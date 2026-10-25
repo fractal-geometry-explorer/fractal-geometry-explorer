@@ -58,6 +58,8 @@
       "artifact": "https://claude.ai/artifact/91wGC9EtnwxZp8MZJ4MF6N",
       "kind": "template",
       "scripts": [
+        "shared/geometry.js",
+        "shared/draw.js",
         "script.js"
       ],
       "layout_comment": "/* Layout: four plate sections in book order (49 with its family and critical-angle studies, 51, 53, 54–55), each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
@@ -70,6 +72,8 @@
       "artifact": "https://claude.ai/artifact/FXhChG4k3TAgHyYbvsyoCQ",
       "kind": "template",
       "scripts": [
+        "shared/geometry.js",
+        "shared/draw.js",
         "script.js"
       ],
       "layout_comment": "/* Layout: Plate 56, the dimension equation, and the two figures of Plate 57, each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
@@ -82,6 +86,8 @@
       "artifact": "https://claude.ai/artifact/LW9gkq4RLJEzELfAx7s6xe",
       "kind": "template",
       "scripts": [
+        "shared/geometry.js",
+        "shared/draw.js",
         "script.js"
       ],
       "layout_comment": "/* Layout: Plate 63 (island, the flipping point, the sweep), Plates 64–65 (two-interval sweeps) and the efficiency demo, each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"

@@ -123,49 +123,13 @@ function crossingsOf(P, cap = 400) {
 // CORE END
 
 (() => {
-  const $ = (id) => document.getElementById(id);
-  const fmt = (n) => n.toLocaleString('en-US');
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const PRINT = { paper: '#ecebe6', ink: '#151515', rule: '#c9c8c2', muted: '#66665f', accent: '#2f5f9e', light: '#e7e6e0', dark: '#1b1b1b', hatchBase: '#cbcac3', hatch: '#262626', red: '#c2552d' };
+  // this page's extra inks on top of the shared palette (its red is the plates' warmer one)
+  PRINT.light = '#e7e6e0'; PRINT.dark = '#1b1b1b'; PRINT.hatchBase = '#cbcac3'; PRINT.hatch = '#262626'; PRINT.red = '#c2552d';
 
-  // ---------- shared plumbing ----------
-  function figure(canvas, draw) {
-    const wrap = canvas.parentElement;
-    const f = { canvas, ctx: canvas.getContext('2d'), w: 1, h: 1, dpr: 1, draw };
-    const resize = () => {
-      f.dpr = Math.min(2, window.devicePixelRatio || 1);
-      f.w = wrap.clientWidth || 1; f.h = wrap.clientHeight || 1;
-      canvas.width = Math.round(f.w * f.dpr); canvas.height = Math.round(f.h * f.dpr);
-      f.draw();
-    };
-    new ResizeObserver(resize).observe(wrap);
-    return f;
-  }
   function fitView(f, cx, cy, r, box) {
     const W = box ? box.w : f.w, H = box ? box.h : f.h, s = Math.min(W, H) / (2 * r);
     return { s, ox: (box ? box.x : 0) + W / 2 - cx * s, oy: (box ? box.y : 0) + H / 2 + cy * s };
-  }
-  const toWorld = (f, v) => f.ctx.setTransform(f.dpr * v.s, 0, 0, -f.dpr * v.s, f.dpr * v.ox, f.dpr * v.oy);
-  const toScreen = (f) => f.ctx.setTransform(f.dpr, 0, 0, f.dpr, 0, 0);
-  function paper(f, color) { f.ctx.setTransform(1, 0, 0, 1, 0, 0); f.ctx.fillStyle = color; f.ctx.fillRect(0, 0, f.canvas.width, f.canvas.height); }
-  function polyPath(P, closed = true) {
-    const p = new Path2D();
-    p.moveTo(P[0], P[1]);
-    for (let i = 2; i < P.length; i += 2) p.lineTo(P[i], P[i + 1]);
-    if (closed) p.closePath();
-    return p;
-  }
-  function stepButtons(el, values, text, aria, onPick) {
-    const bs = values.map((v) => {
-      const b = document.createElement('button');
-      b.type = 'button'; b.textContent = text(v); b.setAttribute('aria-label', aria(v));
-      b.addEventListener('click', () => onPick(v));
-      el.append(b);
-      return b;
-    });
-    const mark = (cur) => bs.forEach((b, i) => b.setAttribute('aria-pressed', String(values[i] === cur)));
-    mark.buttons = bs;
-    return mark;
   }
   // A Koch polygon refined only where it is on screen and only while a side is longer than minPx; returns screen
   // points. Points are not clamped: at a low stage a side can cross the screen with both ends far outside, and moving
@@ -187,64 +151,6 @@ function crossingsOf(P, cap = 400) {
     return out;
   }
   const frameBox = (f) => ({ x: 0, y: 0, w: f.w, h: f.h });
-  // pan and zoom for a canvas: a quick rescaled snapshot while moving, a full redraw once it settles
-  function zoomable(wrapId, canvasId, fitOf, render, maxZoom = 400) {
-    const wrap = $(wrapId), z = { view: null, user: false, snapView: null, raf: 0, full: 0 };
-    const snap = document.createElement('canvas');
-    const f = figure($(canvasId), () => draw());
-    function touch() { wrap.style.touchAction = z.view && z.view.s > z.view.fit * 1.02 ? 'none' : 'pan-y'; }
-    function draw() {
-      if (!z.view || !z.user) { z.view = fitOf(f); z.view.fit = z.view.s; z.user = false; touch(); }
-      render(f, z.view);
-      snap.width = f.canvas.width; snap.height = f.canvas.height; snap.getContext('2d').drawImage(f.canvas, 0, 0);
-      z.snapView = { s: z.view.s, ox: z.view.ox, oy: z.view.oy };
-    }
-    function quick() {
-      const v = z.view, k = v.s / z.snapView.s, c = f.ctx;
-      c.setTransform(1, 0, 0, 1, 0, 0); c.fillStyle = z.ground || PRINT.paper; c.fillRect(0, 0, f.canvas.width, f.canvas.height);
-      c.drawImage(snap, (v.ox - z.snapView.ox * k) * f.dpr, (v.oy - z.snapView.oy * k) * f.dpr, snap.width * k, snap.height * k);
-    }
-    function schedule() { if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; draw(); }); }
-    function moved() {
-      if (!z.snapView) { schedule(); return; }
-      if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; quick(); });
-      clearTimeout(z.full); z.full = setTimeout(schedule, 160);
-    }
-    function zoomAt(px, py, k) {
-      const v = z.view, ns = Math.min(v.fit * maxZoom, Math.max(v.fit * 0.8, v.s * k)), wx = (px - v.ox) / v.s, wy = (v.oy - py) / v.s;
-      v.s = ns; v.ox = px - wx * ns; v.oy = py + wy * ns; z.user = true; touch(); moved();
-    }
-    function pan(dx, dy) { z.view.ox += dx; z.view.oy += dy; z.user = true; moved(); }
-    wrap.querySelector('[data-z="in"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1.6));
-    wrap.querySelector('[data-z="out"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1 / 1.6));
-    wrap.querySelector('[data-z="fit"]').addEventListener('click', () => { z.user = false; schedule(); });
-    const pts = new Map();
-    let pinch = null;
-    const local = (e) => { const r = wrap.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
-    wrap.addEventListener('pointerdown', (e) => {
-      if (e.target.closest('.view-tools')) return;
-      pts.set(e.pointerId, local(e));
-      try { wrap.setPointerCapture(e.pointerId); } catch (_) {}
-      if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), m: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2] }; }
-      wrap.classList.add('dragging');
-    });
-    wrap.addEventListener('pointermove', (e) => {
-      if (!pts.has(e.pointerId)) return;
-      const prev = pts.get(e.pointerId), cur = local(e);
-      pts.set(e.pointerId, cur);
-      if (pts.size === 2 && pinch) {
-        const [a, b] = [...pts.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]), m = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
-        pan(m[0] - pinch.m[0], m[1] - pinch.m[1]);
-        if (pinch.d > 0) zoomAt(m[0], m[1], d / pinch.d);
-        pinch = { d, m };
-      } else if (pts.size === 1 && (e.pointerType !== 'touch' || z.view.s > z.view.fit * 1.02)) pan(cur[0] - prev[0], cur[1] - prev[1]);
-    });
-    const end = (e) => { pts.delete(e.pointerId); if (pts.size < 2) pinch = null; if (!pts.size) wrap.classList.remove('dragging'); };
-    wrap.addEventListener('pointerup', end); wrap.addEventListener('pointercancel', end);
-    wrap.addEventListener('wheel', (e) => { if (!(e.ctrlKey || e.metaKey)) return; e.preventDefault(); const [x, y] = local(e); zoomAt(x, y, Math.exp(-e.deltaY * 0.0045)); }, { passive: false });
-    wrap.addEventListener('dblclick', (e) => { if (e.target.closest('.view-tools')) return; const [x, y] = local(e); zoomAt(x, y, e.shiftKey ? 0.5 : 2); });
-    return { f, z, schedule, refit: () => { z.user = false; schedule(); } };
-  }
   // small lattice drawing of a generator
   function latticeSVG(svg, q) {
     const xs = [], ys = [];
@@ -564,7 +470,7 @@ function crossingsOf(P, cap = 400) {
 
   // ====================== Plates 54–55 ======================
   const st54 = { N: 32, n: 3 };
-  const z54 = zoomable('w54', 'c54', (f) => fitView(f, BOX[st54.N].cx, BOX[st54.N].cy, BOX[st54.N].r), (f, v) => renderQuad(QUAD[st54.N], () => st54.n)(f, v), 1000);
+  const z54 = zoomable('w54', 'c54', (f) => fitView(f, BOX[st54.N].cx, BOX[st54.N].cy, BOX[st54.N].r), (f, v) => renderQuad(QUAD[st54.N], () => st54.n)(f, v), { maxZoom: 1000 });
   const fS = figure($('cS'), () => {
     const f = fS, c = f.ctx, q = QUAD[st54.N], Bx = BOX[st54.N];
     paper(f, PRINT.paper); toScreen(f);
