@@ -133,6 +133,18 @@
         "ui.js"
       ],
       "layout_comment": "/* Layout: the Cantor bar (80), the Cantor curtains (81), the devil's staircase (83) and the chapter's dust-and-dimension concept, each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "self-squared-dragons",
+      "title": "Self-Squared Dragons",
+      "plates": "Plates 185–192",
+      "chapter": 19,
+      "scripts": [
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: the inverted-V map (pages 180-182), real-lambda curves (185), the drape (187), the separators (188-189), the dragon lab (190-191) and the Fatou dusts (192), each a computed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
     }
   ]
 }

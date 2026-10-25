@@ -19,6 +19,9 @@ Conventions used below:
 - **Animated zooms.** Zoom smoothly without rotating, and cap the rate. The user found the spinning tangent zoom dizzying, and saw flicker near the slider's end.
 - **Sub-pixel dust.** Rasterising a Cantor dust by coverage (recurse until a piece is under a pixel, then deposit its overlap) leaves horizontal bands wherever the recursion bottoms out one level earlier: the deposited mass jumps by the factor N·r. Deposit a sub-pixel piece of length ℓ with total mass (ℓ/px)^D instead: that is the one weight for which a piece deposits exactly what its N children would (N·r^D = 1), so nothing jumps, and thin cords dim like the dust's D-dimensional density. Plate 81's curtains draw this way; chapters 31–32 (Lévy dusts) will want the same.
 - **Layout shift.** Give readouts whose text length changes a fixed height. A caption that changed size moved the graph around.
+- **Escape-time rasters recompute per view.** Key the ImageData on (mode, size, view) inside the zoomable's render and deep zooming comes free; the pan-and-zoom snapshot hides the recompute. Render at CSS resolution and scale up — retina-resolution iteration quadruples the cost for little gain.
+- **Distance-estimate thresholds live in the dynamical plane.** When the sampled plane is a transform of it (chapter 19's inverted λ-map), convert the pixel size through the transform's derivative, or the estimate paints whole regions as "boundary".
+- **Attracting cycles end iteration early.** Find the cycle once per λ (a long warmup — a multiplier of modulus 0.98 needs tens of thousands of steps to settle), then stop any pixel whose orbit comes near the stored cycle point: interior pixels stop in hundreds of steps instead of burning the full budget.
 
 ## Foundation (shared library and site shell)
 
@@ -123,6 +126,31 @@ Conventions used below:
 - **Plate 81, the curtains.** Both figures are dusts with N = 2 and r varying with height, square frames, topped by [0, 1]. Told apart by fitting the central gap over ~180 rows each: the top figure is linear in D (from 1 to 0; residual rms 0.02), the bottom linear in r (from 1/2 to 0; rms 0.0008). The printed margin arrows sit a little high of the stated values — about r = 0.347 and D = 0.68 instead of r = 1/3, D = 0.6309 — so the page's arrows mark the exact values, and the note says so.
 - **Plate 83, the devil's staircase.** The unit square with the region under the Cantor function in solid ink. The scan's top profile matches the Cantor function to rms 0.005 of the height (max deviation 0.018 at the near-vertical risers, which is ink spread); treads are resolved down to about 3⁻⁷. The page computes M(R) per pixel column, so zooming keeps producing steps. Graph length checked in closed form: 1 − (2/3)ⁿ + √(1 + (4/9)ⁿ) → 2.
 - **Generalized dusts (pages 77–78).** The book gives N and r for its example dusts (N = 3, r = 1/5; N = 2, r = 1/4; N = 3, r = 1/9) but never draws them, so the page's evenly spaced arrangement — first piece at 0, last ending at 1, equal tremas — is a reconstruction, flagged on the page. The gap-count law Nr(U > u) stepping across F·u⁻ᴰ was verified and is drawn as a log–log chart.
+
+## Part VI, chapter 19 (Plates 185–192)
+
+All on the page `self-squared-dragons`. Every figure is a per-pixel escape-time render of z → λz(1−z) or x → x²−μ (μ = λ²/4 − λ/2), with a distance estimate for boundaries and filaments. The scans were matched by eye at 300 dpi; the maps and Plates 185 and 192 follow from their definitions, while the dragons' λ are reconstructions, as noted below.
+
+**Pages 180–182, the inverted V.** The book prints no figure; the cobweb drawing and the survival rows are ours. The map is the tent map stretched to peak 1/(2r).
+
+**Plate 185.**
+- **Left.** The five domains (λ = 1, 1.5, 2, 2.5, 3) nest, so rendering a count of containing sets in stepped grays reproduces the print. λ = 2 is the exact circle |z−½| = ½.
+- **Right.** The caption's λ = 3.3260680 is a digit transposition. The nuclear λ of the period-2 atom (the caption's own definition: w = 2) solves λ² − 2λ − 4 = 0, i.e. λ = 1 + √5 = 3.2360680…, confirmed by Newton on f²(½) = ½. The page draws the true nucleus, turned 90° as printed, and says so.
+
+**Plate 187, the drape.** Reconstructed, not copied: the book's shaded 3D render is redrawn as a waterfall of exactly-computed horizontal sections (120 slices, silhouette half-heights by bisection), nearer slices occluding farther ones. The caption's wall, its island-molecule corrugations and the backbone tree are described in the page's note but not drawn.
+
+**Plates 188–189, the separators.** Five views, all computed from the definitions: the μ-map (the Mandelbrot set mirrored, cusp μ = −¼, tip μ = 2), the λ-map with its two empty discs, the inverse of the λ-map about λ = 1 (top of 188), the lemniscate detail at the 3-bond 2 − exp(−2πi/3), and the channel near the 100-bond. Checked: the circle |λ|=1 inverts to the line Re λ′ = ½ with the m = 1 sprout roots at cot(π/n)/2 — spacing → 1/(2π), which is why the plate's inverted sprouts look evenly strung. The 100-fold channel needs thousands of iterations before the slow escapers clear; the view warns it is slow.
+
+**Plates 190–191, the dragons.** The book names no λ for any dragon, so all four presets were fitted to the scans by eye (the strongest candidates from families the captions describe):
+- **190 top left, starved:** the period-doubling accumulation in the 1/10 sprout, λ ≈ 0.83309563 + 0.60035559i, from Newton nuclei of periods 10·2^k extrapolated by δ.
+- **190 top right, twist:** the root of the 1/7 subsprout of the 1/6 sprout, λ ≈ 0.52345446 + 0.86392232i, from a two-variable Newton prescribing the cycle's multiplier σ = e^{2πi/7}.
+- **190 bottom, σ-dragon:** the nucleus of a period-102 island in the channel near λ = 1 (where bottom-right Plate 189 looks), λ ≈ 0.99820131 + 0.06156126i, found by grid-searching the channel for bounded parameters outside both discs.
+- **191:** λ ≈ 0.96928400 + 0.24774506i, in the period-25 sprout with multiplier 0.98·e^{2πi/8}. The caption places it in an island offshore the bond at θ = 2π/n; the island candidate found there (period 70, λ ≈ 1.03583 + 0.26609i) matched the print worse than the sprout value, so the page uses the sprout value and notes the discrepancy.
+- The book printed its thin dragons as inverse-iteration dust, so the page draws the starved, twist and σ figures as the set's skin (distance-estimate line, threshold 0.45 px) rather than filled.
+
+**Plate 192, Fatou dusts.** Exact: a point is black when its first k iterates stay in [0, 1], the complement of the tremas of order ≤ k; the plate is k = 5. Three horizontal subsamples per pixel keep the thin high-λ fingers printing. The mid trema's ends solve λx(1−x) = 1.
+
+**The μ-atom arithmetic (p. 184)** — at most 2^{w−1} atoms of period w, fewer for w > 1 — was not verified numerically; the page quotes none of it.
 
 ## Open questions
 
