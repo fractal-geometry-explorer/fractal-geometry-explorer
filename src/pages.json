@@ -133,6 +133,18 @@
         "ui.js"
       ],
       "layout_comment": "/* Layout: the Cantor bar (80), the Cantor curtains (81), the devil's staircase (83) and the chapter's dust-and-dimension concept, each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "general-tremas",
+      "title": "General Tremas",
+      "plates": "Plates 323–325",
+      "chapter": 35,
+      "scripts": [
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: Plate 323 (diamond tremas and lacunarity, two panels) and Plate 325 (a spatial trema dust on one octant of the sky), each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
     }
   ]
 }

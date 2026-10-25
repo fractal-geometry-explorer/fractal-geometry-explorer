@@ -1,0 +1,978 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>General Tremas</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>
+/* Layout: Plate 323 (diamond tremas and lacunarity, two panels) and Plate 325 (a spatial trema dust on one octant of the sky), each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */
+:root {
+  --page: #e4e5e1;
+  --text: #1b1d1f;
+  --muted: #595e64;
+  --rule: #c4c7c1;
+  --surface: #f6f6f3;
+  --accent: #285895;
+  --f-display: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Newsreader", Georgia, "Times New Roman", serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* the figures are reproductions of printed plates, so their paper and inks stay the same in both themes */
+  --print-paper: #ecebe6;
+  --print-ink: #151515;
+  --print-rule: #c9c8c2;
+  --gain: rgba(47, 95, 158, 0.42);
+  --loss: rgba(186, 88, 44, 0.42);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --page: #111214; --text: #e5e5e1; --muted: #9a9fa6; --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --page: #111214; --text: #e5e5e1; --muted: #9a9fa6; --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--page); color: var(--text); font-family: var(--f-display); font-size: 14px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
+.wrap {
+  max-width: 1180px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 36px 64px;
+  display: grid; gap: 40px;
+}
+header.top { display: grid; gap: 10px; max-width: 820px; }
+.eyebrow { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+h1 {
+  margin: 0; display: flex; align-items: center; flex-wrap: wrap; gap: 0.18em 0.42em;
+  font-weight: 800; font-size: clamp(30px, 5.4vw, 54px); line-height: 1.02; letter-spacing: 0.01em; text-transform: uppercase; text-wrap: balance;
+}
+h1 .plate-no { font-weight: 600; text-transform: none; letter-spacing: 0; }
+.lozenge { display: inline-block; width: 0.42em; height: 0.42em; border: 0.075em solid currentColor; position: relative; top: -0.02em; }
+.lozenge::after { content: ""; position: absolute; inset: 0.1em; border: 0.05em solid currentColor; }
+.dek { margin: 0; font-family: var(--f-body); font-size: 19px; line-height: 1.45; max-width: 64ch; }
+
+nav.index {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+  padding: 10px max(16px, env(safe-area-inset-right, 0px)) 10px max(16px, env(safe-area-inset-left, 0px));
+  background: var(--page); border-bottom: 1px solid var(--rule);
+  display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none;
+}
+nav.index a {
+  flex: none; display: inline-flex; gap: 8px; align-items: baseline; padding: 6px 10px;
+  border: 1px solid var(--rule); background: var(--surface); color: var(--text); text-decoration: none; font-size: 13px; font-weight: 600;
+}
+nav.index a b { font-family: var(--f-mono); font-weight: 500; color: var(--accent); }
+nav.index a:hover { border-color: var(--text); }
+
+section.plate { display: grid; gap: 18px; scroll-margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--rule); }
+.plate-head { display: grid; gap: 4px; }
+.plate-head .no { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.plate-head h2 { margin: 0; font-size: clamp(22px, 3vw, 30px); font-weight: 800; line-height: 1.1; text-transform: uppercase; letter-spacing: 0.01em; text-wrap: balance; }
+.plate-head .dim { margin: 0; font-family: var(--f-mono); font-size: 13px; color: var(--muted); }
+.plate-body { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(280px, 1fr); gap: 32px; align-items: start; }
+@media (max-width: 899px) { .plate-body { grid-template-columns: minmax(0, 1fr); gap: 20px; } }
+figure.fig { margin: 0; display: grid; gap: 8px; min-width: 0; }
+.canvas-wrap { position: relative; width: 100%; max-width: 100%; background: var(--print-paper); outline: 1px solid var(--rule); overflow: hidden; }
+.canvas-wrap canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.r-sq { aspect-ratio: 1 / 1; }
+.r-lox { aspect-ratio: 5 / 4; }
+.zoomable { cursor: grab; touch-action: pan-y; }
+.zoomable.dragging { cursor: grabbing; }
+.view-tools { position: absolute; top: 10px; right: 10px; display: flex; gap: 6px; z-index: 2; }
+.view-tools button { min-width: 34px; height: 34px; padding: 0 10px; font: 600 15px/1 var(--f-display); color: var(--print-ink); background: #f7f7f3; border: 1px solid var(--print-rule); cursor: pointer; }
+figcaption { font-size: 13px; color: var(--muted); }
+figcaption strong { color: var(--text); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+
+.side { display: grid; gap: 18px; min-width: 0; align-content: start; }
+.side p.cap { margin: 0; font-family: var(--f-body); font-size: 17px; line-height: 1.55; max-width: 62ch; }
+.group { display: grid; gap: 8px; min-width: 0; }
+.label-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.label { font-size: 11.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.value { font-family: var(--f-mono); font-size: 12.5px; font-variant-numeric: tabular-nums; text-align: right; }
+.steps { display: flex; flex-wrap: wrap; gap: 6px; }
+.steps button {
+  min-width: 38px; height: 34px; padding: 0 10px; font: 600 13px/1 var(--f-mono); color: var(--text);
+  background: var(--surface); border: 1px solid var(--rule); cursor: pointer;
+}
+.steps.words button { font: 600 13px/1 var(--f-display); }
+.steps button[aria-pressed="true"] { background: var(--text); color: var(--page); border-color: var(--text); }
+.steps button:hover { border-color: var(--text); }
+.steps button:disabled { opacity: 0.35; cursor: default; border-color: var(--rule); }
+.btn-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.btn { padding: 8px 12px; font: 600 13px/1.2 var(--f-display); color: var(--text); background: var(--surface); border: 1px solid var(--rule); cursor: pointer; }
+.btn:hover { border-color: var(--text); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--page); }
+.check { display: flex; align-items: flex-start; gap: 8px; font-size: 13.5px; cursor: pointer; }
+.check input { accent-color: var(--accent); width: 16px; height: 16px; margin: 1px 0 0; flex: none; }
+.check:has(input:disabled) { opacity: 0.45; cursor: default; }
+.slider { display: grid; gap: 4px; }
+.slider input { width: 100%; accent-color: var(--accent); margin: 0; }
+.slider input:disabled { opacity: 0.4; }
+dl.read { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; padding-top: 14px; border-top: 1px solid var(--rule); }
+dl.read div { display: grid; gap: 2px; min-width: 0; }
+dl.read dt { font-size: 10.5px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); }
+dl.read dd { margin: 0; font-family: var(--f-mono); font-size: 16px; overflow-wrap: anywhere; }
+dl.read dd small { font-size: 11.5px; color: var(--muted); }
+.note { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.mini { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; padding: 10px 12px; background: var(--print-paper); border: 1px solid var(--print-rule); color: var(--print-ink); }
+.mini svg { height: 64px; width: auto; max-width: 100%; }
+.mini .fx { font-family: var(--f-mono); font-size: 12px; line-height: 1.6; color: var(--print-ink); }
+.key { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--muted); }
+.key span { display: inline-flex; align-items: center; gap: 6px; }
+.key i { width: 14px; height: 10px; display: inline-block; border: 1px solid var(--print-rule); }
+.readline { min-height: 2.9em; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.readline b { color: var(--text); font-weight: 700; }
+
+.sub { display: grid; gap: 14px; padding-top: 22px; border-top: 1px dashed var(--rule); scroll-margin-top: 64px; }
+.sub h3 { margin: 0; font-size: 15px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
+.source { font-family: var(--f-body); font-size: 15px; color: var(--muted); margin: 0; max-width: 84ch; }
+.source i { color: var(--text); }
+.source a { color: var(--accent); }
+button:focus-visible, input:focus-visible, a:focus-visible, canvas:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.r-two { aspect-ratio: 2.07 / 1; }
+.mini svg.sky { height: 72px; }
+.mini svg.gen { height: 56px; }
+</style>
+<style>
+body { margin: 0; }
+/* The hidden attribute must beat the pages' own display rules (.slider, .check, ...). The artifact
+   wrapper's stylesheet used to provide this; self-hosted pages carry it themselves. */
+[hidden] { display: none !important; }
+nav.shell { font-family: var(--f-display); font-size: 12.5px; font-weight: 600; background: var(--page);
+  border-bottom: 1px solid var(--rule); display: flex; align-items: center; gap: 6px 18px;
+  padding: 9px max(16px, env(safe-area-inset-right, 0px)) 9px max(16px, env(safe-area-inset-left, 0px)); }
+nav.shell a { color: var(--text); text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+nav.shell a:hover { color: var(--accent); }
+nav.shell .home { letter-spacing: 0.07em; text-transform: uppercase; flex: none; }
+nav.shell .gap { flex: 1; }
+nav.shell .pn { color: var(--muted); font-weight: 500; }
+nav.shell .pn b { color: var(--text); font-weight: 600; }
+nav.shell a:hover .pn, nav.shell a:hover .pn b { color: var(--accent); }
+</style>
+</head>
+<body>
+<nav class="shell" aria-label="Site"><a class="home" href="index.html">Fractal Geometry Explorer</a><span class="gap"></span><a rel="prev" href="wiener-sausage.html"><span class="pn">&#8592; <b>Brownian motion</b></span></a></nav>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 35, "General tremas, and the control of texture" · pages 319–325</p>
+    <h1><span class="plate-no">Plates 323 and 325</span><span class="lozenge" aria-hidden="true"></span><span>General Tremas</span></h1>
+    <p class="dek">A trema fractal is what is left of space after random holes — tremas — are cut out of it. A theorem of El Hélou says the dimension D cares only about how the tremas' areas or volumes are distributed, so their <i>shape</i> is a free knob: it tunes the texture of the remainder — its lacunarity and its succolarity — while D stands still. This was the last chapter of the book to be written, "a mere sketch" against a deadline, and its two plates show the knob at work in the plane and in space.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#lac"><b>323</b> The trema generator and lacunarity</a>
+    <a href="#sky"><b>325</b> A dust on the spherical sky</a>
+  </nav>
+
+  <!-- ===================== PLATE 323 ===================== -->
+  <section class="plate" id="lac">
+    <div class="plate-head">
+      <p class="no">Plate 323 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Effect of the trema generator upon lacunarity</h2>
+      <p class="dim">Diamond tremas, centers and sizes Poisson · tremas with area above a: (2 − D)/2a per unit area · D fixed by the area law alone (El Hélou 1978)</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-two" id="wrapA">
+          <div id="wA" class="zoomable" style="position:absolute;inset:0">
+            <canvas id="cA" role="img" aria-label="Random diamond tremas cut from a square"></canvas>
+            <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+          </div>
+        </div>
+        <figcaption><strong id="cAt">Both panels</strong> · <span id="cAn">tremas</span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Both panels cut diamonds out of a square: the left panel's diamonds are nearly squares, the right panel's are sharp needles, isotropically rotated. Both use the very same dimension D and the same areas for the largest and smallest trema, so the white remainders have identical expected areas — the theorem again. Yet one remainder huddles into clumps and the other spreads nearly everywhere: the needle panel has far lower lacunarity. The needles also slice the remainder into many small polygons, which is the chapter's other claim: flattening the tremas drives the critical percolation dimension D<sub>crit</sub> as close to 2 as one pleases.</p>
+        <div class="mini" aria-label="The two trema generators">
+          <svg class="gen" viewBox="-0.2 -0.35 2.4 0.7" aria-hidden="true" id="miniGen"></svg>
+          <div class="fx">two diamonds,<br>equal areas</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Panel</span></div>
+          <div class="steps words" id="mA" role="group" aria-label="Which panel to show"></div>
+        </div>
+        <div class="slider" id="wA323w">
+          <div class="label-row"><span class="label">Diamond shape</span><span class="value" id="wAv">aspect</span></div>
+          <input type="range" id="wA323" min="0" max="1" step="0.005" value="1" aria-label="Diamond aspect, needle to square">
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Dimension</span><span class="value" id="dAv">D = 1.50</span></div>
+          <input type="range" id="dA323" min="1.25" max="1.75" step="0.01" value="1.5" aria-label="Dimension D">
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate323">Show Plate 323 as printed</button>
+          <button type="button" class="btn" id="seedA">New seed</button>
+          <span class="value" id="seedAv">seed 2</span>
+        </div>
+        <dl class="read">
+          <div><dt>White area, measured</dt><dd id="rAa">—</dd></div>
+          <div><dt>White area, expected</dt><dd id="rAb">—</dd></div>
+          <div><dt>Lacunarity Λ (boxes 1/8)</dt><dd id="rAc">—</dd></div>
+          <div><dt>White pieces</dt><dd id="rAd">—</dd></div>
+        </dl>
+        <p class="note">A random plate, matched statistically, not stroke for stroke. The book states no numbers for these panels: the aspects (0.75 and 0.02), D = 1.5 and the area cutoffs (largest 1/20 of the square, smallest 3·10⁻⁵) were fitted to the printed ink coverage, and the isotropic rotation follows the chapter's text. In both panels the readout pairs run left panel · right panel. The white area is measured by sampling 20,000 random points against the diamonds themselves; Λ is the mean of M² over the squared mean of M, the white mass in boxes of side 1/8 of the square: identical areas, very different Λ.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 325 ===================== -->
+  <section class="plate" id="sky">
+    <div class="plate-head">
+      <p class="no">Plate 325 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Fractal dust from nonspherical tremas, on a spherical sky</h2>
+      <p class="dim">A 600³ torus · ellipsoid tremas, volume pinned to scale³, scales 2.3 to 300 · tremas with volume above u: (3 − D)/3u per unit volume · plate: D ≈ 1.23, shells 400 &lt; R ≤ 600</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wB">
+          <canvas id="cB" role="img" aria-label="Trema dust projected on one octant of the sky"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cBt">One octant of the sky</strong> · <span id="cBn">flattened tremas · D = 1.23</span> · the Hammer projection's "gothic ogive window"</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The caption opens with a confession: this is not the intended illustration, and its precise specification "escapes me at the moment" — the files of the 1979 runs were lost. What it does describe is the pipeline, reproduced here: cut ellipsoid tremas out of a 600³ lattice whose opposite faces are glued (a torus), move the origin to a point no trema removed, keep the lattice points of the shell 400 &lt; R ≤ 600 sorted into shells of decreasing brightness, push each point off the lattice by a random [0,1] vector, and map the octant x, y, z &gt; 0 — northern latitudes, longitudes −45° to 45° — through the Hammer projection. The surviving dust clusters on the sky like galaxy counts, which is chapter 9's seed for this whole family of models.</p>
+        <div class="mini" aria-label="The whole sky under the Hammer projection, the plotted octant shaded">
+          <svg class="sky" viewBox="-2.95 -1.5 5.9 3" aria-hidden="true" id="miniSky"></svg>
+          <div class="fx">the whole sky;<br>the octant plotted</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Octant</span></div>
+          <div class="steps words" id="vB" role="group" aria-label="Which octant to plot"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Trema shape</span></div>
+          <div class="steps words" id="sB" role="group" aria-label="Trema shape"></div>
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Dimension</span><span class="value" id="dBv">D = 1.23</span></div>
+          <input type="range" id="dB325" min="1.0" max="1.6" step="0.01" value="1.23" aria-label="Dimension D">
+        </div>
+        <label class="check" for="jitB"><input type="checkbox" id="jitB" checked> Push each point off the lattice by a random [0,1] vector, the caption's final processing step</label>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate325">Show Plate 325 as printed</button>
+          <button type="button" class="btn" id="seedB">New seed</button>
+          <span class="value" id="seedBv">seed 7</span>
+        </div>
+        <p class="readline" id="infoB" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Points plotted</dt><dd id="rBa">—</dd></div>
+          <div><dt>Share of lattice kept</dt><dd id="rBb">—</dd></div>
+          <div><dt>Share predicted</dt><dd id="rBc">—</dd></div>
+          <div><dt>Origin points tried</dt><dd id="rBd">—</dd></div>
+        </dl>
+        <p class="note">A reconstruction of the described pipeline, not of the lost picture: since the book never says what the nonspherical tremas were, this page uses ellipsoids with volume pinned to scale³ — flattened 10 : 3 by default, needle-like 1 : 0.4 or spheres for comparison — and the trema scales are truncated to 2.3 … 300, which fixes the predicted share (2.3/300)^(3 − D). The brightness steps, the octant window and the caption's warning that the lattice-smoothing jitter "misrepresents the underlying fractal" are all kept; turn the jitter off to see the bare lattice points. The antipodal octant re-uses the very same tremas, as the caption suggests.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 35, pages 319–325 (Plates 323 and 325). Both plates are random constructions: the figures are computed from the processes the captions describe and matched statistically, with the fitted choices flagged in each note. The trema model's dimension theorem is due to Y. El Hélou (1978); lacunarity and succolarity are chapter 34's measures of texture, and the "same D, different look" demonstration on the <a href="cantor-dust.html">Cantor Dust</a> page is the linear ancestor of Plate 323.</p>
+</div>
+
+<script>
+// Shared drawing library: style constants, the zoomable canvas (snapshot while panning), chunked
+// paths, controls and small SVG figures. Loaded before each page's own scripts; pages may extend
+// PRINT with their own inks (PRINT.red = ..., PRINT.light = ...).
+const $ = (id) => document.getElementById(id);
+const fmt = (n) => n.toLocaleString('en-US');
+const PRINT = { paper: '#ecebe6', ink: '#151515', rule: '#c9c8c2', muted: '#66665f', accent: '#2f5f9e', red: '#c2452d', faint: '#bdbbb3', gray: '#8f8e88' };
+const RAMP = [[233, 185, 73], [217, 113, 59], [184, 66, 79], [125, 58, 120], [63, 79, 151], [43, 122, 138]];
+const ramp = (t, a = 1) => {
+  const x = Math.max(0, Math.min(1, t)) * (RAMP.length - 1), i = Math.min(RAMP.length - 2, Math.floor(x)), f = x - i;
+  const c = RAMP[i].map((v, k) => Math.round(v + (RAMP[i + 1][k] - v) * f));
+  return `rgba(${c[0]},${c[1]},${c[2]},${a})`;
+};
+const CAT = ['#151515', '#9a988f', '#2f5f9e', '#c2452d', '#3f8f6c', '#b58a2a', '#6b4e9b', '#5f8fae'];
+
+// ---------- shared plumbing ----------
+function figure(canvas, draw) {
+  const wrap = canvas.parentElement;
+  const f = { canvas, ctx: canvas.getContext('2d'), w: 1, h: 1, dpr: 1, draw };
+  const resize = () => {
+    f.dpr = Math.min(2, window.devicePixelRatio || 1);
+    f.w = wrap.clientWidth || 1; f.h = wrap.clientHeight || 1;
+    canvas.width = Math.round(f.w * f.dpr); canvas.height = Math.round(f.h * f.dpr);
+    f.draw();
+  };
+  new ResizeObserver(resize).observe(wrap);
+  return f;
+}
+function fitBox(f, bb, pad = 0.04) {
+  const w = Math.max(1e-9, bb.x1 - bb.x0), h = Math.max(1e-9, bb.y1 - bb.y0), s = Math.min(f.w / (w * (1 + 2 * pad)), f.h / (h * (1 + 2 * pad)));
+  return { s, ox: f.w / 2 - ((bb.x0 + bb.x1) / 2) * s, oy: f.h / 2 + ((bb.y0 + bb.y1) / 2) * s };
+}
+const toWorld = (f, v) => f.ctx.setTransform(f.dpr * v.s, 0, 0, -f.dpr * v.s, f.dpr * v.ox, f.dpr * v.oy);
+const toScreen = (f) => f.ctx.setTransform(f.dpr, 0, 0, f.dpr, 0, 0);
+function paper(f, color) { f.ctx.setTransform(1, 0, 0, 1, 0, 0); f.ctx.fillStyle = color; f.ctx.fillRect(0, 0, f.canvas.width, f.canvas.height); }
+function polyPath(P, closed = true, upto) {
+  const p = new Path2D(), m = upto === undefined ? P.length / 2 : upto;
+  p.moveTo(P[0], P[1]);
+  for (let i = 1; i < m; i++) p.lineTo(P[2 * i], P[2 * i + 1]);
+  if (closed) p.closePath();
+  return p;
+}
+function bbox(P, bb = { x0: Infinity, x1: -Infinity, y0: Infinity, y1: -Infinity }) {
+  for (let i = 0; i < P.length; i += 2) { bb.x0 = Math.min(bb.x0, P[i]); bb.x1 = Math.max(bb.x1, P[i]); bb.y0 = Math.min(bb.y0, P[i + 1]); bb.y1 = Math.max(bb.y1, P[i + 1]); }
+  return bb;
+}
+function stepButtons(el, values, text, aria, onPick) {
+  const bs = values.map((v) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.textContent = text(v); b.setAttribute('aria-label', aria(v));
+    b.addEventListener('click', () => onPick(v));
+    el.append(b);
+    return b;
+  });
+  const mark = (cur) => bs.forEach((b, i) => b.setAttribute('aria-pressed', String(values[i] === cur)));
+  mark.buttons = bs;
+  return mark;
+}
+// pan and zoom: a quick rescaled snapshot while moving, a full redraw once it settles
+function zoomable(wrapId, canvasId, fitOf, render, opts = {}) {
+  const maxZoom = opts.maxZoom || 400;
+  const wrap = $(wrapId), z = { view: null, user: false, snapView: null, raf: 0, full: 0 };
+  const snap = document.createElement('canvas');
+  const f = figure($(canvasId), () => draw());
+  function touch() { wrap.style.touchAction = z.view && z.view.s > z.view.fit * 1.02 ? 'none' : 'pan-y'; }
+  function draw() {
+    if (!z.view || !z.user) { z.view = fitOf(f); z.view.fit = z.view.s; z.user = false; touch(); }
+    render(f, z.view);
+    snap.width = f.canvas.width; snap.height = f.canvas.height; snap.getContext('2d').drawImage(f.canvas, 0, 0);
+    z.snapView = { s: z.view.s, ox: z.view.ox, oy: z.view.oy };
+  }
+  function quick() {
+    const v = z.view, k = v.s / z.snapView.s, c = f.ctx;
+    c.setTransform(1, 0, 0, 1, 0, 0); c.fillStyle = z.ground || PRINT.paper; c.fillRect(0, 0, f.canvas.width, f.canvas.height);
+    c.drawImage(snap, (v.ox - z.snapView.ox * k) * f.dpr, (v.oy - z.snapView.oy * k) * f.dpr, snap.width * k, snap.height * k);
+  }
+  function schedule() { if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; draw(); }); }
+  function moved() {
+    if (!z.snapView) { schedule(); return; }
+    if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; quick(); });
+    clearTimeout(z.full); z.full = setTimeout(schedule, 160);
+  }
+  function zoomAt(px, py, k) {
+    const v = z.view, ns = Math.min(v.fit * maxZoom, Math.max(v.fit * 0.8, v.s * k)), wx = (px - v.ox) / v.s, wy = (v.oy - py) / v.s;
+    v.s = ns; v.ox = px - wx * ns; v.oy = py + wy * ns; z.user = true; touch(); moved();
+  }
+  function pan(dx, dy) { z.view.ox += dx; z.view.oy += dy; z.user = true; moved(); }
+  wrap.querySelector('[data-z="in"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1.6));
+  wrap.querySelector('[data-z="out"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1 / 1.6));
+  wrap.querySelector('[data-z="fit"]').addEventListener('click', () => { z.user = false; schedule(); });
+  const pts = new Map();
+  let pinch = null, down = null;
+  const local = (e) => { const r = wrap.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+  wrap.addEventListener('pointerdown', (e) => {
+    if (e.target.closest('.view-tools')) return;
+    pts.set(e.pointerId, local(e));
+    down = pts.size === 1 ? { p: local(e), t: performance.now(), moved: 0 } : null;
+    try { wrap.setPointerCapture(e.pointerId); } catch (_) {}
+    if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), m: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2] }; }
+    wrap.classList.add('dragging');
+  });
+  wrap.addEventListener('pointermove', (e) => {
+    if (!pts.has(e.pointerId)) return;
+    const prev = pts.get(e.pointerId), cur = local(e);
+    pts.set(e.pointerId, cur);
+    if (down) down.moved = Math.max(down.moved, Math.hypot(cur[0] - down.p[0], cur[1] - down.p[1]));
+    if (pts.size === 2 && pinch) {
+      const [a, b] = [...pts.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]), m = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+      pan(m[0] - pinch.m[0], m[1] - pinch.m[1]);
+      if (pinch.d > 0) zoomAt(m[0], m[1], d / pinch.d);
+      pinch = { d, m };
+    } else if (pts.size === 1 && (e.pointerType !== 'touch' || z.view.s > z.view.fit * 1.02)) pan(cur[0] - prev[0], cur[1] - prev[1]);
+  });
+  const end = (e) => {
+    if (down && pts.size === 1 && down.moved < 5 && opts.onTap) { const [x, y] = local(e), v = z.view; opts.onTap((x - v.ox) / v.s, (v.oy - y) / v.s); }
+    down = null;
+    pts.delete(e.pointerId); if (pts.size < 2) pinch = null; if (!pts.size) wrap.classList.remove('dragging');
+  };
+  wrap.addEventListener('pointerup', end); wrap.addEventListener('pointercancel', (e) => { down = null; end(e); });
+  wrap.addEventListener('wheel', (e) => { if (!(e.ctrlKey || e.metaKey)) return; e.preventDefault(); const [x, y] = local(e); zoomAt(x, y, Math.exp(-e.deltaY * 0.0045)); }, { passive: false });
+  wrap.addEventListener('dblclick', (e) => { if (e.target.closest('.view-tools')) return; const [x, y] = local(e); zoomAt(x, y, e.shiftKey ? 0.5 : 2); });
+  return { f, z, schedule, refit: () => { z.user = false; schedule(); } };
+}
+// chunked paths: many small paths fill far faster than one path with a hundred thousand pieces
+function chunked(count, add, size = 512) {
+  const out = [];
+  let p = null;
+  for (let i = 0; i < count; i++) { if (i % size === 0) { p = new Path2D(); out.push(p); } add(p, i); }
+  return out;
+}
+// fill and outline in the same colour, so that tiles which only meet along an edge show no hairline seams
+function solid(c, paths, color, lw) {
+  c.fillStyle = color; c.strokeStyle = color; c.lineWidth = lw; c.lineJoin = 'miter';
+  for (const p of paths) { c.fill(p); c.stroke(p); }
+}
+const dot = (c, v, x, y, r = 4, color = PRINT.red) => { c.beginPath(); c.arc(v.ox + x * v.s, v.oy - y * v.s, r, 0, Math.PI * 2); c.fillStyle = color; c.fill(); c.strokeStyle = PRINT.paper; c.lineWidth = 1.5; c.stroke(); };
+
+// a polyline (Float64Array or [[x,y],...]) as SVG points with y flipped
+const svgPts = (P) => (P instanceof Float64Array ? Array.from({ length: P.length / 2 }, (_, i) => [P[2 * i], P[2 * i + 1]]) : P).map(([x, y]) => `${x.toFixed(4)},${(-y).toFixed(4)}`).join(' ');
+function miniCurve(id, P, dots = true) {
+  const pts = P instanceof Float64Array ? Array.from({ length: P.length / 2 }, (_, i) => [P[2 * i], P[2 * i + 1]]) : P;
+  $(id).innerHTML = `<line x1="0" y1="0" x2="1" y2="0" stroke="#8a8a84" stroke-width="0.008" stroke-dasharray="0.025 0.02"/>` +
+    `<polyline points="${svgPts(pts)}" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linejoin="round"/>` +
+    (dots ? `<g fill="currentColor">${pts.map(([x, y], i) => `<circle cx="${x.toFixed(4)}" cy="${(-y).toFixed(4)}" r="${i === 0 || i === pts.length - 1 ? 0.03 : 0.018}"/>`).join('')}</g>` : '');
+}
+function miniTree(id, links, dx = 0) {
+  const ends = new Set(), mid = new Set(), k = (x, y) => `${x.toFixed(4)},${y.toFixed(4)}`;
+  let s = '';
+  for (const [px, py, qx, qy] of links) {
+    s += `<line x1="${(px + dx).toFixed(4)}" y1="${(-py).toFixed(4)}" x2="${(qx + dx).toFixed(4)}" y2="${(-qy).toFixed(4)}" stroke="currentColor" stroke-width="0.02" stroke-linecap="round"/>`;
+    mid.add(k(px + dx, py)); mid.add(k(qx + dx, qy));
+  }
+  s += `<g fill="currentColor">${[...mid].map((p) => { const [x, y] = p.split(',').map(Number); const big = (Math.abs(x - dx) < 1e-6 || Math.abs(x - dx - 1) < 1e-6) && Math.abs(y) < 1e-6; return `<circle cx="${x}" cy="${-y}" r="${big ? 0.03 : 0.018}"/>`; }).join('')}</g>`;
+  return s;
+}
+// canvas transform for a similarity map f = [ar, ai, br, bi, m] composed with the view
+function setMap(f, c, v, fig) {
+  const [ar, ai, br, bi, m] = f, k = fig.dpr * v.s;
+  if (m) c.setTransform(k * ar, -k * ai, k * ai, k * ar, fig.dpr * (v.ox + v.s * br), fig.dpr * (v.oy - v.s * bi));
+  else c.setTransform(k * ar, -k * ai, -k * ai, -k * ar, fig.dpr * (v.ox + v.s * br), fig.dpr * (v.oy - v.s * bi));
+}
+const segPath = (segs, pick) => { const p = new Path2D(); for (const s of segs) if (!pick || pick(s)) { p.moveTo(s[0], s[1]); p.lineTo(s[2], s[3]); } return p; };
+// Plate 64's chevrons, measured from the plate: each interval a→b becomes a thin quadrilateral
+// pointing toward F, the corner the next stage would add (see DECISIONS.md)
+const CHEV_OUT = 0.43, CHEV_IN = 0.235;
+function chevronPaths(P, F, m) {
+  return chunked(m, (p, i) => {
+    const ax = P[2 * i], ay = P[2 * i + 1], bx = P[2 * i + 2], by = P[2 * i + 3], mx = (ax + bx) / 2, my = (ay + by) / 2;
+    const vx = F[2 * i] - mx, vy = F[2 * i + 1] - my;
+    p.moveTo(ax, ay); p.lineTo(mx + CHEV_OUT * vx, my + CHEV_OUT * vy); p.lineTo(bx, by); p.lineTo(mx + CHEV_IN * vx, my + CHEV_IN * vy); p.closePath();
+  });
+}
+
+// Chapter 35: general tremas. The model code behind both plates — the plane trema fractal of
+// Plate 323 (diamond tremas of free aspect) and the spatial trema dust of Plate 325 (ellipsoid
+// tremas on a 600³ torus, one octant of a shell projected on the sky). Everything is a Poisson
+// trema process: positions and sizes random, the trema length (area, volume) law fixed by D,
+// the generator's shape free. No DOM in this file.
+
+function mulberry(seed) {
+  let a = seed >>> 0;
+  return () => { a |= 0; a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+}
+// a deterministic stream per grid cell, so a trema is the same every time its cell is visited
+function cellHash(a, b, c, d) {
+  let h = Math.imul(a ^ 0x2e1b2137, 0x9e3779b1) ^ Math.imul(b ^ 0x5f356495, 0x85ebca77) ^ Math.imul(c ^ 0x1b873593, 0xc2b2ae3d) ^ Math.imul(d, 0x27d4eb2f);
+  h ^= h >>> 15; h = Math.imul(h, 0x2c1b3c6d); h ^= h >>> 12; h = Math.imul(h, 0x297a2d39); h ^= h >>> 15;
+  return h >>> 0;
+}
+function poisson(mu, rnd) {
+  const L = Math.exp(-mu);
+  let k = 0, p = 1;
+  do { k++; p *= rnd(); } while (p > L);
+  return k - 1;
+}
+
+// ====================== Plate 323: diamond tremas in the plane ======================
+// Tremas are rhombi ("diamonds") of aspect w = short diagonal / long diagonal, isotropically
+// rotated. The number of tremas with area above a, centered per unit area, is K/a with
+// K = (2 − D)/2: then a point escapes every trema with probability (aMin/aMax)^K, which depends
+// on the area law alone — El Hélou's theorem, and the caption's "identical white areas".
+const P323 = { aMax: 0.05, aMin: 3e-5 };
+function tremas323(D, w, seed) {
+  const K = (2 - D) / 2;
+  const pMax = Math.sqrt((2 * P323.aMax) / w);            // long diagonal of the largest diamond
+  const m = pMax / 2 + 0.01, side = 1 + 2 * m;            // centers beyond the square still reach it
+  const rnd = mulberry(seed);
+  const count = Math.round(side * side * K * (1 / P323.aMin - 1 / P323.aMax));
+  const T = new Float64Array(count * 5);                  // cx, cy, half long diag, half short diag, angle
+  for (let i = 0; i < count; i++) {
+    const a = P323.aMin / (1 - rnd() * (1 - P323.aMin / P323.aMax));   // density K/a² between the cutoffs
+    const p = Math.sqrt((2 * a) / w);
+    T[5 * i] = -m + rnd() * side; T[5 * i + 1] = -m + rnd() * side;
+    T[5 * i + 2] = p / 2; T[5 * i + 3] = (w * p) / 2; T[5 * i + 4] = rnd() * Math.PI;
+  }
+  return T;
+}
+const whiteExpected323 = (D) => Math.pow(P323.aMin / P323.aMax, (2 - D) / 2);
+// fill-only diamond paths in chunks (no closePath: fill() closes each subpath, see DECISIONS.md)
+function diamondPaths(T) {
+  return chunked(T.length / 5, (p, i) => {
+    const cx = T[5 * i], cy = T[5 * i + 1], h1 = T[5 * i + 2], h2 = T[5 * i + 3];
+    const co = Math.cos(T[5 * i + 4]), si = Math.sin(T[5 * i + 4]);
+    const ux = h1 * co, uy = h1 * si, vx = -h2 * si, vy = h2 * co;
+    p.moveTo(cx + ux, cy + uy); p.lineTo(cx + vx, cy + vy); p.lineTo(cx - ux, cy - uy); p.lineTo(cx - vx, cy - vy);
+  }, 2048);
+}
+
+// ====================== Plate 325: a spatial trema dust on the sky ======================
+// The caption's pipeline: a 600³ periodic lattice (a torus), tremas removed, the origin moved to
+// a point no trema covers, the lattice points of the shell R1 < |p| ≤ R2 kept, pushed off the
+// lattice by a random [0,1] vector, and one octant projected on the sky through the Hammer
+// projection. Tremas are ellipsoids with the volume pinned to scale³ ("volume is pinned down
+// during resizing"), so D again depends on the volume law alone, and the shape is free.
+//
+// Scales live in octaves k: scale in (Λ/2^(k+1), Λ/2^k], density (3−D)/r⁴ per unit volume, which
+// puts a Poisson(7(3−D)/3) count of tremas in each octave-k grid cell and makes a point escape
+// the whole process with probability (smallest scale / largest)^(3−D). Tremas come from a hash of
+// their grid cell, so the dust is a fixed function of the seed and can be re-visited cell by cell.
+const P325 = { L: 600, kMin: 1, kMax: 7 };               // scales 600/2^8 = 2.34 … 600/2 = 300
+const scaleRange325 = () => [P325.L / Math.pow(2, P325.kMax + 1), P325.L / Math.pow(2, P325.kMin)];
+function survival325(D) { const [a, b] = scaleRange325(); return Math.pow(a / b, 3 - D); }
+
+// semi-axes per unit scale: [along the symmetry axis, equatorial], with volume (4π/3)·ax·eq² = 1
+function shapeAxes(shape, f) {
+  const s3 = 3 / (4 * Math.PI);
+  if (shape === 'sphere') { const s = Math.cbrt(s3); return [s, s]; }
+  if (shape === 'pancake') { const a = Math.cbrt(s3 / f); return [f * a, a]; }
+  const a = Math.cbrt(s3 / (f * f)); return [a, f * a];   // needle
+}
+
+// dust325Start returns a job whose next() processes one 150-sized block of the octant, so a page
+// can spread the computation over frames; dust325 runs the whole job at once (used by tests)
+function dust325(opts) {
+  const job = dust325Start(opts);
+  while (job.next());
+  return job;
+}
+function dust325Start(opts) {
+  const { D, shape, f, seed, R2, south, jitter } = opts;
+  const L = P325.L, R1 = R2 / 1.5, c = 3 - D, mu = (7 * c) / 3;
+  const [sAx, sEq] = shapeAxes(shape, f);
+  const bMax = Math.max(sAx, sEq);                        // bounding radius per unit scale
+  const axInv = 1 / (sAx * sAx), eqInv = 1 / (sEq * sEq);
+  const rnd = mulberry(seed);
+  const O = [0, 0, 0];                                    // the origin, a lattice point of the torus
+
+  // Tremas live in one flat stack: 10 floats each — cx, cy, cz, axis x/y/z, 1/ax², 1/eq²,
+  // bound², ax·scale (the half-thickness, for the slab test). A node's tremas are a slice of the
+  // stack; children append their filtered copies after it and pop them on the way out, so the
+  // traversal allocates nothing. Cells are generated from a hash of their wrapped grid index, so
+  // the dust is a fixed function of the seed and a cell re-visited yields the same tremas.
+  const ST = 10;
+  let S = new Float64Array(1 << 16), top = 0;
+  const grow = (need) => { if (top + need > S.length) { const n = new Float64Array(Math.max(S.length * 2, top + need)); n.set(S); S = n; } };
+  function emitCell(k, jx, jy, jz, x0, y0, z0, x1, y1, z1) {
+    const n = 1 << k, rk = L / n;
+    const r = mulberry(cellHash(((jx % n) + n) % n, ((jy % n) + n) % n, ((jz % n) + n) % n, (seed ^ (k * 0x9e37)) >>> 0));
+    const m = poisson(mu, r), b3 = 1 / (rk * rk * rk), a3 = 8 * b3;
+    grow(m * ST);
+    for (let t = 0; t < m; t++) {
+      const sc = Math.pow(a3 - r() * (a3 - b3), -1 / 3);  // inverse CDF of density ∝ 1/r⁴ on (rk/2, rk]
+      const cx = (jx + r()) * rk - O[0], cy = (jy + r()) * rk - O[1], cz = (jz + r()) * rk - O[2];
+      const u = 2 * r() - 1, th = r() * 2 * Math.PI, si = Math.sqrt(1 - u * u);
+      const nx = si * Math.cos(th), ny = si * Math.sin(th);
+      const bb = bMax * bMax * sc * sc;
+      // bounding-sphere test against the box, then a slab test across the symmetry axis —
+      // flat tremas have huge bounding spheres but are thin, and the slab test knows it
+      const dx = Math.max(x0 - cx, 0, cx - x1), dy = Math.max(y0 - cy, 0, cy - y1), dz = Math.max(z0 - cz, 0, cz - z1);
+      if (dx * dx + dy * dy + dz * dz > bb) continue;
+      const hx = (x1 - x0) / 2, dn = Math.abs(nx * ((x0 + x1) / 2 - cx) + ny * ((y0 + y1) / 2 - cy) + u * ((z0 + z1) / 2 - cz));
+      const reach = sAx * sc + hx * (Math.abs(nx) + Math.abs(ny) + Math.abs(u));
+      if (dn > reach) continue;
+      S[top] = cx; S[top + 1] = cy; S[top + 2] = cz; S[top + 3] = nx; S[top + 4] = ny; S[top + 5] = u;
+      S[top + 6] = axInv / (sc * sc); S[top + 7] = eqInv / (sc * sc); S[top + 8] = bb; S[top + 9] = sAx * sc;
+      top += ST;
+    }
+  }
+  // all octave-k tremas that can reach the box go onto the stack
+  function gather(k, x0, y0, z0, x1, y1, z1) {
+    const rk = L / (1 << k), b = bMax * rk;
+    const jx0 = Math.floor((O[0] + x0 - b) / rk), jx1 = Math.floor((O[0] + x1 + b) / rk);
+    const jy0 = Math.floor((O[1] + y0 - b) / rk), jy1 = Math.floor((O[1] + y1 + b) / rk);
+    const jz0 = Math.floor((O[2] + z0 - b) / rk), jz1 = Math.floor((O[2] + z1 + b) / rk);
+    for (let jx = jx0; jx <= jx1; jx++) for (let jy = jy0; jy <= jy1; jy++) for (let jz = jz0; jz <= jz1; jz++)
+      emitCell(k, jx, jy, jz, x0, y0, z0, x1, y1, z1);
+  }
+  const inside = (i, x, y, z) => {
+    const vx = x - S[i], vy = y - S[i + 1], vz = z - S[i + 2];
+    const q = vx * vx + vy * vy + vz * vz;
+    if (q > S[i + 8]) return false;
+    const t = vx * S[i + 3] + vy * S[i + 4] + vz * S[i + 5];
+    return t * t * S[i + 6] + (q - t * t) * S[i + 7] <= 1;
+  };
+  function covered(x, y, z, kTo = P325.kMax) {
+    for (let k = P325.kMin; k <= kTo; k++) {
+      top = 0;
+      gather(k, x, y, z, x, y, z);
+      for (let i = 0; i < top; i += ST) if (inside(i, x, y, z)) return true;
+    }
+    return false;
+  }
+
+  // move the origin to a lattice point that no trema covers ("moved to a nonremoved point");
+  // this search runs in plain torus coordinates (O = 0). A whole block can sit inside one large
+  // trema, so a block that keeps failing is abandoned for a fresh one.
+  let tries = 0, ox = 0, oy = 0, oz = 0, found = false;
+  for (let round = 0; round < 24 && !found; round++) {
+    const bx = Math.floor(rnd() * L), by = Math.floor(rnd() * L), bz = Math.floor(rnd() * L);
+    // a block whose middle sits inside a large trema is almost surely swallowed whole — skip it
+    // cheaply; this leans the origin toward a dense region, which the caption allows
+    if (covered((bx + 32) % L, (by + 32) % L, (bz + 32) % L, 4)) continue;
+    for (let t = 0; t < 8000; t++, tries++) {
+      ox = (bx + Math.floor(rnd() * 64)) % L; oy = (by + Math.floor(rnd() * 64)) % L; oz = (bz + Math.floor(rnd() * 64)) % L;
+      if (!covered(ox, oy, oz)) { found = true; break; }
+    }
+  }
+  O[0] = ox; O[1] = oy; O[2] = oz;
+  top = 0;
+
+  // walk an octree over the octant of the shell, carrying down the tremas that reach each cell;
+  // a cell all of whose corners lie in one trema is gone (ellipsoids are convex), and lattice
+  // points are only tested inside the small cells that survive
+  const sg = south ? -1 : 1;
+  const dots = [];                                        // x, y, z per surviving point (jittered)
+  let tested = 0;
+  // the list for a node at [p0, p1): octaves ≤ k filtered to its box, octave k + 1 gathered by the parent
+  function recurse(k, x0, y0, z0, size, p0, p1) {
+    const x1 = x0 + size, y1 = y0 + size, z1 = z0 + size;
+    // fully swallowed? only a trema at least as wide as the cell's diagonal can manage it
+    const need = (3 * size * size) / 4;
+    for (let i = p0; i < p1; i += ST) {
+      if (S[i + 8] < need) continue;
+      let n = 0;
+      for (; n < 8 && inside(i, n & 1 ? x1 : x0, n & 2 ? y1 : y0, n & 4 ? z1 : z0); n++);
+      if (n === 8) return;
+    }
+    if (k === P325.kMax) {
+      for (let x = Math.ceil(x0); x < x1; x++) for (let y = Math.ceil(y0); y < y1; y++) for (let z = Math.ceil(z0); z < z1; z++) {
+        if (sg > 0 ? x <= 0 || y <= 0 || z <= 0 : x >= 0 || y >= 0 || z >= 0) continue;
+        const q = x * x + y * y + z * z;
+        if (q <= R1 * R1 || q > R2 * R2) continue;
+        tested++;
+        let dead = false;
+        for (let i = p0; i < p1 && !dead; i += ST) dead = inside(i, x, y, z);
+        if (dead) continue;
+        const jr = mulberry(cellHash(x | 0, y | 0, z | 0, seed ^ 0x5bd1));
+        dots.push(jitter ? [x + jr(), y + jr(), z + jr()] : [x, y, z]);
+      }
+      return;
+    }
+    // octave k + 1 is gathered once for the whole node; each child then filters its own list
+    // from the node's tremas plus that gather
+    const h = size / 2, g0 = top;
+    gather(k + 1, x0, y0, z0, x1, y1, z1);
+    const g1 = top;
+    for (let i = 0; i < 8; i++) {
+      const cx0 = x0 + (i & 1 ? h : 0), cy0 = y0 + (i & 2 ? h : 0), cz0 = z0 + (i & 4 ? h : 0);
+      const cx1 = cx0 + h, cy1 = cy0 + h, cz1 = cz0 + h;
+      if (sg > 0 ? cx1 <= 0 || cy1 <= 0 || cz1 <= 0 : cx0 >= 0 || cy0 >= 0 || cz0 >= 0) continue;
+      const lo = (a0, a1) => (sg > 0 ? Math.max(a0, 0) : Math.max(-a1, 0));
+      const near = lo(cx0, cx1) ** 2 + lo(cy0, cy1) ** 2 + lo(cz0, cz1) ** 2;
+      const far = Math.max(cx0 * cx0, cx1 * cx1) + Math.max(cy0 * cy0, cy1 * cy1) + Math.max(cz0 * cz0, cz1 * cz1);
+      if (near > R2 * R2 || far <= R1 * R1) continue;
+      const q0 = top, mx = (cx0 + cx1) / 2, my = (cy0 + cy1) / 2, mz = (cz0 + cz1) / 2;
+      for (let s = 0; s < 2; s++) {
+        const a = s ? g0 : p0, b = s ? g1 : p1;
+        for (let j = a; j < b; j += ST) {
+          const dx = Math.max(cx0 - S[j], 0, S[j] - cx1), dy = Math.max(cy0 - S[j + 1], 0, S[j + 1] - cy1), dz = Math.max(cz0 - S[j + 2], 0, S[j + 2] - cz1);
+          if (dx * dx + dy * dy + dz * dz > S[j + 8]) continue;
+          const dn = Math.abs(S[j + 3] * (mx - S[j]) + S[j + 4] * (my - S[j + 1]) + S[j + 5] * (mz - S[j + 2]));
+          if (dn > S[j + 9] + (h / 2) * (Math.abs(S[j + 3]) + Math.abs(S[j + 4]) + Math.abs(S[j + 5]))) continue;
+          grow(ST);
+          S.copyWithin(top, j, j + ST);
+          top += ST;
+        }
+      }
+      recurse(k + 1, cx0, cy0, cz0, h, q0, top);
+      top = q0;
+    }
+    top = g0;
+  }
+  // the work, cut into the level-2 blocks (size 150) of the octant that meet the shell
+  const kStart = 2, sB = L / (1 << kStart);
+  const boxes = [];
+  const lo0 = sg > 0 ? 0 : -R2, hiEnd = sg > 0 ? R2 : 0;
+  for (let x = Math.floor(lo0 / sB) * sB; x < hiEnd; x += sB)
+    for (let y = Math.floor(lo0 / sB) * sB; y < hiEnd; y += sB)
+      for (let z = Math.floor(lo0 / sB) * sB; z < hiEnd; z += sB) {
+        const lo = (a) => (sg > 0 ? Math.max(a, 0) : Math.max(-a - sB, 0));
+        const near = lo(x) ** 2 + lo(y) ** 2 + lo(z) ** 2;
+        const far = Math.max(x * x, (x + sB) ** 2) + Math.max(y * y, (y + sB) ** 2) + Math.max(z * z, (z + sB) ** 2);
+        if (near > R2 * R2 || far <= R1 * R1) continue;
+        boxes.push([x, y, z]);
+      }
+  let bi = 0;
+  return {
+    dots, originTries: tries, R1, total: boxes.length,
+    get tested() { return tested; },
+    get done() { return bi >= boxes.length; },
+    next() {
+      if (bi >= boxes.length) return false;
+      const [x, y, z] = boxes[bi++];
+      top = 0;
+      for (let k = P325.kMin; k <= kStart; k++) gather(k, x, y, z, x + sB, y + sB, z + sB);
+      recurse(kStart, x, y, z, sB, 0, top);
+      return bi < boxes.length;
+    },
+  };
+}
+
+// Hammer projection of one octant: latitude φ (from the z axis' equator), longitude λ centered on
+// the octant. North: x, y, z > 0, λ = atan2(y, x) − 45°. South (the antipodal octant): x, y, z < 0.
+function hammer(phi, lam) {
+  const d = Math.sqrt(1 + Math.cos(phi) * Math.cos(lam / 2));
+  return [(2 * Math.SQRT2 * Math.cos(phi) * Math.sin(lam / 2)) / d, (Math.SQRT2 * Math.sin(phi)) / d];
+}
+function projectDot(x, y, z, south) {
+  const r = Math.hypot(x, y, z), phi = Math.asin(z / r);
+  const lam = Math.atan2(y, x) - (south ? (-3 * Math.PI) / 4 : Math.PI / 4);
+  const [X, Y] = hammer(phi, lam);
+  return [X, Y, r];
+}
+// the "gothic ogive window": the equator across the bottom and the two meridians λ = ±45°
+function ogiveOutline(south) {
+  const P = [], n = 64, s = south ? -1 : 1;
+  for (let i = 0; i <= n; i++) P.push(hammer(0, -Math.PI / 4 + (i / n) * (Math.PI / 2)));          // equator
+  for (let i = 1; i <= n; i++) P.push(hammer((s * Math.PI * i) / (2 * n), Math.PI / 4));           // up one side
+  for (let i = n - 1; i >= 0; i--) P.push(hammer((s * Math.PI * i) / (2 * n), -Math.PI / 4));      // down the other
+  return P;
+}
+
+(() => {
+  const sup = (n) => String(n).replace(/\d/g, (d) => '⁰¹²³⁴⁵⁶⁷⁸⁹'[d]);
+  const sci = (x) => { if (x >= 0.001) return x.toFixed(x >= 0.1 ? 3 : 4); const [m, e] = x.toExponential(1).split('e'); return `${m}·10⁻${sup(-e)}`; };
+
+  // ====================== Plate 323: diamond tremas and lacunarity ======================
+  const SQ = 0.75, NDL = 0.02;                            // the two printed panels' aspects (fitted)
+  const stA = { mode: 'both', w: SQ, D: 1.5, seed: 2 };
+  const cacheA = new Map();
+  function setA323(w) {
+    const key = `${stA.D}|${w}|${stA.seed}`;
+    if (!cacheA.has(key)) {
+      if (cacheA.size > 6) cacheA.clear();
+      const T = tremas323(stA.D, w, stA.seed);
+      cacheA.set(key, { T, paths: diamondPaths(T), stats: analyse323(T) });
+    }
+    return cacheA.get(key);
+  }
+  const panelsA = () => (stA.mode === 'both' ? [[0, setA323(SQ)], [1.07, setA323(NDL)]] : [[0, setA323(stA.w)]]);
+  // the white (uncovered) share, measured exactly by Monte Carlo against the diamonds — a raster
+  // thickens sub-pixel needles and would understate it
+  function whiteMC(T, n = 20000) {
+    const N = T.length / 5, G = 50;
+    const co = new Float64Array(N), si = new Float64Array(N);
+    const cells = Array.from({ length: G * G }, () => []);
+    for (let i = 0; i < N; i++) {
+      const h1 = T[5 * i + 2], h2 = T[5 * i + 3], c = Math.cos(T[5 * i + 4]), s = Math.sin(T[5 * i + 4]);
+      co[i] = c; si[i] = s;
+      const ex = Math.abs(h1 * c) + Math.abs(h2 * s), ey = Math.abs(h1 * s) + Math.abs(h2 * c);
+      const x0 = Math.max(0, Math.floor((T[5 * i] - ex) * G)), x1 = Math.min(G - 1, Math.floor((T[5 * i] + ex) * G));
+      const y0 = Math.max(0, Math.floor((T[5 * i + 1] - ey) * G)), y1 = Math.min(G - 1, Math.floor((T[5 * i + 1] + ey) * G));
+      for (let gy = y0; gy <= y1; gy++) for (let gx = x0; gx <= x1; gx++) cells[gy * G + gx].push(i);
+    }
+    const rnd = mulberry(987654321);
+    let w = 0;
+    for (let k = 0; k < n; k++) {
+      const x = rnd(), y = rnd(), lst = cells[Math.min(G - 1, (y * G) | 0) * G + Math.min(G - 1, (x * G) | 0)];
+      let hit = false;
+      for (const i of lst) {
+        const dx = x - T[5 * i], dy = y - T[5 * i + 1];
+        if (Math.abs(dx * co[i] + dy * si[i]) / T[5 * i + 2] + Math.abs(dy * co[i] - dx * si[i]) / T[5 * i + 3] <= 1) { hit = true; break; }
+      }
+      if (!hit) w++;
+    }
+    return w / n;
+  }
+  // texture, measured on a small offscreen raster: lacunarity of the white mass in boxes of
+  // side 1/8, and the white components
+  function analyse323(T) {
+    const res = 256, off = document.createElement('canvas');
+    off.width = off.height = res;
+    const g = off.getContext('2d', { willReadFrequently: true });
+    g.setTransform(1, 0, 0, 1, 0, 0); g.fillStyle = '#fff'; g.fillRect(0, 0, res, res);
+    g.setTransform(res, 0, 0, res, 0, 0); g.fillStyle = '#000';
+    for (const p of diamondPaths(T)) g.fill(p);
+    const d = g.getImageData(0, 0, res, res).data, W = new Uint8Array(res * res);
+    let white = 0;
+    for (let i = 0; i < res * res; i++) if (d[4 * i] > 127) { W[i] = 1; white++; }
+    const I = new Float64Array((res + 1) * (res + 1));
+    for (let y = 0; y < res; y++) { let row = 0; for (let x = 0; x < res; x++) { row += W[y * res + x]; I[(y + 1) * (res + 1) + x + 1] = I[y * (res + 1) + x + 1] + row; } }
+    const B = 32, st = 4;
+    let s1 = 0, s2 = 0, n = 0;
+    for (let y = 0; y + B <= res; y += st) for (let x = 0; x + B <= res; x += st) {
+      const M = I[(y + B) * (res + 1) + x + B] - I[y * (res + 1) + x + B] - I[(y + B) * (res + 1) + x] + I[y * (res + 1) + x];
+      s1 += M; s2 += M * M; n++;
+    }
+    const mean = s1 / n, lam = mean > 0 ? s2 / n / (mean * mean) : NaN;
+    const lbl = new Int32Array(res * res), stack = new Int32Array(res * res);
+    let comps = 0, largest = 0;
+    for (let i = 0; i < res * res; i++) {
+      if (!W[i] || lbl[i]) continue;
+      comps++;
+      let sz = 0, sp = 0;
+      stack[sp++] = i; lbl[i] = comps;
+      while (sp) {
+        const j = stack[--sp], x = j % res;
+        sz++;
+        if (x > 0 && W[j - 1] && !lbl[j - 1]) { lbl[j - 1] = comps; stack[sp++] = j - 1; }
+        if (x < res - 1 && W[j + 1] && !lbl[j + 1]) { lbl[j + 1] = comps; stack[sp++] = j + 1; }
+        if (j >= res && W[j - res] && !lbl[j - res]) { lbl[j - res] = comps; stack[sp++] = j - res; }
+        if (j < res * (res - 1) && W[j + res] && !lbl[j + res]) { lbl[j + res] = comps; stack[sp++] = j + res; }
+      }
+      if (sz > largest) largest = sz;
+    }
+    return { white: whiteMC(T), lam, comps, largest: white ? largest / white : 0 };
+  }
+  const zA = zoomable('wA', 'cA', (f) => (stA.mode === 'both'
+    ? fitBox(f, { x0: -0.015, x1: 2.085, y0: -0.015, y1: 1.015 }, 0.012)
+    : fitBox(f, { x0: -0.015, x1: 1.015, y0: -0.015, y1: 1.015 }, 0.012)), (f, v) => {
+    paper(f, PRINT.paper); toWorld(f, v);
+    const c = f.ctx;
+    for (const [ox, set] of panelsA()) {
+      c.save();
+      c.beginPath(); c.rect(ox, 0, 1, 1); c.clip();
+      c.translate(ox, 0);
+      c.fillStyle = PRINT.ink;
+      for (const p of set.paths) c.fill(p);
+      c.restore();
+    }
+    for (const [ox] of panelsA()) { c.strokeStyle = PRINT.ink; c.lineWidth = 1.2 / v.s; c.strokeRect(ox, 0, 1, 1); }
+    toScreen(f);
+  });
+  const MODES_A = { sq: 'Nearly a square', ndl: 'Sharp needle', both: 'Both, as printed' };
+  const wSlider = $('wA323');
+  const wTo = (t) => NDL * Math.pow(SQ / NDL, t);          // log scale from needle to square
+  const pairFmt = (fn) => (stA.mode === 'both' ? `${fn(setA323(SQ).stats)} · ${fn(setA323(NDL).stats)}` : fn(setA323(stA.w).stats));
+  let timerA = 0;
+  function setA(refit, lazy) {
+    markMA(stA.mode === 'both' ? 'both' : Math.abs(stA.w - SQ) < 1e-9 ? 'sq' : Math.abs(stA.w - NDL) < 1e-9 ? 'ndl' : '');
+    $('wrapA').classList.toggle('r-two', stA.mode === 'both');
+    $('wrapA').classList.toggle('r-sq', stA.mode !== 'both');
+    $('wA323w').hidden = stA.mode === 'both';
+    wSlider.value = Math.log(stA.w / NDL) / Math.log(SQ / NDL);
+    $('wAv').textContent = `short diagonal = ${stA.w.toFixed(stA.w < 0.1 ? 3 : 2)} of the long one`;
+    $('dAv').textContent = `D = ${stA.D.toFixed(2)}`;
+    $('dA323').value = stA.D;
+    $('seedAv').textContent = `seed ${stA.seed}`;
+    clearTimeout(timerA);
+    const apply = () => {
+      $('cAt').textContent = stA.mode === 'both' ? 'Both panels' : stA.w > 0.3 ? 'Blunt diamonds' : 'Needle diamonds';
+      $('cAn').textContent = stA.mode === 'both'
+        ? `${fmt(setA323(SQ).T.length / 5)} + ${fmt(setA323(NDL).T.length / 5)} tremas`
+        : `${fmt(setA323(stA.w).T.length / 5)} tremas`;
+      $('rAa').textContent = pairFmt((s) => s.white.toFixed(3));
+      $('rAb').textContent = whiteExpected323(stA.D).toFixed(3);
+      $('rAc').textContent = pairFmt((s) => (Number.isNaN(s.lam) ? '—' : s.lam.toFixed(2)));
+      $('rAd').innerHTML = pairFmt((s) => `${fmt(s.comps)} <small>top ${(100 * s.largest).toFixed(0)}%</small>`);
+      if (refit) zA.refit(); else zA.schedule();
+    };
+    if (lazy) timerA = setTimeout(apply, 150); else apply();
+  }
+  const markMA = stepButtons($('mA'), ['sq', 'ndl', 'both'], (k) => MODES_A[k], (k) => `Show: ${MODES_A[k]}`, (k) => {
+    const was = stA.mode;
+    stA.mode = k === 'both' ? 'both' : 'single';
+    if (k !== 'both') stA.w = k === 'sq' ? SQ : NDL;
+    setA(was !== stA.mode);
+  });
+  wSlider.addEventListener('input', (e) => { stA.w = wTo(+e.target.value); setA(false, true); });
+  $('dA323').addEventListener('input', (e) => { stA.D = +e.target.value; setA(false, true); });
+  $('seedA').addEventListener('click', () => { stA.seed = 1 + ((Math.random() * 9999) | 0); setA(false); });
+  $('plate323').addEventListener('click', () => { Object.assign(stA, { mode: 'both', D: 1.5, seed: 2 }); setA(true); });
+  // the two generators as small figures, at a common area
+  (() => {
+    const dia = (w, dx) => { const p = Math.sqrt(0.16 / w), q = w * p; return `<polygon points="${dx + p / 2},0 ${dx},${-q / 2} ${dx - p / 2},0 ${dx},${q / 2}" fill="currentColor"/>`; };
+    $('miniGen').innerHTML = dia(SQ, 0.3) + dia(NDL, 1.6);
+  })();
+
+  // ====================== Plate 325: the trema dust on the sky ======================
+  const stB = { view: 'north', shape: 'pancake', D: 1.23, seed: 7, jitter: true };
+  const FLAT = { pancake: 0.3, needle: 0.4, sphere: 0.5 };
+  const R2 = 600, SHELLS = 5;
+  let jobB = null, ptsB = [];                              // projected dots per shell bucket
+  const latticeCount = () => ((4 * Math.PI) / 24) * (R2 ** 3 - (R2 / 1.5) ** 3);
+  const zB = zoomable('wB', 'cB', (f) => (stB.view === 'north'
+    ? fitBox(f, { x0: -0.83, x1: 0.83, y0: -0.035, y1: 1.45 }, 0.02)
+    : fitBox(f, { x0: -0.83, x1: 0.83, y0: -1.45, y1: 0.035 }, 0.02)), (f, v) => {
+    paper(f, PRINT.paper); toScreen(f);
+    const c = f.ctx;
+    c.strokeStyle = PRINT.ink; c.lineWidth = 1.1; c.beginPath();
+    ogiveOutline(stB.view === 'south').forEach(([X, Y], i) => { const sx = v.ox + X * v.s, sy = v.oy - Y * v.s; if (i) c.lineTo(sx, sy); else c.moveTo(sx, sy); });
+    c.closePath(); c.stroke();
+    for (let b = 0; b < SHELLS; b++) {
+      const P = ptsB[b];
+      if (!P || !P.length) continue;
+      c.fillStyle = `rgba(21,21,21,${(0.95 - (0.6 * b) / (SHELLS - 1)).toFixed(2)})`;
+      for (let i = 0; i < P.length; i += 2) c.fillRect(v.ox + P[i] * v.s - 1.1, v.oy - P[i + 1] * v.s - 1.1, 2.2, 2.2);
+    }
+  });
+  function finishB(job) {
+    const n = job.dots.length;
+    $('infoB').innerHTML = n
+      ? `Done: <b>${fmt(n)}</b> of the shell's ≈ ${fmt(Math.round(latticeCount()))} octant lattice points escaped every trema and are plotted, nearer shells darker.`
+      : 'No lattice point of the shell escaped the tremas for this seed — an empty sky. Try another seed.';
+    $('rBa').textContent = fmt(n);
+    $('rBb').textContent = sci(n / latticeCount());
+    $('rBc').textContent = sci(survival325(stB.D));
+    $('rBd').textContent = fmt(job.originTries + 1);
+  }
+  function startB(refit) {
+    if (jobB) jobB.cancel = true;
+    const my = { cancel: false };
+    jobB = my;
+    ptsB = Array.from({ length: SHELLS }, () => []);
+    $('infoB').textContent = 'Removing tremas and sorting the shell\'s lattice points…';
+    $('rBa').textContent = $('rBb').textContent = $('rBd').textContent = '—';
+    $('rBc').textContent = sci(survival325(stB.D));
+    if (refit) zB.refit(); else zB.schedule();
+    // the origin search and the first blocks run after the controls have painted
+    setTimeout(() => {
+      if (my.cancel) return;
+      const run = dust325Start({ D: stB.D, shape: stB.shape, f: FLAT[stB.shape], seed: stB.seed, R2, south: stB.view === 'south', jitter: stB.jitter });
+      let seen = 0;
+      const south = stB.view === 'south';
+      const step = () => {
+        if (my.cancel) return;
+        const t0 = performance.now();
+        while (!run.done && performance.now() - t0 < 28) run.next();
+        for (; seen < run.dots.length; seen++) {
+          const [x, y, z] = run.dots[seen];
+          const [X, Y, r] = projectDot(x, y, z, south);
+          let b = Math.floor((SHELLS * (r - run.R1)) / (R2 - run.R1));
+          if (b < 0) b = 0; else if (b >= SHELLS) b = SHELLS - 1;
+          ptsB[b].push(X, Y);
+        }
+        zB.schedule();
+        if (!run.done) { $('infoB').textContent = `Sorting the shell's lattice points… ${fmt(run.dots.length)} kept so far`; requestAnimationFrame(step); } else finishB(run);
+      };
+      step();
+    }, 30);
+  }
+  const VIEWS = { north: 'Octant x, y, z > 0 (as printed)', south: 'The antipodal octant' };
+  const SHAPES = { pancake: 'Flattened', needle: 'Needle-like', sphere: 'Spheres, to compare' };
+  let timerB = 0;
+  function setB(refit, lazy) {
+    markVB(stB.view); markSB(stB.shape);
+    $('dBv').textContent = `D = ${stB.D.toFixed(2)}`;
+    $('dB325').value = stB.D;
+    $('seedBv').textContent = `seed ${stB.seed}`;
+    $('cBt').textContent = stB.view === 'north' ? 'One octant of the sky' : 'The antipodal octant';
+    $('cBn').textContent = `${SHAPES[stB.shape].toLowerCase().replace(', to compare', '')} tremas · D = ${stB.D.toFixed(2)}`;
+    clearTimeout(timerB);
+    if (lazy) timerB = setTimeout(() => startB(refit), 220); else startB(refit);
+  }
+  const markVB = stepButtons($('vB'), Object.keys(VIEWS), (k) => VIEWS[k], (k) => `Show: ${VIEWS[k]}`, (k) => { stB.view = k; setB(true); });
+  const markSB = stepButtons($('sB'), Object.keys(SHAPES), (k) => SHAPES[k], (k) => `Tremas: ${SHAPES[k]}`, (k) => { stB.shape = k; setB(false); });
+  $('dB325').addEventListener('input', (e) => { stB.D = +e.target.value; $('dBv').textContent = `D = ${stB.D.toFixed(2)}`; setB(false, true); });
+  $('jitB').addEventListener('change', (e) => { stB.jitter = e.target.checked; setB(false); });
+  $('seedB').addEventListener('click', () => { stB.seed = 1 + ((Math.random() * 9999) | 0); setB(false); });
+  $('plate325').addEventListener('click', () => { Object.assign(stB, { view: 'north', shape: 'pancake', D: 1.23, seed: 7, jitter: true }); $('jitB').checked = true; setB(true); });
+  // the whole Hammer sky, with the octant's "gothic ogive window" marked, as on page 324
+  (() => {
+    const path = (pts) => pts.map(([X, Y], i) => `${i ? 'L' : 'M'}${X.toFixed(3)},${(-Y).toFixed(3)}`).join('');
+    let g = '';
+    for (let lam = -180; lam <= 180; lam += 45) g += `<path d="${path(Array.from({ length: 49 }, (_, i) => hammer(((i / 48) * Math.PI) - Math.PI / 2, (lam * Math.PI) / 180)))}" fill="none" stroke="currentColor" stroke-width="0.016" opacity="0.35"/>`;
+    for (let phi = -60; phi <= 60; phi += 30) g += `<path d="${path(Array.from({ length: 49 }, (_, i) => hammer((phi * Math.PI) / 180, ((i / 48) * 2 - 1) * Math.PI)))}" fill="none" stroke="currentColor" stroke-width="0.016" opacity="0.35"/>`;
+    g += `<path d="${path(ogiveOutline(false))}Z" fill="currentColor" opacity="0.8"/>`;
+    $('miniSky').innerHTML = g;
+  })();
+
+  setA(true);
+  setB(true);
+})();
+
+</script>
+
+</body>
+</html>
