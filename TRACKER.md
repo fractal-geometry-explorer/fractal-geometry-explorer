@@ -74,7 +74,7 @@ Update this file in the same pull request as the work it records.
 
 | Plate | Page | Title | Kind | Status | Site page |
 | :- | :- | :- | :- | :- | :- |
-| 115 | 115 | Log(perimeter) versus log(area) for clouds and rain areas | data | todo | |
+| 115 | 115 | Log(perimeter) versus log(area) for clouds and rain areas | data | done | length-area |
 | Figure, p. 121 | 121 | Islands and lakes by curdling (generator and advanced teragon) | exact | todo | |
 | Figure, p. 124 | 124 | Nonlumped curdling clusters (generators A–F) | exact | todo | |
 | Figure, p. 125 | 125 | Cross-lumped curdling clusters; knotted Peano monsters | exact | todo | |
@@ -186,7 +186,7 @@ Each chapter session should add the chapter's main ideas here, alongside its pla
 - similarity dimension (chapters 3 and 6);
 - coastline length against ruler size (chapter 5; partly on the Minkowski page);
 - intermittency (chapter 10);
-- length–area–volume relations (chapter 12);
+- length–area–volume relations (chapter 12): done, on the length-area page (divider-walk demo, Hack's rivers, area–volume cases);
 - percolation (chapter 13);
 - the diameter exponent of trees (chapter 17);
 - 1/f noise and scaling nets (chapter 27);

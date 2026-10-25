@@ -133,6 +133,19 @@
         "ui.js"
       ],
       "layout_comment": "/* Layout: the Cantor bar (80), the Cantor curtains (81), the devil's staircase (83) and the chapter's dust-and-dimension concept, each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "length-area",
+      "title": "Length–Area Relations",
+      "plates": "Plate 115",
+      "chapter": 12,
+      "scripts": [
+        "shared/geometry.js",
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: the length-area relation demo (five similar islands and one yardstick, with its log-log chart), the digitised Plate 115 chart, and the area-volume section with the brain-folds cartoon, each a figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
     }
   ]
 }

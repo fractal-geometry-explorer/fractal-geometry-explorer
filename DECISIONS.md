@@ -124,6 +124,16 @@ Conventions used below:
 - **Plate 83, the devil's staircase.** The unit square with the region under the Cantor function in solid ink. The scan's top profile matches the Cantor function to rms 0.005 of the height (max deviation 0.018 at the near-vertical risers, which is ink spread); treads are resolved down to about 3⁻⁷. The page computes M(R) per pixel column, so zooming keeps producing steps. Graph length checked in closed form: 1 − (2/3)ⁿ + √(1 + (4/9)ⁿ) → 2.
 - **Generalized dusts (pages 77–78).** The book gives N and r for its example dusts (N = 3, r = 1/5; N = 2, r = 1/4; N = 3, r = 1/9) but never draws them, so the page's evenly spaced arrangement — first piece at 0, last ending at 1, equal tremas — is a reconstruction, flagged on the page. The gap-count law Nr(U > u) stepping across F·u⁻ᴰ was verified and is drawn as a log–log chart.
 
+## Part IV, chapter 12
+
+**Plate 115, log(perimeter) versus log(area) for clouds and rain areas (page length-area).**
+- A `data` plate: 71 points digitised from the 600 dpi scan (55 open-circle clouds, 16 filled rain areas), by ring/disc template matching plus a residual-ink audit, so every marker was accounted for. Centres are good to about 2 px ≈ 0.006 decade.
+- Axes calibrated from the decade ticks: 332.5 px/decade in x, 333.3 px/decade in y, consistent to 0.3%.
+- A least-squares refit of the digitised points gives slope 0.674, D = 1.349 — Lovejoy's published 1.35, which the caption rounds to 4/3. The line printed on the plate has slope 0.678 (D = 1.356), intercept logP = 0.555 at logA = 0. The page draws the printed line by default and offers the refit.
+- Cloud and rain points fit separately give D = 1.348 and 1.366; the page's note keeps only the joint statement.
+- **The length–area demo is our construction, not a book figure.** Five similar islands (Koch snowflake D = log 4/log 3, Plate 51's quadric D = 3/2, or circles), coasts walked with genuine dividers at a common G. Checked numerically: circles give slope 0.5000 and length within 0.01% of 2πr; the quadric family returns D = 1.50 ± 0.01 at any G; the Koch family oscillates D ≈ 1.24–1.30 with G (the known log-periodic wobble of divider walks), which the page says on the figure's note.
+- **The brain-folds figure is a cartoon** (sinusoidally folded pia in a disc section, wiggle count solved numerically so pia length tracks section area as A ∝ V or ∝ V^0.92). Flagged as such on the page; the book proposes no construction for the pia.
+
 ## Open questions
 
 - **The 13-interval generator.** Why does Plate 69's large circle use a different rule from the caption's second stage? This may be worth a sentence once the rest of chapter 7 is reviewed.
