@@ -1,0 +1,25 @@
+# Checks every pull request and push to main: the committed site/ matches the sources,
+# and every built page passes the smoke test (no script errors, no blank canvases,
+# no horizontal scroll at phone width).
+name: Checks
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: The committed site/ matches the sources
+        run: python3 tools/check_build.py
+      - name: Build the pages from src/
+        run: python3 tools/build.py
+      - name: Install Playwright
+        run: |
+          npm install playwright
+          npx playwright install --with-deps chromium
+      - name: Smoke test every page at 1280px and 390px
+        run: node tests/smoke.cjs
