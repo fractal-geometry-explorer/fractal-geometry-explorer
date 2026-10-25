@@ -123,6 +123,17 @@
       "layout_comment": "/* Layout: snowflake sweeps (68–69), Peano–Gosper trees (70–71), a cascade tree (71), the fudgeflake (72–73) and the quartet (73), each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
     },
     {
+      "slug": "historical-sketches",
+      "title": "Historical Sketches",
+      "plates": "Pages 405–421",
+      "chapter": 41,
+      "scripts": [
+        "shared/draw.js",
+        "script.js"
+      ],
+      "layout_comment": "/* Layout: six entry sections in book order, three with a figure beside the entry's text and controls, three as prose; a sticky index on top. One column under 900px. */"
+    },
+    {
       "slug": "cantor-dust",
       "title": "Cantor Dust",
       "plates": "Plates 80–83",

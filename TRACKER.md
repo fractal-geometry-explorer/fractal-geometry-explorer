@@ -173,6 +173,12 @@ Update this file in the same pull request as the work it records.
 | :- | :- | :- | :- | :- | :- |
 | 340 | 340 | Original evidence for scaling in economics (cotton prices) | data | todo | |
 
+## XII Of men and ideas (chapters 40–42)
+
+| Plate | Page | Title | Kind | Status | Site page |
+| :- | :- | :- | :- | :- | :- |
+| (concept) | 405–421 | Historical sketches: chimeras, dimension, Poincaré, old scaling evidence, Weierstrass | — | done | historical-sketches |
+
 ## Front matter and the update for the second printing (pages 458–468)
 
 | Plate | Title | Kind | Status | Site page |
@@ -192,4 +198,5 @@ Each chapter session should add the chapter's main ideas here, alongside its pla
 - 1/f noise and scaling nets (chapter 27);
 - Lévy flights and dusts (chapters 31–32);
 - lacunarity (chapter 34);
-- scaling in prices and in word frequencies (chapters 37–38).
+- scaling in prices and in word frequencies (chapters 37–38);
+- the prehistory of dimension, scaling and the monsters (chapter 41): done, on the historical-sketches page.
