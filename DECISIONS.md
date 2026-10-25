@@ -124,6 +124,15 @@ Conventions used below:
 - **Plate 83, the devil's staircase.** The unit square with the region under the Cantor function in solid ink. The scan's top profile matches the Cantor function to rms 0.005 of the height (max deviation 0.018 at the near-vertical risers, which is ink spread); treads are resolved down to about 3⁻⁷. The page computes M(R) per pixel column, so zooming keeps producing steps. Graph length checked in closed form: 1 − (2/3)ⁿ + √(1 + (4/9)ⁿ) → 2.
 - **Generalized dusts (pages 77–78).** The book gives N and r for its example dusts (N = 3, r = 1/5; N = 2, r = 1/4; N = 3, r = 1/9) but never draws them, so the page's evenly spaced arrangement — first piece at 0, last ending at 1, equal tremas — is a reconstruction, flagged on the page. The gap-count law Nr(U > u) stepping across F·u⁻ᴰ was verified and is drawn as a log–log chart.
 
+## Part III, chapter 10
+
+**Geometry of turbulence; intermittency (pages 97–105, no plates).**
+- The chapter prints no figures at all — every page of the scan was checked — so the whole page (`turbulence-intermittency`) is labelled as this page's own illustrations of the text. Formulas were verified on the 600 dpi scan: ⟨[v(x) − v(x+r)]²⟩ = |r|^(2/3+B) with B = (3 − D)/3 for fractally homogeneous turbulence, B ≤ (3 − D)/3 for weighted curdling, and the curdling rule "N = r⁻ᴰ out of r⁻³ mth-order subeddies".
+- **The record of gusts.** Base-9 curdling of [0, 1] where every kept cell keeps exactly N of its 9 ninths, so d = log N/log 9 exactly and the fixed total dissipation stays uniform on the survivors (density (9/N)ᵐ). Positions are seeded-random per cell; a checkbox reuses one position set everywhere, which is the chapter's "de-randomized" curdling. N = 3 gives d = 1/2, i.e. the measured D ≈ 2.5 in space.
+- **The cube.** Base-3 curdling with a seeded generator of N of 27 cells reused at every scale (the chapter's model). Drawn isometrically with painter's order by x + y + z; 4096 cubes redraw in ~45 ms. The partial Fisher–Yates pick makes the generator nest as N grows, so the N slider adds curds without rearranging the rest.
+- **The section argument.** Computed exactly, not simulated: randomize the curdling (each subcell kept with probability p = 3^(D−3)); a straight probe's trace is a branching process with Binomial(3, p) offspring, mean 3^(D−2), so it dies out surely for D ≤ 2 and survives with positive probability for D > 2 — extinction iterates q → (1 − p + pq)³. Chapter 23 is cited by the book as proving the theorem for a simple class; the galaxies' contrast (projections must vanish, D < 2, D ≈ 1.23) is drawn on the same chart.
+- The chapter's open topology question (dust vs vortex tubes vs sheets; kurtosis tests determine only D) is reported as open on the page.
+
 ## Part VIII, chapter 25
 
 **Plate 241, a sample random walk and its zeroset.**

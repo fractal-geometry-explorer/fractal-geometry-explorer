@@ -69,6 +69,7 @@ Update this file in the same pull request as the work it records.
 | :- | :- | :- | :- | :- | :- |
 | 95 | 95 | Projection of Fournier's multiuniverse (D ≈ 0.8270) | exact | todo | |
 | 96 | 96 | A flat Fournier universe with D = 1 | exact | todo | |
+| (concept) | 97–105 | Geometry of turbulence; intermittency (chapter 10, no plates) | random | done | turbulence-intermittency |
 
 ## IV Scaling fractals (chapters 12–14)
 
@@ -186,7 +187,6 @@ Update this file in the same pull request as the work it records.
 Each chapter session should add the chapter's main ideas here, alongside its plates. Candidates so far:
 - similarity dimension (chapters 3 and 6);
 - coastline length against ruler size (chapter 5; partly on the Minkowski page);
-- intermittency (chapter 10);
 - length–area–volume relations (chapter 12);
 - percolation (chapter 13);
 - surfaces with positive volume: Cantor dusts of positive measure, Osgood's curve of positive area, and the arteries-and-veins model of flesh (chapter 15, which prints no plates);
