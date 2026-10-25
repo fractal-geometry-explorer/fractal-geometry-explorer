@@ -124,6 +124,32 @@ Conventions used below:
 - **Plate 83, the devil's staircase.** The unit square with the region under the Cantor function in solid ink. The scan's top profile matches the Cantor function to rms 0.005 of the height (max deviation 0.018 at the near-vertical risers, which is ink spread); treads are resolved down to about 3⁻⁷. The page computes M(R) per pixel column, so zooming keeps producing steps. Graph length checked in closed form: 1 − (2/3)ⁿ + √(1 + (4/9)ⁿ) → 2.
 - **Generalized dusts (pages 77–78).** The book gives N and r for its example dusts (N = 3, r = 1/5; N = 2, r = 1/4; N = 3, r = 1/9) but never draws them, so the page's evenly spaced arrangement — first piece at 0, last ending at 1, equal tremas — is a reconstruction, flagged on the page. The gap-count law Nr(U > u) stepping across F·u⁻ᴰ was verified and is drawn as a log–log chart.
 
+## Part VIII, chapter 24 (Plates 228–231, page chains-and-squigs)
+
+**Plate 228, random Koch coastline (D = log 18/log 6 ≈ 1.6131).**
+- Both caption-box generators were decoded exactly at 600 dpi (dot centres snapped to the lattice, max residual 0.16 of a step; every edge confirmed against ink). They visit the same 19 lattice points with 18 unit steps on b = 6.
+- The second generator is identical to Plate 53's, already in quadric-islands.
+- The first is deliberately disconnected: a 12-step path plus a closed 6-edge ring (the 2×1 rectangle above the midline). The ring is what spawns the plate's satellite islands, which then spawn their own.
+- The random mixture (a fair coin per interval per stage) was checked exactly on the integer lattice for 20 seeds to stage 3: no vertex is ever visited twice, so the mixture is self-avoiding and islands never touch the coast.
+- The square initiator and the even coin are reconstructions; the caption gives neither, only that the initiator's symmetries stay visible.
+
+**Plate 229, random Peano curve (N = 4, r = 1/2, D = 2).**
+- Generator read from the box: (0,0) → (1/4, √3/4) → (3/4, √3/4) → (1/2, 0) → (1,0) — up the left side of the interval's equilateral triangle, across, down to the base midpoint, out. The flipped form is its mirror through the perpendicular bisector (equivalently: the two focal points are point-symmetric through the interval's midpoint, which is the caption's "distribution symmetric with respect to the midpoint").
+- Each interval carries a shelter triangle (u, v, f); straight visits corner-u, corner-f, middle, corner-v; flipped visits corner-u, middle, corner-f, corner-v. Both keep the children inside the shelter, so shelters tile and the limit sweeps the triangle.
+- The caption-box second stage is the deterministic alternation (flipped, straight, flipped, straight along the teragon, the initiator itself straight): reproduced to 0.0 px mean distance at 600 dpi after scoring all 16 form combinations.
+- **The full plate is a reconstruction in regime.** The printed sweep wanders outside its triangle: the apex sits ~14% above the equilateral point and the left edge bulges out ~9%, which no within-shelter rule can produce; free re-tossing of shelter sides at every stage (tried in several variants) wanders far too much. The page's "wandering" regime (confined for stages 0–1, shelter side re-tossed from stage 2 on) reproduces the plate's silhouette and texture; "in the triangle" is the cleanest rule fitting both caption diagrams. Logged as undetermined by the caption.
+- The spiky rendering follows the caption's detour rule — each interval drawn through the centre of its shelter — with every stage's detour points kept (between the 2nd and 3rd child of their interval). Keeping them is what produces the plate's long multi-scale slivers; the caption's one line does not say either way.
+
+**Plate 230, triangle and squig curve (D = log 2.5/log 2 ≈ 1.3219).**
+- Refinement decoded from the text: halve every interface (shared side) and keep one half at random; within a link the subchain is then forced — 1 subtriangle when the kept halves meet at a corner (probability 1/4), 3 otherwise (3/4), mean 2.5, matching the caption's numbers exactly (verified over 10 stages: ratio ≈ 1:3, growth ≈ 2.5).
+- The plate's superposition-in-grays is reproduced at one scale (the print enlarges stages 6–10; the page zooms instead). Entry through the left side, exit through the base; the printed sample's own entry/exit and seed are not recoverable.
+- The asymmetric squig (text, not plate): with "left" judged by an observer looking downstream, D = log(3 − p² − (1−p)²)/log 2; the page's bias slider implements this convention and says so.
+- The branching-squig river tree (the text figure on page 227, no plate number) is built by outlets: each triangle drains across one side; the kept half of the outlet decides which subtriangle inherits it, the rest drain inward, fully determined, as the text says.
+
+**Plate 231, hexa-squig coastline (D ≈ 4/3).**
+- Initiator: the ring of six triangles around the hexagon's centre; the six radial sides are the cyclic interfaces; refinement identical to Plate 230's, cyclically. The loop stays self-avoiding by construction.
+- Drawn as the print: hexagon in ink, the loop's interior in paper. Matched statistically with the seed shown; the printed sample's seed is not recoverable.
+
 ## Open questions
 
 - **The 13-interval generator.** Why does Plate 69's large circle use a different rule from the caption's second stage? This may be worth a sentence once the rest of chapter 7 is reviewed.

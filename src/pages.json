@@ -123,6 +123,17 @@
       "layout_comment": "/* Layout: snowflake sweeps (68–69), Peano–Gosper trees (70–71), a cascade tree (71), the fudgeflake (72–73) and the quartet (73), each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
     },
     {
+      "slug": "chains-and-squigs",
+      "title": "Random Chains and Squigs",
+      "plates": "Plates 228–231",
+      "chapter": 24,
+      "scripts": [
+        "shared/draw.js",
+        "script.js"
+      ],
+      "layout_comment": "/* Layout: the random Koch coastline (228), the random Peano curve (229), the squig and its valleys (230) and the hexa-squig loop (231), each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
       "slug": "cantor-dust",
       "title": "Cantor Dust",
       "plates": "Plates 80–83",
