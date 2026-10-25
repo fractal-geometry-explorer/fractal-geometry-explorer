@@ -31,7 +31,7 @@ def build_page(p, rewrite=True, pages=None):
     else:
         css = (SRC / 'shared' / 'base.css').read_text()
         css = LAYOUT_RE.sub(lambda m: p['layout_comment'], css, count=1)
-        script = '\n'.join((d / s).read_text() for s in p['scripts'])
+        script = '\n'.join(((SRC / s) if '/' in s else (d / s)).read_text() for s in p['scripts'])
         out = (d / 'template.html').read_text().replace('/*BASECSS*/', css).replace('/*SCRIPT*/', script)
     if rewrite and pages:
         for q in pages:

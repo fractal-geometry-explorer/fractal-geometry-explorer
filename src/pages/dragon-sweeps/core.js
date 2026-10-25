@@ -272,9 +272,4 @@ function pruneTree(adj, times) {
   }
   return g;
 }
-function dimension(rs) {
-  let lo = 0, hi = 3;
-  for (let i = 0; i < 90; i++) { const mid = (lo + hi) / 2, g = rs.reduce((s, r) => s + Math.pow(r, mid), 0); if (g > 1) lo = mid; else hi = mid; }
-  return (lo + hi) / 2;
-}
 // CORE END

@@ -94,6 +94,8 @@
       "artifact": "https://claude.ai/artifact/6EmzLTVdLKdNvpiUt94pog",
       "kind": "template",
       "scripts": [
+        "shared/geometry.js",
+        "shared/draw.js",
         "core.js",
         "ui.js"
       ],
@@ -107,6 +109,8 @@
       "artifact": "https://claude.ai/artifact/QxRja4otEyH8dMeU8Uy4UY",
       "kind": "template",
       "scripts": [
+        "shared/geometry.js",
+        "shared/draw.js",
         "core.js",
         "ui.js"
       ],
