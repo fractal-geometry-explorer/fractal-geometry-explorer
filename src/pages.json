@@ -123,6 +123,18 @@
       "layout_comment": "/* Layout: snowflake sweeps (68–69), Peano–Gosper trees (70–71), a cascade tree (71), the fudgeflake (72–73) and the quartet (73), each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
     },
     {
+      "slug": "mathematical-backup",
+      "title": "Mathematical Backup",
+      "plates": "Chapter 39",
+      "chapter": 39,
+      "scripts": [
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: five concept sections (self-affinity, covering and dimension, Lévy stability, R/S analysis, Weierstrass), each a computed figure beside its caption, then a guide to the chapter's remaining entries; a sticky index on top. One column under 900px. */"
+    },
+    {
       "slug": "cantor-dust",
       "title": "Cantor Dust",
       "plates": "Plates 80–83",
