@@ -25,6 +25,9 @@ LAYOUT_RE = re.compile(r'/\* Layout:[^\n]*\*/')
 
 SHELL_CSS = '''<style>
 body { margin: 0; }
+/* The hidden attribute must beat the pages' own display rules (.slider, .check, ...). The artifact
+   wrapper's stylesheet used to provide this; self-hosted pages carry it themselves. */
+[hidden] { display: none !important; }
 nav.shell { font-family: var(--f-display); font-size: 12.5px; font-weight: 600; background: var(--page);
   border-bottom: 1px solid var(--rule); display: flex; align-items: center; gap: 6px 18px;
   padding: 9px max(16px, env(safe-area-inset-right, 0px)) 9px max(16px, env(safe-area-inset-left, 0px)); }
@@ -173,6 +176,7 @@ INDEX_TPL = '''<!doctype html>
 }
 :root[data-theme="dark"] { --page: #111214; --text: #e5e5e1; --muted: #9a9fa6; --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6; color-scheme: dark; }
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 body { margin: 0; background: var(--page); color: var(--text); font-family: var(--f-display); font-size: 14px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
 .wrap { max-width: 1080px; margin: 0 auto; padding: 40px max(16px, env(safe-area-inset-right, 0px)) 72px max(16px, env(safe-area-inset-left, 0px)); display: grid; gap: 36px; }
 header { display: grid; gap: 10px; max-width: 820px; }
