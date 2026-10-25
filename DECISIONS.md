@@ -20,6 +20,8 @@ Conventions used below:
 - **Sub-pixel dust.** Rasterising a Cantor dust by coverage (recurse until a piece is under a pixel, then deposit its overlap) leaves horizontal bands wherever the recursion bottoms out one level earlier: the deposited mass jumps by the factor N·r. Deposit a sub-pixel piece of length ℓ with total mass (ℓ/px)^D instead: that is the one weight for which a piece deposits exactly what its N children would (N·r^D = 1), so nothing jumps, and thin cords dim like the dust's D-dimensional density. Plate 81's curtains draw this way; chapters 31–32 (Lévy dusts) will want the same.
 - **Layout shift.** Give readouts whose text length changes a fixed height. A caption that changed size moved the graph around.
 
+- **Heavy random rasters: render once, blit while navigating.** Each of brown-relief's figures draws once per parameter change into an offscreen canvas covering a fixed world rectangle; the zoomable view only re-blits that canvas. Pan and zoom never recompute the field, and a random figure magnifies like the printed plate it stands for (its resolution is the simulation grid's).
+
 ## Foundation (shared library and site shell)
 
 - **The shared library is the newest pages' code.** `src/shared/draw.js` and `geometry.js` are the plumbing of snow-sweeps and dragon-sweeps, verbatim; the older pages had drifted copies, and the newest were taken as canonical. The only widenings: `polyPath` takes peano's optional `upto`, `zoomable` takes `{ maxZoom, onTap }` and quadric's `z.ground` override, and `dimension` brackets [0.01, 8].
@@ -123,6 +125,44 @@ Conventions used below:
 - **Plate 81, the curtains.** Both figures are dusts with N = 2 and r varying with height, square frames, topped by [0, 1]. Told apart by fitting the central gap over ~180 rows each: the top figure is linear in D (from 1 to 0; residual rms 0.02), the bottom linear in r (from 1/2 to 0; rms 0.0008). The printed margin arrows sit a little high of the stated values — about r = 0.347 and D = 0.68 instead of r = 1/3, D = 0.6309 — so the page's arrows mark the exact values, and the note says so.
 - **Plate 83, the devil's staircase.** The unit square with the region under the Cantor function in solid ink. The scan's top profile matches the Cantor function to rms 0.005 of the height (max deviation 0.018 at the near-vertical risers, which is ink spread); treads are resolved down to about 3⁻⁷. The page computes M(R) per pixel column, so zooming keeps producing steps. Graph length checked in closed form: 1 − (2/3)ⁿ + √(1 + (4/9)ⁿ) → 2.
 - **Generalized dusts (pages 77–78).** The book gives N and r for its example dusts (N = 3, r = 1/5; N = 2, r = 1/4; N = 3, r = 1/9) but never draws them, so the page's evenly spaced arrangement — first piece at 0, last ending at 1, equal tremas — is a reconstruction, flagged on the page. The gap-count law Nr(U > u) stepping across F·u⁻ᴰ was verified and is drawn as a log–log chart.
+
+## Part IX, chapter 28
+
+All six plate groups are random (`random`/`render`), so they are matched statistically, never pixel for pixel; every figure is a fresh simulation with its seed on display (default 1975). Fractional Brown surfaces are synthesized spectrally — white complex Gaussian noise filtered to density k^-(2H+2), inverse FFT over a 256-period, central crop — which is the book's own shortcut for Plates 264 to 267 ("a periodic function computed by fast Fourier methods, then cropped"). The book made Plates 268, 270 and 271 by a Poisson (fault) approximation instead; the pages say so and match statistics only. Surface D = 3 - H, coastline and vertical-section D = 2 - H throughout.
+
+**Plates 264-265, Brown lake landscapes.**
+- The caption states only the ends, "D ~ 2.1 to D = 5/2, proceeding clockwise" (265 top, 265 bottom, 264 bottom, 264 top); the middle figures' D = 2.2333 and 2.3667 are evenly interpolated — a guess, flagged on the page.
+- Lighting from 60° over the left and the viewer 25° over the base level are from the caption. The light is tipped slightly toward the viewer (y-component 0.16 before normalising) so depth-facing slopes shade too; a strict side light left vertical stripes.
+- Sea level (30% of the grid under water), the vertical scale (0.057 of the width per unit sd) and the gradient scale used for shading (0.8 of geometric) are fitted by eye to the plates.
+- The synthesized field is periodic, so the crop starts on the row whose leading block is lowest: the viewer looks over low foreground into the massif, as printed, and the block's front face (drawn in solid ink down to the frame, like the plates' black foreground) stays shallow.
+
+**Plates 266-267, Brown coastlines.**
+- Land in solid ink above sea level; the field is bilinearly upsampled 4x before thresholding so coasts curve instead of stair-stepping.
+- The captions give no sea level; the default (28% land) is fitted by eye. Island counts ignore specks under 3 grid cells.
+- Checked: at D >= 5/2 the ocean visibly splits into roundish seas and the islands string, as the caption claims; at 7/3 the effect fades.
+
+**Plate 268, contour lines.**
+- Top D ~ 1.3333 and bottom D ~ 1.1667 (coastline), same program and seed, per the caption. H = 2 - D.
+- "The side of a huge mountain": a linear slope added down the frame. Its size (5 sd across the frame) and the three contour levels (0 bold, ±1.1 sd at the default slope) are fitted to read like the plate; the caption only says the figures combine "two or three contour lines (the bold lines being coastlines)".
+
+**Plate 269, Brownian Pangaea.**
+- Lévy's Bo(P) is built from random great-circle step faults (sign ± across a random great circle), which converges to his definition as the integral of white Gaussian noise over the hemisphere centred at P; 1600 faults on a 121 x 241 grid by default.
+- Sea level puts 75% of the sphere's area (cos-weighted) under water, per the caption. Coastline D = 3/2.
+- The map is rotated so the land's centroid sits at the Hammer map's centre (latitude 15° N) — the plate frames its Pangaea centrally, and an uncentred sample usually straddles the ±180° seam. A presentation choice, not part of the model. Graticule every 30°, drawn under the land.
+
+**Plate 270, the first Brown coastlines.**
+- The caption names "near 1", 1.3000, 3/2 and "closer to 2"; the end panels use D = 1.1 and 1.8 — a choice, flagged on the page.
+- One seed for all four panels ("the same programs and seed" family style); panel heights follow the print's unequal panels; land shares 3.5 / 9 / 24 / 42% fitted by eye, since no sea levels are stated (with a fixed threshold on a normalised Gaussian field the land share would not grow with D, but in the print it clearly does).
+
+**Plate 271, fractional Brown islands.**
+- D = 2.3000 (H = 0.7) from the caption; six views of one island, sea level falling. The six levels (97.5% to 68% of the sheet under water) are fitted by eye.
+- Drawn as the CRT drew it: white raster rows on black, hidden lines removed with a per-column horizon buffer, no simulated side lighting (the caption notes none was needed). The sea rows are the flat raster that "shimmers toward the horizon".
+- The relief is tapered toward the sheet's centre (-1.1 r² in sd units) so the island emerges in view rather than at an edge — a presentation choice, flagged on the page.
+
+### Open questions (chapter 28)
+
+- Plates 264-265: can the two middle landscapes' D be pinned from the print (e.g., by variogram of the skyline)? The page interpolates.
+- Plate 270: the growing land share down the page suggests the originals did not renormalise variance per D, or chose sea levels per panel; worth a look if the original programs ever surface.
 
 ## Open questions
 

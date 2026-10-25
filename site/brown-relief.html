@@ -1,0 +1,1290 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Brown Relief and Coastlines</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>
+/* Layout: six plate sections in book order (264–265 lake landscapes, 266–267 coastlines, 268 contour lines, 269 Pangaea, 270 the first coastlines, 271 the island from the sea), each a seeded simulation beside its caption, controls and numbers; a sticky plate index on top. One column under 900px. */
+:root {
+  --page: #e4e5e1;
+  --text: #1b1d1f;
+  --muted: #595e64;
+  --rule: #c4c7c1;
+  --surface: #f6f6f3;
+  --accent: #285895;
+  --f-display: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Newsreader", Georgia, "Times New Roman", serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* the figures are reproductions of printed plates, so their paper and inks stay the same in both themes */
+  --print-paper: #ecebe6;
+  --print-ink: #151515;
+  --print-rule: #c9c8c2;
+  --gain: rgba(47, 95, 158, 0.42);
+  --loss: rgba(186, 88, 44, 0.42);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --page: #111214; --text: #e5e5e1; --muted: #9a9fa6; --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --page: #111214; --text: #e5e5e1; --muted: #9a9fa6; --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--page); color: var(--text); font-family: var(--f-display); font-size: 14px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
+.wrap {
+  max-width: 1180px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 36px 64px;
+  display: grid; gap: 40px;
+}
+header.top { display: grid; gap: 10px; max-width: 820px; }
+.eyebrow { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+h1 {
+  margin: 0; display: flex; align-items: center; flex-wrap: wrap; gap: 0.18em 0.42em;
+  font-weight: 800; font-size: clamp(30px, 5.4vw, 54px); line-height: 1.02; letter-spacing: 0.01em; text-transform: uppercase; text-wrap: balance;
+}
+h1 .plate-no { font-weight: 600; text-transform: none; letter-spacing: 0; }
+.lozenge { display: inline-block; width: 0.42em; height: 0.42em; border: 0.075em solid currentColor; position: relative; top: -0.02em; }
+.lozenge::after { content: ""; position: absolute; inset: 0.1em; border: 0.05em solid currentColor; }
+.dek { margin: 0; font-family: var(--f-body); font-size: 19px; line-height: 1.45; max-width: 64ch; }
+
+nav.index {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+  padding: 10px max(16px, env(safe-area-inset-right, 0px)) 10px max(16px, env(safe-area-inset-left, 0px));
+  background: var(--page); border-bottom: 1px solid var(--rule);
+  display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none;
+}
+nav.index a {
+  flex: none; display: inline-flex; gap: 8px; align-items: baseline; padding: 6px 10px;
+  border: 1px solid var(--rule); background: var(--surface); color: var(--text); text-decoration: none; font-size: 13px; font-weight: 600;
+}
+nav.index a b { font-family: var(--f-mono); font-weight: 500; color: var(--accent); }
+nav.index a:hover { border-color: var(--text); }
+
+section.plate { display: grid; gap: 18px; scroll-margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--rule); }
+.plate-head { display: grid; gap: 4px; }
+.plate-head .no { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.plate-head h2 { margin: 0; font-size: clamp(22px, 3vw, 30px); font-weight: 800; line-height: 1.1; text-transform: uppercase; letter-spacing: 0.01em; text-wrap: balance; }
+.plate-head .dim { margin: 0; font-family: var(--f-mono); font-size: 13px; color: var(--muted); }
+.plate-body { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(280px, 1fr); gap: 32px; align-items: start; }
+@media (max-width: 899px) { .plate-body { grid-template-columns: minmax(0, 1fr); gap: 20px; } }
+figure.fig { margin: 0; display: grid; gap: 8px; min-width: 0; }
+.canvas-wrap { position: relative; width: 100%; max-width: 100%; background: var(--print-paper); outline: 1px solid var(--rule); overflow: hidden; }
+.canvas-wrap canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.r-sq { aspect-ratio: 1 / 1; }
+.r-lox { aspect-ratio: 5 / 4; }
+.zoomable { cursor: grab; touch-action: pan-y; }
+.zoomable.dragging { cursor: grabbing; }
+.view-tools { position: absolute; top: 10px; right: 10px; display: flex; gap: 6px; z-index: 2; }
+.view-tools button { min-width: 34px; height: 34px; padding: 0 10px; font: 600 15px/1 var(--f-display); color: var(--print-ink); background: #f7f7f3; border: 1px solid var(--print-rule); cursor: pointer; }
+figcaption { font-size: 13px; color: var(--muted); }
+figcaption strong { color: var(--text); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+
+.side { display: grid; gap: 18px; min-width: 0; align-content: start; }
+.side p.cap { margin: 0; font-family: var(--f-body); font-size: 17px; line-height: 1.55; max-width: 62ch; }
+.group { display: grid; gap: 8px; min-width: 0; }
+.label-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.label { font-size: 11.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.value { font-family: var(--f-mono); font-size: 12.5px; font-variant-numeric: tabular-nums; text-align: right; }
+.steps { display: flex; flex-wrap: wrap; gap: 6px; }
+.steps button {
+  min-width: 38px; height: 34px; padding: 0 10px; font: 600 13px/1 var(--f-mono); color: var(--text);
+  background: var(--surface); border: 1px solid var(--rule); cursor: pointer;
+}
+.steps.words button { font: 600 13px/1 var(--f-display); }
+.steps button[aria-pressed="true"] { background: var(--text); color: var(--page); border-color: var(--text); }
+.steps button:hover { border-color: var(--text); }
+.steps button:disabled { opacity: 0.35; cursor: default; border-color: var(--rule); }
+.btn-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.btn { padding: 8px 12px; font: 600 13px/1.2 var(--f-display); color: var(--text); background: var(--surface); border: 1px solid var(--rule); cursor: pointer; }
+.btn:hover { border-color: var(--text); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--page); }
+.check { display: flex; align-items: flex-start; gap: 8px; font-size: 13.5px; cursor: pointer; }
+.check input { accent-color: var(--accent); width: 16px; height: 16px; margin: 1px 0 0; flex: none; }
+.check:has(input:disabled) { opacity: 0.45; cursor: default; }
+.slider { display: grid; gap: 4px; }
+.slider input { width: 100%; accent-color: var(--accent); margin: 0; }
+.slider input:disabled { opacity: 0.4; }
+dl.read { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; padding-top: 14px; border-top: 1px solid var(--rule); }
+dl.read div { display: grid; gap: 2px; min-width: 0; }
+dl.read dt { font-size: 10.5px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); }
+dl.read dd { margin: 0; font-family: var(--f-mono); font-size: 16px; overflow-wrap: anywhere; }
+dl.read dd small { font-size: 11.5px; color: var(--muted); }
+.note { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.mini { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; padding: 10px 12px; background: var(--print-paper); border: 1px solid var(--print-rule); color: var(--print-ink); }
+.mini svg { height: 64px; width: auto; max-width: 100%; }
+.mini .fx { font-family: var(--f-mono); font-size: 12px; line-height: 1.6; color: var(--print-ink); }
+.key { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--muted); }
+.key span { display: inline-flex; align-items: center; gap: 6px; }
+.key i { width: 14px; height: 10px; display: inline-block; border: 1px solid var(--print-rule); }
+.readline { min-height: 2.9em; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.readline b { color: var(--text); font-weight: 700; }
+
+.sub { display: grid; gap: 14px; padding-top: 22px; border-top: 1px dashed var(--rule); scroll-margin-top: 64px; }
+.sub h3 { margin: 0; font-size: 15px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
+.source { font-family: var(--f-body); font-size: 15px; color: var(--muted); margin: 0; max-width: 84ch; }
+.source i { color: var(--text); }
+.source a { color: var(--accent); }
+button:focus-visible, input:focus-visible, a:focus-visible, canvas:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.r-land { aspect-ratio: 2 / 1; }
+.r-coast { aspect-ratio: 3 / 2; }
+.r-cont { aspect-ratio: 10 / 7; }
+.r-ham { aspect-ratio: 2 / 1; }
+.r-four { aspect-ratio: 10 / 16; max-width: 420px; }
+.r-isl { aspect-ratio: 10 / 13; max-width: 460px; }
+.canvas-wrap.dark { background: #101010; }
+.canvas-wrap.dark + figcaption { }
+</style>
+<style>
+body { margin: 0; }
+/* The hidden attribute must beat the pages' own display rules (.slider, .check, ...). The artifact
+   wrapper's stylesheet used to provide this; self-hosted pages carry it themselves. */
+[hidden] { display: none !important; }
+nav.shell { font-family: var(--f-display); font-size: 12.5px; font-weight: 600; background: var(--page);
+  border-bottom: 1px solid var(--rule); display: flex; align-items: center; gap: 6px 18px;
+  padding: 9px max(16px, env(safe-area-inset-right, 0px)) 9px max(16px, env(safe-area-inset-left, 0px)); }
+nav.shell a { color: var(--text); text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+nav.shell a:hover { color: var(--accent); }
+nav.shell .home { letter-spacing: 0.07em; text-transform: uppercase; flex: none; }
+nav.shell .gap { flex: 1; }
+nav.shell .pn { color: var(--muted); font-weight: 500; }
+nav.shell .pn b { color: var(--text); font-weight: 600; }
+nav.shell a:hover .pn, nav.shell a:hover .pn b { color: var(--accent); }
+</style>
+</head>
+<body>
+<nav class="shell" aria-label="Site"><a class="home" href="index.html">Fractal Geometry Explorer</a><span class="gap"></span><a rel="prev" href="wiener-sausage.html"><span class="pn">&#8592; <b>Brownian motion</b></span></a></nav>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 28, "Relief and Coastlines" · pages 256–271</p>
+    <h1><span class="plate-no">Plates 264–271</span><span class="lozenge" aria-hidden="true"></span><span>Brown Relief and Coastlines</span></h1>
+    <p class="dek">Mountains like the Alps, Mandelbrot argues, are usefully modeled by fractal surfaces ruled by Brownian chance — and their zerosets, the points at ocean level, at last give a sensible model of coastlines. The ordinary Brown relief has surface dimension D = 5/2 and coastlines of D = 3/2, too rough for most of Earth; its fractional variants reach any dimension the data ask for. Every figure here is a fresh simulation, computed from the chapter's rules with the seed on display.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#land"><b>264–5</b> Lake landscapes</a>
+    <a href="#coast"><b>266–7</b> Coastlines</a>
+    <a href="#contour"><b>268</b> Contour lines</a>
+    <a href="#pangaea"><b>269</b> Pangaea</a>
+    <a href="#first"><b>270</b> First coastlines</a>
+    <a href="#island"><b>271</b> Island from the sea</a>
+  </nav>
+
+  <!-- ===================== PLATES 264-265: LAKE LANDSCAPES ===================== -->
+  <section class="plate" id="land">
+    <div class="plate-head">
+      <p class="no">Plates 264 and 265 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Brown lake landscapes, ordinary and fractional</h2>
+      <p class="dim">surface D = 3 − H, from ≈ 2.1 to 5/2 · every vertical cut is a (fractional) Brown line-to-line function</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-land zoomable" id="wA">
+          <canvas id="cA" role="img" aria-label="A shaded fractional Brown relief with white lakes"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cAt">Plate 265, top</strong> · <span id="cAn"></span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The top of Plate 265 is a fractional Brown relief of dimension fairly close to 2 — Mandelbrot's model of Earth's landscape. The other figures extrapolate it to higher D, ending at the top of Plate 264 with the ordinary Brown relief, "definitely rougher than most of Earth's relief": a beautiful long jump forward, but a crude model, begging to be returned to the bench. As in the book, the altitude is computed on a square grid, lit from 60° over the left, and seen from 25° over the base level; water fills every hollow below sea level.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">The four printed figures, clockwise</span></div>
+          <div class="steps words" id="mA" role="group" aria-label="Which printed figure"></div>
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Surface dimension D</span><span class="value" id="dAv"></span></div>
+          <input type="range" id="dAs" min="2.05" max="2.95" step="0.01" value="2.1" aria-label="Surface dimension">
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Sea level</span><span class="value" id="qAv"></span></div>
+          <input type="range" id="qAs" min="0" max="0.7" step="0.01" value="0.3" aria-label="Fraction of the land under water">
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plateA">Show Plate 265, top, as printed</button>
+          <button type="button" class="btn" id="seedA">New seed</button>
+        </div>
+        <p class="readline" id="infoA" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Surface D</dt><dd id="rAa">—</dd></div>
+          <div><dt>Coastline D</dt><dd id="rAb">—</dd></div>
+          <div><dt>Exponent H</dt><dd id="rAc">—</dd></div>
+          <div><dt>Seed</dt><dd id="rAd">—</dd></div>
+        </dl>
+        <p class="note">The caption gives only the two end dimensions, "D ≈ 2.1 to D = 5/2, proceeding clockwise", so the two middle figures' D here are evenly interpolated — a guess. The relief is built the book's way: a periodic surface synthesized by fast Fourier methods, then cropped to a central portion unaffected by periodicity. The vertical scale and the sea level are fitted by eye to the plates; the landscapes are random, so only their statistics — not their peaks — can match the print.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATES 266-267: COASTLINES AND ISLAND STRINGS ===================== -->
+  <section class="plate" id="coast">
+    <div class="plate-head">
+      <p class="no">Plates 266 and 267 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Brown coastlines, and island "strings"</h2>
+      <p class="dim">coastline D = surface D − 1 · 8/3 → 5/3 · 7/3 → 4/3 · 5/2 → 3/2</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-coast zoomable" id="wB">
+          <canvas id="cB" role="img" aria-label="Islands of a fractional Brown relief, land in black"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cBt">Plate 266</strong> · <span id="cBn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Slice a fractional Brown relief at sea level and fill the land black. These plates underline a newly discovered effect: when the relief's D reaches and exceeds 2.5, the ocean tends more and more to split into roundish separate "seas", each with a sharp individuality, while the islands come in "strings". The samples look anisotropic — yet the generating mechanism is perfectly isotropic. The coastline of Plate 270's kind was the first curve Mandelbrot had met that avoids itself, has a clear fractal dimension above 1, and is isotropic.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">The three printed figures</span></div>
+          <div class="steps words" id="mB" role="group" aria-label="Which printed figure"></div>
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Surface dimension D</span><span class="value" id="dBv"></span></div>
+          <input type="range" id="dBs" min="2.05" max="2.95" step="0.01" value="2.6667" aria-label="Surface dimension">
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Sea level</span><span class="value" id="qBv"></span></div>
+          <input type="range" id="qBs" min="0.02" max="0.8" step="0.01" value="0.28" aria-label="Fraction of the frame that is land">
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plateB">Show Plate 266 as printed</button>
+          <button type="button" class="btn" id="seedB">New seed</button>
+        </div>
+        <p class="readline" id="infoB" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Coastline D</dt><dd id="rBa">—</dd></div>
+          <div><dt>Land share</dt><dd id="rBb">—</dd></div>
+          <div><dt>Islands</dt><dd id="rBc">—</dd></div>
+          <div><dt>Seed</dt><dd id="rBd">—</dd></div>
+        </dl>
+        <p class="note">As in the book, each figure is a trimmed central portion of one period of a periodic variant of the process, which "diminishes the overall shape's dependence upon D" — actual Brownian coastlines' overall shapes differ more than these plates show. The land share is a slider because the captions do not state sea level; the printed figures' share was matched by eye. Islands under a few grid cells are left uncounted.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 268: CONTOUR LINES ===================== -->
+  <section class="plate" id="contour">
+    <div class="plate-head">
+      <p class="no">Plate 268 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Contour lines in fractional Brown landscapes</h2>
+      <p class="dim">same program and seed · top D ≈ 1.3333, bottom D ≈ 1.1667 · the side of a huge mountain</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-cont zoomable" id="wC">
+          <canvas id="cC" role="img" aria-label="Contour lines of a fractional Brown landscape on a strong slope"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cCt">Plate 268, top</strong> · <span id="cCn">the bold line is the coastline</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Here the relief has a strong overall slope — we see the <i>side</i> of a huge mountain, not its summit — and a few of its contour lines are drawn, the bold one being the coastline. Both figures use the same program and the same seed, only H changes. The curves seem much less "rugged" than Plate 267's of the same D: with a systematic slope the coastline differs from a straight line only by mild irregularities. Comparing them shows the wide margin left for the interplay between irregularity and fragmentation even after D is fixed.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">The two printed figures</span></div>
+          <div class="steps words" id="mC" role="group" aria-label="Which printed figure"></div>
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Coastline dimension D</span><span class="value" id="dCv"></span></div>
+          <input type="range" id="dCs" min="1.05" max="1.6" step="0.005" value="1.3333" aria-label="Coastline dimension">
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Overall slope</span><span class="value" id="sCv"></span></div>
+          <input type="range" id="sCs" min="0" max="8" step="0.1" value="5" aria-label="Overall slope in standard deviations across the frame">
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plateC">Show Plate 268, top, as printed</button>
+          <button type="button" class="btn" id="seedC">New seed</button>
+        </div>
+        <p class="readline" id="infoC" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Coastline D</dt><dd id="rCa">—</dd></div>
+          <div><dt>Exponent H</dt><dd id="rCb">—</dd></div>
+          <div><dt>Surface D</dt><dd id="rCc">—</dd></div>
+          <div><dt>Seed</dt><dd id="rCd">—</dd></div>
+        </dl>
+        <p class="note">The book's figures were made by a Poisson (fault) approximation; this page synthesizes the same statistics spectrally, so the curves can only match in character. The number of contour lines (two or three per figure in the print) and their spacing are set to read like the plate; at zero slope the section turns back into the summit-like coastlines of Plate 267.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 269: BROWNIAN PANGAEA ===================== -->
+  <section class="plate" id="pangaea">
+    <div class="plate-head">
+      <p class="no">Plate 269, and C9 (top) <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Brownian Pangaea</h2>
+      <p class="dim">Lévy's Brown sphere-to-line function Bo(P) · coastline D = 3/2 · three quarters of the area under water</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-ham zoomable" id="wD">
+          <canvas id="cD" role="img" aria-label="A Brownian Pangaea on a Hammer map"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>Hammer map</strong> · <span id="cDn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Let the base of the relief be a sphere. Lévy's Brown function from the sphere's points to altitudes was implemented on a computer here for the first time; sea level is adjusted so three quarters of the total area is under water, and the result is shown on a Hammer map, the projection favored by students of Wegener's continental drift. Like the primeval Pangaea, it is a blob of land dented by broad sinuses — on the sphere the Brownian rules involve a strong positive correlation below 60° and a strong negative one between antipodal points, so a big hill at P answers a big hole at its antipode.</p>
+        <div class="slider">
+          <div class="label-row"><span class="label">Under water</span><span class="value" id="qDv"></span></div>
+          <input type="range" id="qDs" min="0.4" max="0.95" step="0.01" value="0.75" aria-label="Fraction of the sphere's area under water">
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Faults</span><span class="value" id="fDv"></span></div>
+          <input type="range" id="fDs" min="200" max="4000" step="100" value="1600" aria-label="Number of great-circle faults">
+        </div>
+        <div class="group">
+          <label class="check" for="gratD"><input type="checkbox" id="gratD" checked> Graticule, as on the printed map</label>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plateD">Show Plate 269 as printed</button>
+          <button type="button" class="btn" id="seedD">New seed</button>
+        </div>
+        <p class="readline" id="infoD" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Coastline D</dt><dd>3/2</dd></div>
+          <div><dt>Under water</dt><dd id="rDb">—</dd></div>
+          <div><dt>Faults</dt><dd id="rDc">—</dd></div>
+          <div><dt>Seed</dt><dd id="rDd">—</dd></div>
+        </dl>
+        <p class="note">Bo(P) is built here by superimposing random great-circle faults — a plateau breaks along a random great circle, one side steps up and the other down — which converges to Lévy's function, the integral of white Gaussian noise over the hemisphere centred at P. The book says the real Pangaea is drawn with D ≈ 1.2 in geology books, while this model forces D = 3/2; only the degrees of wiggliness, not the local detail, are expected to resemble it. The graticule spacing was matched to the plate by eye.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 270: THE FIRST BROWN COASTLINES ===================== -->
+  <section class="plate" id="first">
+    <div class="plate-head">
+      <p class="no">Plate 270 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>The first known examples of Brown coastlines</h2>
+      <p class="dim">top to bottom: D near 1 · D = 1.3000 · D = 3/2 · D closer to 2</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-four zoomable" id="wE">
+          <canvas id="cE" role="img" aria-label="Four model coastlines of increasing dimension, stacked as printed"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cEt">As printed</strong> · <span id="cEn">four panels, one seed</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Mandelbrot's claim that fractional Brown functions are reasonable models of Earth's relief was originally founded on these four model coastlines, a sentimental carry-over from his 1975 French Essay. When D is near 1, the coastline is too straight to be realistic. At D = 1.3000 it "strongly reminds us of the real Atlas" — he finds echos of Africa, South America in mirror image, and Greenland. At D = 3/2 the guessing game is harder; closer to 2 it becomes specialized (Minnesota? Finland?), then impossible. Finer graphics favor D ≈ 1.2.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mE" role="group" aria-label="Printed panels or one panel"></div>
+        </div>
+        <div class="slider" id="dEwrap" hidden>
+          <div class="label-row"><span class="label">Coastline dimension D</span><span class="value" id="dEv"></span></div>
+          <input type="range" id="dEs" min="1.02" max="1.95" step="0.005" value="1.3" aria-label="Coastline dimension">
+        </div>
+        <div class="slider" id="qEwrap" hidden>
+          <div class="label-row"><span class="label">Sea level</span><span class="value" id="qEv"></span></div>
+          <input type="range" id="qEs" min="0.02" max="0.8" step="0.01" value="0.25" aria-label="Fraction of the frame that is land">
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plateE">Show Plate 270 as printed</button>
+          <button type="button" class="btn" id="seedE">New seed</button>
+        </div>
+        <p class="readline" id="infoE" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Panel D</dt><dd id="rEa">1.1 · 1.3 · 1.5 · 1.8</dd></div>
+          <div><dt>Coastline D</dt><dd id="rEb">—</dd></div>
+          <div><dt>Land share</dt><dd id="rEc">—</dd></div>
+          <div><dt>Seed</dt><dd id="rEd">—</dd></div>
+        </dl>
+        <p class="note">The caption names only "near 1", 1.3000, 3/2 and "closer to 2"; the first and last panels here use D = 1.1 and D = 1.8. The panels share one seed, like the originals ("the same program and seed"); their unequal heights follow the print. The growing amount of land down the page is reproduced by raising the land share per panel, fitted by eye — the caption does not state sea levels. The originals were drawn by the Poisson fault method and inked by hand; these are spectral simulations with the same statistics.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 271: AN ISLAND WITH VARYING SEA LEVEL ===================== -->
+  <section class="plate" id="island">
+    <div class="plate-head">
+      <p class="no">Plate 271 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Fractional Brown islands, emerging from the sea</h2>
+      <p class="dim">surface D = 2.3000 · one island, six sea levels · drawn as a raster, as on the 1976 CRT</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-isl dark zoomable" id="wF">
+          <canvas id="cF" role="img" aria-label="A fractional Brown island at six falling sea levels, drawn as white raster lines on black"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cFt">As printed</strong> · <span id="cFn">sea level falls from panel to panel</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Views of an island with varying sea level, from Mandelbrot 1975w — part of the first sequence of fractional Brown islands ever drawn, filmed in 1976 as the island emerged from the sea. The original was photographed from a cathode ray tube, and the raster lines make the sea seem to shimmer toward the horizon. The dimension, D = 2.3, is surprisingly high: early graphics could not show small detail, so the drawn landscapes seemed smoother than the D fed into the program, and D was raised beyond the evidence to compensate.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mF" role="group" aria-label="Printed panels or one island"></div>
+        </div>
+        <div class="slider" id="qFwrap" hidden>
+          <div class="label-row"><span class="label">Sea level</span><span class="value" id="qFv"></span></div>
+          <input type="range" id="qFs" min="0.01" max="0.6" step="0.005" value="0.2" aria-label="Fraction of the sheet above water">
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plateF">Show Plate 271 as printed</button>
+          <button type="button" class="btn" id="seedF">New seed</button>
+        </div>
+        <p class="readline" id="infoF" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Surface D</dt><dd>2.3000</dd></div>
+          <div><dt>Exponent H</dt><dd>0.7</dd></div>
+          <div><dt>Above water</dt><dd id="rFc">—</dd></div>
+          <div><dt>Seed</dt><dd id="rFd">—</dd></div>
+        </dl>
+        <p class="note">The six sea levels are not stated in the book; here they fall so the land grows from a few specks to near half the sheet, matching the print by eye. The relief is gently tapered toward the sheet's centre so that the island emerges in view rather than at the edge — a presentation choice, flagged here, not part of the model. No side lighting is simulated, as the caption notes: the raster alone shapes the relief.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 28, pages 256–271 (Plates 264–271). All figures are fresh seeded simulations built from the chapter's stated rules — fractional Brown surfaces by the book's own periodic Fourier shortcut, and Lévy's sphere function by great-circle faults; none is traced from the book, and the plates being random, only statistics can match. Companion page: <a href="./wiener-sausage.html">Wiener Sausage</a> (Brownian motion, chapter 25).</p>
+</div>
+
+<script>
+// Shared drawing library: style constants, the zoomable canvas (snapshot while panning), chunked
+// paths, controls and small SVG figures. Loaded before each page's own scripts; pages may extend
+// PRINT with their own inks (PRINT.red = ..., PRINT.light = ...).
+const $ = (id) => document.getElementById(id);
+const fmt = (n) => n.toLocaleString('en-US');
+const PRINT = { paper: '#ecebe6', ink: '#151515', rule: '#c9c8c2', muted: '#66665f', accent: '#2f5f9e', red: '#c2452d', faint: '#bdbbb3', gray: '#8f8e88' };
+const RAMP = [[233, 185, 73], [217, 113, 59], [184, 66, 79], [125, 58, 120], [63, 79, 151], [43, 122, 138]];
+const ramp = (t, a = 1) => {
+  const x = Math.max(0, Math.min(1, t)) * (RAMP.length - 1), i = Math.min(RAMP.length - 2, Math.floor(x)), f = x - i;
+  const c = RAMP[i].map((v, k) => Math.round(v + (RAMP[i + 1][k] - v) * f));
+  return `rgba(${c[0]},${c[1]},${c[2]},${a})`;
+};
+const CAT = ['#151515', '#9a988f', '#2f5f9e', '#c2452d', '#3f8f6c', '#b58a2a', '#6b4e9b', '#5f8fae'];
+
+// ---------- shared plumbing ----------
+function figure(canvas, draw) {
+  const wrap = canvas.parentElement;
+  const f = { canvas, ctx: canvas.getContext('2d'), w: 1, h: 1, dpr: 1, draw };
+  const resize = () => {
+    f.dpr = Math.min(2, window.devicePixelRatio || 1);
+    f.w = wrap.clientWidth || 1; f.h = wrap.clientHeight || 1;
+    canvas.width = Math.round(f.w * f.dpr); canvas.height = Math.round(f.h * f.dpr);
+    f.draw();
+  };
+  new ResizeObserver(resize).observe(wrap);
+  return f;
+}
+function fitBox(f, bb, pad = 0.04) {
+  const w = Math.max(1e-9, bb.x1 - bb.x0), h = Math.max(1e-9, bb.y1 - bb.y0), s = Math.min(f.w / (w * (1 + 2 * pad)), f.h / (h * (1 + 2 * pad)));
+  return { s, ox: f.w / 2 - ((bb.x0 + bb.x1) / 2) * s, oy: f.h / 2 + ((bb.y0 + bb.y1) / 2) * s };
+}
+const toWorld = (f, v) => f.ctx.setTransform(f.dpr * v.s, 0, 0, -f.dpr * v.s, f.dpr * v.ox, f.dpr * v.oy);
+const toScreen = (f) => f.ctx.setTransform(f.dpr, 0, 0, f.dpr, 0, 0);
+function paper(f, color) { f.ctx.setTransform(1, 0, 0, 1, 0, 0); f.ctx.fillStyle = color; f.ctx.fillRect(0, 0, f.canvas.width, f.canvas.height); }
+function polyPath(P, closed = true, upto) {
+  const p = new Path2D(), m = upto === undefined ? P.length / 2 : upto;
+  p.moveTo(P[0], P[1]);
+  for (let i = 1; i < m; i++) p.lineTo(P[2 * i], P[2 * i + 1]);
+  if (closed) p.closePath();
+  return p;
+}
+function bbox(P, bb = { x0: Infinity, x1: -Infinity, y0: Infinity, y1: -Infinity }) {
+  for (let i = 0; i < P.length; i += 2) { bb.x0 = Math.min(bb.x0, P[i]); bb.x1 = Math.max(bb.x1, P[i]); bb.y0 = Math.min(bb.y0, P[i + 1]); bb.y1 = Math.max(bb.y1, P[i + 1]); }
+  return bb;
+}
+function stepButtons(el, values, text, aria, onPick) {
+  const bs = values.map((v) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.textContent = text(v); b.setAttribute('aria-label', aria(v));
+    b.addEventListener('click', () => onPick(v));
+    el.append(b);
+    return b;
+  });
+  const mark = (cur) => bs.forEach((b, i) => b.setAttribute('aria-pressed', String(values[i] === cur)));
+  mark.buttons = bs;
+  return mark;
+}
+// pan and zoom: a quick rescaled snapshot while moving, a full redraw once it settles
+function zoomable(wrapId, canvasId, fitOf, render, opts = {}) {
+  const maxZoom = opts.maxZoom || 400;
+  const wrap = $(wrapId), z = { view: null, user: false, snapView: null, raf: 0, full: 0 };
+  const snap = document.createElement('canvas');
+  const f = figure($(canvasId), () => draw());
+  function touch() { wrap.style.touchAction = z.view && z.view.s > z.view.fit * 1.02 ? 'none' : 'pan-y'; }
+  function draw() {
+    if (!z.view || !z.user) { z.view = fitOf(f); z.view.fit = z.view.s; z.user = false; touch(); }
+    render(f, z.view);
+    snap.width = f.canvas.width; snap.height = f.canvas.height; snap.getContext('2d').drawImage(f.canvas, 0, 0);
+    z.snapView = { s: z.view.s, ox: z.view.ox, oy: z.view.oy };
+  }
+  function quick() {
+    const v = z.view, k = v.s / z.snapView.s, c = f.ctx;
+    c.setTransform(1, 0, 0, 1, 0, 0); c.fillStyle = z.ground || PRINT.paper; c.fillRect(0, 0, f.canvas.width, f.canvas.height);
+    c.drawImage(snap, (v.ox - z.snapView.ox * k) * f.dpr, (v.oy - z.snapView.oy * k) * f.dpr, snap.width * k, snap.height * k);
+  }
+  function schedule() { if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; draw(); }); }
+  function moved() {
+    if (!z.snapView) { schedule(); return; }
+    if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; quick(); });
+    clearTimeout(z.full); z.full = setTimeout(schedule, 160);
+  }
+  function zoomAt(px, py, k) {
+    const v = z.view, ns = Math.min(v.fit * maxZoom, Math.max(v.fit * 0.8, v.s * k)), wx = (px - v.ox) / v.s, wy = (v.oy - py) / v.s;
+    v.s = ns; v.ox = px - wx * ns; v.oy = py + wy * ns; z.user = true; touch(); moved();
+  }
+  function pan(dx, dy) { z.view.ox += dx; z.view.oy += dy; z.user = true; moved(); }
+  wrap.querySelector('[data-z="in"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1.6));
+  wrap.querySelector('[data-z="out"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1 / 1.6));
+  wrap.querySelector('[data-z="fit"]').addEventListener('click', () => { z.user = false; schedule(); });
+  const pts = new Map();
+  let pinch = null, down = null;
+  const local = (e) => { const r = wrap.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+  wrap.addEventListener('pointerdown', (e) => {
+    if (e.target.closest('.view-tools')) return;
+    pts.set(e.pointerId, local(e));
+    down = pts.size === 1 ? { p: local(e), t: performance.now(), moved: 0 } : null;
+    try { wrap.setPointerCapture(e.pointerId); } catch (_) {}
+    if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), m: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2] }; }
+    wrap.classList.add('dragging');
+  });
+  wrap.addEventListener('pointermove', (e) => {
+    if (!pts.has(e.pointerId)) return;
+    const prev = pts.get(e.pointerId), cur = local(e);
+    pts.set(e.pointerId, cur);
+    if (down) down.moved = Math.max(down.moved, Math.hypot(cur[0] - down.p[0], cur[1] - down.p[1]));
+    if (pts.size === 2 && pinch) {
+      const [a, b] = [...pts.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]), m = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+      pan(m[0] - pinch.m[0], m[1] - pinch.m[1]);
+      if (pinch.d > 0) zoomAt(m[0], m[1], d / pinch.d);
+      pinch = { d, m };
+    } else if (pts.size === 1 && (e.pointerType !== 'touch' || z.view.s > z.view.fit * 1.02)) pan(cur[0] - prev[0], cur[1] - prev[1]);
+  });
+  const end = (e) => {
+    if (down && pts.size === 1 && down.moved < 5 && opts.onTap) { const [x, y] = local(e), v = z.view; opts.onTap((x - v.ox) / v.s, (v.oy - y) / v.s); }
+    down = null;
+    pts.delete(e.pointerId); if (pts.size < 2) pinch = null; if (!pts.size) wrap.classList.remove('dragging');
+  };
+  wrap.addEventListener('pointerup', end); wrap.addEventListener('pointercancel', (e) => { down = null; end(e); });
+  wrap.addEventListener('wheel', (e) => { if (!(e.ctrlKey || e.metaKey)) return; e.preventDefault(); const [x, y] = local(e); zoomAt(x, y, Math.exp(-e.deltaY * 0.0045)); }, { passive: false });
+  wrap.addEventListener('dblclick', (e) => { if (e.target.closest('.view-tools')) return; const [x, y] = local(e); zoomAt(x, y, e.shiftKey ? 0.5 : 2); });
+  return { f, z, schedule, refit: () => { z.user = false; schedule(); } };
+}
+// chunked paths: many small paths fill far faster than one path with a hundred thousand pieces
+function chunked(count, add, size = 512) {
+  const out = [];
+  let p = null;
+  for (let i = 0; i < count; i++) { if (i % size === 0) { p = new Path2D(); out.push(p); } add(p, i); }
+  return out;
+}
+// fill and outline in the same colour, so that tiles which only meet along an edge show no hairline seams
+function solid(c, paths, color, lw) {
+  c.fillStyle = color; c.strokeStyle = color; c.lineWidth = lw; c.lineJoin = 'miter';
+  for (const p of paths) { c.fill(p); c.stroke(p); }
+}
+const dot = (c, v, x, y, r = 4, color = PRINT.red) => { c.beginPath(); c.arc(v.ox + x * v.s, v.oy - y * v.s, r, 0, Math.PI * 2); c.fillStyle = color; c.fill(); c.strokeStyle = PRINT.paper; c.lineWidth = 1.5; c.stroke(); };
+
+// a polyline (Float64Array or [[x,y],...]) as SVG points with y flipped
+const svgPts = (P) => (P instanceof Float64Array ? Array.from({ length: P.length / 2 }, (_, i) => [P[2 * i], P[2 * i + 1]]) : P).map(([x, y]) => `${x.toFixed(4)},${(-y).toFixed(4)}`).join(' ');
+function miniCurve(id, P, dots = true) {
+  const pts = P instanceof Float64Array ? Array.from({ length: P.length / 2 }, (_, i) => [P[2 * i], P[2 * i + 1]]) : P;
+  $(id).innerHTML = `<line x1="0" y1="0" x2="1" y2="0" stroke="#8a8a84" stroke-width="0.008" stroke-dasharray="0.025 0.02"/>` +
+    `<polyline points="${svgPts(pts)}" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linejoin="round"/>` +
+    (dots ? `<g fill="currentColor">${pts.map(([x, y], i) => `<circle cx="${x.toFixed(4)}" cy="${(-y).toFixed(4)}" r="${i === 0 || i === pts.length - 1 ? 0.03 : 0.018}"/>`).join('')}</g>` : '');
+}
+function miniTree(id, links, dx = 0) {
+  const ends = new Set(), mid = new Set(), k = (x, y) => `${x.toFixed(4)},${y.toFixed(4)}`;
+  let s = '';
+  for (const [px, py, qx, qy] of links) {
+    s += `<line x1="${(px + dx).toFixed(4)}" y1="${(-py).toFixed(4)}" x2="${(qx + dx).toFixed(4)}" y2="${(-qy).toFixed(4)}" stroke="currentColor" stroke-width="0.02" stroke-linecap="round"/>`;
+    mid.add(k(px + dx, py)); mid.add(k(qx + dx, qy));
+  }
+  s += `<g fill="currentColor">${[...mid].map((p) => { const [x, y] = p.split(',').map(Number); const big = (Math.abs(x - dx) < 1e-6 || Math.abs(x - dx - 1) < 1e-6) && Math.abs(y) < 1e-6; return `<circle cx="${x}" cy="${-y}" r="${big ? 0.03 : 0.018}"/>`; }).join('')}</g>`;
+  return s;
+}
+// canvas transform for a similarity map f = [ar, ai, br, bi, m] composed with the view
+function setMap(f, c, v, fig) {
+  const [ar, ai, br, bi, m] = f, k = fig.dpr * v.s;
+  if (m) c.setTransform(k * ar, -k * ai, k * ai, k * ar, fig.dpr * (v.ox + v.s * br), fig.dpr * (v.oy - v.s * bi));
+  else c.setTransform(k * ar, -k * ai, -k * ai, -k * ar, fig.dpr * (v.ox + v.s * br), fig.dpr * (v.oy - v.s * bi));
+}
+const segPath = (segs, pick) => { const p = new Path2D(); for (const s of segs) if (!pick || pick(s)) { p.moveTo(s[0], s[1]); p.lineTo(s[2], s[3]); } return p; };
+// Plate 64's chevrons, measured from the plate: each interval a→b becomes a thin quadrilateral
+// pointing toward F, the corner the next stage would add (see DECISIONS.md)
+const CHEV_OUT = 0.43, CHEV_IN = 0.235;
+function chevronPaths(P, F, m) {
+  return chunked(m, (p, i) => {
+    const ax = P[2 * i], ay = P[2 * i + 1], bx = P[2 * i + 2], by = P[2 * i + 3], mx = (ax + bx) / 2, my = (ay + by) / 2;
+    const vx = F[2 * i] - mx, vy = F[2 * i + 1] - my;
+    p.moveTo(ax, ay); p.lineTo(mx + CHEV_OUT * vx, my + CHEV_OUT * vy); p.lineTo(bx, by); p.lineTo(mx + CHEV_IN * vx, my + CHEV_IN * vy); p.closePath();
+  });
+}
+
+// Chapter 28's machinery: seeded Gaussian noise, fractional Brown surfaces by spectral synthesis
+// (the periodic shortcut the book itself uses for Plates 264-267, "cropped to keep to a central
+// portion unaffected by periodicity"), great-circle faults on the sphere for Plate 269, the Hammer
+// projection, contour tracing and simple surface statistics.
+
+// ---- seeded randomness ----
+function mulberry32(seed) {
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6d2b79f5) >>> 0;
+    let t = a;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function gaussMaker(rng) {
+  let spare = null;
+  return () => {
+    if (spare !== null) { const v = spare; spare = null; return v; }
+    let u, v, s;
+    do { u = 2 * rng() - 1; v = 2 * rng() - 1; s = u * u + v * v; } while (s >= 1 || s === 0);
+    const k = Math.sqrt((-2 * Math.log(s)) / s);
+    spare = v * k;
+    return u * k;
+  };
+}
+
+// ---- FFT (iterative radix-2, in place) ----
+function fft1(re, im, i0, stride, n, inv) {
+  for (let i = 1, j = 0; i < n; i++) {
+    let bit = n >> 1;
+    for (; j & bit; bit >>= 1) j ^= bit;
+    j ^= bit;
+    if (i < j) {
+      const a = i0 + i * stride, b = i0 + j * stride;
+      let t = re[a]; re[a] = re[b]; re[b] = t;
+      t = im[a]; im[a] = im[b]; im[b] = t;
+    }
+  }
+  for (let len = 2; len <= n; len <<= 1) {
+    const ang = ((inv ? 2 : -2) * Math.PI) / len, wr = Math.cos(ang), wi = Math.sin(ang), half = len >> 1;
+    for (let i = 0; i < n; i += len) {
+      let cr = 1, ci = 0;
+      for (let k = 0; k < half; k++) {
+        const a = i0 + (i + k) * stride, b = i0 + (i + k + half) * stride;
+        const vr = re[b] * cr - im[b] * ci, vi = re[b] * ci + im[b] * cr;
+        re[b] = re[a] - vr; im[b] = im[a] - vi;
+        re[a] += vr; im[a] += vi;
+        const t = cr * wr - ci * wi; ci = cr * wi + ci * wr; cr = t;
+      }
+    }
+  }
+}
+function fft2(re, im, n, inv) {
+  for (let r = 0; r < n; r++) fft1(re, im, r * n, 1, n, inv);
+  for (let c = 0; c < n; c++) fft1(re, im, c, n, n, inv);
+}
+
+// ---- fractional Brown surface, period n, exponent H in (0, 1): surface D = 3 - H ----
+// White complex Gaussian noise is filtered to spectral density ~ k^-(2H+2); the real part of the
+// inverse transform is a periodic stationary Gaussian field with the fBm-like spectrum. The field
+// is normalised to mean 0 and unit variance.
+function fbmSurface(n, H, seed) {
+  const rng = mulberry32((seed * 2654435761) >>> 0), g = gaussMaker(rng);
+  const re = new Float64Array(n * n), im = new Float64Array(n * n);
+  const e = -(H + 1);
+  for (let j = 0; j < n; j++) {
+    const ky = j <= n / 2 ? j : j - n;
+    for (let i = 0; i < n; i++) {
+      const kx = i <= n / 2 ? i : i - n, k2 = kx * kx + ky * ky;
+      const a = k2 === 0 ? 0 : Math.pow(k2, e / 2);
+      const o = j * n + i;
+      re[o] = g() * a; im[o] = g() * a;
+    }
+  }
+  fft2(re, im, n, true);
+  let m = 0;
+  for (let i = 0; i < re.length; i++) m += re[i];
+  m /= re.length;
+  let s = 0;
+  for (let i = 0; i < re.length; i++) { re[i] -= m; s += re[i] * re[i]; }
+  s = Math.sqrt(s / re.length) || 1;
+  for (let i = 0; i < re.length; i++) re[i] /= s;
+  return re;
+}
+// central w x h crop of an n-period field (keeps clear of the periodic seam)
+function cropField(src, n, w, h) {
+  const out = new Float64Array(w * h), i0 = (n - w) >> 1, j0 = (n - h) >> 1;
+  for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) out[j * w + i] = src[(j + j0) * n + i + i0];
+  return out;
+}
+// bilinear upsample by factor u (smooth coastlines instead of grid stairs)
+function upsample(src, w, h, u) {
+  const W = (w - 1) * u + 1, Hh = (h - 1) * u + 1, out = new Float64Array(W * Hh);
+  for (let j = 0; j < Hh; j++) {
+    const y = j / u, j1 = Math.min(h - 2, Math.floor(y)), fy = y - j1;
+    for (let i = 0; i < W; i++) {
+      const x = i / u, i1 = Math.min(w - 2, Math.floor(x)), fx = x - i1;
+      const o = j1 * w + i1;
+      out[j * W + i] = src[o] * (1 - fx) * (1 - fy) + src[o + 1] * fx * (1 - fy) + src[o + w] * (1 - fx) * fy + src[o + w + 1] * fx * fy;
+    }
+  }
+  return { data: out, w: W, h: Hh };
+}
+function quantile(arr, q) {
+  const a = Array.from(arr).sort((x, y) => x - y);
+  const t = q * (a.length - 1), i = Math.floor(t);
+  return a[i] + (a[Math.min(a.length - 1, i + 1)] - a[i]) * (t - i);
+}
+// fraction of samples above the level
+function landFraction(h, level) {
+  let n = 0;
+  for (let i = 0; i < h.length; i++) if (h[i] > level) n++;
+  return n / h.length;
+}
+// connected components above the level (4-neighbour), ignoring specks under minCells
+function islandCount(h, w, hgt, level, minCells = 3) {
+  const seen = new Uint8Array(w * hgt), stack = [];
+  let count = 0;
+  for (let s = 0; s < w * hgt; s++) {
+    if (seen[s] || h[s] <= level) continue;
+    let cells = 0;
+    stack.length = 0; stack.push(s); seen[s] = 1;
+    while (stack.length) {
+      const o = stack.pop(), x = o % w, y = (o - x) / w;
+      cells++;
+      if (x > 0 && !seen[o - 1] && h[o - 1] > level) { seen[o - 1] = 1; stack.push(o - 1); }
+      if (x < w - 1 && !seen[o + 1] && h[o + 1] > level) { seen[o + 1] = 1; stack.push(o + 1); }
+      if (y > 0 && !seen[o - w] && h[o - w] > level) { seen[o - w] = 1; stack.push(o - w); }
+      if (y < hgt - 1 && !seen[o + w] && h[o + w] > level) { seen[o + w] = 1; stack.push(o + w); }
+    }
+    if (cells >= minCells) count++;
+  }
+  return count;
+}
+// marching squares: segments of the level line, in grid coordinates
+function contourSegs(h, w, hgt, level) {
+  const segs = [];
+  const lerp = (a, b) => (level - a) / (b - a);
+  for (let j = 0; j < hgt - 1; j++) {
+    for (let i = 0; i < w - 1; i++) {
+      const o = j * w + i, a = h[o], b = h[o + 1], c = h[o + w + 1], d = h[o + w];
+      let m = (a > level ? 8 : 0) | (b > level ? 4 : 0) | (c > level ? 2 : 0) | (d > level ? 1 : 0);
+      if (m === 0 || m === 15) continue;
+      // edge points: top (a-b), right (b-c), bottom (d-c), left (a-d)
+      const T = [i + lerp(a, b), j], R = [i + 1, j + lerp(b, c)], B = [i + lerp(d, c), j + 1], L = [i, j + lerp(a, d)];
+      const put = (p, q) => segs.push([p[0], p[1], q[0], q[1]]);
+      switch (m) {
+        case 1: case 14: put(L, B); break;
+        case 2: case 13: put(B, R); break;
+        case 3: case 12: put(L, R); break;
+        case 4: case 11: put(T, R); break;
+        case 6: case 9: put(T, B); break;
+        case 7: case 8: put(T, L); break;
+        case 5: put(T, R); put(L, B); break;
+        case 10: put(T, L); put(B, R); break;
+      }
+    }
+  }
+  return segs;
+}
+
+// ---- Plate 269: Levy's Brown function on the sphere, by great-circle faults ----
+// Each fault is a random great circle; the relief steps up by a on one side and down on the other.
+// The sum over a Poisson collection of faults, rescaled, converges to the sphere-to-line Brown
+// function Bo(P) (the integral of white noise over the hemisphere centred at P).
+function sphereFaults(nLat, nLon, nFaults, seed) {
+  const rng = mulberry32((seed * 2654435761 + 7) >>> 0), g = gaussMaker(rng);
+  const h = new Float64Array(nLat * nLon);
+  const px = new Float64Array(nLat * nLon), py = new Float64Array(nLat * nLon), pz = new Float64Array(nLat * nLon);
+  for (let j = 0; j < nLat; j++) {
+    const lat = (-90 + (180 * j) / (nLat - 1)) * (Math.PI / 180), cl = Math.cos(lat), sl = Math.sin(lat);
+    for (let i = 0; i < nLon; i++) {
+      const lon = (-180 + (360 * i) / (nLon - 1)) * (Math.PI / 180), o = j * nLon + i;
+      px[o] = cl * Math.cos(lon); py[o] = cl * Math.sin(lon); pz[o] = sl;
+    }
+  }
+  for (let f = 0; f < nFaults; f++) {
+    let ux = g(), uy = g(), uz = g();
+    const L = Math.hypot(ux, uy, uz) || 1;
+    ux /= L; uy /= L; uz /= L;
+    const s = rng() < 0.5 ? -1 : 1;
+    for (let o = 0; o < h.length; o++) h[o] += px[o] * ux + py[o] * uy + pz[o] * uz > 0 ? s : -s;
+  }
+  let m = 0, sw = 0;
+  for (let j = 0; j < nLat; j++) {
+    const w = Math.cos((-90 + (180 * j) / (nLat - 1)) * (Math.PI / 180));
+    for (let i = 0; i < nLon; i++) { m += h[j * nLon + i] * w; sw += w; }
+  }
+  m /= sw;
+  let s2 = 0;
+  for (let o = 0; o < h.length; o++) { h[o] -= m; s2 += h[o] * h[o]; }
+  s2 = Math.sqrt(s2 / h.length) || 1;
+  for (let o = 0; o < h.length; o++) h[o] /= s2;
+  return h;
+}
+// the sea level that puts fraction q of the sphere's AREA under water (weights by cos latitude)
+function sphereSeaLevel(h, nLat, nLon, q) {
+  const vals = [], ws = [];
+  for (let j = 0; j < nLat; j++) {
+    const w = Math.cos((-90 + (180 * j) / (nLat - 1)) * (Math.PI / 180));
+    for (let i = 0; i < nLon; i++) { vals.push(h[j * nLon + i]); ws.push(w); }
+  }
+  const idx = vals.map((_, i) => i).sort((a, b) => vals[a] - vals[b]);
+  const total = ws.reduce((a, b) => a + b, 0);
+  let acc = 0;
+  for (const i of idx) { acc += ws[i]; if (acc >= q * total) return vals[i]; }
+  return vals[idx[idx.length - 1]];
+}
+// Hammer projection: lon, lat in radians -> x in [-2sqrt2, 2sqrt2], y in [-sqrt2, sqrt2]
+function hammer(lon, lat) {
+  const d = Math.sqrt(1 + Math.cos(lat) * Math.cos(lon / 2));
+  return [(2 * Math.SQRT2 * Math.cos(lat) * Math.sin(lon / 2)) / d, (Math.SQRT2 * Math.sin(lat)) / d];
+}
+// inverse: null outside the ellipse
+function hammerInv(x, y) {
+  const z2 = 1 - (x * x) / 16 - (y * y) / 4;
+  if (z2 < 0.5) return null;
+  const z = Math.sqrt(z2);
+  return [2 * Math.atan2(z * x, 2 * (2 * z2 - 1)), Math.asin(Math.max(-1, Math.min(1, z * y)))];
+}
+
+(() => {
+  const PAPER = PRINT.paper, INK = PRINT.ink;
+  const DEFAULT_SEED = 1975;                      // the year of the French Essay
+  const nextSeed = (s) => ((s * 1103515245 + 12345) & 0x7fffffff) % 100000 || 1;
+
+  // every heavy figure renders once per parameter change into an offscreen canvas that covers a
+  // fixed world rectangle; zooming and panning only re-blit it
+  function offscreenFigure(wrapId, canvasId, world, build, opts = {}) {
+    const st = { off: null, key: '' };
+    const z = zoomable(wrapId, canvasId, (f) => fitBox(f, { x0: world.x0, x1: world.x1, y0: world.y0, y1: world.y1 }, 0.015), (f, v) => {
+      paper(f, opts.ground || PAPER);
+      const c = f.ctx;
+      c.setTransform(f.dpr, 0, 0, f.dpr, 0, 0);
+      c.imageSmoothingEnabled = true; c.imageSmoothingQuality = 'high';
+      if (st.off) c.drawImage(st.off, v.ox + world.x0 * v.s, v.oy - world.y1 * v.s, (world.x1 - world.x0) * v.s, (world.y1 - world.y0) * v.s);
+      toScreen(f);
+    }, { maxZoom: opts.maxZoom || 60 });
+    if (opts.ground) z.z.ground = opts.ground;
+    z.update = (key, ...args) => {
+      if (st.key !== key) { st.off = build(...args); st.key = key; }
+      z.schedule();
+    };
+    return z;
+  }
+  const makeCanvas = (w, h) => { const cv = document.createElement('canvas'); cv.width = w; cv.height = h; return cv; };
+  const pct = (x) => `${Math.round(x * 100)}%`;
+
+  // land/sea raster: heights above `level` in ink on paper, bilinear-upsampled for smooth coasts
+  function coastRaster(field, w, h, level, scale) {
+    const up = upsample(field, w, h, scale), cv = makeCanvas(up.w, up.h), c = cv.getContext('2d');
+    const img = c.createImageData(up.w, up.h), d = img.data;
+    for (let o = 0; o < up.data.length; o++) {
+      const land = up.data[o] > level, k = 4 * o;
+      d[k] = land ? 21 : 236; d[k + 1] = land ? 21 : 235; d[k + 2] = land ? 21 : 230; d[k + 3] = 255;
+    }
+    c.putImageData(img, 0, 0);
+    return cv;
+  }
+
+  // ====================== Plates 264-265: lake landscapes ======================
+  // crop of the periodic surface, lakes flattened, quads shaded and drawn back to front, the
+  // block's front face in solid ink
+  const LAND_W = 224, LAND_D = 176, CELL = 6;
+  function landscapeCanvas(H, seaQ, seed) {
+    // the synthesized surface is periodic, so the crop may start on any row; start it where the
+    // front rows are lowest, as the plates do, so the viewer looks over low ground into the massif
+    const full = fbmSurface(256, H, seed);
+    let j0 = 0, best = Infinity;
+    for (let j = 0; j < 256; j++) {
+      let m = 0;
+      for (let jj = 0; jj < 10; jj++) for (let i = 0; i < LAND_W; i += 4) m += full[((j + jj) % 256) * 256 + i + 16];
+      if (m < best) { best = m; j0 = j; }
+    }
+    const field = new Float64Array(LAND_W * LAND_D);
+    for (let j = 0; j < LAND_D; j++) for (let i = 0; i < LAND_W; i++) field[j * LAND_W + i] = full[((j0 + j) % 256) * 256 + i + 16];
+    const sea = quantile(field, seaQ);
+    const z = new Float64Array(field.length);
+    for (let i = 0; i < field.length; i++) z[i] = Math.max(field[i], sea);
+    const S = Math.sin((25 * Math.PI) / 180);                       // viewer 25 degrees over the base
+    const ZS = CELL * LAND_W * 0.057 * Math.cos((25 * Math.PI) / 180);
+    const W = (LAND_W - 1) * CELL;
+    const Hpx = Math.round(W / 2);                                  // the world rectangle is 2 : 1
+    const cv = makeCanvas(W, Hpx), c = cv.getContext('2d');
+    c.fillStyle = PAPER; c.fillRect(0, 0, W, Hpx);
+    const base = Hpx - 36;
+    const sy = (j, v) => base - j * CELL * S - (v - sea) * ZS;
+    // light 60 degrees over the left, tipped a little toward the viewer so depth slopes shade too
+    const LL = Math.hypot(0.5, 0.16, Math.sin((60 * Math.PI) / 180));
+    const LX = -0.5 / LL, LY = 0.16 / LL, LZ = Math.sin((60 * Math.PI) / 180) / LL;
+    const k = (ZS / CELL) * 0.8;
+    for (let j = LAND_D - 2; j >= 0; j--) {
+      for (let i = 0; i < LAND_W - 1; i++) {
+        const o = j * LAND_W + i;
+        const a = z[o], b = z[o + 1], d2 = z[o + LAND_W], e = z[o + LAND_W + 1];
+        const x0 = i * CELL, x1 = x0 + CELL;
+        if (a <= sea && b <= sea && d2 <= sea && e <= sea) {
+          c.fillStyle = '#f6f5f0';
+          c.strokeStyle = c.fillStyle; c.lineWidth = 1;
+        } else {
+          const gx = ((b - a + e - d2) / 2) * k, gy = ((d2 - a + e - b) / 2) * k;
+          const inv = 1 / Math.hypot(gx, gy, 1);
+          const lam = Math.max(0, (-gx * LX - gy * LY + LZ) * inv);
+          const g = Math.round(18 + 205 * Math.min(1, lam) ** 1.5);
+          c.fillStyle = `rgb(${g},${g},${g})`;
+          c.strokeStyle = c.fillStyle; c.lineWidth = 1;
+        }
+        c.beginPath();
+        c.moveTo(x0, sy(j, a)); c.lineTo(x1, sy(j, b)); c.lineTo(x1, sy(j + 1, e)); c.lineTo(x0, sy(j + 1, d2));
+        c.closePath(); c.fill(); c.stroke();
+      }
+    }
+    // the block's front face, down to the bottom edge
+    c.fillStyle = INK;
+    c.beginPath();
+    c.moveTo(0, Hpx);
+    for (let i = 0; i < LAND_W; i++) c.lineTo(i * CELL, sy(0, z[i]));
+    c.lineTo(W, Hpx); c.closePath(); c.fill();
+    return cv;
+  }
+  const stA = { D: 2.1, seaQ: 0.3, seed: DEFAULT_SEED };
+  const WORLD_A = { x0: 0, x1: 2, y0: 0, y1: 1 };
+  const zA = offscreenFigure('wA', 'cA', WORLD_A, (H, q, seed) => landscapeCanvas(H, q, seed));
+  const FIGS_A = [
+    ['t265', 'Plate 265, top', 2.1], ['b265', 'Plate 265, bottom', 2.2333], ['b264', 'Plate 264, bottom', 2.3667], ['t264', 'Plate 264, top', 2.5],
+  ];
+  function setA() {
+    const H = 3 - stA.D;
+    markMA(FIGS_A.reduce((best, [k, , d]) => (Math.abs(d - stA.D) < 0.005 ? k : best), ''));
+    $('dAv').textContent = `D = ${stA.D.toFixed(4)}`;
+    $('qAv').textContent = `${pct(stA.seaQ)} of the grid under water`;
+    const fig = FIGS_A.find(([, , d]) => Math.abs(d - stA.D) < 0.005);
+    $('cAt').textContent = fig ? fig[1] : 'Fractional Brown relief';
+    $('cAn').textContent = `surface D = ${stA.D.toFixed(2)} · seed ${stA.seed}`;
+    $('infoA').innerHTML = stA.D >= 2.49 ? 'The ordinary Brown relief: every vertical cut an ordinary Brown line-to-line function, as in Plate 241. "Conspicuously too irregular in its detail."' : stA.D <= 2.15 ? 'H = 0.8 or so "justifies Plate 265": Richardson\'s data make coastline dimensions typically about 1.2, hence relief about 2.2.' : 'Between the model of Earth (D near 2.2) and the ordinary Brown relief (D = 5/2).';
+    $('rAa').textContent = stA.D.toFixed(4);
+    $('rAb').textContent = (stA.D - 1).toFixed(4);
+    $('rAc').textContent = H.toFixed(4);
+    $('rAd').textContent = String(stA.seed);
+    zA.update(`${stA.D}|${stA.seaQ}|${stA.seed}`, H, stA.seaQ, stA.seed);
+  }
+  const markMA = stepButtons($('mA'), FIGS_A.map((f) => f[0]), (k) => FIGS_A.find((f) => f[0] === k)[1].replace('Plate ', ''), (k) => FIGS_A.find((f) => f[0] === k)[1], (k) => {
+    stA.D = FIGS_A.find((f) => f[0] === k)[2]; $('dAs').value = stA.D; setA();
+  });
+  $('dAs').addEventListener('input', () => { stA.D = Number($('dAs').value); setA(); });
+  $('qAs').addEventListener('input', () => { stA.seaQ = Number($('qAs').value); setA(); });
+  $('seedA').addEventListener('click', () => { stA.seed = nextSeed(stA.seed); setA(); });
+  $('plateA').addEventListener('click', () => { Object.assign(stA, { D: 2.1, seaQ: 0.3, seed: DEFAULT_SEED }); $('dAs').value = 2.1; $('qAs').value = 0.3; setA(); zA.refit(); });
+
+  // ====================== Plates 266-267: coastlines ======================
+  const COAST_W = 216, COAST_H = 144;
+  const stB = { D: 8 / 3, landQ: 0.28, seed: DEFAULT_SEED };
+  const WORLD_B = { x0: 0, x1: 3, y0: 0, y1: 2 };
+  let statsB = { land: 0, isles: 0 };
+  const zB = offscreenFigure('wB', 'cB', WORLD_B, (H, landQ, seed) => {
+    const field = cropField(fbmSurface(256, H, seed), 256, COAST_W, COAST_H);
+    const level = quantile(field, 1 - landQ);
+    statsB = { land: landFraction(field, level), isles: islandCount(field, COAST_W, COAST_H, level) };
+    return coastRaster(field, COAST_W, COAST_H, level, 4);
+  });
+  const FIGS_B = [['p266', 'Plate 266', 8 / 3, '8/3'], ['t267', 'Plate 267, top', 7 / 3, '7/3'], ['b267', 'Plate 267, bottom', 5 / 2, '5/2']];
+  function setB() {
+    markMB(FIGS_B.reduce((best, [k, , d]) => (Math.abs(d - stB.D) < 0.005 ? k : best), ''));
+    const fig = FIGS_B.find(([, , d]) => Math.abs(d - stB.D) < 0.005);
+    $('dBv').textContent = `D = ${fig ? fig[3] : stB.D.toFixed(4)} · coastline ${(stB.D - 1).toFixed(4)}`;
+    $('qBv').textContent = `${pct(stB.landQ)} land`;
+    $('cBt').textContent = fig ? fig[1] : 'Brown coastline';
+    $('cBn').textContent = `surface D = ${stB.D.toFixed(2)}, coastline D = ${(stB.D - 1).toFixed(2)} · seed ${stB.seed}`;
+    $('infoB').innerHTML = stB.D >= 2.5 ? 'Relief D at or beyond 2.5: the ocean splits into roundish separate "seas", and the islands come in "strings".' : 'Below relief D = 2.5 the ocean hangs together and the island strings fade.';
+    zB.update(`${stB.D}|${stB.landQ}|${stB.seed}`, 3 - stB.D, stB.landQ, stB.seed);
+    $('rBa').textContent = (stB.D - 1).toFixed(4);
+    $('rBb').textContent = pct(statsB.land);
+    $('rBc').textContent = fmt(statsB.isles);
+    $('rBd').textContent = String(stB.seed);
+  }
+  const markMB = stepButtons($('mB'), FIGS_B.map((f) => f[0]), (k) => { const f = FIGS_B.find((x) => x[0] === k); return `${f[1].replace('Plate ', '')} · D = ${f[3]}`; }, (k) => FIGS_B.find((f) => f[0] === k)[1], (k) => {
+    stB.D = FIGS_B.find((f) => f[0] === k)[2]; $('dBs').value = stB.D; setB();
+  });
+  $('dBs').addEventListener('input', () => { stB.D = Number($('dBs').value); setB(); });
+  $('qBs').addEventListener('input', () => { stB.landQ = Number($('qBs').value); setB(); });
+  $('seedB').addEventListener('click', () => { stB.seed = nextSeed(stB.seed); setB(); });
+  $('plateB').addEventListener('click', () => { Object.assign(stB, { D: 8 / 3, landQ: 0.28, seed: DEFAULT_SEED }); $('dBs').value = stB.D; $('qBs').value = 0.28; setB(); zB.refit(); });
+
+  // ====================== Plate 268: contour lines ======================
+  const CONT_W = 240, CONT_H = 168;
+  const stC = { D: 1.3333, slope: 5, seed: DEFAULT_SEED };
+  const WORLD_C = { x0: 0, x1: 10, y0: 0, y1: 7 };
+  const zC = offscreenFigure('wC', 'cC', WORLD_C, (H, slope, seed) => {
+    const base = cropField(fbmSurface(256, H, seed), 256, CONT_W, CONT_H);
+    // the side of a huge mountain: a systematic slope from the top of the frame to the bottom
+    for (let j = 0; j < CONT_H; j++) for (let i = 0; i < CONT_W; i++) base[j * CONT_W + i] += slope * (0.5 - j / (CONT_H - 1));
+    const up = upsample(base, CONT_W, CONT_H, 2);
+    const cv = makeCanvas(1200, 840), c = cv.getContext('2d');
+    c.fillStyle = PAPER; c.fillRect(0, 0, 1200, 840);
+    const sx = 1200 / (up.w - 1), sy2 = 840 / (up.h - 1);
+    const spread = Math.max(0.8, slope * 0.22);
+    for (const [lvl, lw] of [[spread, 1.3], [0, 3], [-spread, 1.3]]) {
+      const segs = contourSegs(up.data, up.w, up.h, lvl);
+      c.strokeStyle = INK; c.lineWidth = lw; c.lineCap = 'round';
+      c.beginPath();
+      for (const [x0, y0, x1, y1] of segs) { c.moveTo(x0 * sx, y0 * sy2); c.lineTo(x1 * sx, y1 * sy2); }
+      c.stroke();
+    }
+    return cv;
+  });
+  const FIGS_C = [['top', 'Top · D ≈ 1.3333', 1.3333], ['bot', 'Bottom · D ≈ 1.1667', 1.1667]];
+  function setC() {
+    markMC(FIGS_C.reduce((best, [k, , d]) => (Math.abs(d - stC.D) < 0.003 ? k : best), ''));
+    const fig = FIGS_C.find(([, , d]) => Math.abs(d - stC.D) < 0.003);
+    $('dCv').textContent = `D = ${stC.D.toFixed(4)}`;
+    $('sCv').textContent = stC.slope === 0 ? 'none (a summit)' : `${stC.slope.toFixed(1)} sd across the frame`;
+    $('cCt').textContent = fig ? `Plate 268, ${fig[0] === 'top' ? 'top' : 'bottom'}` : 'Contour lines';
+    $('infoC').innerHTML = 'Both printed figures share one program and seed; only the exponent H changes. The slider redraws the same relief with a different slope.';
+    $('rCa').textContent = stC.D.toFixed(4);
+    $('rCb').textContent = (2 - stC.D).toFixed(4);
+    $('rCc').textContent = (stC.D + 1).toFixed(4);
+    $('rCd').textContent = String(stC.seed);
+    zC.update(`${stC.D}|${stC.slope}|${stC.seed}`, 2 - stC.D, stC.slope, stC.seed);
+  }
+  const markMC = stepButtons($('mC'), FIGS_C.map((f) => f[0]), (k) => FIGS_C.find((f) => f[0] === k)[1], (k) => FIGS_C.find((f) => f[0] === k)[1], (k) => {
+    stC.D = FIGS_C.find((f) => f[0] === k)[2]; $('dCs').value = stC.D; setC();
+  });
+  $('dCs').addEventListener('input', () => { stC.D = Number($('dCs').value); setC(); });
+  $('sCs').addEventListener('input', () => { stC.slope = Number($('sCs').value); setC(); });
+  $('seedC').addEventListener('click', () => { stC.seed = nextSeed(stC.seed); setC(); });
+  $('plateC').addEventListener('click', () => { Object.assign(stC, { D: 1.3333, slope: 5, seed: DEFAULT_SEED }); $('dCs').value = stC.D; $('sCs').value = 5; setC(); zC.refit(); });
+
+  // ====================== Plate 269: Brownian Pangaea ======================
+  const stD = { q: 0.75, faults: 1600, seed: DEFAULT_SEED, grat: true };
+  const NLAT = 121, NLON = 241;
+  const WORLD_D = { x0: 0, x1: 2, y0: 0, y1: 1 };
+  let sphereCache = { key: '', h: null };
+  const zD = offscreenFigure('wD', 'cD', WORLD_D, (q, faults, seed, grat) => {
+    const skey = `${faults}|${seed}`;
+    if (sphereCache.key !== skey) sphereCache = { key: skey, h: sphereFaults(NLAT, NLON, faults, seed) };
+    const h = sphereCache.h, sea = sphereSeaLevel(h, NLAT, NLON, q);
+    // rotate the sphere so the main landmass faces the map's centre, as the plate frames its Pangaea
+    let cx = 0, cy = 0, cz = 0;
+    for (let j = 0; j < NLAT; j++) {
+      const lat = ((-90 + (180 * j) / (NLAT - 1)) * Math.PI) / 180, w = Math.cos(lat);
+      for (let i = 0; i < NLON; i++) {
+        if (h[j * NLON + i] <= sea) continue;
+        const lon = ((-180 + (360 * i) / (NLON - 1)) * Math.PI) / 180;
+        cx += w * w * Math.cos(lon); cy += w * w * Math.sin(lon); cz += w * Math.sin(lat);
+      }
+    }
+    const cl = Math.hypot(cx, cy, cz) || 1;
+    cx /= cl; cy /= cl; cz /= cl;
+    const tLat = (15 * Math.PI) / 180, t = [Math.cos(tLat), 0, Math.sin(tLat)];
+    // Rodrigues rotation taking t to the land centroid c; sampling through it recentres the land
+    const ax = t[1] * cz - t[2] * cy, ay = t[2] * cx - t[0] * cz, az = t[0] * cy - t[1] * cx;
+    const sA = Math.hypot(ax, ay, az), cA = t[0] * cx + t[1] * cy + t[2] * cz;
+    const [ux, uy, uz] = sA > 1e-9 ? [ax / sA, ay / sA, az / sA] : [0, 0, 1];
+    const rot = (v) => {
+      const d = ux * v[0] + uy * v[1] + uz * v[2];
+      const crx = uy * v[2] - uz * v[1], cry = uz * v[0] - ux * v[2], crz = ux * v[1] - uy * v[0];
+      return [v[0] * cA + crx * sA + ux * d * (1 - cA), v[1] * cA + cry * sA + uy * d * (1 - cA), v[2] * cA + crz * sA + uz * d * (1 - cA)];
+    };
+    const W = 1280, Hh = 640, cv = makeCanvas(W, Hh), c = cv.getContext('2d');
+    c.fillStyle = PAPER; c.fillRect(0, 0, W, Hh);
+    const img = c.createImageData(W, Hh), d = img.data;
+    const X0 = 2 * Math.SQRT2, Y0 = Math.SQRT2;
+    for (let py = 0; py < Hh; py++) {
+      const y = Y0 - (2 * Y0 * (py + 0.5)) / Hh;
+      for (let px = 0; px < W; px++) {
+        const x = -X0 + (2 * X0 * (px + 0.5)) / W, inv = hammerInv(x, y), o = 4 * (py * W + px);
+        if (!inv) { d[o] = 236; d[o + 1] = 235; d[o + 2] = 230; d[o + 3] = 255; continue; }
+        const cl0 = Math.cos(inv[1]);
+        const [vx, vy, vz] = rot([cl0 * Math.cos(inv[0]), cl0 * Math.sin(inv[0]), Math.sin(inv[1])]);
+        const lon = Math.atan2(vy, vx), lat = Math.asin(Math.max(-1, Math.min(1, vz)));
+        const fj = ((lat * 180) / Math.PI + 90) / (180 / (NLAT - 1)), fi = ((lon * 180) / Math.PI + 180) / (360 / (NLON - 1));
+        const j0 = Math.max(0, Math.min(NLAT - 2, Math.floor(fj))), i0 = Math.max(0, Math.min(NLON - 2, Math.floor(fi)));
+        const ty = fj - j0, tx = fi - i0, oo = j0 * NLON + i0;
+        const v = h[oo] * (1 - tx) * (1 - ty) + h[oo + 1] * tx * (1 - ty) + h[oo + NLON] * (1 - tx) * ty + h[oo + NLON + 1] * tx * ty;
+        const land = v > sea;
+        d[o] = land ? 21 : 236; d[o + 1] = land ? 21 : 235; d[o + 2] = land ? 21 : 230; d[o + 3] = 255;
+      }
+    }
+    c.putImageData(img, 0, 0);
+    const toPx = (lon, lat) => { const [x, y] = hammer(lon, lat); return [((x + X0) / (2 * X0)) * W, ((Y0 - y) / (2 * Y0)) * Hh]; };
+    if (grat) {
+      c.strokeStyle = 'rgba(21,21,21,0.55)'; c.lineWidth = 1.1;
+      c.globalCompositeOperation = 'darken';
+      for (let lonD = -180; lonD <= 180; lonD += 30) {
+        c.beginPath();
+        for (let latD = -90; latD <= 90; latD += 2) { const [x, y] = toPx((lonD * Math.PI) / 180, (latD * Math.PI) / 180); latD === -90 ? c.moveTo(x, y) : c.lineTo(x, y); }
+        c.stroke();
+      }
+      for (let latD = -60; latD <= 60; latD += 30) {
+        c.beginPath();
+        for (let lonD = -180; lonD <= 180; lonD += 2) { const [x, y] = toPx((lonD * Math.PI) / 180, (latD * Math.PI) / 180); lonD === -180 ? c.moveTo(x, y) : c.lineTo(x, y); }
+        c.stroke();
+      }
+      c.globalCompositeOperation = 'source-over';
+    }
+    c.strokeStyle = INK; c.lineWidth = 2;
+    c.beginPath();
+    c.ellipse(W / 2, Hh / 2, W / 2 - 1.5, Hh / 2 - 1.5, 0, 0, 2 * Math.PI);
+    c.stroke();
+    return cv;
+  });
+  function setD() {
+    $('qDv').textContent = pct(stD.q);
+    $('fDv').textContent = fmt(stD.faults);
+    $('cDn').textContent = `${pct(stD.q)} of the area under water · ${fmt(stD.faults)} faults · seed ${stD.seed}`;
+    $('infoD').innerHTML = 'Each fault is a random great circle: one side of the planet steps up, the other down. Enough of them converge to Lévy\'s Brown sphere-to-line function.';
+    $('rDb').textContent = pct(stD.q);
+    $('rDc').textContent = fmt(stD.faults);
+    $('rDd').textContent = String(stD.seed);
+    zD.update(`${stD.q}|${stD.faults}|${stD.seed}|${stD.grat}`, stD.q, stD.faults, stD.seed, stD.grat);
+  }
+  $('qDs').addEventListener('input', () => { stD.q = Number($('qDs').value); setD(); });
+  $('fDs').addEventListener('change', () => { stD.faults = Number($('fDs').value); setD(); });
+  $('gratD').addEventListener('change', () => { stD.grat = $('gratD').checked; setD(); });
+  $('seedD').addEventListener('click', () => { stD.seed = nextSeed(stD.seed); setD(); });
+  $('plateD').addEventListener('click', () => { Object.assign(stD, { q: 0.75, faults: 1600, seed: DEFAULT_SEED, grat: true }); $('qDs').value = 0.75; $('fDs').value = 1600; $('gratD').checked = true; setD(); zD.refit(); });
+
+  // ====================== Plate 270: the first Brown coastlines ======================
+  // four panels, one seed; unequal heights and growing land shares follow the print
+  const PANELS_E = [
+    { D: 1.1, land: 0.035, h: 76 }, { D: 1.3, land: 0.09, h: 112 }, { D: 1.5, land: 0.24, h: 216 }, { D: 1.8, land: 0.42, h: 236 },
+  ];
+  const PANEL_W = 224;
+  const stE = { mode: 'printed', D: 1.3, landQ: 0.25, seed: DEFAULT_SEED };
+  const WORLD_E = { x0: 0, x1: 10, y0: 0, y1: 16 };
+  let statsE = { land: 0 };
+  const zE = offscreenFigure('wE', 'cE', WORLD_E, (mode, D, landQ, seed) => {
+    const upscale = 3, pxW = PANEL_W * upscale;
+    const cv = makeCanvas(pxW + 8, Math.round((pxW + 8) * 1.6)), c = cv.getContext('2d');
+    c.fillStyle = PAPER; c.fillRect(0, 0, cv.width, cv.height);
+    const panels = mode === 'printed' ? PANELS_E : [{ D, land: landQ, h: Math.round(PANEL_W * 1.45) }];
+    const totalH = panels.reduce((s, p) => s + p.h, 0);
+    const scaleY = (cv.height - 8) / (totalH * upscale);
+    let y = 4;
+    for (const p of panels) {
+      // the field is one seed for all panels; each panel crops a band of its own height
+      const rows = Math.min(236, p.h);
+      const field = cropField(fbmSurface(256, 2 - p.D, seed), 256, PANEL_W, rows);
+      const level = quantile(field, 1 - p.land);
+      if (mode !== 'printed') statsE = { land: landFraction(field, level) };
+      const panelCv = coastRaster(field, PANEL_W, rows, level, upscale);
+      const drawH = p.h * upscale * scaleY;
+      c.imageSmoothingEnabled = true; c.imageSmoothingQuality = 'high';
+      c.drawImage(panelCv, 4, y, pxW, drawH);
+      c.strokeStyle = INK; c.lineWidth = 2;
+      c.strokeRect(4, y, pxW, drawH);
+      y += drawH;
+    }
+    return cv;
+  });
+  const MODES_E = { printed: 'The four panels, as printed', single: 'One panel, with sliders' };
+  function setE() {
+    markME(stE.mode);
+    $('dEwrap').hidden = $('qEwrap').hidden = stE.mode === 'printed';
+    $('dEv').textContent = `D = ${stE.D.toFixed(4)}`;
+    $('qEv').textContent = `${pct(stE.landQ)} land`;
+    $('cEt').textContent = stE.mode === 'printed' ? 'As printed' : 'One panel';
+    $('cEn').textContent = stE.mode === 'printed' ? `four panels, one seed (${stE.seed})` : `coastline D = ${stE.D.toFixed(2)} · seed ${stE.seed}`;
+    $('infoE').innerHTML = stE.mode === 'printed' ? 'Top to bottom: D = 1.1 (near 1), 1.3000 (the Atlas game), 3/2, 1.8 (closer to 2).' : 'One coastline with the dimension and sea level free. Finer tests favor D ≈ 1.2, the Richardson value.';
+    $('rEb').textContent = stE.mode === 'printed' ? '—' : stE.D.toFixed(4);
+    $('rEc').textContent = stE.mode === 'printed' ? '3.5 · 9 · 24 · 42%' : pct(statsE.land);
+    $('rEd').textContent = String(stE.seed);
+    zE.update(`${stE.mode}|${stE.D}|${stE.landQ}|${stE.seed}`, stE.mode, stE.D, stE.landQ, stE.seed);
+    if (stE.mode !== 'printed') $('rEc').textContent = pct(statsE.land);
+  }
+  const markME = stepButtons($('mE'), Object.keys(MODES_E), (k) => MODES_E[k], (k) => MODES_E[k], (k) => { stE.mode = k; setE(); zE.refit(); });
+  $('dEs').addEventListener('input', () => { stE.D = Number($('dEs').value); setE(); });
+  $('qEs').addEventListener('input', () => { stE.landQ = Number($('qEs').value); setE(); });
+  $('seedE').addEventListener('click', () => { stE.seed = nextSeed(stE.seed); setE(); });
+  $('plateE').addEventListener('click', () => { Object.assign(stE, { mode: 'printed', seed: DEFAULT_SEED }); setE(); zE.refit(); });
+
+  // ====================== Plate 271: an island with varying sea level ======================
+  // white raster lines on black, hidden lines removed with a horizon buffer, as on the 1976 CRT
+  const ISL_N = 144;
+  let islandField = { key: '', z: null, levels: null };
+  function islandData(seed) {
+    const key = String(seed);
+    if (islandField.key === key) return islandField;
+    const z = cropField(fbmSurface(256, 0.7, seed), 256, ISL_N, ISL_N);
+    // gentle taper so the island emerges in view, not at the sheet's edge (a presentation choice)
+    for (let j = 0; j < ISL_N; j++) {
+      for (let i = 0; i < ISL_N; i++) {
+        const dx = (i / (ISL_N - 1)) * 2 - 1, dy = (j / (ISL_N - 1)) * 2 - 1;
+        z[j * ISL_N + i] -= 1.1 * (dx * dx + dy * dy);
+      }
+    }
+    islandField = { key, z, levels: null };
+    return islandField;
+  }
+  // draw one sheet into c; returns nothing. Rows front to back; a horizon buffer hides what lies behind.
+  function drawSheet(c, z, sea, x0, y0, w, skew, dy, zs, step) {
+    const n = ISL_N, dx = w / (n - 1);
+    const minY = new Float64Array(Math.ceil(w + skew * (n - 1)) + 8).fill(1e9);
+    // the sheet's base and front skirt in solid black, so the sheet hides whatever lies behind it
+    const back = (n - 1) * dy;
+    c.fillStyle = '#101010';
+    c.beginPath();
+    c.moveTo(x0 - 3, y0 + 12);
+    c.lineTo(x0 + skew * (n - 1) - 3, y0 - back - 6);
+    c.lineTo(x0 + skew * (n - 1) + w + 3, y0 - back - 6);
+    c.lineTo(x0 + w + 3, y0 + 12);
+    c.closePath(); c.fill();
+    c.strokeStyle = '#e8e7e2'; c.lineWidth = 1;
+    for (let j = 0; j < n; j += step) {
+      const ox = x0 + skew * j, oy = y0 - j * dy;
+      c.beginPath();
+      let pen = false;
+      for (let i = 0; i < n; i++) {
+        const v = Math.max(z[j * ISL_N + i], sea);
+        const px = ox + i * dx, py = oy - (v - sea) * zs;
+        const col = Math.max(0, Math.min(minY.length - 1, Math.round(px - x0)));
+        if (py < minY[col] - 0.4) {
+          minY[col] = py;
+          if (!pen) { c.moveTo(px, py); pen = true; } else c.lineTo(px, py);
+        } else pen = false;
+      }
+      c.stroke();
+    }
+  }
+  const stF = { mode: 'printed', aboveQ: 0.2, seed: DEFAULT_SEED };
+  const SEAS_F = [0.975, 0.955, 0.925, 0.875, 0.79, 0.68];               // area quantiles: land grows down the page
+  const WORLD_F = { x0: 0, x1: 10, y0: 0, y1: 13 };
+  const zF = offscreenFigure('wF', 'cF', WORLD_F, (mode, aboveQ, seed) => {
+    const { z } = islandData(seed);
+    const W = 1000, Hh = 1300, cv = makeCanvas(W, Hh), c = cv.getContext('2d');
+    c.fillStyle = '#101010'; c.fillRect(0, 0, W, Hh);
+    if (mode === 'printed') {
+      const sheetW = 560, skew = 1.15, dy = 1.45, zs = 46;
+      SEAS_F.forEach((q, k) => {
+        const sea = quantile(z, q);
+        drawSheet(c, z, sea, 60 + k * 18, 330 + k * 190, sheetW, skew, dy, zs, 2);
+      });
+    } else {
+      const sea = quantile(z, 1 - aboveQ);
+      drawSheet(c, z, sea, 90, 1120, 780, 0.5, 4.4, 150, 1);
+    }
+    return cv;
+  }, { ground: '#101010' });
+  const MODES_F = { printed: 'The six views, as printed', single: 'One island, sea level free' };
+  function setF() {
+    markMF(stF.mode);
+    $('qFwrap').hidden = stF.mode === 'printed';
+    $('qFv').textContent = `${pct(stF.aboveQ)} of the sheet above water`;
+    $('cFt').textContent = stF.mode === 'printed' ? 'As printed' : 'One island';
+    $('cFn').textContent = stF.mode === 'printed' ? `sea level falls from panel to panel · seed ${stF.seed}` : `seed ${stF.seed}`;
+    $('infoF').innerHTML = stF.mode === 'printed' ? 'Six views of one island, the sea falling: specks, then a peninsula, then "small islands scattered like seeds at the tip of a narrow peninsula".' : 'Raise and lower the sea around the one island. The flat rows are the sea; their raster makes it shimmer toward the horizon.';
+    $('rFc').textContent = stF.mode === 'printed' ? '0.5 → 38%' : pct(stF.aboveQ);
+    $('rFd').textContent = String(stF.seed);
+    zF.update(`${stF.mode}|${stF.aboveQ}|${stF.seed}`, stF.mode, stF.aboveQ, stF.seed);
+  }
+  const markMF = stepButtons($('mF'), Object.keys(MODES_F), (k) => MODES_F[k], (k) => MODES_F[k], (k) => { stF.mode = k; setF(); zF.refit(); });
+  $('qFs').addEventListener('input', () => { stF.aboveQ = Number($('qFs').value); setF(); });
+  $('seedF').addEventListener('click', () => { stF.seed = nextSeed(stF.seed); setF(); });
+  $('plateF').addEventListener('click', () => { Object.assign(stF, { mode: 'printed', aboveQ: 0.2, seed: DEFAULT_SEED }); $('qFs').value = 0.2; setF(); zF.refit(); });
+
+  // first paint
+  setA(); setB(); setC(); setD(); setE(); setF();
+})();
+
+</script>
+
+</body>
+</html>

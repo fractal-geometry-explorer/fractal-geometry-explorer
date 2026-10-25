@@ -128,12 +128,12 @@ Update this file in the same pull request as the work it records.
 | Plate | Page | Title | Kind | Status | Site page |
 | :- | :- | :- | :- | :- | :- |
 | 255 | 255 | Fractional Brown trails (D ≈ 1.1111, 1.4285) | random | todo | |
-| 264–265 | 264–265 | Brown lake landscapes, ordinary and fractional | render | todo | |
-| 266–267 | 266–267 | Brown coastlines, and island "strings" | random | todo | |
-| 268 | 268 | Contour lines in fractional Brown landscapes | random | todo | |
-| 269, C9 (top) | 269 | Brownian Pangaea (coastline D = 3/2) | render | todo | |
-| 270 | 270 | The first known examples of Brown coastlines | random | todo | |
-| 271 | 271 | (landscape slices; confirm caption) | render | todo | |
+| 264–265 | 264–265 | Brown lake landscapes, ordinary and fractional | render | done | brown-relief |
+| 266–267 | 266–267 | Brown coastlines, and island "strings" | random | done | brown-relief |
+| 268 | 268 | Contour lines in fractional Brown landscapes | random | done | brown-relief |
+| 269, C9 (top) | 269 | Brownian Pangaea (coastline D = 3/2) | render | done | brown-relief |
+| 270 | 270 | The first known examples of Brown coastlines | random | done | brown-relief |
+| 271 | 271 | The first known examples of fractional Brown islands (D = 2.3000) | render | done | brown-relief |
 
 ## A book within the book, in colour (C1–C16, before chapter 30)
 
@@ -190,6 +190,7 @@ Each chapter session should add the chapter's main ideas here, alongside its pla
 - percolation (chapter 13);
 - the diameter exponent of trees (chapter 17);
 - 1/f noise and scaling nets (chapter 27);
+- global dependence in Brown relief, and the horizon (chapter 28);
 - Lévy flights and dusts (chapters 31–32);
 - lacunarity (chapter 34);
 - scaling in prices and in word frequencies (chapters 37–38).
