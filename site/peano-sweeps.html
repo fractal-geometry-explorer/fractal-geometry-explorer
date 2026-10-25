@@ -1,3 +1,8 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Peano Sweeps</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -147,6 +152,22 @@ ol.proof { margin: 0; padding-left: 1.4em; display: grid; gap: 6px; font-family:
 ol.proof li::marker { font-family: var(--f-display); font-weight: 700; color: var(--muted); }
 .side p.cap b { font-family: var(--f-display); font-size: 14px; letter-spacing: 0.04em; text-transform: uppercase; }
 </style>
+<style>
+body { margin: 0; }
+nav.shell { font-family: var(--f-display); font-size: 12.5px; font-weight: 600; background: var(--page);
+  border-bottom: 1px solid var(--rule); display: flex; align-items: center; gap: 6px 18px;
+  padding: 9px max(16px, env(safe-area-inset-right, 0px)) 9px max(16px, env(safe-area-inset-left, 0px)); }
+nav.shell a { color: var(--text); text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+nav.shell a:hover { color: var(--accent); }
+nav.shell .home { letter-spacing: 0.07em; text-transform: uppercase; flex: none; }
+nav.shell .gap { flex: 1; }
+nav.shell .pn { color: var(--muted); font-weight: 500; }
+nav.shell .pn b { color: var(--text); font-weight: 600; }
+nav.shell a:hover .pn, nav.shell a:hover .pn b { color: var(--accent); }
+</style>
+</head>
+<body>
+<nav class="shell" aria-label="Site"><a class="home" href="index.html">Fractal Geometry Explorer</a><span class="gap"></span><a rel="prev" href="unequal-parts.html"><span class="pn">&#8592; <b>Plates 56–57</b></span></a><a rel="next" href="dragon-sweeps.html"><span class="pn"><b>Plates 66–67</b> &#8594;</span></a></nav>
 
 <div class="wrap">
   <header class="top">
@@ -1162,3 +1183,6 @@ function cesaroTime(P) {
 })();
 
 </script>
+
+</body>
+</html>

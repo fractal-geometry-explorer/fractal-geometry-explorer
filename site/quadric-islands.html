@@ -1,3 +1,8 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Quadric Koch Islands</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -145,6 +150,22 @@ table.mt tr.sel td { color: var(--accent); font-weight: 500; }
 #maxPlot text { font-family: var(--f-mono); font-size: 10px; fill: #5d5d58; }
 .mini svg.lat { height: 78px; }
 </style>
+<style>
+body { margin: 0; }
+nav.shell { font-family: var(--f-display); font-size: 12.5px; font-weight: 600; background: var(--page);
+  border-bottom: 1px solid var(--rule); display: flex; align-items: center; gap: 6px 18px;
+  padding: 9px max(16px, env(safe-area-inset-right, 0px)) 9px max(16px, env(safe-area-inset-left, 0px)); }
+nav.shell a { color: var(--text); text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+nav.shell a:hover { color: var(--accent); }
+nav.shell .home { letter-spacing: 0.07em; text-transform: uppercase; flex: none; }
+nav.shell .gap { flex: 1; }
+nav.shell .pn { color: var(--muted); font-weight: 500; }
+nav.shell .pn b { color: var(--text); font-weight: 600; }
+nav.shell a:hover .pn, nav.shell a:hover .pn b { color: var(--accent); }
+</style>
+</head>
+<body>
+<nav class="shell" aria-label="Site"><a class="home" href="index.html">Fractal Geometry Explorer</a><span class="gap"></span><a rel="prev" href="gosper-island.html"><span class="pn">&#8592; <b>Plates 46–47</b></span></a><a rel="next" href="unequal-parts.html"><span class="pn"><b>Plates 56–57</b> &#8594;</span></a></nav>
 
 <div class="wrap">
   <header class="top">
@@ -1064,3 +1085,6 @@ function crossingsOf(P, cap = 400) {
 })();
 
 </script>
+
+</body>
+</html>
