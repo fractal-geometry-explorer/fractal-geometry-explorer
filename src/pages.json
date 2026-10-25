@@ -133,6 +133,18 @@
         "ui.js"
       ],
       "layout_comment": "/* Layout: the Cantor bar (80), the Cantor curtains (81), the devil's staircase (83) and the chapter's dust-and-dimension concept, each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "carpets-lacunarity",
+      "title": "Carpets' Lacunarity",
+      "plates": "Plate 318",
+      "chapter": 34,
+      "scripts": [
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: Plate 318's two carpets, the Cantor dusts along their mid lines, and the chapter's lacunarity measures (gap census and mass-in-window), each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
     }
   ]
 }
