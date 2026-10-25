@@ -123,6 +123,43 @@
       "layout_comment": "/* Layout: snowflake sweeps (68–69), Peano–Gosper trees (70–71), a cascade tree (71), the fudgeflake (72–73) and the quartet (73), each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
     },
     {
+      "slug": "color-plates",
+      "title": "A Book Within the Book",
+      "plates": "Plates C1–C7, C16",
+      "chapter": 30,
+      "scripts": [
+        "shared/draw.js",
+        "dragon.js",
+        "patchwork.js"
+      ],
+      "layout_comment": "/* Layout: the three art plates discussed without reproduction, then the self-squared dragon (C5) and the self-inverse patchwork (C7), each a computed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "fractal-landscapes",
+      "title": "Landscapes That Never Were",
+      "plates": "Plates C9–C15",
+      "chapter": 30,
+      "scripts": [
+        "shared/draw.js",
+        "fbm.js",
+        "render3d.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: four landscape sections in plate order (C11 Gaussian hills, C13 power-law valleys, C15 zenith archipelagos, C9 planetrise), each a synthesised figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "isothermal-surfaces",
+      "title": "Isothermal Surfaces of Turbulence",
+      "plates": "Chapter 30",
+      "chapter": 30,
+      "scripts": [
+        "shared/draw.js",
+        "pages/fractal-landscapes/fbm.js",
+        "script.js"
+      ],
+      "layout_comment": "/* Layout: the planar isotherm laboratory beside its caption and controls, then the linear section below it; a sticky index on top. One column under 900px. */"
+    },
+    {
       "slug": "cantor-dust",
       "title": "Cantor Dust",
       "plates": "Plates 80–83",

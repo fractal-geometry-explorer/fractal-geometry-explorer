@@ -124,6 +124,36 @@ Conventions used below:
 - **Plate 83, the devil's staircase.** The unit square with the region under the Cantor function in solid ink. The scan's top profile matches the Cantor function to rms 0.005 of the height (max deviation 0.018 at the near-vertical risers, which is ink spread); treads are resolved down to about 3⁻⁷. The page computes M(R) per pixel column, so zooming keeps producing steps. Graph length checked in closed form: 1 − (2/3)ⁿ + √(1 + (4/9)ⁿ) → 2.
 - **Generalized dusts (pages 77–78).** The book gives N and r for its example dusts (N = 3, r = 1/5; N = 2, r = 1/4; N = 3, r = 1/9) but never draws them, so the page's evenly spaced arrangement — first piece at 0, last ending at 1, equal tremas — is a reconstruction, flagged on the page. The gap-count law Nr(U > u) stepping across F·u⁻ᴰ was verified and is drawn as a log–log chart.
 
+## The colour signature (plates C1–C16) and chapter 30
+
+**Plates C1, C3, C16 (art).** Discussed on the `color-plates` page with links to the holding collections (ÖNB codex 2554; the Royal Collection's deluge drawings; Hokusai's Great Wave); nothing is reproduced, per the project's copyright rule.
+
+**Plate C5, the self-squared dragon.**
+- The caption gives λ only as "~1.64 + .96i" (checked on the 600 dpi crop). At exactly 1.64 + 0.96i the critical point z = 1/2 escapes, so there is no attracting cycle and no "stones": the tilde matters. The page shows this as the "as the caption prints it" preset, shaded by escape time.
+- The page's λ = 1.6461826781 + 0.9636567466i is the superattracting centre (f₂₅(½) = ½, found by Newton's method over a seeded grid) of a period-25 component near the printed value. Among the two dozen such centres within |Δλ| < 0.08, it is one of the few whose 25-cycle clusters into 5 bunches of 5 (a satellite of the period-5 component at 1.6776 + 0.9885i, which the caption's "5 genera, each made up of 5 species" requires), and the only one of those whose rendered dragon reproduces the plate's smooth multi-armed spirals; the others are dendritic. This is a fit, and the page says so.
+- Stones are classified by iterating until the orbit lands within 10⁻⁴ of a cycle point at an iteration count divisible by 25: landing on point m at step n means the pixel's f₂₅ₙ-limit is cycle point (m − n) mod 25.
+- Colour mapping: a genus = a bunch (cycle index mod 5, after rotating the index so the critical point's class is 0). The five cycle points of one bunch string along one stretch of the body and their stones meet at a wasp's waist; gold on the critical bunch reproduces the plate's golden main body. The species shade is the index div 5. Mapping genus to index div 5 instead scatters the hues, which contradicts the plate.
+
+**Plate C7, the self-inverse patchwork.**
+- The caption's diagram was measured at 600 dpi (line and circle fits): lines x = ±1, y = ±0.7 in units of the rectangle's half-width; circles of radius 0.600 centred on the long lines at (0, ±0.7); side circles of radius ≈ 0.65 centred on the short lines at (±1, 0).
+- The raw measurements do not form a discrete group (adjacent circles would cross at ≈ 25°, no π/n), and rendering them gives mush. The plate resolves it: around every white hub the discs accumulate in unending concentric rings — a parabolic point, not a 2n-petal rosette — so adjacent circles are tangent. Side radius = √(1 + 0.7²) − 0.6 ≈ 0.6207, within 4% of the schematic diagram and within the plate's own measurement error.
+- The 6 Γ-circles follow exactly from "orthogonal to 3 of the 8 shapes": medallion pair at (±x, 0), x = (1 − B² − r₂² + r₁²)/2 ≈ 0.2424, r ≈ 0.4345 (orthogonal to both long-line circles and one side circle); corners at (±x₀, ±0.7), x₀ = (1 + B² + r₁² − r₂²)/2 ≈ 0.7324, r ≈ 0.42 (orthogonal to one line and two circles). A least-squares fit of the measured plate discs against this model agrees to about 1.5% of scale.
+- The plate is printed turned 90° from the diagram, cropped roughly to a square centred on the red medallion disc. The six cloth colours are sampled from the print (medallion red and green; corners blue, yellow, orange, pink); overlaps are drawn with multiply blending, the "transparent cloth" of the caption.
+- The page enumerates disc images breadth-first with the dedupe key rounded to ~10⁻⁴ (float noise otherwise duplicates orbits), pruned by on-screen radius.
+
+**Plates C9–C15, the landscapes (`fractal-landscapes` page).**
+- Random/render kind: matched statistically with visible seeds, never pixel for pixel; the book doesn't give Voss's seeds.
+- Fields are spectrally synthesised (the "numerical Fourier methods" of C15's caption): Gaussian spectrum with amplitude |k|^−(H+1) on a periodic grid. Verified in node at 512²: delta-variance slope/2 ≈ 0.39/0.53/0.77 for H = 1/3, 1/2, 0.8, and coastline dimension by coarsening rulers 1.59–1.61/1.46–1.47/1.24–1.25 against theory 2 − H = 5/3, 3/2, 1.2.
+- **Measuring level sets: count crossings at coarsened rulers, not boxes.** Box-covering the pixel-resolution isotherm underestimates D badly (1.25 where theory says 5/3); sampling the field at every s-th grid point and counting sign-change cells recovers it. Chapters that measure coastlines on random fields should reuse this.
+- The perspective view follows C11's caption: altitudes on a square grid, flooded flats, the base "rolled around a cylinder" (parallel projection with a droop toward the horizon), lit from 60° over the left. The hypsometric ramp is Times-Atlas-like, per the C9 caption's story.
+- C13: same D everywhere, altitude above the valley floor raised to a power; γ = 3 is the caption's cube, the mesa preset's γ = 0.35 is fitted by eye (the caption only says "below 1").
+- C9: the planet is the chapter-28 fault model (random great circles, each lifting a hemisphere), sea by quantile; the foreground is a cubed Brown relief per C13's caption. The composition and colours follow the plate; the printed foreground's crater-pocked texture comes from Voss's renderer and is not reproduced. Loosest reconstruction of the set, and flagged on the page.
+- Preset seeds were chosen by comparing compositions against the scans (C11: seed 5).
+
+**Chapter 30 (`isothermal-surfaces` page).** No plates of its own (it explains Plates 10–11, which stay with Part I in the tracker). The page builds the chapter's ladder of dimensions — isosurface 3 − H, planar isotherm 2 − H, graph of a linear section 2 − H, zero-set 1 − H — on a planar section with H = 1/3 (Kolmogorov), 1/2 (Burgers), 3/4 (the persistent contrast of Plate 10), with a live ruler-count of the drawn isotherm. The linear section is the first row of the same field.
+
+**Tracker bookkeeping.** Part IX's heading now reads "chapters 27–30": the running heads on pages 278–279 put chapter 30 in Part IX ("FRACTIONAL BROWN FRACTALS ⁂ IX"), and the old "27–29" left chapter 30 shelfless. `tools/build.py` learned to shelve colour-plate pages (plates matching C + digit) under the colour-signature section of the index instead of a numbered chapter range.
+
 ## Open questions
 
 - **The 13-interval generator.** Why does Plate 69's large circle use a different rule from the caption's second stage? This may be worth a sentence once the rest of chapter 7 is reviewed.
