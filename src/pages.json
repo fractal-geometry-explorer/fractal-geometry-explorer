@@ -36,9 +36,12 @@
       "plates": "Plates 42–45",
       "chapter": 6,
       "artifact": "https://claude.ai/artifact/1diKiTcEwLkJpZaVA2gQ11",
-      "kind": "single",
-      "scripts": [],
-      "layout_comment": null
+      "kind": "template",
+      "scripts": [
+        "shared/draw.js",
+        "script.js"
+      ],
+      "layout_comment": "/* Layout: four plate sections in book order, each a printed figure beside its caption, controls and numbers; a sticky plate index on top. One column under 900px. */"
     },
     {
       "slug": "gosper-island",
@@ -46,9 +49,12 @@
       "plates": "Plates 46–47",
       "chapter": 6,
       "artifact": "https://claude.ai/artifact/UWcE52EkH4ip5mfXMMYdAA",
-      "kind": "single",
-      "scripts": [],
-      "layout_comment": null
+      "kind": "template",
+      "scripts": [
+        "shared/draw.js",
+        "script.js"
+      ],
+      "layout_comment": "/* Layout: two plate sections in book order (46 with its tiling and loxodromic-point studies, then 47), each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
     },
     {
       "slug": "quadric-islands",
@@ -58,7 +64,6 @@
       "artifact": "https://claude.ai/artifact/91wGC9EtnwxZp8MZJ4MF6N",
       "kind": "template",
       "scripts": [
-        "shared/geometry.js",
         "shared/draw.js",
         "script.js"
       ],
@@ -100,7 +105,6 @@
       "artifact": "https://claude.ai/artifact/6EmzLTVdLKdNvpiUt94pog",
       "kind": "template",
       "scripts": [
-        "shared/geometry.js",
         "shared/draw.js",
         "core.js",
         "ui.js"
