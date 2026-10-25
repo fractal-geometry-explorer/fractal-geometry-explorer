@@ -59,8 +59,9 @@ Update this file in the same pull request as the work it records.
 | 68–69 | 68–69 | The snowflake sweeps | exact | done | snow-sweeps |
 | 70–71 | 70–71 | The Peano–Gosper curve, its trees, and a cascade tree | exact | done | snow-sweeps |
 | 72–73 | 72–73 | Plane-filling fractal trees, fudgeflake and quartet | exact | done | snow-sweeps |
-| 80–81 | 80–81 | Cantorian triadic curdling (Cantor bar, Cantor cake) | exact | todo | |
-| 83 | 82–83 | Cantor function, or devil's staircase; Cantor motion | exact | todo | |
+| 80–81 | 80–81 | Cantorian triadic curdling (Cantor bar, Cantor cake) | exact | done | cantor-dust |
+| 83 | 82–83 | Cantor function, or devil's staircase; Cantor motion | exact | done | cantor-dust |
+| (concept) | 74–79 | Cantor dust and its dimension | exact | done | cantor-dust |
 
 ## III Galaxies and eddies (chapters 9–11)
 
@@ -184,7 +185,6 @@ Update this file in the same pull request as the work it records.
 Each chapter session should add the chapter's main ideas here, alongside its plates. Candidates so far:
 - similarity dimension (chapters 3 and 6);
 - coastline length against ruler size (chapter 5; partly on the Minkowski page);
-- Cantor dust and its dimension (chapter 8);
 - intermittency (chapter 10);
 - length–area–volume relations (chapter 12);
 - percolation (chapter 13);

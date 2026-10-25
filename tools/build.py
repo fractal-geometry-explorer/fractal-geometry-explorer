@@ -86,7 +86,8 @@ def build_page(p, rewrite=True, pages=None):
     out = (d / 'template.html').read_text().replace('/*BASECSS*/', css).replace('/*SCRIPT*/', script)
     if rewrite and pages:
         for q in pages:
-            out = out.replace(q['artifact'], f"{q['slug']}.html")
+            if q.get('artifact'):          # pages born on the site have no published artifact
+                out = out.replace(q['artifact'], f"{q['slug']}.html")
         # links that opened artifacts in a new tab now stay in the site
         out = re.sub(r'(href="[a-z0-9-]+\.html") target="_blank" rel="noopener"', r'\1', out)
         out = wrap_page(out, p, pages)

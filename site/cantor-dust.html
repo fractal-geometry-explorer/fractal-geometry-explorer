@@ -1,0 +1,994 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cantor Dust</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>
+/* Layout: the Cantor bar (80), the Cantor curtains (81), the devil's staircase (83) and the chapter's dust-and-dimension concept, each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */
+:root {
+  --page: #e4e5e1;
+  --text: #1b1d1f;
+  --muted: #595e64;
+  --rule: #c4c7c1;
+  --surface: #f6f6f3;
+  --accent: #285895;
+  --f-display: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Newsreader", Georgia, "Times New Roman", serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* the figures are reproductions of printed plates, so their paper and inks stay the same in both themes */
+  --print-paper: #ecebe6;
+  --print-ink: #151515;
+  --print-rule: #c9c8c2;
+  --gain: rgba(47, 95, 158, 0.42);
+  --loss: rgba(186, 88, 44, 0.42);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --page: #111214; --text: #e5e5e1; --muted: #9a9fa6; --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --page: #111214; --text: #e5e5e1; --muted: #9a9fa6; --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--page); color: var(--text); font-family: var(--f-display); font-size: 14px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
+.wrap {
+  max-width: 1180px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 36px 64px;
+  display: grid; gap: 40px;
+}
+header.top { display: grid; gap: 10px; max-width: 820px; }
+.eyebrow { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+h1 {
+  margin: 0; display: flex; align-items: center; flex-wrap: wrap; gap: 0.18em 0.42em;
+  font-weight: 800; font-size: clamp(30px, 5.4vw, 54px); line-height: 1.02; letter-spacing: 0.01em; text-transform: uppercase; text-wrap: balance;
+}
+h1 .plate-no { font-weight: 600; text-transform: none; letter-spacing: 0; }
+.lozenge { display: inline-block; width: 0.42em; height: 0.42em; border: 0.075em solid currentColor; position: relative; top: -0.02em; }
+.lozenge::after { content: ""; position: absolute; inset: 0.1em; border: 0.05em solid currentColor; }
+.dek { margin: 0; font-family: var(--f-body); font-size: 19px; line-height: 1.45; max-width: 64ch; }
+
+nav.index {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+  padding: 10px max(16px, env(safe-area-inset-right, 0px)) 10px max(16px, env(safe-area-inset-left, 0px));
+  background: var(--page); border-bottom: 1px solid var(--rule);
+  display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none;
+}
+nav.index a {
+  flex: none; display: inline-flex; gap: 8px; align-items: baseline; padding: 6px 10px;
+  border: 1px solid var(--rule); background: var(--surface); color: var(--text); text-decoration: none; font-size: 13px; font-weight: 600;
+}
+nav.index a b { font-family: var(--f-mono); font-weight: 500; color: var(--accent); }
+nav.index a:hover { border-color: var(--text); }
+
+section.plate { display: grid; gap: 18px; scroll-margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--rule); }
+.plate-head { display: grid; gap: 4px; }
+.plate-head .no { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.plate-head h2 { margin: 0; font-size: clamp(22px, 3vw, 30px); font-weight: 800; line-height: 1.1; text-transform: uppercase; letter-spacing: 0.01em; text-wrap: balance; }
+.plate-head .dim { margin: 0; font-family: var(--f-mono); font-size: 13px; color: var(--muted); }
+.plate-body { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(280px, 1fr); gap: 32px; align-items: start; }
+@media (max-width: 899px) { .plate-body { grid-template-columns: minmax(0, 1fr); gap: 20px; } }
+figure.fig { margin: 0; display: grid; gap: 8px; min-width: 0; }
+.canvas-wrap { position: relative; width: 100%; max-width: 100%; background: var(--print-paper); outline: 1px solid var(--rule); overflow: hidden; }
+.canvas-wrap canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.r-sq { aspect-ratio: 1 / 1; }
+.r-lox { aspect-ratio: 5 / 4; }
+.zoomable { cursor: grab; touch-action: pan-y; }
+.zoomable.dragging { cursor: grabbing; }
+.view-tools { position: absolute; top: 10px; right: 10px; display: flex; gap: 6px; z-index: 2; }
+.view-tools button { min-width: 34px; height: 34px; padding: 0 10px; font: 600 15px/1 var(--f-display); color: var(--print-ink); background: #f7f7f3; border: 1px solid var(--print-rule); cursor: pointer; }
+figcaption { font-size: 13px; color: var(--muted); }
+figcaption strong { color: var(--text); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+
+.side { display: grid; gap: 18px; min-width: 0; align-content: start; }
+.side p.cap { margin: 0; font-family: var(--f-body); font-size: 17px; line-height: 1.55; max-width: 62ch; }
+.group { display: grid; gap: 8px; min-width: 0; }
+.label-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.label { font-size: 11.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.value { font-family: var(--f-mono); font-size: 12.5px; font-variant-numeric: tabular-nums; text-align: right; }
+.steps { display: flex; flex-wrap: wrap; gap: 6px; }
+.steps button {
+  min-width: 38px; height: 34px; padding: 0 10px; font: 600 13px/1 var(--f-mono); color: var(--text);
+  background: var(--surface); border: 1px solid var(--rule); cursor: pointer;
+}
+.steps.words button { font: 600 13px/1 var(--f-display); }
+.steps button[aria-pressed="true"] { background: var(--text); color: var(--page); border-color: var(--text); }
+.steps button:hover { border-color: var(--text); }
+.steps button:disabled { opacity: 0.35; cursor: default; border-color: var(--rule); }
+.btn-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.btn { padding: 8px 12px; font: 600 13px/1.2 var(--f-display); color: var(--text); background: var(--surface); border: 1px solid var(--rule); cursor: pointer; }
+.btn:hover { border-color: var(--text); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--page); }
+.check { display: flex; align-items: flex-start; gap: 8px; font-size: 13.5px; cursor: pointer; }
+.check input { accent-color: var(--accent); width: 16px; height: 16px; margin: 1px 0 0; flex: none; }
+.check:has(input:disabled) { opacity: 0.45; cursor: default; }
+.slider { display: grid; gap: 4px; }
+.slider input { width: 100%; accent-color: var(--accent); margin: 0; }
+.slider input:disabled { opacity: 0.4; }
+dl.read { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; padding-top: 14px; border-top: 1px solid var(--rule); }
+dl.read div { display: grid; gap: 2px; min-width: 0; }
+dl.read dt { font-size: 10.5px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); }
+dl.read dd { margin: 0; font-family: var(--f-mono); font-size: 16px; overflow-wrap: anywhere; }
+dl.read dd small { font-size: 11.5px; color: var(--muted); }
+.note { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.mini { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; padding: 10px 12px; background: var(--print-paper); border: 1px solid var(--print-rule); color: var(--print-ink); }
+.mini svg { height: 64px; width: auto; max-width: 100%; }
+.mini .fx { font-family: var(--f-mono); font-size: 12px; line-height: 1.6; color: var(--print-ink); }
+.key { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--muted); }
+.key span { display: inline-flex; align-items: center; gap: 6px; }
+.key i { width: 14px; height: 10px; display: inline-block; border: 1px solid var(--print-rule); }
+.readline { min-height: 2.9em; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.readline b { color: var(--text); font-weight: 700; }
+
+.sub { display: grid; gap: 14px; padding-top: 22px; border-top: 1px dashed var(--rule); scroll-margin-top: 64px; }
+.sub h3 { margin: 0; font-size: 15px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
+.source { font-family: var(--f-body); font-size: 15px; color: var(--muted); margin: 0; max-width: 84ch; }
+.source i { color: var(--text); }
+.source a { color: var(--accent); }
+button:focus-visible, input:focus-visible, a:focus-visible, canvas:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.mini svg.gen { height: 56px; }
+.side p.cap b { font-family: var(--f-display); font-size: 14px; letter-spacing: 0.04em; text-transform: uppercase; }
+.r-bar { aspect-ratio: 10 / 7; }
+</style>
+<style>
+body { margin: 0; }
+/* The hidden attribute must beat the pages' own display rules (.slider, .check, ...). The artifact
+   wrapper's stylesheet used to provide this; self-hosted pages carry it themselves. */
+[hidden] { display: none !important; }
+nav.shell { font-family: var(--f-display); font-size: 12.5px; font-weight: 600; background: var(--page);
+  border-bottom: 1px solid var(--rule); display: flex; align-items: center; gap: 6px 18px;
+  padding: 9px max(16px, env(safe-area-inset-right, 0px)) 9px max(16px, env(safe-area-inset-left, 0px)); }
+nav.shell a { color: var(--text); text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+nav.shell a:hover { color: var(--accent); }
+nav.shell .home { letter-spacing: 0.07em; text-transform: uppercase; flex: none; }
+nav.shell .gap { flex: 1; }
+nav.shell .pn { color: var(--muted); font-weight: 500; }
+nav.shell .pn b { color: var(--text); font-weight: 600; }
+nav.shell a:hover .pn, nav.shell a:hover .pn b { color: var(--accent); }
+</style>
+</head>
+<body>
+<nav class="shell" aria-label="Site"><a class="home" href="index.html">Fractal Geometry Explorer</a><span class="gap"></span><a rel="prev" href="snow-sweeps.html"><span class="pn">&#8592; <b>Plates 68–73</b></span></a><a rel="next" href="wiener-sausage.html"><span class="pn"><b>Brownian motion</b> &#8594;</span></a></nav>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 8, "Fractal Events and Cantor Dusts" · pages 74–83</p>
+    <h1><span class="plate-no">Plates 80–83</span><span class="lozenge" aria-hidden="true"></span><span>Cantor Dust</span></h1>
+    <p class="dek">On a data line, errors come in bursts, the bursts in smaller bursts, and between them lie error-free gaps at every scale. Mandelbrot's rough model of this intermittency is Cantor's dust: start with an interval and cut out middle thirds forever. What is left is a "dust" of points — too thin to draw, so the plates thicken it into a bar, hang it in curtains, and pile up its mass into the devil's staircase. Every figure is computed from the rules in the captions.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#bar"><b>80</b> Cantor bar</a>
+    <a href="#curtains"><b>81</b> Cantor curtains</a>
+    <a href="#staircase"><b>83</b> Devil's staircase</a>
+    <a href="#dimension"><b>D</b> Dust and dimension</a>
+  </nav>
+
+  <!-- ===================== PLATE 80: THE CANTOR BAR ===================== -->
+  <section class="plate" id="bar">
+    <div class="plate-head">
+      <p class="no">Plate 80 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Cantorian triadic curdling: the Cantor bar</h2>
+      <p class="dim">N = 2, r = 1/3 · D = log 2/log 3 ≈ 0.6309 · each stage: 2× the slugs, 1/3 the length, 3/2 the density</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-bar zoomable" id="wA">
+          <canvas id="cA" role="img" aria-label="The Cantor bar: curdling stages drawn as rows of slugs"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cAt">Cantor bar</strong> · <span id="cAn">stages 0 to 7</span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The dust itself is "thin and spare to the point of being invisible," so the plate thickens it into a <i>Cantor bar</i>. Start with a round bar of very low density, seen in projection as a long rectangle. Matter "curdles" out of the bar's middle third into the end thirds, whose positions do not change; then out of each of their middle thirds, and so on. The limit is infinitely many infinitely thin slugs of infinitely high density, spaced along the line as the Cantor dust.</p>
+        <div class="mini" aria-label="The generator: two intervals of length one third">
+          <svg class="gen" viewBox="-0.06 -0.14 1.12 0.28" aria-hidden="true" id="miniA"></svg>
+          <div class="fx">N = 2, r = 1/3<br>D = log 2/log 3</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Draw</span></div>
+          <div class="steps words" id="mA" role="group" aria-label="Drawing"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Curdle down to stage</span><span class="value" id="sAv">stage 7</span></div>
+          <div class="steps" id="sA" role="group" aria-label="Stage"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate80">Show Plate 80 as printed</button>
+        </div>
+        <p class="readline" id="infoA" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Slugs</dt><dd id="rAa">128</dd></div>
+          <div><dt>Each slug</dt><dd id="rAb">3⁻⁷ ≈ 0.00046</dd></div>
+          <div><dt>Total length</dt><dd id="rAc">(2/3)⁷ ≈ 0.0585</dd></div>
+          <div><dt>Density</dt><dd id="rAd">(3/2)⁷ ≈ 17.1×</dd></div>
+        </dl>
+        <p class="note">Measured from the scan: the plate draws stages 0 to 7 as rows of constant thickness, 0.035 of the bar's length (the caption says the projection is a rectangle with width/length = 0.03), at the book's measured row spacing. The growing density is told, not drawn. In the plate the last row's 128 slugs blur into 64 gray ones — "the last line is indistinguishable from the last but one" — and the same happens here when the slugs drop below a pixel. The cake and the rings are this page's illustrations of the caption's remarks, not figures from the book.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 81: THE CANTOR CURTAINS ===================== -->
+  <section class="plate" id="curtains">
+    <div class="plate-head">
+      <p class="no">Plate 81 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Cantor curtains: every cut a dust</h2>
+      <p class="dim">N = 2, r from 0 to 1/2 · every horizontal cut is a Cantor dust · D = log 2/log (1/r), from 0 to 1</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wB">
+          <canvas id="cB" role="img" aria-label="A Cantor curtain: dusts with every ratio r stacked into a surface"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cBt">The D curtain</strong> · <span id="cBn">D runs from 1 at the top to 0 at the bottom</span> · tap to read a cut</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Here the Cantor dust is "clarified by being placed among generalized dusts with N = 2 and variable r." Both theater curtains are topped by the full interval [0, 1]. Going down, r shrinks and the middle tremas open wider, so the ink gathers into hanging folds. Every horizontal cut of either figure is some Cantor dust; the arrows point out the triadic one, r = 1/3, D ≈ 0.6309. The two figures differ only in the vertical scale: the top one is linear in the dimension D, the bottom one linear in the ratio r.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Vertical coordinate</span></div>
+          <div class="steps words" id="mB" role="group" aria-label="Which curtain"></div>
+        </div>
+        <div class="group">
+          <label class="check" for="markB"><input type="checkbox" id="markB" checked> Arrows at the triadic dust, as in the plate</label>
+          <label class="check" for="cutB"><input type="checkbox" id="cutB"> Read a horizontal cut (or tap the figure)</label>
+          <div class="slider" id="cutWrap" hidden>
+            <div class="label-row"><span class="label">Cut height</span><span class="value" id="cutBv"></span></div>
+            <input type="range" id="cutBs" min="0.02" max="1" step="0.005" value="0.6309" aria-label="Cut height">
+          </div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate81t">Show Plate 81, top, as printed</button>
+          <button type="button" class="btn" id="plate81b">Bottom</button>
+        </div>
+        <p class="readline" id="infoB" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>At the cut: r</dt><dd id="rBa">—</dd></div>
+          <div><dt>At the cut: D</dt><dd id="rBb">—</dd></div>
+          <div><dt>First trema</dt><dd id="rBc">—</dd></div>
+          <div><dt>Dust's length</dt><dd id="rBd">0</dd></div>
+        </dl>
+        <p class="note">The two rules were told apart by measuring the scan: in the top figure the first trema's width makes D fall off linearly with height; in the bottom one r itself does (fitted to the central gap over 180 rows, rms 0.0008). Both printed figures are square. The book's margin arrows sit a little high of the exact values — at about r = 0.35 and D = 0.68 — so the arrows here mark the stated r = 1/3 and D = 0.6309 instead.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 83: THE DEVIL'S STAIRCASE ===================== -->
+  <section class="plate" id="staircase">
+    <div class="plate-head">
+      <p class="no">Plate 83 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>The Cantor function, or devil's staircase</h2>
+      <p class="dim">length of the graph = 2, so D = 1 · the risers' abscissas form the dust, D ≈ 0.6309 · rises on a set of length 0</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wC">
+          <canvas id="cC" role="img" aria-label="The devil's staircase, the graph of the Cantor function"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cCt">As printed</strong> · <span id="cCn">the square filled under M(R)</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The Cantor function describes how mass is spread along the Cantor bar of Plate 80. Give the bar length 1 and mass 1, and let M(R) be the mass between 0 and R. Over every gap M(R) stays flat — and the gaps add up to the whole length of the bar. Yet M(R) climbs from 0 to 1, over infinitely many, infinitely small, highly clustered rises sitting on the slugs. The plate fills the unit square under the graph with ink.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mC" role="group" aria-label="What to show"></div>
+        </div>
+        <p class="cap" id="capC"></p>
+        <div class="group" id="sCwrap">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="sCv">stage 5</span></div>
+          <div class="steps" id="sC" role="group" aria-label="Stage"></div>
+        </div>
+        <div class="group" id="massWrap" hidden>
+          <div class="slider">
+            <div class="label-row"><span class="label">First window</span><span class="value" id="m1v"></span></div>
+            <input type="range" id="m1s" min="0" max="1" step="0.005" value="0.18" aria-label="First mass window">
+          </div>
+          <div class="slider">
+            <div class="label-row"><span class="label">Second window</span><span class="value" id="m2v"></span></div>
+            <input type="range" id="m2s" min="0" max="1" step="0.005" value="0.65" aria-label="Second mass window">
+          </div>
+          <div class="label-row"><span class="label">Window height</span></div>
+          <div class="steps" id="dmC" role="group" aria-label="Window height"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate83">Show Plate 83 as printed</button>
+        </div>
+        <dl class="read">
+          <div><dt>Graph length</dt><dd id="rCa">2</dd></div>
+          <div><dt>Flat part</dt><dd id="rCb">1</dd></div>
+          <div><dt>Climb</dt><dd id="rCc">1</dd></div>
+          <div><dt>Graph dimension</dt><dd>1</dd></div>
+        </dl>
+        <p class="note" id="noteC">Checked against the scan: the printed figure is the unit square with the region under M(R) in solid ink (the top profile matches the Cantor function to 0.5% of the height, the difference being ink spread at the near-vertical risers). The widths of the steps sum to 1 and so do the heights, and the graph's length is exactly 2 — finite, so its dimension is 1: a curve can be full of irregularity and still be rectifiable. The staircase is continuous but climbs entirely on a set of zero length; its derivative vanishes almost everywhere.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CONCEPT: DUST AND DIMENSION ===================== -->
+  <section class="plate" id="dimension">
+    <div class="plate-head">
+      <p class="no">Chapter 8, pages 74–79 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Cantor dust and its dimension</h2>
+      <p class="dim" id="dimD">N pieces of ratio r, evenly spaced · D = log N / log (1/r) · any D between 0 and 1 can be reached</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-bar zoomable" id="wD">
+          <canvas id="cD" role="img" aria-label="Generalized Cantor dusts and their gap counts"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cDt">Curdling</strong> · <span id="cDn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The errors on a transmission line gave Mandelbrot his first concrete use for fractals: bursts within bursts, separated by error-free gaps at every scale. Cantor's cascade models them. Divide an interval into <i>b</i> = 1/r pieces, keep N of them — the <i>curds</i> — and empty the rest, the <i>tremas</i>. Repeating forever leaves a dust of dimension D = log N/log (1/r), anywhere between 0 and 1. Counting instants of error between 0 and R gives M(R) ∝ R<sup>D</sup>, just as for the mass of a D-dimensional ball.</p>
+        <div class="mini" aria-label="The current generator">
+          <svg class="gen" viewBox="-0.06 -0.14 1.12 0.28" aria-hidden="true" id="miniD"></svg>
+          <div class="fx" id="miniDfx">N = 2, r = 1/3</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mD" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group" id="genWrap">
+          <div class="label-row"><span class="label">Pieces kept, N</span></div>
+          <div class="steps" id="nD" role="group" aria-label="Number of pieces"></div>
+          <div class="slider">
+            <div class="label-row"><span class="label">Ratio r</span><span class="value" id="rDv">1/3</span></div>
+            <input type="range" id="rDs" min="0" max="1" step="0.001" value="0" aria-label="Ratio r">
+          </div>
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="sDv">stage 6</span></div>
+          <div class="steps" id="sD" role="group" aria-label="Stage"></div>
+        </div>
+        <div class="btn-row" id="preD"></div>
+        <p class="readline" id="infoD" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Dimension</dt><dd id="rDa">0.6309</dd></div>
+          <div><dt>Curds</dt><dd id="rDb">64</dd></div>
+          <div><dt>Each curd</dt><dd id="rDc">—</dd></div>
+          <div><dt>Dust's length</dt><dd id="rDd">0</dd></div>
+        </dl>
+        <p class="note">The book names these dusts and their D by formula but draws only the triadic one, so the evenly spaced arrangement here (first piece at 0, last ending at 1, equal tremas between) is a reconstruction — the simplest rule consistent with the text. The two dusts with D = 1/2 "look" very different even though their D is equal; chapter 34 turns that observation into <i>lacunarity</i>. The gap-count chart verifies the book's claim that Nr(U &gt; u), the number of gaps longer than u, steps across a line F·u<sup>−D</sup>.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 8, pages 74–83 (Plates 80, 81 and 83). Every figure is computed from the rules in the captions; layouts were measured from the scans where the book shows them, as noted under each figure. Companion pages: <a href="snow-sweeps.html">Sweeps, Rivers and Trees</a> (Plates 68–73) and <a href="koch-plates.html">Triadic Koch Island</a> (Plates 42–45).</p>
+</div>
+
+<script>
+// Shared drawing library: style constants, the zoomable canvas (snapshot while panning), chunked
+// paths, controls and small SVG figures. Loaded before each page's own scripts; pages may extend
+// PRINT with their own inks (PRINT.red = ..., PRINT.light = ...).
+const $ = (id) => document.getElementById(id);
+const fmt = (n) => n.toLocaleString('en-US');
+const PRINT = { paper: '#ecebe6', ink: '#151515', rule: '#c9c8c2', muted: '#66665f', accent: '#2f5f9e', red: '#c2452d', faint: '#bdbbb3', gray: '#8f8e88' };
+const RAMP = [[233, 185, 73], [217, 113, 59], [184, 66, 79], [125, 58, 120], [63, 79, 151], [43, 122, 138]];
+const ramp = (t, a = 1) => {
+  const x = Math.max(0, Math.min(1, t)) * (RAMP.length - 1), i = Math.min(RAMP.length - 2, Math.floor(x)), f = x - i;
+  const c = RAMP[i].map((v, k) => Math.round(v + (RAMP[i + 1][k] - v) * f));
+  return `rgba(${c[0]},${c[1]},${c[2]},${a})`;
+};
+const CAT = ['#151515', '#9a988f', '#2f5f9e', '#c2452d', '#3f8f6c', '#b58a2a', '#6b4e9b', '#5f8fae'];
+
+// ---------- shared plumbing ----------
+function figure(canvas, draw) {
+  const wrap = canvas.parentElement;
+  const f = { canvas, ctx: canvas.getContext('2d'), w: 1, h: 1, dpr: 1, draw };
+  const resize = () => {
+    f.dpr = Math.min(2, window.devicePixelRatio || 1);
+    f.w = wrap.clientWidth || 1; f.h = wrap.clientHeight || 1;
+    canvas.width = Math.round(f.w * f.dpr); canvas.height = Math.round(f.h * f.dpr);
+    f.draw();
+  };
+  new ResizeObserver(resize).observe(wrap);
+  return f;
+}
+function fitBox(f, bb, pad = 0.04) {
+  const w = Math.max(1e-9, bb.x1 - bb.x0), h = Math.max(1e-9, bb.y1 - bb.y0), s = Math.min(f.w / (w * (1 + 2 * pad)), f.h / (h * (1 + 2 * pad)));
+  return { s, ox: f.w / 2 - ((bb.x0 + bb.x1) / 2) * s, oy: f.h / 2 + ((bb.y0 + bb.y1) / 2) * s };
+}
+const toWorld = (f, v) => f.ctx.setTransform(f.dpr * v.s, 0, 0, -f.dpr * v.s, f.dpr * v.ox, f.dpr * v.oy);
+const toScreen = (f) => f.ctx.setTransform(f.dpr, 0, 0, f.dpr, 0, 0);
+function paper(f, color) { f.ctx.setTransform(1, 0, 0, 1, 0, 0); f.ctx.fillStyle = color; f.ctx.fillRect(0, 0, f.canvas.width, f.canvas.height); }
+function polyPath(P, closed = true, upto) {
+  const p = new Path2D(), m = upto === undefined ? P.length / 2 : upto;
+  p.moveTo(P[0], P[1]);
+  for (let i = 1; i < m; i++) p.lineTo(P[2 * i], P[2 * i + 1]);
+  if (closed) p.closePath();
+  return p;
+}
+function bbox(P, bb = { x0: Infinity, x1: -Infinity, y0: Infinity, y1: -Infinity }) {
+  for (let i = 0; i < P.length; i += 2) { bb.x0 = Math.min(bb.x0, P[i]); bb.x1 = Math.max(bb.x1, P[i]); bb.y0 = Math.min(bb.y0, P[i + 1]); bb.y1 = Math.max(bb.y1, P[i + 1]); }
+  return bb;
+}
+function stepButtons(el, values, text, aria, onPick) {
+  const bs = values.map((v) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.textContent = text(v); b.setAttribute('aria-label', aria(v));
+    b.addEventListener('click', () => onPick(v));
+    el.append(b);
+    return b;
+  });
+  const mark = (cur) => bs.forEach((b, i) => b.setAttribute('aria-pressed', String(values[i] === cur)));
+  mark.buttons = bs;
+  return mark;
+}
+// pan and zoom: a quick rescaled snapshot while moving, a full redraw once it settles
+function zoomable(wrapId, canvasId, fitOf, render, opts = {}) {
+  const maxZoom = opts.maxZoom || 400;
+  const wrap = $(wrapId), z = { view: null, user: false, snapView: null, raf: 0, full: 0 };
+  const snap = document.createElement('canvas');
+  const f = figure($(canvasId), () => draw());
+  function touch() { wrap.style.touchAction = z.view && z.view.s > z.view.fit * 1.02 ? 'none' : 'pan-y'; }
+  function draw() {
+    if (!z.view || !z.user) { z.view = fitOf(f); z.view.fit = z.view.s; z.user = false; touch(); }
+    render(f, z.view);
+    snap.width = f.canvas.width; snap.height = f.canvas.height; snap.getContext('2d').drawImage(f.canvas, 0, 0);
+    z.snapView = { s: z.view.s, ox: z.view.ox, oy: z.view.oy };
+  }
+  function quick() {
+    const v = z.view, k = v.s / z.snapView.s, c = f.ctx;
+    c.setTransform(1, 0, 0, 1, 0, 0); c.fillStyle = z.ground || PRINT.paper; c.fillRect(0, 0, f.canvas.width, f.canvas.height);
+    c.drawImage(snap, (v.ox - z.snapView.ox * k) * f.dpr, (v.oy - z.snapView.oy * k) * f.dpr, snap.width * k, snap.height * k);
+  }
+  function schedule() { if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; draw(); }); }
+  function moved() {
+    if (!z.snapView) { schedule(); return; }
+    if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; quick(); });
+    clearTimeout(z.full); z.full = setTimeout(schedule, 160);
+  }
+  function zoomAt(px, py, k) {
+    const v = z.view, ns = Math.min(v.fit * maxZoom, Math.max(v.fit * 0.8, v.s * k)), wx = (px - v.ox) / v.s, wy = (v.oy - py) / v.s;
+    v.s = ns; v.ox = px - wx * ns; v.oy = py + wy * ns; z.user = true; touch(); moved();
+  }
+  function pan(dx, dy) { z.view.ox += dx; z.view.oy += dy; z.user = true; moved(); }
+  wrap.querySelector('[data-z="in"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1.6));
+  wrap.querySelector('[data-z="out"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1 / 1.6));
+  wrap.querySelector('[data-z="fit"]').addEventListener('click', () => { z.user = false; schedule(); });
+  const pts = new Map();
+  let pinch = null, down = null;
+  const local = (e) => { const r = wrap.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+  wrap.addEventListener('pointerdown', (e) => {
+    if (e.target.closest('.view-tools')) return;
+    pts.set(e.pointerId, local(e));
+    down = pts.size === 1 ? { p: local(e), t: performance.now(), moved: 0 } : null;
+    try { wrap.setPointerCapture(e.pointerId); } catch (_) {}
+    if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), m: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2] }; }
+    wrap.classList.add('dragging');
+  });
+  wrap.addEventListener('pointermove', (e) => {
+    if (!pts.has(e.pointerId)) return;
+    const prev = pts.get(e.pointerId), cur = local(e);
+    pts.set(e.pointerId, cur);
+    if (down) down.moved = Math.max(down.moved, Math.hypot(cur[0] - down.p[0], cur[1] - down.p[1]));
+    if (pts.size === 2 && pinch) {
+      const [a, b] = [...pts.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]), m = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+      pan(m[0] - pinch.m[0], m[1] - pinch.m[1]);
+      if (pinch.d > 0) zoomAt(m[0], m[1], d / pinch.d);
+      pinch = { d, m };
+    } else if (pts.size === 1 && (e.pointerType !== 'touch' || z.view.s > z.view.fit * 1.02)) pan(cur[0] - prev[0], cur[1] - prev[1]);
+  });
+  const end = (e) => {
+    if (down && pts.size === 1 && down.moved < 5 && opts.onTap) { const [x, y] = local(e), v = z.view; opts.onTap((x - v.ox) / v.s, (v.oy - y) / v.s); }
+    down = null;
+    pts.delete(e.pointerId); if (pts.size < 2) pinch = null; if (!pts.size) wrap.classList.remove('dragging');
+  };
+  wrap.addEventListener('pointerup', end); wrap.addEventListener('pointercancel', (e) => { down = null; end(e); });
+  wrap.addEventListener('wheel', (e) => { if (!(e.ctrlKey || e.metaKey)) return; e.preventDefault(); const [x, y] = local(e); zoomAt(x, y, Math.exp(-e.deltaY * 0.0045)); }, { passive: false });
+  wrap.addEventListener('dblclick', (e) => { if (e.target.closest('.view-tools')) return; const [x, y] = local(e); zoomAt(x, y, e.shiftKey ? 0.5 : 2); });
+  return { f, z, schedule, refit: () => { z.user = false; schedule(); } };
+}
+// chunked paths: many small paths fill far faster than one path with a hundred thousand pieces
+function chunked(count, add, size = 512) {
+  const out = [];
+  let p = null;
+  for (let i = 0; i < count; i++) { if (i % size === 0) { p = new Path2D(); out.push(p); } add(p, i); }
+  return out;
+}
+// fill and outline in the same colour, so that tiles which only meet along an edge show no hairline seams
+function solid(c, paths, color, lw) {
+  c.fillStyle = color; c.strokeStyle = color; c.lineWidth = lw; c.lineJoin = 'miter';
+  for (const p of paths) { c.fill(p); c.stroke(p); }
+}
+const dot = (c, v, x, y, r = 4, color = PRINT.red) => { c.beginPath(); c.arc(v.ox + x * v.s, v.oy - y * v.s, r, 0, Math.PI * 2); c.fillStyle = color; c.fill(); c.strokeStyle = PRINT.paper; c.lineWidth = 1.5; c.stroke(); };
+
+// a polyline (Float64Array or [[x,y],...]) as SVG points with y flipped
+const svgPts = (P) => (P instanceof Float64Array ? Array.from({ length: P.length / 2 }, (_, i) => [P[2 * i], P[2 * i + 1]]) : P).map(([x, y]) => `${x.toFixed(4)},${(-y).toFixed(4)}`).join(' ');
+function miniCurve(id, P, dots = true) {
+  const pts = P instanceof Float64Array ? Array.from({ length: P.length / 2 }, (_, i) => [P[2 * i], P[2 * i + 1]]) : P;
+  $(id).innerHTML = `<line x1="0" y1="0" x2="1" y2="0" stroke="#8a8a84" stroke-width="0.008" stroke-dasharray="0.025 0.02"/>` +
+    `<polyline points="${svgPts(pts)}" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linejoin="round"/>` +
+    (dots ? `<g fill="currentColor">${pts.map(([x, y], i) => `<circle cx="${x.toFixed(4)}" cy="${(-y).toFixed(4)}" r="${i === 0 || i === pts.length - 1 ? 0.03 : 0.018}"/>`).join('')}</g>` : '');
+}
+function miniTree(id, links, dx = 0) {
+  const ends = new Set(), mid = new Set(), k = (x, y) => `${x.toFixed(4)},${y.toFixed(4)}`;
+  let s = '';
+  for (const [px, py, qx, qy] of links) {
+    s += `<line x1="${(px + dx).toFixed(4)}" y1="${(-py).toFixed(4)}" x2="${(qx + dx).toFixed(4)}" y2="${(-qy).toFixed(4)}" stroke="currentColor" stroke-width="0.02" stroke-linecap="round"/>`;
+    mid.add(k(px + dx, py)); mid.add(k(qx + dx, qy));
+  }
+  s += `<g fill="currentColor">${[...mid].map((p) => { const [x, y] = p.split(',').map(Number); const big = (Math.abs(x - dx) < 1e-6 || Math.abs(x - dx - 1) < 1e-6) && Math.abs(y) < 1e-6; return `<circle cx="${x}" cy="${-y}" r="${big ? 0.03 : 0.018}"/>`; }).join('')}</g>`;
+  return s;
+}
+// canvas transform for a similarity map f = [ar, ai, br, bi, m] composed with the view
+function setMap(f, c, v, fig) {
+  const [ar, ai, br, bi, m] = f, k = fig.dpr * v.s;
+  if (m) c.setTransform(k * ar, -k * ai, k * ai, k * ar, fig.dpr * (v.ox + v.s * br), fig.dpr * (v.oy - v.s * bi));
+  else c.setTransform(k * ar, -k * ai, -k * ai, -k * ar, fig.dpr * (v.ox + v.s * br), fig.dpr * (v.oy - v.s * bi));
+}
+const segPath = (segs, pick) => { const p = new Path2D(); for (const s of segs) if (!pick || pick(s)) { p.moveTo(s[0], s[1]); p.lineTo(s[2], s[3]); } return p; };
+// Plate 64's chevrons, measured from the plate: each interval a→b becomes a thin quadrilateral
+// pointing toward F, the corner the next stage would add (see DECISIONS.md)
+const CHEV_OUT = 0.43, CHEV_IN = 0.235;
+function chevronPaths(P, F, m) {
+  return chunked(m, (p, i) => {
+    const ax = P[2 * i], ay = P[2 * i + 1], bx = P[2 * i + 2], by = P[2 * i + 3], mx = (ax + bx) / 2, my = (ay + by) / 2;
+    const vx = F[2 * i] - mx, vy = F[2 * i + 1] - my;
+    p.moveTo(ax, ay); p.lineTo(mx + CHEV_OUT * vx, my + CHEV_OUT * vy); p.lineTo(bx, by); p.lineTo(mx + CHEV_IN * vx, my + CHEV_IN * vy); p.closePath();
+  });
+}
+
+// Chapter 8 geometry: generalized Cantor dusts, a coverage rasteriser for the curtains, and the
+// Cantor function. Plate 80's layout is measured from the scan at 600 dpi: rows of constant
+// thickness 0.035 of the bar's length, at the measured row spacing below (stage 0 sits a touch
+// farther from stage 1 than the later pitch of 0.0796).
+const BAR_T = 0.035;
+const BAR_Y = [0, 0.0908, 0.1704, 0.2497, 0.3293, 0.4083, 0.4879, 0.5675];
+const barTop = (k) => (k < BAR_Y.length ? BAR_Y[k] : BAR_Y[7] + 0.0796 * (k - 7));
+
+// a dust generator: N pieces of ratio r on [0, 1], evenly spaced — the first starts at 0, the
+// last ends at 1, and the N − 1 tremas between them are equal, of length (1 − N r)/(N − 1)
+const pieceStarts = (N, r) => Array.from({ length: N }, (_, i) => (i * (1 - r)) / (N - 1));
+function dustPieces(N, r, n) {                 // stage n: N^n pieces of length r^n
+  let starts = [0], len = 1;
+  for (let k = 0; k < n; k++) {
+    const S = pieceStarts(N, r), out = new Float64Array(starts.length * N);
+    let j = 0;
+    for (const a of starts) for (const s of S) out[j++] = a + s * len;
+    starts = out; len *= r;
+  }
+  return { starts, len };
+}
+
+// ink coverage of the limit dust on a row of pixels: buf[i] += the covered fraction of pixel i.
+// wx0 is the world x at buf[0]'s left edge, px one pixel in world units. Pieces outside the
+// window are pruned, pieces under a pixel are deposited, so the cost is O(pixels) per row.
+// A sub-pixel piece is deposited with weight (len/px)^(D−1) · its geometric overlap, i.e. total
+// mass (len/px)^D: the one weight for which a piece deposits exactly what its N children would
+// (N r^D = 1), so nothing jumps where the recursion bottoms out, and thin cords dim the way the
+// dust's D-dimensional density says, not the way an interval's length does.
+function coverDust(buf, N, r, wx0, px, a, len, depth, expo = 0) {
+  if (a + len <= wx0 || a >= wx0 + buf.length * px) return;
+  if (len <= px || depth <= 0) {
+    const w = expo && len < px ? Math.pow(len / px, expo) : 1;
+    const i0 = Math.max(0, Math.floor((a - wx0) / px)), i1 = Math.min(buf.length - 1, Math.floor((a + len - wx0) / px));
+    for (let i = i0; i <= i1; i++) {
+      const lo = Math.max(a, wx0 + i * px), hi = Math.min(a + len, wx0 + (i + 1) * px);
+      if (hi > lo) buf[i] += ((hi - lo) / px) * w;
+    }
+    return;
+  }
+  const g = ((1 - r) / (N - 1)) * len;
+  for (let i = 0; i < N; i++) coverDust(buf, N, r, wx0, px, a + i * g, len * r, depth - 1, expo);
+}
+
+// the Cantor function M(R): the mass of the bar between 0 and R
+function cantorF(x) {
+  let y = 0, p = 1;
+  for (let i = 0; i < 48; i++) {
+    if (x <= 0) return y;
+    if (x >= 1) return y + p;
+    if (x < 1 / 3) { x *= 3; p /= 2; }
+    else if (x > 2 / 3) { x = 3 * x - 2; y += p / 2; p /= 2; }
+    else return y + p / 2;
+  }
+  return y;
+}
+// a position where the staircase reaches height t (the right end of t's tread; the left end is
+// 1 − cantorInv(1 − t), by the staircase's symmetry)
+function cantorInv(t) {
+  if (t <= 0) return 0;
+  if (t >= 1) return 1;
+  let x = 0, q = 1 / 3;
+  for (let i = 0; i < 40; i++) {
+    t *= 2;
+    if (t >= 1) { x += 2 * q; t -= 1; }
+    if (t <= 0) return x;
+    q /= 3;
+  }
+  return x;
+}
+
+// the stage-n staircase as a polyline from (0,0) to (1,1): diagonals over the pieces, treads
+// over the tremas. Its length is 1 − (2/3)^n + sqrt(1 + (4/9)^n) → 2.
+function staircase(n) {
+  const pts = [0, 0];
+  (function rec(a, b, ya, yb, d) {
+    if (!d) { pts.push(b, yb); return; }
+    const w = (b - a) / 3, ym = (ya + yb) / 2;
+    rec(a, a + w, ya, ym, d - 1);
+    pts.push(a + 2 * w, ym);
+    rec(a + 2 * w, b, ym, yb, d - 1);
+  })(0, 1, 0, 1, n);
+  return new Float64Array(pts);
+}
+const stairLen = (n) => 1 - Math.pow(2 / 3, n) + Math.sqrt(1 + Math.pow(4 / 9, n));
+const polyLen = (P) => { let L = 0; for (let i = 2; i < P.length; i += 2) L += Math.hypot(P[i] - P[i - 2], P[i + 1] - P[i - 1]); return L; };
+
+// gap counts: generation j has (N − 1)·N^(j−1) tremas of length lam·r^(j−1), lam = (1 − N r)/(N − 1),
+// so Nr(U > u) climbs from N^(j−1) − 1 to N^j − 1 as u drops past lam·r^(j−1)
+function gapGenerations(N, r, J) {
+  const lam = (1 - N * r) / (N - 1), out = [];
+  for (let j = 1; j <= J; j++) out.push({ len: lam * Math.pow(r, j - 1), below: Math.pow(N, j - 1) - 1, above: Math.pow(N, j) - 1 });
+  return out;
+}
+const dustDim = (N, r) => Math.log(N) / Math.log(1 / r);
+
+(() => {
+
+  // a dust generator as a small figure: the kept pieces on a dashed [0, 1]
+  function dustMini(id, N, r) {
+    const S = pieceStarts(N, r);
+    $(id).innerHTML = `<line x1="0" y1="0" x2="1" y2="0" stroke="#8a8a84" stroke-width="0.012" stroke-dasharray="0.03 0.022"/>` +
+      S.map((s) => `<line x1="${s.toFixed(4)}" y1="0" x2="${(s + r).toFixed(4)}" y2="0" stroke="currentColor" stroke-width="0.055"/>`).join('') +
+      `<g fill="currentColor">${S.flatMap((s) => [s, s + r]).map((x) => `<circle cx="${x.toFixed(4)}" cy="0" r="0.026"/>`).join('')}</g>`;
+  }
+  const pow = Math.pow, sup = (n) => String(n).replace(/\d/g, (d) => '⁰¹²³⁴⁵⁶⁷⁸⁹'[d]);
+  const sci = (x) => { if (x >= 0.001) return x.toFixed(x >= 0.1 ? 3 : 4); const [m, e] = x.toExponential(1).split('e'); return `${m}·10⁻${sup(-e)}`; };
+  const barsPath = (N, r, n, pitch, t) => chunked(n + 1, (p, k) => {
+    const { starts, len } = dustPieces(N, r, k);
+    for (const a of starts) p.rect(a, -(pitch(k) + t), len, t);
+  }, 1);
+
+  // ====================== Plate 80: the Cantor bar ======================
+  const stA = { n: 7, mode: 'printed' };
+  const cacheA = {};
+  function dataA() {
+    const key = `${stA.mode}|${stA.n}`;
+    if (cacheA[key]) return cacheA[key];
+    let out;
+    if (stA.mode === 'printed') out = { paths: barsPath(2, 1 / 3, stA.n, barTop, BAR_T) };
+    else if (stA.mode === 'cake') out = { H: 0.62 };
+    else {
+      const { starts, len } = dustPieces(2, 1 / 3, stA.n), R0 = 0.42, DR = 0.58, cx = 0.5, cy = 0;
+      out = { paths: chunked(starts.length, (p, i) => {
+        const inn = R0 + starts[i] * DR, outr = R0 + (starts[i] + len) * DR;
+        p.moveTo(cx + outr, cy); p.arc(cx, cy, outr, 0, 2 * Math.PI);
+        p.moveTo(cx + inn, cy); p.arc(cx, cy, inn, 0, 2 * Math.PI, true);
+      }) };
+    }
+    return (cacheA[key] = out);
+  }
+  const zA = zoomable('wA', 'cA', (f) => {
+    if (stA.mode === 'cake') return fitBox(f, { x0: -0.03, x1: 1.03, y0: -0.03, y1: 0.65 }, 0.03);
+    if (stA.mode === 'rings') return fitBox(f, { x0: -0.55, x1: 1.55, y0: -1.05, y1: 1.05 }, 0.02);
+    return fitBox(f, { x0: -0.02, x1: 1.02, y0: -(barTop(stA.n) + BAR_T + 0.03), y1: 0.03 }, 0.03);
+  }, (f, v) => {
+    const c = f.ctx, D = dataA();
+    paper(f, PRINT.paper); toWorld(f, v);
+    c.fillStyle = PRINT.ink;
+    if (stA.mode === 'cake') {
+      // each layer keeps at least a pen's width, as a plotter would draw it
+      const { starts, len } = dustPieces(2, 1 / 3, stA.n), h = Math.max(len * D.H, 0.75 / v.s);
+      for (const a of starts) c.fillRect(0, a * D.H + (len * D.H - h) / 2, 1, h);
+    } else {
+      if (stA.mode === 'rings') { c.beginPath(); c.arc(0.5, 0, 0.36, 0, 2 * Math.PI); c.fillStyle = PRINT.gray; c.fill(); c.fillStyle = PRINT.ink; }
+      for (const p of D.paths) c.fill(p);
+    }
+    toScreen(f);
+  });
+  const MODES_A = { printed: 'The bar, as printed', cake: 'Cantor cake', rings: "Saturn's rings" };
+  const INFO_A = {
+    printed: 'Each row is one more stage of curdling. The matter conserved through every stage ends up "hammered" into ever denser slugs — the drawing keeps their thickness constant and lets the print (or your screen) give out instead.',
+    cake: 'Start the same curdling from a pancake much less thick than it is wide. Dough curdles into thinner pancakes, "exuding an appropriate filling", and the limit is an infinitely extrapolated Napoleon — a <b>Cantor cake</b>. Here, seen from the side: the dust is vertical, each layer runs the full width.',
+    rings: "Voyager found Saturn's rings broken by very many, mostly very thin gaps, and diaphanous — light passes through, as befits a set that is \"thin and spare\". The caption's picture: circles whose radii run over a Cantor dust (the product of a dust by a circle). This drawing is our illustration of that remark.",
+  };
+  function setA(refit) {
+    markMA(stA.mode); markSA(stA.n);
+    const n = stA.n;
+    $('cAt').textContent = { printed: 'Cantor bar', cake: 'Cantor cake', rings: "Saturn's rings" }[stA.mode];
+    $('cAn').textContent = stA.mode === 'printed' ? `stages 0 to ${n}` : `stage ${n}`;
+    $('sAv').textContent = `stage ${n}`;
+    $('infoA').innerHTML = INFO_A[stA.mode];
+    $('rAa').textContent = fmt(pow(2, n));
+    $('rAb').textContent = `3⁻${sup(n)} ≈ ${sci(pow(3, -n))}`;
+    $('rAc').textContent = `(2/3)${sup(n)} ≈ ${sci(pow(2 / 3, n))}`;
+    $('rAd').textContent = `(3/2)${sup(n)} ≈ ${pow(1.5, n).toFixed(1)}×`;
+    if (refit) zA.refit(); else zA.schedule();
+  }
+  const markMA = stepButtons($('mA'), Object.keys(MODES_A), (k) => MODES_A[k], (k) => `Draw: ${MODES_A[k]}`, (k) => { stA.mode = k; setA(true); });
+  const markSA = stepButtons($('sA'), [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], String, (n) => `Stage ${n}`, (n) => { stA.n = n; setA(stA.mode === 'printed'); });
+  $('plate80').addEventListener('click', () => { Object.assign(stA, { n: 7, mode: 'printed' }); setA(true); });
+  dustMini('miniA', 2, 1 / 3);
+
+  // ====================== Plate 81: the Cantor curtains ======================
+  const stB = { which: 'D', marks: true, showCut: false, cut: 0.6309 };
+  let imgB = { key: '', img: null };            // the rastered curtain, reused while the view holds
+  const PP = [236, 235, 230], KK = [21, 21, 21];
+  const rOf = (t) => (stB.which === 'D' ? (t < 1e-4 ? 0 : Math.min(0.5, pow(2, -1 / t))) : Math.min(0.5, t / 2));
+  const zB = zoomable('wB', 'cB', (f) => fitBox(f, { x0: -0.14, x1: 1.14, y0: -0.02, y1: 1.02 }, 0.02), (f, v) => {
+    const c = f.ctx, W = f.canvas.width, H = f.canvas.height;
+    const key = `${stB.which}|${W}|${H}|${v.s}|${v.ox}|${v.oy}`;
+    if (imgB.key !== key) {
+      const img = c.createImageData(W, H), d = img.data, px = 1 / (v.s * f.dpr), wx0 = -v.ox / v.s, buf = new Float64Array(W);
+      for (let j = 0; j < H; j++) {
+        const wy = (v.oy - (j + 0.5) / f.dpr) / v.s, base = j * W * 4;
+        let inside = wy >= 0 && wy <= 1;
+        const r = inside ? rOf(wy) : 0;
+        if (r < 1e-6) inside = false;
+        if (inside) { buf.fill(0); coverDust(buf, 2, r, wx0, px, 0, 1, 40, dustDim(2, r) - 1); }
+        for (let i = 0; i < W; i++) {
+          const cv = inside ? Math.min(1, buf[i]) : 0, o = base + 4 * i;
+          d[o] = PP[0] + (KK[0] - PP[0]) * cv; d[o + 1] = PP[1] + (KK[1] - PP[1]) * cv; d[o + 2] = PP[2] + (KK[2] - PP[2]) * cv; d[o + 3] = 255;
+        }
+      }
+      imgB = { key, img };
+    }
+    c.setTransform(1, 0, 0, 1, 0, 0);
+    c.putImageData(imgB.img, 0, 0);
+    toScreen(f);
+    const mark = (wy, label) => {
+      const y = v.oy - wy * v.s, a0 = v.ox - 0.1 * v.s, a1 = v.ox - 0.018 * v.s, b0 = v.ox + 1.018 * v.s, b1 = v.ox + 1.1 * v.s;
+      c.strokeStyle = c.fillStyle = PRINT.ink; c.lineWidth = 1.6;
+      for (const [xa, xb, s] of [[a0, a1, 1], [b1, b0, -1]]) {
+        c.beginPath(); c.moveTo(xa, y); c.lineTo(xb, y); c.stroke();
+        c.beginPath(); c.moveTo(xb + s * 1, y); c.lineTo(xb - s * 6, y - 4); c.lineTo(xb - s * 6, y + 4); c.closePath(); c.fill();
+      }
+      c.font = '600 11px "IBM Plex Mono", monospace'; c.textAlign = 'left'; c.textBaseline = 'bottom';
+      c.fillText(label, a0, y - 4);
+    };
+    if (stB.marks) mark(stB.which === 'D' ? Math.log(2) / Math.log(3) : 2 / 3, stB.which === 'D' ? 'D = 0.6309' : 'r = 1/3');
+    if (stB.showCut) {
+      const y = v.oy - stB.cut * v.s;
+      c.strokeStyle = PRINT.red; c.lineWidth = 1.4; c.setLineDash([5, 4]);
+      c.beginPath(); c.moveTo(v.ox - 0.02 * v.s, y); c.lineTo(v.ox + 1.02 * v.s, y); c.stroke(); c.setLineDash([]);
+    }
+  }, { onTap: (wx, wy) => { if (wy >= 0 && wy <= 1 && wx >= -0.1 && wx <= 1.1) { stB.cut = Math.max(0.02, wy); stB.showCut = true; $('cutB').checked = true; $('cutBs').value = stB.cut; setB(false); } } });
+  const INFO_B = {
+    D: 'Linear in D: the dimension falls off evenly from 1 to 0, so r = 2<sup>−1/D</sup>. Near the bottom r plunges and the folds rush to the corners.',
+    r: 'Linear in r: the ratio falls off evenly from 1/2 to 0. The triadic dust, r = 1/3, sits two thirds of the way up.',
+  };
+  function setB(refit) {
+    markMB(stB.which);
+    $('cBt').textContent = stB.which === 'D' ? 'The D curtain' : 'The r curtain';
+    $('cBn').textContent = stB.which === 'D' ? 'D runs from 1 at the top to 0 at the bottom' : 'r runs from 1/2 at the top to 0 at the bottom';
+    $('infoB').innerHTML = INFO_B[stB.which] + (stB.showCut ? '' : ' Tap the figure, or turn on the cut, to read r and D along any horizontal line.');
+    $('cutWrap').hidden = !stB.showCut;
+    if (stB.showCut) {
+      const r = rOf(stB.cut);
+      $('cutBv').textContent = stB.which === 'D' ? `D = ${stB.cut.toFixed(3)}` : `r = ${(stB.cut / 2).toFixed(3)}`;
+      $('rBa').textContent = r.toFixed(4);
+      $('rBb').textContent = r > 1e-4 ? dustDim(2, r).toFixed(4) : '0';
+      $('rBc').textContent = (1 - 2 * r).toFixed(4);
+      $('rBd').textContent = r > 0.4999 ? '1' : '0';
+    } else { $('rBa').textContent = $('rBb').textContent = $('rBc').textContent = '—'; $('rBd').textContent = '0'; }
+    if (refit) zB.refit(); else zB.schedule();
+  }
+  const markMB = stepButtons($('mB'), ['D', 'r'], (k) => (k === 'D' ? 'Linear in D (top figure)' : 'Linear in r (bottom figure)'), (k) => `Vertical coordinate ${k}`, (k) => { stB.which = k; setB(false); });
+  $('markB').addEventListener('change', (e) => { stB.marks = e.target.checked; setB(false); });
+  $('cutB').addEventListener('change', (e) => { stB.showCut = e.target.checked; setB(false); });
+  $('cutBs').addEventListener('input', (e) => { stB.cut = +e.target.value; setB(false); });
+  $('plate81t').addEventListener('click', () => { Object.assign(stB, { which: 'D', marks: true, showCut: false }); $('cutB').checked = false; setB(true); });
+  $('plate81b').addEventListener('click', () => { Object.assign(stB, { which: 'r', marks: true, showCut: false }); $('cutB').checked = false; setB(true); });
+
+  // ====================== Plate 83: the devil's staircase ======================
+  const stC = { mode: 'printed', n: 5, m1: 0.18, m2: 0.65, dm: 0.125 };
+  function stairColumns(f, v, inv) {
+    // one sample per device pixel column across the visible part of [0, 1]
+    const px = 1 / (v.s * f.dpr), lo = Math.max(0, -v.ox / v.s), hi = Math.min(1, (f.w - v.ox) / v.s), out = [];
+    if (hi <= lo) return out;
+    for (let x = lo; x <= hi + px / 2; x += px) { const t = Math.min(1, x); out.push(t, inv ? cantorInv(t) : cantorF(t)); }
+    return out;
+  }
+  const zC = zoomable('wC', 'cC', (f) => fitBox(f, { x0: -0.03, x1: 1.03, y0: stC.mode === 'stages' || stC.mode === 'mass' ? -0.17 : -0.03, y1: 1.03 }, 0.03), (f, v) => {
+    const c = f.ctx;
+    paper(f, PRINT.paper); toWorld(f, v);
+    if (stC.mode === 'printed' || stC.mode === 'mass') {
+      const S = stairColumns(f, v, false), p = new Path2D();
+      if (S.length) {
+        p.moveTo(S[0], 0);
+        for (let i = 0; i < S.length; i += 2) p.lineTo(S[i], S[i + 1]);
+        p.lineTo(S[S.length - 2], 0);
+        p.closePath();
+      }
+      if (stC.mode === 'printed') { c.fillStyle = PRINT.ink; c.fill(p); }
+      else {
+        c.fillStyle = '#dedcd3'; c.fill(p);
+        c.strokeStyle = PRINT.ink; c.lineWidth = 1.2 / v.s; c.stroke(p);
+        const win = (u, color, bary) => {
+          const u1 = Math.min(1, u + stC.dm), xa = 1 - cantorInv(1 - u), xb = cantorInv(u1);
+          c.fillStyle = color.band; c.fillRect(0, u, 1, u1 - u);
+          const { starts, len } = dustPieces(2, 1 / 3, 6);
+          c.fillStyle = color.ink;
+          for (const a of starts) {
+            const s = Math.max(a, xa), e = Math.min(a + len, xb);
+            if (e > s) c.fillRect(s, bary, e - s, 0.03);
+          }
+          c.strokeStyle = color.ink; c.lineWidth = 1 / v.s; c.setLineDash([4 / v.s, 3 / v.s]);
+          c.beginPath(); c.moveTo(xa, u); c.lineTo(xa, bary + 0.03); c.moveTo(xb, u1); c.lineTo(xb, bary); c.stroke(); c.setLineDash([]);
+        };
+        win(Math.min(stC.m1, 1 - stC.dm), { band: 'rgba(47,95,158,0.22)', ink: PRINT.accent }, -0.075);
+        win(Math.min(stC.m2, 1 - stC.dm), { band: 'rgba(194,69,45,0.20)', ink: PRINT.red }, -0.135);
+      }
+    } else if (stC.mode === 'stages') {
+      const P = staircase(stC.n), treads = new Path2D(), diags = new Path2D();
+      for (let i = 2; i < P.length; i += 2) {
+        const p = P[i + 1] === P[i - 1] ? treads : diags;
+        p.moveTo(P[i - 2], P[i - 1]); p.lineTo(P[i], P[i + 1]);
+      }
+      c.lineWidth = 2 / v.s; c.lineCap = 'round';
+      c.strokeStyle = PRINT.red; c.stroke(diags);
+      c.strokeStyle = PRINT.ink; c.stroke(treads);
+      const { starts, len } = dustPieces(2, 1 / 3, stC.n), bar = new Path2D();
+      for (const a of starts) bar.rect(a, -0.075, len, 0.03);
+      c.fillStyle = PRINT.ink; c.fill(bar);
+    } else {
+      const S = stairColumns(f, v, true), p = new Path2D();
+      for (let i = 0; i < S.length; i += 2) { if (i) p.lineTo(S[i], S[i + 1]); else p.moveTo(S[i], S[i + 1]); }
+      c.strokeStyle = '#b9b7af'; c.lineWidth = 1 / v.s; c.setLineDash([5 / v.s, 4 / v.s]);
+      c.beginPath(); c.moveTo(0, 0); c.lineTo(1, 1); c.stroke(); c.setLineDash([]);
+      c.strokeStyle = PRINT.ink; c.lineWidth = 1.8 / v.s; c.lineJoin = 'round'; c.stroke(p);
+    }
+    toScreen(f);
+    if (stC.mode !== 'printed') { dot(c, v, 0, 0); dot(c, v, 1, 1); }
+  });
+  const MODES_C = { printed: 'As printed', stages: 'The construction', motion: 'Cantor motion', mass: 'Reading off masses' };
+  const CAP_C = {
+    printed: 'The square filled with ink under M(R), computed column by column — in the limit, not at a finite stage. Zoom in anywhere: more steps appear forever, and the big tread over each trema stays perfectly flat.',
+    stages: 'Stage by stage: over each kept piece the mass climbs along a diagonal (red); over each trema it rests on a tread (black). Each stage replaces every diagonal by two diagonals half as tall and a tread between them. The bar below is the matching stage of Plate 80.',
+    motion: 'Read the ordinate M as time and the abscissa as position: the inverse function R(M) is a motion that creeps across each slug, then leaps over each gap in no time at all — "most discontinuous". Chapters 31 and 32 randomize it. The dashed diagonal is uniform motion, for comparison.',
+    mass: 'The staircase "maps the drastic nonuniformity of the Cantor bar into something uniform and homogeneous": two equal spans of mass on the vertical axis (the two bands) come from stretches of bar holding exactly the same mass, however different they look. Science thrives on uniformity, so such regularizing transformations make fractal irregularity accessible to analysis.',
+  };
+  function setC(refit) {
+    markMC(stC.mode); markSC(stC.n);
+    $('sCwrap').hidden = stC.mode !== 'stages';
+    $('massWrap').hidden = stC.mode !== 'mass';
+    $('cCt').textContent = MODES_C[stC.mode];
+    $('capC').innerHTML = CAP_C[stC.mode];
+    $('cCn').textContent = { printed: 'the square filled under M(R)', stages: `stage ${stC.n} · ${fmt(pow(2, stC.n))} diagonals`, motion: 'position against time', mass: 'two windows of equal mass' }[stC.mode];
+    if (stC.mode === 'stages') {
+      const n = stC.n;
+      $('sCv').textContent = `stage ${n}`;
+      $('rCa').textContent = stairLen(n).toFixed(5);
+      $('rCb').textContent = `${(1 - pow(2 / 3, n)).toFixed(4)} → 1`;
+      $('rCc').textContent = `${Math.sqrt(1 + pow(4 / 9, n)).toFixed(4)} → 1`;
+    } else if (stC.mode === 'mass') {
+      const span = (u0) => { const u = Math.min(u0, 1 - stC.dm); return cantorInv(Math.min(1, u + stC.dm)) - (1 - cantorInv(1 - u)); };
+      $('m1v').textContent = `mass ${stC.m1.toFixed(3)} to ${(stC.m1 + stC.dm).toFixed(3)} · bar span ${span(stC.m1).toFixed(3)}`;
+      $('m2v').textContent = `mass ${stC.m2.toFixed(3)} to ${(stC.m2 + stC.dm).toFixed(3)} · bar span ${span(stC.m2).toFixed(3)}`;
+      $('rCa').textContent = '2'; $('rCb').textContent = '1'; $('rCc').textContent = '1';
+    } else { $('rCa').textContent = '2'; $('rCb').textContent = '1'; $('rCc').textContent = '1'; }
+    if (refit) zC.refit(); else zC.schedule();
+  }
+  const markMC = stepButtons($('mC'), Object.keys(MODES_C), (k) => MODES_C[k], (k) => `Show: ${MODES_C[k]}`, (k) => { stC.mode = k; setC(true); });
+  const markSC = stepButtons($('sC'), [1, 2, 3, 4, 5, 6, 7, 8], String, (n) => `Stage ${n}`, (n) => { stC.n = n; setC(false); });
+  const markDM = stepButtons($('dmC'), [0.25, 0.125, 0.0625], (d) => ({ 0.25: '1/4', 0.125: '1/8', 0.0625: '1/16' }[d]), (d) => `Window height ${d}`, (d) => { stC.dm = d; markDM(d); setC(false); });
+  $('m1s').addEventListener('input', (e) => { stC.m1 = Math.min(+e.target.value, 1 - stC.dm); setC(false); });
+  $('m2s').addEventListener('input', (e) => { stC.m2 = Math.min(+e.target.value, 1 - stC.dm); setC(false); });
+  $('plate83').addEventListener('click', () => { stC.mode = 'printed'; setC(true); });
+  markDM(stC.dm);
+
+  // ====================== Chapter 8: dust and dimension ======================
+  const stD = { N: 2, r: 1 / 3, n: 6, mode: 'bars' };
+  const MAXN_D = { 2: 10, 3: 7, 4: 6, 5: 5 };
+  const rMin = 0.04, rMax = () => 1 / stD.N - 0.002;
+  const FRACS = [[1, 3], [1, 4], [1, 5], [1, 9], [1, 6], [1, 7], [1, 8], [2, 5], [1, 2]];
+  const rLabel = (r) => { for (const [p, q] of FRACS) if (Math.abs(r - p / q) < 5e-4) return `${p}/${q}`; return r.toFixed(3); };
+  const zD = zoomable('wD', 'cD', (f) => {
+    if (stD.mode === 'compare') return fitBox(f, { x0: -0.02, x1: 1.02, y0: -1.08, y1: 0.03 }, 0.03);
+    if (stD.mode === 'gaps') return fitBox(f, { x0: 0, x1: 1, y0: 0, y1: 1 }, 0);
+    return fitBox(f, { x0: -0.02, x1: 1.02, y0: -(0.08 * stD.n + BAR_T + 0.03), y1: 0.03 }, 0.03);
+  }, (f, v) => {
+    const c = f.ctx;
+    paper(f, PRINT.paper); toWorld(f, v);
+    if (stD.mode === 'bars') {
+      c.fillStyle = PRINT.ink;
+      for (const p of barsPath(stD.N, stD.r, stD.n, (k) => 0.08 * k, BAR_T)) c.fill(p);
+    } else if (stD.mode === 'compare') {
+      c.fillStyle = PRINT.ink;
+      for (const [N, r, oy] of [[2, 1 / 4, 0], [3, 1 / 9, -0.58]]) {
+        toWorld(f, v); c.translate(0, oy);
+        for (const p of barsPath(N, r, 5, (k) => 0.08 * k, BAR_T)) c.fill(p);
+      }
+      toScreen(f);
+      c.fillStyle = PRINT.muted; c.font = '600 12px "IBM Plex Mono", monospace'; c.textAlign = 'left'; c.textBaseline = 'bottom';
+      c.fillText('N = 2, r = 1/4 · D = 1/2', v.ox, v.oy - 0.02 * v.s);
+      c.fillText('N = 3, r = 1/9 · D = 1/2', v.ox, v.oy + 0.56 * v.s);
+    } else {
+      // the gap-count chart, drawn in screen space
+      toScreen(f);
+      const D = dustDim(stD.N, stD.r), J = Math.max(3, Math.min(12, Math.ceil(Math.log(5e4) / Math.log(stD.N))));
+      const gens = gapGenerations(stD.N, stD.r, J).filter((g) => g.len > 1e-9);
+      const ml = 56, mr = 14, mt = 12, mb = 34, iw = f.w - ml - mr, ih = f.h - mt - mb;
+      const lx0 = Math.log10(gens[gens.length - 1].len), lx1 = Math.log10(gens[0].len) + 0.3;
+      const ly0 = Math.log10(0.8), ly1 = Math.log10(gens[gens.length - 1].above) + 0.2;
+      const X = (u) => ml + ((Math.log10(u) - lx0) / (lx1 - lx0)) * iw;
+      const Y = (n) => mt + ih - ((Math.log10(n) - ly0) / (ly1 - ly0)) * ih;
+      c.strokeStyle = PRINT.rule; c.lineWidth = 1; c.strokeRect(ml, mt, iw, ih);
+      c.fillStyle = PRINT.muted; c.font = '500 10.5px "IBM Plex Mono", monospace'; c.textAlign = 'center'; c.textBaseline = 'top';
+      for (let e = Math.ceil(lx0); e <= Math.floor(lx1); e++) {
+        const x = ml + ((e - lx0) / (lx1 - lx0)) * iw;
+        c.strokeStyle = '#dddbd2'; c.beginPath(); c.moveTo(x, mt); c.lineTo(x, mt + ih); c.stroke();
+        c.fillText(`10${e < 0 ? '⁻' : ''}${'⁰¹²³⁴⁵⁶⁷⁸⁹'[Math.abs(e)]}`, x, mt + ih + 6);
+      }
+      c.textAlign = 'right'; c.textBaseline = 'middle';
+      for (let e = 0; e <= Math.floor(ly1); e++) {
+        const y = mt + ih - ((e - ly0) / (ly1 - ly0)) * ih;
+        c.strokeStyle = '#dddbd2'; c.beginPath(); c.moveTo(ml, y); c.lineTo(ml + iw, y); c.stroke();
+        c.fillText(`10${'⁰¹²³⁴⁵⁶⁷⁸⁹'[e]}`, ml - 6, y);
+      }
+      c.textAlign = 'center'; c.textBaseline = 'top'; c.fillText('gap length u', ml + iw / 2, f.h - 14);
+      c.save(); c.translate(14, mt + ih / 2); c.rotate(-Math.PI / 2); c.textBaseline = 'middle'; c.fillText('Nr(U > u)', 0, 0); c.restore();
+      // the steps
+      c.strokeStyle = PRINT.ink; c.lineWidth = 2; c.beginPath();
+      c.moveTo(X(Math.pow(10, lx1)), Y(0.8));
+      for (const g of gens) { c.lineTo(X(g.len), Y(Math.max(0.8, g.below))); c.lineTo(X(g.len), Y(g.above)); }
+      c.lineTo(X(gens[gens.length - 1].len * 0.6), Y(gens[gens.length - 1].above));
+      c.stroke();
+      // the line F·u^−D through the steps' corners
+      const lf = gens.slice(1).reduce((s, g) => s + Math.log10(Math.sqrt((g.below + 1) * g.above)) + D * Math.log10(g.len), 0) / (gens.length - 1);
+      c.strokeStyle = PRINT.red; c.lineWidth = 1.4; c.setLineDash([6, 4]); c.beginPath();
+      const uA = Math.pow(10, lx1), uB = gens[gens.length - 1].len * 0.6;
+      c.moveTo(X(uA), Y(Math.pow(10, lf - D * Math.log10(uA))));
+      c.lineTo(X(uB), Y(Math.min(Math.pow(10, ly1), Math.pow(10, lf - D * Math.log10(uB)))));
+      c.stroke(); c.setLineDash([]);
+      c.fillStyle = PRINT.red; c.textAlign = 'left'; c.fillText(`slope −D = −${D.toFixed(4)}`, ml + 10, mt + 8);
+    }
+    toScreen(f);
+  });
+  const MODES_D = { bars: 'Curdling', gaps: 'Gap counts', compare: 'Same D, different look' };
+  const INFO_D = {
+    bars: 'Choose how many pieces survive each stage (N) and how long each is (r). The dimension D = log N/log (1/r) says how fast the curds multiply against how fast they shrink; the dust\'s total length (N r)ⁿ always dies away.',
+    gaps: 'Count the tremas longer than u. Each generation adds N times as many gaps, each r times shorter, so the count climbs in uniform steps on log paper, crossing the dashed line F·u⁻ᴰ — dimension read off a census of the holes.',
+    compare: 'Two dusts with the very same D = 1/2: N = 2 pieces of r = 1/4, and N = 3 pieces of r = 1/9. Equal dimension, yet they "look" very different — the lower one is coarser, more lacunar. Chapter 34 measures that difference as lacunarity.',
+  };
+  function setD(refit) {
+    markMD(stD.mode); markND(stD.N); markSD(stD.n);
+    $('genWrap').hidden = stD.mode === 'compare';
+    const max = MAXN_D[stD.N];
+    markSD.buttons.forEach((b, i) => { b.disabled = i + 1 > max; });
+    const D = dustDim(stD.N, stD.r), n = stD.n;
+    $('rDs').value = (stD.r - rMin) / (rMax() - rMin);
+    $('rDv').textContent = `r = ${rLabel(stD.r)}`;
+    $('sDv').textContent = `stage ${n}`;
+    $('cDt').textContent = MODES_D[stD.mode];
+    $('cDn').textContent = stD.mode === 'compare' ? 'both at stage 5' : stD.mode === 'gaps' ? `N = ${stD.N}, r = ${rLabel(stD.r)}` : `N = ${stD.N}, r = ${rLabel(stD.r)} · stages 0 to ${n}`;
+    $('infoD').innerHTML = INFO_D[stD.mode];
+    $('dimD').textContent = `N pieces of ratio r, evenly spaced · D = log ${stD.N}/log ${(1 / stD.r).toFixed(Math.abs(1 / stD.r - Math.round(1 / stD.r)) < 1e-9 ? 0 : 2)} ≈ ${D.toFixed(4)}`;
+    $('miniDfx').textContent = `N = ${stD.N}, r = ${rLabel(stD.r)}`;
+    dustMini('miniD', stD.N, stD.r);
+    $('rDa').textContent = D.toFixed(4);
+    $('rDb').textContent = fmt(pow(stD.N, n));
+    $('rDc').textContent = sci(pow(stD.r, n));
+    $('rDd').textContent = `${sci(pow(stD.N * stD.r, n))} → 0`;
+    if (refit) zD.refit(); else zD.schedule();
+  }
+  const markMD = stepButtons($('mD'), Object.keys(MODES_D), (k) => MODES_D[k], (k) => `Show: ${MODES_D[k]}`, (k) => { stD.mode = k; setD(true); });
+  const markND = stepButtons($('nD'), [2, 3, 4, 5], String, (N) => `${N} pieces`, (N) => { stD.N = N; stD.r = Math.min(stD.r, rMax()); stD.n = Math.min(stD.n, MAXN_D[N]); setD(true); });
+  const markSD = stepButtons($('sD'), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], String, (n) => `Stage ${n}`, (n) => { stD.n = n; setD(true); });
+  $('rDs').addEventListener('input', (e) => { stD.r = rMin + (+e.target.value) * (rMax() - rMin); setD(false); });
+  for (const [label, N, r] of [['N=2, r=1/3', 2, 1 / 3], ['N=3, r=1/5', 3, 1 / 5], ['N=2, r=1/4', 2, 1 / 4], ['N=3, r=1/9', 3, 1 / 9]]) {
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'btn'; b.textContent = label;
+    b.addEventListener('click', () => { stD.N = N; stD.r = r; if (stD.mode === 'compare') stD.mode = 'bars'; stD.n = Math.min(stD.n, MAXN_D[N]); setD(true); });
+    $('preD').append(b);
+  }
+
+  setA(true); setB(true); setC(true); setD(true);
+})();
+
+</script>
+
+</body>
+</html>

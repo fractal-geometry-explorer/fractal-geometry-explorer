@@ -1,0 +1,220 @@
+<title>Cantor Dust</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.mini svg.gen { height: 56px; }
+.side p.cap b { font-family: var(--f-display); font-size: 14px; letter-spacing: 0.04em; text-transform: uppercase; }
+.r-bar { aspect-ratio: 10 / 7; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 8, "Fractal Events and Cantor Dusts" · pages 74–83</p>
+    <h1><span class="plate-no">Plates 80–83</span><span class="lozenge" aria-hidden="true"></span><span>Cantor Dust</span></h1>
+    <p class="dek">On a data line, errors come in bursts, the bursts in smaller bursts, and between them lie error-free gaps at every scale. Mandelbrot's rough model of this intermittency is Cantor's dust: start with an interval and cut out middle thirds forever. What is left is a "dust" of points — too thin to draw, so the plates thicken it into a bar, hang it in curtains, and pile up its mass into the devil's staircase. Every figure is computed from the rules in the captions.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#bar"><b>80</b> Cantor bar</a>
+    <a href="#curtains"><b>81</b> Cantor curtains</a>
+    <a href="#staircase"><b>83</b> Devil's staircase</a>
+    <a href="#dimension"><b>D</b> Dust and dimension</a>
+  </nav>
+
+  <!-- ===================== PLATE 80: THE CANTOR BAR ===================== -->
+  <section class="plate" id="bar">
+    <div class="plate-head">
+      <p class="no">Plate 80 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Cantorian triadic curdling: the Cantor bar</h2>
+      <p class="dim">N = 2, r = 1/3 · D = log 2/log 3 ≈ 0.6309 · each stage: 2× the slugs, 1/3 the length, 3/2 the density</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-bar zoomable" id="wA">
+          <canvas id="cA" role="img" aria-label="The Cantor bar: curdling stages drawn as rows of slugs"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cAt">Cantor bar</strong> · <span id="cAn">stages 0 to 7</span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The dust itself is "thin and spare to the point of being invisible," so the plate thickens it into a <i>Cantor bar</i>. Start with a round bar of very low density, seen in projection as a long rectangle. Matter "curdles" out of the bar's middle third into the end thirds, whose positions do not change; then out of each of their middle thirds, and so on. The limit is infinitely many infinitely thin slugs of infinitely high density, spaced along the line as the Cantor dust.</p>
+        <div class="mini" aria-label="The generator: two intervals of length one third">
+          <svg class="gen" viewBox="-0.06 -0.14 1.12 0.28" aria-hidden="true" id="miniA"></svg>
+          <div class="fx">N = 2, r = 1/3<br>D = log 2/log 3</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Draw</span></div>
+          <div class="steps words" id="mA" role="group" aria-label="Drawing"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Curdle down to stage</span><span class="value" id="sAv">stage 7</span></div>
+          <div class="steps" id="sA" role="group" aria-label="Stage"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate80">Show Plate 80 as printed</button>
+        </div>
+        <p class="readline" id="infoA" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Slugs</dt><dd id="rAa">128</dd></div>
+          <div><dt>Each slug</dt><dd id="rAb">3⁻⁷ ≈ 0.00046</dd></div>
+          <div><dt>Total length</dt><dd id="rAc">(2/3)⁷ ≈ 0.0585</dd></div>
+          <div><dt>Density</dt><dd id="rAd">(3/2)⁷ ≈ 17.1×</dd></div>
+        </dl>
+        <p class="note">Measured from the scan: the plate draws stages 0 to 7 as rows of constant thickness, 0.035 of the bar's length (the caption says the projection is a rectangle with width/length = 0.03), at the book's measured row spacing. The growing density is told, not drawn. In the plate the last row's 128 slugs blur into 64 gray ones — "the last line is indistinguishable from the last but one" — and the same happens here when the slugs drop below a pixel. The cake and the rings are this page's illustrations of the caption's remarks, not figures from the book.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 81: THE CANTOR CURTAINS ===================== -->
+  <section class="plate" id="curtains">
+    <div class="plate-head">
+      <p class="no">Plate 81 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Cantor curtains: every cut a dust</h2>
+      <p class="dim">N = 2, r from 0 to 1/2 · every horizontal cut is a Cantor dust · D = log 2/log (1/r), from 0 to 1</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wB">
+          <canvas id="cB" role="img" aria-label="A Cantor curtain: dusts with every ratio r stacked into a surface"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cBt">The D curtain</strong> · <span id="cBn">D runs from 1 at the top to 0 at the bottom</span> · tap to read a cut</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Here the Cantor dust is "clarified by being placed among generalized dusts with N = 2 and variable r." Both theater curtains are topped by the full interval [0, 1]. Going down, r shrinks and the middle tremas open wider, so the ink gathers into hanging folds. Every horizontal cut of either figure is some Cantor dust; the arrows point out the triadic one, r = 1/3, D ≈ 0.6309. The two figures differ only in the vertical scale: the top one is linear in the dimension D, the bottom one linear in the ratio r.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Vertical coordinate</span></div>
+          <div class="steps words" id="mB" role="group" aria-label="Which curtain"></div>
+        </div>
+        <div class="group">
+          <label class="check" for="markB"><input type="checkbox" id="markB" checked> Arrows at the triadic dust, as in the plate</label>
+          <label class="check" for="cutB"><input type="checkbox" id="cutB"> Read a horizontal cut (or tap the figure)</label>
+          <div class="slider" id="cutWrap" hidden>
+            <div class="label-row"><span class="label">Cut height</span><span class="value" id="cutBv"></span></div>
+            <input type="range" id="cutBs" min="0.02" max="1" step="0.005" value="0.6309" aria-label="Cut height">
+          </div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate81t">Show Plate 81, top, as printed</button>
+          <button type="button" class="btn" id="plate81b">Bottom</button>
+        </div>
+        <p class="readline" id="infoB" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>At the cut: r</dt><dd id="rBa">—</dd></div>
+          <div><dt>At the cut: D</dt><dd id="rBb">—</dd></div>
+          <div><dt>First trema</dt><dd id="rBc">—</dd></div>
+          <div><dt>Dust's length</dt><dd id="rBd">0</dd></div>
+        </dl>
+        <p class="note">The two rules were told apart by measuring the scan: in the top figure the first trema's width makes D fall off linearly with height; in the bottom one r itself does (fitted to the central gap over 180 rows, rms 0.0008). Both printed figures are square. The book's margin arrows sit a little high of the exact values — at about r = 0.35 and D = 0.68 — so the arrows here mark the stated r = 1/3 and D = 0.6309 instead.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 83: THE DEVIL'S STAIRCASE ===================== -->
+  <section class="plate" id="staircase">
+    <div class="plate-head">
+      <p class="no">Plate 83 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>The Cantor function, or devil's staircase</h2>
+      <p class="dim">length of the graph = 2, so D = 1 · the risers' abscissas form the dust, D ≈ 0.6309 · rises on a set of length 0</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wC">
+          <canvas id="cC" role="img" aria-label="The devil's staircase, the graph of the Cantor function"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cCt">As printed</strong> · <span id="cCn">the square filled under M(R)</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The Cantor function describes how mass is spread along the Cantor bar of Plate 80. Give the bar length 1 and mass 1, and let M(R) be the mass between 0 and R. Over every gap M(R) stays flat — and the gaps add up to the whole length of the bar. Yet M(R) climbs from 0 to 1, over infinitely many, infinitely small, highly clustered rises sitting on the slugs. The plate fills the unit square under the graph with ink.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mC" role="group" aria-label="What to show"></div>
+        </div>
+        <p class="cap" id="capC"></p>
+        <div class="group" id="sCwrap">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="sCv">stage 5</span></div>
+          <div class="steps" id="sC" role="group" aria-label="Stage"></div>
+        </div>
+        <div class="group" id="massWrap" hidden>
+          <div class="slider">
+            <div class="label-row"><span class="label">First window</span><span class="value" id="m1v"></span></div>
+            <input type="range" id="m1s" min="0" max="1" step="0.005" value="0.18" aria-label="First mass window">
+          </div>
+          <div class="slider">
+            <div class="label-row"><span class="label">Second window</span><span class="value" id="m2v"></span></div>
+            <input type="range" id="m2s" min="0" max="1" step="0.005" value="0.65" aria-label="Second mass window">
+          </div>
+          <div class="label-row"><span class="label">Window height</span></div>
+          <div class="steps" id="dmC" role="group" aria-label="Window height"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate83">Show Plate 83 as printed</button>
+        </div>
+        <dl class="read">
+          <div><dt>Graph length</dt><dd id="rCa">2</dd></div>
+          <div><dt>Flat part</dt><dd id="rCb">1</dd></div>
+          <div><dt>Climb</dt><dd id="rCc">1</dd></div>
+          <div><dt>Graph dimension</dt><dd>1</dd></div>
+        </dl>
+        <p class="note" id="noteC">Checked against the scan: the printed figure is the unit square with the region under M(R) in solid ink (the top profile matches the Cantor function to 0.5% of the height, the difference being ink spread at the near-vertical risers). The widths of the steps sum to 1 and so do the heights, and the graph's length is exactly 2 — finite, so its dimension is 1: a curve can be full of irregularity and still be rectifiable. The staircase is continuous but climbs entirely on a set of zero length; its derivative vanishes almost everywhere.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CONCEPT: DUST AND DIMENSION ===================== -->
+  <section class="plate" id="dimension">
+    <div class="plate-head">
+      <p class="no">Chapter 8, pages 74–79 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Cantor dust and its dimension</h2>
+      <p class="dim" id="dimD">N pieces of ratio r, evenly spaced · D = log N / log (1/r) · any D between 0 and 1 can be reached</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-bar zoomable" id="wD">
+          <canvas id="cD" role="img" aria-label="Generalized Cantor dusts and their gap counts"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cDt">Curdling</strong> · <span id="cDn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The errors on a transmission line gave Mandelbrot his first concrete use for fractals: bursts within bursts, separated by error-free gaps at every scale. Cantor's cascade models them. Divide an interval into <i>b</i> = 1/r pieces, keep N of them — the <i>curds</i> — and empty the rest, the <i>tremas</i>. Repeating forever leaves a dust of dimension D = log N/log (1/r), anywhere between 0 and 1. Counting instants of error between 0 and R gives M(R) ∝ R<sup>D</sup>, just as for the mass of a D-dimensional ball.</p>
+        <div class="mini" aria-label="The current generator">
+          <svg class="gen" viewBox="-0.06 -0.14 1.12 0.28" aria-hidden="true" id="miniD"></svg>
+          <div class="fx" id="miniDfx">N = 2, r = 1/3</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mD" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group" id="genWrap">
+          <div class="label-row"><span class="label">Pieces kept, N</span></div>
+          <div class="steps" id="nD" role="group" aria-label="Number of pieces"></div>
+          <div class="slider">
+            <div class="label-row"><span class="label">Ratio r</span><span class="value" id="rDv">1/3</span></div>
+            <input type="range" id="rDs" min="0" max="1" step="0.001" value="0" aria-label="Ratio r">
+          </div>
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="sDv">stage 6</span></div>
+          <div class="steps" id="sD" role="group" aria-label="Stage"></div>
+        </div>
+        <div class="btn-row" id="preD"></div>
+        <p class="readline" id="infoD" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Dimension</dt><dd id="rDa">0.6309</dd></div>
+          <div><dt>Curds</dt><dd id="rDb">64</dd></div>
+          <div><dt>Each curd</dt><dd id="rDc">—</dd></div>
+          <div><dt>Dust's length</dt><dd id="rDd">0</dd></div>
+        </dl>
+        <p class="note">The book names these dusts and their D by formula but draws only the triadic one, so the evenly spaced arrangement here (first piece at 0, last ending at 1, equal tremas between) is a reconstruction — the simplest rule consistent with the text. The two dusts with D = 1/2 "look" very different even though their D is equal; chapter 34 turns that observation into <i>lacunarity</i>. The gap-count chart verifies the book's claim that Nr(U &gt; u), the number of gaps longer than u, steps across a line F·u<sup>−D</sup>.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 8, pages 74–83 (Plates 80, 81 and 83). Every figure is computed from the rules in the captions; layouts were measured from the scans where the book shows them, as noted under each figure. Companion pages: <a href="https://claude.ai/artifact/QxRja4otEyH8dMeU8Uy4UY" target="_blank" rel="noopener">Sweeps, Rivers and Trees</a> (Plates 68–73) and <a href="https://claude.ai/artifact/1diKiTcEwLkJpZaVA2gQ11" target="_blank" rel="noopener">Triadic Koch Island</a> (Plates 42–45).</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>
