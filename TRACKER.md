@@ -161,8 +161,8 @@ Update this file in the same pull request as the work it records.
 | 298 | 298 | Decrease of D by subordination | random | todo | |
 | 299 | 299 | Zooming toward a Lévy dust with D = 1.26 | random | todo | |
 | 300 | 300 | Circumnavigation of Lévy dusts | random | todo | |
-| 306–307 | 306–307 | Smallish round tremas, in white; random slices of "Swiss cheese" | random | todo | |
-| 308–309 | 308–309 | Larger round tremas, in black | random | todo | |
+| 306–307 | 306–307 | Smallish round tremas, in white; random slices of "Swiss cheese" | random | done | disc-tremas |
+| 308–309 | 308–309 | Larger round tremas, in black | random | done | disc-tremas |
 | 318 | 318 | Carpets' lacunarity | exact | todo | |
 | 323 | 323 | Effect of the trema generator upon lacunarity | random | todo | |
 | 325 | 324–325 | Fractal dust from nonspherical tremas (one octant on a spherical net) | random | todo | |
@@ -191,5 +191,6 @@ Each chapter session should add the chapter's main ideas here, alongside its pla
 - the diameter exponent of trees (chapter 17);
 - 1/f noise and scaling nets (chapter 27);
 - Lévy flights and dusts (chapters 31–32);
+- disc and ball tremas: saturation, critical dimensions, lunar craters and galactic voids (chapter 33; the Moon-saturation section of the disc-tremas page);
 - lacunarity (chapter 34);
 - scaling in prices and in word frequencies (chapters 37–38).
