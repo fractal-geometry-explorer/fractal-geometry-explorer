@@ -19,17 +19,20 @@ An integrated website of interactive reconstructions of every plate and main con
 
 ```
 src/shared/base.css        shared style: colour tokens, dark mode, layout, controls
-src/pages.json             manifest: slug, title, plates, chapter, kind, scripts
-src/pages/<slug>/          template.html + scripts (or page.html for older single-file pages)
+src/shared/draw.js         shared drawing: style constants, zoomable canvas, chunked paths, controls, mini SVGs, chevrons
+src/shared/geometry.js     shared geometry: similarity maps, decorated generators, cascades, tree cascades, rounding, dimension
+src/pages.json             manifest: slug, title, plates, chapter, scripts
+src/pages/<slug>/          template.html + the page's scripts
 tools/build.py             builds site/ from src/  (python3 tools/build.py)
-tools/check_build.py       confirms the sources reproduce the published pages
+tools/check_build.py       confirms the sources reproduce the committed site/ (CI runs this)
 tests/smoke.cjs            Playwright smoke test of every built page
-site/                      build output, deployed as the website
+site/                      build output, committed, deployed as the website
 .github/workflows/pages.yml rebuilds site/ and publishes it to GitHub Pages on every merge to main
+.github/workflows/checks.yml build, byte-exactness and smoke test on every pull request
 research/                  analysis scripts from earlier sessions (reference only; paths are stale)
 ```
 
-The shared JavaScript library doesn't exist yet. Pages currently carry their own copies of the canvas, zoom and control code. Extracting it is the first task in `TRACKER.md` ("Foundation"). Until it is done, copy from the most recent page, `src/pages/snow-sweeps/`.
+A page is an artifact-style fragment (`template.html` with `/*BASECSS*/` and `/*SCRIPT*/` placeholders) plus its own scripts; the build inlines the shared stylesheet and the scripts named in `pages.json` (a path with `/` resolves from `src/`, so `shared/draw.js` is the library), wraps the fragment in a document skeleton, and adds the site bar and index. A new page starts from `src/pages/snow-sweeps/` as the pattern and loads `shared/geometry.js` and `shared/draw.js` instead of carrying its own copies. The three oldest pages (monkeys-tree, minkowski-sausage, wiener-sausage) still carry their own stylesheet and canvas machinery; moving them onto the library is tracked as follow-up in `TRACKER.md`. Rebuild `site/` and commit it with any change to `src/` — CI fails when the two drift.
 
 ## Commands
 

@@ -1,3 +1,8 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Sweeps and Rivers</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -127,9 +132,6 @@ dl.read dd small { font-size: 11.5px; color: var(--muted); }
 
 .sub { display: grid; gap: 14px; padding-top: 22px; border-top: 1px dashed var(--rule); scroll-margin-top: 64px; }
 .sub h3 { margin: 0; font-size: 15px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
-#loxPlot { width: 100%; height: auto; display: block; background: var(--print-paper); outline: 1px solid var(--print-rule); }
-#loxPlot text { font-family: var(--f-mono); font-size: 10px; fill: #5d5d58; }
-
 .source { font-family: var(--f-body); font-size: 15px; color: var(--muted); margin: 0; max-width: 84ch; }
 .source i { color: var(--text); }
 .source a { color: var(--accent); }
@@ -146,6 +148,22 @@ button:focus-visible, input:focus-visible, a:focus-visible, canvas:focus-visible
 .minis .mini { flex: 1 1 140px; }
 .side p.cap b { font-family: var(--f-display); font-size: 14px; letter-spacing: 0.04em; text-transform: uppercase; }
 </style>
+<style>
+body { margin: 0; }
+nav.shell { font-family: var(--f-display); font-size: 12.5px; font-weight: 600; background: var(--page);
+  border-bottom: 1px solid var(--rule); display: flex; align-items: center; gap: 6px 18px;
+  padding: 9px max(16px, env(safe-area-inset-right, 0px)) 9px max(16px, env(safe-area-inset-left, 0px)); }
+nav.shell a { color: var(--text); text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+nav.shell a:hover { color: var(--accent); }
+nav.shell .home { letter-spacing: 0.07em; text-transform: uppercase; flex: none; }
+nav.shell .gap { flex: 1; }
+nav.shell .pn { color: var(--muted); font-weight: 500; }
+nav.shell .pn b { color: var(--text); font-weight: 600; }
+nav.shell a:hover .pn, nav.shell a:hover .pn b { color: var(--accent); }
+</style>
+</head>
+<body>
+<nav class="shell" aria-label="Site"><a class="home" href="index.html">Fractal Geometry Explorer</a><span class="gap"></span><a rel="prev" href="dragon-sweeps.html"><span class="pn">&#8592; <b>Plates 66–67</b></span></a><a rel="next" href="wiener-sausage.html"><span class="pn"><b>Brownian motion</b> &#8594;</span></a></nav>
 
 <div class="wrap">
   <header class="top">
@@ -396,8 +414,11 @@ button:focus-visible, input:focus-visible, a:focus-visible, canvas:focus-visible
 </div>
 
 <script>
-// CORE START
-const R3 = Math.sqrt(3), DEG = Math.PI / 180;
+// Shared geometry library: similarity maps, decorated generators and their cascades, tree
+// cascades, rounding arcs and the similarity-dimension solver. Conventions are in DECISIONS.md:
+// a generator is a list of points on [0, 1] plus a code per interval (bit 0: mirror the copy,
+// bit 1: place it from the interval's far end, which also reverses its traversal).
+const R3 = Math.sqrt(3);
 // ---- similarity maps z -> A·z + B or A·conj(z) + B, as [ar, ai, br, bi, m] ----
 const C = {
   mul: (ar, ai, br, bi) => [ar * br - ai * bi, ar * bi + ai * br],
@@ -426,8 +447,7 @@ function substituteLeg(G, leg, H) {
   const [f, r] = G[leg], sub = (r ? H.slice().reverse() : H).map(([g, s]) => [C.comp(f, g), r ^ s]);
   return G.slice(0, leg).concat(sub, G.slice(leg + 1));
 }
-const X3 = [-1, 0, 1, 0, 1];
-const normaliseGen = (G) => G.map(([f, r]) => (r ? [C.comp(f, X3), 0] : [f, 0]));
+const normaliseGen = (G) => G.map(([f, r]) => (r ? [C.comp(f, MX), 0] : [f, 0]));
 // leaves of the cascade, in the order the curve runs through them: [map, rev]
 function leaves(gens) {
   const out = [];
@@ -447,49 +467,6 @@ function curveOf(gens) {
   return P;
 }
 
-// ---- Plates 68–69: the snowflake sweeps ----
-const pol = (L, a) => [L * Math.cos(a * DEG), L * Math.sin(a * DEG)];
-const SNOW_PTS = (() => {
-  const steps = [pol(1 / 3, 60), pol(1 / 3, 60), pol(1 / 3, 0), pol(1 / 3, -60), pol(1 / R3, 210), pol(1 / 3, 0), pol(1 / 3, 0)];
-  const P = [[0, 0]];
-  for (const [dx, dy] of steps) { const [x, y] = P[P.length - 1]; P.push([x + dx, y + dy]); }
-  P[7] = [1, 0];
-  return P;
-})();
-const SNOW_CODES = [1, 3, 3, 3, 2, 1, 3];       // read off the book's second stage
-const GEN_S = genFromCodes(SNOW_PTS, SNOW_CODES), GEN_F = mirrorGen(GEN_S);
-// the 13-interval generator: S with its long fifth leg replaced by F reduced by 1/√3. Its legs that run backward
-// can hold the same generator run backward (GEN_13S, as in the large figure of Plate 69), or the other one
-// (GEN_13, as in Plate 68, the caption's second stage and the small figures of Plate 69)
-const GEN_13S = substituteLeg(GEN_S, 4, GEN_F), GEN_13F = mirrorGen(GEN_13S);
-const GEN_13 = normaliseGen(GEN_13S), GEN_13M = mirrorGen(GEN_13);
-// the snowflake's outline: a hexagon of side 1/√3 around the triangle on [0,1], then j steps of the two-piece
-// generator (each edge -> two edges of 1/√3 at 120°), bumps all inward, then all outward, and so on
-function snowOutline(j) {
-  let P = [[0, 0], [0.5, -R3 / 6], [1, 0], [1, R3 / 3], [0.5, R3 / 2], [0, R3 / 3]];
-  for (let k = 0; k < j; k++) {
-    const s = k % 2 === 0 ? 1 : -1, Q = [];
-    for (let i = 0; i < P.length; i++) {
-      const [ax, ay] = P[i], [bx, by] = P[(i + 1) % P.length], dx = bx - ax, dy = by - ay;
-      Q.push([ax, ay], [(ax + bx) / 2 - dy * s / (2 * R3), (ay + by) / 2 + dx * s / (2 * R3)]);
-    }
-    P = Q;
-  }
-  return P;
-}
-// the Koch snowflake on the triangle (0,0) (1,0) (1/2, √3/2), stage n, as a flat polygon
-function kochFlake(n) {
-  let P = [[0, 0], [1, 0], [0.5, R3 / 2]];
-  for (let k = 0; k < n; k++) {
-    const Q = [];
-    for (let i = 0; i < P.length; i++) {
-      const [ax, ay] = P[i], [bx, by] = P[(i + 1) % P.length], dx = (bx - ax) / 3, dy = (by - ay) / 3;
-      Q.push([ax, ay], [ax + dx, ay + dy], [ax + dx + dx * 0.5 + dy * R3 / 2, ay + dy + dy * 0.5 - dx * R3 / 2], [ax + 2 * dx, ay + 2 * dy]);
-    }
-    P = Q;
-  }
-  return P;
-}
 // a 60° arc from a to b bulging to `side` (+1: left of a→b), sampled at n+1 points (a included, b excluded)
 function arcPts(ax, ay, bx, by, side, n, out) {
   const dx = bx - ax, dy = by - ay, L = Math.hypot(dx, dy), mx = (ax + bx) / 2, my = (ay + by) / 2;
@@ -499,53 +476,6 @@ function arcPts(ax, ay, bx, by, side, n, out) {
   while (da > Math.PI) da -= 2 * Math.PI;
   while (da < -Math.PI) da += 2 * Math.PI;
   for (let t = 0; t < n; t++) { const a = a0 + (da * t) / n; out.push(cx + L * Math.cos(a), cy + L * Math.sin(a)); }
-}
-
-// ---- Plates 70–71: the Peano–Gosper curve on the triangular lattice ----
-const HEX = [[1, 0], [0, 1], [-1, 1], [-1, 0], [0, -1], [1, -1]];
-function flowsnakeLattice(n) {
-  let s = 'A';
-  for (let k = 0; k < n; k++) s = s.replace(/[AB]/g, (c) => (c === 'A' ? 'A-B--B+A++AA+B-' : '+A-BB--B-A++A+B'));
-  let x = 0, y = 0, h = 0;
-  const P = [[0, 0]];
-  // turned the book's way: the generator rises to the left of [0, 1]
-  for (const c of s) { if (c === '+') h = (h + 5) % 6; else if (c === '-') h = (h + 1) % 6; else { x += HEX[h][0]; y += HEX[h][1]; P.push([x, y]); } }
-  return P;
-}
-// lattice point -> page: the curve runs from (0,0) to (1,0)
-function latticeFrame(P) {
-  const [ex, ey] = P[P.length - 1], fx = ex + ey / 2, fy = (ey * R3) / 2, L2 = fx * fx + fy * fy;
-  const cr = fx / L2, ci = -fy / L2;           // multiply by 1/end
-  return (i, j) => { const x = i + j / 2, y = (j * R3) / 2; return [cr * x - ci * y, cr * y + ci * x]; };
-}
-// Rivers and watersheds: the lattice triangles with all three corners on the curve, joined across the links the
-// curve does not use. Each piece is a tree; a triangle lies left (river) or right (watershed) of the curve.
-function gosperTrees(n) {
-  const P = flowsnakeLattice(n), key = (i, j) => (i + 50000) * 100003 + (j + 50000), V = new Set(P.map(([i, j]) => key(i, j)));
-  const pt = new Map(P.map(([i, j]) => [key(i, j), [i, j]]));
-  const ekey = (a, b) => { const ka = key(...a), kb = key(...b); return ka < kb ? ka + ':' + kb : kb + ':' + ka; };
-  const curve = new Set();
-  for (let k = 0; k + 1 < P.length; k++) curve.add(ekey(P[k], P[k + 1]));
-  const side = new Map(), tkey = (t) => t.map((p) => key(...p)).sort((a, b) => a - b).join(',');
-  const cross = (a, b, c) => { const ax = a[0] + a[1] / 2, ay = a[1], bx = b[0] + b[1] / 2, by = b[1], cx = c[0] + c[1] / 2, cy = c[1]; return (bx - ax) * (cy - ay) - (by - ay) * (cx - ax); };
-  for (let k = 0; k + 1 < P.length; k++) {
-    const a = P[k], b = P[k + 1], h = HEX.findIndex(([dx, dy]) => dx === b[0] - a[0] && dy === b[1] - a[1]);
-    for (const hh of [(h + 1) % 6, (h + 5) % 6]) { const c = [a[0] + HEX[hh][0], a[1] + HEX[hh][1]]; side.set(tkey([a, b, c]), cross(a, b, c) > 0 ? 1 : -1); }
-  }
-  const tris = [];
-  for (const [i, j] of P) for (const t of [[[i, j], [i + 1, j], [i, j + 1]], [[i, j], [i + 1, j], [i + 1, j - 1]]]) if (t.every((p) => V.has(key(...p)))) tris.push(t);
-  const tid = new Map(); tris.forEach((t, k) => tid.set(tkey(t), k));
-  const byEdge = new Map();
-  tris.forEach((t, k) => { for (const [u, v] of [[0, 1], [1, 2], [0, 2]]) { const e = ekey(t[u], t[v]); if (!byEdge.has(e)) byEdge.set(e, []); byEdge.get(e).push(k); } });
-  // a triangle's side: from any of its curve edges; triangles without one take their neighbours' side
-  const sideOf = tris.map((t) => side.get(tkey(t)) || 0);
-  const links = [], adj = tris.map(() => []);
-  for (const [e, ks] of byEdge) if (ks.length === 2 && !curve.has(e)) { links.push(ks); adj[ks[0]].push(ks[1]); adj[ks[1]].push(ks[0]); }
-  for (let changed = true; changed;) { changed = false; tris.forEach((t, k) => { if (!sideOf[k]) { const s = adj[k].map((o) => sideOf[o]).find((v) => v); if (s) { sideOf[k] = s; changed = true; } } }); }
-  // outer boundary edges (one triangle only), with the side of that triangle
-  const boundary = [];
-  for (const [e, ks] of byEdge) if (ks.length === 1) { const [ka, kb] = e.split(':').map(Number); boundary.push([ka, kb, sideOf[ks[0]]]); }
-  return { P, tris, links, adj, sideOf, boundary: boundary.map(([ka, kb, sd]) => [pt.get(ka), pt.get(kb), sd]) };
 }
 
 // ---- tree cascades: every link is replaced by the tree generator placed on it ----
@@ -595,6 +525,279 @@ function clipSources(segs, rounds = 1) {
   }
   return cur;
 }
+
+// the dimension D: the unique real root of G(D) = Σ r_m^D = 1 (G is strictly decreasing)
+function dimension(rs) {
+  let lo = 0.01, hi = 8;
+  for (let i = 0; i < 90; i++) { const mid = (lo + hi) / 2, g = rs.reduce((s, r) => s + Math.pow(r, mid), 0); if (g > 1) lo = mid; else hi = mid; }
+  return (lo + hi) / 2;
+}
+
+// Shared drawing library: style constants, the zoomable canvas (snapshot while panning), chunked
+// paths, controls and small SVG figures. Loaded before each page's own scripts; pages may extend
+// PRINT with their own inks (PRINT.red = ..., PRINT.light = ...).
+const $ = (id) => document.getElementById(id);
+const fmt = (n) => n.toLocaleString('en-US');
+const PRINT = { paper: '#ecebe6', ink: '#151515', rule: '#c9c8c2', muted: '#66665f', accent: '#2f5f9e', red: '#c2452d', faint: '#bdbbb3', gray: '#8f8e88' };
+const RAMP = [[233, 185, 73], [217, 113, 59], [184, 66, 79], [125, 58, 120], [63, 79, 151], [43, 122, 138]];
+const ramp = (t, a = 1) => {
+  const x = Math.max(0, Math.min(1, t)) * (RAMP.length - 1), i = Math.min(RAMP.length - 2, Math.floor(x)), f = x - i;
+  const c = RAMP[i].map((v, k) => Math.round(v + (RAMP[i + 1][k] - v) * f));
+  return `rgba(${c[0]},${c[1]},${c[2]},${a})`;
+};
+const CAT = ['#151515', '#9a988f', '#2f5f9e', '#c2452d', '#3f8f6c', '#b58a2a', '#6b4e9b', '#5f8fae'];
+
+// ---------- shared plumbing ----------
+function figure(canvas, draw) {
+  const wrap = canvas.parentElement;
+  const f = { canvas, ctx: canvas.getContext('2d'), w: 1, h: 1, dpr: 1, draw };
+  const resize = () => {
+    f.dpr = Math.min(2, window.devicePixelRatio || 1);
+    f.w = wrap.clientWidth || 1; f.h = wrap.clientHeight || 1;
+    canvas.width = Math.round(f.w * f.dpr); canvas.height = Math.round(f.h * f.dpr);
+    f.draw();
+  };
+  new ResizeObserver(resize).observe(wrap);
+  return f;
+}
+function fitBox(f, bb, pad = 0.04) {
+  const w = Math.max(1e-9, bb.x1 - bb.x0), h = Math.max(1e-9, bb.y1 - bb.y0), s = Math.min(f.w / (w * (1 + 2 * pad)), f.h / (h * (1 + 2 * pad)));
+  return { s, ox: f.w / 2 - ((bb.x0 + bb.x1) / 2) * s, oy: f.h / 2 + ((bb.y0 + bb.y1) / 2) * s };
+}
+const toWorld = (f, v) => f.ctx.setTransform(f.dpr * v.s, 0, 0, -f.dpr * v.s, f.dpr * v.ox, f.dpr * v.oy);
+const toScreen = (f) => f.ctx.setTransform(f.dpr, 0, 0, f.dpr, 0, 0);
+function paper(f, color) { f.ctx.setTransform(1, 0, 0, 1, 0, 0); f.ctx.fillStyle = color; f.ctx.fillRect(0, 0, f.canvas.width, f.canvas.height); }
+function polyPath(P, closed = true, upto) {
+  const p = new Path2D(), m = upto === undefined ? P.length / 2 : upto;
+  p.moveTo(P[0], P[1]);
+  for (let i = 1; i < m; i++) p.lineTo(P[2 * i], P[2 * i + 1]);
+  if (closed) p.closePath();
+  return p;
+}
+function bbox(P, bb = { x0: Infinity, x1: -Infinity, y0: Infinity, y1: -Infinity }) {
+  for (let i = 0; i < P.length; i += 2) { bb.x0 = Math.min(bb.x0, P[i]); bb.x1 = Math.max(bb.x1, P[i]); bb.y0 = Math.min(bb.y0, P[i + 1]); bb.y1 = Math.max(bb.y1, P[i + 1]); }
+  return bb;
+}
+function stepButtons(el, values, text, aria, onPick) {
+  const bs = values.map((v) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.textContent = text(v); b.setAttribute('aria-label', aria(v));
+    b.addEventListener('click', () => onPick(v));
+    el.append(b);
+    return b;
+  });
+  const mark = (cur) => bs.forEach((b, i) => b.setAttribute('aria-pressed', String(values[i] === cur)));
+  mark.buttons = bs;
+  return mark;
+}
+// pan and zoom: a quick rescaled snapshot while moving, a full redraw once it settles
+function zoomable(wrapId, canvasId, fitOf, render, opts = {}) {
+  const maxZoom = opts.maxZoom || 400;
+  const wrap = $(wrapId), z = { view: null, user: false, snapView: null, raf: 0, full: 0 };
+  const snap = document.createElement('canvas');
+  const f = figure($(canvasId), () => draw());
+  function touch() { wrap.style.touchAction = z.view && z.view.s > z.view.fit * 1.02 ? 'none' : 'pan-y'; }
+  function draw() {
+    if (!z.view || !z.user) { z.view = fitOf(f); z.view.fit = z.view.s; z.user = false; touch(); }
+    render(f, z.view);
+    snap.width = f.canvas.width; snap.height = f.canvas.height; snap.getContext('2d').drawImage(f.canvas, 0, 0);
+    z.snapView = { s: z.view.s, ox: z.view.ox, oy: z.view.oy };
+  }
+  function quick() {
+    const v = z.view, k = v.s / z.snapView.s, c = f.ctx;
+    c.setTransform(1, 0, 0, 1, 0, 0); c.fillStyle = z.ground || PRINT.paper; c.fillRect(0, 0, f.canvas.width, f.canvas.height);
+    c.drawImage(snap, (v.ox - z.snapView.ox * k) * f.dpr, (v.oy - z.snapView.oy * k) * f.dpr, snap.width * k, snap.height * k);
+  }
+  function schedule() { if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; draw(); }); }
+  function moved() {
+    if (!z.snapView) { schedule(); return; }
+    if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; quick(); });
+    clearTimeout(z.full); z.full = setTimeout(schedule, 160);
+  }
+  function zoomAt(px, py, k) {
+    const v = z.view, ns = Math.min(v.fit * maxZoom, Math.max(v.fit * 0.8, v.s * k)), wx = (px - v.ox) / v.s, wy = (v.oy - py) / v.s;
+    v.s = ns; v.ox = px - wx * ns; v.oy = py + wy * ns; z.user = true; touch(); moved();
+  }
+  function pan(dx, dy) { z.view.ox += dx; z.view.oy += dy; z.user = true; moved(); }
+  wrap.querySelector('[data-z="in"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1.6));
+  wrap.querySelector('[data-z="out"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1 / 1.6));
+  wrap.querySelector('[data-z="fit"]').addEventListener('click', () => { z.user = false; schedule(); });
+  const pts = new Map();
+  let pinch = null, down = null;
+  const local = (e) => { const r = wrap.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+  wrap.addEventListener('pointerdown', (e) => {
+    if (e.target.closest('.view-tools')) return;
+    pts.set(e.pointerId, local(e));
+    down = pts.size === 1 ? { p: local(e), t: performance.now(), moved: 0 } : null;
+    try { wrap.setPointerCapture(e.pointerId); } catch (_) {}
+    if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), m: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2] }; }
+    wrap.classList.add('dragging');
+  });
+  wrap.addEventListener('pointermove', (e) => {
+    if (!pts.has(e.pointerId)) return;
+    const prev = pts.get(e.pointerId), cur = local(e);
+    pts.set(e.pointerId, cur);
+    if (down) down.moved = Math.max(down.moved, Math.hypot(cur[0] - down.p[0], cur[1] - down.p[1]));
+    if (pts.size === 2 && pinch) {
+      const [a, b] = [...pts.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]), m = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+      pan(m[0] - pinch.m[0], m[1] - pinch.m[1]);
+      if (pinch.d > 0) zoomAt(m[0], m[1], d / pinch.d);
+      pinch = { d, m };
+    } else if (pts.size === 1 && (e.pointerType !== 'touch' || z.view.s > z.view.fit * 1.02)) pan(cur[0] - prev[0], cur[1] - prev[1]);
+  });
+  const end = (e) => {
+    if (down && pts.size === 1 && down.moved < 5 && opts.onTap) { const [x, y] = local(e), v = z.view; opts.onTap((x - v.ox) / v.s, (v.oy - y) / v.s); }
+    down = null;
+    pts.delete(e.pointerId); if (pts.size < 2) pinch = null; if (!pts.size) wrap.classList.remove('dragging');
+  };
+  wrap.addEventListener('pointerup', end); wrap.addEventListener('pointercancel', (e) => { down = null; end(e); });
+  wrap.addEventListener('wheel', (e) => { if (!(e.ctrlKey || e.metaKey)) return; e.preventDefault(); const [x, y] = local(e); zoomAt(x, y, Math.exp(-e.deltaY * 0.0045)); }, { passive: false });
+  wrap.addEventListener('dblclick', (e) => { if (e.target.closest('.view-tools')) return; const [x, y] = local(e); zoomAt(x, y, e.shiftKey ? 0.5 : 2); });
+  return { f, z, schedule, refit: () => { z.user = false; schedule(); } };
+}
+// chunked paths: many small paths fill far faster than one path with a hundred thousand pieces
+function chunked(count, add, size = 512) {
+  const out = [];
+  let p = null;
+  for (let i = 0; i < count; i++) { if (i % size === 0) { p = new Path2D(); out.push(p); } add(p, i); }
+  return out;
+}
+// fill and outline in the same colour, so that tiles which only meet along an edge show no hairline seams
+function solid(c, paths, color, lw) {
+  c.fillStyle = color; c.strokeStyle = color; c.lineWidth = lw; c.lineJoin = 'miter';
+  for (const p of paths) { c.fill(p); c.stroke(p); }
+}
+const dot = (c, v, x, y, r = 4, color = PRINT.red) => { c.beginPath(); c.arc(v.ox + x * v.s, v.oy - y * v.s, r, 0, Math.PI * 2); c.fillStyle = color; c.fill(); c.strokeStyle = PRINT.paper; c.lineWidth = 1.5; c.stroke(); };
+
+// a polyline (Float64Array or [[x,y],...]) as SVG points with y flipped
+const svgPts = (P) => (P instanceof Float64Array ? Array.from({ length: P.length / 2 }, (_, i) => [P[2 * i], P[2 * i + 1]]) : P).map(([x, y]) => `${x.toFixed(4)},${(-y).toFixed(4)}`).join(' ');
+function miniCurve(id, P, dots = true) {
+  const pts = P instanceof Float64Array ? Array.from({ length: P.length / 2 }, (_, i) => [P[2 * i], P[2 * i + 1]]) : P;
+  $(id).innerHTML = `<line x1="0" y1="0" x2="1" y2="0" stroke="#8a8a84" stroke-width="0.008" stroke-dasharray="0.025 0.02"/>` +
+    `<polyline points="${svgPts(pts)}" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linejoin="round"/>` +
+    (dots ? `<g fill="currentColor">${pts.map(([x, y], i) => `<circle cx="${x.toFixed(4)}" cy="${(-y).toFixed(4)}" r="${i === 0 || i === pts.length - 1 ? 0.03 : 0.018}"/>`).join('')}</g>` : '');
+}
+function miniTree(id, links, dx = 0) {
+  const ends = new Set(), mid = new Set(), k = (x, y) => `${x.toFixed(4)},${y.toFixed(4)}`;
+  let s = '';
+  for (const [px, py, qx, qy] of links) {
+    s += `<line x1="${(px + dx).toFixed(4)}" y1="${(-py).toFixed(4)}" x2="${(qx + dx).toFixed(4)}" y2="${(-qy).toFixed(4)}" stroke="currentColor" stroke-width="0.02" stroke-linecap="round"/>`;
+    mid.add(k(px + dx, py)); mid.add(k(qx + dx, qy));
+  }
+  s += `<g fill="currentColor">${[...mid].map((p) => { const [x, y] = p.split(',').map(Number); const big = (Math.abs(x - dx) < 1e-6 || Math.abs(x - dx - 1) < 1e-6) && Math.abs(y) < 1e-6; return `<circle cx="${x}" cy="${-y}" r="${big ? 0.03 : 0.018}"/>`; }).join('')}</g>`;
+  return s;
+}
+// canvas transform for a similarity map f = [ar, ai, br, bi, m] composed with the view
+function setMap(f, c, v, fig) {
+  const [ar, ai, br, bi, m] = f, k = fig.dpr * v.s;
+  if (m) c.setTransform(k * ar, -k * ai, k * ai, k * ar, fig.dpr * (v.ox + v.s * br), fig.dpr * (v.oy - v.s * bi));
+  else c.setTransform(k * ar, -k * ai, -k * ai, -k * ar, fig.dpr * (v.ox + v.s * br), fig.dpr * (v.oy - v.s * bi));
+}
+const segPath = (segs, pick) => { const p = new Path2D(); for (const s of segs) if (!pick || pick(s)) { p.moveTo(s[0], s[1]); p.lineTo(s[2], s[3]); } return p; };
+// Plate 64's chevrons, measured from the plate: each interval a→b becomes a thin quadrilateral
+// pointing toward F, the corner the next stage would add (see DECISIONS.md)
+const CHEV_OUT = 0.43, CHEV_IN = 0.235;
+function chevronPaths(P, F, m) {
+  return chunked(m, (p, i) => {
+    const ax = P[2 * i], ay = P[2 * i + 1], bx = P[2 * i + 2], by = P[2 * i + 3], mx = (ax + bx) / 2, my = (ay + by) / 2;
+    const vx = F[2 * i] - mx, vy = F[2 * i + 1] - my;
+    p.moveTo(ax, ay); p.lineTo(mx + CHEV_OUT * vx, my + CHEV_OUT * vy); p.lineTo(bx, by); p.lineTo(mx + CHEV_IN * vx, my + CHEV_IN * vy); p.closePath();
+  });
+}
+
+// Plate data for the snowflake sweeps, the Peano–Gosper curve and its trees, the fudgeflake and
+// the quartet. The generator and cascade machinery lives in src/shared/geometry.js.
+const DEG = Math.PI / 180;
+// ---- Plates 68–69: the snowflake sweeps ----
+const pol = (L, a) => [L * Math.cos(a * DEG), L * Math.sin(a * DEG)];
+const SNOW_PTS = (() => {
+  const steps = [pol(1 / 3, 60), pol(1 / 3, 60), pol(1 / 3, 0), pol(1 / 3, -60), pol(1 / R3, 210), pol(1 / 3, 0), pol(1 / 3, 0)];
+  const P = [[0, 0]];
+  for (const [dx, dy] of steps) { const [x, y] = P[P.length - 1]; P.push([x + dx, y + dy]); }
+  P[7] = [1, 0];
+  return P;
+})();
+const SNOW_CODES = [1, 3, 3, 3, 2, 1, 3];       // read off the book's second stage
+const GEN_S = genFromCodes(SNOW_PTS, SNOW_CODES), GEN_F = mirrorGen(GEN_S);
+// the 13-interval generator: S with its long fifth leg replaced by F reduced by 1/√3. Its legs that run backward
+// can hold the same generator run backward (GEN_13S, as in the large figure of Plate 69), or the other one
+// (GEN_13, as in Plate 68, the caption's second stage and the small figures of Plate 69)
+const GEN_13S = substituteLeg(GEN_S, 4, GEN_F), GEN_13F = mirrorGen(GEN_13S);
+const GEN_13 = normaliseGen(GEN_13S), GEN_13M = mirrorGen(GEN_13);
+// the snowflake's outline: a hexagon of side 1/√3 around the triangle on [0,1], then j steps of the two-piece
+// generator (each edge -> two edges of 1/√3 at 120°), bumps all inward, then all outward, and so on
+function snowOutline(j) {
+  let P = [[0, 0], [0.5, -R3 / 6], [1, 0], [1, R3 / 3], [0.5, R3 / 2], [0, R3 / 3]];
+  for (let k = 0; k < j; k++) {
+    const s = k % 2 === 0 ? 1 : -1, Q = [];
+    for (let i = 0; i < P.length; i++) {
+      const [ax, ay] = P[i], [bx, by] = P[(i + 1) % P.length], dx = bx - ax, dy = by - ay;
+      Q.push([ax, ay], [(ax + bx) / 2 - dy * s / (2 * R3), (ay + by) / 2 + dx * s / (2 * R3)]);
+    }
+    P = Q;
+  }
+  return P;
+}
+// the Koch snowflake on the triangle (0,0) (1,0) (1/2, √3/2), stage n, as a flat polygon
+function kochFlake(n) {
+  let P = [[0, 0], [1, 0], [0.5, R3 / 2]];
+  for (let k = 0; k < n; k++) {
+    const Q = [];
+    for (let i = 0; i < P.length; i++) {
+      const [ax, ay] = P[i], [bx, by] = P[(i + 1) % P.length], dx = (bx - ax) / 3, dy = (by - ay) / 3;
+      Q.push([ax, ay], [ax + dx, ay + dy], [ax + dx + dx * 0.5 + dy * R3 / 2, ay + dy + dy * 0.5 - dx * R3 / 2], [ax + 2 * dx, ay + 2 * dy]);
+    }
+    P = Q;
+  }
+  return P;
+}
+// ---- Plates 70–71: the Peano–Gosper curve on the triangular lattice ----
+const HEX = [[1, 0], [0, 1], [-1, 1], [-1, 0], [0, -1], [1, -1]];
+function flowsnakeLattice(n) {
+  let s = 'A';
+  for (let k = 0; k < n; k++) s = s.replace(/[AB]/g, (c) => (c === 'A' ? 'A-B--B+A++AA+B-' : '+A-BB--B-A++A+B'));
+  let x = 0, y = 0, h = 0;
+  const P = [[0, 0]];
+  // turned the book's way: the generator rises to the left of [0, 1]
+  for (const c of s) { if (c === '+') h = (h + 5) % 6; else if (c === '-') h = (h + 1) % 6; else { x += HEX[h][0]; y += HEX[h][1]; P.push([x, y]); } }
+  return P;
+}
+// lattice point -> page: the curve runs from (0,0) to (1,0)
+function latticeFrame(P) {
+  const [ex, ey] = P[P.length - 1], fx = ex + ey / 2, fy = (ey * R3) / 2, L2 = fx * fx + fy * fy;
+  const cr = fx / L2, ci = -fy / L2;           // multiply by 1/end
+  return (i, j) => { const x = i + j / 2, y = (j * R3) / 2; return [cr * x - ci * y, cr * y + ci * x]; };
+}
+// Rivers and watersheds: the lattice triangles with all three corners on the curve, joined across the links the
+// curve does not use. Each piece is a tree; a triangle lies left (river) or right (watershed) of the curve.
+function gosperTrees(n) {
+  const P = flowsnakeLattice(n), key = (i, j) => (i + 50000) * 100003 + (j + 50000), V = new Set(P.map(([i, j]) => key(i, j)));
+  const pt = new Map(P.map(([i, j]) => [key(i, j), [i, j]]));
+  const ekey = (a, b) => { const ka = key(...a), kb = key(...b); return ka < kb ? ka + ':' + kb : kb + ':' + ka; };
+  const curve = new Set();
+  for (let k = 0; k + 1 < P.length; k++) curve.add(ekey(P[k], P[k + 1]));
+  const side = new Map(), tkey = (t) => t.map((p) => key(...p)).sort((a, b) => a - b).join(',');
+  const cross = (a, b, c) => { const ax = a[0] + a[1] / 2, ay = a[1], bx = b[0] + b[1] / 2, by = b[1], cx = c[0] + c[1] / 2, cy = c[1]; return (bx - ax) * (cy - ay) - (by - ay) * (cx - ax); };
+  for (let k = 0; k + 1 < P.length; k++) {
+    const a = P[k], b = P[k + 1], h = HEX.findIndex(([dx, dy]) => dx === b[0] - a[0] && dy === b[1] - a[1]);
+    for (const hh of [(h + 1) % 6, (h + 5) % 6]) { const c = [a[0] + HEX[hh][0], a[1] + HEX[hh][1]]; side.set(tkey([a, b, c]), cross(a, b, c) > 0 ? 1 : -1); }
+  }
+  const tris = [];
+  for (const [i, j] of P) for (const t of [[[i, j], [i + 1, j], [i, j + 1]], [[i, j], [i + 1, j], [i + 1, j - 1]]]) if (t.every((p) => V.has(key(...p)))) tris.push(t);
+  const tid = new Map(); tris.forEach((t, k) => tid.set(tkey(t), k));
+  const byEdge = new Map();
+  tris.forEach((t, k) => { for (const [u, v] of [[0, 1], [1, 2], [0, 2]]) { const e = ekey(t[u], t[v]); if (!byEdge.has(e)) byEdge.set(e, []); byEdge.get(e).push(k); } });
+  // a triangle's side: from any of its curve edges; triangles without one take their neighbours' side
+  const sideOf = tris.map((t) => side.get(tkey(t)) || 0);
+  const links = [], adj = tris.map(() => []);
+  for (const [e, ks] of byEdge) if (ks.length === 2 && !curve.has(e)) { links.push(ks); adj[ks[0]].push(ks[1]); adj[ks[1]].push(ks[0]); }
+  for (let changed = true; changed;) { changed = false; tris.forEach((t, k) => { if (!sideOf[k]) { const s = adj[k].map((o) => sideOf[o]).find((v) => v); if (s) { sideOf[k] = s; changed = true; } } }); }
+  // outer boundary edges (one triangle only), with the side of that triangle
+  const boundary = [];
+  for (const [e, ks] of byEdge) if (ks.length === 1) { const [ka, kb] = e.split(':').map(Number); boundary.push([ka, kb, sideOf[ks[0]]]); }
+  return { P, tris, links, adj, sideOf, boundary: boundary.map(([ka, kb, sd]) => [pt.get(ka), pt.get(kb), sd]) };
+}
+
 // ---- Plates 72–73 ----
 // fudgeflake tree: three links from the centre of the triangle on [0,1] to its corners
 const FUDGE_C = [0.5, R3 / 6], FUDGE_T = [0.5, R3 / 2];
@@ -619,167 +822,8 @@ const GOS_TREE = (() => {
   const L = [[S, A], [A, B], [B, E], [A, Cc], [Cc, D], [Cc, F], [F, G]].map(([p, q]) => [p[0], p[1], q[0], q[1]]);
   return { links: L, codes: [3, 1, 3, 1, 3, 3, 1], main: [1, 1, 1, 0, 0, 0, 0] };
 })();
-// CORE END
 
 (() => {
-  const $ = (id) => document.getElementById(id);
-  const fmt = (n) => n.toLocaleString('en-US');
-  const PRINT = { paper: '#ecebe6', ink: '#151515', rule: '#c9c8c2', muted: '#66665f', accent: '#2f5f9e', red: '#c2452d', faint: '#bdbbb3', gray: '#8f8e88' };
-  const RAMP = [[233, 185, 73], [217, 113, 59], [184, 66, 79], [125, 58, 120], [63, 79, 151], [43, 122, 138]];
-  const ramp = (t, a = 1) => {
-    const x = Math.max(0, Math.min(1, t)) * (RAMP.length - 1), i = Math.min(RAMP.length - 2, Math.floor(x)), f = x - i;
-    const c = RAMP[i].map((v, k) => Math.round(v + (RAMP[i + 1][k] - v) * f));
-    return `rgba(${c[0]},${c[1]},${c[2]},${a})`;
-  };
-  const CAT = ['#151515', '#9a988f', '#2f5f9e', '#c2452d', '#3f8f6c', '#b58a2a', '#6b4e9b', '#5f8fae'];
-
-  // ---------- shared plumbing ----------
-  function figure(canvas, draw) {
-    const wrap = canvas.parentElement;
-    const f = { canvas, ctx: canvas.getContext('2d'), w: 1, h: 1, dpr: 1, draw };
-    const resize = () => {
-      f.dpr = Math.min(2, window.devicePixelRatio || 1);
-      f.w = wrap.clientWidth || 1; f.h = wrap.clientHeight || 1;
-      canvas.width = Math.round(f.w * f.dpr); canvas.height = Math.round(f.h * f.dpr);
-      f.draw();
-    };
-    new ResizeObserver(resize).observe(wrap);
-    return f;
-  }
-  function fitBox(f, bb, pad = 0.04) {
-    const w = Math.max(1e-9, bb.x1 - bb.x0), h = Math.max(1e-9, bb.y1 - bb.y0), s = Math.min(f.w / (w * (1 + 2 * pad)), f.h / (h * (1 + 2 * pad)));
-    return { s, ox: f.w / 2 - ((bb.x0 + bb.x1) / 2) * s, oy: f.h / 2 + ((bb.y0 + bb.y1) / 2) * s };
-  }
-  const toWorld = (f, v) => f.ctx.setTransform(f.dpr * v.s, 0, 0, -f.dpr * v.s, f.dpr * v.ox, f.dpr * v.oy);
-  const toScreen = (f) => f.ctx.setTransform(f.dpr, 0, 0, f.dpr, 0, 0);
-  function paper(f, color) { f.ctx.setTransform(1, 0, 0, 1, 0, 0); f.ctx.fillStyle = color; f.ctx.fillRect(0, 0, f.canvas.width, f.canvas.height); }
-  function polyPath(P, closed = true) {
-    const p = new Path2D(), m = P.length / 2;
-    p.moveTo(P[0], P[1]);
-    for (let i = 1; i < m; i++) p.lineTo(P[2 * i], P[2 * i + 1]);
-    if (closed) p.closePath();
-    return p;
-  }
-  function bbox(P, bb = { x0: Infinity, x1: -Infinity, y0: Infinity, y1: -Infinity }) {
-    for (let i = 0; i < P.length; i += 2) { bb.x0 = Math.min(bb.x0, P[i]); bb.x1 = Math.max(bb.x1, P[i]); bb.y0 = Math.min(bb.y0, P[i + 1]); bb.y1 = Math.max(bb.y1, P[i + 1]); }
-    return bb;
-  }
-  function stepButtons(el, values, text, aria, onPick) {
-    const bs = values.map((v) => {
-      const b = document.createElement('button');
-      b.type = 'button'; b.textContent = text(v); b.setAttribute('aria-label', aria(v));
-      b.addEventListener('click', () => onPick(v));
-      el.append(b);
-      return b;
-    });
-    const mark = (cur) => bs.forEach((b, i) => b.setAttribute('aria-pressed', String(values[i] === cur)));
-    mark.buttons = bs;
-    return mark;
-  }
-  // pan and zoom: a quick rescaled snapshot while moving, a full redraw once it settles
-  function zoomable(wrapId, canvasId, fitOf, render, opts = {}) {
-    const maxZoom = opts.maxZoom || 400;
-    const wrap = $(wrapId), z = { view: null, user: false, snapView: null, raf: 0, full: 0 };
-    const snap = document.createElement('canvas');
-    const f = figure($(canvasId), () => draw());
-    function touch() { wrap.style.touchAction = z.view && z.view.s > z.view.fit * 1.02 ? 'none' : 'pan-y'; }
-    function draw() {
-      if (!z.view || !z.user) { z.view = fitOf(f); z.view.fit = z.view.s; z.user = false; touch(); }
-      render(f, z.view);
-      snap.width = f.canvas.width; snap.height = f.canvas.height; snap.getContext('2d').drawImage(f.canvas, 0, 0);
-      z.snapView = { s: z.view.s, ox: z.view.ox, oy: z.view.oy };
-    }
-    function quick() {
-      const v = z.view, k = v.s / z.snapView.s, c = f.ctx;
-      c.setTransform(1, 0, 0, 1, 0, 0); c.fillStyle = PRINT.paper; c.fillRect(0, 0, f.canvas.width, f.canvas.height);
-      c.drawImage(snap, (v.ox - z.snapView.ox * k) * f.dpr, (v.oy - z.snapView.oy * k) * f.dpr, snap.width * k, snap.height * k);
-    }
-    function schedule() { if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; draw(); }); }
-    function moved() {
-      if (!z.snapView) { schedule(); return; }
-      if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; quick(); });
-      clearTimeout(z.full); z.full = setTimeout(schedule, 160);
-    }
-    function zoomAt(px, py, k) {
-      const v = z.view, ns = Math.min(v.fit * maxZoom, Math.max(v.fit * 0.8, v.s * k)), wx = (px - v.ox) / v.s, wy = (v.oy - py) / v.s;
-      v.s = ns; v.ox = px - wx * ns; v.oy = py + wy * ns; z.user = true; touch(); moved();
-    }
-    function pan(dx, dy) { z.view.ox += dx; z.view.oy += dy; z.user = true; moved(); }
-    wrap.querySelector('[data-z="in"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1.6));
-    wrap.querySelector('[data-z="out"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1 / 1.6));
-    wrap.querySelector('[data-z="fit"]').addEventListener('click', () => { z.user = false; schedule(); });
-    const pts = new Map();
-    let pinch = null, down = null;
-    const local = (e) => { const r = wrap.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
-    wrap.addEventListener('pointerdown', (e) => {
-      if (e.target.closest('.view-tools')) return;
-      pts.set(e.pointerId, local(e));
-      down = pts.size === 1 ? { p: local(e), t: performance.now(), moved: 0 } : null;
-      try { wrap.setPointerCapture(e.pointerId); } catch (_) {}
-      if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), m: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2] }; }
-      wrap.classList.add('dragging');
-    });
-    wrap.addEventListener('pointermove', (e) => {
-      if (!pts.has(e.pointerId)) return;
-      const prev = pts.get(e.pointerId), cur = local(e);
-      pts.set(e.pointerId, cur);
-      if (down) down.moved = Math.max(down.moved, Math.hypot(cur[0] - down.p[0], cur[1] - down.p[1]));
-      if (pts.size === 2 && pinch) {
-        const [a, b] = [...pts.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]), m = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
-        pan(m[0] - pinch.m[0], m[1] - pinch.m[1]);
-        if (pinch.d > 0) zoomAt(m[0], m[1], d / pinch.d);
-        pinch = { d, m };
-      } else if (pts.size === 1 && (e.pointerType !== 'touch' || z.view.s > z.view.fit * 1.02)) pan(cur[0] - prev[0], cur[1] - prev[1]);
-    });
-    const end = (e) => {
-      if (down && pts.size === 1 && down.moved < 5 && opts.onTap) { const [x, y] = local(e), v = z.view; opts.onTap((x - v.ox) / v.s, (v.oy - y) / v.s); }
-      down = null;
-      pts.delete(e.pointerId); if (pts.size < 2) pinch = null; if (!pts.size) wrap.classList.remove('dragging');
-    };
-    wrap.addEventListener('pointerup', end); wrap.addEventListener('pointercancel', (e) => { down = null; end(e); });
-    wrap.addEventListener('wheel', (e) => { if (!(e.ctrlKey || e.metaKey)) return; e.preventDefault(); const [x, y] = local(e); zoomAt(x, y, Math.exp(-e.deltaY * 0.0045)); }, { passive: false });
-    wrap.addEventListener('dblclick', (e) => { if (e.target.closest('.view-tools')) return; const [x, y] = local(e); zoomAt(x, y, e.shiftKey ? 0.5 : 2); });
-    return { f, z, schedule, refit: () => { z.user = false; schedule(); } };
-  }
-  // chunked paths: many small paths fill far faster than one path with a hundred thousand pieces
-  function chunked(count, add, size = 512) {
-    const out = [];
-    let p = null;
-    for (let i = 0; i < count; i++) { if (i % size === 0) { p = new Path2D(); out.push(p); } add(p, i); }
-    return out;
-  }
-  // fill and outline in the same colour, so that tiles which only meet along an edge show no hairline seams
-  function solid(c, paths, color, lw) {
-    c.fillStyle = color; c.strokeStyle = color; c.lineWidth = lw; c.lineJoin = 'miter';
-    for (const p of paths) { c.fill(p); c.stroke(p); }
-  }
-  const dot = (c, v, x, y, r = 4, color = PRINT.red) => { c.beginPath(); c.arc(v.ox + x * v.s, v.oy - y * v.s, r, 0, Math.PI * 2); c.fillStyle = color; c.fill(); c.strokeStyle = PRINT.paper; c.lineWidth = 1.5; c.stroke(); };
-
-  // a polyline (Float64Array or [[x,y],...]) as SVG points with y flipped
-  const svgPts = (P) => (P instanceof Float64Array ? Array.from({ length: P.length / 2 }, (_, i) => [P[2 * i], P[2 * i + 1]]) : P).map(([x, y]) => `${x.toFixed(4)},${(-y).toFixed(4)}`).join(' ');
-  function miniCurve(id, P, dots = true) {
-    const pts = P instanceof Float64Array ? Array.from({ length: P.length / 2 }, (_, i) => [P[2 * i], P[2 * i + 1]]) : P;
-    $(id).innerHTML = `<line x1="0" y1="0" x2="1" y2="0" stroke="#8a8a84" stroke-width="0.008" stroke-dasharray="0.025 0.02"/>` +
-      `<polyline points="${svgPts(pts)}" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linejoin="round"/>` +
-      (dots ? `<g fill="currentColor">${pts.map(([x, y], i) => `<circle cx="${x.toFixed(4)}" cy="${(-y).toFixed(4)}" r="${i === 0 || i === pts.length - 1 ? 0.03 : 0.018}"/>`).join('')}</g>` : '');
-  }
-  function miniTree(id, links, dx = 0) {
-    const ends = new Set(), mid = new Set(), k = (x, y) => `${x.toFixed(4)},${y.toFixed(4)}`;
-    let s = '';
-    for (const [px, py, qx, qy] of links) {
-      s += `<line x1="${(px + dx).toFixed(4)}" y1="${(-py).toFixed(4)}" x2="${(qx + dx).toFixed(4)}" y2="${(-qy).toFixed(4)}" stroke="currentColor" stroke-width="0.02" stroke-linecap="round"/>`;
-      mid.add(k(px + dx, py)); mid.add(k(qx + dx, qy));
-    }
-    s += `<g fill="currentColor">${[...mid].map((p) => { const [x, y] = p.split(',').map(Number); const big = (Math.abs(x - dx) < 1e-6 || Math.abs(x - dx - 1) < 1e-6) && Math.abs(y) < 1e-6; return `<circle cx="${x}" cy="${-y}" r="${big ? 0.03 : 0.018}"/>`; }).join('')}</g>`;
-    return s;
-  }
-  // canvas transform for a similarity map f = [ar, ai, br, bi, m] composed with the view
-  function setMap(f, c, v, fig) {
-    const [ar, ai, br, bi, m] = f, k = fig.dpr * v.s;
-    if (m) c.setTransform(k * ar, -k * ai, k * ai, k * ar, fig.dpr * (v.ox + v.s * br), fig.dpr * (v.oy - v.s * bi));
-    else c.setTransform(k * ar, -k * ai, -k * ai, -k * ar, fig.dpr * (v.ox + v.s * br), fig.dpr * (v.oy - v.s * bi));
-  }
-  const segPath = (segs, pick) => { const p = new Path2D(); for (const s of segs) if (!pick || pick(s)) { p.moveTo(s[0], s[1]); p.lineTo(s[2], s[3]); } return p; };
 
   // ====================== Plates 68–69: snowflake sweeps ======================
   const stA = { gen: '7', n: 3, seq: ['S', 'S', 'S', 'S', 'S', 'S'], mode: 'teragon', swap: true };
@@ -1155,3 +1199,6 @@ const GOS_TREE = (() => {
 })();
 
 </script>
+
+</body>
+</html>

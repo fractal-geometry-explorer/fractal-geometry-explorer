@@ -22,11 +22,12 @@ Update this file in the same pull request as the work it records.
 
 | Task | Status |
 | :- | :- |
-| Pull a shared library out of the ten existing pages: geometry (similarity maps, decorated generators, cascades, tree cascades, chevrons, rounding), drawing (zoomable canvas, chunked paths, controls) and style | todo |
-| Site shell: chapter index, plate finder, navigation between pages, cross-links | todo |
-| Move the ten existing pages onto the shared library; check each against its published version (`tools/check_build.py`) | todo |
-| Automated checks in CI: build, smoke test (`tests/smoke.cjs`), phone width | todo |
+| Pull a shared library out of the ten existing pages: geometry (similarity maps, decorated generators, cascades, tree cascades, chevrons, rounding), drawing (zoomable canvas, chunked paths, controls) and style | done |
+| Site shell: chapter index, plate finder, navigation between pages, cross-links | done |
+| Move the ten existing pages onto the shared library; check each against its published version (`tools/check_build.py`) | done |
+| Automated checks in CI: build, smoke test (`tests/smoke.cjs`), phone width | done |
 | Hosting: GitHub Pages, published by `.github/workflows/pages.yml` on every merge to `main` | done |
+| Move the three oldest pages (monkeys-tree, minkowski-sausage, wiener-sausage) off their own stylesheet and canvas machinery onto `base.css` and the shared library — their markup and theme-following figures predate the conventions, so it is a rework, not a deduplication (see DECISIONS.md, Foundation) | todo |
 
 ## I Introduction (chapters 1–4)
 

@@ -122,9 +122,6 @@ dl.read dd small { font-size: 11.5px; color: var(--muted); }
 
 .sub { display: grid; gap: 14px; padding-top: 22px; border-top: 1px dashed var(--rule); scroll-margin-top: 64px; }
 .sub h3 { margin: 0; font-size: 15px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
-#loxPlot { width: 100%; height: auto; display: block; background: var(--print-paper); outline: 1px solid var(--print-rule); }
-#loxPlot text { font-family: var(--f-mono); font-size: 10px; fill: #5d5d58; }
-
 .source { font-family: var(--f-body); font-size: 15px; color: var(--muted); margin: 0; max-width: 84ch; }
 .source i { color: var(--text); }
 .source a { color: var(--accent); }

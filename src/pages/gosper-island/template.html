@@ -1,0 +1,165 @@
+<title>Gosper Island</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+#loxPlot { width: 100%; height: auto; display: block; background: var(--print-paper); outline: 1px solid var(--print-rule); }
+#loxPlot text { font-family: var(--f-mono); font-size: 10px; fill: #5d5d58; }</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 6 · pages 46–47</p>
+    <h1><span class="plate-no">Plates 46–47</span><span class="lozenge" aria-hidden="true"></span><span>Gosper Island</span></h1>
+    <p class="dek">W. Gosper's variant of the Koch island. It starts from a hexagon, and each side is replaced by three sides 1/√7 as long, again and again. The area never changes, copies of the island cover the plane, every island splits into seven smaller copies of itself, and a single Peano curve fills it. Each figure is computed from these rules so you can take it apart.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#p46"><b>46</b> Wrapping and filling</a>
+    <a href="#tiling">Tiling and pertiling</a>
+    <a href="#lox">Why no tangent</a>
+    <a href="#p47"><b>47</b> The seven provinces</a>
+  </nav>
+
+  <!-- ===================== PLATE 46 ===================== -->
+  <section class="plate" id="p46">
+    <div class="plate-head">
+      <p class="no">Plate 46 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Alternative Koch island</h2>
+      <p class="dim">Coastline D = log 3 / log √7 = log 9 / log 7 ≈ 1.12915</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq"><canvas id="c46" role="img" aria-label="Gosper island"></canvas></div>
+        <figcaption><strong>Gosper island</strong> · wrapping stage <span id="c46s">2</span><span id="c46f"> · filling stage 3</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The initiator is a regular hexagon. Each side is replaced by three sides 1/√7 as long, bent as in the generator below. The bold line is what Mandelbrot calls the <i>wrapping</i>. The thin line inside, the <i>filling</i>, is the Peano–Gosper curve of Plate 70, drawn one stage further on. It runs from one corner of the hexagon to another and, in the limit, fills the island completely.</p>
+        <div class="mini" aria-label="The generator: three steps of length 1 over root 7">
+          <svg viewBox="-0.06 -0.27 1.12 0.48" aria-hidden="true">
+            <line x1="0" y1="0" x2="1" y2="0" stroke="#8a8a84" stroke-width="0.008" stroke-dasharray="0.025 0.02"/>
+            <polygon points="0,0 0.35714,-0.12372 0.5,0" fill="rgba(47,95,158,0.42)"/>
+            <polygon points="0.5,0 0.64286,0.12372 1,0" fill="rgba(186,88,44,0.42)"/>
+            <polyline points="0,0 0.35714,-0.12372 0.64286,0.12372 1,0" fill="none" stroke="currentColor" stroke-width="0.016" stroke-linejoin="round"/>
+            <g fill="currentColor"><circle cx="0" cy="0" r="0.022"/><circle cx="0.35714" cy="-0.12372" r="0.016"/><circle cx="0.64286" cy="0.12372" r="0.016"/><circle cx="1" cy="0" r="0.022"/></g>
+            <text x="0.1" y="-0.17" font-size="0.065" font-family="IBM Plex Mono, monospace" fill="#5d5d58">outside</text>
+            <text x="0.72" y="0.2" font-size="0.065" font-family="IBM Plex Mono, monospace" fill="#5d5d58">inside</text>
+          </svg>
+          <div class="fx">N = 3 steps, each r = 1/√7<br>D = log 3 / log √7 ≈ 1.1291<br>symmetric about its center point</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Wrapping stage</span><span class="value" id="s46v">stage 2</span></div>
+          <div class="steps" id="s46" role="group" aria-label="Wrapping stage"></div>
+          <div class="btn-row"><button type="button" class="btn primary" id="play46">Grow it</button></div>
+        </div>
+        <div class="group">
+          <label class="check" for="fill46"><input type="checkbox" id="fill46" checked> Draw the filling (the Peano–Gosper curve, one stage further on)</label>
+          <label class="check" for="gain46"><input type="checkbox" id="gain46"> Show what this stage moved, compared with the stage before</label>
+          <div class="key" id="key46" hidden><span><i style="background:rgba(47,95,158,0.42)"></i>land added (peninsulas)</span><span><i style="background:rgba(186,88,44,0.42)"></i>land removed (bays)</span></div>
+        </div>
+        <dl class="read">
+          <div><dt>Sides</dt><dd id="r46a">54</dd></div>
+          <div><dt>Each side</dt><dd id="r46b">1/7</dd></div>
+          <div><dt>Coastline length</dt><dd id="r46c">1.286 <small>× the hexagon's</small></dd></div>
+          <div><dt>Area</dt><dd id="r46d">1 <small>× the hexagon, at every stage</small></dd></div>
+        </dl>
+        <div class="label-row"><span class="label">Moved out = moved in</span><span class="value" id="r46e">3/98 = 0.0306 of the hexagon</span></div>
+        <p class="note">The generator is symmetric about its center point, so each peninsula it pushes out is matched by a bay of exactly the same area. The coastline grows by 3/√7 ≈ 1.134 at every stage, so the limit coastline is infinitely long. The area stays 3√3/2 for a hexagon of side 1.</p>
+      </div>
+    </div>
+
+    <!-- tiling and pertiling -->
+    <div class="sub" id="tiling">
+      <h3>Tiling and pertiling</h3>
+      <div class="plate-body">
+        <figure class="fig">
+          <div class="canvas-wrap r-sq"><canvas id="cT" tabindex="0" role="img" aria-label="Gosper island divided into provinces. Use the arrow keys to pick a province and Enter to expand it."></canvas></div>
+          <figcaption><strong>Provinces</strong> · <span id="cTn">7 provinces</span> · click a province to expand it to the whole island</figcaption>
+        </figure>
+        <div class="side">
+          <p class="cap">Copies of the Gosper island cover the plane with no gaps and no overlaps, which is called <i>tiling</i>. Better still, each island divides into seven <i>provinces</i>, and every province is the whole island shrunk by 1/√7 and turned 19.1°. Mandelbrot coined <i>pertiling</i> for this. Seven hexagons never quite make a bigger hexagon; Gosper's island bends the hexagon just enough that seven islands make a bigger island.</p>
+          <div class="group">
+            <div class="label-row"><span class="label">Divide into</span><span class="value" id="dTv">7 provinces</span></div>
+            <div class="steps words" id="dT" role="group" aria-label="Number of provinces"></div>
+          </div>
+          <label class="slider" for="exT">
+            <span class="label-row"><span class="label">Pull the provinces apart</span><span class="value" id="exTv">0%</span></span>
+            <input type="range" id="exT" min="0" max="100" value="0">
+          </label>
+          <label class="check" for="tileT"><input type="checkbox" id="tileT"> Show the neighbouring islands (the tiling)</label>
+          <p class="readline" id="infoT" aria-live="polite">Click any of the 7 provinces (or use the arrow keys and Enter) to expand it to the whole island.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- loxodromic points -->
+    <div class="sub" id="lox">
+      <h3>Why a tangent cannot be defined at any point</h3>
+      <div class="plate-body">
+        <figure class="fig">
+          <div class="canvas-wrap r-lox"><canvas id="cL" role="img" aria-label="Chord from a corner of the hexagon to a point on the coastline"></canvas></div>
+          <figcaption><strong>Chord to a corner</strong> · the view zooms straight in on the corner, √7× per step, without turning. The arc around the corner adds up how far the chord has turned.</figcaption>
+        </figure>
+        <div class="side">
+          <p class="cap">Fix a corner of the first hexagon and draw the chord from it to a point on the coastline. Near the corner the coastline is a copy of itself √7 times smaller and turned 19.1°. So each time the point gets √7 times closer, the chord turns another 19.1°. Coming from either side it winds around the corner without end, always clockwise. Mandelbrot calls such a point <i>loxodromic</i>; every point the coastline reaches at a finite stage is one.</p>
+          <div class="group">
+            <div class="label-row"><span class="label">The point approaches</span></div>
+            <div class="steps words" id="sideL" role="group" aria-label="Which side the point approaches from"></div>
+          </div>
+          <label class="slider" for="uL">
+            <span class="label-row"><span class="label">Toward the corner</span><span class="value" id="uLv">distance 1</span></span>
+            <input type="range" id="uL" min="0" max="2000" value="0">
+          </label>
+          <div class="btn-row"><button type="button" class="btn primary" id="playL">Play slowly</button></div>
+          <div class="label-row"><span class="label">The chord has turned</span><span class="value" id="aLv">0.0°</span></div>
+          <svg id="loxPlot" viewBox="0 0 360 180" role="img" aria-label="Chord direction against how many times closer the point is"></svg>
+          <p class="note">A full turn takes about 18.8 steps of √7, with the point about 90 million times closer. Koch's corner in Plate 42 is different: there the chord only swings inside a 30° band.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 47 ===================== -->
+  <section class="plate" id="p47">
+    <div class="plate-head">
+      <p class="no">Plate 47 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Gosper island with variable-width hatching</h2>
+      <p class="dim">Coastline D ≈ 1.1291 · the filling: a Peano curve, D = 2</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="w47">
+          <canvas id="c47" role="img" aria-label="Gosper island hatched by the Peano–Gosper curve in three line widths"></canvas>
+          <div class="view-tools">
+            <button type="button" id="zin47" aria-label="Zoom in">+</button>
+            <button type="button" id="zout47" aria-label="Zoom out">−</button>
+            <button type="button" id="zfit47">Fit</button>
+          </div>
+        </div>
+        <figcaption><strong>Plate 47</strong> · filling stage <span id="c47s">5</span> · <span id="c47n">16,807</span> steps · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">An advanced stage of the island, hatched by the filling curve at stage 5 in lines of three widths. Thicker lines read as darker gray, so the seven provinces show up as tones: a light center ringed by six copies, alternately dark and medium. The whole hatching is one unbroken line. Mandelbrot adds that the outline of France, often called <i>the Hexagon</i>, looks more like this plate than like a hexagon.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Filling stage</span><span class="value" id="s47v">stage 5 · 16,807 steps</span></div>
+          <div class="steps" id="s47" role="group" aria-label="Filling stage"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Line widths by</span></div>
+          <div class="steps words" id="h47" role="group" aria-label="What the line widths follow"></div>
+        </div>
+        <div class="group">
+          <label class="check" for="wrap47"><input type="checkbox" id="wrap47"> Draw the wrapping (the coastline, one stage behind)</label>
+          <div class="btn-row"><button type="button" class="btn primary" id="trace47">Trace the curve</button></div>
+          <p class="readline" id="info47" aria-live="polite">The curve fills one province completely before it crosses into the next.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 6, pages 46–47 (Plates 46 and 47), with the Peano–Gosper curve from pages 70–71. Gosper's curve was first published in Martin Gardner's column (1976). Every figure is computed from the constructions in the captions; nothing is traced from the book.</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>

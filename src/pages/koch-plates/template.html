@@ -1,0 +1,223 @@
+<title>Triadic Koch Island</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.r-snow { aspect-ratio: 1 / 1; }
+.r-tan { aspect-ratio: 5 / 4; }
+#tanPlot { width: 100%; height: auto; display: block; background: var(--print-paper); outline: 1px solid var(--print-rule); }
+#tanPlot text { font-family: var(--f-mono); font-size: 10px; fill: #5d5d58; }
+#ss { width: 100%; height: auto; display: block; background: var(--print-paper); outline: 1px solid var(--rule); }
+#ss .piece { fill: none; stroke: var(--print-ink); stroke-width: 1.4; stroke-linejoin: round; pointer-events: none; }
+#ss .piece.alt { stroke: #6e6e69; }
+#ss .hit { fill: none; stroke: transparent; stroke-width: 16; stroke-linejoin: round; pointer-events: stroke; cursor: pointer; }
+#ss .pc { outline: none; }
+#ss .pc:hover .piece, #ss .pc:focus-visible .piece { stroke: #2f5f9e; stroke-width: 2.4; }
+#ss .ghost { fill: none; stroke: #2f5f9e; stroke-width: 2.2; stroke-linejoin: round; pointer-events: none; }
+#ss .dim-ink { stroke: var(--print-ink); stroke-width: 1.6; fill: none; }
+#ss .cell { fill: none; stroke: var(--print-ink); stroke-width: 1.2; }
+#ss text { font-family: var(--f-mono); font-size: 12px; fill: #45453f; }
+.formulas { display: grid; gap: 6px; font-family: var(--f-mono); font-size: 13px; }
+.formulas div { display: grid; grid-template-columns: 7.5em 1fr; gap: 8px; }
+.formulas b { font-family: var(--f-display); font-weight: 700; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.sf { display: flex; flex-wrap: wrap; gap: 6px; }
+.sf button { min-width: 50px; height: 34px; font: 500 12.5px/1 var(--f-mono); color: var(--text); background: var(--surface); border: 1px solid var(--rule); cursor: pointer; }
+.sf button[data-f="1"] { background: var(--text); color: var(--page); border-color: var(--text); }
+.sf button:disabled { opacity: 0.35; cursor: default; }</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 6 · pages 42–45</p>
+    <h1><span class="plate-no">Plates 42–45</span><span class="lozenge" aria-hidden="true"></span><span>Triadic Koch Island</span></h1>
+    <p class="dek">Four plates on the Koch snowflake: von Koch's construction, Cesàro's, what a fractional dimension measures, and the snowflake printed as a lake full of waves. Each is rebuilt from its rules so you can step through it.</p>
+  </header>
+
+  <nav class="index" aria-label="Plates">
+    <a href="#p42"><b>42</b> Koch's construction</a>
+    <a href="#p43"><b>43</b> Cesàro's construction</a>
+    <a href="#p44"><b>44</b> Two kinds of self-similarity</a>
+    <a href="#p45"><b>45</b> The Koch lake</a>
+  </nav>
+
+  <!-- ===================== PLATE 42 ===================== -->
+  <section class="plate" id="p42">
+    <div class="plate-head">
+      <p class="no">Plate 42 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Original construction by Helge von Koch</h2>
+      <p class="dim">Coastline dimension D = log 4 / log 3 ≈ 1.26186</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-snow"><canvas id="c42" role="img" aria-label="Koch island"></canvas></div>
+        <figcaption><strong>Koch island</strong> · stage <span id="c42s">2</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Start with a black equilateral triangle. On the middle third of every side, paste a triangular peninsula a third as wide. The triangle becomes a Star of David, then a 48-sided island, and so on forever. The first triangle's corners never move. Every other point either settles after finitely many stages or keeps moving by ever smaller amounts toward the limit coastline.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="s42v">stage 2</span></div>
+          <div class="steps" id="s42" role="group" aria-label="Stage"></div>
+          <div class="btn-row">
+            <button type="button" class="btn primary" id="play42">Grow it</button>
+            <label class="check" for="new42"><input type="checkbox" id="new42" checked> Show this stage's new peninsulas in blue</label>
+          </div>
+        </div>
+        <dl class="read">
+          <div><dt>Sides</dt><dd id="r42a">48</dd></div>
+          <div><dt>Each side</dt><dd id="r42b">1/9</dd></div>
+          <div><dt>Coastline length</dt><dd id="r42c">5.333 <small>sides of the triangle</small></dd></div>
+          <div><dt>Area</dt><dd id="r42d">1.4667 <small>× triangle, → 1.6</small></dd></div>
+        </dl>
+        <p class="note">Each stage multiplies the coastline by 4/3, so its length grows without limit, while the area converges to 8/5 of the first triangle.</p>
+      </div>
+    </div>
+
+    <div class="sub">
+      <h3>Why a tangent cannot be defined here</h3>
+      <div class="plate-body">
+        <figure class="fig">
+          <div class="canvas-wrap r-tan"><canvas id="ctan" role="img" aria-label="Chord from a corner of the triangle to a point on the coastline"></canvas></div>
+          <figcaption><strong>Chord to a corner</strong> · the view zooms in steadily, exactly 3× for every 3× closer, so the coastline repeats and the point stays near the same spot</figcaption>
+        </figure>
+        <div class="side">
+          <p class="cap">Fix a corner of the first triangle and draw the chord to a point on the coastline. Move the point toward the corner. Near the corner the coastline is a copy of itself three times smaller, so the chord swings back and forth inside a 30° wedge forever and never settles on a direction. Mandelbrot calls such a point hyperbolic.</p>
+          <label class="slider" for="tan">
+            <span class="label-row"><span class="label">Move the point toward the corner</span><span class="value" id="tanv">distance 1</span></span>
+            <input type="range" id="tan" min="0" max="800" value="0">
+          </label>
+          <div class="label-row"><span class="label">Chord angle below the side</span><span class="value" id="tana">0.0°</span></div>
+          <svg id="tanPlot" viewBox="0 0 360 150" role="img" aria-label="Chord angle against how many times closer the point is"></svg>
+          <p class="note">The angle repeats every time the point gets 3 times closer, between 0° and 30°, without ever converging.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 43 ===================== -->
+  <section class="plate" id="p43">
+    <div class="plate-head">
+      <p class="no">Plate 43 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Alternative construction by Ernest Cesàro</h2>
+      <p class="dim">Coastline dimension D = log 4 / log 3 ≈ 1.26186</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-snow"><canvas id="c43" role="img" aria-label="Cesàro construction: land, swamp and sea"></canvas></div>
+        <figcaption><strong>Land, swamp, sea</strong> · stage <span id="c43s">0</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Cesàro squeezes the coastline from both sides. A white hexagon of swamp surrounds a black Star of David of land, in a gray sea. At each stage a tent-shaped notch is pushed into every side, alternately from the outside and the inside, so chunks of swamp go to the sea or to the land. In the limit the swamp shrinks from an area down to a curve: the Koch coastline.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="s43v">stage 0</span></div>
+          <div class="steps" id="s43" role="group" aria-label="Stage"></div>
+          <label class="check" for="lim43"><input type="checkbox" id="lim43"> Show where the coastline ends up</label>
+        </div>
+        <div class="mini" aria-label="Generator: two legs at 120 degrees, applied twice gives Koch's generator">
+          <svg viewBox="-0.08 -0.38 2.4 0.5" aria-hidden="true">
+            <polyline points="0,0 0.5,-0.2887 1,0" fill="none" stroke="currentColor" stroke-width="0.022" stroke-linejoin="round"/>
+            <g fill="currentColor"><circle cx="0" cy="0" r="0.035"/><circle cx="0.5" cy="-0.2887" r="0.025"/><circle cx="1" cy="0" r="0.035"/></g>
+            <polyline points="1.3,0 1.6333,0 1.8,-0.2887 1.9667,0 2.3,0" fill="none" stroke="currentColor" stroke-width="0.022" stroke-linejoin="round"/>
+            <polyline points="1.3,0 1.8,-0.2887 2.3,0" fill="none" stroke="currentColor" stroke-width="0.012" stroke-dasharray="0.03 0.03" opacity="0.6"/>
+            <g fill="currentColor"><circle cx="1.3" cy="0" r="0.035"/><circle cx="2.3" cy="0" r="0.035"/></g>
+          </svg>
+          <div class="fx">N = 2, r = 1/√3, angle 120°<br>D = log 2 / log √3 = log 4 / log 3</div>
+        </div>
+        <dl class="read">
+          <div><dt>Swamp left</dt><dd id="r43a">0.6667 <small>× triangle</small></dd></div>
+          <div><dt>Land</dt><dd id="r43b">1.3333 <small>× triangle</small></dd></div>
+          <div><dt>Inner sides</dt><dd id="r43c">12</dd></div>
+          <div><dt>Outer sides</dt><dd id="r43d">6</dd></div>
+        </dl>
+        <p class="note">Each stage hands 5/9 of the remaining swamp to land or sea: the swamp is (2/3)(4/9)<sup>k</sup> of the first triangle, so it vanishes while the coastline's length grows without limit. The tent applied twice, once outward and once inward, is exactly Koch's four-piece generator.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 44 ===================== -->
+  <section class="plate" id="p44">
+    <div class="plate-head">
+      <p class="no">Plate 44 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Two kinds of self-similarity: standard and fractal</h2>
+      <p class="dim">D = log N / log (1/r)</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <svg id="ss" viewBox="0 0 640 470" role="img" aria-label="An interval cut into b pieces, a square into b squared squares, and a third of the Koch coastline cut into reduced copies"></svg>
+        <figcaption><strong>Pieces of the whole</strong> · click a piece of the Koch curve to enlarge it</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Cut a segment into b equal pieces, or a square into b² equal squares, and the formula log N / log(1/r) gives 1 and 2: the ordinary dimensions. A third of the Koch coastline also splits into exact copies of itself, 4 of them, each a third as large. The same formula then gives log 4 / log 3, a number no shape of standard geometry has.</p>
+        <label class="slider" for="b44">
+          <span class="label-row"><span class="label">Pieces per side, b</span><span class="value" id="b44v">5</span></span>
+          <input type="range" id="b44" min="2" max="8" value="5">
+        </label>
+        <div class="group">
+          <div class="label-row"><span class="label">Cut the Koch curve</span><span class="value" id="k44v">into 4 pieces</span></div>
+          <div class="steps" id="k44" role="group" aria-label="Cut depth"></div>
+        </div>
+        <div class="formulas" id="f44"></div>
+        <p class="note" id="n44">Hausdorff showed this D is also the curve's Hausdorff dimension. Mandelbrot's claim is that it matters in natural science too.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 45 ===================== -->
+  <section class="plate" id="p45">
+    <div class="plate-head">
+      <p class="no">Plate 45 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Triadic Koch lake</h2>
+      <p class="dim">Coastline D = log 4 / log 3 ≈ 1.26186 · the waves: a plane-filling sweep, D = 2</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-snow zoomable" id="w45">
+          <canvas id="c45" role="img" aria-label="Koch lake with wave shading"></canvas>
+          <div class="view-tools">
+            <button type="button" id="zin45" aria-label="Zoom in">+</button>
+            <button type="button" id="zout45" aria-label="Zoom out">−</button>
+            <button type="button" id="zfit45">Fit</button>
+          </div>
+        </div>
+        <figcaption><strong>Koch lake</strong> · sweep stage <span id="c45s">4</span> · <span id="c45n">2,401</span> arcs · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Plate 42's island printed as a photographic negative: a lake in a black disc. The gray waves come from a curve Mandelbrot designed later (Plates 68–69), a Peano curve that sweeps out the whole snowflake. Each step is rounded into a sixth of a circle, and one side of the curve is shaded.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Sweep stage</span><span class="value" id="s45v">stage 4</span></div>
+          <div class="steps" id="s45" role="group" aria-label="Sweep stage"></div>
+        </div>
+        <div class="group">
+          <label class="check" for="wave45"><input type="checkbox" id="wave45" checked> Shade one side of the sweep (the waves)</label>
+          <label class="check" for="round45"><input type="checkbox" id="round45" checked> Round each step into a sixth of a circle</label>
+          <label class="check" for="line45"><input type="checkbox" id="line45"> Draw the sweep itself</label>
+        </div>
+        <div class="mini" aria-label="The sweep's generator, straight and flipped">
+          <svg viewBox="-0.08 -0.68 2.36 0.78" aria-hidden="true">
+            <polyline points="0,0 0.1667,-0.2887 0.3333,-0.5774 0.6667,-0.5774 0.8333,-0.2887 0.3333,0 0.6667,0 1,0" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linejoin="round"/>
+            <g fill="currentColor"><circle cx="0" cy="0" r="0.032"/><circle cx="1" cy="0" r="0.032"/></g>
+            <text x="0.45" y="0.09" font-size="0.1" font-family="IBM Plex Mono, monospace" fill="currentColor">S</text>
+            <polyline points="2.2,0 2.0333,-0.2887 1.8667,-0.5774 1.5333,-0.5774 1.3667,-0.2887 1.8667,0 1.5333,0 1.2,0" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linejoin="round"/>
+            <g fill="currentColor"><circle cx="1.2" cy="0" r="0.032"/><circle cx="2.2" cy="0" r="0.032"/></g>
+            <text x="1.65" y="0.09" font-size="0.1" font-family="IBM Plex Mono, monospace" fill="currentColor">F</text>
+          </svg>
+          <div class="fx">7 steps: six of 1/3, one of 1/√3<br>6·(1/3)² + (1/√3)² = 1, so D = 2</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Generator at each stage</span><span class="value">S straight · F flipped</span></div>
+          <div class="sf" id="sf45" role="group" aria-label="Straight or flipped generator at each stage"></div>
+          <div class="btn-row">
+            <button type="button" class="btn" id="mix45">Mix S and F at random</button>
+            <button type="button" class="btn" id="allS45">All S, as in the plate</button>
+          </div>
+        </div>
+        <p class="note">Mandelbrot lets each stage use the generator or its mirror image, and every sequence gives a different sweep of the same snowflake. The plate is all S at about stage 4.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 6, pages 42–45 (Plates 42–45), with the snowflake sweep from pages 68–69 (Plates 68–69). Every figure is computed from the constructions in the captions; nothing is traced from the book. Companion pages: <a href="https://claude.ai/artifact/7gvGnFScNh6SAy2x99eudc" target="_blank" rel="noopener">Mandelbrot's Monkeys Tree</a> (Plate 31), <a href="https://claude.ai/artifact/LXgM42xuGAp9wWuX2x18D6" target="_blank" rel="noopener">Minkowski Sausage</a> (Plate 32) and <a href="https://claude.ai/artifact/RvpGQi3Td4y7gZnjM1pukG" target="_blank" rel="noopener">Wiener Sausage</a>.</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>

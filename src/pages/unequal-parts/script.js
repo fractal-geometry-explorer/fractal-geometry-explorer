@@ -1,11 +1,5 @@
 // CORE START
 const DEG = 180 / Math.PI, S3 = Math.sqrt(3);
-// the dimension D: the unique real root of G(D) = Σ r_m^D = 1 (G is strictly decreasing)
-function dimension(rs) {
-  let lo = 0.01, hi = 8;
-  for (let i = 0; i < 90; i++) { const mid = (lo + hi) / 2, g = rs.reduce((s, r) => s + Math.pow(r, mid), 0); if (g > 1) lo = mid; else hi = mid; }
-  return (lo + hi) / 2;
-}
 // A generator: points from (0,0) to (1,0) and, for each piece, an orientation code
 // (0 as drawn, 1 flipped across its chord, 2 run backwards, 3 both).
 function makeGen(points, codes) {
@@ -44,9 +38,6 @@ function countPieces(rs, eps, cap = 600000, parity = -1) {
 // CORE END
 
 (() => {
-  const $ = (id) => document.getElementById(id);
-  const fmt = (n) => n.toLocaleString('en-US');
-  const PRINT = { paper: '#ecebe6', ink: '#151515', rule: '#c9c8c2', muted: '#66665f', accent: '#2f5f9e', landLight: '#c9c7bf' };
   const RAMP = ['#2f5f9e', '#3f8f8c', '#8a9a3c', '#d08a2c', '#c2452d'];
   const rampRGB = (t) => {
     t = Math.min(1, Math.max(0, t)) * (RAMP.length - 1);
@@ -59,31 +50,6 @@ function countPieces(rs, eps, cap = 600000, parity = -1) {
   const rampAt = (t) => mixRGB(rampRGB(t), [0, 0, 0], 0);
 
   // ---------- shared plumbing ----------
-  function figure(canvas, draw) {
-    const wrap = canvas.parentElement;
-    const f = { canvas, ctx: canvas.getContext('2d'), w: 1, h: 1, dpr: 1, draw };
-    const resize = () => {
-      f.dpr = Math.min(2, window.devicePixelRatio || 1);
-      f.w = wrap.clientWidth || 1; f.h = wrap.clientHeight || 1;
-      canvas.width = Math.round(f.w * f.dpr); canvas.height = Math.round(f.h * f.dpr);
-      f.draw();
-    };
-    new ResizeObserver(resize).observe(wrap);
-    return f;
-  }
-  function fitBox(f, bb, pad = 0.04) {
-    const w = bb.x1 - bb.x0, h = bb.y1 - bb.y0, s = Math.min(f.w / (w * (1 + 2 * pad)), f.h / (h * (1 + 2 * pad)));
-    return { s, ox: f.w / 2 - ((bb.x0 + bb.x1) / 2) * s, oy: f.h / 2 + ((bb.y0 + bb.y1) / 2) * s };
-  }
-  const toScreen = (f) => f.ctx.setTransform(f.dpr, 0, 0, f.dpr, 0, 0);
-  function paper(f, color) { f.ctx.setTransform(1, 0, 0, 1, 0, 0); f.ctx.fillStyle = color; f.ctx.fillRect(0, 0, f.canvas.width, f.canvas.height); }
-  function polyPath(P, closed = true) {
-    const p = new Path2D();
-    p.moveTo(P[0], P[1]);
-    for (let i = 2; i < P.length; i += 2) p.lineTo(P[i], P[i + 1]);
-    if (closed) p.closePath();
-    return p;
-  }
   // The curve in screen coordinates. A piece is split while it is at least ε long (the plate's rule), at least
   // pxMin pixels long, and on screen. Points are not clamped: a long piece or a stage's whole triangle can cross the
   // screen with its ends far outside, and moving those ends would move what is drawn (zoom is capped at 300×, so
@@ -140,63 +106,6 @@ function countPieces(rs, eps, cap = 600000, parity = -1) {
     svg.innerHTML = s;
   }
   // pan and zoom: a quick rescaled snapshot while moving, a full redraw once it settles
-  function zoomable(wrapId, canvasId, fitOf, render, maxZoom = 300) {
-    const wrap = $(wrapId), z = { view: null, user: false, snapView: null, raf: 0, full: 0 };
-    const snap = document.createElement('canvas');
-    const f = figure($(canvasId), () => draw());
-    function touch() { wrap.style.touchAction = z.view && z.view.s > z.view.fit * 1.02 ? 'none' : 'pan-y'; }
-    function draw() {
-      if (!z.view || !z.user) { z.view = fitOf(f); z.view.fit = z.view.s; z.user = false; touch(); }
-      render(f, z.view);
-      snap.width = f.canvas.width; snap.height = f.canvas.height; snap.getContext('2d').drawImage(f.canvas, 0, 0);
-      z.snapView = { s: z.view.s, ox: z.view.ox, oy: z.view.oy };
-    }
-    function quick() {
-      const v = z.view, k = v.s / z.snapView.s, c = f.ctx;
-      c.setTransform(1, 0, 0, 1, 0, 0); c.fillStyle = PRINT.paper; c.fillRect(0, 0, f.canvas.width, f.canvas.height);
-      c.drawImage(snap, (v.ox - z.snapView.ox * k) * f.dpr, (v.oy - z.snapView.oy * k) * f.dpr, snap.width * k, snap.height * k);
-    }
-    function schedule() { if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; draw(); }); }
-    function moved() {
-      if (!z.snapView) { schedule(); return; }
-      if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; quick(); });
-      clearTimeout(z.full); z.full = setTimeout(schedule, 160);
-    }
-    function zoomAt(px, py, k) {
-      const v = z.view, ns = Math.min(v.fit * maxZoom, Math.max(v.fit * 0.8, v.s * k)), wx = (px - v.ox) / v.s, wy = (v.oy - py) / v.s;
-      v.s = ns; v.ox = px - wx * ns; v.oy = py + wy * ns; z.user = true; touch(); moved();
-    }
-    function pan(dx, dy) { z.view.ox += dx; z.view.oy += dy; z.user = true; moved(); }
-    wrap.querySelector('[data-z="in"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1.6));
-    wrap.querySelector('[data-z="out"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1 / 1.6));
-    wrap.querySelector('[data-z="fit"]').addEventListener('click', () => { z.user = false; schedule(); });
-    const pts = new Map();
-    let pinch = null;
-    const local = (e) => { const r = wrap.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
-    wrap.addEventListener('pointerdown', (e) => {
-      if (e.target.closest('.view-tools')) return;
-      pts.set(e.pointerId, local(e));
-      try { wrap.setPointerCapture(e.pointerId); } catch (_) {}
-      if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), m: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2] }; }
-      wrap.classList.add('dragging');
-    });
-    wrap.addEventListener('pointermove', (e) => {
-      if (!pts.has(e.pointerId)) return;
-      const prev = pts.get(e.pointerId), cur = local(e);
-      pts.set(e.pointerId, cur);
-      if (pts.size === 2 && pinch) {
-        const [a, b] = [...pts.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]), m = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
-        pan(m[0] - pinch.m[0], m[1] - pinch.m[1]);
-        if (pinch.d > 0) zoomAt(m[0], m[1], d / pinch.d);
-        pinch = { d, m };
-      } else if (pts.size === 1 && (e.pointerType !== 'touch' || z.view.s > z.view.fit * 1.02)) pan(cur[0] - prev[0], cur[1] - prev[1]);
-    });
-    const end = (e) => { pts.delete(e.pointerId); if (pts.size < 2) pinch = null; if (!pts.size) wrap.classList.remove('dragging'); };
-    wrap.addEventListener('pointerup', end); wrap.addEventListener('pointercancel', end);
-    wrap.addEventListener('wheel', (e) => { if (!(e.ctrlKey || e.metaKey)) return; e.preventDefault(); const [x, y] = local(e); zoomAt(x, y, Math.exp(-e.deltaY * 0.0045)); }, { passive: false });
-    wrap.addEventListener('dblclick', (e) => { if (e.target.closest('.view-tools')) return; const [x, y] = local(e); zoomAt(x, y, e.shiftKey ? 0.5 : 2); });
-    return { f, z, schedule, refit: () => { z.user = false; schedule(); } };
-  }
   // Land drawn black above a base bar (as in the plates). Coloured by stage: each stage's new land is painted in
   // that stage's colour, in stage order, and land a stage carves away goes back to paper; so every bit of land
   // shows the stage that last made it. Each coastline piece is outlined in a darker shade of the stage it ends on.
@@ -249,7 +158,7 @@ function countPieces(rs, eps, cap = 600000, parity = -1) {
   const st56 = { a: 0.25, e: 80, depth: false, G: gen56(0.25), box: null };
   st56.box = worldBox(st56.G);
   const fitOf56 = (f) => fitBox(f, { x0: -0.01, x1: 1.01, y0: -BAR, y1: Math.max(0.3, st56.box.y1) }, 0.03);
-  const z56 = zoomable('w56', 'c56', fitOf56, (f, v) => renderLand(f, v, st56.G, epsOf(st56.e, 0.001), st56.depth, ['k56a', 'k56b']));
+  const z56 = zoomable('w56', 'c56', fitOf56, (f, v) => renderLand(f, v, st56.G, epsOf(st56.e, 0.001), st56.depth, ['k56a', 'k56b']), { maxZoom: 300 });
   function set56(refit) {
     st56.G = gen56(st56.a);
     if (refit) { st56.box = worldBox(st56.G); z56.refit(); } else z56.schedule();
@@ -281,7 +190,7 @@ function countPieces(rs, eps, cap = 600000, parity = -1) {
   st57.G = gen57(st57.g, st57.p);
   $('ang57').value = String(Math.round(GAMMA57 * 100));
   const fitOf57 = (f) => fitBox(f, { x0: -0.01, x1: 1.01, y0: -BAR, y1: 0.52 }, 0.02);
-  const z57 = zoomable('w57', 'c57', fitOf57, (f, v) => renderLand(f, v, st57.G, epsOf(st57.e, 0.0025), st57.depth, ['k57a', 'k57b'], st57.even ? 0 : -1));
+  const z57 = zoomable('w57', 'c57', fitOf57, (f, v) => renderLand(f, v, st57.G, epsOf(st57.e, 0.0025), st57.depth, ['k57a', 'k57b'], st57.even ? 0 : -1), { maxZoom: 300 });
   function set57() {
     st57.G = gen57(st57.g, st57.p);
     z57.schedule();
