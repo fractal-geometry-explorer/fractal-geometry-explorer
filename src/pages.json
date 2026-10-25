@@ -6,9 +6,11 @@
       "plates": "Plate 31",
       "chapter": 5,
       "artifact": "https://claude.ai/artifact/7gvGnFScNh6SAy2x99eudc",
-      "kind": "single",
-      "scripts": [],
-      "layout_comment": null
+      "kind": "template",
+      "scripts": [
+        "script.js"
+      ],
+      "layout_comment": "/* Layout: the plate sits on the left like a page of the book; the instrument panel runs down the right. One column under 900px. */"
     },
     {
       "slug": "minkowski-sausage",
@@ -16,9 +18,11 @@
       "plates": "Plate 32",
       "chapter": 5,
       "artifact": "https://claude.ai/artifact/LXgM42xuGAp9wWuX2x18D6",
-      "kind": "single",
-      "scripts": [],
-      "layout_comment": null
+      "kind": "template",
+      "scripts": [
+        "script.js"
+      ],
+      "layout_comment": "/* Layout: the plate on the left as on the book's page 32; controls, readouts and the measuring chart down the right. One column under 900px. */"
     },
     {
       "slug": "wiener-sausage",
@@ -26,9 +30,11 @@
       "plates": "Brownian motion",
       "chapter": 25,
       "artifact": "https://claude.ai/artifact/RvpGQi3Td4y7gZnjM1pukG",
-      "kind": "single",
-      "scripts": [],
-      "layout_comment": null
+      "kind": "template",
+      "scripts": [
+        "script.js"
+      ],
+      "layout_comment": "/* Layout: the simulated trail on the left like a plate; controls, readouts and the measuring chart down the right. One column under 900px. */"
     },
     {
       "slug": "koch-plates",

@@ -1,0 +1,380 @@
+<title>Mandelbrot's Monkeys Tree</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>
+/* Layout: the plate sits on the left like a page of the book; the instrument panel runs down the right. One column under 900px. */
+:root {
+  --page: #e4e5e1;
+  --plate: #efefeb;
+  --ink: #141414;
+  --text: #1b1d1f;
+  --muted: #595e64;
+  --rule: #c4c7c1;
+  --surface: #f6f6f3;
+  --accent: #285895;
+  --accent-soft: rgba(40, 88, 149, 0.16);
+  --f-display: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Newsreader", Georgia, "Times New Roman", serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --page: #111214; --plate: #18191c; --ink: #e9e8e3; --text: #e5e5e1; --muted: #9a9fa6;
+    --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6; --accent-soft: rgba(138, 177, 230, 0.22);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --page: #111214; --plate: #18191c; --ink: #e9e8e3; --text: #e5e5e1; --muted: #9a9fa6;
+  --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6; --accent-soft: rgba(138, 177, 230, 0.22);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--page);
+  color: var(--text);
+  font-family: var(--f-display);
+  font-size: 14px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 36px 64px;
+  display: grid;
+  gap: 32px;
+}
+
+/* Header, echoing the book's plate captions */
+header { display: grid; gap: 10px; max-width: 760px; }
+.eyebrow {
+  margin: 0;
+  font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--muted);
+}
+h1 {
+  margin: 0;
+  display: flex; align-items: center; flex-wrap: wrap; gap: 0.18em 0.42em;
+  font-weight: 800; font-size: clamp(30px, 5.4vw, 54px); line-height: 1.02;
+  letter-spacing: 0.01em; text-transform: uppercase; text-wrap: balance;
+}
+h1 .plate-no { font-weight: 600; text-transform: none; letter-spacing: 0; }
+.lozenge {
+  display: inline-block; width: 0.42em; height: 0.42em;
+  border: 0.075em solid currentColor; position: relative; top: -0.02em;
+}
+.lozenge::after {
+  content: ""; position: absolute; inset: 0.1em; border: 0.05em solid currentColor;
+}
+.dek {
+  margin: 0; font-family: var(--f-body); font-size: 19px; line-height: 1.45; color: var(--text);
+  max-width: 62ch;
+}
+
+/* Stage */
+.stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(290px, 360px);
+  gap: 40px;
+  align-items: start;
+}
+@media (max-width: 899px) {
+  .stage { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+}
+figure.plate { margin: 0; display: grid; gap: 10px; min-width: 0; justify-self: center; width: 100%; max-width: min(100%, calc(84vh * 0.8)); }
+.canvas-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  max-width: 100%;
+  background: var(--plate);
+  outline: 1px solid var(--rule);
+  overflow: hidden;
+  cursor: grab;
+  touch-action: pan-y;
+}
+.canvas-wrap.dragging { cursor: grabbing; }
+.canvas-wrap canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.view-tools {
+  position: absolute; top: 10px; right: 10px; display: flex; gap: 6px; z-index: 2;
+}
+.view-tools button {
+  min-width: 34px; height: 34px; padding: 0 10px;
+  font: 600 15px/1 var(--f-display); color: var(--text);
+  background: var(--surface); border: 1px solid var(--rule); cursor: pointer;
+}
+.view-tools button:hover { border-color: var(--text); }
+figcaption {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 16px;
+  font-size: 13px; color: var(--muted);
+}
+figcaption strong { color: var(--text); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+.num { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+
+/* Panel */
+.panel { display: grid; gap: 26px; min-width: 0; }
+.group { display: grid; gap: 10px; min-width: 0; }
+.label-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.label {
+  font-size: 11.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+}
+.value { font-family: var(--f-mono); font-size: 12.5px; color: var(--text); font-variant-numeric: tabular-nums; }
+
+.depths { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; }
+.depths button {
+  display: grid; gap: 3px; padding: 4px 4px 5px; min-width: 0;
+  background: var(--surface); border: 1px solid var(--rule); color: var(--text); cursor: pointer;
+  font: inherit; text-align: center;
+}
+.depths button canvas { width: 100%; aspect-ratio: 4 / 5; display: block; background: var(--plate); }
+.depths button span { font-family: var(--f-mono); font-size: 10.5px; color: var(--muted); font-variant-numeric: tabular-nums; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.depths button b { font-size: 12px; font-weight: 700; }
+.depths button:hover { border-color: var(--text); }
+.depths button[aria-pressed="true"] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.depths button[aria-pressed="true"] b { color: var(--accent); }
+
+.seg { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--rule); }
+
+/* Minkowski sausage */
+.nc { text-transform: none; letter-spacing: 0; }
+dl.sread { margin: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+dl.sread div { display: grid; gap: 2px; min-width: 0; }
+dl.sread dt { font-size: 10.5px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); }
+dl.sread dd { margin: 0; font-family: var(--f-mono); font-size: 15px; }
+.exact { margin: 0; font-size: 12.5px; color: var(--muted); }
+.exact b { color: var(--text); font-family: var(--f-mono); font-weight: 500; }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 11.5px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 5px; }
+.legend span.cur { color: var(--text); font-weight: 600; }
+.legend i { display: inline-block; width: 16px; height: 0; border-top: 2px solid var(--muted); }
+.legend i.ref { border-top: 1.5px dashed var(--text); opacity: 0.6; }
+.chart-box { position: relative; }
+#sChart { display: block; width: 100%; height: auto; background: var(--plate); outline: 1px solid var(--rule); touch-action: pan-y; cursor: crosshair; }
+#sChart .grid line { stroke: var(--rule); stroke-width: 1; }
+#sChart text { font-family: var(--f-mono); font-size: 10px; fill: var(--muted); }
+#sChart .ser { fill: none; stroke: var(--muted); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+#sChart .ser.cur { stroke: var(--accent); }
+#sChart .ref { fill: none; stroke: var(--text); stroke-width: 1.25; stroke-dasharray: 4 3; opacity: 0.6; }
+#sChart .mark { stroke: var(--accent); stroke-width: 1; }
+#sChart .dot { fill: var(--accent); stroke: var(--plate); stroke-width: 2; }
+#sChart .hair { stroke: var(--muted); stroke-width: 1; }
+.tip {
+  position: absolute; top: 8px; pointer-events: none; z-index: 2;
+  background: var(--surface); border: 1px solid var(--rule); padding: 6px 8px;
+  display: grid; gap: 2px; min-width: 112px; font-size: 11.5px; color: var(--muted);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+.tip .hd { font-family: var(--f-mono); color: var(--text); margin-bottom: 2px; }
+.tip .row { display: flex; align-items: center; gap: 6px; }
+.tip .row i { display: inline-block; width: 12px; border-top: 2px solid var(--muted); }
+.tip .row b { font-family: var(--f-mono); font-weight: 500; color: var(--text); min-width: 3.2em; text-align: right; }
+.chart-note { margin: 0; font-size: 12.5px; color: var(--muted); line-height: 1.45; }
+details.nums summary { cursor: pointer; font-size: 12.5px; font-weight: 600; }
+.tbl-wrap { overflow-x: auto; margin-top: 6px; }
+.tbl-wrap table { border-collapse: collapse; width: 100%; font-family: var(--f-mono); font-size: 11.5px; font-variant-numeric: tabular-nums; }
+.tbl-wrap th, .tbl-wrap td { padding: 3px 6px; text-align: right; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+.tbl-wrap th { color: var(--muted); font-weight: 500; }
+.seg button {
+  padding: 8px 10px; font: 600 13px/1.2 var(--f-display); color: var(--text);
+  background: var(--surface); border: 0; cursor: pointer;
+}
+.seg button + button { border-left: 1px solid var(--rule); }
+.seg button[aria-pressed="true"] { background: var(--text); color: var(--page); }
+
+.slider { display: grid; gap: 4px; }
+.slider input { width: 100%; accent-color: var(--accent); margin: 0; }
+.slider input:disabled { opacity: 0.4; }
+
+.check { display: flex; align-items: center; gap: 8px; font-size: 13.5px; cursor: pointer; }
+.check input { accent-color: var(--accent); width: 16px; height: 16px; margin: 0; }
+
+.btn-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.btn {
+  padding: 8px 12px; font: 600 13px/1.2 var(--f-display); color: var(--text);
+  background: var(--surface); border: 1px solid var(--rule); cursor: pointer;
+}
+.btn:hover { border-color: var(--text); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--plate); }
+.btn.primary:hover { filter: brightness(1.08); }
+
+#gen { width: 100%; height: auto; display: block; background: var(--plate); outline: 1px solid var(--rule); }
+#gen .hit { stroke: transparent; fill: none; cursor: pointer; }
+#gen .main { stroke: var(--ink); fill: none; }
+#gen .ghost { stroke: var(--accent); opacity: 0.55; fill: none; }
+#gen .vtx { fill: var(--ink); }
+#gen .end { fill: var(--ink); }
+#gen g.s:hover .main, #gen g.s:focus-visible .main, #gen g.s.on .main { stroke: var(--accent); }
+#gen g.s:hover .ghost, #gen g.s:focus-visible .ghost, #gen g.s.on .ghost { opacity: 1; }
+#gen g.s:focus { outline: none; }
+.hint { margin: 0; font-size: 13px; color: var(--muted); min-height: 2.9em; }
+.hint b { color: var(--text); font-weight: 600; }
+.status {
+  margin: 0; display: flex; gap: 8px; align-items: flex-start;
+  font-size: 13px; line-height: 1.4;
+}
+.status::before {
+  content: ""; flex: none; width: 9px; height: 9px; margin-top: 4px; border-radius: 50%;
+  background: var(--accent);
+}
+.status.bad::before { background: transparent; border: 2px solid var(--muted); width: 9px; height: 9px; }
+
+dl.stats {
+  margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 14px 18px;
+  padding-top: 16px; border-top: 1px solid var(--rule);
+}
+dl.stats div { display: grid; gap: 2px; min-width: 0; }
+dl.stats dt { font-size: 11px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); }
+dl.stats dd { margin: 0; font-family: var(--f-mono); font-size: 18px; font-variant-numeric: tabular-nums; }
+dl.stats dd small { font-size: 11.5px; color: var(--muted); }
+
+/* Notes */
+.notes {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 28px 40px;
+  padding-top: 28px; border-top: 1px solid var(--rule);
+}
+.notes article { display: grid; gap: 8px; align-content: start; min-width: 0; }
+.notes h2 { margin: 0; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+.notes p { margin: 0; font-family: var(--f-body); font-size: 17px; line-height: 1.55; max-width: 62ch; }
+.eq {
+  font-family: var(--f-mono); font-size: 13.5px; line-height: 1.7; padding: 10px 12px; background: var(--plate);
+  border: 1px solid var(--rule); overflow-x: auto; white-space: nowrap;
+}
+.source { font-family: var(--f-body); font-size: 15px; color: var(--muted); margin: 0; max-width: 80ch; }
+.source i { color: var(--text); }
+
+button:focus-visible, input:focus-visible, .check:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 5 · page 31</p>
+    <h1><span class="plate-no">Plate 31</span><span class="lozenge" aria-hidden="true"></span><span>Monkeys Tree</span></h1>
+    <p class="dek">Mandelbrot's curve rebuilt from its 11-segment generator. Change the depth and the inking, or flip how each segment's smaller copy is laid down, and the plate redraws as you go.</p>
+  </header>
+
+  <section class="stage">
+    <figure class="plate">
+      <div class="canvas-wrap" id="wrap">
+        <canvas id="cv" role="img" aria-label="Monkeys Tree fractal, level 3"></canvas>
+        <canvas id="ov" aria-hidden="true"></canvas>
+        <div class="view-tools">
+          <button type="button" id="zin" aria-label="Zoom in">+</button>
+          <button type="button" id="zout" aria-label="Zoom out">−</button>
+          <button type="button" id="zfit">Fit</button>
+        </div>
+      </div>
+      <figcaption>
+        <span><strong>Monkeys Tree</strong> · level <span class="num" id="capLevel">3</span> · <span class="num" id="capSegs">1,331</span> segments</span>
+        <span>Drag to pan · pinch or Ctrl/⌘ + scroll to zoom</span>
+      </figcaption>
+    </figure>
+
+    <aside class="panel">
+      <div class="group">
+        <div class="label-row"><span class="label">Depth</span><span class="value" id="depthVal">level 3</span></div>
+        <div class="depths" id="depths"></div>
+      </div>
+
+      <div class="group">
+        <span class="label">Inking</span>
+        <div class="seg" role="group" aria-label="Rendering">
+          <button type="button" id="mFill" aria-pressed="true">Filled</button>
+          <button type="button" id="mLine" aria-pressed="false">Outline</button>
+          <button type="button" id="mSaus" aria-pressed="false">Sausage</button>
+        </div>
+        <label class="slider" for="round">
+          <span class="label-row"><span class="label">Arc rounding</span><span class="value" id="roundVal">100%</span></span>
+          <input type="range" id="round" min="0" max="100" value="100">
+        </label>
+        <label class="slider" for="gap">
+          <span class="label-row"><span class="label">White channels</span><span class="value" id="gapVal">15%</span></span>
+          <input type="range" id="gap" min="0" max="100" value="15">
+        </label>
+        <label class="check" for="constr"><input type="checkbox" id="constr"> Show the previous level as construction lines</label>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="trace">Trace the curve</button>
+          <button type="button" class="btn" id="restore">Restore the plate</button>
+        </div>
+      </div>
+
+      <div class="group" id="sGroup">
+        <div class="label-row"><span class="label">Minkowski sausage</span><span class="value">Plate 32</span></div>
+        <label class="slider" for="eps">
+          <span class="label-row"><span class="label">Band radius <span class="nc">ε</span></span><span class="value" id="epsVal">0.020 of base</span></span>
+          <input type="range" id="eps" min="0" max="1000" value="473">
+        </label>
+        <dl class="sread">
+          <div><dt>Band area</dt><dd id="sA">…</dd></div>
+          <div><dt>Area ÷ 2<span class="nc">ε</span></dt><dd id="sL">…</dd></div>
+          <div><dt>Fitted D</dt><dd id="sD">…</dd></div>
+        </dl>
+        <p class="exact">Exact D from the generator: <b>1.8687</b></p>
+        <div class="legend" id="sLegend" aria-hidden="true"></div>
+        <div class="chart-box" id="sBox">
+          <svg id="sChart" role="img" aria-label="Log-log chart of band area divided by 2ε against ε, one line per depth"></svg>
+          <div class="tip" id="sTip" hidden></div>
+        </div>
+        <p class="chart-note">Each line is one depth: band area ÷ 2ε, the curve's length as seen at resolution ε. The lines agree at large ε and peel away at small ε once the band is narrower than that depth's finest detail. After that point a depth's band stops changing, which is Plate 32's point. The fitted D is 1 − slope of the current depth's line for ε up to 0.03; it creeps toward 1.8687 only slowly as depth grows (a level-6 check gives about 1.80). Click the chart to set ε.</p>
+        <details class="nums"><summary>Show the numbers</summary><div class="tbl-wrap"><table id="sTable"></table></div></details>
+      </div>
+
+      <div class="group">
+        <div class="label-row"><span class="label">Generator</span><span class="value">click a segment to flip its copy</span></div>
+        <svg id="gen" role="group" aria-label="Generator editor: 11 segments"></svg>
+        <p class="hint" id="hint">Each blue sketch shows the smaller copy that replaces that segment at the next level. Hover a segment to find its part of the plate.</p>
+        <p class="status" id="status"></p>
+        <div class="btn-row">
+          <button type="button" class="btn" id="mandel">Mandelbrot's arrangement</button>
+          <button type="button" class="btn" id="shuffle">Shuffle</button>
+        </div>
+      </div>
+
+      <dl class="stats">
+        <div><dt>Dimension D</dt><dd id="stD">1.8687</dd></div>
+        <div><dt>Segments</dt><dd id="stN">1,331</dd></div>
+        <div><dt>Curve length</dt><dd id="stL">26.0 <small>× base</small></dd></div>
+        <div><dt>Shortest step</dt><dd id="stS">1/140 <small>of base</small></dd></div>
+      </dl>
+    </aside>
+  </section>
+
+  <section class="notes">
+    <article>
+      <h2>The generator</h2>
+      <p>Start with a straight segment and replace it with an 11-step zigzag: six steps a third as long as the segment and five steps 1/(3√3) as long, all pointing along multiples of 30°. Then replace each of those steps with a smaller copy of the whole zigzag, and keep going.</p>
+      <p>Each copy can go down four ways: as drawn, mirrored, reversed, or reversed and mirrored. Mandelbrot's arrangement is one of 4<sup>11</sup>, about 4.2 million, and it keeps the curve from ever crossing itself. Most others tangle within two levels.</p>
+    </article>
+    <article>
+      <h2>Why D = 1.8687</h2>
+      <p>With pieces of two sizes, the dimension is the exponent that makes the scaled pieces add up to exactly one whole:</p>
+      <div class="eq">6·(1/3)<sup>D</sup> + 5·(1/(3√3))<sup>D</sup> = 1<br>D = <span id="eqD">1.86873</span></div>
+      <p>Every level multiplies the curve's length by 2 + 5/(3√3) ≈ 2.962, so the length grows without limit while the outline barely moves. It is the coastline paradox from the same chapter.</p>
+    </article>
+    <article>
+      <h2>The fill</h2>
+      <p>The plate shades everything on the left of the curve as you walk it from start to finish, then closes the shape with a solid band underneath. Where the curve dips below its starting line, white hooks bite into the band.</p>
+      <p>The book's drawing is level 3, with 1,331 segments, and its corners are drawn as smooth curls. Set Arc rounding and White channels to zero to see the exact polygon underneath.</p>
+    </article>
+    <article>
+      <h2>Minkowski sausage</h2>
+      <p>Plate 32, on the next page of the book, wraps a curve in a band of radius ε: every point within ε of it. The band's area divided by its width 2ε is the curve's length as seen at resolution ε. For a smooth curve that settles to the true length as ε shrinks. For a fractal it keeps growing, roughly like ε<sup>1−D</sup>, which is the law Richardson found for coastlines. Choose Sausage and drag ε to measure it here.</p>
+    </article>
+    <article>
+      <h2>The curls, as circular arcs</h2>
+      <p>Each segment of the polygon is redrawn as two circular arcs that pass through its endpoints and meet with matching tangents, a construction called a biarc. At every vertex the two neighbouring biarcs share one tangent, so the outline is a single chain of circles with no kinks.</p>
+      <p>The tangent at a vertex splits the turn there, leaning slightly toward the longer neighbouring segment. That rule, a band 0.295 of the base deep, and a hairline white channel gave the closest overlap with a scan of the plate. Lower Arc rounding to turn the arcs back toward straight lines.</p>
+    </article>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 5, page 31, Plate 31 and its generator, and page 32, Plate 32. The caption points ahead to Plate 146, “Split Snowflake Halls,” in chapter 14. The curve here is computed from the generator; nothing is traced from the book.</p>
+</div>
+
+<script>
+/*SCRIPT*/</script>
