@@ -124,6 +124,18 @@ Conventions used below:
 - **Plate 83, the devil's staircase.** The unit square with the region under the Cantor function in solid ink. The scan's top profile matches the Cantor function to rms 0.005 of the height (max deviation 0.018 at the near-vertical risers, which is ink spread); treads are resolved down to about 3⁻⁷. The page computes M(R) per pixel column, so zooming keeps producing steps. Graph length checked in closed form: 1 − (2/3)ⁿ + √(1 + (4/9)ⁿ) → 2.
 - **Generalized dusts (pages 77–78).** The book gives N and r for its example dusts (N = 3, r = 1/5; N = 2, r = 1/4; N = 3, r = 1/9) but never draws them, so the page's evenly spaced arrangement — first piece at 0, last ending at 1, equal tremas — is a reconstruction, flagged on the page. The gap-count law Nr(U > u) stepping across F·u⁻ᴰ was verified and is drawn as a log–log chart.
 
+## Part XI, chapter 36 (lattice-physics page)
+
+**Figure, p. 329, the spin automaton.**
+- The text's rule — S(t, n) = −1 iff S(t−1, n−1) = S(t−1, n+1), started from a single +1 at n = 0 — reproduces the printed figure exactly: rows t = 0 to 13 in a fixed window |n| ≤ 13 (13 signs on even rows, 14 on odd; 189 signs in all, every one matching). The +'s are the odd binomial coefficients (Pascal's triangle mod 2, elementary automaton rule 90).
+- Grid measured at 600 dpi, in units of the half-column spacing u: row pitch 1.664u; plus glyph 0.80u × 0.78u, minus 0.70u long, stroke 0.105u.
+- Counting check behind D = log 3/log 2: row t carries 2^popcount(t) +'s, so the first 2^k rows hold exactly 3^k. The downsized view overlays the exact gasket (apex at the impurity, base corners (±T, −T)) on T rows of cells.
+
+**The chapter's other sections have no figures in the book; those panels are reconstructions, each flagged on the page.**
+- **"Strays by"** (two-kinds-of-convergence demo) is the one-sided Hausdorff distance from the new refinement to the previous one, sampled at an odd vertex step — every 4th vertex of a Koch stage *is* a previous-stage vertex, and sampling only those hides the distance entirely.
+- **Self-avoiding walks** are sampled by the pivot algorithm (random joint, random lattice symmetry, keep when self-avoiding; the shorter arm is transformed). The ensemble fit over n = 48 … 768 (16 walks each) gives slope ≈ 0.77–0.79, D ≈ 1.25–1.30 — near, not on, the asymptotic 3/4 and 4/3; the page says so rather than forcing the number.
+- **Rivers.** Leopold & Langbein's streams are self-avoiding walks with "various rather arbitrary decisions" against loops and snags, which the book does not specify. The page's streams erase any loop they close (loop-erased walks, dimension exactly 5/4, Hack exponent 5/8 = 0.625); the fit on 32²–64² grids wanders with the seed around 0.62–0.68, against Leopold & Langbein's 0.64. Drainage area and longest upstream length are computed leaves-up over the resulting forest; the fit uses cells draining ≥ 8 squares.
+
 ## Open questions
 
 - **The 13-interval generator.** Why does Plate 69's large circle use a different rule from the caption's second stage? This may be worth a sentence once the rest of chapter 7 is reviewed.

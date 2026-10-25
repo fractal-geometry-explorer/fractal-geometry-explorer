@@ -171,6 +171,8 @@ Update this file in the same pull request as the work it records.
 
 | Plate | Page | Title | Kind | Status | Site page |
 | :- | :- | :- | :- | :- | :- |
+| Figure, p. 329 | 329 | A spin impurity's spread: Pascal's triangle mod 2, whose downsized limit is the Sierpiński gasket | exact | done | lattice-physics |
+| (concept) | 326–333 | Weak against strong convergence; the self-avoiding walk (D = 4/3); Leopold–Langbein rivers | random | done | lattice-physics |
 | 340 | 340 | Original evidence for scaling in economics (cotton prices) | data | todo | |
 
 ## Front matter and the update for the second printing (pages 458–468)
@@ -192,4 +194,5 @@ Each chapter session should add the chapter's main ideas here, alongside its pla
 - 1/f noise and scaling nets (chapter 27);
 - Lévy flights and dusts (chapters 31–32);
 - lacunarity (chapter 34);
+- weak against strong convergence, and the self-avoiding walk (chapter 36 — done, on the lattice-physics page);
 - scaling in prices and in word frequencies (chapters 37–38).
