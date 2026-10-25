@@ -75,9 +75,10 @@ Update this file in the same pull request as the work it records.
 | Plate | Page | Title | Kind | Status | Site page |
 | :- | :- | :- | :- | :- | :- |
 | 115 | 115 | Log(perimeter) versus log(area) for clouds and rain areas | data | todo | |
-| Figure, p. 121 | 121 | Islands and lakes by curdling (generator and advanced teragon) | exact | todo | |
-| Figure, p. 124 | 124 | Nonlumped curdling clusters (generators A–F) | exact | todo | |
-| Figure, p. 125 | 125 | Cross-lumped curdling clusters; knotted Peano monsters | exact | todo | |
+| Figure, pp. 117–118 | 117–118 | Koch continent and islands (two generators, D = 4/3) | exact | done | islands-clusters |
+| Figure, p. 121 | 121 | Islands and lakes (generator and advanced teragon) | exact | done | islands-clusters |
+| Figure, p. 124 | 124 | Nonlumped curdling clusters (generators A, B, C, E, F) | exact | done | islands-clusters |
+| Figure, p. 125 | 125 | Cross-lumped curdling clusters; knotted Peano monsters (p. 126) | exact | done | islands-clusters |
 | Figure, p. 132 | 132 | Critical percolation cluster | random | todo | |
 | 141 | 141–142 | Sierpiński arrowhead (boundary D ≈ 1.5849) | exact | todo | |
 | 143 | 142–143 | A fractal skewed web | exact | todo | |
@@ -187,7 +188,7 @@ Each chapter session should add the chapter's main ideas here, alongside its pla
 - coastline length against ruler size (chapter 5; partly on the Minkowski page);
 - intermittency (chapter 10);
 - length–area–volume relations (chapter 12);
-- percolation (chapter 13);
+- percolation (chapter 13) — done, on islands-clusters (seeded bond-percolation lattice);
 - the diameter exponent of trees (chapter 17);
 - 1/f noise and scaling nets (chapter 27);
 - Lévy flights and dusts (chapters 31–32);

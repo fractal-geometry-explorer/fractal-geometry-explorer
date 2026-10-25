@@ -133,6 +133,18 @@
         "ui.js"
       ],
       "layout_comment": "/* Layout: the Cantor bar (80), the Cantor curtains (81), the devil's staircase (83) and the chapter's dust-and-dimension concept, each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "islands-clusters",
+      "title": "Islands, Clusters and Percolation",
+      "plates": "Chapter 13 figures",
+      "chapter": 13,
+      "scripts": [
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: six sections in page order (Koch islands 117-118, islands and lakes 121, nonlumped curdling 124, cross-lumped 125, knotted Peano 126, Bernoulli percolation 126-130), each a computed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
     }
   ]
 }
