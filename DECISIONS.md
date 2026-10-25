@@ -124,6 +124,15 @@ Conventions used below:
 - **Plate 83, the devil's staircase.** The unit square with the region under the Cantor function in solid ink. The scan's top profile matches the Cantor function to rms 0.005 of the height (max deviation 0.018 at the near-vertical risers, which is ink spread); treads are resolved down to about 3⁻⁷. The page computes M(R) per pixel column, so zooming keeps producing steps. Graph length checked in closed form: 1 − (2/3)ⁿ + √(1 + (4/9)ⁿ) → 2.
 - **Generalized dusts (pages 77–78).** The book gives N and r for its example dusts (N = 3, r = 1/5; N = 2, r = 1/4; N = 3, r = 1/9) but never draws them, so the page's evenly spaced arrangement — first piece at 0, last ending at 1, equal tremas — is a reconstruction, flagged on the page. The gap-count law Nr(U > u) stepping across F·u⁻ᴰ was verified and is drawn as a log–log chart.
 
+## Part IX, chapter 27
+
+**Plate 255, fractional Brown trails.**
+- A random plate: the book's trails came from Mandelbrot & Wallis's 1969 program and an unrecorded seed, so the page matches the plate statistically, never stroke for stroke.
+- The noise is exact fractional Gaussian noise by circulant embedding (Davies & Harte 1987), not the periodic fast-Fourier shortcut the chapter criticizes on page 251. The increments' covariance is exact at every lag; the delta variance was checked against |Δt|^2H at lags 1–64 (within 2% at H = 0.9, 0.7, 0.5).
+- As in the plate, one Gaussian draw is reused across every H, so the two panels (H = 0.9 and 0.7) share a seed and the trail deforms coherently as H moves. The default seed (2) was picked from twelve candidates for its resemblance to the printed pair; the book's step count is unknown, and the page draws 4,096 steps.
+- **Hurst's R/S** is fitted over spans d ≥ 64, but near H = 1 the measured slope still sits low: on exact fGn with true H = 0.9 at 8,192 samples the estimator reads 0.844 ± 0.043 (20 runs; 0.682 ± 0.041 at H = 0.7, 0.530 ± 0.027 at H = 0.5). That is a bias of R/S, said on the page, not an error in the noise.
+- **The spectrum** (log-binned periodogram of the increments) matches the theory β = 2H − 1 closely: measured β ≈ 0.79 against 0.80 at H = 0.9.
+
 ## Open questions
 
 - **The 13-interval generator.** Why does Plate 69's large circle use a different rule from the caption's second stage? This may be worth a sentence once the rest of chapter 7 is reviewed.

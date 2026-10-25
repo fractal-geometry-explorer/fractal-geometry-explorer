@@ -127,7 +127,7 @@ Update this file in the same pull request as the work it records.
 
 | Plate | Page | Title | Kind | Status | Site page |
 | :- | :- | :- | :- | :- | :- |
-| 255 | 255 | Fractional Brown trails (D ≈ 1.1111, 1.4285) | random | todo | |
+| 255 | 255 | Fractional Brown trails (D ≈ 1.1111, 1.4285) | random | done | fractional-trails |
 | 264–265 | 264–265 | Brown lake landscapes, ordinary and fractional | render | todo | |
 | 266–267 | 266–267 | Brown coastlines, and island "strings" | random | todo | |
 | 268 | 268 | Contour lines in fractional Brown landscapes | random | todo | |
@@ -189,7 +189,7 @@ Each chapter session should add the chapter's main ideas here, alongside its pla
 - length–area–volume relations (chapter 12);
 - percolation (chapter 13);
 - the diameter exponent of trees (chapter 17);
-- 1/f noise and scaling nets (chapter 27);
+- 1/f noise and scaling nets (chapter 27): the Joseph effect, Hurst's R/S and the spectrum are on the fractional-trails page;
 - Lévy flights and dusts (chapters 31–32);
 - lacunarity (chapter 34);
 - scaling in prices and in word frequencies (chapters 37–38).
