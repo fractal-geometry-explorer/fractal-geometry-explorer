@@ -1,0 +1,159 @@
+<title>Trees and the Diameter Exponent</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.mini svg { height: 84px; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 17, "Trees and the diameter exponent" · pages 156–165</p>
+    <h1><span class="plate-no">Plates 163–165</span><span class="lozenge" aria-hidden="true"></span><span>Trees and the Diameter Exponent</span></h1>
+    <p class="dek">Lungs, arteries, botanical trees and rivers are trees with thick stems, and trees with thick stems cannot be self-similar. The best one can hope is that self-similarity holds for the branch tips. Beside the tips' dimension D, such a tree carries a second number: the diameter exponent Δ, which says how fast the branches thin out. Leonardo da Vinci already knew one of its values. Every figure is computed from the rules in the captions.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#delta"><b>Δ</b> The diameter exponent</a>
+    <a href="#bronchi"><b>164–165</b> Recursive bronchi</a>
+    <a href="#flowers"><b>163</b> Flower models</a>
+  </nav>
+
+  <!-- ===================== THE DIAMETER EXPONENT ===================== -->
+  <section class="plate" id="delta">
+    <div class="plate-head">
+      <p class="no">Pages 156–162 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>The diameter exponent Δ</h2>
+      <p class="dim">d<sup>Δ</sup> = d₁<sup>Δ</sup> + d₂<sup>Δ</sup> at every bifurcation · lung Δ ≈ 3 · arteries Δ ≈ 2.7 · botanical trees and rivers Δ = 2 · neurons Δ ≈ 1.5</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wA">
+          <canvas id="cA" role="img" aria-label="A schematic vessel tree whose branch diameters follow the diameter exponent"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>A schematic vessel tree</strong> · the trunk splits in two, again and again; each daughter's diameter is d·2<sup>−1/Δ</sup></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Leonardo wrote that "all the branches of a tree at every stage of its height when put together are equal in thickness to the trunk below them". In formulas: at a bifurcation the diameters obey d<sup>Δ</sup> = d₁<sup>Δ</sup> + d₂<sup>Δ</sup> with Δ = 2, since cross-sections go as d². Mandelbrot measures other anatomies by the same exponent. In the lung the air slows down toward thinner bronchi, and resistance arguments (Murray's) and space-packing arguments both land on Δ = 3. For rivers, the discharge Q is preserved at junctions and width goes as √Q, so Leonardo's Δ = 2 holds for streams too, as he himself suspected.</p>
+        <div class="mini" aria-label="A pipe of diameter d splitting into pipes of diameters d1 and d2">
+          <svg viewBox="-0.05 -0.05 1.2 1.05" aria-hidden="true" id="miniDelta"></svg>
+          <div class="fx">d<sup>Δ</sup> = d₁<sup>Δ</sup> + d₂<sup>Δ</sup></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Diameter exponent</span><span class="value" id="dAv">Δ = 3.00</span></div>
+          <div class="slider"><input type="range" id="dA" min="1.3" max="3.4" step="0.05" value="3" aria-label="Diameter exponent"></div>
+        </div>
+        <div class="btn-row" id="preA"></div>
+        <dl class="read">
+          <div><dt>Daughter / trunk diameter</dt><dd id="rAk">0.7937</dd></div>
+          <div><dt>Cross-section per split</dt><dd id="rAs">1.2599</dd></div>
+          <div><dt>Flow speed per split</dt><dd id="rAv">0.7937</dd></div>
+          <div><dt>Leonardo's value</dt><dd>Δ = 2</dd></div>
+        </dl>
+        <p class="note">The figure is a diagram, not a plate: the book draws no figure for these pages. Δ only fixes how diameters shrink; the angles and lengths here are decorative. At Δ = 2 the total cross-section is kept at every split, so a tree is a bundle of constant-width vessels — the "pipe model" of botanists. Above 2 the total section grows and the flow slows; the lung's Δ ≈ 3 makes the branching ratio 2<sup>1/3</sup> ≈ 1.26, the value Murray's least-resistance argument asks for.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATES 164–165 ===================== -->
+  <section class="plate" id="bronchi">
+    <div class="plate-head">
+      <p class="no">Plates 164 and 165 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Plane-filling recursive bronchi</h2>
+      <p class="dim" id="bDim">Two subtrees in ratios r₁ and r₂ · tips' D solves r₁<sup>D</sup> + r₂<sup>D</sup> = 1 · diameters d = c·ℓ</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wB">
+          <canvas id="cB" role="img" aria-label="A recursive bronchial tree of rectangles"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>Recursive bronchi</strong> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">A trunk with barren sides and one fertile bud grows two branches at right angles, one in ratio r₁, the other in r₂; each branch repeats the rule, forever. The whole tree is not self-similar — it keeps a trunk as residue — but the set of branch tips is, with dimension D solving r₁<sup>D</sup> + r₂<sup>D</sup> = 1. In Plate 165 each branch is a rectangle whose width is a fixed fraction of its length, and the tree fills a roughly rectangular piece of the plane with no gap and no overlap. In Plate 164 the width-to-length ratio shrinks at every stage — faster in the left half than in the right — and as the branches thin, the tips' dimension can reach D = 2.</p>
+        <div class="mini" aria-label="The branching rule: a rectangle with two perpendicular daughters">
+          <svg viewBox="0 0 1.1 1.0" aria-hidden="true" id="miniT"></svg>
+          <div class="fx">one bud, two branches<br>at right angles</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Long ratio r₁</span><span class="value" id="bR1v">0.718</span></div>
+          <div class="slider"><input type="range" id="bR1" min="0.55" max="0.76" step="0.001" value="0.718" aria-label="First ratio"></div>
+          <div class="label-row"><span class="label">Short ratio r₂</span><span class="value" id="bR2v">0.678</span></div>
+          <div class="slider"><input type="range" id="bR2" min="0.45" max="0.72" step="0.001" value="0.678" aria-label="Second ratio"></div>
+          <div class="label-row"><span class="label">Width / length c</span><span class="value" id="bCv">0.15</span></div>
+          <div class="slider"><input type="range" id="bC" min="0.02" max="0.55" step="0.005" value="0.148" aria-label="Width to length ratio"></div>
+          <div class="label-row"><span class="label">Width decay per stage</span><span class="value" id="bQv">1 (fixed width/length)</span></div>
+          <div class="slider"><input type="range" id="bQ" min="0.6" max="1" step="0.005" value="1" aria-label="Width decay per stage"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Stages</span></div>
+          <div class="steps" id="sB" role="group" aria-label="Stages"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="p165top">Show Plate 165, top, as printed</button>
+          <button type="button" class="btn" id="p165bot">Plate 165, bottom</button>
+          <button type="button" class="btn" id="p164">Plate 164</button>
+        </div>
+        <dl class="read">
+          <div><dt>Tips' dimension D</dt><dd id="rBd">1.93</dd></div>
+          <div><dt>Diameter exponent Δ</dt><dd id="rBdelta">1.93 = D</dd></div>
+          <div><dt>Branches drawn</dt><dd id="rBn">2,047</dd></div>
+          <div><dt>Width / length</dt><dd id="rBw">fixed</dd></div>
+        </dl>
+        <p class="note">The construction was decoded from the scans: branches meet in a T whose two bars tuck behind the parent's tip, the long branch flips which side its own long daughter takes while the short branch keeps it, and the printed figures follow this rule branch for branch. The ratios are fitted: r₁ ≈ 0.718, r₂ ≈ 0.678, width 0.15 of length for the top of Plate 165; r₁ ≈ 0.726, r₂ ≈ 0.582, width 0.41 for the bottom. Plate 164's per-stage width schedule is our reconstruction (widths fitted as shrinking by ≈ 0.66 per stage on the left and ≈ 0.78 on the right); its large-scale structure matches the plate, the finest twigs only approximately. When the width-to-length ratio is fixed, Δ = D; when widths shrink faster, Δ &lt; D — the chapter's two cases.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 163 ===================== -->
+  <section class="plate" id="flowers">
+    <div class="plate-head">
+      <p class="no">Plate 163 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Flattened fractal models of plant flowers</h2>
+      <p class="dim">An umbrella tree of sticks, every stick thickened into triangles · angles θ/2 at the root, π−θ at the tip · Δ = D here</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wC">
+          <canvas id="cC" role="img" aria-label="An umbrella tree thickened into triangles, a flattened model of a plant flower"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>A flattened flower</strong> · two sticks from the root, every fork at the angle θ, lengths in ratio r</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Take an umbrella tree of infinitely thin sticks, as in Plate 155: two sticks from the root with the angle θ between them, and every stick forking into two daughters at the same angle, r times shorter. Now thicken every stick into triangles that have the stick as a side, with the angle θ/2 at the stick's root and π−θ at its tip. Around every fork the corners of the triangles add up to exactly 360°, so when θ is as small as self-avoidance allows, the thickened stems neither overlap nor leave gaps: they fill the umbrella's insides, and the figure goes solid, scalloped like a cauliflower. The branches thin out most when D comes close to 1 or 2 — Mandelbrot asks whether the D's of real flowers sit where branches are thickest.</p>
+        <div class="mini" aria-label="A stick with its two thickening triangles">
+          <svg viewBox="0 0 1.0 1.0" aria-hidden="true" id="miniTri"></svg>
+          <div class="fx">θ/2 at the root<br>π−θ at the tip</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Inter-branch angle</span><span class="value" id="thCv">θ = 60.3°</span></div>
+          <div class="slider"><input type="range" id="thC" min="18" max="110" step="0.5" value="60.3" aria-label="Angle between branches"></div>
+          <label class="check" for="trimC"><input type="checkbox" id="trimC"> Trim the triangles on one side, as in the plate's bottom figure</label>
+          <label class="check" for="stickC"><input type="checkbox" id="stickC"> Sticks only (the umbrella tree of Plate 155)</label>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn" id="cTop">Show Plate 163, top, as printed</button>
+          <button type="button" class="btn primary" id="cMid">Middle</button>
+          <button type="button" class="btn" id="cBot">Bottom</button>
+        </div>
+        <dl class="read">
+          <div><dt>Branch ratio r</dt><dd id="rCr">0.544</dd></div>
+          <div><dt>Tips' dimension</dt><dd id="rCd">1.14 (plane) · 2.14 (space)</dd></div>
+          <div><dt>Largest self-avoiding r</dt><dd id="rCcrit">0.557</dd></div>
+          <div><dt>Sticks drawn</dt><dd id="rCn">8,191</dd></div>
+        </dl>
+        <p class="note">The three printed figures fit the angles 30°, 60° and 90° (fitted 29.9°, 60.3°, 89.8°), with ratios r ≈ 0.50, 0.54 and 0.57 — each a whisker under the largest self-avoiding ratio our own computation gives for that angle, so the figures sit just on the safe side of self-contact. The trees' first canopy level is drawn a few percent shorter or longer than strict scaling in the plates, and the presets reproduce that. Moving the slider sets r to the computed self-avoidance bound. The bottom figure's white slits are the trimming the caption describes. Since width and length shrink together here, Δ = D, the case the chapter calls "self-similar with a residue".</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 17, pages 156–165 (Plates 163 to 165, with the umbrella trees of Plate 155 from chapter 16). Every figure is computed from the rules in the captions; ratios, angles and Plate 164's width schedule were fitted to the scans as noted under each figure.</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>

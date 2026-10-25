@@ -1,138 +1,151 @@
 {
-  "pages": [
-    {
-      "slug": "monkeys-tree",
-      "title": "Mandelbrot's Monkeys Tree",
-      "plates": "Plate 31",
-      "chapter": 5,
-      "artifact": "https://claude.ai/artifact/7gvGnFScNh6SAy2x99eudc",
-      "scripts": [
-        "script.js"
-      ],
-      "layout_comment": "/* Layout: the plate sits on the left like a page of the book; the instrument panel runs down the right. One column under 900px. */"
-    },
-    {
-      "slug": "minkowski-sausage",
-      "title": "Minkowski Sausage",
-      "plates": "Plate 32",
-      "chapter": 5,
-      "artifact": "https://claude.ai/artifact/LXgM42xuGAp9wWuX2x18D6",
-      "scripts": [
-        "script.js"
-      ],
-      "layout_comment": "/* Layout: the plate on the left as on the book's page 32; controls, readouts and the measuring chart down the right. One column under 900px. */"
-    },
-    {
-      "slug": "wiener-sausage",
-      "title": "Wiener Sausage",
-      "plates": "Brownian motion",
-      "chapter": 25,
-      "artifact": "https://claude.ai/artifact/RvpGQi3Td4y7gZnjM1pukG",
-      "scripts": [
-        "script.js"
-      ],
-      "layout_comment": "/* Layout: the simulated trail on the left like a plate; controls, readouts and the measuring chart down the right. One column under 900px. */"
-    },
-    {
-      "slug": "koch-plates",
-      "title": "Triadic Koch Island",
-      "plates": "Plates 42–45",
-      "chapter": 6,
-      "artifact": "https://claude.ai/artifact/1diKiTcEwLkJpZaVA2gQ11",
-      "scripts": [
-        "shared/draw.js",
-        "script.js"
-      ],
-      "layout_comment": "/* Layout: four plate sections in book order, each a printed figure beside its caption, controls and numbers; a sticky plate index on top. One column under 900px. */"
-    },
-    {
-      "slug": "gosper-island",
-      "title": "Gosper Island",
-      "plates": "Plates 46–47",
-      "chapter": 6,
-      "artifact": "https://claude.ai/artifact/UWcE52EkH4ip5mfXMMYdAA",
-      "scripts": [
-        "shared/draw.js",
-        "script.js"
-      ],
-      "layout_comment": "/* Layout: two plate sections in book order (46 with its tiling and loxodromic-point studies, then 47), each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
-    },
-    {
-      "slug": "quadric-islands",
-      "title": "Quadric Koch Islands",
-      "plates": "Plates 49–55",
-      "chapter": 6,
-      "artifact": "https://claude.ai/artifact/91wGC9EtnwxZp8MZJ4MF6N",
-      "scripts": [
-        "shared/draw.js",
-        "script.js"
-      ],
-      "layout_comment": "/* Layout: four plate sections in book order (49 with its family and critical-angle studies, 51, 53, 54–55), each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
-    },
-    {
-      "slug": "unequal-parts",
-      "title": "Unequal Parts",
-      "plates": "Plates 56–57",
-      "chapter": 6,
-      "artifact": "https://claude.ai/artifact/FXhChG4k3TAgHyYbvsyoCQ",
-      "scripts": [
-        "shared/geometry.js",
-        "shared/draw.js",
-        "script.js"
-      ],
-      "layout_comment": "/* Layout: Plate 56, the dimension equation, and the two figures of Plate 57, each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
-    },
-    {
-      "slug": "peano-sweeps",
-      "title": "Peano Sweeps",
-      "plates": "Plates 63–65",
-      "chapter": 7,
-      "artifact": "https://claude.ai/artifact/LW9gkq4RLJEzELfAx7s6xe",
-      "scripts": [
-        "shared/geometry.js",
-        "shared/draw.js",
-        "script.js"
-      ],
-      "layout_comment": "/* Layout: Plate 63 (island, the flipping point, the sweep), Plates 64–65 (two-interval sweeps) and the efficiency demo, each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
-    },
-    {
-      "slug": "dragon-sweeps",
-      "title": "Square and Dragon Sweeps",
-      "plates": "Plates 66–67",
-      "chapter": 7,
-      "artifact": "https://claude.ai/artifact/6EmzLTVdLKdNvpiUt94pog",
-      "scripts": [
-        "shared/draw.js",
-        "core.js",
-        "ui.js"
-      ],
-      "layout_comment": "/* Layout: Plate 66 square sweep (with the efficiency note), Plate 67 trapezoid sweep, the dragon and alternate dragons, and the twindragon, each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
-    },
-    {
-      "slug": "snow-sweeps",
-      "title": "Sweeps, Rivers and Trees",
-      "plates": "Plates 68–73",
-      "chapter": 7,
-      "artifact": "https://claude.ai/artifact/QxRja4otEyH8dMeU8Uy4UY",
-      "scripts": [
-        "shared/geometry.js",
-        "shared/draw.js",
-        "core.js",
-        "ui.js"
-      ],
-      "layout_comment": "/* Layout: snowflake sweeps (68–69), Peano–Gosper trees (70–71), a cascade tree (71), the fudgeflake (72–73) and the quartet (73), each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
-    },
-    {
-      "slug": "cantor-dust",
-      "title": "Cantor Dust",
-      "plates": "Plates 80–83",
-      "chapter": 8,
-      "scripts": [
-        "shared/draw.js",
-        "core.js",
-        "ui.js"
-      ],
-      "layout_comment": "/* Layout: the Cantor bar (80), the Cantor curtains (81), the devil's staircase (83) and the chapter's dust-and-dimension concept, each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
-    }
-  ]
+ "pages": [
+  {
+   "slug": "monkeys-tree",
+   "title": "Mandelbrot's Monkeys Tree",
+   "plates": "Plate 31",
+   "chapter": 5,
+   "artifact": "https://claude.ai/artifact/7gvGnFScNh6SAy2x99eudc",
+   "scripts": [
+    "script.js"
+   ],
+   "layout_comment": "/* Layout: the plate sits on the left like a page of the book; the instrument panel runs down the right. One column under 900px. */"
+  },
+  {
+   "slug": "minkowski-sausage",
+   "title": "Minkowski Sausage",
+   "plates": "Plate 32",
+   "chapter": 5,
+   "artifact": "https://claude.ai/artifact/LXgM42xuGAp9wWuX2x18D6",
+   "scripts": [
+    "script.js"
+   ],
+   "layout_comment": "/* Layout: the plate on the left as on the book's page 32; controls, readouts and the measuring chart down the right. One column under 900px. */"
+  },
+  {
+   "slug": "wiener-sausage",
+   "title": "Wiener Sausage",
+   "plates": "Brownian motion",
+   "chapter": 25,
+   "artifact": "https://claude.ai/artifact/RvpGQi3Td4y7gZnjM1pukG",
+   "scripts": [
+    "script.js"
+   ],
+   "layout_comment": "/* Layout: the simulated trail on the left like a plate; controls, readouts and the measuring chart down the right. One column under 900px. */"
+  },
+  {
+   "slug": "koch-plates",
+   "title": "Triadic Koch Island",
+   "plates": "Plates 42–45",
+   "chapter": 6,
+   "artifact": "https://claude.ai/artifact/1diKiTcEwLkJpZaVA2gQ11",
+   "scripts": [
+    "shared/draw.js",
+    "script.js"
+   ],
+   "layout_comment": "/* Layout: four plate sections in book order, each a printed figure beside its caption, controls and numbers; a sticky plate index on top. One column under 900px. */"
+  },
+  {
+   "slug": "gosper-island",
+   "title": "Gosper Island",
+   "plates": "Plates 46–47",
+   "chapter": 6,
+   "artifact": "https://claude.ai/artifact/UWcE52EkH4ip5mfXMMYdAA",
+   "scripts": [
+    "shared/draw.js",
+    "script.js"
+   ],
+   "layout_comment": "/* Layout: two plate sections in book order (46 with its tiling and loxodromic-point studies, then 47), each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+  },
+  {
+   "slug": "quadric-islands",
+   "title": "Quadric Koch Islands",
+   "plates": "Plates 49–55",
+   "chapter": 6,
+   "artifact": "https://claude.ai/artifact/91wGC9EtnwxZp8MZJ4MF6N",
+   "scripts": [
+    "shared/draw.js",
+    "script.js"
+   ],
+   "layout_comment": "/* Layout: four plate sections in book order (49 with its family and critical-angle studies, 51, 53, 54–55), each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+  },
+  {
+   "slug": "unequal-parts",
+   "title": "Unequal Parts",
+   "plates": "Plates 56–57",
+   "chapter": 6,
+   "artifact": "https://claude.ai/artifact/FXhChG4k3TAgHyYbvsyoCQ",
+   "scripts": [
+    "shared/geometry.js",
+    "shared/draw.js",
+    "script.js"
+   ],
+   "layout_comment": "/* Layout: Plate 56, the dimension equation, and the two figures of Plate 57, each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+  },
+  {
+   "slug": "peano-sweeps",
+   "title": "Peano Sweeps",
+   "plates": "Plates 63–65",
+   "chapter": 7,
+   "artifact": "https://claude.ai/artifact/LW9gkq4RLJEzELfAx7s6xe",
+   "scripts": [
+    "shared/geometry.js",
+    "shared/draw.js",
+    "script.js"
+   ],
+   "layout_comment": "/* Layout: Plate 63 (island, the flipping point, the sweep), Plates 64–65 (two-interval sweeps) and the efficiency demo, each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+  },
+  {
+   "slug": "dragon-sweeps",
+   "title": "Square and Dragon Sweeps",
+   "plates": "Plates 66–67",
+   "chapter": 7,
+   "artifact": "https://claude.ai/artifact/6EmzLTVdLKdNvpiUt94pog",
+   "scripts": [
+    "shared/draw.js",
+    "core.js",
+    "ui.js"
+   ],
+   "layout_comment": "/* Layout: Plate 66 square sweep (with the efficiency note), Plate 67 trapezoid sweep, the dragon and alternate dragons, and the twindragon, each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+  },
+  {
+   "slug": "snow-sweeps",
+   "title": "Sweeps, Rivers and Trees",
+   "plates": "Plates 68–73",
+   "chapter": 7,
+   "artifact": "https://claude.ai/artifact/QxRja4otEyH8dMeU8Uy4UY",
+   "scripts": [
+    "shared/geometry.js",
+    "shared/draw.js",
+    "core.js",
+    "ui.js"
+   ],
+   "layout_comment": "/* Layout: snowflake sweeps (68–69), Peano–Gosper trees (70–71), a cascade tree (71), the fudgeflake (72–73) and the quartet (73), each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+  },
+  {
+   "slug": "cantor-dust",
+   "title": "Cantor Dust",
+   "plates": "Plates 80–83",
+   "chapter": 8,
+   "scripts": [
+    "shared/draw.js",
+    "core.js",
+    "ui.js"
+   ],
+   "layout_comment": "/* Layout: the Cantor bar (80), the Cantor curtains (81), the devil's staircase (83) and the chapter's dust-and-dimension concept, each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+  },
+  {
+   "slug": "diameter-exponent",
+   "title": "Trees and the Diameter Exponent",
+   "plates": "Plates 163–165",
+   "chapter": 17,
+   "scripts": [
+    "shared/geometry.js",
+    "shared/draw.js",
+    "core.js",
+    "ui.js"
+   ],
+   "layout_comment": "/* Layout: the diameter exponent (a concept diagram), Plates 164-165 recursive bronchi, Plate 163 flower models, each a figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+  }
+ ]
 }

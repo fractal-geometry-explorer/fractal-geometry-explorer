@@ -89,8 +89,8 @@ Update this file in the same pull request as the work it records.
 | Plate | Page | Title | Kind | Status | Site page |
 | :- | :- | :- | :- | :- | :- |
 | 155 | 154–155 | Fractal umbrella | exact | todo | |
-| 163 | 163 | Flattened fractal models of plant flowers | exact | todo | |
-| 164–165 | 164–165 | Plane-filling recursive bronchi | exact | todo | |
+| 163 | 163 | Flattened fractal models of plant flowers | exact | done | diameter-exponent |
+| 164–165 | 164–165 | Plane-filling recursive bronchi | exact | done | diameter-exponent |
 
 ## VI Self-mapping fractals (chapters 18–20)
 
@@ -188,7 +188,7 @@ Each chapter session should add the chapter's main ideas here, alongside its pla
 - intermittency (chapter 10);
 - length–area–volume relations (chapter 12);
 - percolation (chapter 13);
-- the diameter exponent of trees (chapter 17);
+- the diameter exponent of trees (chapter 17) — done, on the diameter-exponent page;
 - 1/f noise and scaling nets (chapter 27);
 - Lévy flights and dusts (chapters 31–32);
 - lacunarity (chapter 34);
