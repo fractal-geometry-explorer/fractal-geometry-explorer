@@ -1,0 +1,269 @@
+<title>Sweeps and Rivers</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.seq { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px; }
+.seq button { height: 40px; padding: 0; display: grid; place-items: center; font: 600 14px/1 var(--f-mono); color: var(--text); background: var(--surface); border: 1px solid var(--rule); cursor: pointer; }
+.seq button small { display: block; font: 500 9.5px/1 var(--f-mono); color: var(--muted); }
+.seq button[aria-pressed="true"] { background: var(--text); color: var(--page); border-color: var(--text); }
+.seq button[aria-pressed="true"] small { color: var(--page); opacity: 0.75; }
+.seq button.off { opacity: 0.38; }
+.mini svg.gen { height: 66px; }
+.minis { display: flex; flex-wrap: wrap; gap: 8px; }
+.minis .mini { flex: 1 1 140px; }
+.side p.cap b { font-family: var(--f-display); font-size: 14px; letter-spacing: 0.04em; text-transform: uppercase; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 7, "Harnessing the Peano monster curves" · pages 68–73</p>
+    <h1><span class="plate-no">Plates 68–73</span><span class="lozenge" aria-hidden="true"></span><span>Sweeps, Rivers and Trees</span></h1>
+    <p class="dek">Peano curves are far from being monsters with no concrete meaning. When they avoid touching themselves, the two sides of the curve form two interlocking trees, rivers and watersheds, which are good first models of drainage basins, botanical trees and blood vessels. These plates show sweeps of the Koch snowflake and of Gosper's island, their trees, and trees grown directly from tree-shaped generators. Every figure is computed from the rules in the captions.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#snow"><b>68–69</b> Snowflake sweeps</a>
+    <a href="#gosper"><b>70–71</b> Peano–Gosper trees</a>
+    <a href="#cascade"><b>71</b> A tree by cascade</a>
+    <a href="#fudge"><b>72–73</b> Fudgeflake</a>
+    <a href="#quartet"><b>73</b> Quartet</a>
+  </nav>
+
+  <!-- ===================== SNOWFLAKE SWEEPS ===================== -->
+  <section class="plate" id="snow">
+    <div class="plate-head">
+      <p class="no">Plates 68 and 69 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>The snowflake sweeps</h2>
+      <p class="dim" id="snowDim">Seven intervals: six of length 1/3, one of 1/√3 · 6·(1/3)² + (1/√3)² = 1 · D = 2 · rivers D = log 4/log 3 ≈ 1.2619</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wA">
+          <canvas id="cA" role="img" aria-label="Snowflake sweep"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cAt">Snowflake sweep</strong> · stage <span id="cAs">3</span> · <span id="cAn">343 intervals</span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">A family of Peano curves Mandelbrot designed. They fill the original Koch snowflake of Plate 45, bringing together two monsters of around 1900. The initiator is [0, 1], and the curve fills the snowflake built on the equilateral triangle with that base. The generator, called S for straight, has six intervals of length 1/3 and one of length 1/√3. Its mirror image in the line x = ½ is F, for flipped. Either may be used at any stage, so each sequence of S and F gives a different snowflake sweep.</p>
+        <div class="minis">
+          <div class="mini" aria-label="Generator S">
+            <svg class="gen" viewBox="-0.06 -0.66 1.12 0.78" aria-hidden="true" id="miniS"></svg>
+            <div class="fx">S</div>
+          </div>
+          <div class="mini" aria-label="Generator F">
+            <svg class="gen" viewBox="-0.06 -0.66 1.12 0.78" aria-hidden="true" id="miniF"></svg>
+            <div class="fx">F</div>
+          </div>
+          <div class="mini" aria-label="Thirteen-interval generator">
+            <svg class="gen" viewBox="-0.06 -0.66 1.12 0.78" aria-hidden="true" id="mini13"></svg>
+            <div class="fx">13 intervals</div>
+          </div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Generator</span></div>
+          <div class="steps words" id="gA" role="group" aria-label="Generator"></div>
+          <div id="seqWrap" class="group">
+            <div class="label-row"><span class="label">S or F at each stage</span></div>
+            <div class="seq" id="seqA" role="group" aria-label="Generator used at each stage"></div>
+            <div class="btn-row" id="preSeq"></div>
+            <label class="check" for="swapA" id="swapWrap" hidden><input type="checkbox" id="swapA" checked> Legs that run backward take the other generator (S ↔ F): the rule of Plate 68 and Plate 69's small figures. Off: the rule of Plate 69's large figure.</label>
+          </div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="sAv">stage 3</span></div>
+          <div class="steps" id="sA" role="group" aria-label="Stage"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Draw</span></div>
+          <div class="steps words" id="mA" role="group" aria-label="Drawing"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate68">Show Plate 68 as printed</button>
+          <button type="button" class="btn" id="plate69">Plate 69</button>
+        </div>
+        <p class="readline" id="infoA" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Intervals</dt><dd id="rAa">343</dd></div>
+          <div><dt>Dimension</dt><dd>2</dd></div>
+          <div><dt>Region swept</dt><dd>the snowflake</dd></div>
+          <div><dt>Each river</dt><dd>D ≈ 1.2619</dd></div>
+        </dl>
+        <p class="note" id="noteA">The orientation of each piece was read off the book's second stages, which these reproduce exactly. F carries the mirrored orientations, and every sequence of S and F was checked to avoid self-contact. The book's figures of the 13-interval sweep use two rules for the legs that run backward, told apart by fitting the scans: Plate 68 (stage 4, all S) and Plate 69's two small figures follow one; the large figure of Plate 69 is stage 3 with the sequence S, F, F under the other. The plate also rounds the snowflake's outline two ways, both reproduced here.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PEANO–GOSPER ===================== -->
+  <section class="plate" id="gosper">
+    <div class="plate-head">
+      <p class="no">Plates 70 and 71 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>The Peano–Gosper curve and its trees</h2>
+      <p class="dim">N = 7, r = 1/√7, D = 2 · its boundary, and every river and watershed, D = log 3/log √7 ≈ 1.1291</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wB">
+          <canvas id="cB" role="img" aria-label="Peano–Gosper curve"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cBt">Black and white</strong> · stage <span id="cBs">4</span> · <span id="cBn">2,401 links</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The thin broken lines of Plate 46 were the first stages of a curve due to Gosper (Gardner 1976). It was the first Peano curve that avoids touching itself to be obtained by the Koch method without further processing. Turned until its first link is horizontal, its generator lies on a triangular lattice, where it uses 7 of the 3 × 7 links. The curve fills the Gosper island of Plate 46.</p>
+        <div class="mini" aria-label="The Peano–Gosper generator">
+          <svg class="gen" viewBox="-0.06 -0.62 1.12 0.78" aria-hidden="true" id="miniG"></svg>
+          <div class="fx">N = 7, 1/r = √7<br>D = 2</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mB" role="group" aria-label="What to show"></div>
+        </div>
+        <p class="cap" id="capB"></p>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="sBv">stage 4</span></div>
+          <div class="steps" id="sB" role="group" aria-label="Stage"></div>
+        </div>
+        <dl class="read">
+          <div><dt>Curve links</dt><dd id="rBa">2,401</dd></div>
+          <div><dt>River links</dt><dd id="rBb">—</dd></div>
+          <div><dt>Watershed links</dt><dd id="rBc">—</dd></div>
+          <div><dt>Separate fingers</dt><dd id="rBd">—</dd></div>
+        </dl>
+        <p class="note">Mandelbrot adds that anyone who, as a schoolboy, often gazed at a map of the Loire and the Garonne will not feel far from home.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CASCADE TREE ===================== -->
+  <section class="plate" id="cascade">
+    <div class="plate-head">
+      <p class="no">Plate 71, bottom <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>A river tree built directly by a Koch cascade</h2>
+      <p class="dim">A tree-shaped generator of seven links on Gosper's lattice · N = 7, r = 1/√7, D = 2</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wC">
+          <canvas id="cC" role="img" aria-label="River tree grown by a Koch cascade"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>Koch cascade tree</strong> · stage <span id="cCs">4</span> · <span id="cCn">2,401 links</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">When the generator is itself shaped like a tree, the Koch cascade generates a tree. Replace every link by the seven-link generator, again and again. The result is another way of draining the Gosper island of Plate 46. Links that left the generator's main channel more often are drawn thinner.</p>
+        <div class="mini" aria-label="The tree generator">
+          <svg class="gen" viewBox="-0.06 -0.86 1.2 1.0" aria-hidden="true" id="miniT"></svg>
+          <div class="fx">N = 7, 1/r = √7<br>D = 2</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="sCv">stage 4</span></div>
+          <div class="steps" id="sC" role="group" aria-label="Stage"></div>
+          <label class="check" for="clipC"><input type="checkbox" id="clipC" checked> Clip off the last branches near the sources, as in the plate</label>
+        </div>
+        <dl class="read">
+          <div><dt>Links</dt><dd id="rCa">2,401</dd></div>
+          <div><dt>Links drawn</dt><dd id="rCb">—</dd></div>
+        </dl>
+        <p class="note">The placement of each link was read off the book's second stage, where each copy of the generator shows its main channel and the first link of its side branch. The clipping here removes every stream from its source to the first junction. From the second stage on, links touch at some lattice points and close small hexagonal rings, as in the plate.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FUDGEFLAKE ===================== -->
+  <section class="plate" id="fudge">
+    <div class="plate-head">
+      <p class="no">Plates 72 and 73 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Plane-filling trees and the fudgeflake</h2>
+      <p class="dim">A Y-shaped generator: three links of 1/√3 · N = 3, D = 2 · each river D = log 2/log √3 = log 4/log 3</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wD">
+          <canvas id="cD" role="img" aria-label="Fudgeflake river tree"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cDt">Fudgeflake river tree</strong> · stage <span id="cDs">7</span> · <span id="cDn">2,187 links</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The river trees deduced from Peano curves can also be grown directly, from a generator that is itself a tree. Take [0, 1] as initiator and three links of length 1/√3 joining the corners of the equilateral triangle on [0, 1] to its centre. Each river is a midpoint displacement curve like Plate 43's, of dimension log 4/log 3. To leave room for the rivers, the generator must alternate between the right and the left. That fudges the snowflake's symmetry, and the domain these rivers drain is called the <i>fudgeflake</i>.</p>
+        <div class="minis">
+          <div class="mini" aria-label="The Y generator">
+            <svg class="gen" viewBox="-0.06 -0.92 1.12 1.0" aria-hidden="true" id="miniY"></svg>
+            <div class="fx">N = 3, 1/r = √3</div>
+          </div>
+          <div class="mini" aria-label="A river, stages 1 and 2">
+            <svg class="gen" viewBox="-0.06 -0.4 2.24 0.5" aria-hidden="true" id="miniR"></svg>
+            <div class="fx">a river, stages 1 and 2</div>
+          </div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mD" role="group" aria-label="What to show"></div>
+        </div>
+        <p class="cap" id="capD"></p>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="sDv">stage 7</span></div>
+          <div class="steps" id="sD" role="group" aria-label="Stage"></div>
+        </div>
+        <dl class="read">
+          <div><dt>Links</dt><dd id="rDa">2,187</dd></div>
+          <div><dt>Area</dt><dd id="rDb">√3/2 ≈ 0.8660</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== QUARTET ===================== -->
+  <section class="plate" id="quartet">
+    <div class="plate-head">
+      <p class="no">Plate 73, bottom, and Plate 49 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>The quartet</h2>
+      <p class="dim">Five intervals of length 1/√5 · N = 5, D = 2 · boundary D = log 3/log √5 ≈ 1.3652</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wE">
+          <canvas id="cE" role="img" aria-label="The quartet"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cEt">Quartet</strong> · stage <span id="cEs">4</span> · <span id="cEn">625 intervals</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">A different Koch curve, together with three curves that fill it: one Peano curve and two trees. The Peano curve on [0, 1] uses five intervals of length 1/√5. Its boundary converges to a Koch curve of dimension log 3/log √5 ≈ 1.3652. Mandelbrot calls the shape the <i>quartet</i>; it is the figure in the centre of Plate 49. Each "player", and the table between them, pertile: they are the five pieces the generator's five intervals sweep.</p>
+        <div class="minis">
+          <div class="mini" aria-label="The quartet's generator">
+            <svg class="gen" viewBox="-0.06 -0.86 1.12 0.96" aria-hidden="true" id="miniQ"></svg>
+            <div class="fx">N = 5, 1/r = √5</div>
+          </div>
+          <div class="mini" aria-label="Two tree generators">
+            <svg class="gen" viewBox="-0.06 -0.86 2.3 1.36" aria-hidden="true" id="miniQT"></svg>
+            <div class="fx">H and F trees</div>
+          </div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mE" role="group" aria-label="What to show"></div>
+        </div>
+        <p class="cap" id="capE"></p>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="sEv">stage 4</span></div>
+          <div class="steps" id="sE" role="group" aria-label="Stage"></div>
+        </div>
+        <dl class="read">
+          <div><dt>Intervals</dt><dd id="rEa">625</dd></div>
+          <div><dt>Touches itself</dt><dd id="rEb">no</dd></div>
+        </dl>
+        <p class="note">The Peano curve's placements were read off the book's second stage. The book doesn't show the trees' second stages. The H tree touches itself however its links are placed. For the F tree, this page uses the placement that never touches itself, so its outline is a reconstruction.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 7, pages 68–73 (Plates 68 to 73). Every figure is computed from the rules in the captions. Placements and stages were fitted to the scans where the book shows them, as noted under each figure. Companion pages: <a href="https://claude.ai/artifact/6EmzLTVdLKdNvpiUt94pog" target="_blank" rel="noopener">Square and Dragon Sweeps</a> (Plates 66–67), <a href="https://claude.ai/artifact/LW9gkq4RLJEzELfAx7s6xe" target="_blank" rel="noopener">Peano Sweeps</a> (Plates 63–65), <a href="https://claude.ai/artifact/UWcE52EkH4ip5mfXMMYdAA" target="_blank" rel="noopener">Gosper Island</a> (Plates 46–47) and <a href="https://claude.ai/artifact/1diKiTcEwLkJpZaVA2gQ11" target="_blank" rel="noopener">Triadic Koch Island</a> (Plates 42–45).</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>

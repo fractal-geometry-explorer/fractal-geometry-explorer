@@ -1,0 +1,33 @@
+const { chromium } = require('playwright');
+(async () => {
+  const b = await chromium.launch(); const errs = [];
+  const p = await b.newPage({ viewport: {width:1280,height:1000}, deviceScaleFactor: 1 });
+  await p.addInitScript(() => Object.defineProperty(navigator, 'hardwareConcurrency', { get: () => 8 }));
+  p.on('pageerror', e => errs.push(e.message)); p.on('console', m => { if (m.type()==='error' && !m.text().includes('ERR_TUNNEL')) errs.push(m.text()); });
+  await p.goto('file://' + process.argv[2]);
+  const t0 = Date.now();
+  await p.waitForFunction(() => document.querySelectorAll('#sTable td').length && [...document.querySelectorAll('#sTable td')].every(td => td.textContent !== '…'), null, { timeout: 300000 });
+  console.log('chart complete in', Date.now() - t0, 'ms');
+  const rows = await p.$$eval('#sTable tr', trs => trs.map(tr => [...tr.children].map(c => c.textContent)));
+  const hdr = rows[0]; const i7 = hdr.indexOf('Stage 7'), i9 = hdr.indexOf('Stage 9'), il = hdr.length - 1;
+  console.log('stage 7:', rows.slice(1).map(r => r[i7]).join(' '));
+  console.log('stage 9:', rows.slice(1).map(r => r[i9]).join(' '));
+  console.log('law    :', rows.slice(1).map(r => r[il]).join(' '));
+  console.log('readouts:', await p.$eval('#rA', e=>e.textContent), '|', await p.$eval('#rL', e=>e.textContent), '|', await p.$eval('#rC', e=>e.textContent), '| D', await p.$eval('#rD', e=>e.textContent), '| law D', await p.$eval('#lawD', e=>e.textContent));
+  for (const n of [4,5,6,8,9]) { await p.click(`#stages button:nth-child(${n-3})`); await p.waitForFunction(() => !document.querySelector('#rC').textContent.includes('…'), null, {timeout: 60000}); console.log('stage', n, 'D', await p.$eval('#rD', e=>e.textContent), '| changed', await p.$eval('#rC', e=>e.textContent)); }
+  await p.click('#stages button:nth-child(4)'); await p.waitForTimeout(800);
+  await p.screenshot({ path: '../fgn/ws_desk.png', fullPage: true });
+  await p.check('#chg'); await p.check('#prev'); await p.click('#stages button:nth-child(2)'); await p.waitForTimeout(1000);
+  await (await p.$('#wrap')).screenshot({ path: '../fgn/ws_chg5.png' });
+  await p.uncheck('#prev'); await p.click('#stages button:nth-child(6)'); await p.waitForTimeout(2500);
+  await (await p.$('#wrap')).screenshot({ path: '../fgn/ws_chg9.png' });
+  await p.click('#newPath'); await p.waitForTimeout(1500);
+  console.log('after new path: caption', await p.$eval('figcaption', e => e.textContent.replace(/\s+/g,' ').trim().slice(0,80)));
+  const p2 = await b.newPage({ viewport: {width:400,height:860}, colorScheme: 'dark' });
+  p2.on('pageerror', e => errs.push('phone: '+e.message));
+  await p2.goto('file://' + process.argv[2]); await p2.waitForTimeout(3000);
+  await p2.screenshot({ path: '../fgn/ws_phone.png', fullPage: true });
+  console.log('phone overflow', await p2.evaluate(() => document.documentElement.scrollWidth - innerWidth));
+  console.log('errors', errs);
+  await b.close();
+})();

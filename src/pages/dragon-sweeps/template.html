@@ -1,0 +1,239 @@
+<title>Dragon Sweeps</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.r-tall { aspect-ratio: 4 / 5; }
+.panels { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; padding: 12px; background: var(--print-paper); border: 1px solid var(--print-rule); color: var(--print-ink); }
+.panels figure { margin: 0; display: grid; gap: 4px; justify-items: center; }
+.panels svg { width: 100%; height: auto; display: block; }
+.panels figcaption { font-family: var(--f-mono); font-size: 11px; color: #5d5d58; }
+.seq { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: 4px; }
+.seq button { height: 40px; padding: 0; display: grid; place-items: center; gap: 0; font: 600 14px/1 var(--f-mono); color: var(--text); background: var(--surface); border: 1px solid var(--rule); cursor: pointer; }
+.seq button small { display: block; font: 500 9.5px/1 var(--f-mono); color: var(--muted); }
+.seq button[aria-pressed="true"] { background: var(--text); color: var(--page); border-color: var(--text); }
+.seq button[aria-pressed="true"] small { color: var(--page); opacity: 0.75; }
+.seq button:hover { border-color: var(--text); }
+.seq button.off { opacity: 0.38; }
+.addr { display: grid; gap: 8px; font-size: 13.5px; line-height: 1.45; }
+.addr:empty { display: none; }
+.addr .val { font-family: var(--f-mono); font-size: 14px; }
+.addr ol { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; }
+.addr li { display: flex; gap: 10px; align-items: baseline; font-family: var(--f-mono); font-size: 14.5px; overflow-wrap: anywhere; }
+.addr li i { flex: none; width: 12px; height: 12px; border: 1px solid var(--print-rule); position: relative; top: 1px; }
+.addr li.typed { color: var(--accent); font-weight: 500; }
+.addr li small { font-family: var(--f-display); font-size: 11.5px; color: var(--muted); font-weight: 500; }
+.addr .hl { color: var(--accent); font-weight: 500; }
+.numrow { display: flex; gap: 8px; }
+.numrow input { flex: 1; min-width: 0; height: 36px; padding: 0 10px; font: 500 15px/1 var(--f-mono); color: var(--text); background: var(--surface); border: 1px solid var(--rule); }
+.numrow input:focus { border-color: var(--accent); outline: none; }
+#numEx .btn { font-family: var(--f-mono); font-weight: 500; padding: 6px 9px; }
+.mini svg.gen { height: 70px; }
+.side p.cap b { font-family: var(--f-display); font-size: 14px; letter-spacing: 0.04em; text-transform: uppercase; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 7, "Harnessing the Peano monster curves" · pages 66–67</p>
+    <h1><span class="plate-no">Plates 66–67</span><span class="lozenge" aria-hidden="true"></span><span>Square and Dragon Sweeps</span></h1>
+    <p class="dek">The generator is the same one as in Plates 64 and 65: two intervals meeting at a right angle. What changes is the rule for which side each copy goes on, and seemingly slight changes there have lasting consequences: a square swept with no waste, a right trapezoid, and the dragon. Every figure is computed from the rules in the captions.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#sq"><b>66</b> Peano's later sweep</a>
+    <a href="#p67"><b>67</b> A right trapezoid</a>
+    <a href="#dragon"><b>66</b> The dragon sweep</a>
+    <a href="#twin"><b>66–67</b> Twindragon</a>
+  </nav>
+
+  <!-- ===================== SQUARE SWEEP ===================== -->
+  <section class="plate" id="sq">
+    <div class="plate-head">
+      <p class="no">Plate 66 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>A later square sweep by Peano</h2>
+      <p class="dim">Initiator [0, 1] · two equal legs at 90° · N = 2, r = 1/√2 · D = 2 · area 1</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wA">
+          <canvas id="cA" role="img" aria-label="Peano's later square sweep"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>Square sweep</strong> · stage <span id="cAs">4</span> · <span id="cAn">16 intervals</span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Start from the unit interval with the square above it. Each step replaces every interval by the right-angled generator, as in Plate 64. What is new is how the side is chosen. Two stages on, every interval is again the side of its own small square, and these squares tile the big one exactly. The book shows stages 2, 4 and 6:</p>
+        <div class="panels" id="panelsA" aria-label="Stages 2, 4 and 6 as in the book"></div>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="sAv">stage 4</span></div>
+          <div class="steps" id="sA" role="group" aria-label="Stage"></div>
+          <label class="check" for="procA"><input type="checkbox" id="procA" checked> Pull each strand slightly into its own square, and pinch a step that goes straight back into a V, as the book does</label>
+          <label class="check" for="ownA"><input type="checkbox" id="ownA"> Shade what each interval owns, coloured in the order the curve reaches it</label>
+          <label class="check" for="hilA"><input type="checkbox" id="hilA"> Join the squares' centres in that order (even stages)</label>
+        </div>
+        <p class="readline" id="infoA" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Intervals</dt><dd id="rAa">16</dd></div>
+          <div><dt>Each interval owns</dt><dd id="rAb">a square</dd></div>
+          <div><dt>Area swept</dt><dd>1</dd></div>
+          <div><dt>Edges traced twice</dt><dd id="rAd">1</dd></div>
+        </dl>
+      </div>
+    </div>
+
+    <div class="sub" id="eff">
+      <h3>Efficiency, an extremal property</h3>
+      <div class="plate-body">
+        <div class="side">
+          <p class="cap">On an interval of length 1, this curve fills an area of 1. Pólya's and Cesàro's sweeps (Plates 64–65) and the dragon below fill only ½ or ¼. Mandelbrot notes that when the teragons lie on a square grid, the area swept can never be more than 1. It reaches that maximum when the curve avoids itself, as this one does once each strand is pulled into its own square. So avoiding self-contact is more than a matter of looks. Rounding off a curve's self-contacts, as in Plate 63, does not make it as efficient as a curve that truly avoids itself.</p>
+          <p class="cap">The squares show where the 1 comes from. At an even stage the 4<sup>k</sup> intervals have length 2<sup>−k</sup>, and each owns a square of that side. The squares never overlap, so their areas add up to exactly 1. Edges traced twice do no harm here, because the two passes own squares on opposite sides.</p>
+        </div>
+        <div class="side">
+          <p class="cap"><b>Hilbert's curve inside.</b> Mandelbrot remarks that this sweep, with its self-contacts smoothed away, "falls back on a Peano curve due to Hilbert". The cleanest way to see it is to tick the last box above. At every even stage the curve visits its squares in exactly the order of Hilbert's curve (checked here up to stage 12, all 4,096 squares). Mandelbrot describes it as joining the midpoints of the intervals at alternate stages. Either way, the limit curve is Hilbert's.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 67 ===================== -->
+  <section class="plate" id="p67">
+    <div class="plate-head">
+      <p class="no">Plate 67 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>A curve sweeping a right trapezoid</h2>
+      <p class="dim" id="p67dim">Two unequal legs at 90° · r₁ = cos 30°, r₂ = sin 30° · D = 2</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-tall zoomable" id="wB">
+          <canvas id="cB" role="img" aria-label="The right-trapezoid sweep"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>Trapezoid sweep</strong> · φ = <span id="cBp">30°</span> · stage <span id="cBs">9</span> · <span id="cBn">512 intervals</span> · dashed: the trapezoid it sweeps</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Same rule as the square sweep, but the generator's two legs are unequal: the corner sits at angle φ from the interval instead of 45°. One more choice appears: which leg comes first. Putting the short leg first on the squares' sides, and the long leg first on their halves, turns the squares into right trapezoids, with parallel sides tan φ and cot φ on a base of length 1, and they still tile exactly. The caption says the processing is the same as in the preceding plate; the printed figure uses the thin chevrons of Plate 64, each pointing toward the corner the next stage would add.</p>
+        <label class="slider" for="phB">
+          <span class="label-row"><span class="label">Angle φ of the generator's corner</span><span class="value" id="phBv">30.0°</span></span>
+          <input type="range" id="phB" min="100" max="800" value="300">
+        </label>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate67">Show Plate 67 as printed</button>
+          <button type="button" class="btn" id="sq45">45°: back to the square sweep</button>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="sBv">stage 9</span></div>
+          <div class="steps" id="sB" role="group" aria-label="Stage"></div>
+          <label class="check" for="chevB"><input type="checkbox" id="chevB" checked> Draw each interval as a chevron, as printed</label>
+          <label class="check" for="trapB"><input type="checkbox" id="trapB" checked> Show the trapezoid it sweeps</label>
+          <label class="check" for="ownB"><input type="checkbox" id="ownB"> Shade what each interval owns</label>
+        </div>
+        <dl class="read">
+          <div><dt>Legs r₁, r₂</dt><dd id="rBa">0.866, 0.5</dd></div>
+          <div><dt>Dimension D</dt><dd id="rBb">2 <small>(r₁² + r₂² = 1)</small></dd></div>
+          <div><dt>Trapezoid sides</dt><dd id="rBc">0.577, 1.732</dd></div>
+          <div><dt>Area swept</dt><dd id="rBd">1.1547</dd></div>
+        </dl>
+        <p class="note">Mandelbrot gives no numbers for this plate. φ = 30° (legs in the ratio 1 : √3), stage 9 and the chevron drawing were found by matching the printed figure: laid over the scan, the computed chevrons fall on the printed ones. The plate stops short of the trapezoid's sharp corner because the curve approaches it slowly: the longest intervals shrink by only cos φ per stage.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== DRAGON ===================== -->
+  <section class="plate" id="dragon">
+    <div class="plate-head">
+      <p class="no">Plate 66 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>The Harter–Heighway dragon, and alternate dragons</h2>
+      <p class="dim" id="dragDim">Initiator [1, 0] · two equal legs at 90° · first copy always to the right · D = 2</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-lox zoomable" id="wC">
+          <canvas id="cC" role="img" aria-label="Dragon sweep"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cCt">Harter–Heighway dragon</strong> · stage <span id="cCs">14</span> · <span id="cCn">16,384 intervals</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">(Gardner 1967; Davis &amp; Knuth 1970.) The generator alternates between the right and the left of the teragon, exactly as in Pólya's triangle sweep. The only difference is that here the first copy goes to the right at every stage. The consequences are dramatic. At a mature stage the curve itself is lost and only its boundary shows, called the <i>dragon curve</i>; the sweep deserves to be called the <i>dragon sweep</i>.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">First copy at each stage</span><span class="value">R: x<sub>k</sub> = 1 · L: x<sub>k</sub> = 0</span></div>
+          <div class="seq" id="seqC" role="group" aria-label="Side of the first copy at each stage"></div>
+          <div class="btn-row" id="preC"></div>
+          <p class="note" id="seqNote"></p>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="sCv">stage 14</span></div>
+          <div class="steps" id="sC" role="group" aria-label="Stage"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Draw</span></div>
+          <div class="steps words" id="mC" role="group" aria-label="Drawing"></div>
+          <div class="steps" id="kC" role="group" aria-label="Number of copies" hidden></div>
+          <label class="check" for="ghostC"><input type="checkbox" id="ghostC"> Show the previous stage underneath</label>
+        </div>
+        <dl class="read">
+          <div><dt>Intervals</dt><dd id="rCa">16,384</dd></div>
+          <div><dt>Area swept</dt><dd>½</dd></div>
+          <div><dt>Region</dt><dd id="rCc">a dragon</dd></div>
+          <div><dt>Boundary dimension</dt><dd id="rCd">≈ 1.5236</dd></div>
+        </dl>
+        <p class="note">Like any Koch curve, the dragon is self-similar: "Copies" colours the 2<sup>k</sup> smaller dragons it is made of. It is also cut into portions that join at narrow wasp waists. Zoom in on a pinch to see them. These portions are similar to one another, but not to the dragon itself. (The book prints its mature stage turned half a turn from the early stages in its caption box; this page keeps one orientation throughout.)</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== TWINDRAGON ===================== -->
+  <section class="plate" id="twin">
+    <div class="plate-head">
+      <p class="no">Plates 66–67 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>The twindragon</h2>
+      <p class="dim">Initiator [0, 1] followed by [1, 0] · area 1 · skin D ≈ 1.5236</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-lox zoomable" id="wD">
+          <canvas id="cD" role="img" aria-label="Twindragon"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cDt">Twindragon</strong> · <span id="cDn">two dragons</span> · click a point to read its address</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The 1977 <i>Fractals</i> points out that with the dragon's rules a more natural initiator is [0, 1] followed by [1, 0]: two dragons back to back. Together they sweep a <i>twindragon</i>. The same shape turns up in number representations (Knuth 1980). In base −1 + i, using only the digits 0 and 1, the numbers 0.d₁d₂d₃… fill exactly one twindragon.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mD" role="group" aria-label="What to show"></div>
+        </div>
+        <p class="cap" id="modeCap"></p>
+        <div class="group" id="kDg">
+          <div class="label-row"><span class="label" id="kDl">Replicas</span><span class="value" id="kDv">4</span></div>
+          <div class="steps" id="kD" role="group" aria-label="Level"></div>
+        </div>
+        <div class="mini" id="skinMini" hidden aria-label="The skin's generator">
+          <svg class="gen" viewBox="-0.08 -0.36 1.16 0.72" aria-hidden="true">
+            <line x1="0" y1="0" x2="1" y2="0" stroke="#8a8a84" stroke-width="0.008" stroke-dasharray="0.025 0.02"/>
+            <polyline points="0,0 0.25,0.25 0.75,-0.25 1,0" fill="none" stroke="currentColor" stroke-width="0.022" stroke-linejoin="round"/>
+            <g fill="currentColor"><circle cx="0" cy="0" r="0.03"/><circle cx="0.25" cy="0.25" r="0.022"/><circle cx="0.75" cy="-0.25" r="0.022"/><circle cx="1" cy="0" r="0.03"/></g>
+          </svg>
+          <div class="fx">long r = 1/√2, two short r³ = 1/(2√2)<br>(1/√2)<sup>D</sup> + 2(1/(2√2))<sup>D</sup> = 1<br>x = 2<sup>D/2</sup> solves x³ − x² − 2 = 0 · D ≈ 1.5236</div>
+        </div>
+        <div class="group" id="numBox">
+          <div class="label-row"><span class="label">A number in base −1 + i</span></div>
+          <form class="numrow" id="numForm" autocomplete="off">
+            <input id="numIn" type="text" inputmode="decimal" spellcheck="false" aria-label="Digits in base −1 + i" placeholder="0.0(001)">
+            <button type="submit" class="btn primary">Show</button>
+          </form>
+          <p class="note">Digits 0 and 1 with a point; put a repeating block in parentheses, so 0.0(001) means 0.0001001001…. Or click anywhere on the picture to read that point's digits.</p>
+          <div class="btn-row" id="numEx"></div>
+          <div class="addr" id="addrD" aria-live="polite"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 7, pages 66–67 (Plates 66 and 67). Every figure is computed from the rules in the captions. The angle and stage of Plate 67 were found by fitting the printed figure. The Hilbert order, the trapezoid tiling and the twindragon's skin generator were checked numerically. Companion pages: <a href="https://claude.ai/artifact/LW9gkq4RLJEzELfAx7s6xe" target="_blank" rel="noopener">Peano Sweeps</a> (Plates 63–65), <a href="https://claude.ai/artifact/FXhChG4k3TAgHyYbvsyoCQ" target="_blank" rel="noopener">Unequal Parts</a> (Plates 56–57) and <a href="https://claude.ai/artifact/91wGC9EtnwxZp8MZJ4MF6N" target="_blank" rel="noopener">Quadric Koch Islands</a> (Plates 49–55).</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>

@@ -1,0 +1,28 @@
+const { chromium } = require('playwright');
+(async () => {
+  const b = await chromium.launch(); const errs = [];
+  const p = await b.newPage({ viewport: { width: 1280, height: 900 }, deviceScaleFactor: 1 });
+  p.on('pageerror', e => errs.push(e.message)); p.on('console', m => { if (m.type() === 'error' && !m.text().includes('ERR_TUNNEL')) errs.push(m.text()); });
+  const t0 = Date.now();
+  await p.goto('file://' + process.argv[2]); await p.waitForTimeout(1800);
+  console.log('load ms', Date.now() - t0);
+  const shot = async (sel, name) => { const el = await p.$(sel); await el.scrollIntoViewIfNeeded(); await p.waitForTimeout(250); await el.screenshot({ path: `fgn/up_${name}.png` }); };
+  for (const id of ['p56', 'dim', 'p57t', 'p57b']) await shot('#' + id, id);
+  console.log('56', await p.$eval('#p56 dl', e => e.innerText.replace(/\n/g, ' ')));
+  console.log('57t', await p.$eval('#p57t dl', e => e.innerText.replace(/\n/g, ' ')), await p.$eval('#ang57v', e => e.textContent));
+  console.log('57b', await p.$eval('#p57b dl', e => e.innerText.replace(/\n/g, ' ')));
+  console.log('legend', await p.$eval('#gLeg', e => e.innerText.replace(/\n/g, ' | ')));
+  await p.check('#d56'); await p.waitForTimeout(300); await shot('#c56', 'c56depth');
+  await p.check('#d57'); await p.waitForTimeout(300); await shot('#c57', 'c57depth');
+  await p.click('#pre57 button:nth-child(2)'); await p.waitForTimeout(400); await p.uncheck('#d57'); await p.waitForTimeout(300); await shot('#c57', 'c57polya');
+  console.log('polya', await p.$eval('#p57t dl', e => e.innerText.replace(/\n/g, ' ')));
+  const t = await p.evaluate(async () => { const el = document.getElementById('e57'); const t0 = performance.now(); el.value = 100; el.dispatchEvent(new Event('input', { bubbles: true })); await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))); return performance.now() - t0; });
+  console.log('57t finest eps ms', Math.round(t), await p.$eval('#r57b', e => e.textContent));
+  const p2 = await b.newPage({ viewport: { width: 390, height: 844 }, colorScheme: 'dark' });
+  p2.on('pageerror', e => errs.push('phone: ' + e.message));
+  await p2.goto('file://' + process.argv[2]); await p2.waitForTimeout(2000);
+  console.log('phone overflow', await p2.evaluate(() => document.documentElement.scrollWidth - innerWidth));
+  await p2.screenshot({ path: 'fgn/up_phone.png', fullPage: true });
+  console.log('errors', errs);
+  await b.close();
+})();

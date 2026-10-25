@@ -1,0 +1,1255 @@
+<title>Dragon Sweeps</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>
+/* Layout: Plate 66 square sweep (with the efficiency note), Plate 67 trapezoid sweep, the dragon and alternate dragons, and the twindragon, each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */
+:root {
+  --page: #e4e5e1;
+  --text: #1b1d1f;
+  --muted: #595e64;
+  --rule: #c4c7c1;
+  --surface: #f6f6f3;
+  --accent: #285895;
+  --f-display: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Newsreader", Georgia, "Times New Roman", serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* the figures are reproductions of printed plates, so their paper and inks stay the same in both themes */
+  --print-paper: #ecebe6;
+  --print-ink: #151515;
+  --print-rule: #c9c8c2;
+  --gain: rgba(47, 95, 158, 0.42);
+  --loss: rgba(186, 88, 44, 0.42);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --page: #111214; --text: #e5e5e1; --muted: #9a9fa6; --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --page: #111214; --text: #e5e5e1; --muted: #9a9fa6; --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--page); color: var(--text); font-family: var(--f-display); font-size: 14px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
+.wrap {
+  max-width: 1180px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 36px 64px;
+  display: grid; gap: 40px;
+}
+header.top { display: grid; gap: 10px; max-width: 820px; }
+.eyebrow { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+h1 {
+  margin: 0; display: flex; align-items: center; flex-wrap: wrap; gap: 0.18em 0.42em;
+  font-weight: 800; font-size: clamp(30px, 5.4vw, 54px); line-height: 1.02; letter-spacing: 0.01em; text-transform: uppercase; text-wrap: balance;
+}
+h1 .plate-no { font-weight: 600; text-transform: none; letter-spacing: 0; }
+.lozenge { display: inline-block; width: 0.42em; height: 0.42em; border: 0.075em solid currentColor; position: relative; top: -0.02em; }
+.lozenge::after { content: ""; position: absolute; inset: 0.1em; border: 0.05em solid currentColor; }
+.dek { margin: 0; font-family: var(--f-body); font-size: 19px; line-height: 1.45; max-width: 64ch; }
+
+nav.index {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+  padding: 10px max(16px, env(safe-area-inset-right, 0px)) 10px max(16px, env(safe-area-inset-left, 0px));
+  background: var(--page); border-bottom: 1px solid var(--rule);
+  display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none;
+}
+nav.index a {
+  flex: none; display: inline-flex; gap: 8px; align-items: baseline; padding: 6px 10px;
+  border: 1px solid var(--rule); background: var(--surface); color: var(--text); text-decoration: none; font-size: 13px; font-weight: 600;
+}
+nav.index a b { font-family: var(--f-mono); font-weight: 500; color: var(--accent); }
+nav.index a:hover { border-color: var(--text); }
+
+section.plate { display: grid; gap: 18px; scroll-margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--rule); }
+.plate-head { display: grid; gap: 4px; }
+.plate-head .no { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.plate-head h2 { margin: 0; font-size: clamp(22px, 3vw, 30px); font-weight: 800; line-height: 1.1; text-transform: uppercase; letter-spacing: 0.01em; text-wrap: balance; }
+.plate-head .dim { margin: 0; font-family: var(--f-mono); font-size: 13px; color: var(--muted); }
+.plate-body { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(280px, 1fr); gap: 32px; align-items: start; }
+@media (max-width: 899px) { .plate-body { grid-template-columns: minmax(0, 1fr); gap: 20px; } }
+figure.fig { margin: 0; display: grid; gap: 8px; min-width: 0; }
+.canvas-wrap { position: relative; width: 100%; max-width: 100%; background: var(--print-paper); outline: 1px solid var(--rule); overflow: hidden; }
+.canvas-wrap canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.r-sq { aspect-ratio: 1 / 1; }
+.r-lox { aspect-ratio: 5 / 4; }
+.zoomable { cursor: grab; touch-action: pan-y; }
+.zoomable.dragging { cursor: grabbing; }
+.view-tools { position: absolute; top: 10px; right: 10px; display: flex; gap: 6px; z-index: 2; }
+.view-tools button { min-width: 34px; height: 34px; padding: 0 10px; font: 600 15px/1 var(--f-display); color: var(--print-ink); background: #f7f7f3; border: 1px solid var(--print-rule); cursor: pointer; }
+figcaption { font-size: 13px; color: var(--muted); }
+figcaption strong { color: var(--text); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+
+.side { display: grid; gap: 18px; min-width: 0; align-content: start; }
+.side p.cap { margin: 0; font-family: var(--f-body); font-size: 17px; line-height: 1.55; max-width: 62ch; }
+.group { display: grid; gap: 8px; min-width: 0; }
+.label-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.label { font-size: 11.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.value { font-family: var(--f-mono); font-size: 12.5px; font-variant-numeric: tabular-nums; text-align: right; }
+.steps { display: flex; flex-wrap: wrap; gap: 6px; }
+.steps button {
+  min-width: 38px; height: 34px; padding: 0 10px; font: 600 13px/1 var(--f-mono); color: var(--text);
+  background: var(--surface); border: 1px solid var(--rule); cursor: pointer;
+}
+.steps.words button { font: 600 13px/1 var(--f-display); }
+.steps button[aria-pressed="true"] { background: var(--text); color: var(--page); border-color: var(--text); }
+.steps button:hover { border-color: var(--text); }
+.steps button:disabled { opacity: 0.35; cursor: default; border-color: var(--rule); }
+.btn-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.btn { padding: 8px 12px; font: 600 13px/1.2 var(--f-display); color: var(--text); background: var(--surface); border: 1px solid var(--rule); cursor: pointer; }
+.btn:hover { border-color: var(--text); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--page); }
+.check { display: flex; align-items: flex-start; gap: 8px; font-size: 13.5px; cursor: pointer; }
+.check input { accent-color: var(--accent); width: 16px; height: 16px; margin: 1px 0 0; flex: none; }
+.check:has(input:disabled) { opacity: 0.45; cursor: default; }
+.slider { display: grid; gap: 4px; }
+.slider input { width: 100%; accent-color: var(--accent); margin: 0; }
+.slider input:disabled { opacity: 0.4; }
+dl.read { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; padding-top: 14px; border-top: 1px solid var(--rule); }
+dl.read div { display: grid; gap: 2px; min-width: 0; }
+dl.read dt { font-size: 10.5px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); }
+dl.read dd { margin: 0; font-family: var(--f-mono); font-size: 16px; overflow-wrap: anywhere; }
+dl.read dd small { font-size: 11.5px; color: var(--muted); }
+.note { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.mini { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; padding: 10px 12px; background: var(--print-paper); border: 1px solid var(--print-rule); color: var(--print-ink); }
+.mini svg { height: 64px; width: auto; max-width: 100%; }
+.mini .fx { font-family: var(--f-mono); font-size: 12px; line-height: 1.6; color: var(--print-ink); }
+.key { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--muted); }
+.key span { display: inline-flex; align-items: center; gap: 6px; }
+.key i { width: 14px; height: 10px; display: inline-block; border: 1px solid var(--print-rule); }
+.readline { min-height: 2.9em; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.readline b { color: var(--text); font-weight: 700; }
+
+.sub { display: grid; gap: 14px; padding-top: 22px; border-top: 1px dashed var(--rule); scroll-margin-top: 64px; }
+.sub h3 { margin: 0; font-size: 15px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
+#loxPlot { width: 100%; height: auto; display: block; background: var(--print-paper); outline: 1px solid var(--print-rule); }
+#loxPlot text { font-family: var(--f-mono); font-size: 10px; fill: #5d5d58; }
+
+.source { font-family: var(--f-body); font-size: 15px; color: var(--muted); margin: 0; max-width: 84ch; }
+.source i { color: var(--text); }
+.source a { color: var(--accent); }
+button:focus-visible, input:focus-visible, a:focus-visible, canvas:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.r-tall { aspect-ratio: 4 / 5; }
+.panels { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; padding: 12px; background: var(--print-paper); border: 1px solid var(--print-rule); color: var(--print-ink); }
+.panels figure { margin: 0; display: grid; gap: 4px; justify-items: center; }
+.panels svg { width: 100%; height: auto; display: block; }
+.panels figcaption { font-family: var(--f-mono); font-size: 11px; color: #5d5d58; }
+.seq { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: 4px; }
+.seq button { height: 40px; padding: 0; display: grid; place-items: center; gap: 0; font: 600 14px/1 var(--f-mono); color: var(--text); background: var(--surface); border: 1px solid var(--rule); cursor: pointer; }
+.seq button small { display: block; font: 500 9.5px/1 var(--f-mono); color: var(--muted); }
+.seq button[aria-pressed="true"] { background: var(--text); color: var(--page); border-color: var(--text); }
+.seq button[aria-pressed="true"] small { color: var(--page); opacity: 0.75; }
+.seq button:hover { border-color: var(--text); }
+.seq button.off { opacity: 0.38; }
+.addr { display: grid; gap: 8px; font-size: 13.5px; line-height: 1.45; }
+.addr:empty { display: none; }
+.addr .val { font-family: var(--f-mono); font-size: 14px; }
+.addr ol { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; }
+.addr li { display: flex; gap: 10px; align-items: baseline; font-family: var(--f-mono); font-size: 14.5px; overflow-wrap: anywhere; }
+.addr li i { flex: none; width: 12px; height: 12px; border: 1px solid var(--print-rule); position: relative; top: 1px; }
+.addr li.typed { color: var(--accent); font-weight: 500; }
+.addr li small { font-family: var(--f-display); font-size: 11.5px; color: var(--muted); font-weight: 500; }
+.addr .hl { color: var(--accent); font-weight: 500; }
+.numrow { display: flex; gap: 8px; }
+.numrow input { flex: 1; min-width: 0; height: 36px; padding: 0 10px; font: 500 15px/1 var(--f-mono); color: var(--text); background: var(--surface); border: 1px solid var(--rule); }
+.numrow input:focus { border-color: var(--accent); outline: none; }
+#numEx .btn { font-family: var(--f-mono); font-weight: 500; padding: 6px 9px; }
+.mini svg.gen { height: 70px; }
+.side p.cap b { font-family: var(--f-display); font-size: 14px; letter-spacing: 0.04em; text-transform: uppercase; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 7, "Harnessing the Peano monster curves" · pages 66–67</p>
+    <h1><span class="plate-no">Plates 66–67</span><span class="lozenge" aria-hidden="true"></span><span>Square and Dragon Sweeps</span></h1>
+    <p class="dek">The generator is the same one as in Plates 64 and 65: two intervals meeting at a right angle. What changes is the rule for which side each copy goes on, and seemingly slight changes there have lasting consequences: a square swept with no waste, a right trapezoid, and the dragon. Every figure is computed from the rules in the captions.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#sq"><b>66</b> Peano's later sweep</a>
+    <a href="#p67"><b>67</b> A right trapezoid</a>
+    <a href="#dragon"><b>66</b> The dragon sweep</a>
+    <a href="#twin"><b>66–67</b> Twindragon</a>
+  </nav>
+
+  <!-- ===================== SQUARE SWEEP ===================== -->
+  <section class="plate" id="sq">
+    <div class="plate-head">
+      <p class="no">Plate 66 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>A later square sweep by Peano</h2>
+      <p class="dim">Initiator [0, 1] · two equal legs at 90° · N = 2, r = 1/√2 · D = 2 · area 1</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wA">
+          <canvas id="cA" role="img" aria-label="Peano's later square sweep"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>Square sweep</strong> · stage <span id="cAs">4</span> · <span id="cAn">16 intervals</span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Start from the unit interval with the square above it. Each step replaces every interval by the right-angled generator, as in Plate 64. What is new is how the side is chosen. Two stages on, every interval is again the side of its own small square, and these squares tile the big one exactly. The book shows stages 2, 4 and 6:</p>
+        <div class="panels" id="panelsA" aria-label="Stages 2, 4 and 6 as in the book"></div>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="sAv">stage 4</span></div>
+          <div class="steps" id="sA" role="group" aria-label="Stage"></div>
+          <label class="check" for="procA"><input type="checkbox" id="procA" checked> Pull each strand slightly into its own square, and pinch a step that goes straight back into a V, as the book does</label>
+          <label class="check" for="ownA"><input type="checkbox" id="ownA"> Shade what each interval owns, coloured in the order the curve reaches it</label>
+          <label class="check" for="hilA"><input type="checkbox" id="hilA"> Join the squares' centres in that order (even stages)</label>
+        </div>
+        <p class="readline" id="infoA" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Intervals</dt><dd id="rAa">16</dd></div>
+          <div><dt>Each interval owns</dt><dd id="rAb">a square</dd></div>
+          <div><dt>Area swept</dt><dd>1</dd></div>
+          <div><dt>Edges traced twice</dt><dd id="rAd">1</dd></div>
+        </dl>
+      </div>
+    </div>
+
+    <div class="sub" id="eff">
+      <h3>Efficiency, an extremal property</h3>
+      <div class="plate-body">
+        <div class="side">
+          <p class="cap">On an interval of length 1, this curve fills an area of 1. Pólya's and Cesàro's sweeps (Plates 64–65) and the dragon below fill only ½ or ¼. Mandelbrot notes that when the teragons lie on a square grid, the area swept can never be more than 1. It reaches that maximum when the curve avoids itself, as this one does once each strand is pulled into its own square. So avoiding self-contact is more than a matter of looks. Rounding off a curve's self-contacts, as in Plate 63, does not make it as efficient as a curve that truly avoids itself.</p>
+          <p class="cap">The squares show where the 1 comes from. At an even stage the 4<sup>k</sup> intervals have length 2<sup>−k</sup>, and each owns a square of that side. The squares never overlap, so their areas add up to exactly 1. Edges traced twice do no harm here, because the two passes own squares on opposite sides.</p>
+        </div>
+        <div class="side">
+          <p class="cap"><b>Hilbert's curve inside.</b> Mandelbrot remarks that this sweep, with its self-contacts smoothed away, "falls back on a Peano curve due to Hilbert". The cleanest way to see it is to tick the last box above. At every even stage the curve visits its squares in exactly the order of Hilbert's curve (checked here up to stage 12, all 4,096 squares). Mandelbrot describes it as joining the midpoints of the intervals at alternate stages. Either way, the limit curve is Hilbert's.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 67 ===================== -->
+  <section class="plate" id="p67">
+    <div class="plate-head">
+      <p class="no">Plate 67 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>A curve sweeping a right trapezoid</h2>
+      <p class="dim" id="p67dim">Two unequal legs at 90° · r₁ = cos 30°, r₂ = sin 30° · D = 2</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-tall zoomable" id="wB">
+          <canvas id="cB" role="img" aria-label="The right-trapezoid sweep"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>Trapezoid sweep</strong> · φ = <span id="cBp">30°</span> · stage <span id="cBs">9</span> · <span id="cBn">512 intervals</span> · dashed: the trapezoid it sweeps</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Same rule as the square sweep, but the generator's two legs are unequal: the corner sits at angle φ from the interval instead of 45°. One more choice appears: which leg comes first. Putting the short leg first on the squares' sides, and the long leg first on their halves, turns the squares into right trapezoids, with parallel sides tan φ and cot φ on a base of length 1, and they still tile exactly. The caption says the processing is the same as in the preceding plate; the printed figure uses the thin chevrons of Plate 64, each pointing toward the corner the next stage would add.</p>
+        <label class="slider" for="phB">
+          <span class="label-row"><span class="label">Angle φ of the generator's corner</span><span class="value" id="phBv">30.0°</span></span>
+          <input type="range" id="phB" min="100" max="800" value="300">
+        </label>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate67">Show Plate 67 as printed</button>
+          <button type="button" class="btn" id="sq45">45°: back to the square sweep</button>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="sBv">stage 9</span></div>
+          <div class="steps" id="sB" role="group" aria-label="Stage"></div>
+          <label class="check" for="chevB"><input type="checkbox" id="chevB" checked> Draw each interval as a chevron, as printed</label>
+          <label class="check" for="trapB"><input type="checkbox" id="trapB" checked> Show the trapezoid it sweeps</label>
+          <label class="check" for="ownB"><input type="checkbox" id="ownB"> Shade what each interval owns</label>
+        </div>
+        <dl class="read">
+          <div><dt>Legs r₁, r₂</dt><dd id="rBa">0.866, 0.5</dd></div>
+          <div><dt>Dimension D</dt><dd id="rBb">2 <small>(r₁² + r₂² = 1)</small></dd></div>
+          <div><dt>Trapezoid sides</dt><dd id="rBc">0.577, 1.732</dd></div>
+          <div><dt>Area swept</dt><dd id="rBd">1.1547</dd></div>
+        </dl>
+        <p class="note">Mandelbrot gives no numbers for this plate. φ = 30° (legs in the ratio 1 : √3), stage 9 and the chevron drawing were found by matching the printed figure: laid over the scan, the computed chevrons fall on the printed ones. The plate stops short of the trapezoid's sharp corner because the curve approaches it slowly: the longest intervals shrink by only cos φ per stage.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== DRAGON ===================== -->
+  <section class="plate" id="dragon">
+    <div class="plate-head">
+      <p class="no">Plate 66 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>The Harter–Heighway dragon, and alternate dragons</h2>
+      <p class="dim" id="dragDim">Initiator [1, 0] · two equal legs at 90° · first copy always to the right · D = 2</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-lox zoomable" id="wC">
+          <canvas id="cC" role="img" aria-label="Dragon sweep"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cCt">Harter–Heighway dragon</strong> · stage <span id="cCs">14</span> · <span id="cCn">16,384 intervals</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">(Gardner 1967; Davis &amp; Knuth 1970.) The generator alternates between the right and the left of the teragon, exactly as in Pólya's triangle sweep. The only difference is that here the first copy goes to the right at every stage. The consequences are dramatic. At a mature stage the curve itself is lost and only its boundary shows, called the <i>dragon curve</i>; the sweep deserves to be called the <i>dragon sweep</i>.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">First copy at each stage</span><span class="value">R: x<sub>k</sub> = 1 · L: x<sub>k</sub> = 0</span></div>
+          <div class="seq" id="seqC" role="group" aria-label="Side of the first copy at each stage"></div>
+          <div class="btn-row" id="preC"></div>
+          <p class="note" id="seqNote"></p>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="sCv">stage 14</span></div>
+          <div class="steps" id="sC" role="group" aria-label="Stage"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Draw</span></div>
+          <div class="steps words" id="mC" role="group" aria-label="Drawing"></div>
+          <div class="steps" id="kC" role="group" aria-label="Number of copies" hidden></div>
+          <label class="check" for="ghostC"><input type="checkbox" id="ghostC"> Show the previous stage underneath</label>
+        </div>
+        <dl class="read">
+          <div><dt>Intervals</dt><dd id="rCa">16,384</dd></div>
+          <div><dt>Area swept</dt><dd>½</dd></div>
+          <div><dt>Region</dt><dd id="rCc">a dragon</dd></div>
+          <div><dt>Boundary dimension</dt><dd id="rCd">≈ 1.5236</dd></div>
+        </dl>
+        <p class="note">Like any Koch curve, the dragon is self-similar: "Copies" colours the 2<sup>k</sup> smaller dragons it is made of. It is also cut into portions that join at narrow wasp waists. Zoom in on a pinch to see them. These portions are similar to one another, but not to the dragon itself. (The book prints its mature stage turned half a turn from the early stages in its caption box; this page keeps one orientation throughout.)</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== TWINDRAGON ===================== -->
+  <section class="plate" id="twin">
+    <div class="plate-head">
+      <p class="no">Plates 66–67 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>The twindragon</h2>
+      <p class="dim">Initiator [0, 1] followed by [1, 0] · area 1 · skin D ≈ 1.5236</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-lox zoomable" id="wD">
+          <canvas id="cD" role="img" aria-label="Twindragon"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cDt">Twindragon</strong> · <span id="cDn">two dragons</span> · click a point to read its address</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The 1977 <i>Fractals</i> points out that with the dragon's rules a more natural initiator is [0, 1] followed by [1, 0]: two dragons back to back. Together they sweep a <i>twindragon</i>. The same shape turns up in number representations (Knuth 1980). In base −1 + i, using only the digits 0 and 1, the numbers 0.d₁d₂d₃… fill exactly one twindragon.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mD" role="group" aria-label="What to show"></div>
+        </div>
+        <p class="cap" id="modeCap"></p>
+        <div class="group" id="kDg">
+          <div class="label-row"><span class="label" id="kDl">Replicas</span><span class="value" id="kDv">4</span></div>
+          <div class="steps" id="kD" role="group" aria-label="Level"></div>
+        </div>
+        <div class="mini" id="skinMini" hidden aria-label="The skin's generator">
+          <svg class="gen" viewBox="-0.08 -0.36 1.16 0.72" aria-hidden="true">
+            <line x1="0" y1="0" x2="1" y2="0" stroke="#8a8a84" stroke-width="0.008" stroke-dasharray="0.025 0.02"/>
+            <polyline points="0,0 0.25,0.25 0.75,-0.25 1,0" fill="none" stroke="currentColor" stroke-width="0.022" stroke-linejoin="round"/>
+            <g fill="currentColor"><circle cx="0" cy="0" r="0.03"/><circle cx="0.25" cy="0.25" r="0.022"/><circle cx="0.75" cy="-0.25" r="0.022"/><circle cx="1" cy="0" r="0.03"/></g>
+          </svg>
+          <div class="fx">long r = 1/√2, two short r³ = 1/(2√2)<br>(1/√2)<sup>D</sup> + 2(1/(2√2))<sup>D</sup> = 1<br>x = 2<sup>D/2</sup> solves x³ − x² − 2 = 0 · D ≈ 1.5236</div>
+        </div>
+        <div class="group" id="numBox">
+          <div class="label-row"><span class="label">A number in base −1 + i</span></div>
+          <form class="numrow" id="numForm" autocomplete="off">
+            <input id="numIn" type="text" inputmode="decimal" spellcheck="false" aria-label="Digits in base −1 + i" placeholder="0.0(001)">
+            <button type="submit" class="btn primary">Show</button>
+          </form>
+          <p class="note">Digits 0 and 1 with a point; put a repeating block in parentheses, so 0.0(001) means 0.0001001001…. Or click anywhere on the picture to read that point's digits.</p>
+          <div class="btn-row" id="numEx"></div>
+          <div class="addr" id="addrD" aria-live="polite"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 7, pages 66–67 (Plates 66 and 67). Every figure is computed from the rules in the captions. The angle and stage of Plate 67 were found by fitting the printed figure. The Hilbert order, the trapezoid tiling and the twindragon's skin generator were checked numerically. Companion pages: <a href="peano-sweeps.html">Peano Sweeps</a> (Plates 63–65), <a href="unequal-parts.html">Unequal Parts</a> (Plates 56–57) and <a href="quadric-islands.html">Quadric Koch Islands</a> (Plates 49–55).</p>
+</div>
+
+<script>
+// CORE START
+const DEG = 180 / Math.PI;
+// ---- Peano's later square sweep and its unequal-leg cousin (Plates 66 and 67) ----
+// Every interval carries a type: 0 = S (it owns the region on its side: a square, or a right trapezoid when the
+// legs are unequal), 1 = R and 2 = Q (the two halves of an S one stage later). s = +1 when that region is on the
+// left of the interval, -1 when on the right. S -> R Q, R -> S(-s) S(s), Q -> S(s) S(-s); in an S interval the
+// generator is run backwards, so that its short leg comes first.
+function sweep(phiDeg, n) {
+  const a = phiDeg / DEG, ax = Math.cos(a) * Math.cos(a), ay = Math.cos(a) * Math.sin(a);
+  let P = new Float64Array([0, 0, 1, 0]), T = new Uint8Array([0]), S = new Int8Array([1]);
+  const apex = (i, P, T, S) => {
+    const px = P[2 * i], py = P[2 * i + 1], dx = P[2 * i + 2] - px, dy = P[2 * i + 3] - py;
+    let gx = ax, gy = ay * S[i];
+    if (T[i] === 0) { gx = 1 - gx; }             // run backwards: 1 - conj(A), conj flips again for s
+    return [px + dx * gx - dy * gy, py + dx * gy + dy * gx];
+  };
+  for (let k = 0; k < n; k++) {
+    const m = T.length, P2 = new Float64Array(4 * m + 2), T2 = new Uint8Array(2 * m), S2 = new Int8Array(2 * m);
+    for (let i = 0; i < m; i++) {
+      const [cx, cy] = apex(i, P, T, S), s = S[i];
+      P2[4 * i] = P[2 * i]; P2[4 * i + 1] = P[2 * i + 1]; P2[4 * i + 2] = cx; P2[4 * i + 3] = cy;
+      if (T[i] === 0) { T2[2 * i] = 1; T2[2 * i + 1] = 2; S2[2 * i] = s; S2[2 * i + 1] = s; }
+      else if (T[i] === 1) { S2[2 * i] = -s; S2[2 * i + 1] = s; }
+      else { S2[2 * i] = s; S2[2 * i + 1] = -s; }
+    }
+    P2[4 * m] = P[2 * m]; P2[4 * m + 1] = P[2 * m + 1];
+    P = P2; T = T2; S = S2;
+  }
+  const m = T.length, F = new Float64Array(2 * m);
+  for (let i = 0; i < m; i++) { const [x, y] = apex(i, P, T, S); F[2 * i] = x; F[2 * i + 1] = y; }
+  return { P, T, S, F, m, phi: phiDeg };
+}
+// the region owned by S interval i: the right trapezoid (0,0) (1,0) (1, cot φ) (0, tan φ) in the interval's frame
+function ownedTrapezoid(d, i) {
+  const a = d.phi / DEG, t = Math.tan(a), ct = 1 / t, P = d.P, s = d.S[i];
+  const px = P[2 * i], py = P[2 * i + 1], dx = P[2 * i + 2] - px, dy = P[2 * i + 3] - py;
+  const out = [];
+  for (const [u, v0] of [[0, 0], [1, 0], [1, ct], [0, t]]) { const v = v0 * s; out.push(px + dx * u - dy * v, py + dy * u + dx * v); }
+  return out;
+}
+// Strands pulled a little into their own regions so that retraced edges and touching corners come apart;
+// an immediate backtrack becomes a narrow V with its tip on the grid point (as in the book's panels).
+function processedSweep(d, delta) {
+  const P = d.P, m = d.m, out = new Float64Array(2 * m + 2);
+  const off = (i) => { const dx = P[2 * i + 2] - P[2 * i], dy = P[2 * i + 3] - P[2 * i + 1], s = d.S[i] * delta; return [-dy * s, dx * s]; };
+  let o1 = off(0);
+  out[0] = P[0] + o1[0]; out[1] = P[1] + o1[1];
+  for (let i = 0; i + 1 < m; i++) {
+    const o2 = off(i + 1), bx = P[2 * i + 2], by = P[2 * i + 3];
+    const ux = bx - P[2 * i], uy = by - P[2 * i + 1], vx = P[2 * i + 4] - bx, vy = P[2 * i + 5] - by;
+    const cr = ux * vy - uy * vx, dt = ux * vx + uy * vy, L = Math.hypot(ux, uy) * Math.hypot(vx, vy);
+    let x = bx, y = by;
+    if (Math.abs(cr) < 1e-9 * L) {
+      if (dt > 0) { x += (o1[0] + o2[0]) / 2; y += (o1[1] + o2[1]) / 2; }
+    } else { x += o1[0] + o2[0]; y += o1[1] + o2[1]; }
+    out[2 * i + 2] = x; out[2 * i + 3] = y; o1 = o2;
+  }
+  out[2 * m] = P[2 * m] + o1[0]; out[2 * m + 1] = P[2 * m + 1] + o1[1];
+  return out;
+}
+// Hilbert's curve, cell d of a 2^k × 2^k grid (the usual d2xy)
+function hilbertXY(N, d) {
+  let x = 0, y = 0, t = d;
+  for (let s = 1; s < N; s *= 2) {
+    const rx = 1 & (t >> 1), ry = 1 & (t ^ rx);
+    if (ry === 0) { if (rx === 1) { x = s - 1 - x; y = s - 1 - y; } const tmp = x; x = y; y = tmp; }
+    x += s * rx; y += s * ry; t >>= 2;
+  }
+  return [x, y];
+}
+
+// ---- dragons: x[k] = 1 puts the k-th stage's first generator to the right of the teragon, 0 to the left ----
+function dragon(xs, n, ax, ay, bx, by) {
+  let P = new Float64Array([ax, ay, bx, by]);
+  for (let k = 0; k < n; k++) {
+    const m = P.length / 2 - 1, Q = new Float64Array(4 * m + 2), first = xs[k] ? 1 : -1;
+    for (let i = 0; i < m; i++) {
+      const px = P[2 * i], py = P[2 * i + 1], dx = P[2 * i + 2] - px, dy = P[2 * i + 3] - py;
+      const r = (i % 2 === 0 ? first : -first);      // +1: right of the direction of travel
+      Q[4 * i] = px; Q[4 * i + 1] = py;
+      Q[4 * i + 2] = px + (dx + r * dy) / 2; Q[4 * i + 3] = py + (dy - r * dx) / 2;
+    }
+    Q[4 * m] = P[2 * m]; Q[4 * m + 1] = P[2 * m + 1];
+    P = Q;
+  }
+  return P;
+}
+
+// ---- twindragon, in Knuth's base β = −1 + i: T = { Σ d_k β^−k : d_k ∈ {0, 1} } ----
+// The page draws T in the frame where it is the union of the dragons on [0,1] and [1,0]: z = (w_y + 0.6, w_x + 0.2).
+const TW = {
+  toPage: (wx, wy) => [wy + 0.6, wx + 0.2],
+  toT: (x, y) => [y - 0.2, x - 0.6],
+  // the six corners where three tiles meet, in order around T
+  corners: [[0.4, 0.2], [0.2, 0.6], [-0.6, 0.2], [-0.8, -0.4], [-0.6, -0.8], [0.2, -0.4]],
+};
+// the skin: a Koch curve on each side with the generator 0 → (¼,−¼) → (¾,¼) → 1, all pieces as drawn
+const SKIN_G = [[0, 0], [0.25, -0.25], [0.75, 0.25], [1, 0]];
+function skinCurve(ax, ay, bx, by, n, out) {
+  if (n === 0) { out.push(bx, by); return; }
+  const dx = bx - ax, dy = by - ay;
+  let px = ax, py = ay;
+  for (let k = 1; k < 4; k++) {
+    const [u, v] = SKIN_G[k], qx = ax + dx * u - dy * v, qy = ay + dy * u + dx * v;
+    skinCurve(px, py, qx, qy, n - 1, out); px = qx; py = qy;
+  }
+}
+// address of a point, by Knuth's radix: round β^M·w to a Gaussian integer Z, expand Z in base β with digits
+// {0, 1}; the digits below β^M are w's first fraction digits, those above its integer part (empty: w is in T)
+function twinDigits(wx, wy, depth) {
+  const M = Math.min(62, depth + 46);
+  let x = wx, y = wy;
+  for (let k = 0; k < M; k++) { const nx = -x - y, ny = x - y; x = nx; y = ny; }   // multiply by β = −1 + i
+  let a = Math.round(x), b = Math.round(y);
+  const e = [];
+  for (let guard = 0; (a !== 0 || b !== 0) && guard < 200; guard++) {
+    const d = ((a + b) % 2 + 2) % 2; e.push(d);
+    const a1 = a - d; [a, b] = [(-a1 + b) / 2, (-a1 - b) / 2];               // (Z − d) / β
+  }
+  while (e.length < M) e.push(0);
+  let s = '';
+  for (let k = 1; k <= depth; k++) s += e[M - k];
+  return { I: e.slice(M).reverse().join('').replace(/^0+/, ''), d: s };
+}
+// ---- exact numbers in base β = −1 + i: Gaussian rationals (a + b i)/q with BigInt parts ----
+const GQ = {
+  gcd(a, b) { a = a < 0n ? -a : a; b = b < 0n ? -b : b; while (b) [a, b] = [b, a % b]; return a; },
+  norm([a, b, q]) { if (q < 0n) { a = -a; b = -b; q = -q; } const g = GQ.gcd(GQ.gcd(a, b), q) || 1n; return [a / g, b / g, q / g]; },
+  add(x, y) { return GQ.norm([x[0] * y[2] + y[0] * x[2], x[1] * y[2] + y[1] * x[2], x[2] * y[2]]); },
+  sub(x, y) { return GQ.add(x, [-y[0], -y[1], y[2]]); },
+  mul(x, y) { return GQ.norm([x[0] * y[0] - x[1] * y[1], x[0] * y[1] + x[1] * y[0], x[2] * y[2]]); },
+  div(x, y) { const n = y[0] * y[0] + y[1] * y[1]; return GQ.norm([(x[0] * y[0] + x[1] * y[1]) * y[2], (x[1] * y[0] - x[0] * y[1]) * y[2], x[2] * n]); },
+  num(x) { return [Number(x[0]) / Number(x[2]), Number(x[1]) / Number(x[2])]; },
+};
+const BETA = [-1n, 1n, 1n], BINV = [-1n, -1n, 2n], ONEQ = [1n, 0n, 1n], ZEROQ = [0n, 0n, 1n];
+// "11.0(001)": integer digits, then fraction digits, with an optional repeating block in parentheses
+function parseBase(str) {
+  const s = str.replace(/\s+/g, '').replace(/,/g, '.');
+  const m = /^([01]*)(?:\.([01]*)(?:\(([01]+)\))?)?$/.exec(s);
+  if (!m || (!m[1] && m[2] === undefined)) return null;
+  const I = m[1] || '', pre = m[2] || '', per = m[3] || '';
+  let v = ZEROQ;
+  for (const ch of I) v = GQ.add(GQ.mul(v, BETA), [BigInt(ch), 0n, 1n]);
+  let p = ONEQ;
+  for (const ch of pre) { p = GQ.mul(p, BINV); if (ch === '1') v = GQ.add(v, p); }
+  if (per && /1/.test(per)) {
+    let r = ONEQ, blk = ZEROQ;
+    for (const ch of per) { r = GQ.mul(r, BINV); if (ch === '1') blk = GQ.add(blk, r); }
+    v = GQ.add(v, GQ.div(GQ.mul(p, blk), GQ.sub(ONEQ, r)));
+  }
+  return { I, pre, per, value: v };
+}
+// a Gaussian integer's digits in base β (every Gaussian integer has exactly one finite expansion)
+function intDigits(a, b) {
+  let s = '';
+  for (let guard = 0; (a !== 0n || b !== 0n) && guard < 400; guard++) {
+    const d = (((a + b) % 2n) + 2n) % 2n; s = String(d) + s;
+    const a1 = a - d; [a, b] = [(-a1 + b) / 2n, (-a1 - b) / 2n];
+  }
+  return s;
+}
+// Every expansion of the number w = (a + b i)/q. Try each integer part g whose tile T + g can hold w; the
+// fraction f = w − g must then be 0.d₁d₂… with β·f − d₁ again a fraction, and so on forever. The states
+// stay inside a disc around T and all have denominator q, so there are finitely many of them: keep the
+// states from which an endless path exists, and read off each path once it starts to repeat.
+function expansionsOf(w, maxStates = 60000) {
+  const [wx, wy] = GQ.num(w), q = w[2], out = [];
+  const R = 0.9 + 1e-9, cx = -0.2, cy = -0.1, inDisc = (A, B) => Math.hypot(Number(A) / Number(q) - cx, Number(B) / Number(q) - cy) <= R;
+  for (let m = Math.floor(wx - cx - R); m <= Math.ceil(wx - cx + R); m++) {
+    for (let n = Math.floor(wy - cy - R); n <= Math.ceil(wy - cy + R); n++) {
+      const A0 = w[0] - BigInt(m) * q, B0 = w[1] - BigInt(n) * q;
+      if (!inDisc(A0, B0)) continue;
+      const key = (A, B) => A + ',' + B, succ = new Map(), queue = [[A0, B0]];
+      succ.set(key(A0, B0), null);
+      let overflow = false;
+      for (let h = 0; h < queue.length; h++) {
+        const [A, B] = queue[h], nx = [];
+        for (const d of [0n, 1n]) {
+          const A2 = -A - B - d * q, B2 = A - B;
+          if (!inDisc(A2, B2)) continue;
+          const k2 = key(A2, B2); nx.push([d, k2]);
+          if (!succ.has(k2)) { succ.set(k2, null); queue.push([A2, B2]); }
+        }
+        succ.set(key(A, B), nx);
+        if (succ.size > maxStates) { overflow = true; break; }
+      }
+      if (overflow) continue;
+      // keep only states with an endless continuation
+      const alive = new Set(succ.keys());
+      for (let changed = true; changed;) {
+        changed = false;
+        for (const k of alive) if (!(succ.get(k) || []).some(([, k2]) => alive.has(k2))) { alive.delete(k); changed = true; }
+      }
+      const k0 = key(A0, B0);
+      if (!alive.has(k0)) continue;
+      const I = intDigits(BigInt(m), BigInt(n));
+      const walk = (k, path, digits) => {
+        if (out.length > 8) return;
+        const at = path.indexOf(k);
+        if (at >= 0) { out.push({ I, pre: digits.slice(0, at), per: digits.slice(at), m, n }); return; }
+        for (const [d, k2] of succ.get(k)) if (alive.has(k2)) walk(k2, path.concat([k]), digits + d);
+      };
+      walk(k0, [], '');
+    }
+  }
+  return out;
+}
+// tidy form: drop a repeating block of zeros, and the trailing zeros before it
+function formatExpansion(e) {
+  let pre = e.pre, per = e.per;
+  if (/^0+$/.test(per)) { per = ''; pre = pre.replace(/0+$/, ''); }
+  return (e.I || '0') + (pre || per ? '.' + pre + (per ? '(' + per + ')' : '') : '');
+}
+const expandFrac = (pre, per, n) => { let s = pre; while (s.length < n) s += per || '0'; return s.slice(0, n); };
+
+// The river tree. Run the twindragon's closed curve (the dragons on [0,1] and back on [1,0]) at stage n and round
+// its corners. At each grid point it visits twice, the two turns cut off two opposite corners, and the other two
+// grid squares meet through the point. The squares inside the curve, joined that way, form a tree: the river.
+function riverTree(n) {
+  const xs = new Array(n).fill(1);
+  const A = dragon(xs, n, 0, 0, 1, 0), B = dragon(xs, n, 1, 0, 0, 0);
+  const m = A.length / 2 - 1, L = 2 * m;                 // closed curve with L steps
+  const ux = A[2] - A[0], uy = A[3] - A[1], u2 = ux * ux + uy * uy;
+  const G = new Int32Array(2 * L);
+  for (let i = 0; i < L; i++) {
+    const x = i <= m ? A[2 * i] : B[2 * (i - m)], y = i <= m ? A[2 * i + 1] : B[2 * (i - m) + 1];
+    G[2 * i] = Math.round((x * ux + y * uy) / u2); G[2 * i + 1] = Math.round((y * ux - x * uy) / u2);
+  }
+  let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+  for (let i = 0; i < L; i++) { x0 = Math.min(x0, G[2 * i]); x1 = Math.max(x1, G[2 * i]); y0 = Math.min(y0, G[2 * i + 1]); y1 = Math.max(y1, G[2 * i + 1]); }
+  const W = x1 - x0 + 2, H = y1 - y0 + 2, gx = (i) => G[2 * (i % L)] - x0 + 1, gy = (i) => G[2 * (i % L) + 1] - y0 + 1;
+  // winding number of each grid square (i, j) = [i, i+1] × [j, j+1]
+  const wind = new Int32Array(W * H);
+  for (let i = 0; i < L; i++) {
+    const ax = gx(i), ay = gy(i), bx = gx(i + 1), by = gy(i + 1);
+    if (ax === bx) { const j = Math.min(ay, by), s = by > ay ? 1 : -1; wind[j * W + ax] += s; }
+  }
+  for (let j = 0; j < H; j++) for (let i = 1; i < W; i++) wind[j * W + i] += wind[j * W + i - 1];
+  const inside = (i, j) => i >= 0 && j >= 0 && i < W && j < H && wind[j * W + i] !== 0;
+  // turns at each grid point: the quadrant each pass cuts off
+  const cuts = new Map();
+  for (let i = 0; i < L; i++) {
+    const vx = gx(i + 1), vy = gy(i + 1);
+    const qx = (gx(i) - vx) + (gx(i + 2) - vx), qy = (gy(i) - vy) + (gy(i + 2) - vy);   // −e_in + e_out
+    const k = vy * (W + 1) + vx;
+    if (!cuts.has(k)) cuts.set(k, []);
+    cuts.get(k).push(qx, qy);
+  }
+  const adj = new Map(), cell = (vx, vy, dx, dy) => [vx + (dx > 0 ? 0 : -1), vy + (dy > 0 ? 0 : -1)];
+  const link = (a, b) => {
+    if (!inside(a[0], a[1]) || !inside(b[0], b[1])) return;
+    const ka = a[1] * W + a[0], kb = b[1] * W + b[0];
+    if (!adj.has(ka)) adj.set(ka, new Set()); if (!adj.has(kb)) adj.set(kb, new Set());
+    adj.get(ka).add(kb); adj.get(kb).add(ka);
+  };
+  for (const [k, c] of cuts) {
+    if (c.length !== 4) continue;
+    const vx = k % (W + 1), vy = Math.floor(k / (W + 1));
+    const free = [[1, 1], [-1, 1], [-1, -1], [1, -1]].filter(([dx, dy]) => !((c[0] === dx && c[1] === dy) || (c[2] === dx && c[3] === dy)));
+    if (free.length === 2) link(cell(vx, vy, ...free[0]), cell(vx, vy, ...free[1]));
+  }
+  // back to the plane: square (i, j) has its centre at origin + (i − 1 + x0 + ½)·u + (j − 1 + y0 + ½)·u⊥
+  const toXY = (key) => { const i = key % W, j = Math.floor(key / W), a = i - 1 + x0 + 0.5, b = j - 1 + y0 + 0.5; return [a * ux - b * uy, a * uy + b * ux]; };
+  return { adj, toXY, nodes: adj.size };
+}
+// erase the streams near the sources: strip the tree's leaves, `times` times over
+function pruneTree(adj, times) {
+  const g = new Map([...adj].map(([k, s]) => [k, new Set(s)]));
+  for (let t = 0; t < times; t++) {
+    const leaves = [...g].filter(([, s]) => s.size <= 1).map(([k]) => k);
+    for (const k of leaves) { for (const o of g.get(k)) g.get(o).delete(k); g.delete(k); }
+  }
+  return g;
+}
+function dimension(rs) {
+  let lo = 0, hi = 3;
+  for (let i = 0; i < 90; i++) { const mid = (lo + hi) / 2, g = rs.reduce((s, r) => s + Math.pow(r, mid), 0); if (g > 1) lo = mid; else hi = mid; }
+  return (lo + hi) / 2;
+}
+// CORE END
+
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const fmt = (n) => n.toLocaleString('en-US');
+  const PRINT = { paper: '#ecebe6', ink: '#151515', rule: '#c9c8c2', muted: '#66665f', accent: '#2f5f9e', red: '#c2452d', faint: '#bdbbb3', gray: '#8f8e88' };
+  const CHEV_OUT = 0.43, CHEV_IN = 0.235;            // Plate 64's chevrons, measured from the plate
+  const RAMP = [[233, 185, 73], [217, 113, 59], [184, 66, 79], [125, 58, 120], [63, 79, 151], [43, 122, 138]];
+  const ramp = (t, a = 1) => {
+    const x = Math.max(0, Math.min(1, t)) * (RAMP.length - 1), i = Math.min(RAMP.length - 2, Math.floor(x)), f = x - i;
+    const c = RAMP[i].map((v, k) => Math.round(v + (RAMP[i + 1][k] - v) * f));
+    return `rgba(${c[0]},${c[1]},${c[2]},${a})`;
+  };
+  const CAT = ['#151515', '#9a988f', '#2f5f9e', '#c2452d', '#3f8f6c', '#b58a2a', '#6b4e9b', '#5f8fae'];
+
+  // ---------- shared plumbing ----------
+  function figure(canvas, draw) {
+    const wrap = canvas.parentElement;
+    const f = { canvas, ctx: canvas.getContext('2d'), w: 1, h: 1, dpr: 1, draw };
+    const resize = () => {
+      f.dpr = Math.min(2, window.devicePixelRatio || 1);
+      f.w = wrap.clientWidth || 1; f.h = wrap.clientHeight || 1;
+      canvas.width = Math.round(f.w * f.dpr); canvas.height = Math.round(f.h * f.dpr);
+      f.draw();
+    };
+    new ResizeObserver(resize).observe(wrap);
+    return f;
+  }
+  function fitBox(f, bb, pad = 0.04) {
+    const w = Math.max(1e-9, bb.x1 - bb.x0), h = Math.max(1e-9, bb.y1 - bb.y0), s = Math.min(f.w / (w * (1 + 2 * pad)), f.h / (h * (1 + 2 * pad)));
+    return { s, ox: f.w / 2 - ((bb.x0 + bb.x1) / 2) * s, oy: f.h / 2 + ((bb.y0 + bb.y1) / 2) * s };
+  }
+  const toWorld = (f, v) => f.ctx.setTransform(f.dpr * v.s, 0, 0, -f.dpr * v.s, f.dpr * v.ox, f.dpr * v.oy);
+  const toScreen = (f) => f.ctx.setTransform(f.dpr, 0, 0, f.dpr, 0, 0);
+  function paper(f, color) { f.ctx.setTransform(1, 0, 0, 1, 0, 0); f.ctx.fillStyle = color; f.ctx.fillRect(0, 0, f.canvas.width, f.canvas.height); }
+  function polyPath(P, closed = true) {
+    const p = new Path2D(), m = P.length / 2;
+    p.moveTo(P[0], P[1]);
+    for (let i = 1; i < m; i++) p.lineTo(P[2 * i], P[2 * i + 1]);
+    if (closed) p.closePath();
+    return p;
+  }
+  function bbox(P, bb = { x0: Infinity, x1: -Infinity, y0: Infinity, y1: -Infinity }) {
+    for (let i = 0; i < P.length; i += 2) { bb.x0 = Math.min(bb.x0, P[i]); bb.x1 = Math.max(bb.x1, P[i]); bb.y0 = Math.min(bb.y0, P[i + 1]); bb.y1 = Math.max(bb.y1, P[i + 1]); }
+    return bb;
+  }
+  function stepButtons(el, values, text, aria, onPick) {
+    const bs = values.map((v) => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.textContent = text(v); b.setAttribute('aria-label', aria(v));
+      b.addEventListener('click', () => onPick(v));
+      el.append(b);
+      return b;
+    });
+    const mark = (cur) => bs.forEach((b, i) => b.setAttribute('aria-pressed', String(values[i] === cur)));
+    mark.buttons = bs;
+    return mark;
+  }
+  // pan and zoom: a quick rescaled snapshot while moving, a full redraw once it settles
+  function zoomable(wrapId, canvasId, fitOf, render, opts = {}) {
+    const maxZoom = opts.maxZoom || 400;
+    const wrap = $(wrapId), z = { view: null, user: false, snapView: null, raf: 0, full: 0 };
+    const snap = document.createElement('canvas');
+    const f = figure($(canvasId), () => draw());
+    function touch() { wrap.style.touchAction = z.view && z.view.s > z.view.fit * 1.02 ? 'none' : 'pan-y'; }
+    function draw() {
+      if (!z.view || !z.user) { z.view = fitOf(f); z.view.fit = z.view.s; z.user = false; touch(); }
+      render(f, z.view);
+      snap.width = f.canvas.width; snap.height = f.canvas.height; snap.getContext('2d').drawImage(f.canvas, 0, 0);
+      z.snapView = { s: z.view.s, ox: z.view.ox, oy: z.view.oy };
+    }
+    function quick() {
+      const v = z.view, k = v.s / z.snapView.s, c = f.ctx;
+      c.setTransform(1, 0, 0, 1, 0, 0); c.fillStyle = PRINT.paper; c.fillRect(0, 0, f.canvas.width, f.canvas.height);
+      c.drawImage(snap, (v.ox - z.snapView.ox * k) * f.dpr, (v.oy - z.snapView.oy * k) * f.dpr, snap.width * k, snap.height * k);
+    }
+    function schedule() { if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; draw(); }); }
+    function moved() {
+      if (!z.snapView) { schedule(); return; }
+      if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; quick(); });
+      clearTimeout(z.full); z.full = setTimeout(schedule, 160);
+    }
+    function zoomAt(px, py, k) {
+      const v = z.view, ns = Math.min(v.fit * maxZoom, Math.max(v.fit * 0.8, v.s * k)), wx = (px - v.ox) / v.s, wy = (v.oy - py) / v.s;
+      v.s = ns; v.ox = px - wx * ns; v.oy = py + wy * ns; z.user = true; touch(); moved();
+    }
+    function pan(dx, dy) { z.view.ox += dx; z.view.oy += dy; z.user = true; moved(); }
+    wrap.querySelector('[data-z="in"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1.6));
+    wrap.querySelector('[data-z="out"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1 / 1.6));
+    wrap.querySelector('[data-z="fit"]').addEventListener('click', () => { z.user = false; schedule(); });
+    const pts = new Map();
+    let pinch = null, down = null;
+    const local = (e) => { const r = wrap.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+    wrap.addEventListener('pointerdown', (e) => {
+      if (e.target.closest('.view-tools')) return;
+      pts.set(e.pointerId, local(e));
+      down = pts.size === 1 ? { p: local(e), t: performance.now(), moved: 0 } : null;
+      try { wrap.setPointerCapture(e.pointerId); } catch (_) {}
+      if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), m: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2] }; }
+      wrap.classList.add('dragging');
+    });
+    wrap.addEventListener('pointermove', (e) => {
+      if (!pts.has(e.pointerId)) return;
+      const prev = pts.get(e.pointerId), cur = local(e);
+      pts.set(e.pointerId, cur);
+      if (down) down.moved = Math.max(down.moved, Math.hypot(cur[0] - down.p[0], cur[1] - down.p[1]));
+      if (pts.size === 2 && pinch) {
+        const [a, b] = [...pts.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]), m = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+        pan(m[0] - pinch.m[0], m[1] - pinch.m[1]);
+        if (pinch.d > 0) zoomAt(m[0], m[1], d / pinch.d);
+        pinch = { d, m };
+      } else if (pts.size === 1 && (e.pointerType !== 'touch' || z.view.s > z.view.fit * 1.02)) pan(cur[0] - prev[0], cur[1] - prev[1]);
+    });
+    const end = (e) => {
+      if (down && pts.size === 1 && down.moved < 5 && opts.onTap) { const [x, y] = local(e), v = z.view; opts.onTap((x - v.ox) / v.s, (v.oy - y) / v.s); }
+      down = null;
+      pts.delete(e.pointerId); if (pts.size < 2) pinch = null; if (!pts.size) wrap.classList.remove('dragging');
+    };
+    wrap.addEventListener('pointerup', end); wrap.addEventListener('pointercancel', (e) => { down = null; end(e); });
+    wrap.addEventListener('wheel', (e) => { if (!(e.ctrlKey || e.metaKey)) return; e.preventDefault(); const [x, y] = local(e); zoomAt(x, y, Math.exp(-e.deltaY * 0.0045)); }, { passive: false });
+    wrap.addEventListener('dblclick', (e) => { if (e.target.closest('.view-tools')) return; const [x, y] = local(e); zoomAt(x, y, e.shiftKey ? 0.5 : 2); });
+    return { f, z, schedule, refit: () => { z.user = false; schedule(); } };
+  }
+  // chunked paths: many small paths fill far faster than one path with a hundred thousand pieces
+  function chunked(count, add, size = 512) {
+    const out = [];
+    let p = null;
+    for (let i = 0; i < count; i++) { if (i % size === 0) { p = new Path2D(); out.push(p); } add(p, i); }
+    return out;
+  }
+  function chevronPaths(P, F, m) {
+    return chunked(m, (p, i) => {
+      const ax = P[2 * i], ay = P[2 * i + 1], bx = P[2 * i + 2], by = P[2 * i + 3], mx = (ax + bx) / 2, my = (ay + by) / 2;
+      const vx = F[2 * i] - mx, vy = F[2 * i + 1] - my;
+      p.moveTo(ax, ay); p.lineTo(mx + CHEV_OUT * vx, my + CHEV_OUT * vy); p.lineTo(bx, by); p.lineTo(mx + CHEV_IN * vx, my + CHEV_IN * vy); p.closePath();
+    });
+  }
+  // the region each interval of a sweep owns: its trapezoid (type S), or the two trapezoids of its children
+  function ownedPolys(phi, n) {
+    if (n % 2 === 0) { const d = sweep(phi, n); return Array.from({ length: d.m }, (_, i) => [ownedTrapezoid(d, i)]); }
+    const d = sweep(phi, n + 1); return Array.from({ length: d.m / 2 }, (_, i) => [ownedTrapezoid(d, 2 * i), ownedTrapezoid(d, 2 * i + 1)]);
+  }
+  function fillOwned(c, polys) {
+    const G = Math.min(96, polys.length);
+    for (let g = 0; g < G; g++) {
+      const p = new Path2D(), a = Math.floor((g * polys.length) / G), b = Math.floor(((g + 1) * polys.length) / G);
+      for (let i = a; i < b; i++) for (const Q of polys[i]) { p.moveTo(Q[0], Q[1]); for (let k = 2; k < Q.length; k += 2) p.lineTo(Q[k], Q[k + 1]); p.closePath(); }
+      c.fillStyle = ramp(G === 1 ? 0.5 : g / (G - 1), 0.55); c.fill(p);
+    }
+  }
+  // fill and outline in the same colour, so that tiles which only meet along an edge show no hairline seams
+  function solid(c, paths, color, lw) {
+    c.fillStyle = color; c.strokeStyle = color; c.lineWidth = lw; c.lineJoin = 'miter';
+    for (const p of paths) { c.fill(p); c.stroke(p); }
+  }
+  const dot = (c, v, x, y, r = 4, color = PRINT.red) => { c.beginPath(); c.arc(v.ox + x * v.s, v.oy - y * v.s, r, 0, Math.PI * 2); c.fillStyle = color; c.fill(); c.strokeStyle = PRINT.paper; c.lineWidth = 1.5; c.stroke(); };
+
+  // ====================== Plate 66: Peano's later square sweep ======================
+  const stA = { n: 4, proc: true, own: false, hil: false };
+  const cacheA = {};
+  function dataA(n) {
+    if (cacheA[n]) return cacheA[n];
+    const d = sweep(45, n), L = Math.pow(Math.SQRT1_2, n);
+    const proc = processedSweep(d, 0.1);
+    // edges traced twice in the plain teragon
+    const seen = new Set(); let dup = 0;
+    const q = (v) => Math.round(v * 1e7);
+    for (let i = 0; i < d.m; i++) {
+      const a = `${q(d.P[2 * i])},${q(d.P[2 * i + 1])}`, b = `${q(d.P[2 * i + 2])},${q(d.P[2 * i + 3])}`, k = a < b ? a + '|' + b : b + '|' + a;
+      if (seen.has(k)) dup++; else seen.add(k);
+    }
+    let hil = null;
+    if (n % 2 === 0) { hil = new Float64Array(2 * d.m); for (let i = 0; i < d.m; i++) { const Q = ownedTrapezoid(d, i); hil[2 * i] = (Q[0] + Q[4]) / 2; hil[2 * i + 1] = (Q[1] + Q[5]) / 2; } }
+    return (cacheA[n] = { d, L, raw: polyPath(d.P, false), proc: polyPath(proc, false), dup, hil: hil && polyPath(hil, false), owned: null });
+  }
+  const zA = zoomable('wA', 'cA', (f) => fitBox(f, { x0: 0, x1: 1, y0: 0, y1: 1 }, 0.05), (f, v) => {
+    const c = f.ctx, D = dataA(stA.n);
+    paper(f, PRINT.paper); toWorld(f, v);
+    if (stA.own) { if (!D.owned) D.owned = ownedPolys(45, stA.n); fillOwned(c, D.owned); }
+    c.lineWidth = 1 / v.s; c.strokeStyle = '#8f8d86'; c.strokeRect(0, 0, 1, 1);
+    const px = D.L * v.s;
+    c.lineJoin = 'miter'; c.lineCap = 'butt'; c.strokeStyle = PRINT.ink;
+    c.lineWidth = Math.max(0.7, Math.min(2.6, px * 0.07)) / v.s;
+    c.stroke(stA.proc ? D.proc : D.raw);
+    if (stA.hil && D.hil) { c.strokeStyle = PRINT.red; c.lineJoin = 'round'; c.lineWidth = Math.max(1, Math.min(2.4, px * 0.06)) / v.s; c.stroke(D.hil); }
+    toScreen(f);
+    dot(c, v, 0, 0); dot(c, v, 1, 0);
+  });
+  function panelsA() {
+    const box = $('panelsA');
+    for (const n of [2, 4, 6]) {
+      const d = sweep(45, n), P = processedSweep(d, 0.1), pts = [];
+      for (let i = 0; i < P.length; i += 2) pts.push(`${(0.06 + P[i] * 0.88).toFixed(4)},${(0.94 - P[i + 1] * 0.88).toFixed(4)}`);
+      const fig = document.createElement('figure');
+      fig.innerHTML = `<svg viewBox="0 0 1 1" aria-hidden="true"><rect x="0.06" y="0.06" width="0.88" height="0.88" fill="none" stroke="#8f8d86" stroke-width="0.008"/><polyline points="${pts.join(' ')}" fill="none" stroke="#151515" stroke-width="0.022" stroke-linejoin="miter"/><circle cx="0.06" cy="0.94" r="0.028" fill="#151515"/><circle cx="0.94" cy="0.94" r="0.028" fill="#151515"/></svg><figcaption>stage ${n}</figcaption>`;
+      box.append(fig);
+    }
+  }
+  function setA() {
+    const D = dataA(stA.n), even = stA.n % 2 === 0;
+    markA(stA.n);
+    $('sAv').textContent = `stage ${stA.n}`; $('cAs').textContent = stA.n; $('cAn').textContent = `${fmt(D.d.m)} interval${D.d.m > 1 ? 's' : ''}`;
+    $('rAa').textContent = fmt(D.d.m);
+    $('rAb').textContent = even ? 'a square' : 'a 1 × 2 rectangle';
+    $('rAd').textContent = D.dup ? fmt(D.dup) : 'none';
+    $('hilA').disabled = !even;
+    const k = stA.n / 2, side = `1/${Math.pow(2, Math.floor(stA.n / 2))}`;
+    $('infoA').innerHTML = stA.n === 0 ? 'Stage 0 is the initiator [0, 1], the side of the unit square above it, which it owns.' : even
+      ? `At stage ${stA.n} every interval is the side of a square of side ${side}, beside it on the left or the right. The ${fmt(D.d.m)} squares tile the unit square.${stA.hil && stA.n ? ` <b>Red:</b> their centres in the order the curve visits them, which is Hilbert's curve at order ${k}.` : ''}`
+      : `At odd stages each interval runs from a corner of a 1 × 2 rectangle (half of a square from the stage before) to the middle of its long side. One stage on, it splits into two squares.`;
+    zA.schedule();
+  }
+  const markA = stepButtons($('sA'), [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], String, (n) => `Stage ${n}`, (n) => { stA.n = n; setA(); });
+  $('procA').addEventListener('change', (e) => { stA.proc = e.target.checked; zA.schedule(); });
+  $('ownA').addEventListener('change', (e) => { stA.own = e.target.checked; zA.schedule(); });
+  $('hilA').addEventListener('change', (e) => { stA.hil = e.target.checked; setA(); });
+  panelsA();
+
+  // ====================== Plate 67: the right-trapezoid sweep ======================
+  const stB = { phi: 30, n: 9, chev: true, trap: true, own: false };
+  let cacheB = { key: '' };
+  function dataB() {
+    const key = `${stB.phi}|${stB.n}`;
+    if (cacheB.key === key) return cacheB;
+    const d = sweep(stB.phi, stB.n);
+    return (cacheB = { key, d, path: polyPath(d.P, false), chev: null, owned: null, box: bbox(d.P) });
+  }
+  const trapOf = (phi) => { const t = Math.tan(phi / DEG); return [0, 0, 1, 0, 1, 1 / t, 0, t]; };
+  const zB = zoomable('wB', 'cB', (f) => {
+    const D = dataB(), b = { ...D.box };
+    if (stB.trap || stB.own) bbox(trapOf(stB.phi), b);
+    return fitBox(f, b, 0.04);
+  }, (f, v) => {
+    const c = f.ctx, D = dataB(), d = D.d;
+    paper(f, PRINT.paper); toWorld(f, v);
+    if (stB.own) { if (!D.owned) D.owned = ownedPolys(stB.phi, stB.n); fillOwned(c, D.owned); }
+    if (stB.trap) { c.setLineDash([5 / v.s, 4 / v.s]); c.lineWidth = 1.2 / v.s; c.strokeStyle = '#8f8d86'; c.stroke(polyPath(trapOf(stB.phi))); c.setLineDash([]); }
+    const Lmax = Math.pow(Math.max(Math.cos(stB.phi / DEG), Math.sin(stB.phi / DEG)), stB.n) * v.s;
+    if (stB.chev) {
+      if (!D.chev) D.chev = chevronPaths(d.P, d.F, d.m);
+      c.fillStyle = PRINT.ink; for (const p of D.chev) c.fill(p);
+    } else {
+      c.lineJoin = 'round'; c.lineCap = 'round'; c.strokeStyle = PRINT.ink;
+      c.lineWidth = Math.max(0.6, Math.min(2, Lmax * 0.05)) / v.s; c.stroke(D.path);
+    }
+    toScreen(f);
+    dot(c, v, 0, 0); dot(c, v, 1, 0);
+  });
+  function setB(refit) {
+    const D = dataB(), a = stB.phi / DEG, t = Math.tan(a);
+    markB(stB.n);
+    $('phBv').textContent = `${stB.phi.toFixed(1)}°`; $('cBp').textContent = `${stB.phi.toFixed(1)}°`;
+    $('sBv').textContent = `stage ${stB.n}`; $('cBs').textContent = stB.n; $('cBn').textContent = `${fmt(D.d.m)} intervals`;
+    const r1 = Math.cos(a), r2 = Math.sin(a);
+    $('rBa').textContent = `${r1.toFixed(3)}, ${r2.toFixed(3)}`;
+    $('rBc').textContent = `${Math.min(t, 1 / t).toFixed(3)}, ${Math.max(t, 1 / t).toFixed(3)}`;
+    $('rBd').textContent = (1 / Math.sin(2 * a)).toFixed(4);
+    $('p67dim').textContent = Math.abs(stB.phi - 45) < 1e-9 ? 'Two equal legs at 90°: the square sweep · r = 1/√2 · D = 2'
+      : `Two unequal legs at 90° · r₁ = cos ${stB.phi.toFixed(1)}° = ${r1.toFixed(3)}, r₂ = sin ${stB.phi.toFixed(1)}° = ${r2.toFixed(3)} · D = 2`;
+    if (refit) zB.refit(); else zB.schedule();
+  }
+  const markB = stepButtons($('sB'), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], String, (n) => `Stage ${n}`, (n) => { stB.n = n; setB(true); });
+  let rafB = 0;
+  $('phB').addEventListener('input', (e) => { stB.phi = +e.target.value / 10; if (!rafB) rafB = requestAnimationFrame(() => { rafB = 0; setB(true); }); });
+  $('chevB').addEventListener('change', (e) => { stB.chev = e.target.checked; zB.schedule(); });
+  $('trapB').addEventListener('change', (e) => { stB.trap = e.target.checked; zB.refit(); });
+  $('ownB').addEventListener('change', (e) => { stB.own = e.target.checked; zB.refit(); });
+  $('plate67').addEventListener('click', () => {
+    Object.assign(stB, { phi: 30, n: 9, chev: true, trap: false, own: false });
+    $('phB').value = '300'; $('chevB').checked = true; $('trapB').checked = false; $('ownB').checked = false;
+    setB(true);
+  });
+  $('sq45').addEventListener('click', () => { stB.phi = 45; $('phB').value = '450'; setB(true); });
+
+  // ====================== Plate 66: dragons ======================
+  const NSEQ = 18;
+  const stC = { xs: new Array(NSEQ).fill(1), n: 14, mode: 'fill', k: 3, ghost: false };
+  let cacheC = { key: '' };
+  const seqKey = () => stC.xs.slice(0, stC.n).join('');
+  function dataC() {
+    const key = `${seqKey()}|${stC.n}`;
+    if (cacheC.key === key) return cacheC;
+    const P = dragon(stC.xs, stC.n, 1, 0, 0, 0), m = P.length / 2 - 1;
+    return (cacheC = { key, P, m, prevPath: null, box: bbox(P), round: null });
+  }
+  // the curve with its corners rounded: straight through the midpoints, a quarter-turn at each grid point
+  function roundedPath(P) {
+    const p = new Path2D(), m = P.length / 2 - 1;
+    p.moveTo(P[0], P[1]);
+    if (m === 1) { p.lineTo(P[2], P[3]); return p; }
+    p.lineTo((P[0] + P[2]) / 2, (P[1] + P[3]) / 2);
+    for (let i = 1; i < m; i++) p.quadraticCurveTo(P[2 * i], P[2 * i + 1], (P[2 * i] + P[2 * i + 2]) / 2, (P[2 * i + 1] + P[2 * i + 3]) / 2);
+    p.lineTo(P[2 * m], P[2 * m + 1]);
+    return p;
+  }
+  // each interval is the diagonal of a small square; the squares tile the region the curve sweeps
+  function diamondPaths(P, from, to, size = 2048) {
+    return chunked(to - from, (p, j) => {
+      const i = from + j, ax = P[2 * i], ay = P[2 * i + 1], bx = P[2 * i + 2], by = P[2 * i + 3], hx = (bx - ax) / 2, hy = (by - ay) / 2, mx = ax + hx, my = ay + hy;
+      p.moveTo(ax, ay); p.lineTo(mx - hy, my + hx); p.lineTo(bx, by); p.lineTo(mx + hy, my - hx); p.closePath();
+    }, size);
+  }
+  // A filled dragon at stage n is 2^K copies of one stage-(n − K) dragon, one on each interval of stage K, so a
+  // single small path, cached, is drawn 2^K times. On an odd-numbered interval the copy's first fold is on the
+  // other side, and that is the same set as the copy run backwards, from b to a.
+  const baseCache = new Map();
+  function basePaths(tail, n) {
+    const key = `${tail.join('')}|${n}`;
+    if (!baseCache.has(key)) {
+      const P = dragon(tail, n, 0, 0, 1, 0);
+      if (baseCache.size > 40) baseCache.clear();
+      baseCache.set(key, diamondPaths(P, 0, P.length / 2 - 1));
+    }
+    return baseCache.get(key);
+  }
+  // colourOf(j, K) gives the colour of copy j of 2^K; kMin asks for at least 2^kMin separate copies
+  function drawDragon(f, v, xs, n, ax, ay, bx, by, colourOf, kMin = 0) {
+    const K = Math.min(n, Math.max(kMin, n - 12)), c = f.ctx;
+    const P = dragon(xs, K, ax, ay, bx, by), base = basePaths(xs.slice(K, n), n - K);
+    const W = f.w / v.s, Hh = f.h / v.s, cx0 = -v.ox / v.s, cy1 = v.oy / v.s;     // the visible world box
+    for (let j = 0; j < 1 << K; j++) {
+      let px = P[2 * j], py = P[2 * j + 1], qx = P[2 * j + 2], qy = P[2 * j + 3];
+      if (j & 1) { [px, py, qx, qy] = [qx, qy, px, py]; }
+      const dx = qx - px, dy = qy - py, L = Math.hypot(dx, dy), mx = px + dx / 2, my = py + dy / 2;
+      if (mx + L < cx0 || mx - L > cx0 + W || my - L > cy1 || my + L < cy1 - Hh) continue;   // off screen
+      const k = f.dpr * v.s;
+      c.setTransform(k * dx, -k * dy, -k * dy, -k * dx, f.dpr * (v.ox + v.s * px), f.dpr * (v.oy - v.s * py));
+      solid(c, base, colourOf(j, K), 0.8 / (v.s * L));
+    }
+  }
+  const zC = zoomable('wC', 'cC', (f) => fitBox(f, dataC().box, 0.05), (f, v) => {
+    const c = f.ctx, D = dataC(), L = Math.pow(Math.SQRT1_2, stC.n), px = L * v.s;
+    paper(f, PRINT.paper); toWorld(f, v);
+    if (stC.ghost && stC.n) {
+      if (!D.prevPath) D.prevPath = polyPath(dragon(stC.xs, stC.n - 1, 1, 0, 0, 0), false);
+      c.strokeStyle = '#a9a79f'; c.lineJoin = 'miter'; c.lineWidth = Math.max(0.8, Math.min(3, px * 0.12)) / v.s; c.stroke(D.prevPath);
+    }
+    if (stC.mode === 'curve') {
+      if (!D.round) D.round = roundedPath(D.P);
+      c.strokeStyle = PRINT.ink; c.lineJoin = 'round'; c.lineCap = 'round';
+      c.lineWidth = Math.max(0.6, Math.min(3, px * 0.16)) / v.s; c.stroke(D.round);
+    } else if (stC.mode === 'fill') {
+      drawDragon(f, v, stC.xs, stC.n, 1, 0, 0, 0, () => PRINT.ink);
+    } else if (stC.mode === 'along') {
+      drawDragon(f, v, stC.xs, stC.n, 1, 0, 0, 0, (j, K) => ramp(K ? j / ((1 << K) - 1) : 0.5), 6);
+    } else {
+      const kc = Math.min(stC.k, stC.n);
+      drawDragon(f, v, stC.xs, stC.n, 1, 0, 0, 0, (j, K) => CAT[(j >> (K - kc)) % CAT.length], kc);
+    }
+    toScreen(f);
+    dot(c, v, 1, 0); dot(c, v, 0, 0);
+  });
+  // the sequence editor
+  const seqBtns = [];
+  for (let k = 0; k < NSEQ; k++) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.addEventListener('click', () => { stC.xs[k] = 1 - stC.xs[k]; setC(true); });
+    $('seqC').append(b); seqBtns.push(b);
+  }
+  const PRESETS = [
+    ['Harter–Heighway: always right', () => new Array(NSEQ).fill(1)],
+    ['Pólya: alternate', () => Array.from({ length: NSEQ }, (_, k) => (k % 2 === 0 ? 1 : 0))],
+    ['Random sequence', () => Array.from({ length: NSEQ }, () => (Math.random() < 0.5 ? 0 : 1))],
+  ];
+  for (const [label, make] of PRESETS) {
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'btn'; b.textContent = label;
+    b.addEventListener('click', () => { stC.xs = make(); setC(true); });
+    $('preC').append(b);
+  }
+  function kindC() {
+    const s = seqKey();
+    if (/^1*$/.test(s)) return 'hh';
+    if (/^(10)*1?$/.test(s) || /^(01)*0?$/.test(s)) return 'polya';
+    return 'alt';
+  }
+  function setC(refit) {
+    const D = dataC(), kind = kindC();
+    seqBtns.forEach((b, k) => {
+      const on = stC.xs[k] === 1;
+      b.innerHTML = `${on ? 'R' : 'L'}<small>${k + 1}</small>`;
+      b.setAttribute('aria-pressed', String(on));
+      b.setAttribute('aria-label', `Stage ${k + 1}: first copy to the ${on ? 'right' : 'left'}`);
+      b.classList.toggle('off', k >= stC.n);
+    });
+    markS(stC.n); markM(stC.mode); markK(stC.k);
+    $('kC').hidden = stC.mode !== 'copies';
+    $('ghostC').disabled = stC.n === 0;
+    $('sCv').textContent = `stage ${stC.n}`; $('cCs').textContent = stC.n; $('cCn').textContent = `${fmt(D.m)} interval${D.m > 1 ? 's' : ''}`;
+    $('rCa').textContent = fmt(D.m);
+    const title = { hh: 'Harter–Heighway dragon', polya: 'Pólya triangle sweep', alt: 'Alternate dragon' }[kind];
+    $('cCt').textContent = title;
+    $('rCc').textContent = { hh: 'a dragon', polya: 'a right triangle', alt: 'an alternate dragon' }[kind];
+    $('rCd').innerHTML = { hh: '≈ 1.5236', polya: '1 <small>(a triangle)</small>', alt: '<small>depends on the sequence</small>' }[kind];
+    $('dragDim').textContent = `Initiator [1, 0] · two equal legs at 90° · ${{ hh: 'first copy always to the right', polya: 'first copy alternating from stage to stage', alt: 'first copy set by the sequence xₖ' }[kind]} · D = 2`;
+    $('seqNote').innerHTML = {
+      hh: 'All R: the Harter–Heighway dragon. Tap any stage to flip it.',
+      polya: 'Alternating R, L, R, L…: the first copy changes side from stage to stage, and the curve sweeps a right triangle. This is Pólya’s sweep of Plate 64.',
+      alt: '<b>Alternate dragons</b> (Davis &amp; Knuth 1970): pick any sequence x₁, x₂, … of 0s and 1s, and let xₖ decide the side of the first copy at stage k. Each sequence gives a different alternate dragon, and every one fills area ½.',
+    }[kind];
+    if (refit) zC.refit(); else zC.schedule();
+  }
+  const markS = stepButtons($('sC'), [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18], String, (n) => `Stage ${n}`, (n) => { stC.n = n; setC(true); });
+  const MODES = { curve: 'Curve', fill: 'Filled, as printed', along: 'Along the curve', copies: 'Copies' };
+  const markM = stepButtons($('mC'), Object.keys(MODES), (k) => MODES[k], (k) => `Draw: ${MODES[k]}`, (k) => {
+    stC.mode = k;
+    if (k === 'curve' && stC.n > 12) stC.n = 8;
+    setC(false);
+  });
+  const markK = stepButtons($('kC'), [1, 2, 3, 4, 5, 6], (k) => String(1 << k), (k) => `${1 << k} copies`, (k) => { stC.k = k; setC(false); });
+  $('ghostC').addEventListener('change', (e) => { stC.ghost = e.target.checked; zC.schedule(); });
+
+  // ====================== Plates 66–67: the twindragon ======================
+  const stD = { mode: 'halves', k: 2, sk: 5, rv: 11, pr: 2, num: null };
+  const ONE = new Array(24).fill(1);
+  // the twindragon: the dragons on [0, 1] and [1, 0], or their images under a similarity (x, y) → M(x, y)
+  function drawTwin(f, v, n, colA, colB, M) {
+    const T = M || ((x, y) => [x, y]), [ax, ay] = T(0, 0), [bx, by] = T(1, 0);
+    drawDragon(f, v, ONE, n, ax, ay, bx, by, () => colA);
+    drawDragon(f, v, ONE, n, bx, by, ax, ay, () => colB);
+  }
+  const twinBox = { x0: -0.35, x1: 1.35, y0: -0.7, y1: 0.7 };
+  // page → page map that takes the twindragon to its replica with digits ds (T_d = Σ d_j β^−j + β^−k T)
+  function replicaMatrix(ds) {
+    const k = ds.length;
+    let br = 1, bi = 0;                                   // β^−k
+    for (let j = 0; j < k; j++) { const r = (-br + bi) / 2, i = (-br - bi) / 2; br = r; bi = i; }
+    let cx = 0, cy = 0, pr = 1, pi = 0;
+    for (let j = 0; j < k; j++) { const r = (-pr + pi) / 2, i = (-pr - pi) / 2; pr = r; pi = i; if (ds[j] === 1) { cx += pr; cy += pi; } }
+    // z → w = toT(z); w → β^−k w + c; → toPage
+    const map = (x, y) => { const [wx, wy] = TW.toT(x, y), ux = br * wx - bi * wy + cx, uy = br * wy + bi * wx + cy; return TW.toPage(ux, uy); };
+    const o = map(0, 0), ex = map(1, 0), ey = map(0, 1);
+    return [ex[0] - o[0], ex[1] - o[1], ey[0] - o[0], ey[1] - o[1], o[0], o[1]];
+  }
+  const digitsOf = (i, k) => Array.from({ length: k }, (_, j) => (i >> (k - 1 - j)) & 1);
+  function skinPath(n) {
+    const C = TW.corners, out = [];
+    for (let j = 0; j < 6; j++) {
+      const [ax, ay] = C[j], [bx, by] = C[(j + 1) % 6], pts = [ax, ay];
+      skinCurve(ax, ay, bx, by, n, pts);
+      for (let i = 0; i < pts.length; i += 2) { const [x, y] = TW.toPage(pts[i], pts[i + 1]); out.push(x, y); }
+    }
+    return polyPath(out, true);
+  }
+  let riverCache = {};
+  // the streams drawn wider the more of the tree they carry: an edge's weight is the smaller of the two parts the
+  // tree falls into when that edge is cut
+  function riverPath(n, pr) {
+    const key = `${n}|${pr}`;
+    if (riverCache[key]) return riverCache[key];
+    const R = riverCache[n] || (riverCache[n] = riverTree(n)), g = pruneTree(R.adj, pr);
+    const N = g.size, size = new Map(), parent = new Map(), order = [];
+    const root = g.keys().next().value, stack = [root];
+    parent.set(root, -1);
+    while (stack.length) { const a = stack.pop(); order.push(a); for (const b of g.get(a)) if (!parent.has(b)) { parent.set(b, a); stack.push(b); } }
+    for (let i = order.length - 1; i >= 0; i--) { const a = order[i]; size.set(a, (size.get(a) || 0) + 1); const p = parent.get(a); if (p >= 0) size.set(p, (size.get(p) || 0) + size.get(a)); }
+    const paths = [new Path2D(), new Path2D(), new Path2D()];
+    let segs = 0;
+    for (const a of order) {
+      const p = parent.get(a); if (p < 0) continue;
+      const w = Math.min(size.get(a), N - size.get(a)), cls = w >= N / 10 ? 2 : w >= N / 60 ? 1 : 0;
+      const [x0, y0] = R.toXY(a), [x1, y1] = R.toXY(p); paths[cls].moveTo(x0, y0); paths[cls].lineTo(x1, y1); segs++;
+    }
+    return (riverCache[key] = { paths, segs, nodes: R.nodes });
+  }
+    const TILE_COLS = ['#dcc387', '#c4abd3', '#a8cbb5', '#e3a99a'];
+  const tilesOf = (num) => (num ? num.tiles : []);
+  const zD = zoomable('wD', 'cD', (f) => {
+    const b = { ...twinBox };
+    for (const t of tilesOf(stD.num)) { b.x0 = Math.min(b.x0, twinBox.x0 + t.n); b.x1 = Math.max(b.x1, twinBox.x1 + t.n); b.y0 = Math.min(b.y0, twinBox.y0 + t.m); b.y1 = Math.max(b.y1, twinBox.y1 + t.m); }
+    return fitBox(f, b, 0.03);
+  }, (f, v) => {
+    const c = f.ctx, mode = stD.mode;
+    paper(f, PRINT.paper);
+    const pickDs = stD.num && stD.num.d;
+    // neighbouring tiles T + g that also hold the number (toPage(w + g) = toPage(w) + (Im g, Re g))
+    for (const t of tilesOf(stD.num)) drawTwin(f, v, 14, t.col, t.col, (x, y) => [x + t.n, y + t.m]);
+    if (mode === 'halves') {
+      drawTwin(f, v, 16, PRINT.gray, PRINT.ink);
+    } else if (mode === 'replicas') {
+      const k = stD.k, N = 1 << k;
+      for (let i = 0; i < N; i++) {
+        const ds = digitsOf(i, k), m = replicaMatrix(ds);
+        const hit = pickDs && ds.every((x, j) => x === +pickDs[j]);
+        const tone = hit ? PRINT.accent : ds[k - 1] ? PRINT.gray : PRINT.ink;   // two tones, by the last digit, as in the book
+        drawTwin(f, v, Math.max(6, 16 - k), tone, tone, (x, y) => [m[0] * x + m[2] * y + m[4], m[1] * x + m[3] * y + m[5]]);
+      }
+    } else if (mode === 'skin') {
+      drawTwin(f, v, 16, '#d5d3cc', '#d5d3cc'); toWorld(f, v);
+      c.strokeStyle = PRINT.ink; c.lineJoin = 'round'; c.lineWidth = Math.max(0.8, Math.min(2.2, 2.2 * Math.pow(0.8, stD.sk))) / v.s;
+      c.stroke(skinPath(stD.sk));
+      toScreen(f);
+      for (const [x, y] of TW.corners) { const [px, py] = TW.toPage(x, y); dot(c, v, px, py, 4, PRINT.red); }
+    } else {
+      drawTwin(f, v, 16, '#dedcd5', '#dedcd5'); toWorld(f, v);
+      const R = riverPath(stD.rv, stD.pr), h = Math.pow(Math.SQRT1_2, stD.rv) * v.s, w0 = Math.max(0.7, Math.min(1.6, h * 0.16));
+      c.strokeStyle = PRINT.ink; c.lineCap = 'square'; c.lineJoin = 'miter';
+      R.paths.forEach((p, i) => { c.lineWidth = (w0 * [1, 1.6, 2.4][i]) / v.s; c.stroke(p); });
+    }
+    toScreen(f);
+    const N = stD.num;
+    if (N) {
+      // where 0 is, and which way 1 and i point in this drawing (the book's orientation mirrors the usual one)
+      const [ox, oy] = TW.toPage(0, 0), sx = v.ox + ox * v.s, sy = v.oy - oy * v.s;
+      c.strokeStyle = PRINT.red; c.lineWidth = 1.5; c.beginPath(); c.moveTo(sx - 6, sy); c.lineTo(sx + 6, sy); c.moveTo(sx, sy - 6); c.lineTo(sx, sy + 6); c.stroke();
+      c.font = '600 12px "IBM Plex Mono", monospace'; c.fillStyle = PRINT.red; c.fillText('0', sx + 5, sy + 15);
+      const kx = 18, ky = f.h - 18, L = 34;
+      c.strokeStyle = PRINT.muted; c.fillStyle = PRINT.muted; c.lineWidth = 1.4;
+      const arrow = (x1, y1, lab, lx, ly) => {
+        c.beginPath(); c.moveTo(kx, ky); c.lineTo(x1, y1); c.stroke();
+        const a = Math.atan2(y1 - ky, x1 - kx); c.beginPath(); c.moveTo(x1, y1); c.lineTo(x1 - 7 * Math.cos(a - 0.45), y1 - 7 * Math.sin(a - 0.45)); c.lineTo(x1 - 7 * Math.cos(a + 0.45), y1 - 7 * Math.sin(a + 0.45)); c.closePath(); c.fill();
+        c.fillText(lab, lx, ly);
+      };
+      arrow(kx, ky - L, '1', kx - 4, ky - L - 6); arrow(kx + L, ky, 'i', kx + L + 5, ky + 4);
+      if (N.x !== null) dot(c, v, N.x, N.y, 5, mode === 'replicas' ? '#f2c14e' : PRINT.red);
+    }
+  }, {
+    onTap: (x, y) => {
+      const [wx, wy] = TW.toT(x, y), a = twinDigits(wx, wy, 16);
+      $('numIn').value = `${a.I || '0'}.${a.d}`;
+      showNumber(true);
+    },
+  });
+  const fmtG = (m, n) => {                        // a Gaussian integer m + n i
+    if (!n) return String(m).replace('-', '−');
+    const im = Math.abs(n) === 1 ? 'i' : `${Math.abs(n)}i`;
+    return m ? `${String(m).replace('-', '−')} ${n < 0 ? '−' : '+'} ${im}` : `${n < 0 ? '−' : ''}${im}`;
+  };
+  function fmtQ([a, b, q]) {                     // exact value (a + b i)/q
+    const re = a.toString().replace('-', '−'), mag = (b < 0n ? -b : b), im = mag === 1n ? 'i' : `${mag}i`;
+    let top = b === 0n ? re : a === 0n ? `${b < 0n ? '−' : ''}${im}` : `${re} ${b < 0n ? '−' : '+'} ${im}`;
+    if (q === 1n) return top;
+    return (a !== 0n && b !== 0n ? `(${top})` : top) + `/${q}`;
+  }
+  function showNumber(clicked) {
+    stD.clicked = clicked;
+    const el = $('addrD'), raw = $('numIn').value.trim();
+    if (!raw) { stD.num = null; el.innerHTML = ''; zD.refit(); return; }
+    if (/(…|\.\.\.)$/.test(raw)) { el.innerHTML = '<p class="note">Put the repeating block in parentheses instead of “…”: 0.(1) means 0.111…, and 0.0(001) means 0.0001001001….</p>'; return; }
+    const P = parseBase(raw);
+    if (!P) { el.innerHTML = '<p class="note">Use only the digits 0 and 1, one point, and parentheses around a repeating block at the end, like 11.0(01).</p>'; return; }
+    const exps = expansionsOf(P.value), [wx, wy] = GQ.num(P.value), [x, y] = TW.toPage(wx, wy);
+    const want = expandFrac(P.pre, P.per, 60);
+    const isTyped = (e) => (e.I || '') === P.I.replace(/^0+/, '') && expandFrac(e.pre, e.per, 60) === want;
+    const tiles = [];
+    for (const e of exps) if ((e.m || e.n) && !tiles.some((t) => t.m === e.m && t.n === e.n)) tiles.push({ m: e.m, n: e.n, col: TILE_COLS[tiles.length % TILE_COLS.length] });
+    const home = exps.find((e) => !e.m && !e.n), main = exps.find(isTyped) || exps[0];
+    stD.num = { x, y, tiles, d: home ? expandFrac(home.pre, home.per, 16) : null };
+    const k = stD.mode === 'replicas' && stD.num.d ? stD.k : 0;
+    const rows = exps.map((e) => {
+      const t = tiles.find((t) => t.m === e.m && t.n === e.n), sw = t ? t.col : '#151515';
+      let s = formatExpansion(e);
+      if (k && !e.m && !e.n) { const fr = s.split('.')[1] || ''; s = `0.<span class="hl">${fr.slice(0, k)}</span>${fr.slice(k)}`; }
+      const where = !e.m && !e.n ? 'in the twindragon' : `in the copy moved by ${fmtG(e.m, e.n)}`;
+      return `<li class="${isTyped(e) ? 'typed' : ''}"><i style="background:${sw}"></i><span>${s} <small>${where}</small></span></li>`;
+    });
+    const same = new Set(exps.map((e) => `${e.m},${e.n}`)).size, words = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six'];
+    const why = exps.length < 2 ? 'Only one expansion: at every scale the number lies inside a single piece.'
+      : `${words[exps.length] || exps.length} expansions: the number lies on a seam where ${(words[exps.length] || String(exps.length)).toLowerCase()} pieces meet` +
+        (same > 1 ? (home ? `, on the twindragon’s edge, where it meets the shaded neighbouring ${tiles.length > 1 ? 'copies' : 'copy'}.` : ', where the shaded copies meet.') : ' inside the twindragon.');
+    el.innerHTML = `<div class="val">${clicked ? 'The point you clicked, to 16 digits:' : 'Value:'} ${fmtQ(P.value)} ≈ ${wx.toFixed(4).replace('-', '−')} ${wy < 0 ? '−' : '+'} ${Math.abs(wy).toFixed(4)}i</div>` +
+      (exps.length ? `<ol>${rows.join('')}</ol><p class="note">${why}${k ? ` In blue: the replica picked by the first ${k} digit${k > 1 ? 's' : ''}.` : ''}</p>` : '<p class="note">That one is too long to untangle here; try a shorter repeating block.</p>');
+    zD.refit();
+  }
+  $('numForm').addEventListener('submit', (e) => { e.preventDefault(); showNumber(false); });
+  for (const ex of ['0.(1)', '1', '0.0(001)', '0.000(001)', '0.(010)', '11.1']) {
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'btn'; b.textContent = ex;
+    b.addEventListener('click', () => { $('numIn').value = ex; showNumber(false); });
+    $('numEx').append(b);
+  }
+  const showAddr = () => { if (stD.num) showNumber(stD.clicked); };
+  const MODES_D = { halves: 'Two dragons', replicas: 'Replicas', skin: 'Skin', river: 'River' };
+  const CAP_D = {
+    halves: 'One component dragon is in black, the other in gray, as in the book: in black the dragon on [1, 0] from the section above, in gray the dragon on [0, 1], each with its first copy to the right.',
+    replicas: 'A twindragon can be tiled by reduced replicas of itself: two at scale 1/√2, four at scale ½, and so on, in two tones as in the book. A replica’s digits are the first digits of the addresses of its points.',
+    skin: 'The twindragon’s boundary, its skin, is a Koch curve on six sides with the generator below. The red dots are the six points where it meets two of its neighbours in the tiling of the plane.',
+    river: 'Round off the corners of the twindragon’s curve, here at stage 11. Where it passes a grid point twice, the two turns cut off two opposite grid squares and leave the other two joined. The squares inside the curve, joined that way, form one tree: the river. Those outside reach in from the coast and form the watershed. With the streams near the sources erased, for legibility, the river tree looks like the book’s. Main channels, the ones that split the tree into two big parts, are drawn wider.',
+  };
+  function setD() {
+    markMD(stD.mode);
+    $('cDt').textContent = { halves: 'Twindragon', replicas: 'Replicas', skin: 'Twindragon skin', river: 'Twindragon river' }[stD.mode];
+    $('modeCap').textContent = CAP_D[stD.mode];
+    $('skinMini').hidden = stD.mode !== 'skin';
+    const g = $('kDg'); g.hidden = stD.mode === 'halves';
+    $('kD').innerHTML = '';
+    if (stD.mode === 'replicas') {
+      $('kDl').textContent = 'Replicas'; $('kDv').textContent = `${1 << stD.k} at scale ${stD.k % 2 ? `1/${Math.pow(2, (stD.k - 1) / 2)}√2` : `1/${Math.pow(2, stD.k / 2)}`}`.replace('1/1√2', '1/√2');
+      stepButtons($('kD'), [1, 2, 3, 4, 5, 6, 7, 8], (k) => String(1 << k), (k) => `${1 << k} replicas`, (k) => { stD.k = k; setD(); })(stD.k);
+      $('cDn').textContent = `${1 << stD.k} replicas`;
+    } else if (stD.mode === 'skin') {
+      $('kDl').textContent = 'Stage of the skin'; $('kDv').textContent = `stage ${stD.sk} · ${fmt(6 * Math.pow(3, stD.sk))} pieces`;
+      stepButtons($('kD'), [0, 1, 2, 3, 4, 5, 6, 7, 8], String, (k) => `Skin stage ${k}`, (k) => { stD.sk = k; setD(); })(stD.sk);
+      $('cDn').textContent = `skin at stage ${stD.sk}`;
+    } else if (stD.mode === 'river') {
+      const R = riverPath(stD.rv, stD.pr);
+      $('kDl').textContent = 'Streams erased'; $('kDv').textContent = `${stD.pr} round${stD.pr === 1 ? '' : 's'} · ${fmt(R.segs)} of ${fmt(R.nodes - 1)} links`;
+      stepButtons($('kD'), [0, 1, 2, 3, 4], String, (k) => `Erase ${k} rounds of streams`, (k) => { stD.pr = k; setD(); })(stD.pr);
+      $('cDn').textContent = `river tree, curve at stage ${stD.rv}`;
+    } else $('cDn').textContent = 'two dragons';
+    showAddr();
+    zD.schedule();
+  }
+  const markMD = stepButtons($('mD'), Object.keys(MODES_D), (k) => MODES_D[k], (k) => `Show: ${MODES_D[k]}`, (k) => { stD.mode = k; setD(); });
+
+  setA(); setB(true); setC(true); setD();
+})();
+
+</script>
