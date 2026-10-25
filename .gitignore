@@ -1,0 +1,13 @@
+# the book and anything cut from it stay out of the repository
+scans/
+*.pdf
+*.png
+*.jpg
+!src/**/*.png
+
+# analysis by-products
+*.npy
+*.pkl
+__pycache__/
+node_modules/
+.DS_Store
