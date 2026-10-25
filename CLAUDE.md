@@ -25,6 +25,7 @@ tools/build.py             builds site/ from src/  (python3 tools/build.py)
 tools/check_build.py       confirms the sources reproduce the published pages
 tests/smoke.cjs            Playwright smoke test of every built page
 site/                      build output, deployed as the website
+.github/workflows/pages.yml rebuilds site/ and publishes it to GitHub Pages on every merge to main
 research/                  analysis scripts from earlier sessions (reference only; paths are stale)
 ```
 

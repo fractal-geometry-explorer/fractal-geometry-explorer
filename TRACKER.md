@@ -26,7 +26,7 @@ Update this file in the same pull request as the work it records.
 | Site shell: chapter index, plate finder, navigation between pages, cross-links | todo |
 | Move the ten existing pages onto the shared library; check each against its published version (`tools/check_build.py`) | todo |
 | Automated checks in CI: build, smoke test (`tests/smoke.cjs`), phone width | todo |
-| Hosting (GitHub Pages from `main`) | todo |
+| Hosting: GitHub Pages, published by `.github/workflows/pages.yml` on every merge to `main` | done |
 
 ## I Introduction (chapters 1–4)
 
