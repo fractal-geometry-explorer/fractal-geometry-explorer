@@ -133,6 +133,19 @@
         "ui.js"
       ],
       "layout_comment": "/* Layout: the Cantor bar (80), the Cantor curtains (81), the devil's staircase (83) and the chapter's dust-and-dimension concept, each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "levy-dusts",
+      "title": "Spatial Lévy Dusts",
+      "plates": "Plates 293–300",
+      "chapter": 32,
+      "scripts": [
+        "shared/geometry.js",
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: the computer bug (293), nonrandom subordination (295), the Lévy flight (296–297), the subordination cascade (298), the zoom (299) and the circumnavigation (300), each a figure beside its caption, controls and numbers; a sticky plate index on top. One column under 900px. */"
     }
   ]
 }

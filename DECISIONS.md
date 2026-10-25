@@ -124,6 +124,31 @@ Conventions used below:
 - **Plate 83, the devil's staircase.** The unit square with the region under the Cantor function in solid ink. The scan's top profile matches the Cantor function to rms 0.005 of the height (max deviation 0.018 at the near-vertical risers, which is ink spread); treads are resolved down to about 3⁻⁷. The page computes M(R) per pixel column, so zooming keeps producing steps. Graph length checked in closed form: 1 − (2/3)ⁿ + √(1 + (4/9)ⁿ) → 2.
 - **Generalized dusts (pages 77–78).** The book gives N and r for its example dusts (N = 3, r = 1/5; N = 2, r = 1/4; N = 3, r = 1/9) but never draws them, so the page's evenly spaced arrangement — first piece at 0, last ending at 1, equal tremas — is a reconstruction, flagged on the page. The gap-count law Nr(U > u) stepping across F·u⁻ᴰ was verified and is drawn as a log–log chart.
 
+## Part X, chapter 32 (spatial Lévy dusts, Plates 293–300)
+
+**Plate 293, the computer "bug" as artist, opus 2.**
+- The plate is the output of the program behind Plate 69 with an unrecorded bug, so it cannot be reproduced; treated as `art`. The page runs the same program — the 13-interval snowflake sweep in Plate 69's large-circle rule (S, F, F, no swap), one side filled — and lets the reader plant a bug (flip the mirror and/or the direction of chosen legs' copies). This is an homage, flagged on the page.
+
+**Plate 295, nonrandom subordination.**
+- Decoded exactly. The construction is Plate 49's generator (b = 4, N = 8, D = 3/2) with each leg cut in the middle: 16 children of ratio 1/16 — the two end quarters of each leg, all forward, none mirrored or reversed — so N = 16, r = 1/16, D = 1. Subordinator dimension log 16/log 64 = 2/3 (a piece of spatial scale 1/16 takes time (1/16)^{3/2} = 1/64).
+- The printed plate is the stage-2 dust: its 137 marks are the stage-2 pieces clustered at the 9 generator corners of each stage-1 piece, with the 7 interior corners shared between neighbouring pieces (16 × 9 − 7 = 137). Fitted with scale and translation only (unit length = 3642 px at 600 dpi): every mark sits on the computed stage-3 dust to 1.2 px mean.
+- The caption's gap law Nr(G ≥ u) ∝ u⁻¹ was verified numerically (fitted exponent −1.0 on the stage-4 gaps; shown in the page's readout).
+
+**Plates 296–297, Lévy flight, D = 1.26.**
+- Random; matched statistically with exposed seeds. One 3-D flight (two independent halves from the origin, jump law Pr(U>u) = u^(−D) with cutoff u = 1), projected on the x–y plane (296) and the x–z plane (297). Stopover panels use the caption's grid-cell rendering (mark cells holding ≥ 1 stopover) in negative. The page fits log M(R) against log R around the origin as a live check of M(R) ∝ R^D.
+
+**Plate 298, decrease of D by subordination.**
+- A planar Brownian walk of 2²⁰ steps, decimated by successive Lévy subordinators of dimension α = 2^(−1/6) ≈ 0.89, each riding on its predecessor, giving D = 1.78 … 0.89 — the plate's seven panels as seven states of one seeded experiment. Kept counts scale as N^(α^k), as expected. The Lévy staircase inset (time of the previous dust against kept points, filled below) reproduces the plate's black terraced silhouettes.
+
+**Plate 299, zooming toward a Lévy dust.**
+- A planar flight with D = 1.26; windows divide by b = 3 between views, centred on the flight's origin (a point of the dust — a window centred on the cluster's centroid can go empty under deep zoom; the book's "center of the cluster" was read this way). Default 2 × 10⁶ positions against the book's 12.5 × 10⁶, with 8 × 10⁶ available; noted on the page. About 3^(−1.26) ≈ 1/4 of the stopovers survive each step, as observed.
+
+**Plate 300, circumnavigation.**
+- One 3-D flight with D = 1.3, orthographic projection turning about the vertical axis through the cluster's centroid; the strip's seven views are azimuth steps of 360°/7. The printed sample cannot be recovered; the seed is fixed but arbitrary.
+
+**Rendering.**
+- Millions of stopovers draw fast by writing grid cells straight into an ImageData (background and ink together, put with a dirty rect so panels can share a canvas); a Path2D of dots would not keep up. The full redraw stays in the pan-and-zoom snapshot rhythm.
+
 ## Open questions
 
 - **The 13-interval generator.** Why does Plate 69's large circle use a different rule from the caption's second stage? This may be worth a sentence once the rest of chapter 7 is reviewed.
