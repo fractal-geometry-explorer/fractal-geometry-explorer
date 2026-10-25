@@ -124,6 +124,24 @@ Conventions used below:
 - **Plate 83, the devil's staircase.** The unit square with the region under the Cantor function in solid ink. The scan's top profile matches the Cantor function to rms 0.005 of the height (max deviation 0.018 at the near-vertical risers, which is ink spread); treads are resolved down to about 3⁻⁷. The page computes M(R) per pixel column, so zooming keeps producing steps. Graph length checked in closed form: 1 − (2/3)ⁿ + √(1 + (4/9)ⁿ) → 2.
 - **Generalized dusts (pages 77–78).** The book gives N and r for its example dusts (N = 3, r = 1/5; N = 2, r = 1/4; N = 3, r = 1/9) but never draws them, so the page's evenly spaced arrangement — first piece at 0, last ending at 1, equal tremas — is a reconstruction, flagged on the page. The gap-count law Nr(U > u) stepping across F·u⁻ᴰ was verified and is drawn as a log–log chart.
 
+## Part VIII, chapter 25
+
+**Plate 241, a sample random walk and its zeroset.**
+- The printed figures are Feller's (reproduced from Feller 1950, Wiley, in copyright), and Feller called them "atypical", selected over wilder-looking samples. The page simulates fresh 10,000-toss games from a seed instead: a statistical match, never a copy.
+- Measured from the scan at 600 dpi: the two lower panels plot a dot about every 20 tosses (median dot spacing ≈ 14 px at ≈ 0.65 px/toss), not the caption's "data at intervals of 200 tosses". The page plots every 20th toss and notes the discrepancy.
+- Panel arrangement as printed: tosses 0–550 one by one on top; then the whole record in two rows (0–6,000 and 6,000–10,000) with time compressed tenfold and heights by √10, the walk's self-affine ratio. The penny scale is auto-fitted to the sample.
+- Zero-gap law checked: Pr(U > u) across 200 games of 10,000 tosses fits slope −0.57 over u in [4, 512] against the asymptotic −1/2 (finite-size steepening); shown as a live readout.
+
+**Pages 233–234, the Brown trail as a randomized Peano curve.**
+- The book's example midpoint rule, "the parity of k", works out as the parity of i + k (i the side's index along the curve, k the stage): that choice reproduces the Pólya sweep vertex for vertex (checked against `genFromCodes` with codes [1, 3] through stage 10). The parity of k alone folds the teragon onto itself degenerately.
+- All four rules on the page keep E|ΔM|² = Δt/4 (transversal h = √Δt/2; isotropic Gaussian per-coordinate sd √(Δt/8)), so the Pythagorean identity holds exactly for the transversal rules and in the mean for the Gaussian one; the page shows the measured ratio.
+- The book draws no figure for this construction; the page's figure follows its recipe and says so.
+
+**Plates 242–243, Brown hulls and islands.**
+- The walk is the book's own downsized lattice walk: (X+Y)/√2 and (X−Y)/√2 each move ±1 per step, so P(t) steps to a 4-neighbour. The loop of Plate 243 deals each diagonal coordinate an equal number of +1 and −1 steps, shuffled — a uniformly random closed walk, back at its start.
+- Hull, gaps and boundary are classified on the raster by flood-filling the exterior from the border (4-connectivity): Plate 242 is the hull silhouette (trail plus gaps, solid black); Plate 243 is the loop as a net, trail black and gap tremas gray. The raster is sized to the walk's bounding box; the book drew 200,000 steps on (1,200)².
+- Checked numerically at 200,000 steps: the boundary's box dimension comes out 1.26–1.32 against the conjectured 4/3 (proved by Lawler, Schramm & Werner 2001 — noted on the page), and the caption's G-length vs G-area test gives slope ≈ 0.68 against D/2 = 2/3. Both run live per sample as readouts.
+
 ## Part IX, chapter 27
 
 **Plate 255, fractional Brown trails.**

@@ -118,10 +118,11 @@ Update this file in the same pull request as the work it records.
 | 229 | 229 | Random Peano curve (D = 2) | random | todo | |
 | 230 | 230 | Triangle and squig curve | random | todo | |
 | 231 | 231 | A hexa-squig coastline | random | todo | |
-| 241 | 240–241 | A random walk approximating a Brown line-to-line function, and its zeroset | random | todo | |
-| 242–243 | 242–243 | Brown hulls and islands; self-avoiding Brownian motion | random | todo | |
+| 241 | 240–241 | A random walk approximating a Brown line-to-line function, and its zeroset | random | done | brown-trails |
+| 242–243 | 242–243 | Brown hulls and islands; self-avoiding Brownian motion | random | done | brown-trails |
 | 246 | 246 | The computer "bug" (opus 1) | random | todo | |
 | (concept) | 232– | Brownian motion and the Wiener sausage | random | done | wiener-sausage |
+| (concept) | 232–239 | The Brown trail as a randomized Peano curve | random | done | brown-trails |
 
 ## IX Fractional Brown fractals (chapters 27–29)
 
