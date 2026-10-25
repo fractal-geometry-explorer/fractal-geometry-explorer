@@ -1,0 +1,27 @@
+const { chromium } = require('playwright');
+(async () => {
+  const b = await chromium.launch(); const errs = [];
+  const p = await b.newPage({ viewport: { width: 1280, height: 900 }, deviceScaleFactor: 2 });
+  p.on('pageerror', e => errs.push(e.message));
+  await p.goto('file://' + process.argv[2]); await p.waitForTimeout(1200);
+  const shot = async (sel, name) => { await p.waitForTimeout(350); await (await p.$(sel)).screenshot({ path: `fgn/sn3_${name}.png` }); };
+  const T = async (sel) => p.evaluate(async (sel) => { const t0 = performance.now(); document.querySelector(sel).click(); await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))); return Math.round(performance.now() - t0); }, sel);
+  await (await p.$('#fudge')).scrollIntoViewIfNeeded(); await shot('#wD', 'fplate');
+  console.log('fudge st9', await T('#sD button:nth-child(9)'));
+  await (await p.$('#gosper')).scrollIntoViewIfNeeded();
+  await p.click('#mB button:nth-child(3)'); await shot('#wB', 'widths');
+  console.log('gosper widths st5', await T('#sB button:nth-child(5)'));
+  await (await p.$('#snow')).scrollIntoViewIfNeeded();
+  console.log('snow st6', await T('#sA button:nth-child(7)'));
+  await p.click('#mA button:nth-child(4)'); console.log('tiles max', await p.$eval('#sAv', e => e.textContent));
+  console.log('tiles st5', await T('#sA button:nth-child(6)'));
+  await p.click('#mA button:nth-child(3)'); console.log('rounded st6', await T('#sA button:nth-child(7)'));
+  await p.click('#gA button:nth-child(2)'); console.log('13 rounded st4', await T('#sA button:nth-child(5)'));
+  await p.click('#mA button:nth-child(2)'); console.log('13 domains st4', await T('#sA button:nth-child(5)'));
+  await (await p.$('#quartet')).scrollIntoViewIfNeeded();
+  console.log('quartet st6', await T('#sE button:nth-child(7)'));
+  await p.click('#mE button:nth-child(4)'); console.log('F tree st6', await T('#sE button:nth-child(7)'));
+  await (await p.$('#cascade')).scrollIntoViewIfNeeded(); console.log('cascade st5', await T('#sC button:nth-child(5)'));
+  console.log('errors', errs);
+  await b.close();
+})();

@@ -1,0 +1,11 @@
+import sys; sys.path.insert(0,'.')
+from arcs import *
+c=level(3,OPTS)
+pl=Image.open('../fgn/plate_crop.png').convert('L')
+tv=fill(through_vertices(c,8),W=850)
+box=(270,20,590,340)
+a=pl.crop(box).resize((640,640)); b=tv.crop(box).resize((640,640))
+out=Image.new('L',(1300,640),255); out.paste(a,(0,0)); out.paste(b,(660,0)); out.save('../fgn/zoom_top.png')
+box=(0,560,420,880)
+a=pl.crop(box).resize((630,480)); b=tv.crop(box).resize((630,480))
+out=Image.new('L',(1280,480),255); out.paste(a,(0,0)); out.paste(b,(650,0)); out.save('../fgn/zoom_bl.png')

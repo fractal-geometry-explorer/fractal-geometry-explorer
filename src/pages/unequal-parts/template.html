@@ -1,0 +1,190 @@
+<title>Unequal Parts</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.r-56 { aspect-ratio: 2 / 1.1; }
+.r-57 { aspect-ratio: 2 / 1.15; }
+.r-line { aspect-ratio: 4 / 1; }
+#gPlot { width: 100%; height: auto; display: block; background: var(--print-paper); outline: 1px solid var(--print-rule); }
+#gPlot text { font-family: var(--f-mono); font-size: 10px; fill: #5d5d58; }
+.ramp { height: 10px; border: 1px solid var(--print-rule); background: linear-gradient(90deg, #2f5f9e, #3f8f8c, #8a9a3c, #d08a2c, #c2452d); }
+.ramp-row { display: grid; grid-template-columns: auto 1fr auto; gap: 8px; align-items: center; font-family: var(--f-mono); font-size: 11.5px; color: var(--muted); }
+.mini svg.gen { height: 64px; }
+.sw { display: inline-block; width: 12px; height: 3px; vertical-align: middle; margin-right: 4px; }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12.5px; color: var(--muted); }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 6 · pages 56–57</p>
+    <h1><span class="plate-no">Plates 56–57</span><span class="lozenge" aria-hidden="true"></span><span>Unequal Parts</span></h1>
+    <p class="dek">Koch's construction with one change: the generator's sides need not be equal. The curves become less relentlessly regular. Different parts of a curve need different numbers of stages to reach the same fine detail. The dimension now comes from an equation, Σ r<sub>m</sub><sup>D</sup> = 1.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#p56"><b>56</b> Variety for Koch's curve</a>
+    <a href="#dim">The dimension equation</a>
+    <a href="#p57t"><b>57</b> A row of trees</a>
+    <a href="#p57b"><b>57</b> D just above 1</a>
+  </nav>
+
+  <!-- ===================== PLATE 56 ===================== -->
+  <section class="plate" id="p56">
+    <div class="plate-head">
+      <p class="no">Plate 56 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>A Koch curve with unequal parts</h2>
+      <p class="dim" id="p56dim">Generator 1/4, 1/2, 1/2, 1/4 · D ≈ 1.4500</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-56 zoomable" id="w56">
+          <canvas id="c56" role="img" aria-label="Koch curve with unequal parts, land shaded black"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>Plate 56</strong> · <span id="c56n">3,412 pieces</span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Plate 56 adds variety to the triadic Koch curve. The generator keeps Koch's shape (flat, up 60°, down 60°, flat), but the middle sides are twice as long as the outer ones: 1/4, 1/2, 1/2, 1/4. Solving Σ r<sub>m</sub><sup>D</sup> = 1 gives D ≈ 1.4500, well above Koch's 1.2619 (the book prints 1.4490).</p>
+        <div class="mini" aria-label="The generator">
+          <svg class="gen" id="g56" aria-hidden="true"></svg>
+          <div class="fx" id="g56t">r = 1/4, 1/2, 1/2, 1/4<br>2·(1/4)<sup>D</sup> + 2·(1/2)<sup>D</sup> = 1</div>
+        </div>
+        <label class="slider" for="a56">
+          <span class="label-row"><span class="label">Length of the flat sides</span><span class="value" id="a56v">a = 0.250</span></span>
+          <input type="range" id="a56" min="250" max="450" value="250">
+        </label>
+        <div class="btn-row" id="pre56"></div>
+        <label class="slider" for="e56">
+          <span class="label-row"><span class="label">Stop when pieces are shorter than</span><span class="value" id="e56v">ε = 0.004</span></span>
+          <input type="range" id="e56" min="0" max="100" value="80">
+        </label>
+        <label class="check" for="d56"><input type="checkbox" id="d56"> Colour by stage: the new land each stage adds, and each coastline piece by the stage it ends on</label>
+        <div class="ramp-row" id="k56" hidden><span id="k56a">4</span><div class="ramp"></div><span id="k56b">8</span></div>
+        <dl class="read">
+          <div><dt>Dimension D</dt><dd id="r56a">1.4500</dd></div>
+          <div><dt>Pieces at this ε</dt><dd id="r56b">3,412</dd></div>
+          <div><dt>Stages needed</dt><dd id="r56c">4 to 8</dd></div>
+          <div><dt>Coastline length</dt><dd id="r56d">—</dd></div>
+        </dl>
+        <p class="note">Mandelbrot continues each construction until the details reach a set small size. With equal ratios that takes a fixed number of stages. Here it doesn't: a piece reached through quarters gets small faster than one reached through halves.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== DIMENSION ===================== -->
+  <section class="plate" id="dim">
+    <div class="plate-head">
+      <p class="no">Plates 56–57, caption</p>
+      <h2>The dimension-generating function</h2>
+      <p class="dim">G(D) = Σ r<sub>m</sub><sup>D</sup>, and D is the root of G(D) = 1</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <svg id="gPlot" viewBox="0 0 400 250" role="img" aria-label="G of D for the three generators on this page"></svg>
+        <figcaption><strong>G(D)</strong> for the three generators as currently set · each crosses 1 exactly once, at its dimension</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">To extend similarity dimension to unequal parts, Mandelbrot looks at ordinary shapes paved by pieces shrunk in ratios r<sub>m</sub>. An interval cut into unequal pieces needs Σ r<sub>m</sub> = 1, and a square paved by unequal squares needs Σ r<sub>m</sub><sup>2</sup> = 1. With N equal parts the old rule N r<sup>D</sup> = 1 reads Σ r<sub>m</sub><sup>D</sup> = 1 too. So he forms G(D) = Σ r<sub>m</sub><sup>D</sup> and takes D to be its unique real root of G(D) = 1. G is strictly decreasing, so there is exactly one.</p>
+        <div class="legend" id="gLeg"></div>
+        <p class="note">Whether this D always equals the Hausdorff–Besicovitch dimension, he writes, "remains to be investigated. In every case I know of, it does." P. A. P. Moran had in fact proved it in 1946 for pieces that don't overlap; Hutchinson's 1981 theory of self-similar sets made that condition standard.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 57 TOP ===================== -->
+  <section class="plate" id="p57t">
+    <div class="plate-head">
+      <p class="no">Plate 57, top <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>A row of trees, just below D = 2</h2>
+      <p class="dim" id="p57tdim">Two legs, r ≈ 0.556 and 0.808 · D ≈ 1.8797</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-57 zoomable" id="w57">
+          <canvas id="c57" role="img" aria-label="Koch curve with two unequal legs, drawn as a row of trees"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>Plate 57, top</strong> · <span id="c57n">pieces</span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The generator is just two legs of unequal length meeting at a little more than a right angle. Every copy is flipped to the inside. The land that survives between the copies grows into trunks and branches. Mandelbrot says the resemblance to a row of trees "is not accidental" (Chapter 17). As the angle closes to 90°, D → 2 and the coastline tends to the Peano–Pólya curve, which fills the whole triangle (Chapter 7).</p>
+        <div class="mini" aria-label="The generator">
+          <svg class="gen" id="g57" aria-hidden="true"></svg>
+          <div class="fx" id="g57t">r₁ ≈ 0.556, r₂ ≈ 0.808<br>r₁<sup>D</sup> + r₂<sup>D</sup> = 1</div>
+        </div>
+        <label class="slider" for="ang57">
+          <span class="label-row"><span class="label">Angle where the legs meet</span><span class="value" id="ang57v">92.4°</span></span>
+          <input type="range" id="ang57" min="9005" max="12000" value="9240">
+        </label>
+        <label class="slider" for="p57">
+          <span class="label-row"><span class="label">Where the trunk stands</span><span class="value" id="p57v">0.328 along the base</span></span>
+          <input type="range" id="p57" min="200" max="500" value="328">
+        </label>
+        <div class="btn-row" id="pre57"></div>
+        <label class="slider" for="e57">
+          <span class="label-row"><span class="label">Stop when pieces are shorter than</span><span class="value" id="e57v">ε</span></span>
+          <input type="range" id="e57" min="0" max="100" value="70">
+        </label>
+        <label class="check" for="even57"><input type="checkbox" id="even57" checked> Finish every piece on an even-numbered stage, as the plate does</label>
+        <label class="check" for="d57"><input type="checkbox" id="d57"> Colour by stage: the new land each stage adds (land a stage carves away turns back to white), and each coastline piece by the stage it ends on</label>
+        <div class="ramp-row" id="k57" hidden><span id="k57a">4</span><div class="ramp"></div><span id="k57b">8</span></div>
+        <dl class="read">
+          <div><dt>Dimension D</dt><dd id="r57a">1.8797</dd></div>
+          <div><dt>Pieces at this ε</dt><dd id="r57b">—</dd></div>
+          <div><dt>Stages needed</dt><dd id="r57c">—</dd></div>
+          <div><dt>r₁² + r₂²</dt><dd id="r57d">—</dd></div>
+        </dl>
+        <p class="note">Because every copy is flipped, the stages take turns: odd stages add land and even stages carve it away. Stopping pieces at different stages mixes the two into dark blotches; ending every piece on an even, carving stage gives the plate's clean trees. At exactly 90° the legs satisfy r₁² + r₂² = 1. The two flipped copies then tile the triangle with nothing left over, D = 2, and the curve fills the triangle.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 57 BOTTOM ===================== -->
+  <section class="plate" id="p57b">
+    <div class="plate-head">
+      <p class="no">Plate 57, bottom <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>D slightly above 1</h2>
+      <p class="dim" id="p57bdim">Four flats and two small bumps · D ≈ 1.054</p>
+    </div>
+    <figure class="fig">
+      <div class="canvas-wrap r-line"><canvas id="cB" role="img" aria-label="Koch curve with dimension slightly above 1"></canvas></div>
+      <figcaption><strong>Plate 57, bottom</strong> · <span id="cBn">pieces</span></figcaption>
+    </figure>
+    <div class="plate-body">
+      <div class="side">
+        <p class="cap">At the other extreme, the curve at the bottom of Plate 57 is almost straight. Its generator, reconstructed from the figure, has four flat sides of 0.225, with one small 60° bump of side 0.05 pointing up and one pointing down between them. The same bumps then appear at every scale, ever smaller, up and down along the line. Each stage adds only about a tenth to the length, so D is only just above 1.</p>
+        <p class="cap">The printed figure is cropped. It stops partway through a small triangle on the right and trims a sliver off the left. Completed, the curve is symmetric: turning it half a turn about its centre swaps every up bump with a down bump. The bump positions in the book fit that exactly.</p>
+        <div class="mini" aria-label="The generator">
+          <svg class="gen" id="gB" aria-hidden="true"></svg>
+          <div class="fx" id="gBt">4 flats of r, 4 bump sides of b<br>4r<sup>D</sup> + 4b<sup>D</sup> = 1</div>
+        </div>
+      </div>
+      <div class="side">
+        <label class="slider" for="bB">
+          <span class="label-row"><span class="label">Size of the bumps</span><span class="value" id="bBv">b = 0.050</span></span>
+          <input type="range" id="bB" min="0" max="120" value="50">
+        </label>
+        <div class="btn-row"><button type="button" class="btn" id="preB">Plate 57: b = 0.05</button></div>
+        <label class="check" for="cropB"><input type="checkbox" id="cropB" checked> Mark where the book's figure is cut off (for the plate's bumps)</label>
+        <label class="slider" for="eB">
+          <span class="label-row"><span class="label">Stop when pieces are shorter than</span><span class="value" id="eBv">ε</span></span>
+          <input type="range" id="eB" min="0" max="100" value="70">
+        </label>
+        <dl class="read">
+          <div><dt>Dimension D</dt><dd id="rBa">1.0540</dd></div>
+          <div><dt>Flats r</dt><dd id="rBb">0.2250</dd></div>
+          <div><dt>Pieces at this ε</dt><dd id="rBc">—</dd></div>
+          <div><dt>Length gained per stage</dt><dd id="rBd">—</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 6, pages 56–57 (Plates 56 and 57). The caption gives the dimensions but not the generators, so they were reconstructed from the figures. Plate 56's generator (1/4, 1/2, 1/2, 1/4) reproduces the figure and its dimension. The top of Plate 57 was fitted to the figure (apex at 0.328 along the base, every copy flipped inward) and tuned to D = 1.8797. The bottom of Plate 57 was reconstructed from its bump positions. The printed figure is cropped at both ends; completed, it is symmetric under a half-turn, with flats of 0.225 and bumps of 0.05. Companion pages: <a href="https://claude.ai/artifact/1diKiTcEwLkJpZaVA2gQ11" target="_blank" rel="noopener">Triadic Koch Island</a>, <a href="https://claude.ai/artifact/UWcE52EkH4ip5mfXMMYdAA" target="_blank" rel="noopener">Gosper Island</a> and <a href="https://claude.ai/artifact/91wGC9EtnwxZp8MZJ4MF6N" target="_blank" rel="noopener">Quadric Koch Islands</a>.</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>

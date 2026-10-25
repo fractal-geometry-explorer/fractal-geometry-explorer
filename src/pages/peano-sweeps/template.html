@@ -1,0 +1,216 @@
+<title>Peano Sweeps</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.r-wide { aspect-ratio: 3 / 2; }
+#flip { width: 100%; height: auto; display: block; background: var(--print-paper); outline: 1px solid var(--print-rule); }
+#flip text { font-family: var(--f-mono); font-size: 10px; fill: #5d5d58; }
+table.mt { width: 100%; border-collapse: collapse; font-family: var(--f-mono); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+table.mt th { font: 700 10.5px/1.2 var(--f-display); letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); text-align: right; padding: 4px 6px; border-bottom: 1px solid var(--rule); }
+table.mt th:first-child, table.mt td:first-child { text-align: left; }
+table.mt td { text-align: right; padding: 5px 6px; border-bottom: 1px solid var(--rule); }
+table.mt tr.sel td { color: var(--accent); font-weight: 500; }
+.mini svg.gen { height: 70px; }
+.status { font-family: var(--f-mono); font-size: 12.5px; padding: 8px 10px; border: 1px solid var(--rule); background: var(--surface); }
+.status.good { border-color: #3f8f6c; }
+ol.proof { margin: 0; padding-left: 1.4em; display: grid; gap: 6px; font-family: var(--f-body); font-size: 17px; line-height: 1.5; max-width: 62ch; }
+ol.proof li::marker { font-family: var(--f-display); font-weight: 700; color: var(--muted); }
+.side p.cap b { font-family: var(--f-display); font-size: 14px; letter-spacing: 0.04em; text-transform: uppercase; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 7, "Harnessing the Peano monster curves" · pages 62–65</p>
+    <h1><span class="plate-no">Plates 63–65</span><span class="lozenge" aria-hidden="true"></span><span>Peano Sweeps</span></h1>
+    <p class="dek">Koch constructions pushed all the way to D = 2. Here the coastline doesn't just wrinkle; it fills a whole region of the plane. These pages hold Peano's original curve, turned 45° so that it fits the Koch scheme, and two sweeps of a triangle, Pólya's and Cesàro's, all built from the simplest generators there are. Each figure is computed from the rules in the captions.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#p63"><b>63</b> Peano's island</a>
+    <a href="#sweep"><b>63</b> The sweep itself</a>
+    <a href="#p64"><b>64–65</b> Two intervals</a>
+    <a href="#eff"><b>65</b> Efficiency</a>
+  </nav>
+
+  <!-- ===================== PLATE 63 ===================== -->
+  <section class="plate" id="p63">
+    <div class="plate-head">
+      <p class="no">Plate 63 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>The original Peano curve, a square sweep</h2>
+      <p class="dim">A quadric Koch construction of dimension D = 2 · N = 9, r = 1/3</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq"><canvas id="c63" tabindex="0" role="img" aria-label="Peano island"></canvas></div>
+        <figcaption><strong>Peano island</strong> · stage <span id="c63s">2</span><span id="c63c">, corners cut</span> · click anywhere to test a point</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The initiator is the unit square, the black box. On each side goes Peano's generator: nine steps of a third, with one square bump out and one in. The bumps touch, so the islands are black squares on a chunk of an infinite chessboard, and the coastline is a grid of lines a distance η = 3<sup>−n</sup> apart. The plate cuts off the corners, keeping the area the same, so you can see which squares join and which are separated by a channel.</p>
+        <div class="mini" aria-label="The generator: nine steps of a third">
+          <svg class="gen" viewBox="-0.08 -0.42 1.16 0.84" aria-hidden="true">
+            <line x1="0" y1="0" x2="1" y2="0" stroke="#8a8a84" stroke-width="0.008" stroke-dasharray="0.025 0.02"/>
+            <polyline points="0,0 0.3333,0 0.3333,-0.3333 0.6667,-0.3333 0.6667,0 0.3333,0 0.3333,0.3333 0.6667,0.3333 0.6667,0 1,0" fill="none" stroke="currentColor" stroke-width="0.022" stroke-linejoin="round"/>
+            <g fill="currentColor"><circle cx="0" cy="0" r="0.03"/><circle cx="1" cy="0" r="0.03"/></g>
+          </svg>
+          <div class="fx">N = 9, r = 1/3<br>D = log 9 / log 3 = 2</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="s63v">stage 2</span></div>
+          <div class="steps" id="s63" role="group" aria-label="Stage"></div>
+          <label class="check" for="cut63"><input type="checkbox" id="cut63" checked> Cut off the corners, as in the plate</label>
+        </div>
+        <dl class="read">
+          <div><dt>Black squares</dt><dd id="r63a">81</dd></div>
+          <div><dt>Grid spacing <span style="text-transform:none">η</span></dt><dd id="r63b">1/9</dd></div>
+          <div><dt>Coastline length</dt><dd id="r63c">36</dd></div>
+          <div><dt>Area</dt><dd id="r63d">1</dd></div>
+        </dl>
+      </div>
+    </div>
+
+    <div class="sub" id="flipper">
+      <h3>No limit island</h3>
+      <div class="plate-body">
+        <div class="side">
+          <p class="cap">One would like a limit island, as in Chapter 6, but here there isn't one. A point chosen at random almost surely flips between land and sea forever as the stages go on. Meanwhile any square of middling size x, with η ≪ x ≪ 1, is cut into dry land and water in nearly equal parts.</p>
+          <p class="readline" id="flipInfo" aria-live="polite">Click a point on the island above.</p>
+        </div>
+        <figure class="fig">
+          <svg id="flip" viewBox="0 0 400 200" role="img" aria-label="Land or sea at each stage, for the chosen point and for a small square around it"></svg>
+          <figcaption><strong>Top</strong> · the point at stages 1–12 &nbsp; <strong>Bottom</strong> · share of land in the small square around it (side x = 0.08), stages 1–8</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== THE SWEEP ===================== -->
+  <section class="plate" id="sweep">
+    <div class="plate-head">
+      <p class="no">Plate 63, large figure <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>One fourth of the coastline</h2>
+      <p class="dim">Peano's curve on one side: 9<sup>n</sup> steps filling the square whose diagonal is that side</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wS">
+          <canvas id="cS" role="img" aria-label="Peano curve on one side of the square"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>Peano sweep</strong> · stage <span id="cSs">3</span> · <span id="cSn">729 steps</span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">At stage 4 the whole island would merge into 50% gray, so the plate draws one of its four sides alone and larger. With rounded corners it "can be followed unambiguously (at some risk of becoming seasick)". It shows what is meant by saying the limit curve fills the plane. Each side's curve fills the square with that side as its diagonal, area ½.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="sSv">stage 3</span></div>
+          <div class="steps" id="sS" role="group" aria-label="Stage"></div>
+          <label class="check" for="roundS"><input type="checkbox" id="roundS" checked> Round the corners, as in the plate</label>
+          <div class="btn-row"><button type="button" class="btn primary" id="traceS">Trace the curve</button></div>
+          <p class="readline" id="traceInfo" aria-live="polite">With sharp corners the curve touches itself at the points it visits twice. Rounded, it neither crosses nor touches itself.</p>
+        </div>
+        <p class="note">Without knowing the cascade that built it, Mandelbrot writes, one would be baffled by the long-range order that keeps these curves from crossing, or even touching, themselves. Any lapse in discipline would make self-contact very likely, and a total breakdown of discipline gives Brownian motion (Chapter 25), which crosses itself endlessly.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATES 64–65 ===================== -->
+  <section class="plate" id="p64">
+    <div class="plate-head">
+      <p class="no">Plates 64 and 65 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Cesàro's and Pólya's triangle sweeps, and variants</h2>
+      <p class="dim" id="p64dim">Two equal intervals at θ = 90° · N = 2, r = 1/√2 · D = 2</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wT">
+          <canvas id="cT" role="img" aria-label="Two-interval Koch construction"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cTt">Pólya sweep</strong> · stage <span id="cTs">10</span> · <span id="cTn">1,024 intervals</span> · dashed: the region swept at θ = 90°</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The simplest generator one could imagine: two equal intervals meeting at an angle θ between 90° and 180°. At θ = 180° it is a straight line; at 120° it gives the triadic Koch curve. At θ = 90°, D = 2 and the curve sweeps a triangle. Which triangle, and how, depends only on where each copy of the generator goes, to the right or the left of the previous teragon.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Rule</span></div>
+          <div class="steps words" id="rT" role="group" aria-label="Placement rule"></div>
+          <p class="note" id="ruleNote"></p>
+        </div>
+        <label class="slider" for="thT">
+          <span class="label-row"><span class="label">Angle θ between the intervals</span><span class="value" id="thTv">90.0°</span></span>
+          <input type="range" id="thT" min="900" max="1800" value="900">
+        </label>
+        <label class="slider" for="phT" id="phTwrap" hidden>
+          <span class="label-row"><span class="label">Angle at the start, set at θ = 90°</span><span class="value" id="phTv">30.0°</span></span>
+          <input type="range" id="phT" min="200" max="700" value="300">
+        </label>
+        <div class="btn-row" id="preT"></div>
+        <label class="check" for="chevT"><input type="checkbox" id="chevT"> Draw each interval as a chevron, the way Plate 64 is printed</label>
+        <div class="btn-row"><button type="button" class="btn primary" id="plate64">Show Plate 64 as printed</button></div>
+        <label class="check" for="fillT"><input type="checkbox" id="fillT"> Fill it like an island, closing the curve with its initiator. With the angle opened a little, land and channels appear; Plate 65 as printed is drawn this way, at 95°.</label>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="sTv">stage 10</span></div>
+          <div class="steps" id="sT" role="group" aria-label="Stage"></div>
+        </div>
+        <dl class="read">
+          <div><dt>Intervals</dt><dd id="rTa">1,024</dd></div>
+          <div><dt>Dimension D</dt><dd id="rTb">2</dd></div>
+          <div><dt>Area swept</dt><dd id="rTc">½</dd></div>
+          <div><dt>Intervals drawn a second time</dt><dd id="rTd">—</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== EFFICIENCY ===================== -->
+  <section class="plate" id="eff">
+    <div class="plate-head">
+      <p class="no">Plate 65, caption <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>The Kakutani–Gomory problem</h2>
+      <p class="dim">Visit any points in the square in the order Cesàro's curve reaches them, and the squared steps add up to at most 4</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq"><canvas id="cK" role="img" aria-label="Points in the unit square joined in the order the four Cesàro curves first reach them"></canvas></div>
+        <figcaption><strong>Unit square</strong> · blue: the points in the order the curve reaches them · click to add a point</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap"><b>The question.</b> Scatter M points anywhere in a unit square and join them into one path. Score the path by squaring each step's length and adding these up. Is there always an order that scores under some fixed number, however many points there are? A random order doesn't: each step scores about 1/3 on average, so the total grows like M/3. Kakutani proved that some order always scores at most 8, and Gomory brought this down to 4.</p>
+        <p class="cap"><b>Gomory's order.</b> Run four Cesàro curves inward from the square's sides, one minute each, so that together they sweep the whole square in 4 minutes. Visit the points in the order the curve first reaches them. Two facts finish the proof:</p>
+        <ol class="proof">
+          <li>If the curve reaches Q t minutes after P, then P and Q are at most √t apart, so the step from P to Q scores at most t.</li>
+          <li>The minutes between consecutive points add up to no more than the curve's 4 minutes, so the whole path scores at most 4.</li>
+        </ol>
+        <p class="cap"><b>Why Cesàro's curve.</b> Fact 1 needs a curve that fills area slowly and never jumps, so that points it reaches close together in time are close together in space. Cesàro's curve is the slowest of the curves on this page: it never crosses itself, but its stages trace every grid line twice and pass each grid point four times, so an interval of length 1 fills only a quarter of a unit of area (table below). Mandelbrot calls it the slowest such curve on a square grid, without giving a proof. That slowness, a weakness for filling the plane, is exactly what fact 1 needs. With other Peano curves fact 1 can fail.</p>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="traceK">Trace the curve</button>
+          <button type="button" class="btn" id="addK">Add 10 random points</button>
+          <button type="button" class="btn" id="clrK">Clear</button>
+        </div>
+        <p class="readline" id="traceKInfo" aria-live="polite">Press "Trace the curve" to watch it sweep the square. Each point joins the blue path when the curve first reaches it.</p>
+        <dl class="read">
+          <div><dt>Points</dt><dd id="rKa">0</dd></div>
+          <div><dt>Score in curve order</dt><dd id="rKb">—</dd></div>
+          <div><dt>Score in random order</dt><dd id="rKc">—</dd></div>
+          <div><dt>Curve order, guaranteed</dt><dd>at most 4</dd></div>
+        </dl>
+        <p class="note">Keep adding points: the curve-order score stays under 4 (around 1.3 for 60 points), while the random-order score climbs to around 20.</p>
+        <table class="mt" aria-label="Area filled by plane-filling curves on an interval of length 1">
+          <thead><tr><th>Curve on an interval of length 1</th><th>Region it fills</th><th>Passes per grid point</th><th>Area</th></tr></thead>
+          <tbody>
+            <tr><td>Peano (Plate 63)</td><td>square, diagonal [0, 1]</td><td>2</td><td>½</td></tr>
+            <tr><td>Pólya (Plate 64)</td><td>triangle, side [0, 1]</td><td>2</td><td>½</td></tr>
+            <tr><td>Cesàro (Plate 64)</td><td>triangle, hypotenuse [0, 1]</td><td>4</td><td>¼</td></tr>
+            <tr><td>Peano's later sweep (Plate 66)</td><td>square, side [0, 1]</td><td>1</td><td>1</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 7, pages 62–65 (Plates 63, 64 and 65), with the Peano distance from page 61. Every figure is computed from the rules in the captions. The bound Σ|PₘPₘ₊₁|² ≤ 4 and the inequality between Peano and Euclidean distance were also checked numerically on this construction. Companion pages: <a href="https://claude.ai/artifact/FXhChG4k3TAgHyYbvsyoCQ" target="_blank" rel="noopener">Unequal Parts</a> (Plates 56–57), <a href="https://claude.ai/artifact/91wGC9EtnwxZp8MZJ4MF6N" target="_blank" rel="noopener">Quadric Koch Islands</a> (Plates 49–55) and <a href="https://claude.ai/artifact/UWcE52EkH4ip5mfXMMYdAA" target="_blank" rel="noopener">Gosper Island</a> (Plates 46–47).</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>

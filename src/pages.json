@@ -1,0 +1,116 @@
+{
+  "pages": [
+    {
+      "slug": "monkeys-tree",
+      "title": "Mandelbrot's Monkeys Tree",
+      "plates": "Plate 31",
+      "chapter": 5,
+      "artifact": "https://claude.ai/artifact/7gvGnFScNh6SAy2x99eudc",
+      "kind": "single",
+      "scripts": [],
+      "layout_comment": null
+    },
+    {
+      "slug": "minkowski-sausage",
+      "title": "Minkowski Sausage",
+      "plates": "Plate 32",
+      "chapter": 5,
+      "artifact": "https://claude.ai/artifact/LXgM42xuGAp9wWuX2x18D6",
+      "kind": "single",
+      "scripts": [],
+      "layout_comment": null
+    },
+    {
+      "slug": "wiener-sausage",
+      "title": "Wiener Sausage",
+      "plates": "Brownian motion",
+      "chapter": 25,
+      "artifact": "https://claude.ai/artifact/RvpGQi3Td4y7gZnjM1pukG",
+      "kind": "single",
+      "scripts": [],
+      "layout_comment": null
+    },
+    {
+      "slug": "koch-plates",
+      "title": "Triadic Koch Island",
+      "plates": "Plates 42–45",
+      "chapter": 6,
+      "artifact": "https://claude.ai/artifact/1diKiTcEwLkJpZaVA2gQ11",
+      "kind": "single",
+      "scripts": [],
+      "layout_comment": null
+    },
+    {
+      "slug": "gosper-island",
+      "title": "Gosper Island",
+      "plates": "Plates 46–47",
+      "chapter": 6,
+      "artifact": "https://claude.ai/artifact/UWcE52EkH4ip5mfXMMYdAA",
+      "kind": "single",
+      "scripts": [],
+      "layout_comment": null
+    },
+    {
+      "slug": "quadric-islands",
+      "title": "Quadric Koch Islands",
+      "plates": "Plates 49–55",
+      "chapter": 6,
+      "artifact": "https://claude.ai/artifact/91wGC9EtnwxZp8MZJ4MF6N",
+      "kind": "template",
+      "scripts": [
+        "script.js"
+      ],
+      "layout_comment": "/* Layout: four plate sections in book order (49 with its family and critical-angle studies, 51, 53, 54–55), each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "unequal-parts",
+      "title": "Unequal Parts",
+      "plates": "Plates 56–57",
+      "chapter": 6,
+      "artifact": "https://claude.ai/artifact/FXhChG4k3TAgHyYbvsyoCQ",
+      "kind": "template",
+      "scripts": [
+        "script.js"
+      ],
+      "layout_comment": "/* Layout: Plate 56, the dimension equation, and the two figures of Plate 57, each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "peano-sweeps",
+      "title": "Peano Sweeps",
+      "plates": "Plates 63–65",
+      "chapter": 7,
+      "artifact": "https://claude.ai/artifact/LW9gkq4RLJEzELfAx7s6xe",
+      "kind": "template",
+      "scripts": [
+        "script.js"
+      ],
+      "layout_comment": "/* Layout: Plate 63 (island, the flipping point, the sweep), Plates 64–65 (two-interval sweeps) and the efficiency demo, each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "dragon-sweeps",
+      "title": "Square and Dragon Sweeps",
+      "plates": "Plates 66–67",
+      "chapter": 7,
+      "artifact": "https://claude.ai/artifact/6EmzLTVdLKdNvpiUt94pog",
+      "kind": "template",
+      "scripts": [
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: Plate 66 square sweep (with the efficiency note), Plate 67 trapezoid sweep, the dragon and alternate dragons, and the twindragon, each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "snow-sweeps",
+      "title": "Sweeps, Rivers and Trees",
+      "plates": "Plates 68–73",
+      "chapter": 7,
+      "artifact": "https://claude.ai/artifact/QxRja4otEyH8dMeU8Uy4UY",
+      "kind": "template",
+      "scripts": [
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: snowflake sweeps (68–69), Peano–Gosper trees (70–71), a cascade tree (71), the fudgeflake (72–73) and the quartet (73), each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    }
+  ]
+}

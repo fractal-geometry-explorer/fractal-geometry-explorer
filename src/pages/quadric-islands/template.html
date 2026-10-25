@@ -1,0 +1,257 @@
+<title>Quadric Koch Islands</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.r-wide { aspect-ratio: 2 / 1; }
+.r-strip { aspect-ratio: 4 / 1.15; }
+table.mt { width: 100%; border-collapse: collapse; font-family: var(--f-mono); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+table.mt th { font: 700 10.5px/1.2 var(--f-display); letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); text-align: right; padding: 4px 6px; border-bottom: 1px solid var(--rule); }
+table.mt th:first-child, table.mt td:first-child { text-align: left; }
+table.mt td { text-align: right; padding: 5px 6px; border-bottom: 1px solid var(--rule); }
+table.mt tr.sel td { color: var(--accent); font-weight: 500; }
+.status { font-family: var(--f-mono); font-size: 12.5px; padding: 8px 10px; border: 1px solid var(--rule); background: var(--surface); }
+.status.bad { border-color: #c2552d; color: #c2552d; }
+#maxPlot { width: 100%; height: auto; display: block; background: var(--print-paper); outline: 1px solid var(--print-rule); }
+#maxPlot text { font-family: var(--f-mono); font-size: 10px; fill: #5d5d58; }
+.mini svg.lat { height: 78px; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 6 · pages 48–55</p>
+    <h1><span class="plate-no">Plates 49–55</span><span class="lozenge" aria-hidden="true"></span><span>Quadric Koch Islands</span></h1>
+    <p class="dek">Koch islands grown from polygons, mostly squares. They start with nested islands and lakes whose coastlines run from almost smooth (D near 1) to D ≈ 1.37. Then come four square islands whose generators wander over a lattice, pushing D from 3/2 toward 2. Every generator here was read off the book's diagrams, and every figure is computed from it.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#p49"><b>49</b> Islands and lakes</a>
+    <a href="#crit">A critical angle</a>
+    <a href="#p51"><b>51</b> D = 3/2</a>
+    <a href="#p53"><b>53</b> Maximal generators</a>
+    <a href="#p54"><b>54–55</b> Marinas</a>
+  </nav>
+
+  <!-- ===================== PLATE 49 ===================== -->
+  <section class="plate" id="p49">
+    <div class="plate-head">
+      <p class="no">Plate 49 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Alternative Koch islands and lakes</h2>
+      <p class="dim">Coastline dimensions from 1 to D = log 3 / log √5 ≈ 1.3652</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="w49">
+          <canvas id="c49" role="img" aria-label="Nested Koch islands and lakes for polygons of 32, 16, 8 and 4 sides"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>Plate 49</strong> · stage <span id="c49s">6</span> · from the outside in: an island on 32 sides, a lake on 16, an island on 8, an island on 4 · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The initiator is a regular polygon with M sides. The generator has three equal legs, turning by θ = 360°/M and then back by θ, so the first and last legs are parallel. Plates 46–47 were the case M = 6. This plate nests advanced stages for M = 32, 16, 8 and 4, alternately as islands and lakes. The central island is hatched by Mandelbrot's <i>quartet</i>, a Peano curve that fills it (Plates 72–73).</p>
+        <div class="mini" aria-label="The generator for M equals 4: three legs of length 1 over root 5">
+          <svg viewBox="-0.05 -0.2 1.1 0.42" aria-hidden="true">
+            <line x1="0" y1="0" x2="1" y2="0" stroke="#8a8a84" stroke-width="0.008" stroke-dasharray="0.025 0.02"/>
+            <polyline points="0,0 0.4,-0.2 0.6,0.2 1,0" fill="none" stroke="currentColor" stroke-width="0.016" stroke-linejoin="round"/>
+            <g fill="currentColor"><circle cx="0" cy="0" r="0.022"/><circle cx="0.4" cy="-0.2" r="0.015"/><circle cx="0.6" cy="0.2" r="0.015"/><circle cx="1" cy="0" r="0.022"/></g>
+          </svg>
+          <div class="fx">M = 4: N = 3, 1/r = √5<br>D = log 3 / log √5 ≈ 1.3652<br>in general 1/r = √(5 + 4 cos θ)</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="s49v">stage 6</span></div>
+          <div class="steps" id="s49" role="group" aria-label="Stage"></div>
+          <label class="check" for="hatch49"><input type="checkbox" id="hatch49" checked> Hatch the central island with the quartet Peano curve</label>
+        </div>
+        <table class="mt" aria-label="The four polygons">
+          <thead><tr><th>Polygon</th><th>Turn θ</th><th>1/r</th><th>D</th></tr></thead>
+          <tbody id="t49"></tbody>
+        </table>
+        <p class="note">As M grows, θ shrinks, each generator flattens toward a straight line and D falls toward 1. Pushed to M = ∞ the pattern would converge to a circle. Going inward, the shapes "shrivel", first gradually, then by rapid jumps. The next step, M = 3, gives D = 2 and a curve that runs into itself (Plates 72–73).</p>
+      </div>
+    </div>
+
+    <!-- one generator, many polygons -->
+    <div class="sub" id="family">
+      <h3>One rule, any polygon</h3>
+      <div class="plate-body">
+        <figure class="fig">
+          <div class="canvas-wrap r-sq"><canvas id="cF" role="img" aria-label="Koch island on a regular polygon"></canvas></div>
+          <figcaption><strong>Koch island</strong> · <span id="cFn">M = 4, stage 5</span> · dashed: the initiating polygon</figcaption>
+        </figure>
+        <div class="side">
+          <p class="cap">Pick the number of sides. Every island keeps exactly the area of its polygon, since the generator is symmetric about its center point. Mandelbrot also lets each stage use the generator <i>S</i> or its mirror image <i>F</i>. With S and F alternating, the corners where a chord used to wind forever (Gosper's loxodromic points) become hyperbolic, like Koch's: the chord only swings back and forth.</p>
+          <div class="group">
+            <div class="label-row"><span class="label">Sides M</span><span class="value" id="mFv">M = 4</span></div>
+            <div class="steps" id="mF" role="group" aria-label="Number of sides"></div>
+          </div>
+          <div class="group">
+            <div class="label-row"><span class="label">Stage</span><span class="value" id="sFv">stage 5</span></div>
+            <div class="steps" id="sF" role="group" aria-label="Stage"></div>
+          </div>
+          <div class="group">
+            <div class="label-row"><span class="label">Generator at each stage</span></div>
+            <div class="steps words" id="aF" role="group" aria-label="Generator sequence"></div>
+          </div>
+          <dl class="read">
+            <div><dt>Turn θ = 360°/M</dt><dd id="rFa">90°</dd></div>
+            <div><dt>1/r</dt><dd id="rFb">2.2361</dd></div>
+            <div><dt>Dimension D</dt><dd id="rFc">1.3652</dd></div>
+            <div><dt>Area</dt><dd id="rFd">1 <small>× the polygon</small></dd></div>
+          </dl>
+          <p class="note" id="nF">&nbsp;</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- critical angle -->
+    <div class="sub" id="crit">
+      <h3>A critical dimension</h3>
+      <div class="plate-body">
+        <figure class="fig">
+          <div class="canvas-wrap r-wide"><canvas id="cC" role="img" aria-label="Koch curve on the interval from 0 to 1"></canvas></div>
+          <figcaption><strong>Koch curve on [0, 1]</strong> · <span id="cCn">stage 7</span> · red rings mark where it crosses or runs back onto itself</figcaption>
+        </figure>
+        <div class="side">
+          <p class="cap">With [0, 1] as initiator, the angle at each bend of the generator can be anything from 180°, a straight line with D = 1, down to 60°, where D = 2. Below a critical angle the curve runs into itself. Mandelbrot puts that angle close to 60°. Computing the stages up to 10, we find the first real crossings at about 64.4°, where D ≈ 1.85. Every polygon from M = 4 up (90° and wider) is safely self-avoiding.</p>
+          <label class="slider" for="aC">
+            <span class="label-row"><span class="label">Angle at each bend</span><span class="value" id="aCv">90.0°</span></span>
+            <input type="range" id="aC" min="600" max="1800" value="900" step="1">
+          </label>
+          <div class="btn-row" id="pC"></div>
+          <div class="group">
+            <div class="label-row"><span class="label">Stage</span><span class="value" id="sCv">stage 7</span></div>
+            <div class="steps" id="sC" role="group" aria-label="Stage"></div>
+          </div>
+          <div class="label-row"><span class="label">Dimension</span><span class="value" id="dCv">D = 1.3652 · 1/r = 2.2361</span></div>
+          <p class="status" id="xC" aria-live="polite">No self-crossing or self-contact at stage 7.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 51 ===================== -->
+  <section class="plate" id="p51">
+    <div class="plate-head">
+      <p class="no">Plate 51 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>A quadric Koch island</h2>
+      <p class="dim">Coastline dimension D = 3/2 = 1.5000</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq"><canvas id="c51" tabindex="0" role="img" aria-label="Quadric Koch island"></canvas></div>
+        <figcaption><strong>Quadric island</strong> · <span id="c51n">stage 4</span><span id="c51h"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Plates 49 to 55 mostly start from a square, hence <i>quadric</i>. Here each side becomes 8 sides a quarter as long. As in Plates 46 to 49, the island's area never changes. Neither the stages nor the limit curve ever overlap, cross or even touch themselves, and the same is true through Plate 55. The fractal is the coastline; the land and the sea have ordinary, finite areas.</p>
+        <div class="mini" aria-label="The generator: 8 steps of a quarter">
+          <svg class="lat" id="g51" aria-hidden="true"></svg>
+          <div class="fx">N = 8, r = 1/b = 1/4<br>D = log 8 / log 4 = 3/2</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="s51v">stage 4</span></div>
+          <div class="steps" id="s51" role="group" aria-label="Stage"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Pertiling: show the provinces</span><span class="value" id="d51v">none</span></div>
+          <div class="steps words" id="d51" role="group" aria-label="Provinces"></div>
+          <p class="readline" id="i51" aria-live="polite">The island splits into 16 islands a quarter the size, each built on one of the 16 squares of the first stage. Show them, then click one to expand it.</p>
+        </div>
+        <dl class="read">
+          <div><dt>Sides</dt><dd id="r51a">16,384</dd></div>
+          <div><dt>Each side</dt><dd id="r51b">1/256</dd></div>
+          <div><dt>Coastline length</dt><dd id="r51c">16 <small>× the square's</small></dd></div>
+          <div><dt>Area</dt><dd id="r51d">1 <small>× the square</small></dd></div>
+        </dl>
+        <p class="note">D = 3/2 also turns up for Brownian functions (Chapters 25 and 29), so this value is easy to get from random curves and surfaces.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 53 ===================== -->
+  <section class="plate" id="p53">
+    <div class="plate-head">
+      <p class="no">Plate 53 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>A quadric Koch island</h2>
+      <p class="dim">Coastline dimension D = log 18 / log 6 ≈ 1.6131</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="w53">
+          <canvas id="c53" role="img" aria-label="Quadric Koch island with an 18-step generator"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>Quadric island</strong> · <span id="c53n">stage 3</span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Again a square, now with an 18-step generator. These islands share roughly the same overall outline only because the initiator is a square; their texture depends strongly on D. The generators also share a property Mandelbrot calls <i>maximality</i>.</p>
+        <div class="mini" aria-label="The generator: 18 steps of a sixth">
+          <svg class="lat" id="g53" aria-hidden="true"></svg>
+          <div class="fx">N = 18, r = 1/b = 1/6<br>D = log 18 / log 6 ≈ 1.6131</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="s53v">stage 3</span></div>
+          <div class="steps" id="s53" role="group" aria-label="Stage"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Maximal generators</span><span class="value" id="b53v">b = 6: N = 18, D ≈ 1.6131</span></div>
+          <svg id="maxPlot" viewBox="0 0 360 190" role="img" aria-label="Largest possible dimension of a self-avoiding square-lattice generator against b"></svg>
+          <p class="note">Take generators drawn on a square lattice that give self-avoiding curves with any lattice initiator. With steps of 1/b, the most steps they can have is N = b²/2 for even b and (b² + 1)/2 for odd b. All four generators in Plates 51–55 reach that maximum. Pushing D up this way gets more and more contrived; the limit D = 2 comes in the next chapter, with Peano curves.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATES 54–55 ===================== -->
+  <section class="plate" id="p54">
+    <div class="plate-head">
+      <p class="no">Plates 54 and 55 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Quadric Koch islands: nightmarish marinas</h2>
+      <p class="dim">Coastline dimensions D = 5/3 ≈ 1.6667 and D = log 98 / log 14 ≈ 1.7373</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="w54">
+          <canvas id="c54" role="img" aria-label="Quadric Koch island"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="c54t">Plate 55</strong> · <span id="c54n">stage 3</span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The same construction with two longer generators: 32 steps of 1/8 for Plate 55, and 98 steps of 1/14 for Plate 54. The causeways and channels of these "nightmarish marinas" narrow toward the tips of the peninsulas and the ends of the bays. They narrow further as D grows, and "wasp waists" appear around D ≈ 5/3. Zoom in on Plate 54 to see them.</p>
+        <div class="mini" aria-label="The generator">
+          <svg class="lat" id="g54" aria-hidden="true"></svg>
+          <div class="fx" id="g54t">N = 32, r = 1/b = 1/8<br>D = log 32 / log 8 = 5/3</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Generator</span></div>
+          <div class="steps words" id="q54" role="group" aria-label="Which plate"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="s54v">stage 3</span></div>
+          <div class="steps" id="s54" role="group" aria-label="Stage"></div>
+        </div>
+        <dl class="read">
+          <div><dt>Sides</dt><dd id="r54a">131,072</dd></div>
+          <div><dt>Each side</dt><dd id="r54b">1/512</dd></div>
+          <div><dt>Coastline length</dt><dd id="r54c">64 <small>× the square's</small></dd></div>
+          <div><dt>Area</dt><dd id="r54d">1 <small>× the square</small></dd></div>
+        </dl>
+      </div>
+    </div>
+    <div class="sub">
+      <h3>A Richardson cascade?</h3>
+      <figure class="fig">
+        <div class="canvas-wrap r-strip"><canvas id="cS" role="img" aria-label="Stages 0 to 3 side by side"></canvas></div>
+        <figcaption><strong>Stages 0 to 3</strong> · <span id="cSn">the 32-step generator of Plate 55</span></figcaption>
+      </figure>
+      <p class="cap" style="font-family: var(--f-body); font-size: 17px; line-height: 1.55; margin: 0; max-width: 78ch;">Mandelbrot sees an uncanny resemblance between this sequence and turbulent dispersion of ink in water, as in a sketch by Corrsin (1959). A pinch of energy spreads a square blob of ink, the first eddy splits into smaller eddies, and the energy cascades to ever smaller scales until it adds only a slight fuzz to the blob's outline. That a Richardson cascade leads to a fractal boundary seems inescapable to him, but he calls the link to D = 5/3 shaky, since numerological analogies are not to be trusted. A postscript adds that Paul Dimotakis later photographed thin sections of a turbulent jet that look strikingly like Plate 55.</p>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 6, pages 48–55 (Plates 49, 51, 53, 54 and 55), with the quartet Peano curve from pages 72–73. The generators were read from the book's lattice diagrams and checked against the plates; the critical angle of about 64.4° is our own computation. Companion pages: <a href="https://claude.ai/artifact/UWcE52EkH4ip5mfXMMYdAA" target="_blank" rel="noopener">Gosper Island</a> (Plates 46–47) and <a href="https://claude.ai/artifact/1diKiTcEwLkJpZaVA2gQ11" target="_blank" rel="noopener">Triadic Koch Island</a> (Plates 42–45).</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>
