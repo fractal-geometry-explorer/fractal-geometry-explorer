@@ -6,7 +6,6 @@
       "plates": "Plate 31",
       "chapter": 5,
       "artifact": "https://claude.ai/artifact/7gvGnFScNh6SAy2x99eudc",
-      "kind": "template",
       "scripts": [
         "script.js"
       ],
@@ -18,7 +17,6 @@
       "plates": "Plate 32",
       "chapter": 5,
       "artifact": "https://claude.ai/artifact/LXgM42xuGAp9wWuX2x18D6",
-      "kind": "template",
       "scripts": [
         "script.js"
       ],
@@ -30,7 +28,6 @@
       "plates": "Brownian motion",
       "chapter": 25,
       "artifact": "https://claude.ai/artifact/RvpGQi3Td4y7gZnjM1pukG",
-      "kind": "template",
       "scripts": [
         "script.js"
       ],
@@ -42,7 +39,6 @@
       "plates": "Plates 42–45",
       "chapter": 6,
       "artifact": "https://claude.ai/artifact/1diKiTcEwLkJpZaVA2gQ11",
-      "kind": "template",
       "scripts": [
         "shared/draw.js",
         "script.js"
@@ -55,7 +51,6 @@
       "plates": "Plates 46–47",
       "chapter": 6,
       "artifact": "https://claude.ai/artifact/UWcE52EkH4ip5mfXMMYdAA",
-      "kind": "template",
       "scripts": [
         "shared/draw.js",
         "script.js"
@@ -68,7 +63,6 @@
       "plates": "Plates 49–55",
       "chapter": 6,
       "artifact": "https://claude.ai/artifact/91wGC9EtnwxZp8MZJ4MF6N",
-      "kind": "template",
       "scripts": [
         "shared/draw.js",
         "script.js"
@@ -81,7 +75,6 @@
       "plates": "Plates 56–57",
       "chapter": 6,
       "artifact": "https://claude.ai/artifact/FXhChG4k3TAgHyYbvsyoCQ",
-      "kind": "template",
       "scripts": [
         "shared/geometry.js",
         "shared/draw.js",
@@ -95,7 +88,6 @@
       "plates": "Plates 63–65",
       "chapter": 7,
       "artifact": "https://claude.ai/artifact/LW9gkq4RLJEzELfAx7s6xe",
-      "kind": "template",
       "scripts": [
         "shared/geometry.js",
         "shared/draw.js",
@@ -109,7 +101,6 @@
       "plates": "Plates 66–67",
       "chapter": 7,
       "artifact": "https://claude.ai/artifact/6EmzLTVdLKdNvpiUt94pog",
-      "kind": "template",
       "scripts": [
         "shared/draw.js",
         "core.js",
@@ -123,7 +114,6 @@
       "plates": "Plates 68–73",
       "chapter": 7,
       "artifact": "https://claude.ai/artifact/QxRja4otEyH8dMeU8Uy4UY",
-      "kind": "template",
       "scripts": [
         "shared/geometry.js",
         "shared/draw.js",
