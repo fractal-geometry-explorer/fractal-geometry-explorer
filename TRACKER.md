@@ -120,7 +120,7 @@ Update this file in the same pull request as the work it records.
 | 231 | 231 | A hexa-squig coastline | random | todo | |
 | 241 | 240–241 | A random walk approximating a Brown line-to-line function, and its zeroset | random | todo | |
 | 242–243 | 242–243 | Brown hulls and islands; self-avoiding Brownian motion | random | todo | |
-| 246 | 246 | The computer "bug" (opus 1) | random | todo | |
+| 246 | 246 | The computer "bug" (opus 1) | random / art | done | midpoint-displacement |
 | (concept) | 232– | Brownian motion and the Wiener sausage | random | done | wiener-sausage |
 
 ## IX Fractional Brown fractals (chapters 27–29)
@@ -186,6 +186,7 @@ Each chapter session should add the chapter's main ideas here, alongside its pla
 - similarity dimension (chapters 3 and 6);
 - coastline length against ruler size (chapter 5; partly on the Minkowski page);
 - intermittency (chapter 10);
+- random midpoint displacement, its creases, and Poisson strata (chapter 26; on the Plate 246 page);
 - length–area–volume relations (chapter 12);
 - percolation (chapter 13);
 - the diameter exponent of trees (chapter 17);

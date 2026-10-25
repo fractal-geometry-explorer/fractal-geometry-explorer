@@ -124,6 +124,15 @@ Conventions used below:
 - **Plate 83, the devil's staircase.** The unit square with the region under the Cantor function in solid ink. The scan's top profile matches the Cantor function to rms 0.005 of the height (max deviation 0.018 at the near-vertical risers, which is ink spread); treads are resolved down to about 3⁻⁷. The page computes M(R) per pixel column, so zooming keeps producing steps. Graph length checked in closed form: 1 − (2/3)ⁿ + √(1 + (4/9)ⁿ) → 2.
 - **Generalized dusts (pages 77–78).** The book gives N and r for its example dusts (N = 3, r = 1/5; N = 2, r = 1/4; N = 3, r = 1/9) but never draws them, so the page's evenly spaced arrangement — first piece at 0, last ending at 1, equal tremas — is a reconstruction, flagged on the page. The gap-count law Nr(U > u) stepping across F·u⁻ᴰ was verified and is drawn as a log–log chart.
 
+## Part VIII, chapters 23–26
+
+**Chapter 26, random midpoint displacement (page `midpoint-displacement`).**
+- **The displacement formula** 2^(−2(k+1)/D) − 2^(−2(k/D+1)) is the Koch geometry d² = L′² − (L/2)² with nominal side L_k = 2^(−k/D). Checked: with sides alternating by stage and D = log 4/log 3 the deterministic rule reproduces the triadic Koch curve exactly (stage-2 points land on 0, 1/3, (1/2, √3/6), 2/3, 1; verified numerically to stage 8, zero crossings); with a constant side at D = 2 it gives Lévy's C curve.
+- **Normalization.** The randomized plane curve uses an isotropic 2D Gaussian whose *total* mean square equals the formula, so ⟨|ΔB*|²⟩ = Δt^(2H) summed over both coordinates; the Peano–Brown case D = 2 is then Brownian motion with E|ΔB|² = Δt (not Δt per coordinate).
+- **Line construction.** Midpoint offset variance 2^(−2Hk)(2^(−2H) − 1/4) gives ⟨ΔX²⟩ = Δt^(2H) on dyadic intervals exactly (Monte Carlo agrees to <1%). Over half-slid windows the measured mean square is smaller — at H = 0.85, Δt = 1/32 the ratio is ≈ 0.88 — sitting between the book's lower bound 2^(1−2H) ≈ 0.62 and 1, as the text claims. The page measures this live over 4,000 curves.
+- **Strata.** The book fixes the Poisson rates b^k but never the amplitude of a stratum's values; the page uses b^(−Hk), the choice that matches the midpoint scheme stage for stage. Flagged as a reconstruction on the page.
+- **Plate 246, the computer bug.** This plate cannot be recomputed: the program and its bug are not recorded anywhere, and the caption itself says "this order is hidden, and no other order is apparent". The caption does say the corrected program's output became Plates 306–309 (chapter 33's round tremas). The page therefore has no "Show Plate 246 as printed" preset — the only plate on the site without one — and shows instead the strict order the program was meant to draw (round tremas, Nr(> u) ∝ u⁻²) and a deliberately invented bug (a pen that lags along each ray from the centre), labelled as a stand-in, not a reconstruction. Tracker kind set to "random / art".
+
 ## Open questions
 
 - **The 13-interval generator.** Why does Plate 69's large circle use a different rule from the caption's second stage? This may be worth a sentence once the rest of chapter 7 is reviewed.
