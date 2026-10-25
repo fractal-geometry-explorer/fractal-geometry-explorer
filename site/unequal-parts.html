@@ -751,13 +751,15 @@ function countPieces(rs, eps, cap = 600000, parity = -1) {
     for (const d of cv.dep) if (d > hi) hi = d;
     for (const a of areas) if (a.stage > hi) hi = a.stage;
     const tOf = (k) => (hi > 1 ? (k - 1) / (hi - 1) : 0);
+    // The subpaths are left open: fill() closes each one implicitly, and closePath on a large
+    // Path2D costs time proportional to the whole path, which made this loop take ~10 s at the
+    // finest ε (see "Rendering lessons" in DECISIONS.md).
     const byStage = new Map();
     for (const a of areas) {
       let g = byStage.get(a.stage); if (!g) byStage.set(a.stage, (g = { add: new Path2D(), cut: new Path2D() }));
       const p = a.add ? g.add : g.cut;
       p.moveTo(a.pts[0], a.pts[1]);
       for (let i = 2; i < a.pts.length; i += 2) p.lineTo(a.pts[i], a.pts[i + 1]);
-      p.closePath();
     }
     for (let k = 1; k <= hi; k++) {
       const g = byStage.get(k);
@@ -781,15 +783,26 @@ function countPieces(rs, eps, cap = 600000, parity = -1) {
   const epsOf = (v, epsMin) => Math.pow(10, Math.log10(0.25) + (Math.log10(epsMin) - Math.log10(0.25)) * (v / 100));
   const epsText = (e) => `ε = ${e >= 0.01 ? e.toFixed(3) : e.toPrecision(2)}`;
   const piecesText = (q) => (q.over ? `> ${fmt(q.n - 1)}` : fmt(q.n));
+  // With stage colouring on, the finest ε draws a few hundred thousand polygons and takes most of
+  // a second, so while a control is moving the land is drawn at a coarser ε and the full drawing
+  // follows once the control settles — like the pan-and-zoom snapshot (DECISIONS.md, "Rendering
+  // lessons"). st.coarse is the temporary floor on ε; 0 means draw at the slider's own ε.
+  const COARSE = 0.02;
+  function nudge(st, redraw) {
+    st.coarse = st.depth ? COARSE : 0;
+    redraw();
+    clearTimeout(st.settle);
+    if (st.coarse) st.settle = setTimeout(() => { st.coarse = 0; redraw(); }, 160);
+  }
 
   // ====================== Plate 56 ======================
-  const st56 = { a: 0.25, e: 80, depth: false, G: gen56(0.25), box: null };
+  const st56 = { a: 0.25, e: 80, depth: false, G: gen56(0.25), box: null, coarse: 0 };
   st56.box = worldBox(st56.G);
   const fitOf56 = (f) => fitBox(f, { x0: -0.01, x1: 1.01, y0: -BAR, y1: Math.max(0.3, st56.box.y1) }, 0.03);
-  const z56 = zoomable('w56', 'c56', fitOf56, (f, v) => renderLand(f, v, st56.G, epsOf(st56.e, 0.001), st56.depth, ['k56a', 'k56b']), { maxZoom: 300 });
+  const z56 = zoomable('w56', 'c56', fitOf56, (f, v) => renderLand(f, v, st56.G, Math.max(epsOf(st56.e, 0.001), st56.coarse), st56.depth, ['k56a', 'k56b']), { maxZoom: 300 });
   function set56(refit) {
     st56.G = gen56(st56.a);
-    if (refit) { st56.box = worldBox(st56.G); z56.refit(); } else z56.schedule();
+    nudge(st56, () => { if (refit) { st56.box = worldBox(st56.G); z56.refit(); refit = false; } else z56.schedule(); });
     const eps = epsOf(st56.e, 0.001), q = countPieces(st56.G.rs, eps);
     const b = 1 - 2 * st56.a;
     $('a56v').textContent = `a = ${st56.a.toFixed(3)}`; $('e56v').textContent = epsText(eps);
@@ -803,7 +816,7 @@ function countPieces(rs, eps, cap = 600000, parity = -1) {
   }
   $('a56').addEventListener('input', (e) => { st56.a = +e.target.value / 1000; set56(true); });
   $('e56').addEventListener('input', (e) => { st56.e = +e.target.value; set56(false); });
-  $('d56').addEventListener('change', (e) => { st56.depth = e.target.checked; $('k56').hidden = !st56.depth; z56.schedule(); });
+  $('d56').addEventListener('change', (e) => { st56.depth = e.target.checked; $('k56').hidden = !st56.depth; nudge(st56, () => z56.schedule()); });
   for (const [a, label] of [[0.25, 'Plate 56: a = 1/4'], [1 / 3, "Koch's curve: a = 1/3"], [0.4, 'Flatter: a = 0.4']]) {
     const b = document.createElement('button'); b.type = 'button'; b.className = 'btn'; b.textContent = label;
     b.addEventListener('click', () => { st56.a = a; $('a56').value = String(Math.round(a * 1000)); set56(true); });
@@ -814,14 +827,14 @@ function countPieces(rs, eps, cap = 600000, parity = -1) {
   // default angle: the one that gives the caption's D = 1.8797 with the trunk where the figure has it
   const P57 = 0.328;
   const GAMMA57 = (() => { let lo = 90.001, hi = 130; for (let i = 0; i < 70; i++) { const m = (lo + hi) / 2; if (gen57(m, P57).D > 1.8797) lo = m; else hi = m; } return (lo + hi) / 2; })();
-  const st57 = { g: GAMMA57, p: P57, e: 70, depth: false, even: true, G: null };
+  const st57 = { g: GAMMA57, p: P57, e: 70, depth: false, even: true, G: null, coarse: 0 };
   st57.G = gen57(st57.g, st57.p);
   $('ang57').value = String(Math.round(GAMMA57 * 100));
   const fitOf57 = (f) => fitBox(f, { x0: -0.01, x1: 1.01, y0: -BAR, y1: 0.52 }, 0.02);
-  const z57 = zoomable('w57', 'c57', fitOf57, (f, v) => renderLand(f, v, st57.G, epsOf(st57.e, 0.0025), st57.depth, ['k57a', 'k57b'], st57.even ? 0 : -1), { maxZoom: 300 });
+  const z57 = zoomable('w57', 'c57', fitOf57, (f, v) => renderLand(f, v, st57.G, Math.max(epsOf(st57.e, 0.0025), st57.coarse), st57.depth, ['k57a', 'k57b'], st57.even ? 0 : -1), { maxZoom: 300 });
   function set57() {
     st57.G = gen57(st57.g, st57.p);
-    z57.schedule();
+    nudge(st57, () => z57.schedule());
     const eps = epsOf(st57.e, 0.0025), q = countPieces(st57.G.rs, eps, 400000, st57.even ? 0 : -1);
     const [r1, r2] = st57.G.rs;
     $('ang57v').textContent = `${st57.g.toFixed(2)}°`; $('p57v').textContent = `${st57.p.toFixed(3)} along the base`; $('e57v').textContent = epsText(eps);
@@ -837,7 +850,7 @@ function countPieces(rs, eps, cap = 600000, parity = -1) {
   $('p57').addEventListener('input', (e) => { st57.p = +e.target.value / 1000; set57(); });
   $('e57').addEventListener('input', (e) => { st57.e = +e.target.value; set57(); });
   $('even57').addEventListener('change', (e) => { st57.even = e.target.checked; set57(); });
-  $('d57').addEventListener('change', (e) => { st57.depth = e.target.checked; $('k57').hidden = !st57.depth; z57.schedule(); });
+  $('d57').addEventListener('change', (e) => { st57.depth = e.target.checked; $('k57').hidden = !st57.depth; nudge(st57, () => z57.schedule()); });
   for (const [g, p, label] of [[GAMMA57, P57, 'Plate 57'], [90.2, P57, 'Nearly Pólya: 90.2°'], [100, P57, '100°'], [GAMMA57, 0.5, 'Trunk centred']]) {
     const b = document.createElement('button'); b.type = 'button'; b.className = 'btn'; b.textContent = label;
     b.addEventListener('click', () => { st57.g = g; st57.p = p; $('ang57').value = String(Math.round(g * 100)); $('p57').value = String(Math.round(p * 1000)); set57(); });
