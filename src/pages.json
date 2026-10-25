@@ -133,6 +133,18 @@
         "ui.js"
       ],
       "layout_comment": "/* Layout: the Cantor bar (80), the Cantor curtains (81), the devil's staircase (83) and the chapter's dust-and-dimension concept, each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "umbrella-trees",
+      "title": "Fractal Umbrella Trees",
+      "plates": "Plate 155",
+      "chapter": 16,
+      "scripts": [
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: Plate 155's five trees, the grow-your-own tree at the self-contact threshold with the critical curve, and the tips-against-branches figure, each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
     }
   ]
 }

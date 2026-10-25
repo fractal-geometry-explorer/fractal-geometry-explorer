@@ -1,0 +1,164 @@
+<title>Fractal Umbrella Trees</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.r-page { aspect-ratio: 6 / 7; }
+.chart-wrap { position: relative; width: 100%; aspect-ratio: 2.1 / 1; background: var(--print-paper); outline: 1px solid var(--print-rule); }
+.chart-wrap canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.chart-cap { font-size: 12px; color: var(--muted); }
+.chart-cap i { font-style: normal; display: inline-block; width: 9px; height: 9px; border-radius: 50%; vertical-align: -1px; margin-right: 3px; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 16, "Trees; scaling residues; nonuniform fractals" · pages 151–155</p>
+    <h1><span class="plate-no">Plate 155</span><span class="lozenge" aria-hidden="true"></span><span>Fractal Umbrella Trees</span></h1>
+    <p class="dek">Grow a tree from two branches: at every fork, two new branches open at the same angle θ, shorter than their parent by the same ratio r. The branch tips form a dust of dimension D between 1 and 2, and for each D the plate takes θ as small as the tree can bear without touching itself. These trees are the book's first <i>nonuniform</i> fractals: tips and branches have dimensions that clash, and neither part can be ignored. Every figure is computed from the rules; nothing is traced.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#plate"><b>155</b> The plate's five trees</a>
+    <a href="#grow"><b>θ, r</b> Grow a tree at the threshold</a>
+    <a href="#parts"><b>D vs D<sub>T</sub></b> Tips against branches</a>
+  </nav>
+
+  <!-- ===================== PLATE 155 ===================== -->
+  <section class="plate" id="plate">
+    <div class="plate-head">
+      <p class="no">Plate 155 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Fractal umbrella trees and fractal canopies</h2>
+      <p class="dim">N = 2 · tips D = log 2 / log(1/r) · θ the smallest angle compatible with self-avoidance</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-page zoomable" id="wP">
+          <canvas id="cP" role="img" aria-label="The five umbrella trees of Plate 155"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cPt">The five trees as printed</strong> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Five trees, one recipe. Each starts as a bare V — the plate draws no trunk — and every branch carries two children at the inter-branch angle θ, reduced by the ratio r. Reading across the plate, θ is 20°, 36° and 60° along the top, then 150° at the bottom left and 200° at the bottom right. For D barely above 1 the result is whisk-like, then broom-like; as D grows the branches open up, and past θ = 180° they curl backward into a pattern the caption likens to classical dance sculptures of India. The two bottom trees are printed lying on their side.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Tree</span></div>
+          <div class="steps words" id="treesP" role="group" aria-label="Which tree to fit"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate155">Show Plate 155 as printed</button>
+        </div>
+        <dl class="read">
+          <div><dt>Angle θ</dt><dd id="rPt">—</dd></div>
+          <div><dt>Ratio r</dt><dd id="rPr">—</dd></div>
+          <div><dt>Tips D</dt><dd id="rPd">—</dd></div>
+          <div><dt>Drawn</dt><dd id="rPs">—</dd></div>
+        </dl>
+        <p class="note">The five angles are exact: fitting the construction to a 600 dpi scan lands on 20°, 36°, 60°, 150° and 200° to a tenth of a degree, with r in every case at the self-contact threshold computed on this page, as the caption prescribes. Apex positions, sizes and the printed recursion depths (9 to 11 levels) are fitted to the scan. The three upright trees match to under 0.3 px at 600 dpi; the 200° tree matches everywhere, with about 1.5 px of drift on its longest lines, which looks like plotter or print distortion.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== GROW ===================== -->
+  <section class="plate" id="grow">
+    <div class="plate-head">
+      <p class="no">The construction <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Grow a tree at the self-contact threshold</h2>
+      <p class="dim" id="growDim">two branches per fork · lengths × r each level · D = log 2 / log(1/r)</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wG">
+          <canvas id="cG" role="img" aria-label="An umbrella tree grown from the angle and ratio set below"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>Umbrella tree</strong> · <span id="cGs">—</span> segments · the first branches have length 1</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The interesting trees are the barely self-avoiding ones. Keep θ fixed and lengthen the branches: at some ratio r the branch tips just reach each other, and past it the tree overlaps itself. This page finds that threshold live, from the rule that a tree first touches itself where an extremal branch tip reaches the line of symmetry between two sibling branches. Two landmarks fall out exactly: at θ = 120° the threshold is r = 1/φ ≈ 0.618, the golden ratio, and at θ = 180° it is r = 1/√2, where D = 2 and the tree fills a patch of the plane.</p>
+        <div class="minis">
+          <div class="mini" aria-label="One fork: two branches at the angle theta">
+            <svg class="gen" viewBox="0 0 1 0.75" aria-hidden="true" id="miniFork"></svg>
+            <div class="fx">one fork</div>
+          </div>
+          <div class="mini" aria-label="Four levels of the cascade">
+            <svg class="gen" viewBox="0 0 1 1.02" aria-hidden="true" id="miniLevels"></svg>
+            <div class="fx">four levels</div>
+          </div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Inter-branch angle</span><span class="value" id="sGtv">θ = 150°</span></div>
+          <div class="slider"><input type="range" id="tG" min="10" max="270" step="1" value="150" aria-label="Inter-branch angle in degrees"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Ratio</span><span class="value" id="sGrv">r</span></div>
+          <div class="slider"><input type="range" id="rG" min="0.40" max="0.75" step="0.001" value="0.654" disabled aria-label="Branch length ratio"></div>
+          <label class="check" for="lockG"><input type="checkbox" id="lockG" checked> Hold r at the self-contact threshold, as the plate does</label>
+          <label class="check" for="trunkG"><input type="checkbox" id="trunkG"> Add the trunk the plate leaves out</label>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Levels</span></div>
+          <div class="steps" id="dG" role="group" aria-label="Recursion depth"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn" id="g120">θ = 120°, r = 1/φ</button>
+          <button type="button" class="btn" id="g180">θ = 180°, D = 2</button>
+          <button type="button" class="btn" id="g200">θ = 200°, curled</button>
+        </div>
+        <dl class="read">
+          <div><dt>Ratio r</dt><dd id="rGr">—</dd></div>
+          <div><dt>Tips D</dt><dd id="rGd">—</dd></div>
+          <div><dt>Whole tree D</dt><dd id="rGw">—</dd></div>
+          <div><dt>Length of all branches</dt><dd id="rGl">—</dd></div>
+        </dl>
+        <div class="group">
+          <div class="chart-wrap"><canvas id="cCurve" role="img" aria-label="Dimension at the self-contact threshold, as a function of the inter-branch angle"></canvas></div>
+          <p class="chart-cap"><i style="background:#151515"></i>D at the threshold against θ · <i style="background:#c2452d"></i>the plate's five trees · <i style="background:#2f5f9e"></i>θ = 120° (r = 1/φ) and θ = 180° (D = 2) · the blue line is the slider</p>
+        </div>
+        <p class="note">Past θ = 180° the branches bend backward, touch sooner, and the threshold D falls again — which is why the plate's 200° tree has a smaller D than its 150° one. The caption notes that D = 2 with θ = 180° fills the plane; this page's computed curve passes through that point. With the threshold released you can set r below 1/2: the branches then have finite total length, the tree's own dimension is 1 whatever its tips do, and Mandelbrot files such trees under the name <i>subfractal</i>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== TIPS AGAINST BRANCHES ===================== -->
+  <section class="plate" id="parts">
+    <div class="plate-head">
+      <p class="no">Nonuniform fractals <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Tips against branches</h2>
+      <p class="dim">branch tips: D<sub>T</sub> = 0, D = log 2 / log(1/r) · each branch: D<sub>T</sub> = D = 1 · whole tree: D of the larger part</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wT">
+          <canvas id="cT" role="img" aria-label="An umbrella tree with its branch tips marked"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>Branches in gray, tips in red</strong> · the tips are the limit points the branching converges to</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">A tree is the sum of two parts whose dimensions clash. The branches dominate it intuitively and topologically: they form connected curves, and erasing one, two or three points disconnects a branch tip, a branch interior, or a fork. The tips, left on their own, are a dust like Cantor's, with N = 2 pieces of ratio r. Yet when D &gt; 1 the whole tree's Hausdorff dimension is D, the tips' value — measured by dimension, the branches are negligible! A fractal whose parts disagree this way is what the chapter calls nonuniform: around a branch point the tree looks like a few intervals, around a tip it looks like a dust, so no single magnifying glass describes it everywhere.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Angle θ, at the threshold</span></div>
+          <div class="steps" id="tT" role="group" aria-label="Inter-branch angle"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mT" role="group" aria-label="What to show"></div>
+        </div>
+        <dl class="read">
+          <div><dt>Tips D</dt><dd id="rTt">—</dd></div>
+          <div><dt>Whole tree D</dt><dd id="rTw">—</dd></div>
+          <div><dt>Branches</dt><dd>D = 1</dd></div>
+          <div><dt>Tips, at the threshold</dt><dd>a curve, D<sub>T</sub> = 1</dd></div>
+        </dl>
+        <p class="note">At the threshold the tips touch each other asymptotically, so they stop being a dust (D<sub>T</sub> = 0) and merge into a connected curve (D<sub>T</sub> = 1) with the same fractal dimension — Mandelbrot names it the <i>extended fractal canopy</i>, and the curve bounding the open region outside the tree the <i>canopy</i>. Pick "tips only" and the canopy appears, folds and all; its vertical shadow lengthens as D grows. The chapter closes by remarking that branches ending inside the folds would wither for lack of sunshine — cauliflower and broccoli differ, it suggests, partly by a fractal dimension. The tips here are drawn at 13 levels, 8,192 dots.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 16, pages 151–155 (Plate 155). The five trees' angles, ratios, placements and depths were decoded from a 600 dpi scan as noted above; the self-contact thresholds are computed on this page. Companion pages: <a href="https://claude.ai/artifact/QxRja4otEyH8dMeU8Uy4UY" target="_blank" rel="noopener">Sweeps, Rivers and Trees</a> (Plates 68–73) for plane-filling trees, and <a href="https://claude.ai/artifact/7gvGnFScNh6SAy2x99eudc" target="_blank" rel="noopener">Monkeys Tree</a> (Plate 31).</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>
