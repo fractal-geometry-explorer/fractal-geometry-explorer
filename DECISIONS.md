@@ -124,6 +124,24 @@ Conventions used below:
 - **Plate 83, the devil's staircase.** The unit square with the region under the Cantor function in solid ink. The scan's top profile matches the Cantor function to rms 0.005 of the height (max deviation 0.018 at the near-vertical risers, which is ink spread); treads are resolved down to about 3⁻⁷. The page computes M(R) per pixel column, so zooming keeps producing steps. Graph length checked in closed form: 1 − (2/3)ⁿ + √(1 + (4/9)ⁿ) → 2.
 - **Generalized dusts (pages 77–78).** The book gives N and r for its example dusts (N = 3, r = 1/5; N = 2, r = 1/4; N = 3, r = 1/9) but never draws them, so the page's evenly spaced arrangement — first piece at 0, last ending at 1, equal tremas — is a reconstruction, flagged on the page. The gap-count law Nr(U > u) stepping across F·u⁻ᴰ was verified and is drawn as a log–log chart.
 
+## Part VIII, chapter 23
+
+**Plates 218–219, Hoyle curdling (page 218–219).**
+- Random kind: matched statistically, with this page's own seeds. The construction follows the caption exactly: E = 3, base 5, each surviving cube collapses into 5 of its 125 subcubes, drawn as the plane projection of the cubes.
+- Plate 219 superposes stages 1–3. The grays were measured at 600 dpi: paper ≈ 197, stage-1 squares ≈ 150, stage-2 ≈ 106, stage-3 ≈ 53, i.e. about 0.27, 0.52 and 0.82 of full ink; the page uses those shades.
+- Plate 218 is a fourth stage alone from a different seed, printed full bleed with the square's top cut by the page edge (and empty in the book's instance); the page draws the whole square and says so.
+
+**Plates 220–223, Novikov–Stewart curds and percolation (pages 220–223).**
+- The plates are plane b = 5 curdling at **stage 4 on a 625 × 625 grid**: the finest cell pitch measures 9 px at 600 dpi in both axes, and each full-bleed plate window is about 487 × 461 cells, so each is a crop of the full square. The page draws the whole square.
+- **Rendering in the book:** every finest whey cell carries one small cross (merging into gray at coarse scales — eddies dead at earlier stages read as solid gray blocks); curd in a percolating contact cluster (touching both top and bottom) is left white; all other contact clusters are solid black. The page reproduces this, drawing the crosses once a cell is at least 7 px on screen.
+- **One stacking serves every N** (Plate 223's caption): each eddy's 25 subeddies are stacked in random order once and the top 25 − N are grayed away, so the five curds are nested. Implemented as M(cell) = max stack rank along the ancestry; curd at threshold N is M < N.
+- **Plate 220 is a splice** of two prints of the same seed: N = 24 in the lower-right corner, N = 22 elsewhere, divided by a diagonal seam measured at 600 dpi from 0.571 of the width (bottom edge) to 0.742 of the height from the bottom (right edge). The pale diagonal "line" in the scan is the splice seam, not a drawn stroke. The preset reproduces the splice at those fractions.
+- **The captions' percolation claims hold for this model at stage 4:** over 60 seeds none percolated at N ≤ 16, two at N = 18 ("a few seeds percolate already"), 51 at N = 19. The default seed (1982) matches the book's seed behaviour: percolation at N ≥ 19 only.
+- **The three largest printed dimensions are arithmetically wrong in the book.** The caption's own formula D = log N/log 5 gives 1.9746 (N = 24), 1.9203 (N = 22), 1.8295 (N = 19), but the book prints 1.9973, 1.9426, 1.8505; for N = 16 and 13 the printed 1.7227 and 1.5936 are exact. No alternative reading tried (canonical p, other r, other N) reproduces the printed three. The page shows computed values and notes the discrepancy.
+
+**Canonical curdling (pages 210–212, concept).**
+- Rows drawn in the style of Plate 80. Sub-pixel rows deposit true ink coverage per pixel column (the sub-pixel dust lesson). The extinction probability readout is the smallest root of q = (1 − p + pq)^b, by iteration; q = 1 exactly when ⟨N⟩ = pb ≤ 1, Bienaymé's alternative.
+
 ## Open questions
 
 - **The 13-interval generator.** Why does Plate 69's large circle use a different rule from the caption's second stage? This may be worth a sentence once the rest of chapter 7 is reviewed.
