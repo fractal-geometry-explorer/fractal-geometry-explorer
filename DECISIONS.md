@@ -133,6 +133,13 @@ Conventions used below:
 - **Hurst's R/S** is fitted over spans d ≥ 64, but near H = 1 the measured slope still sits low: on exact fGn with true H = 0.9 at 8,192 samples the estimator reads 0.844 ± 0.043 (20 runs; 0.682 ± 0.041 at H = 0.7, 0.530 ± 0.027 at H = 0.5). That is a bias of R/S, said on the page, not an error in the noise.
 - **The spectrum** (log-binned periodogram of the increments) matches the theory β = 2H − 1 closely: measured β ≈ 0.79 against 0.80 at H = 0.9.
 
+## Part IX, chapter 29
+
+**Chapter 29, "The areas of islands, lakes, and cups" (pages 272–276): no plates.**
+- Checked against the scan page by page: all five pages are running text, with no figure, plate or caption box. The tracker's plate inventory for part IX (which ends at page 271) is correct.
+- The chapter's concepts went on the "Concepts without a plate" list: Korčak's law for island areas (Pr(A > a) = F·a⁻ᴮ, with 2B = D extended from Koch coastlines to Brown zerosets), the asymmetry between islands, deadvalleys and lakes, cups and the Devil's terraces (the filled relief B\*ₕ, whose vertical cut is a Lévy devil's staircase — the book points to Plates 286–287 in chapter 31), rivers and watersheds losing their symmetry once altitude exists, and the eroded Brown model B\*ₕ with dimension between 2 and 3 − H.
+- If a page is ever built for these ideas, the natural home is with chapter 31's Lévy staircases (Plates 286–287): the one-dimensional cup construction — fill every dip of a Brown line-to-line function to its brim — is exactly the staircase those plates draw.
+
 ## Open questions
 
 - **The 13-interval generator.** Why does Plate 69's large circle use a different rule from the caption's second stage? This may be worth a sentence once the rest of chapter 7 is reviewed.
