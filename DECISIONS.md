@@ -124,6 +124,17 @@ Conventions used below:
 - **Plate 83, the devil's staircase.** The unit square with the region under the Cantor function in solid ink. The scan's top profile matches the Cantor function to rms 0.005 of the height (max deviation 0.018 at the near-vertical risers, which is ink spread); treads are resolved down to about 3⁻⁷. The page computes M(R) per pixel column, so zooming keeps producing steps. Graph length checked in closed form: 1 − (2/3)ⁿ + √(1 + (4/9)ⁿ) → 2.
 - **Generalized dusts (pages 77–78).** The book gives N and r for its example dusts (N = 3, r = 1/5; N = 2, r = 1/4; N = 3, r = 1/9) but never draws them, so the page's evenly spaced arrangement — first piece at 0, last ending at 1, equal tremas — is a reconstruction, flagged on the page. The gap-count law Nr(U > u) stepping across F·u⁻ᴰ was verified and is drawn as a log–log chart.
 
+## Part XI, chapter 37
+
+**Plate 340, original evidence for scaling in economics (cotton prices).**
+- A `data` plate: six empirical tail curves of changes of log cotton price (a: daily, NY Cotton Exchange 1900–05; b: an index of daily closes 1944–58; c: monthly 1880–1940; + and − tails separately) and one theoretical curve, the symmetric Lévy stable tail of exponent D = 1.7.
+- **Digitisation.** All 65 dots were taken from the 600 dpi scan by disk-erosion blob detection; the chain assignment to the six series was checked on a coloured overlay. Axis calibration from the tick marks: bottom (positive) scale .001 at x = 1146 px, 554 px per decade; y scale 1.0 at y = 396 px, 540 px per decade; the top (negative) scale sits exactly two decades right of the bottom one (shift 1109 px ≈ 2 × 554).
+- **The printed curve is the stable tail.** Tracing its centerline and fitting a computed symmetric stable survival function gives α ≈ 1.68, scale 0.127, rms 0.009 in log10 F — consistent with a hand-drawn D = 1.7 curve (α fixed at 1.7 fits with scale 0.1305, rms 0.019). The page draws D = 1.7 at scale 0.1305 for "as printed".
+- **One scale factor per series suffices**, as the caption claims: at D = 1.7 the fitted scales are a⁺ 0.0098 / a⁻ 0.0098, b⁺ 0.0042 / b⁻ 0.0043, c⁺ 0.0452 / c⁻ 0.0451 (rms 0.04–0.15 decades). The +/− scale asymmetry is tiny; the caption's "slight asymmetry" is in the shapes.
+- **The plate prints the erroneous series a.** Pages 339–340 explain that the 1900–05 data behind curves (a) had been read incorrectly (corrected in Mandelbrot 1972b, where a ≈ b); the plate reproduces the 1963 original, so the page shows the misread dots and says so in its note.
+- **Stable tail computation.** The page computes Pr(X > x) live by Nolan's integral for β = 0, α > 1, with panels split where λV(θ) crosses 120·0.6^k and 12-node Gauss–Legendre per panel; α = 2 uses erfc. Checked against scipy's levy_stable over α ∈ [1.05, 2]: worst relative error 2e-3 (at α = 1.999), ~1e-5 at α = 1.7. Dragging the curve is a pure horizontal translation in log–log, so the curve shape is cached per α and per-series fits are table lookups.
+- **The simulations** (second section) are the page's own illustration — the book prints no figure for the chapter's argument. Stable draws by Chambers–Mallows–Stuck; the Brownian comparison record reuses the same (U, W) draws so the records coincide at D = 2.
+
 ## Open questions
 
 - **The 13-interval generator.** Why does Plate 69's large circle use a different rule from the caption's second stage? This may be worth a sentence once the rest of chapter 7 is reviewed.
