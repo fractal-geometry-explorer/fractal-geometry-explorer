@@ -133,6 +133,18 @@
         "ui.js"
       ],
       "layout_comment": "/* Layout: the Cantor bar (80), the Cantor curtains (81), the devil's staircase (83) and the chapter's dust-and-dimension concept, each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "power-laws",
+      "title": "Scaling Without Geometry",
+      "plates": "Chapter 38",
+      "chapter": 38,
+      "scripts": [
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: the chapter's three concepts in book order (expectation paradoxes, Zipf's law with the temperature of discourse, Pareto salaries), each a computed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
     }
   ]
 }

@@ -172,6 +172,7 @@ Update this file in the same pull request as the work it records.
 | Plate | Page | Title | Kind | Status | Site page |
 | :- | :- | :- | :- | :- | :- |
 | 340 | 340 | Original evidence for scaling in economics (cotton prices) | data | todo | |
+| (concept) | 341–348 | Scaling without geometry: expectation paradoxes, Zipf's law, Pareto salaries | exact | done | power-laws |
 
 ## Front matter and the update for the second printing (pages 458–468)
 
@@ -192,4 +193,4 @@ Each chapter session should add the chapter's main ideas here, alongside its pla
 - 1/f noise and scaling nets (chapter 27);
 - Lévy flights and dusts (chapters 31–32);
 - lacunarity (chapter 34);
-- scaling in prices and in word frequencies (chapters 37–38).
+- scaling in prices (chapter 37; chapter 38's word frequencies and salaries are built as power-laws).

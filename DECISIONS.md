@@ -124,6 +124,16 @@ Conventions used below:
 - **Plate 83, the devil's staircase.** The unit square with the region under the Cantor function in solid ink. The scan's top profile matches the Cantor function to rms 0.005 of the height (max deviation 0.018 at the near-vertical risers, which is ink spread); treads are resolved down to about 3⁻⁷. The page computes M(R) per pixel column, so zooming keeps producing steps. Graph length checked in closed form: 1 − (2/3)ⁿ + √(1 + (4/9)ⁿ) → 2.
 - **Generalized dusts (pages 77–78).** The book gives N and r for its example dusts (N = 3, r = 1/5; N = 2, r = 1/4; N = 3, r = 1/9) but never draws them, so the page's evenly spaced arrangement — first piece at 0, last ending at 1, equal tremas — is a reconstruction, flagged on the page. The gap-count law Nr(U > u) stepping across F·u⁻ᴰ was verified and is drawn as a log–log chart.
 
+## Part XI, chapter 38
+
+**Chapter 38, scaling and power laws without geometry (page power-laws).**
+- The chapter prints no plates — checked against the scan, pages 341–348 are text only — so this is a concept page: every figure is computed from the chapter's formulas, and the page says so in the dek, under each figure and in the source line. The tracker row is "(concept)".
+- **Zipf prefactor.** The book stops at "approximating ρ through the average of its bounds" plus the normalization F⁻¹ = Σ(ρ + V)^(−1/D). Carrying the average through gives the closed form F = P₀·(V(N + 1)/2)^(1/D), with P₀ = 1 − Nr; the page uses it for the smooth law and labels it our own algebra. ΣP = P₀·Σ(Nr)ᵏ = 1 checks exactly.
+- **Words as a dust.** The book's base-(N + 1) digit construction is the case r = 1/(N + 1). The tree figure generalizes to arbitrary r by giving the space a share 1 − Nr and each letter a share r of every live branch, which keeps D = log N/log(1/r) for every r. A reconstruction, flagged on the page.
+- **Mixed bag (Mandelbrot 1963e).** The filters are our design: six datasets, each pooled from three batches scaled log-uniformly over ±1 decade; truths are Pareto D = 1.7 against lognormal σ = 1; the apparent tail slope is fitted between quantiles 0.8 and 0.99 of n = 8000 (fitting nearer the extreme order statistics drowned the effect in noise). Measured: the scaling truth's slopes stay within about ±0.1 of −1.7 across datasets and seeds; the lognormal's scatter over ≈0.6.
+- **The parables check out.** Lake widths 1600·N^(−0.8) give D = 1/0.8 = 1.25, expected remaining width 5 miles and 5m after sailing m, as the text says; Lotka's D = 2 makes the expected future equal the past.
+- **The salary pyramid.** The text's "exact pyramid (base equal to the square of the height)" is rendered as inverse income running down with each level's floor area equal to its head count, so the silhouette half-width grows like depth^(D/2) — straight-sided exactly at D = 2. Both axes are normalized independently to fit; our rendering choice, flagged on the page. The rank view's smooth curve is ρ = −V + (V(N + 1)/2)·U^(−D), the Zipf form with P₀ = 1.
+
 ## Open questions
 
 - **The 13-interval generator.** Why does Plate 69's large circle use a different rule from the caption's second stage? This may be worth a sentence once the rest of chapter 7 is reviewed.
