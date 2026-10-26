@@ -1,0 +1,193 @@
+<title>Landscapes That Never Were</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.r-wide { aspect-ratio: 4 / 3; }
+.canvas-wrap.dark { background: #0a0a0c; }
+.two-figs { display: grid; gap: 14px; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · A book-within-the-book, in colour · plates C9–C15</p>
+    <h1><span class="plate-no">Plates C9–C15</span><span class="lozenge" aria-hidden="true"></span><span>Landscapes That Never Were</span></h1>
+    <p class="dek">The colour signature's landscapes are not photographs, and they are not processed from real terrain. Each one is a fractional Brown surface: a random relief whose only inputs are a dimension D, a seed, and a sea level. Richard F. Voss computed the originals; these figures rebuild the same models, so every mountain here is new, but its statistics are the book's.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#c11"><b>C11</b> Gaussian hills</a>
+    <a href="#c13"><b>C13</b> Valleys fixed</a>
+    <a href="#c15"><b>C15</b> Islands from the zenith</a>
+    <a href="#c9"><b>C9</b> Planetrise</a>
+  </nav>
+
+  <!-- ===================== C11 ===================== -->
+  <section class="plate" id="c11">
+    <div class="plate-head">
+      <p class="no">Plate C11 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Gaussian hills that never were</h2>
+      <p class="dim" id="dim11">Brown relief · surface D = 3 − H · coastline D = 2 − H</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-wide" id="w11">
+          <canvas id="c11c" role="img" aria-label="A random fractional Brown mountain landscape"></canvas>
+        </div>
+        <figcaption><strong>Fractional Brown relief</strong> · <span id="cap11">H = 0.50, D = 2.50</span> · seed <span id="seed11">5</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Mandelbrot asks for the simplest possible model of relief: the altitude difference between any two points should be Gaussian, and the landscape should have no preferred scale. The only family that satisfies both is the Brown and fractional Brown surfaces, and the only parameter left free is the fractal dimension D between 2 and 3. At D = 2 the relief is smooth; raise D and it grows corrugated, passes through believable mountains, and finally approaches a space-filling roughness. The altitude is computed on a square grid, a flat sea is flooded in, and "a semblance of roundness is injected by rolling this relief's flat base surface around a cylinder", lit from 60° over the left — all as the caption describes.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Dimension D = 3 − H</span><span class="value" id="v11D">D = 2.50</span></div>
+          <div class="slider"><input type="range" id="s11D" min="2.1" max="2.9" step="0.05" value="2.5" aria-label="Surface dimension"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Vertical scale</span><span class="value" id="v11z">1.0</span></div>
+          <div class="slider"><input type="range" id="s11z" min="0.15" max="2" step="0.05" value="1" aria-label="Vertical scale"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Sea level</span><span class="value" id="v11sea">30%</span></div>
+          <div class="slider"><input type="range" id="s11sea" min="0" max="75" step="5" value="30" aria-label="Sea level percentile"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="p11">Show Plate C11 as printed</button>
+          <button type="button" class="btn" id="roll11">New mountains</button>
+        </div>
+        <dl class="read">
+          <div><dt>Surface</dt><dd id="r11a">D = 2.50</dd></div>
+          <div><dt>Coastlines</dt><dd id="r11b">D = 1.50</dd></div>
+          <div><dt>Grid</dt><dd>256 × 256</dd></div>
+          <div><dt>Seed</dt><dd id="r11c">5</dd></div>
+        </dl>
+        <p class="note">A random plate is matched statistically, not stroke for stroke: the print's exact mountains came from Voss's seed, which the book doesn't give. The "as printed" preset sets the model's parameters and a seed chosen so the scene composes like the plate — snow on a high peak at the right, a lake in the middle ground. The caption's test is worth trying here: lower the vertical scale and the Sierras turn into rolling farmland, though D never changed.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== C13 ===================== -->
+  <section class="plate" id="c13">
+    <div class="plate-head">
+      <p class="no">Plate C13 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Non-Gaussian hills that never were</h2>
+      <p class="dim">the same D throughout · vertical scale varies with altitude: h → h^γ above the valley floor</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-wide" id="w13">
+          <canvas id="c13c" role="img" aria-label="A fractional Brown landscape with power-law valleys"></canvas>
+        </div>
+        <figcaption><strong id="cap13t">Smooth valleys</strong> · <span id="cap13">γ = 3</span> · seed <span id="seed13">7</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">In a Gaussian landscape the valley bottoms are exactly as rough as the mountain tops, while real valleys are smoother — flooding the valleys with lakes and snow was what hid this defect in the other plates. Plate C13 shows Mandelbrot's simplest fix: keep the same D everywhere, but let the vertical scale grow with the altitude above the valley floor. Raising the altitude to the third power gives the gentle valley and sudden peaks of the top panel; a power below 1 instead flattens the tops into the mesa and canyon of the bottom panel.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Altitude power γ</span><span class="value" id="v13g">γ = 3.0</span></div>
+          <div class="slider"><input type="range" id="s13g" min="0.3" max="3" step="0.05" value="3" aria-label="Altitude power"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Dimension D = 3 − H</span><span class="value" id="v13D">D = 2.50</span></div>
+          <div class="slider"><input type="range" id="s13D" min="2.1" max="2.9" step="0.05" value="2.5" aria-label="Surface dimension"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="p13a">Show the top of Plate C13</button>
+          <button type="button" class="btn" id="p13b">The bottom: mesa and canyon</button>
+          <button type="button" class="btn" id="roll13">New terrain</button>
+        </div>
+        <dl class="read">
+          <div><dt>Power γ</dt><dd id="r13a">3.0</dd></div>
+          <div><dt>Surface (tops)</dt><dd id="r13b">D = 2.50</dd></div>
+          <div><dt>Grid</dt><dd>256 × 256</dd></div>
+          <div><dt>Seed</dt><dd id="r13c">7</dd></div>
+        </dl>
+        <p class="note">γ = 1 is the plain Gaussian relief of Plate C11. The caption gives the cube for the top panel (and for Labelgraph Hill in Plate C9) and only "a power below 1" for the mesa; the bottom preset's γ = 0.35 is fitted by eye and is a reconstruction.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== C15 ===================== -->
+  <section class="plate" id="c15">
+    <div class="plate-head">
+      <p class="no">Plate C15 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Fractal islands that never were, seen from the zenith</h2>
+      <p class="dim">top archipelago: Brown, D = 5/2, coastlines D = 3/2 · bottom: persistent, D = 2.200, coastlines D = 1.200</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="two-figs">
+          <div class="canvas-wrap r-wide" id="w15a">
+            <canvas id="c15a" role="img" aria-label="Brown archipelago seen from above"></canvas>
+          </div>
+          <div class="canvas-wrap r-wide" id="w15b">
+            <canvas id="c15b" role="img" aria-label="Persistent fractional Brown archipelago seen from above"></canvas>
+          </div>
+        </div>
+        <figcaption><strong>Two archipelagos</strong> · top <span id="cap15a">D = 2.50</span>, bottom <span id="cap15b">D = 2.20</span> · seeds <span id="seed15">11 / 11</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">To make islands, the caption says, "we center the relief around a maximum, and omit to plot the altitudes below a certain reference level taken as 0". Both archipelagos here use the same seed, so the same underlying randomness wears two dimensions. The top one is an ordinary Brown relief, D = 5/2: a poor model of Earth, too irregular in its detail, its coastline dimension 3/2 well above what maps show. The bottom one is a persistent fractional Brown relief of D = 2.200, whose coastlines take the sensible dimension 1.200 — Mandelbrot notes its resemblance to Hawaii is "better than deserved". The clear-cut ridges appear although the mechanism is isotropic: nothing in the model prefers any direction.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Sea level</span><span class="value" id="v15sea">60%</span></div>
+          <div class="slider"><input type="range" id="s15sea" min="30" max="85" step="5" value="75" aria-label="Sea level percentile"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="p15">Show Plate C15 as printed</button>
+          <button type="button" class="btn" id="roll15">New archipelagos</button>
+        </div>
+        <dl class="read">
+          <div><dt>Top coastline</dt><dd>D = 3/2</dd></div>
+          <div><dt>Bottom coastline</dt><dd>D = 1.200</dd></div>
+          <div><dt>Centred on</dt><dd>the maximum</dd></div>
+          <div><dt>Seed</dt><dd id="r15c">11</dd></div>
+        </dl>
+        <p class="note">The relief is recentred so its highest point sits mid-frame, then flooded. The printed palette — sea blue, cyan lowlands, violet and rose slopes, white ridges — is sampled from the plate; the shading direction is fitted by eye.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== C9 ===================== -->
+  <section class="plate" id="c9">
+    <div class="plate-head">
+      <p class="no">Plate C9 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Planetrise over Labelgraph Hill</h2>
+      <p class="dim">souvenir from a space mission that never was · two models of planetary relief in one frame</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-wide dark" id="w9">
+          <canvas id="c9c" role="img" aria-label="A fractal planet rising over a fractal hill"></canvas>
+        </div>
+        <figcaption><strong>Planetrise</strong> · planet: Brown sphere from <span id="cap9f">800</span> faults · hill: γ = 3 relief · seeds <span id="seed9">3 / 5</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The plate combines Mandelbrot's two theories of planetary surfaces. The distant planet is a Brown relief on the sphere, built by random great-circle faults: each fault lifts one hemisphere by a tiny step, and a few hundred of them leave a relief whose coastline — a Brownian Pangaea — has dimension 3/2. Oceans fill the low side, snow the peaks, and "the sky remains completely cloudless — to put it mildly, a rough approximation". The foreground is Labelgraph Hill, a fractional Brown relief whose altitudes are cubed, the trick of Plate C13, lit low from the left. The hill is named in memory of "lblgraph", the ill-mannered heap of IBM graphics programs that drew the book's plates. R.I.P.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Faults on the planet</span><span class="value" id="v9f">800</span></div>
+          <div class="slider"><input type="range" id="s9f" min="50" max="1500" step="50" value="800" aria-label="Number of faults"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Planet's sea level</span><span class="value" id="v9sea">55%</span></div>
+          <div class="slider"><input type="range" id="s9sea" min="40" max="85" step="5" value="55" aria-label="Planet sea level percentile"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="p9">Show Plate C9 as printed</button>
+          <button type="button" class="btn" id="roll9">New planet and hill</button>
+        </div>
+        <dl class="read">
+          <div><dt>Planet coastline</dt><dd>D = 3/2</dd></div>
+          <div><dt>Hill</dt><dd>Brown, cubed</dd></div>
+          <div><dt>Faults</dt><dd id="r9a">800</dd></div>
+          <div><dt>Seeds</dt><dd id="r9b">3 / 5</dd></div>
+        </dl>
+        <p class="note">This is the loosest reconstruction on the page, and the caption warns that even the original cannot be duplicated without "exactly the same computer equipment". The two models are the book's; the composition — globe high at the left, hill across the foreground — follows the plate, and the colours are chosen after it. The crater-pocked texture of the printed foreground comes from Voss's rendering and is not reproduced by the cubed-altitude model alone. The planet model itself is the subject of Plates 269–271 in Chapter 28.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), colour plates C9–C15 and their captions on pages C8–C14, with the fault-planet model from Chapter 28. The plates were computed by Richard F. Voss; every figure here is re-synthesised from the models in the captions with its own seed, matched statistically — never traced. See also <a href="color-plates.html">the colour signature's dragons</a> (Plates C5 and C7).</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>
