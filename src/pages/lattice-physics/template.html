@@ -1,0 +1,195 @@
+<title>Fractals in Lattice Physics</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.r-spin { aspect-ratio: 5 / 4; }
+.r-two { aspect-ratio: 2 / 1; }
+@media (max-width: 520px) { .r-two { aspect-ratio: 8 / 5; } }
+.mini svg.rule { height: 58px; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 36, "Logic of Fractals in Statistical Lattice Physics" · pages 326–333</p>
+    <h1><span class="plate-no">Chapter 36</span><span class="lozenge" aria-hidden="true"></span><span>Fractals in Lattice Physics</span></h1>
+    <p class="dek">Statistical physics replaces its hardest problems by analogs on a lattice — and on a lattice, a fractal can never be built the way a Koch curve is built, by interpolating detail forever. The lattice shapes only reach their fractal limits "weakly": each downsizing is a fresh shape, a little closer to <i>some</i> limit, without ever settling on one. This chapter's single figure makes the one case where the limit can be exhibited: a flipped spin whose influence grows into the Sierpiński gasket. Around it the chapter walks through the self-avoiding walk of polymer physics and a random model of river networks.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#spins"><b>329</b> The spin impurity</a>
+    <a href="#limits"><b>lim</b> Two kinds of convergence</a>
+    <a href="#sarw"><b>4/3</b> Self-avoiding walk</a>
+    <a href="#rivers"><b>D/2</b> Rivers</a>
+  </nav>
+
+  <!-- ===================== FIGURE, P. 329: THE SPIN IMPURITY ===================== -->
+  <section class="plate" id="spins">
+    <div class="plate-head">
+      <p class="no">Figure, page 329 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>A spin impurity snowballs into the gasket</h2>
+      <p class="dim">S(t, n) = +1 when S(t−1, n−1) ≠ S(t−1, n+1) · the +'s are the odd binomial coefficients · downsized limit: the Sierpiński gasket, D = log 3/log 2 ≈ 1.5850</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-spin zoomable" id="wA">
+          <canvas id="cA" role="img" aria-label="The spin automaton of page 329: rows of plus and minus spins forming Pascal's triangle mod 2"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cAt">As printed</strong> · <span id="cAn">14 rows</span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">A line of spins, all −1, is left alone by the rule: each spin becomes −1 when its two neighbors agree, +1 when they differ. Flip one spin at t = 0 and follow the purely local rule. The disturbance snowballs — "local interactions snowball into global effects" — and the +'s mark the odd coefficients of Pascal's triangle. Join neighboring +'s and the graph is kin to the Sierpiński gasket of chapter 14; downsize it, and it converges to the gasket itself: the chapter's one "example of demonstrable weak limit."</p>
+        <div class="mini" aria-label="The rule: a spin flips to plus when its neighbors disagree">
+          <svg class="rule" viewBox="0 0 9.2 3.1" aria-hidden="true" id="miniA"></svg>
+          <div class="fx">neighbors agree → −<br>neighbors differ → +</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Draw</span></div>
+          <div class="steps words" id="mA" role="group" aria-label="Drawing"></div>
+        </div>
+        <div class="group" id="growA" hidden>
+          <div class="label-row"><span class="label">Steps of time</span><span class="value" id="sAv">256 rows</span></div>
+          <div class="steps" id="sA" role="group" aria-label="Rows"></div>
+          <label class="check" for="gasketA"><input type="checkbox" id="gasketA"> Overlay the limit gasket</label>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="fig329">Show the figure as printed</button>
+        </div>
+        <p class="readline" id="infoA" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Rows</dt><dd id="rAa">14</dd></div>
+          <div><dt>+ spins, last row</dt><dd id="rAb">8</dd></div>
+          <div><dt>+ spins, all rows</dt><dd id="rAc">—</dd></div>
+          <div><dt>Dimension</dt><dd>log 3/log 2 ≈ 1.585</dd></div>
+        </dl>
+        <p class="note">Checked against the scan symbol by symbol: the book prints rows t = 0 to 13 in a fixed window |n| ≤ 13, and all 189 printed signs match the rule. The glyph sizes and the grid (row pitch 1.664 of the half-column spacing) are measured from the scan at 600 dpi. The count of + spins doubles with each 1 bit of t, so the first 2<sup>k</sup> rows hold exactly 3<sup>k</sup> of them — the bookkeeping behind D = log 3/log 2.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CONCEPT: TWO KINDS OF CONVERGENCE ===================== -->
+  <section class="plate" id="limits">
+    <div class="plate-head">
+      <p class="no">Chapter 36, pages 326–328 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Two kinds of convergence</h2>
+      <p class="dim">Koch teragons settle on one curve (a strong limit) · downsized random walks never settle (a weak limit)</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-two zoomable" id="wB">
+          <canvas id="cB" role="img" aria-label="A Koch teragon settling beside a downsized random walk that keeps changing"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>Strong against weak</strong> · <span id="cBn"></span> · the red ghost is the previous refinement</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The bulk of the Essay builds fractals by recursive interpolation: each Koch teragon keeps everything the last stage drew and adds finer wiggles, "like a picture to which detail is continually added by sharper focusing." A downsized random walk cannot be refined that way — there is no way to interpolate a random walk. Each downsizing is a brand-new walk: first seeming close to some Brownian motion, "then even closer to a different one, then still closer to yet another one, and so on... without ever settling down." Mathematicians call the first limit strong, the second weak — and on a lattice, weak is all there is.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Refinement</span><span class="value" id="sBv"></span></div>
+          <div class="steps" id="sB" role="group" aria-label="Refinement"></div>
+        </div>
+        <div class="group">
+          <label class="check" for="ghostB"><input type="checkbox" id="ghostB" checked> Ghost of the previous refinement, in red</label>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn" id="newB">Downsize afresh</button>
+        </div>
+        <p class="readline" id="infoB" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Koch strays by</dt><dd id="rBa">—</dd></div>
+          <div><dt>Walk strays by</dt><dd id="rBb">—</dd></div>
+          <div><dt>Teragon edges</dt><dd id="rBc">—</dd></div>
+          <div><dt>Walk steps</dt><dd id="rBd">—</dd></div>
+        </dl>
+        <p class="note">"Strays by" measures how far each curve moved from its own previous refinement (the largest distance from the new curve to the old one, both scaled to the same size). The Koch figure shrinks it by 1/3 per stage; the walk's stays large forever, because each refinement is an independent walk — the honest meaning of a weak limit. The walk here takes 4<sup>k</sup> lattice steps of length 2<sup>−k</sup>, the downsizing under which random walks converge weakly to Brownian motion — the one case, the chapter notes, with a full mathematical proof.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CONCEPT: THE SELF-AVOIDING WALK ===================== -->
+  <section class="plate" id="sarw">
+    <div class="plate-head">
+      <p class="no">Chapter 36, pages 329–330 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>The self-avoiding walk and linear polymers</h2>
+      <p class="dim">after n steps, displacement R ≈ n<sup>1/D</sup> · Flory: D = (E + 2)/3, so D = 4/3 in the plane · Brownian motion has D = 2</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wC">
+          <canvas id="cC" role="img" aria-label="A self-avoiding random walk on the square lattice"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cCt">One walk</strong> · <span id="cCn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">A linear polymer is a chain of molecules that cannot cross itself. Its lattice model is the self-avoiding random walk: forward at random, but never through a point twice and never into a trap. "So difficult that to date no analytical study has been successful" — yet simulations, due to C. Domb, found that after n steps the walk has wandered about n<sup>1/D</sup> from home, with D ≈ 4/3 in the plane: within a circle of radius R around a site sit about R<sup>D</sup> others, the signature of a fractal of dimension 4/3. Self-avoidance swells the chain — Brownian motion's D = 2 means n<sup>1/2</sup>; the polymer spreads much farther.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mC" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group" id="nCwrap">
+          <div class="label-row"><span class="label">Steps n</span></div>
+          <div class="steps" id="nC" role="group" aria-label="Number of steps"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn" id="newC">New walk</button>
+        </div>
+        <p class="readline" id="infoC" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Steps n</dt><dd id="rCa">—</dd></div>
+          <div><dt>End to end, R</dt><dd id="rCb">—</dd></div>
+          <div><dt>n<sup>3/4</sup></dt><dd id="rCc">—</dd></div>
+          <div><dt>Fitted D</dt><dd id="rCd">—</dd></div>
+        </dl>
+        <p class="note">The book prints no figure for this section; the walks here are sampled by the pivot algorithm (bend the chain at a random joint by a random lattice symmetry, keep the result when it avoids itself), the standard way to draw a self-avoiding walk fairly. The scaling chart regrows an ensemble at each length and fits the slope of log R against log n; with walks this short the fit lands near, not on, 3/4 — Mandelbrot makes the same allowance for the simulations he quotes.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CONCEPT: RIVERS ===================== -->
+  <section class="plate" id="rivers">
+    <div class="plate-head">
+      <p class="no">Chapter 36, pages 332–333 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Rivers' failure to run straight</h2>
+      <p class="dim">Hack: river length ∝ (drainage area)<sup>D/2</sup> · straight rivers would give D = 1 · real maps give D between 1.2 and 1.3</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wD">
+          <canvas id="cD" role="img" aria-label="A random river network grown on a square grid"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>A drainage lattice</strong> · <span id="cDn"></span> · line width grows with the water carried</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Hack's empirical law says a river's length grows like the D/2 power of its drainage area, with D between 1.2 and 1.3 — rivers run crooked. Leopold &amp; Langbein explained this with a lattice simulation that "ought to interest the physicist": sources are chosen at random, each stream wanders into adjacent squares until it leaves the region or joins an earlier stream, and the procedure continues until the whole grid drains. Often the second stream — "the Missouri" — turns out longer than the river it joins. Their simulations gave length ∝ area<sup>0.64</sup>, hence D ≈ 1.28: close to Domb's 4/3, and Mandelbrot suspects the gap is genuine, since every stream is hemmed in by its neighbors.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Grid</span></div>
+          <div class="steps" id="gD" role="group" aria-label="Grid size"></div>
+        </div>
+        <div class="group">
+          <label class="check" for="missD"><input type="checkbox" id="missD" checked> Trace the longest river, in red</label>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn" id="newD">New network</button>
+        </div>
+        <p class="readline" id="infoD" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Hack exponent</dt><dd id="rDa">—</dd></div>
+          <div><dt>Implied D</dt><dd id="rDb">—</dd></div>
+          <div><dt>Leopold &amp; Langbein</dt><dd>0.64 <small>D ≈ 1.28</small></dd></div>
+          <div><dt>Longest river</dt><dd id="rDd">—</dd></div>
+        </dl>
+        <p class="note">A reconstruction: the book prints no figure, and Leopold &amp; Langbein's walks are self-avoiding with "various rather arbitrary decisions" against loops and snags. Here a stream is a random walk that erases any loop it closes — the one no-snag rule. For such walks the theoretical exponent is 5/8 = 0.625 (their dimension is exactly 5/4), and the fit on these small grids lands nearby, wandering with the seed around the 0.64 of Leopold &amp; Langbein. The fit is the slope of log(longest upstream length) against log(drainage area) over every cell draining at least 8 squares.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 36, pages 326–333 (one figure, page 329). The figure is computed from the rule in the text and checked against the scan symbol by symbol; the walk and river sections reconstruct simulations the book describes but does not draw, as noted under each figure. Companion pages: <a href="cantor-dust.html">Cantor Dust</a> (Plates 80–83) and <a href="https://claude.ai/artifact/RvpGQi3Td4y7gZnjM1pukG" target="_blank" rel="noopener">Wiener Sausage</a> (Brownian motion).</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>
