@@ -1,0 +1,198 @@
+<title>Brown Trails and Hulls</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.r-walk { aspect-ratio: 6 / 5; }
+.seedline { display: flex; align-items: center; gap: 8px; }
+.seedline .value { min-width: 9ch; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 25, "Brownian motion and Brown fractals" · pages 232–243</p>
+    <h1><span class="plate-no">Plates 241–243</span><span class="lozenge" aria-hidden="true"></span><span>Brown Trails and Hulls</span></h1>
+    <p class="dek">Brownian motion is the prototype of every random fractal in the book, and Mandelbrot introduces it as a Peano curve whose rules are relaxed one by one: randomize the direction of each midpoint displacement, then its length, and the plane-filling curve becomes the Brown trail, still of dimension 2 but self-intersecting ceaselessly. These plates show a coin-toss walk converging to a Brown function and its clustered zeroset, and the hull of a Brown trail, whose boundary Mandelbrot here names self-avoiding Brownian motion. Every figure is a fresh simulation from a seed, never a copy of the printed one.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#build"><b>232–239</b> Peano made random</a>
+    <a href="#walk"><b>241</b> Coin-toss walk</a>
+    <a href="#hull"><b>242</b> Brown hull</a>
+    <a href="#loop"><b>243</b> Brown loop</a>
+  </nav>
+
+  <!-- ===================== THE CONSTRUCTION ===================== -->
+  <section class="plate" id="build">
+    <div class="plate-head">
+      <p class="no">Pages 232–239 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>A Brown trail from a randomized Peano curve</h2>
+      <p class="dim">N = 2, r = 1/√2 · mean Pythagorean identity ⟨|Δ₁P|² + |Δ₂P|²⟩ = ⟨|ΔP|²⟩ · D = 2</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wB">
+          <canvas id="cB" role="img" aria-label="Midpoint-displacement curve, from the Pólya sweep to the Brown trail"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cBt">Pólya sweep</strong> · stage <span id="cBs">8</span> · <span id="cBn">256 pieces</span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Start from a Peano curve with N = 2 and r = 1/√2: each stage displaces every side's midpoint transversally, by half the square root of the side's time span, so that |ΔP|² = |Δ₁P|² + |Δ₂P|² — a Pythagorean identity. Now release the constraints in steps. Let each midpoint go left or right at random (a "flip-flop curve"), then let it go in any direction, then let the displacement's length be random too, Gaussian, with the identity holding only on average. The limit of the last step is the Brown trail B(t). It keeps the Peano curves' dimension 2, but the randomization utterly destroys the long and short range order that let them avoid themselves: the trail self-intersects ceaselessly, covers area zero, and the unbounded trail is dense in the plane.</p>
+        <div class="minis">
+          <div class="mini" aria-label="Midpoint displacement, stages 1 and 2">
+            <svg class="gen" viewBox="-0.06 -0.62 2.24 0.72" aria-hidden="true" id="miniMD"></svg>
+            <div class="fx">stages 1 and 2<br>|ΔM| = √Δt / 2</div>
+          </div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Midpoint rule</span></div>
+          <div class="steps words" id="mB" role="group" aria-label="Midpoint rule"></div>
+        </div>
+        <p class="readline" id="infoB" aria-live="polite"></p>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="sBv">stage 8</span></div>
+          <div class="steps" id="sB" role="group" aria-label="Stage"></div>
+        </div>
+        <div class="btn-row seedline">
+          <button type="button" class="btn" id="againB">Throw again</button>
+          <span class="value" id="seedBv">seed 11</span>
+        </div>
+        <dl class="read">
+          <div><dt>Pieces</dt><dd id="rBa">256</dd></div>
+          <div><dt>Dimension</dt><dd>2</dd></div>
+          <div><dt>⟨|Δ₁P|²+|Δ₂P|²⟩ / ⟨|ΔP|²⟩</dt><dd id="rBb">1.000</dd></div>
+          <div><dt>Repeated vertices</dt><dd id="rBc">—</dd></div>
+        </dl>
+        <p class="note">The book draws no figure for this construction; this one follows its recipe. The nonrandom reference is the Pólya sweep of Plate 64, whose midpoints alternate left and right along the curve. Unlike Koch curves, which exhibit permanent "creases" at instants of the form N⁻ᵏ, the limit of the Gaussian rule is creaseless — no interval of the finished trail betrays where it sat on the dyadic grid — and it is self-similar with any ratio r, not only r = b⁻ᵏ.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 241 ===================== -->
+  <section class="plate" id="walk">
+    <div class="plate-head">
+      <p class="no">Plate 241 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>A sample random walk, and its zeroset</h2>
+      <p class="dim">graph of X(t): D = 3/2 · zeroset: D = 1/2 · Pr(U &gt; u) = u<sup>−1/2</sup> for the gaps between zeros</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-walk zoomable" id="wA">
+          <canvas id="cA" role="img" aria-label="Coin-toss random walk in three panels, as in Plate 241"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>Henry's winnings</strong> · 10,000 tosses · <span id="cAn">top: every toss to 550 · below: every 20th toss, time ÷ 10, heights ÷ √10</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The longest running of all games of chance: an eternally fair coin, a penny to Henry on heads, to Thomas on tails. William Feller reported Henry's cumulative winnings in the figure this plate reproduces from Feller 1950. The top panel shows the start of the game toss by toss; the lower two continue the same record with time compressed tenfold and heights by √10 — and, by the walk's self-affinity, they look statistically the same. Reported on ever finer graph paper, the record converges to a Brown line-to-line function. Mandelbrot stared at these curves until he saw a mountain silhouette in the whole graph, and bursts of telephone errors in the zeros.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <label class="check" for="zerosA"><input type="checkbox" id="zerosA"> Mark the zeroset: the tosses where the fortunes return to their start. Almost every zero, looked at closer, is a cluster of zeros.</label>
+        </div>
+        <div class="btn-row seedline">
+          <button type="button" class="btn primary" id="plate241">Show a fresh game</button>
+          <span class="value" id="seedAv">seed 2</span>
+        </div>
+        <dl class="read">
+          <div><dt>Zeros in 10,000 tosses</dt><dd id="rAa">—</dd></div>
+          <div><dt>Longest gap between zeros</dt><dd id="rAb">—</dd></div>
+          <div><dt>Henry's final score</dt><dd id="rAc">—</dd></div>
+          <div><dt>Gap-law slope, 200 games</dt><dd id="rAd">—</dd></div>
+        </dl>
+        <p class="note">Feller's printed figures are under copyright (J. Wiley and Sons), and Feller confided that they were "atypical" — picked over samples that looked too wild to be believable. So this page simulates fresh games instead, from a seed, and keeps whatever it gets. The caption says the lower panels use "data at intervals of 200 tosses", but in the printed plate the dots sit about 20 tosses apart, and that is what is drawn here. The zeros' gaps are independent; their positions are not — they cluster, and the tail Pr(U &gt; u) ∝ u<sup>−1/2</sup> measured across 200 games is the zeroset's dimension D = 1/2 at work. The zeroset is the simplest Lévy dust (Chapter 32).</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 242 ===================== -->
+  <section class="plate" id="hull">
+    <div class="plate-head">
+      <p class="no">Plate 242 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>The hull of a Brown trail</h2>
+      <p class="dim">trail: D = 2, area 0 · hull boundary: D = 4/3 (Mandelbrot's conjecture here; proved by Lawler, Schramm &amp; Werner in 2001)</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wC">
+          <canvas id="cC" role="img" aria-label="Hull of a Brown trail, a solid black silhouette"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cCt">Brown hull</strong> · <span id="cCn">200,000 steps</span> · <span id="cCr">raster —</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">A trail drawn during a unit time span has its own most peculiar geometry. The points it leaves uncovered split into an exterior, and an infinite number of disjoint Brown gaps bounded by fractal curves that are subsets of the trail — the trail is a fractal net. Fill the gaps in, and what remains is the <i>hull</i>: the trail plus everything it encloses. The plate's sample involves 200,000 Brownian steps drawn on a raster of (1,200)²; here the walk is the book's own downsized lattice walk, where (X+Y)/√2 and (X−Y)/√2 each move ±1 per toss. Hulls for different time spans are statistically identical except for scale.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mC" role="group" aria-label="What to show"></div>
+        </div>
+        <p class="readline" id="infoC" aria-live="polite"></p>
+        <div class="group">
+          <div class="label-row"><span class="label">Steps</span></div>
+          <div class="steps" id="sC" role="group" aria-label="Number of steps"></div>
+        </div>
+        <div class="btn-row seedline">
+          <button type="button" class="btn primary" id="plate242">Show Plate 242 as printed</button>
+          <button type="button" class="btn" id="againC">New sample</button>
+          <span class="value" id="seedCv">seed 3</span>
+        </div>
+        <dl class="read">
+          <div><dt>Cells visited</dt><dd id="rCa">—</dd></div>
+          <div><dt>Cells in gaps</dt><dd id="rCb">—</dd></div>
+          <div><dt>Boundary cells</dt><dd id="rCc">—</dd></div>
+          <div><dt>Boundary box dimension</dt><dd id="rCd">—</dd></div>
+        </dl>
+        <p class="note">A random plate: it is matched statistically, never stroke for stroke. Mandelbrot writes that he knows of no investigation of the Brown hull and that it "very much deserves attention" — he was right. The conjecture he makes overleaf, that the hull's boundary has dimension 4/3, was proved by Lawler, Schramm and Werner in 2001 using SLE, two decades after this book. The box dimension measured on this one finite sample runs a little low of 4/3, as it should at this raster.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 243 ===================== -->
+  <section class="plate" id="loop">
+    <div class="plate-head">
+      <p class="no">Plate 243 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>A Brown loop: island, gaps and self-avoiding boundary</h2>
+      <p class="dim">loop: D = 2 · boundary, "self-avoiding Brownian motion": D = 4/3 · G-length vs G-area slope D/2 = 2/3</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wD">
+          <canvas id="cD" role="img" aria-label="A Brown loop drawn as a net: trail in black, unvisited gaps in gray"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cDt">Brown loop</strong> · <span id="cDn">200,000 steps</span> · <span id="cDr">raster —</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">A <i>Brown loop</i> is a trail that returns to its point of departure in a finite time — a random Peano curve whose initiator has zero length. Being bounded, it separates the plane into an exterior and an interior Mandelbrot proposes to call the <i>Brown hull</i> or <i>Brown island</i>. In the plate the maximal open domains the loop never visits are gray tremas bounded by fractals: the loop is a net in the sense of Chapter 14. Its outer boundary is the <i>self-avoiding Brownian motion</i>, conjectured here to share the self-avoiding walk's dimension 4/3; Mandelbrot tests it by covering the plate with square lattices and plotting G-length against G-area, finding a slope indistinguishable from D/2 = 2/3. The same test runs live below.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mD" role="group" aria-label="What to show"></div>
+        </div>
+        <p class="readline" id="infoD" aria-live="polite"></p>
+        <div class="group">
+          <div class="label-row"><span class="label">Steps</span></div>
+          <div class="steps" id="sD" role="group" aria-label="Number of steps"></div>
+        </div>
+        <div class="btn-row seedline">
+          <button type="button" class="btn primary" id="plate243">Show Plate 243 as printed</button>
+          <button type="button" class="btn" id="againD">New sample</button>
+          <span class="value" id="seedDv">seed 7</span>
+        </div>
+        <dl class="read">
+          <div><dt>Cells visited</dt><dd id="rDa">—</dd></div>
+          <div><dt>Cells in gaps</dt><dd id="rDb">—</dd></div>
+          <div><dt>Boundary box dimension</dt><dd id="rDc">—</dd></div>
+          <div><dt>G-length vs G-area slope</dt><dd id="rDd">—</dd></div>
+        </dl>
+        <p class="note">The loop is a uniformly random closed lattice walk: each diagonal coordinate gets an equal number of +1 and −1 steps, shuffled. Mandelbrot asks whether the loop is a gasket or a carpet by order of ramification, and reports his conjecture — a carpet, so Brown nets satisfy the Whyburn property and the Brown trail is a universal curve — confirmed in unpublished work of Kakutani and Tongling. He also points to the family resemblance between this plate and the hexa-squig coastline of Plate 231.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 25, pages 232–243 (Plates 241, 242 and 243). The plates are random constructions: every figure here is a fresh simulation from the rules in the captions, matched to the book statistically, with its seed shown. Companion pages: <a href="https://claude.ai/artifact/RvpGQi3Td4y7gZnjM1pukG" target="_blank" rel="noopener">Wiener Sausage</a> (this chapter's Brownian motion, measured), <a href="https://claude.ai/artifact/LW9gkq4RLJEzELfAx7s6xe" target="_blank" rel="noopener">Peano Sweeps</a> (Plates 63–65, the nonrandom midpoint displacements) and <a href="https://claude.ai/artifact/1diKiTcEwLkJpZaVA2gQ11" target="_blank" rel="noopener">Triadic Koch Island</a> (Plates 42–45).</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>

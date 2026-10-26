@@ -123,6 +123,30 @@
       "layout_comment": "/* Layout: snowflake sweeps (68–69), Peano–Gosper trees (70–71), a cascade tree (71), the fudgeflake (72–73) and the quartet (73), each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
     },
     {
+      "slug": "brown-trails",
+      "title": "Brown Trails and Hulls",
+      "plates": "Plates 241–243",
+      "chapter": 25,
+      "scripts": [
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: the randomized-Peano construction, Feller's coin-toss walk (241), the Brown hull (242) and the Brown loop (243), each a figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "fractional-trails",
+      "title": "Fractional Brown Trails",
+      "plates": "Plate 255",
+      "chapter": 27,
+      "scripts": [
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: Plate 255 (the two trails), the Joseph effect (a model river record) and Hurst's R/S with the spectrum, each a figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
       "slug": "cantor-dust",
       "title": "Cantor Dust",
       "plates": "Plates 80–83",
@@ -133,6 +157,29 @@
         "ui.js"
       ],
       "layout_comment": "/* Layout: the Cantor bar (80), the Cantor curtains (81), the devil's staircase (83) and the chapter's dust-and-dimension concept, each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "turbulence-intermittency",
+      "title": "Turbulence and Intermittency",
+      "plates": "Intermittency",
+      "chapter": 10,
+      "scripts": [
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: four concept sections in the chapter's order (the gusty record and its probe, curdling in space, the section argument for D > 2, the spectrum inequality), each a computed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "biographical-sketches",
+      "title": "Biographical Sketches",
+      "plates": "Pages 391–404",
+      "chapter": 40,
+      "scripts": [
+        "shared/draw.js",
+        "script.js"
+      ],
+      "layout_comment": "/* Layout: one timeline of the six sketched lives beside the chapter's prelude, then one section per sketch, the biography beside its key dates. One column under 900px. */"
     },
     {
       "slug": "fournier-universe",
