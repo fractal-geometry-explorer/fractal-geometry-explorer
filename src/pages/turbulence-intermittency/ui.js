@@ -15,7 +15,10 @@
   const ylabel = (c, r, s) => { c.save(); c.translate(14, r.mt + r.ih / 2); c.rotate(-Math.PI / 2); c.fillStyle = PRINT.muted; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(s, 0, 0); c.restore(); };
 
   // ====================== 1: the record a probe reads ======================
-  const stA = { mode: 'record', N: 3, m: 5, seed: 7, fixed: false, k: 1 };
+  // seed 56 puts the first three gusts in separated ninths (2, 4, 6; 1, 4, 7 de-randomized); most
+  // seeds put some kept ninths side by side, where they merge into one longer gust
+  const SEED_A = 56;
+  const stA = { mode: 'record', N: 3, m: 5, seed: SEED_A, fixed: false, k: 1 };
   const mMaxA = (N) => { let m = 0; for (let v = 1; m < 7 && v * N <= 20000; m++) v *= N; return Math.max(1, m); };
   const cacheA = {};
   const dataA = () => {
@@ -25,17 +28,35 @@
   const PITCH = 0.085, THICK = 0.035;
   const zA = zoomable('wA', 'cA', (f) => {
     if (stA.mode === 'cascade') return fitBox(f, { x0: -0.02, x1: 1.02, y0: -(PITCH * stA.m + THICK + 0.02), y1: 0.02 }, 0.03);
-    return fitBox(f, { x0: -0.02, x1: 1.02, y0: -0.18, y1: 0.62 }, 0.03);
+    return fitBox(f, { x0: -0.02, x1: 1.02, y0: -0.18, y1: 0.78 }, 0.03);
   }, (f, v) => {
     const c = f.ctx, stages = dataA();
     paper(f, PRINT.paper); toWorld(f, v);
     c.fillStyle = PRINT.ink;
     const pen = 0.75 / v.s;                      // each gust keeps at least a pen's width on screen
+    const vx0 = -v.ox / v.s, vx1 = (f.w - v.ox) / v.s;
     if (stA.mode === 'cascade') {
-      for (let k = 0; k <= stA.m; k++) {
-        const len = Math.max(pow(9, -k), pen), p = new Path2D();
-        for (const a of stages[k]) p.rect(a, -(PITCH * k) - THICK, len, THICK);
-        c.fill(p);
+      c.fillRect(0, -THICK, 1, THICK);
+      for (let k = 1; k <= stA.m; k++) {
+        const L = pow(9, 1 - k), w = L / 9, y = -(PITCH * k) - THICK, N = stA.N;
+        const kept = new Path2D(), empty = new Path2D();
+        if (w * v.s >= 3) {
+          // the parent's 9 slots: kept ones in ink, the rest faint, a hairline apart so that
+          // kept ninths side by side still read as separate pieces
+          const inset = Math.min(0.08 * w, 0.75 / v.s), parents = stages[k - 1], kids = stages[k];
+          for (let i = 0; i < parents.length; i++) {
+            const a = parents[i];
+            if (a + L < vx0 || a > vx1) continue;
+            const on = new Set();
+            for (let t = 0; t < N; t++) on.add(Math.round((kids[i * N + t] - a) / w));
+            for (let j = 0; j < 9; j++) (on.has(j) ? kept : empty).rect(a + j * w + inset, y, w - 2 * inset, THICK);
+          }
+          c.fillStyle = '#dcdad1'; c.fill(empty);
+        } else {
+          const len = Math.max(w, pen);
+          for (const a of stages[k]) if (a + len >= vx0 && a <= vx1) kept.rect(a, y, len, THICK);
+        }
+        c.fillStyle = PRINT.ink; c.fill(kept);
       }
     } else {
       const len = Math.max(pow(9, -stA.m), pen), rec = new Path2D();
@@ -50,15 +71,25 @@
       for (const a of stages[stA.k]) band.rect(a, -0.125, wk, 0.055);
       c.fillStyle = PRINT.red; c.fill(band);
       toScreen(f);
+      const sy0 = v.oy + 0.07 * v.s, sh = 0.055 * v.s;
+      if (wk * v.s >= 4) {
+        // dividers between the probe's windows, so neighbouring turbulent windows count separately
+        c.strokeStyle = PRINT.paper; c.lineWidth = 1; c.beginPath();
+        for (let j = Math.max(1, Math.ceil(vx0 / wk)); j <= Math.min(Math.round(1 / wk) - 1, Math.floor(vx1 / wk)); j++) {
+          const x = v.ox + j * wk * v.s;
+          c.moveTo(x, sy0); c.lineTo(x, sy0 + sh);
+        }
+        c.stroke();
+      }
       c.strokeStyle = PRINT.rule;
-      c.strokeRect(v.ox, v.oy + 0.07 * v.s, v.s, 0.055 * v.s);
+      c.strokeRect(v.ox, sy0, v.s, sh);
     }
     toScreen(f);
   });
   const MODES_A = { record: 'The record', cascade: 'Stage by stage' };
   const INFO_A = {
-    record: 'Black: the dissipation a perfect probe would read. Red: the stretches a probe of the chosen size calls turbulent — everything else it reads as laminar. Shrink the probe and the turbulent fraction falls; zoom in and every burst splits again.',
-    cascade: 'Each row curdles the one above: every gusty ninth-stretch keeps N of its 9 ninths. The total dissipation never changes, so what survives carries ever higher intensity — gusts within gusts, after the fashion of the Cantor bar of Plate 80.',
+    record: 'Black: the dissipation a perfect probe would read. Red: the stretches a probe of the chosen size calls turbulent — everything else it reads as laminar. The strip is divided into the stretches the probe reads. Shrink the probe and the turbulent fraction falls; zoom in and every burst splits again.',
+    cascade: 'Each row curdles the one above: every gusty stretch is cut into 9 ninths (the faint boxes) and N of them stay gusty (black). Kept ninths often sit side by side, and then merge into one longer gust. The total dissipation never changes, so what survives carries ever higher intensity — gusts within gusts, after the fashion of the Cantor bar of Plate 80. Rows finer than a pixel cannot show their split; zoom in to see it.',
   };
   function setA(refit) {
     markMA(stA.mode); markNA(stA.N); markSA(stA.m);
@@ -85,7 +116,7 @@
   $('kA').addEventListener('input', (e) => { stA.k = +e.target.value; setA(false); });
   $('fixedA').addEventListener('change', (e) => { stA.fixed = e.target.checked; setA(false); });
   $('gustsA').addEventListener('click', () => { stA.seed = (stA.seed * 1664525 + 1013904223) >>> 0; setA(false); });
-  $('pA1').addEventListener('click', () => { Object.assign(stA, { mode: 'record', N: 3, m: 5, k: 1 }); setA(true); });
+  $('pA1').addEventListener('click', () => { Object.assign(stA, { mode: 'record', N: 3, m: 5, k: 1, seed: SEED_A }); setA(true); });
   $('pA2').addEventListener('click', () => { Object.assign(stA, { mode: 'record', N: 9, m: 4, k: 1 }); setA(true); });
 
   // ====================== 2: curdling in space ======================
