@@ -1,0 +1,154 @@
+<title>Random Curds</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.r-bar { aspect-ratio: 2 / 1; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 23, "Random curds: contact clusters and fractal percolation" · pages 210–223</p>
+    <h1><span class="plate-no">Plates 218–223</span><span class="lozenge" aria-hidden="true"></span><span>Random Curds</span></h1>
+    <p class="dek">Curdling, the grid cascade that built the Cantor dust, turns random here: at each stage every surviving cell of a base-5 grid keeps a few of its subcells, chosen by chance. Five cubes of 125 give Hoyle's D = 1 model of galaxy clusters; keep most of the cells instead and the curd models turbulent dissipation, so dense that it splits into contact clusters, and the question becomes whether one of them percolates from one side of the grid to the other. Every figure is computed from the rules in the captions.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#hoyle"><b>218–219</b> Hoyle curdling</a>
+    <a href="#ns"><b>220–223</b> Novikov–Stewart percolation</a>
+    <a href="#birth"><b>concept</b> The Bienaymé effect</a>
+  </nav>
+
+  <!-- ===================== HOYLE ===================== -->
+  <section class="plate" id="hoyle">
+    <div class="plate-head">
+      <p class="no">Plates 218 and 219 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Hoyle's model by random curdling in a grid</h2>
+      <p class="dim">E = 3, base b = 5 · each cube collapses into N = 5 of its 125 subcubes · D = log 5/log 5 = 1</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wA">
+          <canvas id="cA" role="img" aria-label="Plane projection of Hoyle curdling"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cAt">Stages superposed</strong> · stage <span id="cAs">3</span> · <span id="cAn">125 cubes</span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">In Hoyle's model a very low density gas cloud collapses repeatedly: into clusters of galaxies, then galaxies, and so on. The book implements it in the simplest way. An initiator cube of side 1 is divided into 5³ = 125 subcubes, and the matter it holds collapses into 5 of them, chosen at random; then each survivor collapses in turn. Every stage multiplies the density by 25 and reduces the dimension toward D = 1. What is drawn is the projection of the cubes on a face of the initiator, since a dust this sparse leaves space essentially transparent.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="sAv"></span></div>
+          <div class="steps" id="sA" role="group" aria-label="Stage"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Draw</span></div>
+          <div class="steps words" id="mA" role="group" aria-label="Drawing"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate219">Show Plate 219 as printed</button>
+          <button type="button" class="btn" id="plate218">Plate 218</button>
+          <button type="button" class="btn" id="reseedA">New seed</button>
+        </div>
+        <p class="readline" id="infoA" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Cubes</dt><dd id="rAa">125</dd></div>
+          <div><dt>Squares after projection</dt><dd id="rAb">—</dd></div>
+          <div><dt>Cube side</dt><dd id="rAc">—</dd></div>
+          <div><dt>Dimension</dt><dd>D = 1</dd></div>
+        </dl>
+        <p class="note">A random plate is matched statistically, not stroke for stroke: the construction, base, counts and shades follow the captions, while the random choices and their seeds are this page's own. Plate 219 superposes stages 1–3 in darkening grays (read off the print at about 0.27, 0.52 and 0.82 of full ink); Plate 218 shows a fourth stage alone, from a different seed, whose upper part the book's page edge cuts off and happens to be empty. Hoyle's N = 5 is schematic; with Fournier's value N = 10²² (Plate 95) the curd's lacunarity would become very small.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== NOVIKOV–STEWART ===================== -->
+  <section class="plate" id="ns">
+    <div class="plate-head">
+      <p class="no">Plates 220 through 223 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Novikov–Stewart curds, followed by percolation</h2>
+      <p class="dim">plane grid, b = 5 · each eddy keeps N of its 25 subeddies · D = log N/log 5, a section of a spatial curd of dimension D + 1</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wB">
+          <canvas id="cB" role="img" aria-label="Novikov–Stewart random curd with contact clusters coloured"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cBt">N = 19</strong> · <span id="cBn"></span> · zoom in until each whey cell shows the print's small cross</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Novikov &amp; Stewart (1964) proposed that turbulent dissipation curdles: each cascade stage takes the precurd and curdles it further into N pieces smaller in the ratio r = 1/5. In turbulence D &gt; 2, so a plane cross section — which subtracts 1 from the dimension, by the rule that codimensions add — is what the plates show. The whey is gray. The curd splits into <i>contact clusters</i>: the connected pieces touching both the top and the bottom of the grid are the percolating ones, left white, and all the others are black.</p>
+        <div class="key" aria-hidden="true">
+          <span><i style="background:#ecebe6"></i> percolating cluster</span>
+          <span><i style="background:#1a1a1a"></i> other clusters</span>
+          <span><i style="background:#bdbcb8"></i> whey</span>
+        </div>
+        <div class="group slider">
+          <div class="label-row"><span class="label">Subeddies kept</span><span class="value" id="nBv">N = 19 of 25</span></div>
+          <input type="range" id="nB" min="13" max="25" step="1" value="19" aria-label="Subeddies kept per eddy">
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn" id="plate220">Plate 220</button>
+          <button type="button" class="btn" id="plate221">Plate 221</button>
+          <button type="button" class="btn" id="plate222">Plate 222</button>
+          <button type="button" class="btn" id="plate223">Plate 223</button>
+          <button type="button" class="btn" id="reseedB">New seed</button>
+        </div>
+        <p class="readline" id="infoB" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Section D = log N/log 5</dt><dd id="rBa">—</dd></div>
+          <div><dt>Spatial curd D + 1</dt><dd id="rBb">—</dd></div>
+          <div><dt>Contact clusters</dt><dd id="rBc">—</dd></div>
+          <div><dt>Percolates</dt><dd id="rBd">—</dd></div>
+        </dl>
+        <p class="note" id="noteB">The book's plates are one realization at stage 4, printed full bleed, so each shows about a 487 × 461 window of the full 625 × 625 square; this page draws the whole square. Plate 220 splices two prints of the same seed along a diagonal seam, with N = 24 in the lower right corner and N = 22 elsewhere; the preset reproduces the splice with the seam's measured position. The behaviour matches the captions statistically: with this model no seed in 60 percolated at N ≤ 16, two did at N = 18 ("a few seeds percolate already for N = 18"), and most did at N = 19. The three largest printed dimensions disagree with the caption's own formula: log 24/log 5 = 1.9746 (printed 1.9973), log 22/log 5 = 1.9203 (printed 1.9426), log 19/log 5 = 1.8295 (printed 1.8505); for N = 16 and 13 the printed 1.7227 and 1.5936 are exact. This page shows the computed values.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== BIENAYMÉ ===================== -->
+  <section class="plate" id="birth">
+    <div class="plate-head">
+      <p class="no">Pages 210–212, concept <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Canonical curdling and the Bienaymé effect</h2>
+      <p class="dim">each subinterval survives a coin toss of probability p · ⟨N⟩ = pb · D* = log ⟨N⟩/log b</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-bar" id="wC">
+          <canvas id="cC" role="img" aria-label="Rows of a canonical curdling cascade"></canvas>
+        </div>
+        <figcaption><strong>Canonical curdling</strong> · stage rows, as in the Cantor bar of Plate 80</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The chapter's cleanest definition of random curdling needs only coin tossing. Divide an interval into b subintervals; each survives with probability p, independently of the rest, and the cascade resumes inside every survivor. The number of children follows a birth-and-death process, and Irénée Bienaymé saw the fundamental alternative in 1845: when the expected count ⟨N⟩ = pb is 1 or less, the family line almost surely dies out and the cascade leaves the empty set; when ⟨N⟩ &gt; 1, it survives forever with positive probability and yields a random dust of dimension D* = log ⟨N⟩/log b. The threshold ⟨N⟩ = 1 is exactly D* = 0.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Base</span></div>
+          <div class="steps words" id="bC" role="group" aria-label="Base"></div>
+        </div>
+        <div class="group slider">
+          <div class="label-row"><span class="label">Survival probability</span><span class="value" id="pCv"></span></div>
+          <input type="range" id="pC" min="0.05" max="1" step="0.01" value="0.8" aria-label="Survival probability p">
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn" id="critC">Set p to the critical 1/b</button>
+          <button type="button" class="btn" id="reseedC">New seed</button>
+        </div>
+        <dl class="read">
+          <div><dt>⟨N⟩ = pb</dt><dd id="rCa">—</dd></div>
+          <div><dt>D*</dt><dd id="rCb">—</dd></div>
+          <div><dt>Chance the line dies out</dt><dd id="rCc">—</dd></div>
+          <div><dt>This realization</dt><dd id="rCd">—</dd></div>
+        </dl>
+        <p class="note">The chance of dying out is the smallest root of q = (1 − p + pq)<sup>b</sup>, computed here by iteration. Below the critical p = 1/b it is 1, and it falls steeply above. The spatial plates above use the <i>constrained</i> variant, where the count N is fixed and only the choice of cells is random; the book notes both give the same dimensions and the same section rules. Rows whose slugs fall under a pixel deposit their true ink coverage per pixel, so thin rows dim instead of banding.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 23, pages 210–223 (Plates 218 to 223). The random plates are matched statistically: the constructions, counts and shades follow the captions, and the notes under each figure say what was measured from the scans and what is this page's own choice. Companion pages: <a href="cantor-dust.html">Cantor Dust</a> (Plates 80–83, where curdling first appears) and <a href="https://claude.ai/artifact/RvpGQi3Td4y7gZnjM1pukG" target="_blank" rel="noopener">Wiener Sausage</a> (chapter 25).</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>

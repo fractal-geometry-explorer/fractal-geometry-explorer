@@ -18,6 +18,7 @@ Conventions used below:
 - **Heavy sliders.** When a control redraw costs more than a frame, draw a coarse pass immediately (a floor on ε) and the full pass about 160 ms after the control settles — the same rhythm as the pan-and-zoom snapshot. Unequal-parts does this for the stage colouring (`nudge()`); controls answer in ~40 ms where they froze for a second.
 - **Animated zooms.** Zoom smoothly without rotating, and cap the rate. The user found the spinning tangent zoom dizzying, and saw flicker near the slider's end.
 - **Sub-pixel dust.** Rasterising a Cantor dust by coverage (recurse until a piece is under a pixel, then deposit its overlap) leaves horizontal bands wherever the recursion bottoms out one level earlier: the deposited mass jumps by the factor N·r. Deposit a sub-pixel piece of length ℓ with total mass (ℓ/px)^D instead: that is the one weight for which a piece deposits exactly what its N children would (N·r^D = 1), so nothing jumps, and thin cords dim like the dust's D-dimensional density. Plate 81's curtains draw this way; chapters 31–32 (Lévy dusts) will want the same.
+- **Touching pieces in random curdling.** When random generators can keep neighbouring cells, the pieces merge and the split stops being countable. Draw each parent's slots (kept in ink, the rest faint) with a hairline gap between them, as chapter 10's record does; chapter 23 will want the same.
 - **Layout shift.** Give readouts whose text length changes a fixed height. A caption that changed size moved the graph around.
 
 - **Heavy random rasters: render once, blit while navigating.** Each of brown-relief's figures draws once per parameter change into an offscreen canvas covering a fixed world rectangle; the zoomable view only re-blits that canvas. Pan and zoom never recompute the field, and a random figure magnifies like the printed plate it stands for (its resolution is the simulation grid's).
@@ -126,6 +127,70 @@ Conventions used below:
 - **Plate 83, the devil's staircase.** The unit square with the region under the Cantor function in solid ink. The scan's top profile matches the Cantor function to rms 0.005 of the height (max deviation 0.018 at the near-vertical risers, which is ink spread); treads are resolved down to about 3⁻⁷. The page computes M(R) per pixel column, so zooming keeps producing steps. Graph length checked in closed form: 1 − (2/3)ⁿ + √(1 + (4/9)ⁿ) → 2.
 - **Generalized dusts (pages 77–78).** The book gives N and r for its example dusts (N = 3, r = 1/5; N = 2, r = 1/4; N = 3, r = 1/9) but never draws them, so the page's evenly spaced arrangement — first piece at 0, last ending at 1, equal tremas — is a reconstruction, flagged on the page. The gap-count law Nr(U > u) stepping across F·u⁻ᴰ was verified and is drawn as a log–log chart.
 
+## Part III, chapters 9–11
+
+**Plates 95 and 96, Fournier universes (chapter 9).**
+- Both plates are quincunx cascades: five dots — one at the centre, four on the diagonals — repeated at ratio 1/r per order. Plate 95 is three orders at 1/r = 7 (125 dots); Plate 96 is four orders at 1/r = 5 (625 dots), "carried one step further" because it shrinks more slowly.
+- **Measured at 600 dpi.** Plate 95's fitted ratio between levels is 7.000 (dot placement scatter rms 5 px ≈ 0.2 mm, which reads as hand drafting). Its dots are the order-0 balls drawn to scale: expected radius (corner offset)/294 ≈ 3.2 px against ≈ 3.1 px measured — the caption's "represents to scale" is literal. Plate 96: all 625 dots match the exact pattern (fitted ratio 4.98, rms 12 px ≈ 0.5 mm); the scan's four extra marks are printing specks, not structure, and the smallest dots print slightly larger than exact scale.
+- **Geometry.** Sub-aggregate centres sit at distance d = R − R/ρ from the centre, where each corner copy touches the enclosing sphere; the book's text ("corners of a square whose diagonal is 12 units") leaves the square's turn open and the plates print the corners on the diagonals. The octahedron's two polar balls project exactly onto the centre dot, which is why the projection and the equatorial section are one picture — and why the printed pattern has D = log 5/log 7 ≈ 0.8270 while the universe it depicts has D = 1 (the caption's exception to the "a D < 2 set projects to dimension D" rule: a special structure and viewing axis).
+- **Claims verified numerically.** M(R) counted from the model climbs along M = R and sags to M = R/7 between aggregate radii, exactly the band the text describes; non-overlap of the balls needs 1/r > 3, and D in space then runs up to log 7/log 3 ≈ 1.7712, as stated on page 89.
+- **Page extras.** The endless zoom (interpolation to orders −1, −2, …), the M(R) chart and the sky-coverage comparison are this page's illustrations of the text; the book prints no such figures.
+
+## Part III, chapter 10
+
+**Geometry of turbulence; intermittency (pages 97–105, no plates).**
+- The chapter prints no figures at all — every page of the scan was checked — so the whole page (`turbulence-intermittency`) is labelled as this page's own illustrations of the text. Formulas were verified on the 600 dpi scan: ⟨[v(x) − v(x+r)]²⟩ = |r|^(2/3+B) with B = (3 − D)/3 for fractally homogeneous turbulence, B ≤ (3 − D)/3 for weighted curdling, and the curdling rule "N = r⁻ᴰ out of r⁻³ mth-order subeddies".
+- **The record of gusts.** Base-9 curdling of [0, 1] where every kept cell keeps exactly N of its 9 ninths, so d = log N/log 9 exactly and the fixed total dissipation stays uniform on the survivors (density (9/N)ᵐ). Positions are seeded-random per cell; a checkbox reuses one position set everywhere, which is the chapter's "de-randomized" curdling. N = 3 gives d = 1/2, i.e. the measured D ≈ 2.5 in space.
+  - Kept ninths often touch (about 60% of random draws of 3 from 9 have a neighbouring pair), and touching pieces merge. The first default seed kept ninths 4, 5 and 6, so stage 1 drew as one block and the user read the figure as cut off. The stage view now draws every parent's 9 slots (kept ones in ink, the rest faint, a hairline apart), the probe strip shows dividers between its windows, and the default seed is 56 (ninths 2, 4, 6; 1, 4, 7 de-randomized), chosen for legibility and said so on the page.
+- **The cube.** Base-3 curdling with a seeded generator of N of 27 cells reused at every scale (the chapter's model). Drawn isometrically with painter's order by x + y + z; 4096 cubes redraw in ~45 ms. The partial Fisher–Yates pick makes the generator nest as N grows, so the N slider adds curds without rearranging the rest.
+- **The section argument.** Computed exactly, not simulated: randomize the curdling (each subcell kept with probability p = 3^(D−3)); a straight probe's trace is a branching process with Binomial(3, p) offspring, mean 3^(D−2), so it dies out surely for D ≤ 2 and survives with positive probability for D > 2 — extinction iterates q → (1 − p + pq)³. Chapter 23 is cited by the book as proving the theorem for a simple class; the galaxies' contrast (projections must vanish, D < 2, D ≈ 1.23) is drawn on the same chart.
+- The chapter's open topology question (dust vs vortex tubes vs sheets; kurtosis tests determine only D) is reported as open on the page.
+
+## Part VIII, chapter 23
+
+**Plates 218–219, Hoyle curdling (page 218–219).**
+- Random kind: matched statistically, with this page's own seeds. The construction follows the caption exactly: E = 3, base 5, each surviving cube collapses into 5 of its 125 subcubes, drawn as the plane projection of the cubes.
+- Plate 219 superposes stages 1–3. The grays were measured at 600 dpi: paper ≈ 197, stage-1 squares ≈ 150, stage-2 ≈ 106, stage-3 ≈ 53, i.e. about 0.27, 0.52 and 0.82 of full ink; the page uses those shades.
+- Plate 218 is a fourth stage alone from a different seed, printed full bleed with the square's top cut by the page edge (and empty in the book's instance); the page draws the whole square and says so.
+
+**Plates 220–223, Novikov–Stewart curds and percolation (pages 220–223).**
+- The plates are plane b = 5 curdling at **stage 4 on a 625 × 625 grid**: the finest cell pitch measures 9 px at 600 dpi in both axes, and each full-bleed plate window is about 487 × 461 cells, so each is a crop of the full square. The page draws the whole square.
+- **Rendering in the book:** every finest whey cell carries one small cross (merging into gray at coarse scales — eddies dead at earlier stages read as solid gray blocks); curd in a percolating contact cluster (touching both top and bottom) is left white; all other contact clusters are solid black. The page reproduces this, drawing the crosses once a cell is at least 7 px on screen.
+- **One stacking serves every N** (Plate 223's caption): each eddy's 25 subeddies are stacked in random order once and the top 25 − N are grayed away, so the five curds are nested. Implemented as M(cell) = max stack rank along the ancestry; curd at threshold N is M < N.
+- **Plate 220 is a splice** of two prints of the same seed: N = 24 in the lower-right corner, N = 22 elsewhere, divided by a diagonal seam measured at 600 dpi from 0.571 of the width (bottom edge) to 0.742 of the height from the bottom (right edge). The pale diagonal "line" in the scan is the splice seam, not a drawn stroke. The preset reproduces the splice at those fractions.
+- **The captions' percolation claims hold for this model at stage 4:** over 60 seeds none percolated at N ≤ 16, two at N = 18 ("a few seeds percolate already"), 51 at N = 19. The default seed (1982) matches the book's seed behaviour: percolation at N ≥ 19 only.
+- **The three largest printed dimensions are arithmetically wrong in the book.** The caption's own formula D = log N/log 5 gives 1.9746 (N = 24), 1.9203 (N = 22), 1.8295 (N = 19), but the book prints 1.9973, 1.9426, 1.8505; for N = 16 and 13 the printed 1.7227 and 1.5936 are exact. No alternative reading tried (canonical p, other r, other N) reproduces the printed three. The page shows computed values and notes the discrepancy.
+
+**Canonical curdling (pages 210–212, concept).**
+- Rows drawn in the style of Plate 80. Sub-pixel rows deposit true ink coverage per pixel column (the sub-pixel dust lesson). The extinction probability readout is the smallest root of q = (1 − p + pq)^b, by iteration; q = 1 exactly when ⟨N⟩ = pb ≤ 1, Bienaymé's alternative.
+
+## Part VIII, chapter 25
+
+**Plate 241, a sample random walk and its zeroset.**
+- The printed figures are Feller's (reproduced from Feller 1950, Wiley, in copyright), and Feller called them "atypical", selected over wilder-looking samples. The page simulates fresh 10,000-toss games from a seed instead: a statistical match, never a copy.
+- Measured from the scan at 600 dpi: the two lower panels plot a dot about every 20 tosses (median dot spacing ≈ 14 px at ≈ 0.65 px/toss), not the caption's "data at intervals of 200 tosses". The page plots every 20th toss and notes the discrepancy.
+- Panel arrangement as printed: tosses 0–550 one by one on top; then the whole record in two rows (0–6,000 and 6,000–10,000) with time compressed tenfold and heights by √10, the walk's self-affine ratio. The penny scale is auto-fitted to the sample.
+- Zero-gap law checked: Pr(U > u) across 200 games of 10,000 tosses fits slope −0.57 over u in [4, 512] against the asymptotic −1/2 (finite-size steepening); shown as a live readout.
+
+**Pages 233–234, the Brown trail as a randomized Peano curve.**
+- The book's example midpoint rule, "the parity of k", works out as the parity of i + k (i the side's index along the curve, k the stage): that choice reproduces the Pólya sweep vertex for vertex (checked against `genFromCodes` with codes [1, 3] through stage 10). The parity of k alone folds the teragon onto itself degenerately.
+- All four rules on the page keep E|ΔM|² = Δt/4 (transversal h = √Δt/2; isotropic Gaussian per-coordinate sd √(Δt/8)), so the Pythagorean identity holds exactly for the transversal rules and in the mean for the Gaussian one; the page shows the measured ratio.
+- The book draws no figure for this construction; the page's figure follows its recipe and says so.
+
+**Plates 242–243, Brown hulls and islands.**
+- The walk is the book's own downsized lattice walk: (X+Y)/√2 and (X−Y)/√2 each move ±1 per step, so P(t) steps to a 4-neighbour. The loop of Plate 243 deals each diagonal coordinate an equal number of +1 and −1 steps, shuffled — a uniformly random closed walk, back at its start.
+- Hull, gaps and boundary are classified on the raster by flood-filling the exterior from the border (4-connectivity): Plate 242 is the hull silhouette (trail plus gaps, solid black); Plate 243 is the loop as a net, trail black and gap tremas gray. The raster is sized to the walk's bounding box; the book drew 200,000 steps on (1,200)².
+- Checked numerically at 200,000 steps: the boundary's box dimension comes out 1.26–1.32 against the conjectured 4/3 (proved by Lawler, Schramm & Werner 2001 — noted on the page), and the caption's G-length vs G-area test gives slope ≈ 0.68 against D/2 = 2/3. Both run live per sample as readouts.
+
+## Part IX, chapter 27
+
+**Plate 255, fractional Brown trails.**
+- A random plate: the book's trails came from Mandelbrot & Wallis's 1969 program and an unrecorded seed, so the page matches the plate statistically, never stroke for stroke.
+- The noise is exact fractional Gaussian noise by circulant embedding (Davies & Harte 1987), not the periodic fast-Fourier shortcut the chapter criticizes on page 251. The increments' covariance is exact at every lag; the delta variance was checked against |Δt|^2H at lags 1–64 (within 2% at H = 0.9, 0.7, 0.5).
+- As in the plate, one Gaussian draw is reused across every H, so the two panels (H = 0.9 and 0.7) share a seed and the trail deforms coherently as H moves. The default seed (2) was picked from twelve candidates for its resemblance to the printed pair; the book's step count is unknown, and the page draws 4,096 steps.
+- **Hurst's R/S** is fitted over spans d ≥ 64, but near H = 1 the measured slope still sits low: on exact fGn with true H = 0.9 at 8,192 samples the estimator reads 0.844 ± 0.043 (20 runs; 0.682 ± 0.041 at H = 0.7, 0.530 ± 0.027 at H = 0.5). That is a bias of R/S, said on the page, not an error in the noise.
+- **The spectrum** (log-binned periodogram of the increments) matches the theory β = 2H − 1 closely: measured β ≈ 0.79 against 0.80 at H = 0.9.
+
 ## Part IX, chapter 28
 
 All six plate groups are random (`random`/`render`), so they are matched statistically, never pixel for pixel; every figure is a fresh simulation with its seed on display (default 1975). Fractional Brown surfaces are synthesized spectrally — white complex Gaussian noise filtered to density k^-(2H+2), inverse FFT over a 256-period, central crop — which is the book's own shortcut for Plates 264 to 267 ("a periodic function computed by fast Fourier methods, then cropped"). The book made Plates 268, 270 and 271 by a Poisson (fault) approximation instead; the pages say so and match statistics only. Surface D = 3 - H, coastline and vertical-section D = 2 - H throughout.
@@ -163,6 +228,20 @@ All six plate groups are random (`random`/`render`), so they are matched statist
 
 - Plates 264-265: can the two middle landscapes' D be pinned from the print (e.g., by variogram of the skyline)? The page interpolates.
 - Plate 270: the growing land share down the page suggests the originals did not renormalise variance per D, or chose sea levels per panel; worth a look if the original programs ever surface.
+
+## Part IX, chapter 29
+
+**Chapter 29, "The areas of islands, lakes, and cups" (pages 272–276): no plates.**
+- Checked against the scan page by page: all five pages are running text, with no figure, plate or caption box. The tracker's plate inventory for part IX (which ends at page 271) is correct.
+- The chapter's concepts went on the "Concepts without a plate" list: Korčak's law for island areas (Pr(A > a) = F·a⁻ᴮ, with 2B = D extended from Koch coastlines to Brown zerosets), the asymmetry between islands, deadvalleys and lakes, cups and the Devil's terraces (the filled relief B\*ₕ, whose vertical cut is a Lévy devil's staircase — the book points to Plates 286–287 in chapter 31), rivers and watersheds losing their symmetry once altitude exists, and the eroded Brown model B\*ₕ with dimension between 2 and 3 − H.
+- If a page is ever built for these ideas, the natural home is with chapter 31's Lévy staircases (Plates 286–287): the one-dimensional cup construction — fill every dip of a Brown line-to-line function to its brim — is exactly the staircase those plates draw.
+
+## Part XII, chapter 40 (Biographical sketches)
+
+- **A text chapter.** Pages 391–404 print no plates. The only artwork is Jean Effel's drawing on page 404 (dated January 30, 1964, reproduced in the book by his permission), kind `art`: described on the page, not reproduced.
+- **The page's one figure is a timeline of the six sketched lives,** computed only from dates and ages printed in the chapter, with a calendar/age-aligned toggle. Dates the chapter gives directly: Bachelier 1870–1946, thesis defended March 19, 1900, the flawed construction 1913, English translation "sixty years later"; Fournier d'Albe 1868–1933, *Two New Worlds* 1907; Hurst 1880–1978, to Egypt 1906; Lévy 1886–1971, Fournier-universe rediscovery 1904; Richardson 1881–1953, *Weather Prediction* 1922, the wind-velocity paper 1926, the coastline paper 1961 (posthumous); Zipf 1902–1950, *Human Behavior* 1949. Years computed from an age the chapter gives are marked ≈ on the page: Bachelier's Dijon candidacy (Lévy's letter says "1928, give or take a year"), Hurst's papers at 71 and 75, Lévy's turn to probability near 40, his books at 50 and 60, his Académie seat when nearly 80, Richardson's doctorate at 47.
+- **The whorls verse is quoted in full** (five lines, Richardson 1922, long out of copyright). The chapter stresses it parodies Swift, not De Morgan's little-fleas-have-greater-fleas variant, because Richardson believed only in a direct energy cascade; the page keeps that distinction.
+- **Bachelier's error** is paraphrased, not transcribed: the OCR of Lévy's letter garbles the exponent (v = cτ to some negative power as the step τ shrinks), so the page says only that the zigzag's speed was held constant where it must grow as the steps shorten.
 
 ## Open questions
 
