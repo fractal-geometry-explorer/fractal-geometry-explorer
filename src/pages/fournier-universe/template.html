@@ -1,0 +1,171 @@
+<title>Fournier Universes</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.mini svg.gen { height: 72px; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 9, "Fractal View of Galaxy Clusters" · pages 84–96</p>
+    <h1><span class="plate-no">Plates 95–96</span><span class="lozenge" aria-hidden="true"></span><span>Fournier Universes</span></h1>
+    <p class="dek">Galaxies gather into clusters, the clusters into superclusters, and no survey has found the scale where it stops. Mandelbrot reads the evidence as a fractal dust: the mass within distance R of us grows as M(R) ∝ R<sup>D</sup> with D well below 3, so the universe has no global density. The first fully described model is E. E. Fournier d'Albe's 1907 multiuniverse — worlds within worlds within worlds — which these two plates draw. Every figure is computed from the rules in the captions.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#p95"><b>95</b> Fournier's multiuniverse</a>
+    <a href="#p96"><b>96</b> A flat universe with D = 1</a>
+    <a href="#mass"><b>M(R)</b> Mass and the dark sky</a>
+  </nav>
+
+  <!-- ===================== PLATE 95: FOURNIER'S MULTIUNIVERSE ===================== -->
+  <section class="plate" id="p95">
+    <div class="plate-head">
+      <p class="no">Plate 95 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Projection of Fournier's multiuniverse</h2>
+      <p class="dim" id="dimA">N = 7, 1/r = 7 · in space D = log 7/log 7 = 1 · on the page N = 5, D = log 5/log 7 ≈ 0.8270</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wA">
+          <canvas id="cA" role="img" aria-label="Fournier's multiuniverse: a quincunx of quincunxes of quincunxes of dots"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cAt">As printed</strong> · <span id="cAn">order 3 · 125 dots</span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Fournier's construction starts with a centered regular octahedron: four balls at the corners of a square whose diagonal is 12 units, one ball at the centre, and two more above and below the page at the same distance of 6. Each ball of radius 1 is a <i>stellar aggregate of order 0</i>. The smallest sphere holding all seven — radius 7 — is an aggregate of order 1; seven copies of it, placed the same way, make an aggregate of order 2, and so on without end. Each order multiplies the number of balls and the radius by the same 7, so the mass within radius R grows as M(R) ∝ R: dimension 1. The plate shows the order-3 aggregate to exact scale — at once its projection and its equatorial section, since the two polar balls of every aggregate hide exactly behind its centre dot.</p>
+        <div class="mini" aria-label="An aggregate of order 1, seen flat">
+          <svg class="gen" viewBox="-1.15 -1.15 2.3 2.3" aria-hidden="true" id="miniA"></svg>
+          <div class="fx" id="miniAfx">N = 7, 1/r = 7<br>5 dots on the page</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mA" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Order</span><span class="value" id="sAv">order 3</span></div>
+          <div class="steps" id="sA" role="group" aria-label="Order of the aggregate"></div>
+        </div>
+        <div class="group">
+          <div class="slider">
+            <div class="label-row"><span class="label">World ratio 1/r</span><span class="value" id="rAv">7</span></div>
+            <input type="range" id="rAs" min="3.1" max="12" step="0.01" value="7" aria-label="World ratio">
+          </div>
+          <label class="check" for="endA" id="endAwrap"><input type="checkbox" id="endA"> Interpolate without end: zooming in splits every ball into the aggregate of the next order down (orders −1, −2, …)</label>
+          <div class="slider" id="turnAwrap" hidden>
+            <div class="label-row"><span class="label">Turn</span><span class="value" id="turnAv">0°</span></div>
+            <input type="range" id="turnAs" min="-180" max="180" step="1" value="0" aria-label="Turn about the polar axis">
+          </div>
+          <div class="slider" id="tiltAwrap" hidden>
+            <div class="label-row"><span class="label">Tilt</span><span class="value" id="tiltAv">0°</span></div>
+            <input type="range" id="tiltAs" min="0" max="90" step="1" value="0" aria-label="Tilt toward a side view">
+          </div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate95">Show Plate 95 as printed</button>
+        </div>
+        <p class="readline" id="infoA" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Balls in space</dt><dd id="rAa">343</dd></div>
+          <div><dt>Dots on the page</dt><dd id="rAb">125</dd></div>
+          <div><dt>D in space</dt><dd id="rAc">1</dd></div>
+          <div><dt>D on the page</dt><dd id="rAd">0.8270</dd></div>
+        </dl>
+        <p class="note">Checked against the scan at 600 dpi: the plate's 125 dots sit on this exact three-level pattern — the fitted ratio between levels is 7.000, and the dots themselves are the order-0 balls drawn to scale, as the caption's "represents to scale" claims. The dots scatter about their exact positions by about 0.2 mm, which looks like hand drafting; this page draws exact positions. The text leaves the square's turn open, and the plate prints its corners on the diagonals, as here. The balls stop overlapping once 1/r &gt; 3, and the book notes D in space can then take any value up to log 7/log 3 ≈ 1.7712 — try the ratio slider.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 96: A FLAT FOURNIER UNIVERSE ===================== -->
+  <section class="plate" id="p96">
+    <div class="plate-head">
+      <p class="no">Plate 96 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>A flat Fournier universe with D = 1</h2>
+      <p class="dim" id="dimB">N = 5, 1/r = 5 · D = log 5/log 5 = 1 · carried one order further than Plate 95</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wB">
+          <canvas id="cB" role="img" aria-label="A flat Fournier universe: four orders of quincunxes with ratio 5"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cBt">As printed</strong> · <span id="cBn">order 4 · 625 dots</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Plate 95, "being drawn to exact scale, is not only hard to print and to see, but potentially misleading": the picture is not a universe of dimension 1 but its planar projection, of dimension log 5/log 7 ≈ 0.8270 &lt; 1. Projecting flattens the polar balls into the centre dots, and the five that remain shrink by 7 while multiplying only by 5. To leave no wrong impression, the book re-runs the construction directly in the plane with 1/r = 5: now the five dots multiply exactly as fast as they shrink, and D = log 5/log 5 = 1. Because the pattern shrinks more slowly, it can be "carried one step further than is possible in Plate 95": four orders, 625 dots.</p>
+        <div class="mini" aria-label="An aggregate of order 1 with ratio 5">
+          <svg class="gen" viewBox="-1.15 -1.15 2.3 2.3" aria-hidden="true" id="miniB"></svg>
+          <div class="fx" id="miniBfx">N = 5, 1/r = 5<br>D = 1</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Order</span><span class="value" id="sBv">order 4</span></div>
+          <div class="steps" id="sB" role="group" aria-label="Order of the aggregate"></div>
+        </div>
+        <div class="group">
+          <div class="slider">
+            <div class="label-row"><span class="label">World ratio 1/r</span><span class="value" id="rBv">5</span></div>
+            <input type="range" id="rBs" min="3.1" max="12" step="0.01" value="5" aria-label="World ratio">
+          </div>
+          <label class="check" for="endB"><input type="checkbox" id="endB"> Interpolate without end as you zoom</label>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate96">Show Plate 96 as printed</button>
+        </div>
+        <p class="readline" id="infoB" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Dots</dt><dd id="rBa">625</dd></div>
+          <div><dt>Dimension</dt><dd id="rBb">1</dd></div>
+          <div><dt>Radius</dt><dd id="rBc">5⁴ = 625</dd></div>
+          <div><dt>Mass within R</dt><dd id="rBd">∝ R<sup>1</sup></dd></div>
+        </dl>
+        <p class="note">Checked against the scan: all 625 dots match this exact four-level pattern (fitted ratio 4.98, consistent with 5 given the ~0.5 mm placement scatter of the drafting; this page draws exact positions). The scan also shows four stray specks that belong to the printing, not the pattern. The smallest printed dots come out a touch larger than order-0 balls drawn to scale would be.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CONCEPT: MASS, DENSITY AND THE DARK SKY ===================== -->
+  <section class="plate" id="mass">
+    <div class="plate-head">
+      <p class="no">Chapter 9, pages 85–93 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Mass, density and the dark night sky</h2>
+      <p class="dim">M(R) ∝ R<sup>D</sup> · approximate density M(R)/(4/3)πR³ ∝ R<sup>D−3</sup> → 0 · D &lt; 2 keeps the night sky dark</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wC">
+          <canvas id="cC" role="img" aria-label="Mass within radius R of the central ball, on logarithmic axes"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cCt">Mass within R</strong> · <span id="cCn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Centre a sphere of radius R on Earth, weigh the mass M(R) inside, and let R grow. If the universe had a global density, M(R)/R³ would settle to it; de Vaucouleurs observed instead that the estimated density keeps falling, like R<sup>D−3</sup> with D ≈ 1.23 — the signature of a fractal dust. Fournier argued D must be exactly 1: if M(R) ∝ R, the gravitational potential GM/R at the edge of every world ball is the same, so nowhere do stars fall in at anything near the speed of light — and indeed no star moves faster than c/300. Hoyle's 1953 theory of galaxy formation, a cascade of gas clouds collapsing and splitting into five at each stage, reaches D = 1 from the Jeans criterion by a different road.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mC" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group" id="genCwrap">
+          <div class="label-row"><span class="label">Universe</span></div>
+          <div class="steps words" id="gC" role="group" aria-label="Which universe"></div>
+        </div>
+        <p class="readline" id="infoC" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Slope D</dt><dd id="rCa">1</dd></div>
+          <div><dt>Density trend</dt><dd id="rCb">R⁻²</dd></div>
+          <div><dt>Sky covered (this universe)</dt><dd id="rCc">—</dd></div>
+          <div><dt>Sky covered (uniform)</dt><dd id="rCd">—</dd></div>
+        </dl>
+        <p class="note" id="noteC">The staircase is counted from the model itself: distances from the central ball to every other ball, out to the order the chart shows. It climbs along M = R and, between aggregate radii, sags down to M = R/7 — exactly the band the chapter describes ("for intermediate values of R, M(R) is smaller, reaching down to R/7"). The sky view backs the caption of Plate 95: a universe of dimension D &lt; 2 projects onto a set of directions of zero area, so "in some directions the sky would appear quite black, although there is an infinite succession of universes" — the Blazing Sky Effect (often miscredited to Olbers) is exorcised geometrically, with no need to deny the clustering.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 9, pages 84–96 (Plates 95 and 96). Every figure is computed from the rules in the captions; ratios and scales were verified against the scans, as noted under each figure. Companion page: <a href="cantor-dust.html">Cantor Dust</a> (Plates 80–83) — the Fournier universe is its construction "imbedded in space instead of the line".</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>
