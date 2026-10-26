@@ -1,0 +1,229 @@
+<title>Historical Sketches</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.prose { display: grid; gap: 14px; max-width: 72ch; }
+.prose p { margin: 0; font-family: var(--f-body); font-size: 17px; line-height: 1.55; }
+.prose p q { font-style: italic; }
+.prose .aside { font-size: 14.5px; color: var(--muted); }
+.timeline { margin: 0; padding: 0; list-style: none; display: grid; gap: 7px; }
+.timeline li { display: grid; grid-template-columns: 86px minmax(0, 1fr); gap: 10px; align-items: baseline; font-size: 13.5px; line-height: 1.4; }
+.timeline b { font-family: var(--f-mono); font-weight: 500; color: var(--accent); font-size: 12.5px; }
+.timeline span i { font-family: var(--f-body); }
+.r-wide { aspect-ratio: 8 / 5; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 41, "Historical sketches" · pages 405–421</p>
+    <h1><span class="plate-no">Chapter 41</span><span class="lozenge" aria-hidden="true"></span><span>Historical Sketches</span></h1>
+    <p class="dek">The book closes with stories: how the ideas behind fractals kept surfacing for centuries before anyone could use them. Leibniz asking what a fractional derivative would be, Henry Smith building "Cantor" dusts before Cantor, Poincaré meeting a dust in celestial mechanics, and decades of measurements that decayed by power laws while everyone waited for an exponential. This chapter prints no plates; the figures below are this site's own illustrations of three of its stories.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#chimeras"><b>405</b> Chimeras</a>
+    <a href="#brown"><b>408</b> Brown and Einstein</a>
+    <a href="#dimension"><b>409</b> Dimension</a>
+    <a href="#poincare"><b>413</b> Poincaré</a>
+    <a href="#scaling"><b>417</b> Old evidence of scaling</a>
+    <a href="#weierstrass"><b>420</b> Weierstrass</a>
+  </nav>
+
+  <!-- ===================== CHIMERAS ===================== -->
+  <section class="plate" id="chimeras">
+    <div class="plate-head">
+      <p class="no">Pages 405–408 and 412–413 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Chimeras, the chain of being, and "Natura non facit saltus"</h2>
+      <p class="dim">Aristotle's in-between animals · Leibniz's fractional differentials, 1695 · Kant's worlds within worlds, 1755</p>
+    </div>
+    <div class="prose">
+      <p>Gauss said that a finished building should show no trace of its scaffolding, and mathematicians often quote him as licence to ignore their field's history. Mandelbrot takes the other side, and ends the book with stories gathered, as he puts it, in library forays prompted by a passion for Leibniz and Poincaré.</p>
+      <p>The oldest thread is the "principle of continuity", or plenitude. Aristotle held that the gap between any two living species can be bridged by other species, and was fascinated by in-between animals — chimeras, in the mythological sense. Leibniz believed in the principle deeply, and it sat close to the core of his mathematics. Writing to de l'Hospital in 1695, days after inventing his notation for the k-th derivative, he asked what a derivative of fractional order would be, answered himself with an infinite series, and added that <q>one day these paradoxes will yield useful consequences, since there is hardly a paradox without utility</q>. Fractional integro-differentiation returns in earnest in chapter 27, at the heart of fractional Brownian motion.</p>
+      <p>Mandelbrot reads the monster sets of Cantor, Peano and Koch as mathematical chimeras in exactly this tradition — in-between shapes, with the Hausdorff dimension as the scale that orders them. The Cantor dust even defuses an ancient paradox: it is divisible without end, yet nowhere continuous. And the practical scientists of chapters 10 and 35, stuck between "peas, spaghetti, or lettuce" when describing turbulence, or between streams and isolated points when describing galaxy clustering, were calling for in-between shapes without knowing the pedigree of the wish.</p>
+      <p>Kant belongs in the same story. His 1755 description of the heavens — nebulae as Milky Ways, which combine into higher systems, and those into higher ones still, <q>no end but an abyss... without bound</q> — is a full hierarchical universe, a century and a half before Charlier, the astronomer who usually gets the credit (see Plate 95's chapter).</p>
+      <p>The principle's best-known wording, <i>Natura non facit saltus</i> — nature makes no jumps — has its own sketch. It is usually credited to Linné, who was in fact translating Leibniz in passing. But Mandelbrot traced the exact Latin to 1613, well before Leibniz: a fifteen-page pamphlet on the "giant Theutobocus", bones dug up near Grenoble and shown to Louis XIII. The bones were a mastodon's, the pamphlet a pseudonymous prospectus for a circus attraction, and the phrase most likely a stock saying of the time — so the question of its origin, he concludes, is not yet closed.</p>
+    </div>
+  </section>
+
+  <!-- ===================== BROWN AND EINSTEIN ===================== -->
+  <section class="plate" id="brown">
+    <div class="plate-head">
+      <p class="no">Pages 408–409 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Brownian motion, Einstein, and Henry Smith's dusts</h2>
+      <p class="dim">Brown, 1828 · Einstein, 1905 · Smith, 1875 · Volterra, 1881</p>
+    </div>
+    <div class="prose">
+      <p>Two stories about credit. The first is Brownian motion, which a biologist discovered before 1800 and another biologist, Robert Brown, showed in 1828 to be physical rather than biological in nature — the vital step, which is why Mandelbrot thinks the adjective "Brownian" is not undeserved. The phenomenon then sat so far from fame that Brown's biography in the 1878 Britannica does not mention it.</p>
+      <p>The surprise is that Einstein did not set out to explain those observations. His 1905 paper opens by predicting, from the molecular-kinetic theory of heat, that suspended particles must perform visible movements — and adds that these might be identical with the so-called Brownian molecular motion, but that the information available to him was too imprecise to form a judgment. Only afterwards, he wrote in 1906, did physicists tell him the motions matched; and in a 1948 letter to Besso he recalled having deduced it from mechanics <q>without knowing that anyone had already observed anything of the kind</q>. The theory came first; the century-old observations caught up with it. Perrin's experiments (his drawings are Plate 13) completed the story by 1909.</p>
+      <p>The second story starts from a wit's remark that crediting Brownian motion to Brown violates a law of eponymy, fame being incompatible with so plain a name. The same law may explain the "Cantor" dust. Henry Smith, Savilian professor of geometry at Oxford, showed in 1875 that Riemann's theory of integration fails on certain sets of points — and the counterexamples he built were the Cantor dust of chapter 8 and the positive-measure dust of chapter 15, years before Cantor's 1883 paper. Volterra reconstructed the second in 1881. Neither did much with his example, Mandelbrot notes, but then neither did Cantor; yet Smith is never mentioned as a claimant.</p>
+    </div>
+  </section>
+
+  <!-- ===================== DIMENSION ===================== -->
+  <section class="plate" id="dimension">
+    <div class="plate-head">
+      <p class="no">Pages 409–412 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Dimension, from Euclid to Menger</h2>
+      <p class="dim">topological dimension by cuts and coverings · for the plane, fine coverings force points in 3 sets, never need 4</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-wide" id="wBr">
+          <canvas id="cBr" role="img" aria-label="A brick paving of the plane, where no point touches more than three bricks"></canvas>
+        </div>
+        <figcaption><strong>Lebesgue's bricks</strong> · tap the paving to count the bricks a point touches</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Lebesgue observed in 1911 that a square can be covered by arbitrarily small "bricks" so that no point lies in more than three of them — lay the courses like a bricklayer, so no four corners meet — and conjectured that three cannot be avoided: in any sufficiently fine covering, some point must touch at least three bricks. Brouwer proved it in 1913. The count is E + 1 in E dimensions, so the humble brick wall carries a topologically invariant definition of dimension.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Lay the bricks</span></div>
+          <div class="steps words" id="mBr" role="group" aria-label="How the bricks are laid"></div>
+        </div>
+        <div class="group slider">
+          <div class="label-row"><span class="label">Brick size</span><span class="value" id="szBrv">1/8 of the height</span></div>
+          <input type="range" id="szBr" min="4" max="14" step="1" value="8" aria-label="Bricks per column">
+        </div>
+        <p class="readline" id="infoBr" aria-live="polite">Tap anywhere. Near an edge or a corner, the probe snaps to it.</p>
+        <dl class="read">
+          <div><dt>Worst point touches</dt><dd id="rBrA">3 bricks</dd></div>
+          <div><dt>So the plane's dimension</dt><dd>3 − 1 = 2</dd></div>
+        </dl>
+        <p class="note">The chapter quotes this story from Hurewicz &amp; Wallman's 1941 monograph. The book prints no figure; the running-bond paving drawn here is our choice of the standard one. Offset courses meet at most 3 to a point; aligned courses waste the bound, meeting 4 at every corner.</p>
+      </div>
+    </div>
+    <div class="prose">
+      <p>The figure sits at the end of a long road. Dimension underlies the opening definitions of Euclid's <i>Elements</i> — a point has no part, a line is breadthless length, the extremities of a surface are lines — and Plato has Socrates told that after plane surfaces comes <q>the dimension of cubes and of everything that has depth</q>. Then the concept slept. Riemann remarked in his 1854 dissertation that it had never been studied. And when Cantor mapped the line one-to-one onto the plane, and Peano mapped an interval continuously onto a square, the two celebrated monsters together exploded the vague idea that dimension is "the number of parameters": the first showed one-to-one maps can change it, the second that continuous maps can raise it.</p>
+      <p>The reaction was not curiosity but revulsion. Hermite, in an 1883 letter: <q>to read Cantor's writings seems a veritable torture... and no one among us is tempted to follow</q>. Poincaré answered more constructively, in 1903 and 1912, by defining dimension inductively through cuts: a continuum that finite sets of points suffice to divide has dimension one; one that cuts of dimension one suffice to divide has dimension two; and so on. Brouwer made the idea precise and topologically invariant in 1913, Menger and Urysohn recreated and improved it in 1922, and Lebesgue's bricks gave an independent covering route to the same integer.</p>
+      <p class="aside">The book is careful to add that these definitions measure something different from fractal dimension: an island's coastline is topologically of dimension 1 however wiggly it is, while its fractal dimension runs above 1. Fractional dimension itself arrived "near fully armed" with Hausdorff in 1919 — with one strange footnote: Bertrand Russell, in 1897, cites one Delboeuf as speaking of geometries with m/n dimensions, and Mandelbrot's search through Delboeuf's works found no further trace of it. He closes the entry with a word of thanks to Georges Bouligand, whose Cantor–Minkowski–Bouligand dimension (the box dimension used across this site) is less satisfactory than Hausdorff's but initiated him, as a student, to modern mathematics.</p>
+      <ol class="timeline" aria-label="A short timeline of dimension">
+        <li><b>~300 BC</b><span>Euclid's definitions: point, breadthless length, surface, solid.</span></li>
+        <li><b>1854</b><span>Riemann notes that dimension has never been studied.</span></li>
+        <li><b>1877–1890</b><span>Cantor's line-to-plane map, then Peano's square-filling curve, break the parameter-count idea.</span></li>
+        <li><b>1903–1912</b><span>Poincaré defines dimension inductively, by what it takes to cut a continuum.</span></li>
+        <li><b>1911</b><span>Lebesgue's bricks; Brouwer proves E-space differs topologically from E₀-space.</span></li>
+        <li><b>1913</b><span>Brouwer's precise, invariant integer dimension.</span></li>
+        <li><b>1919</b><span>Hausdorff's fractional dimension, the <i>D</i> of this book.</span></li>
+        <li><b>1922</b><span>Menger and Urysohn, independently, rebuild and refine the topological theory.</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ===================== POINCARE ===================== -->
+  <section class="plate" id="poincare">
+    <div class="plate-head">
+      <p class="no">Pages 413–416 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Poincaré and fractal attractors</h2>
+      <p class="dim">New Methods in Celestial Mechanics, 1892 · the first student of "strange" attractors</p>
+    </div>
+    <div class="prose">
+      <p>This entry, Mandelbrot says, is the one that changed his own work: texts by Poincaré that reached him while the 1977 <i>Fractals</i> was in proof led to the research of chapters 18 to 20. His verdict is split. Yes, Poincaré was the first student of fractal ("strange") attractors; no, nothing in his work makes him a precursor of the fractal geometry of visible Nature.</p>
+      <p>The famous passage is in the <i>New Methods in Celestial Mechanics</i> of 1892. Following the two curves attached to a doubly asymptotic solution of the three-body problem, Poincaré sees that <q>their intersection points form a sort of infinitely tight grid</q>, each curve folding on itself without ever crossing itself, and declines to draw it: <q>the complexity of this shape... I do not even attempt to illustrate</q>. He then lists the possible forms of such a set, the last being that it has vanishing area — the analog, he writes, of a Cantor dust. The monsters could enter abstract mathematical physics, when need arose, even for Cantor's fiercest critic.</p>
+      <p>And earlier still, within a year of Cantor's 1883 paper, Cantor-like dusts had appeared in orthodox mathematics: Hadamard's eulogy recalls that Poincaré showed the singularities of automorphic functions form either a whole circle or a Cantor dust — before Bendixson and Cantor himself found such sets. Painlevé insisted on the same relation between function theory and the dusts. Denjoy answered a question of Poincaré's in 1932 by showing a solution of a differential equation on the torus can cut a meridian in exactly a prescribed Cantor dust, and wrote that the dust <q>seems to correspond to a very deep reality</q>. These remarks found no echo in their time; they sat in eulogies, waiting.</p>
+      <p class="aside">A technical tidbit closes the entry. Poincaré asked in 1890 for the probability distributions whose maximum-likelihood estimate of a parameter is a sample average — and found what is now called the Gibbs canonical distribution, rediscovered by Szilard in 1925 and, through the sufficiency property named by Koopman, Pitman and Darmois around 1935, the base of the Szilard–Mandelbrot presentation of statistical thermodynamics.</p>
+    </div>
+  </section>
+
+  <!-- ===================== SCALING: OLD EVIDENCE ===================== -->
+  <section class="plate" id="scaling">
+    <div class="plate-head">
+      <p class="no">Pages 417–420 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Scaling: the oldest evidence, and the durable panaceas</h2>
+      <p class="dim">decay ∝ t<sup>−γ</sup> · Weber's silk threads, 1835 · Leyden jars, 1854 · von Schweidler's 200-day watch, 1907</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-wide" id="wDe">
+          <canvas id="cDe" role="img" aria-label="Hyperbolic decay against exponential decay, on doubly logarithmic axes"></canvas>
+        </div>
+        <figcaption><strong>Hyperbolic decay</strong> · log–log axes, one second to one year · <span id="cDes">the shaded band is von Schweidler's measured range</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">On these doubly logarithmic axes a scaling decay t<sup>−γ</sup> is a straight line, while an exponential hugs 1 and then plunges at its relaxation time τ — whatever τ is, it cannot stay near a power law for long. Hopkinson's 1878 panacea answered: glass is a mixture of silicates, so let the decay be a mixture of a few exponentials. The dashed curve shows the best such mixture; watch how many exponentials it takes to counterfeit a straight line across seven decades, and how it sags between its relaxation times and dives after the last one.</p>
+        <div class="group slider">
+          <div class="label-row"><span class="label">Exponent γ</span><span class="value" id="gDev">γ = 0.30</span></div>
+          <input type="range" id="gDe" min="10" max="100" step="1" value="30" aria-label="Exponent gamma">
+        </div>
+        <div class="group">
+          <label class="check" for="expDe"><input type="checkbox" id="expDe" checked> One exponential, exp(−t/τ)</label>
+          <div class="slider" id="tauWrap">
+            <div class="label-row"><span class="label">Its relaxation time τ</span><span class="value" id="tDev">τ = 10³ s</span></div>
+            <input type="range" id="tDe" min="10" max="65" step="1" value="30" aria-label="Relaxation time, log scale">
+          </div>
+        </div>
+        <div class="group">
+          <label class="check" for="mixDe"><input type="checkbox" id="mixDe" checked> Hopkinson's panacea: a mixture of exponentials</label>
+          <div class="slider" id="mixWrap">
+            <div class="label-row"><span class="label">Exponentials in the mixture</span><span class="value" id="kDev">k = 3</span></div>
+            <input type="range" id="kDe" min="2" max="24" step="1" value="3" aria-label="Number of exponentials">
+          </div>
+        </div>
+        <dl class="read">
+          <div><dt>Mixture's worst error</dt><dd id="rDeA">—</dd></div>
+          <div><dt>Over the measured band</dt><dd>10² s → 1.6 × 10⁷ s</dd></div>
+        </dl>
+        <p class="note">An illustration, not a data plot: the chapter reports the experiments but prints no figure, and no 1907 data is traced here. Von Schweidler measured a Leyden jar's discharge at 100-second intervals, then less often, for 16 million seconds — 200 days, through summer and winter — and the hyperbolic decay continued on the dot. With infinitely many exponentials weighted as in Euler's gamma integral the mixture is exact — which is the "distributed relaxation times" panacea, and is circular: t<sup>−γ</sup> is simply rewritten as itself.</p>
+      </div>
+    </div>
+    <div class="prose">
+      <p>The earliest observation now readable as scaling is from around 1835: on Gauss's urging, Wilhelm Weber studied the silk threads that suspended moving coils in instruments, and found that after a load is removed the thread's slow return follows t<sup>−γ</sup> — hyperbolic in time, not exponential, as everyone expected then and, Mandelbrot adds, expects to this day. Kohlrausch found the same law in 1847, and again in 1854 for the discharge of Leyden jars; Jacques Curie's thesis found dielectrics of both kinds; Kelvin, Maxwell and Boltzmann all touched the problem. A show of interest by names of that order, the chapter observes, is evidently not enough to make a problem worth studying: it fell into extreme obscurity instead.</p>
+      <p>Each generation then rediscovers the same dead ends. Mixtures of a few exponentials fail as soon as data cover several decades; mixtures of infinitely many succeed trivially and explain nothing; and the hope that scaling is a transient that will be cut off exponentially "if only we watch longer" ran into von Schweidler's 200 days, and into 1/f noises that held through every longer vigil — while, as with the galaxies of chapter 9, the search for the cutoff distracts from describing the scaling range itself.</p>
+      <p class="aside">Theory kept pace with the measurements, quietly. Leibniz, tightening Euclid's axioms, defined the straight line by self-similarity: <q>a curve, any part of which is similar to the whole, and it alone has this property, not only among curves but among sets</q> — a claim, the book notes, that can be proved today. Delboeuf reinvented the thought in 1860; Maxims 64 and 69 of the <i>Monadology</i> hold that minute portions of the world are precisely as complex and organized as large ones; and Laplace remarked in 1842 that under Newtonian attraction <q>the universe reduced to the smallest imaginable space would always present the same appearance to observers</q> — the laws of nature only permit us to observe relative dimensions.</p>
+    </div>
+  </section>
+
+  <!-- ===================== WEIERSTRASS ===================== -->
+  <section class="plate" id="weierstrass">
+    <div class="plate-head">
+      <p class="no">Pages 420–421 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Weierstrass functions: continuous, nowhere differentiable</h2>
+      <p class="dim">W(t) = Σ b<sup>−nH</sup> cos(2π bⁿt) · graph's box dimension D = 2 − H · read at the Berlin Academy, 1872 · never published by its author</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-wide zoomable" id="wW">
+          <canvas id="cW" role="img" aria-label="The Weierstrass function"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cWt">Weierstrass function</strong> · <span id="cWn">drag to pan, pinch or Ctrl/⌘ + scroll to zoom</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">A sum of cosines, each b times faster and b<sup>H</sup> times smaller than the last. The sum converges everywhere, so the graph is an unbroken curve; yet the wiggles never die away under magnification, and the curve has a tangent nowhere (Hardy proved it for every H ≤ 1; H = 1 is Cellérier's limit case, with D = 1). Zooming t by b and height by b<sup>H</sup> returns the graph to itself, up to a smooth remainder — the self-affinity that gives the graph its box dimension D = 2 − H.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Function</span></div>
+          <div class="steps words" id="mW" role="group" aria-label="Which function"></div>
+        </div>
+        <div class="group slider" id="hWrap">
+          <div class="label-row"><span class="label">Exponent H</span><span class="value" id="hWv">H = 0.50 · D = 1.50</span></div>
+          <input type="range" id="hW" min="20" max="100" step="1" value="50" aria-label="Exponent H">
+        </div>
+        <div class="group slider" id="bWrap">
+          <div class="label-row"><span class="label">Frequency ratio b</span><span class="value" id="bWv">b = 3.0</span></div>
+          <input type="range" id="bW" min="15" max="60" step="1" value="30" aria-label="Frequency ratio b">
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn" data-d="1.2">D = 1.2</button>
+          <button type="button" class="btn" data-d="1.5">D = 1.5</button>
+          <button type="button" class="btn" data-d="1.8">D = 1.8</button>
+          <button type="button" class="btn primary" id="gerverW">Riemann's graph at Gerver's point</button>
+        </div>
+        <dl class="read">
+          <div><dt>Dimension of the graph</dt><dd id="rWa">D = 1.5</dd></div>
+          <div><dt>Terms drawn</dt><dd id="rWb">—</dd></div>
+        </dl>
+        <p class="note" id="noteW">The story's cast: Riemann is said to have told his students around 1861 that Σ n<sup>−2</sup> sin(n²t) is continuous and nondifferentiable — no proof survives, and none could be complete: Gerver proved in 1970 that it has a finite derivative, −1/2, at points t = πp/q with p and q odd (the red tangent above). Bolzano had built a close analog in 1834 without noticing the property. Cellérier, in Geneva, wrote the case H = 1 in a folder marked <q>Can be published as is</q> — published only in 1890, after his death. Weierstrass read his function at the Berlin Academy in 1872 and never published it; the world learned of it through DuBois Reymond in 1875, a convenient birthdate for the great crisis of mathematics. The mathematics of these functions — spectra, modified forms, their kin — is chapter 39's entry.</p>
+      </div>
+    </div>
+    <div class="prose">
+      <p>Farkas Bolyai told his son that discoveries come like violets in spring, on every side at once, and co-inventors rush to print. Here events ran the other way: everyone sat on it. DuBois Reymond, announcing the function, confessed <q>I cannot get rid of the thought that [they] will lead to the limit of our intellect</q>; Gauss had hidden non-Euclidean geometry for fear of the uproar of the Boeotians; Mittag-Leffler would later advise Cantor to withhold his boldest findings until the world was ready. Rarely, the chapter remarks, has the avant-garde been so reluctant.</p>
+      <p class="aside">Since the Weierstrass function is often used to argue that mathematics and physics are best divorced, the chapter ends with its discoverer's own view. In his 1857 inaugural lecture, Weierstrass said the physicist should not see in mathematics a mere auxiliary discipline, nor the mathematician treat the physicist's questions as a collection of examples — after all, it was pure speculation about conic sections that, centuries later, turned out to describe the planets' orbits. The book's last word on it: AMEN.</p>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 41, pages 405–421. The chapter is text only and prints no plates, so nothing here reproduces printed artwork: the brick paving, the decay chart and the function graphs are this site's own illustrations of the chapter's stories, computed from the formulas named in the captions. Quotations follow the chapter's own translations. Companion pages: <a href="cantor-dust.html">Cantor Dust</a> (the dusts Smith built first) and the Brownian-motion demo on <a href="https://claude.ai/artifact/RvpGQi3Td4y7gZnjM1pukG" target="_blank" rel="noopener">Wiener Sausage</a>.</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>
