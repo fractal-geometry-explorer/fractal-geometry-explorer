@@ -1,0 +1,146 @@
+<title>Disc and Sphere Tremas</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.r-plate { aspect-ratio: 7 / 6; }
+.seed-row { display: flex; align-items: center; gap: 10px; }
+.seed-row .value { min-width: 64px; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 33, "Disc and Sphere Tremas: Moon Craters and Galaxies" · pages 301–309</p>
+    <h1><span class="plate-no">Plates 306–309</span><span class="lozenge" aria-hidden="true"></span><span>Disc and Sphere Tremas</span></h1>
+    <p class="dek">Punch round holes — <i>tremas</i> — out of the plane at random: every center is equally likely, and the p-th largest hole has area K(2−D)/p. Craters on the Moon really are spread this way, which is why these plates look like a bombarded surface. What the holes fail to cover is a fractal of dimension D and of zero area: a wildly extrapolated Swiss cheese. The same device with balls in space was Mandelbrot's second model of the galaxy clusters. Every figure is computed from the caption's rule; change the seed for another sample from the same law.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#white"><b>306–307</b> Tremas in white</a>
+    <a href="#black"><b>308–309</b> Tremas in black</a>
+    <a href="#moon"><b>D</b> Saturating the Moon</a>
+  </nav>
+
+  <!-- ===================== PLATES 306-307: TREMAS IN WHITE ===================== -->
+  <section class="plate" id="white">
+    <div class="plate-head">
+      <p class="no">Plates 306 and 307 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Smallish round tremas, in white: slices of "Swiss cheese"</h2>
+      <p class="dim">trema of rank p: a disc of area K(2−D)/p · the black remainder has dimension D = 1.9900, then 1.9000</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-plate zoomable" id="wA">
+          <canvas id="cA" role="img" aria-label="Random white disc tremas cut from a black field"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cAt">White disc tremas</strong> · <span id="cAn"></span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The tremas are white discs with centers thrown uniformly on the plane; ranked by size, disc p has area K(2−D)/p, so there is one large hole for every thousand pinholes. With D = 1.9900 the holes are small and rare, and the black slice "resembles a cheese that is almost entirely pierced by very small pin holes" — a wild extrapolation of Appenzeller. At D = 1.9000 the holes grow and overlap into an equally wild Emmenthaler. The extrapolation is wild because it never stops: ever smaller tremas keep falling forever, so the black "cheese" has zero area, and what you see at any resolution is only the part not yet eaten below that resolution.</p>
+        <div class="group">
+          <div class="slider">
+            <div class="label-row"><span class="label">Dimension of the black set</span><span class="value" id="sAv"></span></div>
+            <input type="range" id="sA" min="0" max="1" step="0.002" value="0" aria-label="Dimension D">
+          </div>
+          <div class="seed-row">
+            <button type="button" class="btn" id="seedA">New seed</button><span class="value" id="seedAv"></span>
+          </div>
+        </div>
+        <div class="btn-row" id="preA"></div>
+        <dl class="read">
+          <div><dt>Dimension D</dt><dd id="rAa">—</dd></div>
+          <div><dt>Tremas at this resolution</dt><dd id="rAb">—</dd></div>
+          <div><dt>Largest trema</dt><dd id="rAc">—</dd></div>
+          <div><dt>Left black, averaged over seeds</dt><dd id="rAd">—</dd></div>
+        </dl>
+        <p class="note">A random plate: the figure matches the book statistically, not dot for dot, and the seed is exposed. Checked against the scan: the white blobs of Plate 306 obey the rank law — blob area × rank stays near one constant from rank 2 to past rank 250 — and the share of each plate left black sits where the model puts it at print resolution (black almost everywhere for D = 1.99, roughly half for D = 1.90). Tremas smaller than half a screen pixel are not drawn; zoom in and they appear, down to a depth cap. Like the book's own figures, this window is cut from a larger sampled region, so the biggest discs can run off its edges.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATES 308-309: TREMAS IN BLACK ===================== -->
+  <section class="plate" id="black">
+    <div class="plate-head">
+      <p class="no">Plates 308 and 309 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Larger round tremas, in black: random forked white threads</h2>
+      <p class="dim">the same construction with bigger tremas · the white remainder has dimension D = 1.7500, then 1.5000</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-plate zoomable" id="wB">
+          <canvas id="cB" role="img" aria-label="Random black disc tremas on a pale ground"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cBt">Black disc tremas</strong> · <span id="cBn"></span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The rule is unchanged; only the constant K = C/2 is bigger, because C = 2−D has grown. Now "hardly anything is left out", so the book switches ink: the tremas print in black and the surviving fractal in white. At D = 1.75 the survivors still read as a speckled ground between craters. By D = 1.5 they have thinned to the caption's "random forked white threads". Mandelbrot conjectures what happens next: as long as C stays small the remainder is a σ-cluster of connected filaments, of topological dimension 1; when D falls through a critical dimension D<sub>crit</sub> the filaments collapse, and the remainder is a dust.</p>
+        <div class="group">
+          <div class="slider">
+            <div class="label-row"><span class="label">Dimension of the white set</span><span class="value" id="sBv"></span></div>
+            <input type="range" id="sB" min="0" max="1" step="0.002" value="0" aria-label="Dimension D">
+          </div>
+          <div class="seed-row">
+            <button type="button" class="btn" id="seedB">New seed</button><span class="value" id="seedBv"></span>
+          </div>
+        </div>
+        <div class="btn-row" id="preB"></div>
+        <dl class="read">
+          <div><dt>Dimension D</dt><dd id="rBa">—</dd></div>
+          <div><dt>Tremas at this resolution</dt><dd id="rBb">—</dd></div>
+          <div><dt>Largest trema</dt><dd id="rBc">—</dd></div>
+          <div><dt>Left white, averaged over seeds</dt><dd id="rBd">—</dd></div>
+        </dl>
+        <p class="note">The book's caption opens "the construction proceeds as in Plates 307 and 308"; it means 306 and 307. Whether the plane's trema remainder really keeps D<sub>T</sub> = 1 filaments down to a critical D is stated as a conjecture on page 303, tied to the problem of percolation, and the book draws no boundary for it; the threads you see here at D = 1.5 are what the conjecture is about, not a proof of it.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CONCEPT: SATURATING THE MOON ===================== -->
+  <section class="plate" id="moon">
+    <div class="plate-head">
+      <p class="no">Chapter 33, pages 301–305 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Saturating the Moon, and galaxies from ball tremas</h2>
+      <p class="dim">craters: Nr(area &gt; s) = C/s per km² · the uncovered set has D = 2 − C, empty once C ≥ 2 · in space D = 3 − C</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-plate zoomable" id="wS">
+          <canvas id="cS" role="img" aria-label="One random cratered surface saturating as C grows"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cSt">The same craters, longer bombardment</strong> · <span id="cSn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">There is solid evidence that lunar craters follow exactly this law: the number with area above s km², centered in a given km², is C/s. If the Moon scooped up meteorites forever, every point would be covered again and again; the set left uncovered is nontrivial only because C — which measures the time since lava last wiped the surface clean, or the length of the bombardment — is finite. Following page 303, this figure keeps the seed invariant and lets C grow: each crater keeps its place and dilates — here the craters in black, the virgin surface left white — and the surface decays toward dust, with D = 2 − C falling as C climbs to 2.</p>
+        <p class="cap">The spatial version replaces discs by balls, with Nr(volume &gt; v) = C/v and D = 3 − C. When D is close to the observed 1.23, the remainder is a dust whose points cluster like Lévy-flight stopovers — but no longer threaded along a trail, and its three- and four-point covariances fit the galaxy maps better than the flight of Chapter 32. Mandelbrot's simulations put D<sub>crit</sub> above 1.23, which the model needs: veils (D<sub>T</sub> = 2) split into filaments past one critical D, and filaments into dust past a second.</p>
+        <div class="group">
+          <div class="slider">
+            <div class="label-row"><span class="label">Bombardment C, as dimension D = 2 − C</span><span class="value" id="sSv"></span></div>
+            <input type="range" id="sS" min="0" max="1" step="0.002" value="0" aria-label="Dimension D">
+          </div>
+          <div class="seed-row">
+            <button type="button" class="btn" id="seedS">New seed</button><span class="value" id="seedSv"></span>
+          </div>
+          <label class="check" for="markS"><input type="checkbox" id="markS"> Mark every pixel the craters miss, in red</label>
+        </div>
+        <div class="btn-row" id="preS"></div>
+        <dl class="read">
+          <div><dt>Dimension D</dt><dd id="rSa">—</dd></div>
+          <div><dt>Craters at this resolution</dt><dd id="rSb">—</dd></div>
+          <div><dt>Largest crater</dt><dd id="rSc">—</dd></div>
+          <div><dt>Virgin surface, averaged over seeds</dt><dd id="rSd">—</dd></div>
+        </dl>
+        <p class="note">By D ≈ 1.2 the virgin set's grains are thinner than a pixel and vanish into the ink; the red overlay marks exactly the pixels whose center no drawn crater covers. The marked share swings wildly from seed to seed — from nothing to over 1% here — because a handful of window-sized tremas decide the window's fate; the readout's figure is the average over all seeds, and only that average follows the formula. The slider is logarithmic in C, matching how the plates are spaced (C = 0.01, 0.1, 0.25, 0.5). The chapter's appendix covers nonscaling craters, Nr ∝ 1/s<sup>γ</sup> with γ ≠ 1: for γ &gt; 1 small craters dominate every point of the surface, the texture of Callisto; for γ &lt; 1 with bounded crater sizes a positive area survives. Its closing aside computes that meteorites in space, which follow the same 1/v law with a constant of 10⁻²⁰, would as overlapping tremas leave a set of codimension 3 − D = 10⁻²⁰ — a limit "attained so extraordinarily slowly" that it means nothing in practice.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 33, pages 301–309 (Plates 306–309). Every figure is computed from the rule in the captions — disc of rank p, area K(2−D)/p, centers uniform — with the seed exposed; these are random plates, matched to the book statistically rather than dot for dot. Companion page: <a href="cantor-dust.html">Cantor Dust</a> (Plates 80–83), where tremas first appear as the cut-out middle thirds.</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>
