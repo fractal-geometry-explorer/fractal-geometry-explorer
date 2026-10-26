@@ -123,6 +123,30 @@
       "layout_comment": "/* Layout: snowflake sweeps (68–69), Peano–Gosper trees (70–71), a cascade tree (71), the fudgeflake (72–73) and the quartet (73), each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
     },
     {
+      "slug": "brown-trails",
+      "title": "Brown Trails and Hulls",
+      "plates": "Plates 241–243",
+      "chapter": 25,
+      "scripts": [
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: the randomized-Peano construction, Feller's coin-toss walk (241), the Brown hull (242) and the Brown loop (243), each a figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "fractional-trails",
+      "title": "Fractional Brown Trails",
+      "plates": "Plate 255",
+      "chapter": 27,
+      "scripts": [
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: Plate 255 (the two trails), the Joseph effect (a model river record) and Hurst's R/S with the spectrum, each a figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
       "slug": "cantor-dust",
       "title": "Cantor Dust",
       "plates": "Plates 80–83",
@@ -133,6 +157,161 @@
         "ui.js"
       ],
       "layout_comment": "/* Layout: the Cantor bar (80), the Cantor curtains (81), the devil's staircase (83) and the chapter's dust-and-dimension concept, each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "turbulence-intermittency",
+      "title": "Turbulence and Intermittency",
+      "plates": "Intermittency",
+      "chapter": 10,
+      "scripts": [
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: four concept sections in the chapter's order (the gusty record and its probe, curdling in space, the section argument for D > 2, the spectrum inequality), each a computed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "biographical-sketches",
+      "title": "Biographical Sketches",
+      "plates": "Pages 391–404",
+      "chapter": 40,
+      "scripts": [
+        "shared/draw.js",
+        "script.js"
+      ],
+      "layout_comment": "/* Layout: one timeline of the six sketched lives beside the chapter's prelude, then one section per sketch, the biography beside its key dates. One column under 900px. */"
+    },
+    {
+      "slug": "fournier-universe",
+      "title": "Fournier Universes",
+      "plates": "Plates 95–96",
+      "chapter": 9,
+      "scripts": [
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: Plate 95 (the multiuniverse, flat and in space), Plate 96 (the flat D = 1 pattern) and the chapter's mass-and-dark-sky concept, each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "random-curds",
+      "title": "Random Curds",
+      "plates": "Plates 218–223",
+      "chapter": 23,
+      "scripts": [
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: Hoyle curdling (218–219), Novikov–Stewart percolation (220–223) and the canonical-curdling concept, each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "brown-relief",
+      "title": "Brown Relief and Coastlines",
+      "plates": "Plates 264–271",
+      "chapter": 28,
+      "scripts": [
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: six plate sections in book order (264–265 lake landscapes, 266–267 coastlines, 268 contour lines, 269 Pangaea, 270 the first coastlines, 271 the island from the sea), each a seeded simulation beside its caption, controls and numbers; a sticky plate index on top. One column under 900px. */"
+    },
+    {
+      "slug": "carpets-lacunarity",
+      "title": "Carpets' Lacunarity",
+      "plates": "Plate 318",
+      "chapter": 34,
+      "scripts": [
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: Plate 318's two carpets, the Cantor dusts along their mid lines, and the chapter's lacunarity measures (gap census and mass-in-window), each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "historical-sketches",
+      "title": "Historical Sketches",
+      "plates": "Pages 405–421",
+      "chapter": 41,
+      "scripts": [
+        "shared/draw.js",
+        "script.js"
+      ],
+      "layout_comment": "/* Layout: six entry sections in book order, three with a figure beside the entry's text and controls, three as prose; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "disc-tremas",
+      "title": "Disc and Sphere Tremas",
+      "plates": "Plates 306–309",
+      "chapter": 33,
+      "scripts": [
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: white tremas (306-307), black tremas (308-309) and the Moon-saturation concept, each a printed window beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "levy-dusts",
+      "title": "Spatial Lévy Dusts",
+      "plates": "Plates 293–300",
+      "chapter": 32,
+      "scripts": [
+        "shared/geometry.js",
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: the computer bug (293), nonrandom subordination (295), the Lévy flight (296–297), the subordination cascade (298), the zoom (299) and the circumnavigation (300), each a figure beside its caption, controls and numbers; a sticky plate index on top. One column under 900px. */"
+    },
+    {
+      "slug": "midpoint-displacement",
+      "title": "Random Midpoint Displacement",
+      "plates": "Plate 246",
+      "chapter": 26,
+      "scripts": [
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: the midpoint-displacement curve, the creases, the Poisson strata and Plate 246's bug story, each a figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "lattice-physics",
+      "title": "Fractals in Lattice Physics",
+      "plates": "Figure, p. 329",
+      "chapter": 36,
+      "scripts": [
+        "shared/geometry.js",
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: the page-329 spin figure, the two-kinds-of-convergence demo, the self-avoiding walk and the river network, each a figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "islands-clusters",
+      "title": "Islands, Clusters and Percolation",
+      "plates": "Chapter 13 figures",
+      "chapter": 13,
+      "scripts": [
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: six sections in page order (Koch islands 117-118, islands and lakes 121, nonlumped curdling 124, cross-lumped 125, knotted Peano 126, Bernoulli percolation 126-130), each a computed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "cotton-prices",
+      "title": "Scaling in Cotton Prices",
+      "plates": "Plate 340",
+      "chapter": 37,
+      "scripts": [
+        "shared/draw.js",
+        "script.js"
+      ],
+      "layout_comment": "/* Layout: Plate 340's doubly logarithmic chart with a draggable stable curve, then the scaling-principle simulations, each a figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
     },
     {
       "slug": "power-laws",
