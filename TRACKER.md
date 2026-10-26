@@ -184,11 +184,6 @@ Update this file in the same pull request as the work it records.
 | :- | :- | :- | :- | :- | :- |
 | (sketches) | 391–404 | Chapter 40, six biographical sketches: Bachelier, Fournier d'Albe, Hurst, Lévy, Richardson, Zipf | data | done | biographical-sketches |
 | Drawing, p. 404 | 404 | Jean Effel's lecture drawing, "fournir vos questions à mes réponses" | art | done | biographical-sketches |
-
-## XII Of men and ideas (chapters 40–42)
-
-| Plate | Page | Title | Kind | Status | Site page |
-| :- | :- | :- | :- | :- | :- |
 | (concept) | 405–421 | Historical sketches: chimeras, dimension, Poincaré, old scaling evidence, Weierstrass | — | done | historical-sketches |
 | (concept) | 341–348 | Scaling without geometry: expectation paradoxes, Zipf's law, Pareto salaries | exact | done | power-laws |
 
