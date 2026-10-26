@@ -1,0 +1,226 @@
+<title>Turbulence and Intermittency</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.r-bar { aspect-ratio: 10 / 7; }
+.mini svg.gen { height: 56px; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 10, "Geometry of Turbulence; Intermittency" · pages 97–105</p>
+    <h1><span class="plate-no">Chapter 10</span><span class="lozenge" aria-hidden="true"></span><span>Turbulence and Intermittency</span></h1>
+    <p class="dek">Wind comes in gusts, the gusts in smaller gusts, down to scales no airplane feels — turbulent dissipation concentrates on a thinning set, a phenomenon called intermittency. Mandelbrot's claim: that set is a fractal, with a dimension measurements put around 2.5 to 2.6, and even defining "turbulent" requires one. This chapter prints no plates, so every figure here is this page's own illustration of its argument, built from the curdling of chapter 8 carried into space.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#record"><b>1</b> Gusts within gusts</a>
+    <a href="#curdling"><b>2</b> Curdling in space</a>
+    <a href="#sections"><b>3</b> Why D &gt; 2</a>
+    <a href="#spectrum"><b>4</b> The spectrum</a>
+  </nav>
+
+  <!-- ===================== 1: THE RECORD A PROBE READS ===================== -->
+  <section class="plate" id="record">
+    <div class="plate-head">
+      <p class="no">Pages 100–102 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Gusts within gusts: the record a probe reads</h2>
+      <p class="dim" id="dimA">base 9, N gusts per eddy · d = log N / log 9 · in space, D = 2 + d</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-bar zoomable" id="wA">
+          <canvas id="cA" role="img" aria-label="A curdled one-dimensional record of turbulent dissipation"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cAt">The record</strong> · <span id="cAn"></span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">In the Reynolds pipe, turbulence is all or nothing, and no geometry is called for. In the atmosphere it is not: "certain regions are marked by very high dissipation, while other regions seem by contrast nearly free of dissipation." A large airplane is shaken every so often; a smaller airplane feels each of those shocks as a burst of weaker shocks with calm stretches between, and a finer probe splits the bursts again. Each stage of refinement sharpens the turbulence onto a smaller fraction of the record. The model: curdle the record as in chapter 8, keeping N ninths of every gusty stretch.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mA" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Gusts per eddy, N (of 9)</span></div>
+          <div class="steps" id="nA" role="group" aria-label="Gusts per eddy"></div>
+          <div class="label-row"><span class="label">Curdle down to stage</span><span class="value" id="sAv">stage 5</span></div>
+          <div class="steps" id="sA" role="group" aria-label="Stage"></div>
+        </div>
+        <div class="group" id="probeWrap">
+          <div class="slider">
+            <div class="label-row"><span class="label">Probe size (the airplane)</span><span class="value" id="kAv"></span></div>
+            <input type="range" id="kA" min="0" max="5" step="1" value="1" aria-label="Probe size">
+          </div>
+        </div>
+        <div class="group">
+          <label class="check" for="fixedA"><input type="checkbox" id="fixedA"> Same gust positions in every eddy (de-randomized)</label>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="pA1">Natural turbulence (D = 2.5)</button>
+          <button type="button" class="btn" id="pA2">Wind tunnel (D = 3)</button>
+          <button type="button" class="btn" id="gustsA">New gusts</button>
+        </div>
+        <p class="readline" id="infoA" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Gust dimension d</dt><dd id="rAa">1/2</dd></div>
+          <div><dt>In space, D = 2 + d</dt><dd id="rAb">2.5</dd></div>
+          <div><dt>Gust intensity</dt><dd id="rAc">—</dd></div>
+          <div><dt>Turbulent, per probe</dt><dd id="rAd">—</dd></div>
+        </dl>
+        <p class="note">A reconstruction: the book describes these records in words and prints none. Every gusty stretch keeps exactly N of its 9 ninths, so the gusts' dimension is exactly d = log N/log 9 and the fixed total dissipation ends up uniform on what survives. Positions are drawn at random, seeded ("New gusts" redraws them). The opening draw was picked so that its first three gusts fall in separate ninths, which makes the split easy to see; most draws put some kept ninths side by side, where they merge into one longer gust. The checkbox reuses one set of positions everywhere, which is the chapter's own "de-randomized" curdling. A record at a point samples space along a line, so gusts of dimension d on the line mean support of dimension D = 2 + d in space — section 3 takes that up.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 2: CURDLING IN SPACE ===================== -->
+  <section class="plate" id="curdling">
+    <div class="plate-head">
+      <p class="no">Pages 102–103 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Curdling and fractally homogeneous turbulence</h2>
+      <p class="dim" id="dimB">base 3: keep N of 27 subeddies · D = log N / log 3 · density × 27/N per stage</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wB">
+          <canvas id="cB" role="img" aria-label="Curdling of the unit cube: the surviving subeddies after m stages"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cBt">The curds</strong> · <span id="cBn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Papers on intermittency speak of "blobs, rods, slabs, and ribbons" — shapes that fail to be self-similar. Mandelbrot instead lets the whole and its details come from one process: split each eddy into 27 subeddies of one third its side, and let the dissipation curdle into N of them. After m stages it sits, uniformly, on N<sup>m</sup> of the 27<sup>m</sup> cells; continued without end, the limit has dimension D = log N/log 3, and he names it <i>fractally homogeneous turbulence</i>. Keeping all 27 gives D = 3, G. I. Taylor's homogeneous turbulence: curdling allows the classic case, and the novel possibility D &lt; 3.</p>
+        <div class="mini" aria-label="The generator: the kept subcells of the 3 by 3 by 3 box, layer by layer">
+          <svg class="gen" viewBox="-0.2 -0.2 11.6 3.4" aria-hidden="true" id="miniB"></svg>
+          <div class="fx" id="miniBfx">N = 16 of 27</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mB" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group">
+          <div class="slider">
+            <div class="label-row"><span class="label">Subeddies kept, N</span><span class="value" id="nBv"></span></div>
+            <input type="range" id="nBs" min="1" max="27" step="1" value="16" aria-label="Subeddies kept">
+          </div>
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="sBv">stage 2</span></div>
+          <div class="steps" id="sB" role="group" aria-label="Stage"></div>
+        </div>
+        <div class="group" id="zBwrap" hidden>
+          <div class="slider">
+            <div class="label-row"><span class="label">Cut height</span><span class="value" id="zBv"></span></div>
+            <input type="range" id="zBs" min="0" max="0.999" step="0.001" value="0.42" aria-label="Cut height">
+          </div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="pB1">Intermittent (N = 16, D ≈ 2.52)</button>
+          <button type="button" class="btn" id="pB2">Taylor (N = 27, D = 3)</button>
+          <button type="button" class="btn" id="shufB">Shuffle the generator</button>
+        </div>
+        <p class="readline" id="infoB" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Dimension D</dt><dd id="rBa">—</dd></div>
+          <div><dt>Subeddies kept</dt><dd id="rBb">—</dd></div>
+          <div><dt>Dissipation density</dt><dd id="rBc">—</dd></div>
+          <div><dt id="tBd">—</dt><dd id="rBd">—</dd></div>
+        </dl>
+        <p class="note">A reconstruction: the chapter gives the rule (N = r<sup>−D</sup> of the r<sup>−3</sup> subeddies per stage, here r = 1/3) but no figure. The generator's cells are drawn at random once, seeded, then reused in every eddy — the "crude de-randomized form of the Novikov &amp; Stewart model" of chapter 23. Whether the limit set is a dust, stringy vortex tubes or layered vortex sheets is, the chapter stresses, an open question: the same D can be achieved by sets of any of those topologies, and the kurtosis measurements meant to settle it turn out to depend on D alone.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 3: WHY D > 2 ===================== -->
+  <section class="plate" id="sections">
+    <div class="plate-head">
+      <p class="no">Pages 103–104 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Why the probes say D &gt; 2</h2>
+      <p class="dim" id="dimC">a line meets a fractal of dimension D &gt; 2 with positive probability, and almost never one with D &lt; 2</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-lox zoomable" id="wC">
+          <canvas id="cC" role="img" aria-label="Probability that a straight probe still meets dissipation, stage by stage and in the limit"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cCt">Stage by stage</strong> · <span id="cCn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Run a straight probe — a hot-wire record, an airplane's path — through curdled turbulence. Inside each turbulent eddy the probe crosses a column of 3 subeddies, and each stays turbulent with probability 3<sup>D−3</sup>; so along the probe the gusts breed like a family tree with 3<sup>D−2</sup> children per generation on average. When D &lt; 2 the family dies out: almost every probe eventually reads laminar. When D &gt; 2 it survives forever with positive probability. Probes hit turbulence constantly — an experiment "repeated constantly, with the possible outcomes reduced to an alternative between never and often" — so the support of dissipation must satisfy D &gt; 2.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mC" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group">
+          <div class="slider">
+            <div class="label-row"><span class="label">Dimension D of the support</span><span class="value" id="DCv"></span></div>
+            <input type="range" id="DCs" min="1" max="3" step="0.01" value="2.55" aria-label="Dimension D">
+          </div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="pC1">Turbulence (D ≈ 2.55)</button>
+          <button type="button" class="btn" id="pC2">Galaxies (D ≈ 1.23)</button>
+          <button type="button" class="btn" id="pC3">Critical (D = 2)</button>
+        </div>
+        <p class="readline" id="infoC" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Children per generation</dt><dd id="rCa">—</dd></div>
+          <div><dt>Probe hits, in the limit</dt><dd id="rCb">—</dd></div>
+          <div><dt>Trace on the probe</dt><dd id="rCc">—</dd></div>
+          <div><dt>After 20 stages</dt><dd id="rCd">—</dd></div>
+        </dl>
+        <p class="note">Computed exactly for the randomized curdling (each subeddy kept with probability 3<sup>D−3</sup>; chapter 23 proves the underlying theorem for such cascades). The same sign of D − 2 separates this chapter from chapter 9: a probe's hits demand D &gt; 2 for turbulence, while the dark night sky — most lines from Earth never meeting a star — demands that galaxies project onto vanishing area, hence D &lt; 2, and their D ≈ 1.23. When D &gt; 2 the trace left on the probe is itself a dust of dimension D − 2, which is how the record of section 1 inherits d = D − 2.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 4: THE SPECTRUM (IN)EQUALITY ===================== -->
+  <section class="plate" id="spectrum">
+    <div class="plate-head">
+      <p class="no">Pages 104–105 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>The spectrum (in)equality</h2>
+      <p class="dim" id="dimD">⟨[v(x) − v(x+r)]²⟩ = |r|<sup>2/3 + B</sup> · B = (3 − D)/3 · D = 3 gives Kolmogorov's 2/3</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-lox zoomable" id="wD">
+          <canvas id="cD" role="img" aria-label="The velocity structure function and its exponent against the dimension D"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cDt">Structure function</strong> · <span id="cDn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Intermittency leaves a fingerprint on the spectrum. In fractally homogeneous turbulence the velocity difference across a distance r satisfies ⟨[v(x) − v(x+r)]²⟩ = |r|<sup>2/3 + B</sup> with B = (3 − D)/3 — stated by Mandelbrot in 1967, in the notation θ = D − 2. Taylor homogeneous turbulence has D = 3, B vanishes, and the classic Kolmogorov exponent 2/3 is left standing; concentrating the dissipation (D &lt; 3) steepens the exponent. The more general weighted curdling of chapter 23 gives the inequality B ≤ (3 − D)/3 instead.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mD" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group">
+          <div class="slider">
+            <div class="label-row"><span class="label">Dimension D of the support</span><span class="value" id="DDv"></span></div>
+            <input type="range" id="DDs" min="2" max="3" step="0.01" value="2.55" aria-label="Dimension D">
+          </div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="pD1">Measured (D ≈ 2.55)</button>
+          <button type="button" class="btn" id="pD2">Kolmogorov (D = 3)</button>
+        </div>
+        <p class="readline" id="infoD" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>B = (3 − D)/3</dt><dd id="rDa">—</dd></div>
+          <div><dt>Variance exponent</dt><dd id="rDb">—</dd></div>
+          <div><dt>Spectrum E(k)</dt><dd id="rDc">—</dd></div>
+          <div><dt>θ = D − 2 (1967)</dt><dd id="rDd">—</dd></div>
+        </dl>
+        <p class="note">The formulas are the chapter's; the charts are this page's way of drawing them. The β-model of Frisch, Nelkin &amp; Sulem (1978) grafts a dynamical vocabulary onto this same geometry — the chapter notes its mathematics and conclusions are identical. Measurements put D around 2.5 to 2.6, "but probably below 2.66", so the measured exponent sits a little above Kolmogorov's 2/3 — close enough that the 1941 theory predicted spectra so well while resting on an assumption, uniform dissipation, that the wind's gusts plainly violate.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 10, pages 97–105. The chapter prints no plates; every figure above is computed from the rules the text states, and each note says what was reconstructed. Companion pages: <a href="cantor-dust.html">Cantor Dust</a> (the curdling of chapter 8) and the forthcoming pages for chapter 9 (galaxies) and chapter 23 (random curdling).</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>

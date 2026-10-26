@@ -1,0 +1,209 @@
+<title>Random Midpoint Displacement</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.mini svg.gen { height: 56px; }
+.r-trace { aspect-ratio: 16 / 9; }
+@media (max-width: 599px) { .r-trace { aspect-ratio: 4 / 3; } }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 26, "Random Midpoint Displacement Curves" · pages 244–246</p>
+    <h1><span class="plate-no">Plate 246</span><span class="lozenge" aria-hidden="true"></span><span>Random Midpoint Displacement</span></h1>
+    <p class="dek">Build a curve by bending: take each side of the current approximation and displace its midpoint, at random, by just the right amount. For Brownian motion the recipe is exact, and it is so simple and cheap that generations of computer artists adopted it. Mandelbrot's warning in this chapter: adapted to dimensions below 2 it is subtly wrong — the halving points leave permanent creases, and the increments are not stationary. The chapter's one plate is something else entirely: a gloriously broken program.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#grid"><b>B*</b> Displaced midpoints</a>
+    <a href="#creases"><b>H</b> The creases</a>
+    <a href="#strata"><b>B†</b> Random strata</a>
+    <a href="#bug"><b>246</b> The computer bug</a>
+  </nav>
+
+  <!-- ===================== THE MIDPOINT DISPLACEMENT CURVE ===================== -->
+  <section class="plate" id="grid">
+    <div class="plate-head">
+      <p class="no">Chapter 26, pages 244–245 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Random Koch curves with a time grid</h2>
+      <p class="dim" id="dimA">N = 2 pieces of r = 2<sup>−1/D</sup> · displacement² = 2<sup>−2(k+1)/D</sup> − 2<sup>−2(k/D+1)</sup> · H = 1/D</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wA">
+          <canvas id="cA" role="img" aria-label="A plane curve built by displacing midpoints at random"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cAt">Randomized</strong> · <span id="cAn"></span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Whenever a Koch generator is two intervals of length 2<sup>−1/D</sup>, the whole cascade is one rule: displace the midpoint of every side, orthogonally, by the amount the formula above prescribes — the construction itself tells whether to bend left or right. To randomize, "the displacement's direction is made random and isotropic" and its length Gaussian, with the formula giving the mean square. For D = 2 the result is exactly Brownian motion; for D &lt; 2 it is the curve this chapter calls B*<sub>H</sub>(t), with H = 1/D.</p>
+        <div class="mini" aria-label="The generator: two intervals meeting at the displaced midpoint">
+          <svg class="gen" viewBox="-0.06 -0.56 1.12 0.68" aria-hidden="true" id="miniA"></svg>
+          <div class="fx" id="miniAfx">N = 2, r = 2^(−1/D)</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Each midpoint goes</span></div>
+          <div class="steps words" id="mA" role="group" aria-label="Displacement rule"></div>
+        </div>
+        <div class="group">
+          <div class="slider">
+            <div class="label-row"><span class="label">Dimension D</span><span class="value" id="dAv">D = 1.5000</span></div>
+            <input type="range" id="dAs" min="1.05" max="2" step="0.0001" value="1.5" aria-label="Dimension D">
+          </div>
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="sAv">stage 10</span></div>
+          <div class="steps" id="sA" role="group" aria-label="Stage"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="preBrown">Brownian: D = 2</button>
+          <button type="button" class="btn" id="preKoch">The snowflake in base N = 2</button>
+          <button type="button" class="btn" id="seedA">New seed</button>
+        </div>
+        <p class="readline" id="infoA" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>H = 1/D</dt><dd id="rAa">0.6667</dd></div>
+          <div><dt>Sides</dt><dd id="rAb">1,024</dd></div>
+          <div><dt>⟨ΔB*²⟩ over Δt = 2⁻ᵏ</dt><dd id="rAc">Δt<sup>2H</sup></dd></div>
+          <div><dt>Self-crossings</dt><dd id="rAd">—</dd></div>
+        </dl>
+        <p class="note">The book draws no plate for these curves, so the figure is this page's illustration of the text's rule; the two deterministic rules are our check that the formula is the right one (with D = log 4/log 3 ≈ 1.2619 and alternating sides it reproduces the Koch snowflake curve exactly). "Nothing is done to prevent self-intersection, and the limit fractal curve is rife with self-intersections" — the crossing count below the figure verifies it.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== NONSTATIONARY INCREMENTS: THE CREASES ===================== -->
+  <section class="plate" id="creases">
+    <div class="plate-head">
+      <p class="no">Chapter 26, page 245 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Nonstationary increments: the creases</h2>
+      <p class="dim">⟨ΔX²⟩ = Δt<sup>2H</sup> on dyadic intervals only · elsewhere smaller, ≥ 2<sup>1−2H</sup>Δt<sup>2H</sup> · the creases never heal</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-trace zoomable" id="wB">
+          <canvas id="cB" role="img" aria-label="A coordinate function built by midpoint displacement, with creases at the dyadic points"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cBt">The function</strong> · <span id="cBn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Watch one coordinate X(t) of the curve. Over a <i>dyadic</i> interval — from h2<sup>−k</sup> to (h+1)2<sup>−k</sup> — the mean square increment is exactly Δt<sup>2H</sup>. Slide the same window half a step and the variance drops: the window now straddles a point where two independently built halves merely meet. Those points are creases. "With D barely below 2 … the creases are slight. However, with H nearly 1 … the creases are very important and can be seen on the sample functions." The only cure, says the book, is to give up the recursive scheme.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mB" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group">
+          <div class="slider">
+            <div class="label-row"><span class="label">Exponent H</span><span class="value" id="hBv">H = 0.85</span></div>
+            <input type="range" id="hBs" min="0.5" max="0.95" step="0.01" value="0.85" aria-label="Exponent H">
+          </div>
+          <label class="check" for="markBd"><input type="checkbox" id="markBd" checked> Mark the first dyadic points</label>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="preCrease">H = 0.85: Earth-like relief</button>
+          <button type="button" class="btn" id="preHalf">H = 1/2: Brownian</button>
+          <button type="button" class="btn" id="seedB">New seed</button>
+        </div>
+        <p class="readline" id="infoB" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Dyadic windows, Δt = 1/32</dt><dd id="rBa">—</dd></div>
+          <div><dt>Slid by half a step</dt><dd id="rBb">—</dd></div>
+          <div><dt>Measured ratio</dt><dd id="rBc">—</dd></div>
+          <div><dt>Book's lower bound</dt><dd id="rBd">—</dd></div>
+        </dl>
+        <p class="note">The numbers are measured on this page: 4,000 fresh curves, mean square increment over all windows of length 1/32, dyadic against half-slid. On dyadic windows the construction gives Δt<sup>2H</sup> exactly; on slid ones the measured value falls between the book's lower bound 2<sup>1−2H</sup>Δt<sup>2H</sup> and Δt<sup>2H</sup>, and only H = 1/2 makes the two agree — stationary increments. The layers view shows why: every stage's contribution vanishes on the same dyadic grid, "in synchrony with all the following ones".</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== RANDOMLY POSITIONED STRATA ===================== -->
+  <section class="plate" id="strata">
+    <div class="plate-head">
+      <p class="no">Chapter 26, pages 245–246 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Randomly positioned strata</h2>
+      <p class="dim">stratum k: a broken line through Poisson instants, b<sup>k</sup> per unit time · the sum B<sub>H</sub><sup>†</sup>(t) is stationary · b → 1 gives B<sub>H</sub>(t)</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-trace zoomable" id="wC">
+          <canvas id="cC" role="img" aria-label="Poisson strata and their sum"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cCt">The strata</strong> · <span id="cCn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The creases trace back to hierarchy: every stage of the midpoint scheme hangs its tents on the same dyadic grid. So destroy the grid. Let stratum k be a broken line interpolating independent random values at <i>Poisson</i> instants — on average b<sup>k</sup> of them per unit time — and add the strata up. No instant is special any more, so the sum B<sub>H</sub><sup>†</sup>(t) is a stationary random function (Ditlevsen 1969). The price: it is self-similar only by the discrete ratios b<sup>−k</sup>. As b → 1 the admissible ratios crowd together, but B<sub>H</sub><sup>†</sup> "loses its specificity" and converges to the fractional Brownian motion B<sub>H</sub>(t) of the next chapter.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mC" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Base b</span></div>
+          <div class="steps" id="bC" role="group" aria-label="Base b"></div>
+          <div class="slider">
+            <div class="label-row"><span class="label">Exponent H</span><span class="value" id="hCv">H = 0.75</span></div>
+            <input type="range" id="hCs" min="0.5" max="0.9" step="0.01" value="0.75" aria-label="Exponent H">
+          </div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn" id="seedC">New seed</button>
+        </div>
+        <p class="readline" id="infoC" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Strata summed</dt><dd id="rCa">—</dd></div>
+          <div><dt>Instants in last stratum</dt><dd id="rCb">—</dd></div>
+          <div><dt>Stratum k amplitude</dt><dd>b<sup>−Hk</sup></dd></div>
+          <div><dt>Scaling ratios</dt><dd>b<sup>−k</sup> only</dd></div>
+        </dl>
+        <p class="note">The book fixes the strata's rates (b<sup>k</sup> instants per unit time) but not the size of each stratum's values; the amplitude b<sup>−Hk</sup> used here is the choice that matches the midpoint scheme stage for stage, and is a reconstruction. Compare the sum with the previous figure at the same H: same roughness, no preferred halving points.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 246: THE COMPUTER BUG ===================== -->
+  <section class="plate" id="bug">
+    <div class="plate-head">
+      <p class="no">Plate 246 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>The computer "bug" as artist, opus 1</h2>
+      <p class="dim">a very strict order had been designed in · "here, this order is hidden, and no other order is apparent"</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wD">
+          <canvas id="cD" role="img" aria-label="A field of round tremas, drawn correctly or through a deliberate bug"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cDt">The strict order</strong> · <span id="cDn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The plate "can be credited in part to faulty computer programming": a program meant to draw random round cut-outs — the design that, once "the bug was promptly identified and corrected", became Plates 306 to 309 — misdrew them, and the result went "well beyond anything we had expected". Mandelbrot kept the accident, numbered it like any plate, and noted that it "could pass for High Art". The printed picture is a dense starburst of streaks shot through with round dark holes.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mD" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group">
+          <label class="check" for="revealD"><input type="checkbox" id="revealD"> Reveal the hidden order</label>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn" id="seedD">New seed</button>
+        </div>
+        <p class="readline" id="infoD" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Tremas</dt><dd id="rDa">300</dd></div>
+          <div><dt>Radius law</dt><dd>Nr(&gt;u) ∝ u⁻²</dd></div>
+          <div><dt>The book's bug</dt><dd>not recorded</dd></div>
+          <div><dt>Corrected outcome</dt><dd>Plates 306–309</dd></div>
+        </dl>
+        <p class="note">This plate cannot be recomputed: the program and its bug are not recorded anywhere, and the caption itself says the order is hidden. So there is no "as printed" preset here — the only one on the site. What the figure shows instead: the strict order the program was meant to draw (a field of round tremas, the design of Plates 306–309, which belong to chapter 33), and a bug of our own invention — a pen that lags behind its ray while the picture is retraced from the centre — chosen because it, too, turns neat circles into a radial burst. It is a stand-in in the caption's spirit, not a reconstruction of the plate.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 26, pages 244–246 (Plate 246). Every figure is computed from the rules in the text; the displacement formula and the lower bound on slid-window variance are the book's, and the page says where it had to choose for itself. Companion page: <a href="https://claude.ai/artifact/RvpGQi3Td4y7gZnjM1pukG" target="_blank" rel="noopener">Wiener Sausage</a> (chapter 25, Brownian motion).</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>

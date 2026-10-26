@@ -1,0 +1,748 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>A Book Within the Book</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>
+/* Layout: the three art plates discussed without reproduction, then the self-squared dragon (C5) and the self-inverse patchwork (C7), each a computed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */
+:root {
+  --page: #e4e5e1;
+  --text: #1b1d1f;
+  --muted: #595e64;
+  --rule: #c4c7c1;
+  --surface: #f6f6f3;
+  --accent: #285895;
+  --f-display: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Newsreader", Georgia, "Times New Roman", serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* the figures are reproductions of printed plates, so their paper and inks stay the same in both themes */
+  --print-paper: #ecebe6;
+  --print-ink: #151515;
+  --print-rule: #c9c8c2;
+  --gain: rgba(47, 95, 158, 0.42);
+  --loss: rgba(186, 88, 44, 0.42);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --page: #111214; --text: #e5e5e1; --muted: #9a9fa6; --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --page: #111214; --text: #e5e5e1; --muted: #9a9fa6; --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--page); color: var(--text); font-family: var(--f-display); font-size: 14px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
+.wrap {
+  max-width: 1180px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 36px 64px;
+  display: grid; gap: 40px;
+}
+header.top { display: grid; gap: 10px; max-width: 820px; }
+.eyebrow { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+h1 {
+  margin: 0; display: flex; align-items: center; flex-wrap: wrap; gap: 0.18em 0.42em;
+  font-weight: 800; font-size: clamp(30px, 5.4vw, 54px); line-height: 1.02; letter-spacing: 0.01em; text-transform: uppercase; text-wrap: balance;
+}
+h1 .plate-no { font-weight: 600; text-transform: none; letter-spacing: 0; }
+.lozenge { display: inline-block; width: 0.42em; height: 0.42em; border: 0.075em solid currentColor; position: relative; top: -0.02em; }
+.lozenge::after { content: ""; position: absolute; inset: 0.1em; border: 0.05em solid currentColor; }
+.dek { margin: 0; font-family: var(--f-body); font-size: 19px; line-height: 1.45; max-width: 64ch; }
+
+nav.index {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+  padding: 10px max(16px, env(safe-area-inset-right, 0px)) 10px max(16px, env(safe-area-inset-left, 0px));
+  background: var(--page); border-bottom: 1px solid var(--rule);
+  display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none;
+}
+nav.index a {
+  flex: none; display: inline-flex; gap: 8px; align-items: baseline; padding: 6px 10px;
+  border: 1px solid var(--rule); background: var(--surface); color: var(--text); text-decoration: none; font-size: 13px; font-weight: 600;
+}
+nav.index a b { font-family: var(--f-mono); font-weight: 500; color: var(--accent); }
+nav.index a:hover { border-color: var(--text); }
+
+section.plate { display: grid; gap: 18px; scroll-margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--rule); }
+.plate-head { display: grid; gap: 4px; }
+.plate-head .no { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.plate-head h2 { margin: 0; font-size: clamp(22px, 3vw, 30px); font-weight: 800; line-height: 1.1; text-transform: uppercase; letter-spacing: 0.01em; text-wrap: balance; }
+.plate-head .dim { margin: 0; font-family: var(--f-mono); font-size: 13px; color: var(--muted); }
+.plate-body { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(280px, 1fr); gap: 32px; align-items: start; }
+@media (max-width: 899px) { .plate-body { grid-template-columns: minmax(0, 1fr); gap: 20px; } }
+figure.fig { margin: 0; display: grid; gap: 8px; min-width: 0; }
+.canvas-wrap { position: relative; width: 100%; max-width: 100%; background: var(--print-paper); outline: 1px solid var(--rule); overflow: hidden; }
+.canvas-wrap canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.r-sq { aspect-ratio: 1 / 1; }
+.r-lox { aspect-ratio: 5 / 4; }
+.zoomable { cursor: grab; touch-action: pan-y; }
+.zoomable.dragging { cursor: grabbing; }
+.view-tools { position: absolute; top: 10px; right: 10px; display: flex; gap: 6px; z-index: 2; }
+.view-tools button { min-width: 34px; height: 34px; padding: 0 10px; font: 600 15px/1 var(--f-display); color: var(--print-ink); background: #f7f7f3; border: 1px solid var(--print-rule); cursor: pointer; }
+figcaption { font-size: 13px; color: var(--muted); }
+figcaption strong { color: var(--text); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+
+.side { display: grid; gap: 18px; min-width: 0; align-content: start; }
+.side p.cap { margin: 0; font-family: var(--f-body); font-size: 17px; line-height: 1.55; max-width: 62ch; }
+.group { display: grid; gap: 8px; min-width: 0; }
+.label-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.label { font-size: 11.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.value { font-family: var(--f-mono); font-size: 12.5px; font-variant-numeric: tabular-nums; text-align: right; }
+.steps { display: flex; flex-wrap: wrap; gap: 6px; }
+.steps button {
+  min-width: 38px; height: 34px; padding: 0 10px; font: 600 13px/1 var(--f-mono); color: var(--text);
+  background: var(--surface); border: 1px solid var(--rule); cursor: pointer;
+}
+.steps.words button { font: 600 13px/1 var(--f-display); }
+.steps button[aria-pressed="true"] { background: var(--text); color: var(--page); border-color: var(--text); }
+.steps button:hover { border-color: var(--text); }
+.steps button:disabled { opacity: 0.35; cursor: default; border-color: var(--rule); }
+.btn-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.btn { padding: 8px 12px; font: 600 13px/1.2 var(--f-display); color: var(--text); background: var(--surface); border: 1px solid var(--rule); cursor: pointer; }
+.btn:hover { border-color: var(--text); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--page); }
+.check { display: flex; align-items: flex-start; gap: 8px; font-size: 13.5px; cursor: pointer; }
+.check input { accent-color: var(--accent); width: 16px; height: 16px; margin: 1px 0 0; flex: none; }
+.check:has(input:disabled) { opacity: 0.45; cursor: default; }
+.slider { display: grid; gap: 4px; }
+.slider input { width: 100%; accent-color: var(--accent); margin: 0; }
+.slider input:disabled { opacity: 0.4; }
+dl.read { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; padding-top: 14px; border-top: 1px solid var(--rule); }
+dl.read div { display: grid; gap: 2px; min-width: 0; }
+dl.read dt { font-size: 10.5px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); }
+dl.read dd { margin: 0; font-family: var(--f-mono); font-size: 16px; overflow-wrap: anywhere; }
+dl.read dd small { font-size: 11.5px; color: var(--muted); }
+.note { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.mini { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; padding: 10px 12px; background: var(--print-paper); border: 1px solid var(--print-rule); color: var(--print-ink); }
+.mini svg { height: 64px; width: auto; max-width: 100%; }
+.mini .fx { font-family: var(--f-mono); font-size: 12px; line-height: 1.6; color: var(--print-ink); }
+.key { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--muted); }
+.key span { display: inline-flex; align-items: center; gap: 6px; }
+.key i { width: 14px; height: 10px; display: inline-block; border: 1px solid var(--print-rule); }
+.readline { min-height: 2.9em; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.readline b { color: var(--text); font-weight: 700; }
+
+.sub { display: grid; gap: 14px; padding-top: 22px; border-top: 1px dashed var(--rule); scroll-margin-top: 64px; }
+.sub h3 { margin: 0; font-size: 15px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
+.source { font-family: var(--f-body); font-size: 15px; color: var(--muted); margin: 0; max-width: 84ch; }
+.source i { color: var(--text); }
+.source a { color: var(--accent); }
+button:focus-visible, input:focus-visible, a:focus-visible, canvas:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.art-list { display: grid; gap: 14px; margin: 0; padding: 0; list-style: none; }
+.art-list li { display: grid; gap: 4px; padding: 14px 16px; background: var(--surface); border: 1px solid var(--rule); }
+.art-list b { font-size: 14.5px; }
+.art-list span { font-family: var(--f-body); font-size: 15.5px; line-height: 1.5; }
+.art-list small { font-size: 12px; color: var(--muted); }
+.art-list a { color: var(--accent); }
+.formula { margin: 0; padding: 12px 14px; background: var(--print-paper); border: 1px solid var(--print-rule); color: var(--print-ink); font-family: var(--f-mono); font-size: 13.5px; line-height: 1.7; overflow-x: auto; }
+</style>
+<style>
+body { margin: 0; }
+/* The hidden attribute must beat the pages' own display rules (.slider, .check, ...). The artifact
+   wrapper's stylesheet used to provide this; self-hosted pages carry it themselves. */
+[hidden] { display: none !important; }
+nav.shell { font-family: var(--f-display); font-size: 12.5px; font-weight: 600; background: var(--page);
+  border-bottom: 1px solid var(--rule); display: flex; align-items: center; gap: 6px 18px;
+  padding: 9px max(16px, env(safe-area-inset-right, 0px)) 9px max(16px, env(safe-area-inset-left, 0px)); }
+nav.shell a { color: var(--text); text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+nav.shell a:hover { color: var(--accent); }
+nav.shell .home { letter-spacing: 0.07em; text-transform: uppercase; flex: none; }
+nav.shell .gap { flex: 1; }
+nav.shell .pn { color: var(--muted); font-weight: 500; }
+nav.shell .pn b { color: var(--text); font-weight: 600; }
+nav.shell a:hover .pn, nav.shell a:hover .pn b { color: var(--accent); }
+</style>
+</head>
+<body>
+<nav class="shell" aria-label="Site"><a class="home" href="index.html">Fractal Geometry Explorer</a><span class="gap"></span><a rel="prev" href="brown-relief.html"><span class="pn">&#8592; <b>Plates 264–271</b></span></a><a rel="next" href="fractal-landscapes.html"><span class="pn"><b>Plates C9–C15</b> &#8594;</span></a></nav>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · A book-within-the-book, in colour · plates C1–C16</p>
+    <h1><span class="plate-no">Plates C1–C16</span><span class="lozenge" aria-hidden="true"></span><span>A Book Within the Book</span></h1>
+    <p class="dek">Between chapters 29 and 30 the book pauses for a colour signature "dedicated to the proposition that if to see is to believe, then to see in color may lead to an even higher intensity of belief". Three old works of art stand at the threshold; the rest is computed. This page rebuilds V. Alan Norton's two dragons — the self-squared velvet of Plate C5 and the self-inverse patchwork of Plate C7 — from their formulas; Voss's landscapes, C9 to C15, have <a href="fractal-landscapes.html">a page of their own</a>.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#art"><b>C1 C3 C16</b> Three great artists</a>
+    <a href="#c5"><b>C5</b> Self-squared dragon</a>
+    <a href="#c7"><b>C7</b> Self-inverse patchwork</a>
+  </nav>
+
+  <!-- ===================== THE ART PLATES ===================== -->
+  <section class="plate" id="art">
+    <div class="plate-head">
+      <p class="no">Plates C1, C3 and C16 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Three great artists of the past illustrate nature</h2>
+      <p class="dim">circles, waves, and "wiggles" · works of art, discussed but not reproduced here</p>
+    </div>
+    <div class="plate-body">
+      <div class="side">
+        <p class="cap">The signature opens and closes with paintings, chosen because each one is "classically composed": it is easy to find a feature at nearly every scale between the whole picture and the finest visible detail. That property of scaling, Mandelbrot argues, characterises fractals — present in Nature and in some of Man's most carefully crafted creations. In the newly created world of the first plate he sees three kinds of form: circles and waves, which received "colossal investments of effort" and became the foundation of science, and wiggles, left almost untouched. Applying the Lord's dividers to the wiggles is the book's opening problem: the measured length of a coastline grows without limit as the dividers close, the subject of Chapter 5.</p>
+      </div>
+      <div class="side">
+        <ul class="art-list">
+          <li><b>Plate C1 · "Here God creates circles, waves, and fractals"</b>
+            <span>The frontispiece of a famous Bible Moralisée, written between 1220 and 1250 in the Eastern Champagne dialect: the Lord, holding a mason's dividers, measures a newly made world of circles, waves and wiggles. Its legend reads <i>Ici crie Dex ciel et terre, soleil et lune et toz elemenz</i> — here creates God sky and earth, sun and moon and all elements.</span>
+            <small>Austrian National Library, Vienna, codex 2554 · widely known as <a href="https://commons.wikimedia.org/wiki/File:God_the_Geometer.jpg" target="_blank" rel="noopener">God the Geometer</a></small></li>
+          <li><b>Plate C3 · The Deluge, by Leonardo da Vinci</b>
+            <span>One of many drawings in which Leonardo represents water as a superposition of eddies of many sizes. Science formalised that view only in the 1920s, through Lewis F. Richardson's scaling picture of turbulence — which then drifted into formulas and lost, for a time, all geometric flavour.</span>
+            <small>Windsor Castle, <a href="https://www.rct.uk/collection/912380" target="_blank" rel="noopener">the Royal Collection's deluge series</a></small></li>
+          <li><b>Plate C16 · The Great Wave, by Hokusai</b>
+            <span>Katsushika Hokusai (1760–1849), "fascinated by eddies and whorls of every kind". The wave carries feature upon feature down to the spray — the same scaling the closing caption asks the reader to find again in Plates C1 and C3.</span>
+            <small><a href="https://www.metmuseum.org/art/collection/search/45434" target="_blank" rel="noopener">Under the Wave off Kanagawa</a>, c. 1830–32</small></li>
+        </ul>
+        <p class="note">The paintings are in copyright-free collections but are photographs of artworks, not computed figures, so this site links out instead of reproducing them. The closing caption on C16 also defines the word <i>fractal</i>: shapes "very irregular and very fragmented", with distinctive features of every size between zero and a maximum.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== C5 ===================== -->
+  <section class="plate" id="c5">
+    <div class="plate-head">
+      <p class="no">Plate C5 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>A self-squared fractal dragon</h2>
+      <p class="dim" id="dim5">f(z) = λz(1 − z) · λ ≈ 1.6462 + 0.9637i · attracting cycle of period 25 = 5 × 5 · background: lim fₙ(z) = ∞</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wD5" style="background:#000">
+          <canvas id="cD5" role="img" aria-label="The self-squared dragon: coloured stones on black velvet"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cD5t">The dragon</strong> · <span id="cD5s">λ = 1.6462 + 0.9637i</span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">"Flamboyant this design may be, but its black background must be viewed as an example of extreme minimal art": the velvet is exactly the set of starting points z whose iterates f(z), f(f(z)), … escape to infinity. The design that stands out from it is made of 25 kinds of "stones". The map f has an attracting cycle of 25 points, and each stone collects the points whose orbit settles onto one particular point of the cycle under every 25th iteration. The 25 stones fall into 5 genera of 5 species — one colour per genus, one shade per species — and the species of gold are strung along the dragon's main body, meeting at its wasp's waists.</p>
+        <div class="formula">{z : lim<sub>n→∞</sub> |f<sub>n</sub>(z)| = ∞},&nbsp; f(z) = λz(1−z)<br>stone g: {z : lim<sub>n→∞</sub> f<sub>25n</sub>(z) = z<sub>g</sub>}</div>
+        <div class="group">
+          <div class="label-row"><span class="label">The parameter λ</span></div>
+          <div class="steps words" id="lam5" role="group" aria-label="Choice of lambda"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Colour</span></div>
+          <div class="steps words" id="mode5" role="group" aria-label="Colouring"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="p5">Show Plate C5 as printed</button>
+        </div>
+        <p class="readline" id="info5" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Cycle</dt><dd id="r5a">period 25</dd></div>
+          <div><dt>Genera</dt><dd id="r5b">5 × 5 species</dd></div>
+          <div><dt>Multiplier</dt><dd id="r5c">|f₂₅′| ≈ 0</dd></div>
+          <div><dt>Iterations</dt><dd id="r5d">—</dd></div>
+        </dl>
+        <p class="note">The caption prints λ only as "~1.64 + .96i", and at exactly that value the critical point escapes: there are no stones at all, only dust — the tilde is doing real work. This page uses the nearby λ whose 25-cycle is superattracting (the centre of the period-25 island that touches a period-5 island, which is what makes 25 = 5 × 5), found by Newton's method and matched to the plate by its spirals. The button "exactly as the caption prints it" shows the dust.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== C7 ===================== -->
+  <section class="plate" id="c7">
+    <div class="plate-head">
+      <p class="no">Plate C7 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>A self-inverse fractal patchwork</h2>
+      <p class="dim" id="dim7">generator: 4 lines and 4 circles, adjacent circles tangent · 6 Γ-discs, one colour of cloth each</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wP7" style="background:#fff">
+          <canvas id="cP7" role="img" aria-label="The self-inverse patchwork of coloured discs"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>The patchwork</strong> · <span id="cP7s">—</span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">"This hanging is patched of six different kinds of transparent cloth", discs cut from coloured cloth and sewn on a transparent scrim, singly or in superposition. The construction begins with a generator of 4 straight lines, forming a rectangle, and 4 circles, each centred on one of the lines. The shape of interest, L, is the smallest set left unchanged by reflection in any line and inversion in any circle. Mandelbrot's "workable solution": draw the 6 Γ-circles, each orthogonal to 3 of the 8 generating shapes — two overlapping in the central medallion, four at the corners. Give each Γ-disc its own cloth, and copy that cloth into every image of the disc under the group. L is then the set of points where patches touch along their bounding circles.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mode7" role="group" aria-label="Overlay"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Fineness</span><span class="value" id="v7fine">discs down to 1 px</span></div>
+          <div class="steps" id="fine7" role="group" aria-label="Smallest disc drawn"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="p7">Show Plate C7 as printed</button>
+          <button type="button" class="btn" id="p7g">The generator's frame</button>
+        </div>
+        <dl class="read">
+          <div><dt>Discs drawn</dt><dd id="r7a">—</dd></div>
+          <div><dt>Smallest</dt><dd id="r7b">—</dd></div>
+          <div><dt>Γ-discs</dt><dd>6</dd></div>
+          <div><dt>Period</dt><dd>a rectangle</dd></div>
+        </dl>
+        <p class="note">The generator was measured from the caption's diagram: lines x = ±1 and y = ±0.7 (in the rectangle's half-width), circles of radius 0.6 on the long lines. The diagram alone leaves the side circles' radius ambiguous, but the plate decides: around each white hub the discs accumulate in unending rings, the signature of tangency, so the side radius is √(1 + 0.7²) − 0.6 ≈ 0.6207, making each circle tangent to its neighbours. The Γ-circles then follow exactly from orthogonality, and the fitted picture agrees with the plate's disc centres and radii to about 1.5%. The plate is printed turned 90° from the diagram, and its six cloth colours are sampled from the print.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), colour plates C1–C7 and C16 and their captions. The dragons were computed for the book by V. Alan Norton; here every figure is recomputed from the stated formulas and generators, and the notes above say what was fitted. Chapter 19's self-squared plates and Chapter 18's self-inverse constructions will get pages of their own. Companion page: <a href="fractal-landscapes.html">Landscapes That Never Were</a> (Plates C9–C15).</p>
+</div>
+
+<script>
+// Shared drawing library: style constants, the zoomable canvas (snapshot while panning), chunked
+// paths, controls and small SVG figures. Loaded before each page's own scripts; pages may extend
+// PRINT with their own inks (PRINT.red = ..., PRINT.light = ...).
+const $ = (id) => document.getElementById(id);
+const fmt = (n) => n.toLocaleString('en-US');
+const PRINT = { paper: '#ecebe6', ink: '#151515', rule: '#c9c8c2', muted: '#66665f', accent: '#2f5f9e', red: '#c2452d', faint: '#bdbbb3', gray: '#8f8e88' };
+const RAMP = [[233, 185, 73], [217, 113, 59], [184, 66, 79], [125, 58, 120], [63, 79, 151], [43, 122, 138]];
+const ramp = (t, a = 1) => {
+  const x = Math.max(0, Math.min(1, t)) * (RAMP.length - 1), i = Math.min(RAMP.length - 2, Math.floor(x)), f = x - i;
+  const c = RAMP[i].map((v, k) => Math.round(v + (RAMP[i + 1][k] - v) * f));
+  return `rgba(${c[0]},${c[1]},${c[2]},${a})`;
+};
+const CAT = ['#151515', '#9a988f', '#2f5f9e', '#c2452d', '#3f8f6c', '#b58a2a', '#6b4e9b', '#5f8fae'];
+
+// ---------- shared plumbing ----------
+function figure(canvas, draw) {
+  const wrap = canvas.parentElement;
+  const f = { canvas, ctx: canvas.getContext('2d'), w: 1, h: 1, dpr: 1, draw };
+  const resize = () => {
+    f.dpr = Math.min(2, window.devicePixelRatio || 1);
+    f.w = wrap.clientWidth || 1; f.h = wrap.clientHeight || 1;
+    canvas.width = Math.round(f.w * f.dpr); canvas.height = Math.round(f.h * f.dpr);
+    f.draw();
+  };
+  new ResizeObserver(resize).observe(wrap);
+  return f;
+}
+function fitBox(f, bb, pad = 0.04) {
+  const w = Math.max(1e-9, bb.x1 - bb.x0), h = Math.max(1e-9, bb.y1 - bb.y0), s = Math.min(f.w / (w * (1 + 2 * pad)), f.h / (h * (1 + 2 * pad)));
+  return { s, ox: f.w / 2 - ((bb.x0 + bb.x1) / 2) * s, oy: f.h / 2 + ((bb.y0 + bb.y1) / 2) * s };
+}
+const toWorld = (f, v) => f.ctx.setTransform(f.dpr * v.s, 0, 0, -f.dpr * v.s, f.dpr * v.ox, f.dpr * v.oy);
+const toScreen = (f) => f.ctx.setTransform(f.dpr, 0, 0, f.dpr, 0, 0);
+function paper(f, color) { f.ctx.setTransform(1, 0, 0, 1, 0, 0); f.ctx.fillStyle = color; f.ctx.fillRect(0, 0, f.canvas.width, f.canvas.height); }
+function polyPath(P, closed = true, upto) {
+  const p = new Path2D(), m = upto === undefined ? P.length / 2 : upto;
+  p.moveTo(P[0], P[1]);
+  for (let i = 1; i < m; i++) p.lineTo(P[2 * i], P[2 * i + 1]);
+  if (closed) p.closePath();
+  return p;
+}
+function bbox(P, bb = { x0: Infinity, x1: -Infinity, y0: Infinity, y1: -Infinity }) {
+  for (let i = 0; i < P.length; i += 2) { bb.x0 = Math.min(bb.x0, P[i]); bb.x1 = Math.max(bb.x1, P[i]); bb.y0 = Math.min(bb.y0, P[i + 1]); bb.y1 = Math.max(bb.y1, P[i + 1]); }
+  return bb;
+}
+function stepButtons(el, values, text, aria, onPick) {
+  const bs = values.map((v) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.textContent = text(v); b.setAttribute('aria-label', aria(v));
+    b.addEventListener('click', () => onPick(v));
+    el.append(b);
+    return b;
+  });
+  const mark = (cur) => bs.forEach((b, i) => b.setAttribute('aria-pressed', String(values[i] === cur)));
+  mark.buttons = bs;
+  return mark;
+}
+// pan and zoom: a quick rescaled snapshot while moving, a full redraw once it settles
+function zoomable(wrapId, canvasId, fitOf, render, opts = {}) {
+  const maxZoom = opts.maxZoom || 400;
+  const wrap = $(wrapId), z = { view: null, user: false, snapView: null, raf: 0, full: 0 };
+  const snap = document.createElement('canvas');
+  const f = figure($(canvasId), () => draw());
+  function touch() { wrap.style.touchAction = z.view && z.view.s > z.view.fit * 1.02 ? 'none' : 'pan-y'; }
+  function draw() {
+    if (!z.view || !z.user) { z.view = fitOf(f); z.view.fit = z.view.s; z.user = false; touch(); }
+    render(f, z.view);
+    snap.width = f.canvas.width; snap.height = f.canvas.height; snap.getContext('2d').drawImage(f.canvas, 0, 0);
+    z.snapView = { s: z.view.s, ox: z.view.ox, oy: z.view.oy };
+  }
+  function quick() {
+    const v = z.view, k = v.s / z.snapView.s, c = f.ctx;
+    c.setTransform(1, 0, 0, 1, 0, 0); c.fillStyle = z.ground || PRINT.paper; c.fillRect(0, 0, f.canvas.width, f.canvas.height);
+    c.drawImage(snap, (v.ox - z.snapView.ox * k) * f.dpr, (v.oy - z.snapView.oy * k) * f.dpr, snap.width * k, snap.height * k);
+  }
+  function schedule() { if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; draw(); }); }
+  function moved() {
+    if (!z.snapView) { schedule(); return; }
+    if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; quick(); });
+    clearTimeout(z.full); z.full = setTimeout(schedule, 160);
+  }
+  function zoomAt(px, py, k) {
+    const v = z.view, ns = Math.min(v.fit * maxZoom, Math.max(v.fit * 0.8, v.s * k)), wx = (px - v.ox) / v.s, wy = (v.oy - py) / v.s;
+    v.s = ns; v.ox = px - wx * ns; v.oy = py + wy * ns; z.user = true; touch(); moved();
+  }
+  function pan(dx, dy) { z.view.ox += dx; z.view.oy += dy; z.user = true; moved(); }
+  wrap.querySelector('[data-z="in"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1.6));
+  wrap.querySelector('[data-z="out"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1 / 1.6));
+  wrap.querySelector('[data-z="fit"]').addEventListener('click', () => { z.user = false; schedule(); });
+  const pts = new Map();
+  let pinch = null, down = null;
+  const local = (e) => { const r = wrap.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+  wrap.addEventListener('pointerdown', (e) => {
+    if (e.target.closest('.view-tools')) return;
+    pts.set(e.pointerId, local(e));
+    down = pts.size === 1 ? { p: local(e), t: performance.now(), moved: 0 } : null;
+    try { wrap.setPointerCapture(e.pointerId); } catch (_) {}
+    if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), m: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2] }; }
+    wrap.classList.add('dragging');
+  });
+  wrap.addEventListener('pointermove', (e) => {
+    if (!pts.has(e.pointerId)) return;
+    const prev = pts.get(e.pointerId), cur = local(e);
+    pts.set(e.pointerId, cur);
+    if (down) down.moved = Math.max(down.moved, Math.hypot(cur[0] - down.p[0], cur[1] - down.p[1]));
+    if (pts.size === 2 && pinch) {
+      const [a, b] = [...pts.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]), m = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+      pan(m[0] - pinch.m[0], m[1] - pinch.m[1]);
+      if (pinch.d > 0) zoomAt(m[0], m[1], d / pinch.d);
+      pinch = { d, m };
+    } else if (pts.size === 1 && (e.pointerType !== 'touch' || z.view.s > z.view.fit * 1.02)) pan(cur[0] - prev[0], cur[1] - prev[1]);
+  });
+  const end = (e) => {
+    if (down && pts.size === 1 && down.moved < 5 && opts.onTap) { const [x, y] = local(e), v = z.view; opts.onTap((x - v.ox) / v.s, (v.oy - y) / v.s); }
+    down = null;
+    pts.delete(e.pointerId); if (pts.size < 2) pinch = null; if (!pts.size) wrap.classList.remove('dragging');
+  };
+  wrap.addEventListener('pointerup', end); wrap.addEventListener('pointercancel', (e) => { down = null; end(e); });
+  wrap.addEventListener('wheel', (e) => { if (!(e.ctrlKey || e.metaKey)) return; e.preventDefault(); const [x, y] = local(e); zoomAt(x, y, Math.exp(-e.deltaY * 0.0045)); }, { passive: false });
+  wrap.addEventListener('dblclick', (e) => { if (e.target.closest('.view-tools')) return; const [x, y] = local(e); zoomAt(x, y, e.shiftKey ? 0.5 : 2); });
+  return { f, z, schedule, refit: () => { z.user = false; schedule(); } };
+}
+// chunked paths: many small paths fill far faster than one path with a hundred thousand pieces
+function chunked(count, add, size = 512) {
+  const out = [];
+  let p = null;
+  for (let i = 0; i < count; i++) { if (i % size === 0) { p = new Path2D(); out.push(p); } add(p, i); }
+  return out;
+}
+// fill and outline in the same colour, so that tiles which only meet along an edge show no hairline seams
+function solid(c, paths, color, lw) {
+  c.fillStyle = color; c.strokeStyle = color; c.lineWidth = lw; c.lineJoin = 'miter';
+  for (const p of paths) { c.fill(p); c.stroke(p); }
+}
+const dot = (c, v, x, y, r = 4, color = PRINT.red) => { c.beginPath(); c.arc(v.ox + x * v.s, v.oy - y * v.s, r, 0, Math.PI * 2); c.fillStyle = color; c.fill(); c.strokeStyle = PRINT.paper; c.lineWidth = 1.5; c.stroke(); };
+
+// a polyline (Float64Array or [[x,y],...]) as SVG points with y flipped
+const svgPts = (P) => (P instanceof Float64Array ? Array.from({ length: P.length / 2 }, (_, i) => [P[2 * i], P[2 * i + 1]]) : P).map(([x, y]) => `${x.toFixed(4)},${(-y).toFixed(4)}`).join(' ');
+function miniCurve(id, P, dots = true) {
+  const pts = P instanceof Float64Array ? Array.from({ length: P.length / 2 }, (_, i) => [P[2 * i], P[2 * i + 1]]) : P;
+  $(id).innerHTML = `<line x1="0" y1="0" x2="1" y2="0" stroke="#8a8a84" stroke-width="0.008" stroke-dasharray="0.025 0.02"/>` +
+    `<polyline points="${svgPts(pts)}" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linejoin="round"/>` +
+    (dots ? `<g fill="currentColor">${pts.map(([x, y], i) => `<circle cx="${x.toFixed(4)}" cy="${(-y).toFixed(4)}" r="${i === 0 || i === pts.length - 1 ? 0.03 : 0.018}"/>`).join('')}</g>` : '');
+}
+function miniTree(id, links, dx = 0) {
+  const ends = new Set(), mid = new Set(), k = (x, y) => `${x.toFixed(4)},${y.toFixed(4)}`;
+  let s = '';
+  for (const [px, py, qx, qy] of links) {
+    s += `<line x1="${(px + dx).toFixed(4)}" y1="${(-py).toFixed(4)}" x2="${(qx + dx).toFixed(4)}" y2="${(-qy).toFixed(4)}" stroke="currentColor" stroke-width="0.02" stroke-linecap="round"/>`;
+    mid.add(k(px + dx, py)); mid.add(k(qx + dx, qy));
+  }
+  s += `<g fill="currentColor">${[...mid].map((p) => { const [x, y] = p.split(',').map(Number); const big = (Math.abs(x - dx) < 1e-6 || Math.abs(x - dx - 1) < 1e-6) && Math.abs(y) < 1e-6; return `<circle cx="${x}" cy="${-y}" r="${big ? 0.03 : 0.018}"/>`; }).join('')}</g>`;
+  return s;
+}
+// canvas transform for a similarity map f = [ar, ai, br, bi, m] composed with the view
+function setMap(f, c, v, fig) {
+  const [ar, ai, br, bi, m] = f, k = fig.dpr * v.s;
+  if (m) c.setTransform(k * ar, -k * ai, k * ai, k * ar, fig.dpr * (v.ox + v.s * br), fig.dpr * (v.oy - v.s * bi));
+  else c.setTransform(k * ar, -k * ai, -k * ai, -k * ar, fig.dpr * (v.ox + v.s * br), fig.dpr * (v.oy - v.s * bi));
+}
+const segPath = (segs, pick) => { const p = new Path2D(); for (const s of segs) if (!pick || pick(s)) { p.moveTo(s[0], s[1]); p.lineTo(s[2], s[3]); } return p; };
+// Plate 64's chevrons, measured from the plate: each interval a→b becomes a thin quadrilateral
+// pointing toward F, the corner the next stage would add (see DECISIONS.md)
+const CHEV_OUT = 0.43, CHEV_IN = 0.235;
+function chevronPaths(P, F, m) {
+  return chunked(m, (p, i) => {
+    const ax = P[2 * i], ay = P[2 * i + 1], bx = P[2 * i + 2], by = P[2 * i + 3], mx = (ax + bx) / 2, my = (ay + by) / 2;
+    const vx = F[2 * i] - mx, vy = F[2 * i + 1] - my;
+    p.moveTo(ax, ay); p.lineTo(mx + CHEV_OUT * vx, my + CHEV_OUT * vy); p.lineTo(bx, by); p.lineTo(mx + CHEV_IN * vx, my + CHEV_IN * vy); p.closePath();
+  });
+}
+
+// Plate C5: the self-squared dragon. Per-pixel iteration of f(z) = λz(1−z): points whose orbit
+// escapes are the black velvet; the rest settle onto the attracting 25-cycle and are coloured by
+// which cycle point every 25th iterate converges to (the caption's 25 "stones", 5 genera of 5
+// species). The λ values and the colour mapping are documented in DECISIONS.md.
+'use strict';
+
+const LAMBDAS = [
+  { key: 'plate', re: 1.6461826781, im: 0.9636567466, name: 'the λ fitted to the plate', btn: 'the plate' },
+  { key: 'printed', re: 1.64, im: 0.96, name: 'λ = 1.64 + 0.96i exactly', btn: 'as the caption prints it' },
+  { key: 'heart', re: 1.6776241726, im: 0.9885488715, name: 'the period-5 heart', btn: 'period-5 heart' },
+  { key: 'twin', re: 1.6435993896, im: 1.0096152717, name: 'a neighbouring 25-dragon', btn: 'a sibling dragon' },
+];
+// genus base colours, matched to the plate: gold on the main body, then the plate's other inks
+const GENUS_RGB = [[236, 190, 42], [212, 44, 38], [214, 64, 158], [64, 134, 214], [56, 164, 94]];
+const SPECIES_SHADE = [1.14, 0.98, 0.84, 0.7, 0.56];
+
+const dragon = { lam: LAMBDAS[0], mode: 'stones', cyc: null, col: null, maxIter: 1500 };
+
+// the attractor of the critical orbit: null when the critical point escapes
+function findCycle(lr, li) {
+  let x = 0.5, y = 0;
+  for (let i = 0; i < 6000; i++) {
+    const ax = x - (x * x - y * y), ay = y - 2 * x * y;       // z(1-z)
+    x = lr * ax - li * ay; y = lr * ay + li * ax;
+    if (x * x + y * y > 1e8) return null;
+  }
+  // minimal period, then the cycle in iteration order
+  let px = x, py = y, per = 0;
+  for (let p = 1; p <= 400; p++) {
+    const ax = px - (px * px - py * py), ay = py - 2 * px * py;
+    const nx = lr * ax - li * ay, ny = lr * ay + li * ax;
+    px = nx; py = ny;
+    if ((px - x) * (px - x) + (py - y) * (py - y) < 1e-18) { per = p; break; }
+  }
+  if (!per) return null;
+  const cx = new Float64Array(per), cy = new Float64Array(per);
+  let mr = 1, mi = 0;
+  for (let k = 0; k < per; k++) {
+    cx[k] = x; cy[k] = y;
+    const dr = lr * (1 - 2 * x) - li * (-2 * y), di = lr * (-2 * y) + li * (1 - 2 * x);
+    const nmr = mr * dr - mi * di; mi = mr * di + mi * dr; mr = nmr;
+    const ax = x - (x * x - y * y), ay = y - 2 * x * y;
+    const nx = lr * ax - li * ay, ny = lr * ay + li * ax;
+    x = nx; y = ny;
+  }
+  return { per, cx, cy, mult: Math.hypot(mr, mi) };
+}
+
+// genus/species layout: the cycle sits on a period-5 satellite, so z_k ≈ z_{k+5} and the 25
+// points fall into 5 bunches of 5 by their index mod 5. A genus is a bunch: its five stones'
+// cycle points string along one stretch of the dragon and meet at a wasp's waist, matching the
+// caption's gold. Gold goes to the bunch that holds the critical point (the big body diamonds);
+// the species shade distinguishes the five stones inside a genus.
+function cycleColours(cyc) {
+  const { per, cx, cy } = cyc;
+  const fam = new Int32Array(per), sp = new Int32Array(per);
+  let near = 0, nd = Infinity;
+  for (let k = 0; k < per; k++) {
+    const d = (cx[k] - 0.5) * (cx[k] - 0.5) + cy[k] * cy[k];
+    if (d < nd) { nd = d; near = k; }
+  }
+  for (let k = 0; k < per; k++) {
+    const j = (k - near + per) % per;
+    fam[k] = j % 5;
+    sp[k] = ((j / 5) | 0) % 5;
+  }
+  return { fam, sp };
+}
+
+function dragonSet(key) {
+  const L = LAMBDAS.find((l) => l.key === key) || LAMBDAS[0];
+  dragon.lam = L;
+  dragon.cyc = findCycle(L.re, L.im);
+  dragon.col = dragon.cyc ? cycleColours(dragon.cyc) : null;
+}
+
+// render the window [view] into the figure, coarse first then full, synchronously
+function dragonRender(f, v) {
+  const t0 = performance.now();
+  const W = Math.max(2, Math.round(f.w)), H = Math.max(2, Math.round(f.h));
+  const off = dragonRender.off || (dragonRender.off = document.createElement('canvas'));
+  off.width = W; off.height = H;
+  const octx = off.getContext('2d');
+  const img = octx.createImageData(W, H);
+  const data = img.data;
+  const { re: lr, im: li } = dragon.lam;
+  const cyc = dragon.cyc, col = dragon.col, mode = dragon.mode;
+  const per = cyc ? cyc.per : 0;
+  const ccx = cyc ? cyc.cx : null, ccy = cyc ? cyc.cy : null;
+  const maxIt = dragon.maxIter;
+  const esc = 1e8, eps = 1e-8;
+  for (let py = 0; py < H; py++) {
+    const wy = (v.oy - (py + 0.5)) / v.s;
+    for (let px = 0; px < W; px++) {
+      const wx = ((px + 0.5) - v.ox) / v.s;
+      let x = wx, y = wy, n = 0, cls = -1, escAt = -1;
+      while (n < maxIt) {
+        if (cyc && n % per === 0) {
+          for (let k = 0; k < per; k++) {
+            const dx = x - ccx[k], dy = y - ccy[k];
+            if (dx * dx + dy * dy < eps) { cls = k; break; }
+          }
+          if (cls >= 0) break;
+        }
+        const ax = x - (x * x - y * y), ay = y - 2 * x * y;
+        x = lr * ax - li * ay; y = lr * ay + li * ax;
+        n++;
+        if (x * x + y * y > esc) { escAt = n; break; }
+      }
+      const o = 4 * (py * W + px);
+      let r = 0, g = 0, b = 0;
+      if (cls >= 0) {
+        if (mode === 'velvet') { r = g = b = 236; }
+        else {
+          const base = GENUS_RGB[col.fam[cls]];
+          const sh = mode === 'genera' ? 1 : SPECIES_SHADE[col.sp[cls]];
+          r = Math.min(255, base[0] * sh); g = Math.min(255, base[1] * sh); b = Math.min(255, base[2] * sh);
+        }
+      } else if (!cyc && escAt > 0 && mode !== 'velvet') {
+        // no attractor at this λ: shade the dust by escape time so the ghost of the dragon shows
+        const t = Math.min(1, escAt / 60);
+        r = g = b = 10 + 120 * t * t;
+      }
+      data[o] = r; data[o + 1] = g; data[o + 2] = b; data[o + 3] = 255;
+    }
+  }
+  octx.putImageData(img, 0, 0);
+  const c = f.ctx;
+  c.setTransform(f.dpr, 0, 0, f.dpr, 0, 0);
+  c.imageSmoothingEnabled = true;
+  c.drawImage(off, 0, 0, f.w, f.h);
+  $('r5d').textContent = `≤ ${maxIt} · ${Math.round(performance.now() - t0)} ms`;
+}
+
+const DRAGON_BB = { x0: -0.32, x1: 1.32, y0: -0.8, y1: 0.8 };
+const dz = zoomable('wD5', 'cD5', (f) => fitBox(f, DRAGON_BB, 0.02), dragonRender, { maxZoom: 2000 });
+dz.z.ground = '#000';
+
+function dragonSync() {
+  const L = dragon.lam, cyc = dragon.cyc;
+  $('cD5s').textContent = `λ = ${L.re.toFixed(L.key === 'printed' ? 2 : 4)} + ${L.im.toFixed(L.key === 'printed' ? 2 : 4)}i`;
+  $('cD5t').textContent = cyc ? 'The dragon' : 'Dust: no stones';
+  $('r5a').textContent = cyc ? `period ${cyc.per}` : 'none — escapes';
+  $('r5b').textContent = cyc && cyc.per === 25 ? '5 × 5 species' : cyc ? `${cyc.per} stones` : '—';
+  $('r5c').textContent = cyc ? `|f′| ≈ ${cyc.mult < 1e-6 ? '0' : cyc.mult.toFixed(4)}` : '—';
+  $('info5').innerHTML = cyc
+    ? `The critical orbit settles on a <b>period-${cyc.per}</b> cycle; every orbit that does not escape joins it.`
+    : `At this λ the critical point itself escapes: the interior is empty, the dragon is a <b>dust</b>, shaded here by escape time.`;
+  lamMark(L.key); modeMark(dragon.mode);
+  dz.schedule();
+}
+const lamMark = stepButtons($('lam5'), LAMBDAS.map((l) => l.key), (k) => LAMBDAS.find((l) => l.key === k).btn, (k) => LAMBDAS.find((l) => l.key === k).name,
+  (k) => { dragonSet(k); dragonSync(); });
+const modeMark = stepButtons($('mode5'), ['stones', 'genera', 'velvet'], (m) => ({ stones: '25 stones', genera: '5 genera', velvet: 'the velvet alone' }[m]), (m) => m,
+  (m) => { dragon.mode = m; dragonSync(); });
+$('p5').addEventListener('click', () => { dragonSet('plate'); dragon.mode = 'stones'; dz.refit(); dragonSync(); });
+
+dragonSet('plate');
+dragonSync();
+
+// Plate C7: the self-inverse patchwork. The generator (4 lines, 4 circles, adjacent circles
+// tangent) and the 6 Γ-discs are enumerated through the group of reflections and inversions,
+// and every image of a Γ-disc is drawn in its cloth colour with multiply blending — transparent
+// cloth on a white scrim. Coordinates here are the PLATE's frame, which is the caption diagram
+// turned 90°: lines x = ±B and y = ±1, with B = 0.7. See DECISIONS.md for the fit.
+'use strict';
+
+const PB = 0.7;                                     // the short half-side
+const PR1 = 0.6;                                    // circles on the lines x = ±B
+const PR2 = Math.sqrt(1 + PB * PB) - PR1;           // circles on the lines y = ±1: tangent chain
+const PX0 = (1 + PB * PB + PR1 * PR1 - PR2 * PR2) / 2;
+const PRG = Math.sqrt(PX0 * PX0 - PR1 * PR1);       // corner Γ-discs
+const PXM = (1 - PB * PB - PR2 * PR2 + PR1 * PR1) / 2;
+const PRM = Math.sqrt(PXM * PXM + PB * PB - PR1 * PR1); // medallion Γ-discs
+
+// cloth colours sampled from the print: medallion red and green, corners blue/yellow/orange/pink
+const CLOTH = ['#e03028', '#7fa42e', '#46a8dc', '#efc924', '#f09a28', '#e070b0'];
+const GAMMA_DISCS = [
+  [0, PXM, PRM, 0],                                 // red: the upper medallion disc
+  [0, -PXM, PRM, 1],                                // green: the lower one
+  [-PB, PX0, PRG, 2], [PB, PX0, PRG, 3],            // blue, yellow at the top corners
+  [-PB, -PX0, PRG, 4], [PB, -PX0, PRG, 5],          // orange, pink at the bottom
+];
+const INV_CIRCLES = [[-PB, 0, PR1], [PB, 0, PR1], [0, -1, PR2], [0, 1, PR2]];
+
+const pw = { mode: 'cloth', fine: 1, count: 0, minr: 0 };
+
+// every image of the Γ-discs with radius above minr, within the given world rect (expanded)
+function enumerate(minr, x0, x1, y0, y1) {
+  const out = [];
+  const seen = new Set();
+  const q = [];
+  const key = (x, y, r) => `${Math.round(x * 8192)},${Math.round(y * 8192)},${Math.round(r * 8192)}`;
+  for (const [x, y, r, c] of GAMMA_DISCS) { seen.add(key(x, y, r)); q.push([x, y, r, c]); out.push([x, y, r, c]); }
+  const bx0 = x0 - 1, bx1 = x1 + 1, by0 = y0 - 1, by1 = y1 + 1;
+  let head = 0;
+  while (head < q.length && out.length < 140000) {
+    const [cx, cy, r, c] = q[head++];
+    for (let t = 0; t < 8; t++) {
+      let nx, ny, nr;
+      if (t === 0) { nx = 2 * PB - cx; ny = cy; nr = r; }
+      else if (t === 1) { nx = -2 * PB - cx; ny = cy; nr = r; }
+      else if (t === 2) { nx = cx; ny = 2 - cy; nr = r; }
+      else if (t === 3) { nx = cx; ny = -2 - cy; nr = r; }
+      else {
+        const [ax, ay, rho] = INV_CIRCLES[t - 4];
+        const d2 = (cx - ax) * (cx - ax) + (cy - ay) * (cy - ay) - r * r;
+        if (d2 <= 1e-12) continue;
+        const k = rho * rho / d2;
+        nx = ax + k * (cx - ax); ny = ay + k * (cy - ay); nr = k * r;
+      }
+      if (nr < minr || nx < bx0 || nx > bx1 || ny < by0 || ny > by1) continue;
+      const kk = key(nx, ny, nr);
+      if (seen.has(kk)) continue;
+      seen.add(kk);
+      q.push([nx, ny, nr, c]); out.push([nx, ny, nr, c]);
+    }
+  }
+  return out;
+}
+
+function patchRender(f, v) {
+  const c = f.ctx;
+  c.setTransform(1, 0, 0, 1, 0, 0);
+  c.globalCompositeOperation = 'source-over';
+  c.fillStyle = '#ffffff';
+  c.fillRect(0, 0, f.canvas.width, f.canvas.height);
+  const x0 = (0 - v.ox) / v.s, x1 = (f.w - v.ox) / v.s;
+  const y1 = v.oy / v.s, y0 = (v.oy - f.h) / v.s;
+  const minr = Math.max(0.0012, pw.fine / v.s);
+  const discs = enumerate(minr, x0, x1, y0, y1);
+  discs.sort((a, b) => b[2] - a[2]);
+  toWorld(f, v);
+  c.globalCompositeOperation = 'multiply';
+  let batch = -1;
+  for (const [dx, dy, dr, cl] of discs) {
+    if (cl !== batch) { batch = cl; }
+    c.fillStyle = CLOTH[cl];
+    c.beginPath();
+    c.arc(dx, dy, dr, 0, 6.2832);
+    c.fill();
+  }
+  c.globalCompositeOperation = 'source-over';
+  if (pw.mode !== 'cloth') {
+    c.lineWidth = 1.6 / (f.dpr * v.s);
+    c.strokeStyle = '#15151599';
+    for (const L of [-PB, PB]) { c.beginPath(); c.moveTo(L, y0 - 1); c.lineTo(L, y1 + 1); c.stroke(); }
+    for (const L of [-1, 1]) { c.beginPath(); c.moveTo(x0 - 1, L); c.lineTo(x1 + 1, L); c.stroke(); }
+    for (const [ax, ay, rho] of INV_CIRCLES) { c.beginPath(); c.arc(ax, ay, rho, 0, 6.2832); c.stroke(); }
+    if (pw.mode === 'gamma') {
+      c.lineWidth = 2.6 / (f.dpr * v.s);
+      c.strokeStyle = '#151515';
+      for (const [gx, gy, gr] of GAMMA_DISCS) { c.beginPath(); c.arc(gx, gy, gr, 0, 6.2832); c.stroke(); }
+    }
+  }
+  toScreen(f);
+  pw.count = discs.length;
+  pw.minr = minr;
+  $('r7a').textContent = fmt(discs.length);
+  $('r7b').textContent = `r ≈ ${(minr).toFixed(4)}`;
+  $('cP7s').textContent = `${fmt(discs.length)} discs of 6 cloths`;
+}
+
+// the plate's crop: centred on the red medallion disc, just over a half-period wide
+const PLATE_VIEW = { x0: -1.09, x1: 1.09, y0: PXM - 1.09, y1: PXM + 1.09 };
+const pz = zoomable('wP7', 'cP7', (f) => fitBox(f, PLATE_VIEW, 0.0), patchRender, { maxZoom: 60 });
+pz.z.ground = '#fff';
+
+const mode7 = stepButtons($('mode7'), ['cloth', 'frame', 'gamma'],
+  (m) => ({ cloth: 'the cloth alone', frame: '+ lines and circles', gamma: '+ Γ-circles' }[m]), (m) => m,
+  (m) => { pw.mode = m; mode7(m); pz.schedule(); });
+const fine7 = stepButtons($('fine7'), [3, 1.5, 1, 0.5], (x) => `${x} px`, (x) => `discs down to ${x} px`,
+  (x) => { pw.fine = x; fine7(x); $('v7fine').textContent = `discs down to ${x} px`; pz.schedule(); });
+$('p7').addEventListener('click', () => { pw.mode = 'cloth'; mode7('cloth'); pz.refit(); });
+$('p7g').addEventListener('click', () => { pw.mode = 'gamma'; mode7('gamma'); pz.refit(); });
+
+mode7('cloth');
+fine7(1);
+
+</script>
+
+</body>
+</html>
