@@ -123,6 +123,18 @@
       "layout_comment": "/* Layout: snowflake sweeps (68–69), Peano–Gosper trees (70–71), a cascade tree (71), the fudgeflake (72–73) and the quartet (73), each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
     },
     {
+      "slug": "brown-trails",
+      "title": "Brown Trails and Hulls",
+      "plates": "Plates 241–243",
+      "chapter": 25,
+      "scripts": [
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: the randomized-Peano construction, Feller's coin-toss walk (241), the Brown hull (242) and the Brown loop (243), each a figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
       "slug": "fractional-trails",
       "title": "Fractional Brown Trails",
       "plates": "Plate 255",
