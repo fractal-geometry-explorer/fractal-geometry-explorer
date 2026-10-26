@@ -1,0 +1,1004 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Turbulence and Intermittency</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>
+/* Layout: four concept sections in the chapter's order (the gusty record and its probe, curdling in space, the section argument for D > 2, the spectrum inequality), each a computed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */
+:root {
+  --page: #e4e5e1;
+  --text: #1b1d1f;
+  --muted: #595e64;
+  --rule: #c4c7c1;
+  --surface: #f6f6f3;
+  --accent: #285895;
+  --f-display: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Newsreader", Georgia, "Times New Roman", serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* the figures are reproductions of printed plates, so their paper and inks stay the same in both themes */
+  --print-paper: #ecebe6;
+  --print-ink: #151515;
+  --print-rule: #c9c8c2;
+  --gain: rgba(47, 95, 158, 0.42);
+  --loss: rgba(186, 88, 44, 0.42);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --page: #111214; --text: #e5e5e1; --muted: #9a9fa6; --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --page: #111214; --text: #e5e5e1; --muted: #9a9fa6; --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--page); color: var(--text); font-family: var(--f-display); font-size: 14px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
+.wrap {
+  max-width: 1180px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 36px 64px;
+  display: grid; gap: 40px;
+}
+header.top { display: grid; gap: 10px; max-width: 820px; }
+.eyebrow { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+h1 {
+  margin: 0; display: flex; align-items: center; flex-wrap: wrap; gap: 0.18em 0.42em;
+  font-weight: 800; font-size: clamp(30px, 5.4vw, 54px); line-height: 1.02; letter-spacing: 0.01em; text-transform: uppercase; text-wrap: balance;
+}
+h1 .plate-no { font-weight: 600; text-transform: none; letter-spacing: 0; }
+.lozenge { display: inline-block; width: 0.42em; height: 0.42em; border: 0.075em solid currentColor; position: relative; top: -0.02em; }
+.lozenge::after { content: ""; position: absolute; inset: 0.1em; border: 0.05em solid currentColor; }
+.dek { margin: 0; font-family: var(--f-body); font-size: 19px; line-height: 1.45; max-width: 64ch; }
+
+nav.index {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+  padding: 10px max(16px, env(safe-area-inset-right, 0px)) 10px max(16px, env(safe-area-inset-left, 0px));
+  background: var(--page); border-bottom: 1px solid var(--rule);
+  display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none;
+}
+nav.index a {
+  flex: none; display: inline-flex; gap: 8px; align-items: baseline; padding: 6px 10px;
+  border: 1px solid var(--rule); background: var(--surface); color: var(--text); text-decoration: none; font-size: 13px; font-weight: 600;
+}
+nav.index a b { font-family: var(--f-mono); font-weight: 500; color: var(--accent); }
+nav.index a:hover { border-color: var(--text); }
+
+section.plate { display: grid; gap: 18px; scroll-margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--rule); }
+.plate-head { display: grid; gap: 4px; }
+.plate-head .no { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.plate-head h2 { margin: 0; font-size: clamp(22px, 3vw, 30px); font-weight: 800; line-height: 1.1; text-transform: uppercase; letter-spacing: 0.01em; text-wrap: balance; }
+.plate-head .dim { margin: 0; font-family: var(--f-mono); font-size: 13px; color: var(--muted); }
+.plate-body { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(280px, 1fr); gap: 32px; align-items: start; }
+@media (max-width: 899px) { .plate-body { grid-template-columns: minmax(0, 1fr); gap: 20px; } }
+figure.fig { margin: 0; display: grid; gap: 8px; min-width: 0; }
+.canvas-wrap { position: relative; width: 100%; max-width: 100%; background: var(--print-paper); outline: 1px solid var(--rule); overflow: hidden; }
+.canvas-wrap canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.r-sq { aspect-ratio: 1 / 1; }
+.r-lox { aspect-ratio: 5 / 4; }
+.zoomable { cursor: grab; touch-action: pan-y; }
+.zoomable.dragging { cursor: grabbing; }
+.view-tools { position: absolute; top: 10px; right: 10px; display: flex; gap: 6px; z-index: 2; }
+.view-tools button { min-width: 34px; height: 34px; padding: 0 10px; font: 600 15px/1 var(--f-display); color: var(--print-ink); background: #f7f7f3; border: 1px solid var(--print-rule); cursor: pointer; }
+figcaption { font-size: 13px; color: var(--muted); }
+figcaption strong { color: var(--text); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+
+.side { display: grid; gap: 18px; min-width: 0; align-content: start; }
+.side p.cap { margin: 0; font-family: var(--f-body); font-size: 17px; line-height: 1.55; max-width: 62ch; }
+.group { display: grid; gap: 8px; min-width: 0; }
+.label-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.label { font-size: 11.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.value { font-family: var(--f-mono); font-size: 12.5px; font-variant-numeric: tabular-nums; text-align: right; }
+.steps { display: flex; flex-wrap: wrap; gap: 6px; }
+.steps button {
+  min-width: 38px; height: 34px; padding: 0 10px; font: 600 13px/1 var(--f-mono); color: var(--text);
+  background: var(--surface); border: 1px solid var(--rule); cursor: pointer;
+}
+.steps.words button { font: 600 13px/1 var(--f-display); }
+.steps button[aria-pressed="true"] { background: var(--text); color: var(--page); border-color: var(--text); }
+.steps button:hover { border-color: var(--text); }
+.steps button:disabled { opacity: 0.35; cursor: default; border-color: var(--rule); }
+.btn-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.btn { padding: 8px 12px; font: 600 13px/1.2 var(--f-display); color: var(--text); background: var(--surface); border: 1px solid var(--rule); cursor: pointer; }
+.btn:hover { border-color: var(--text); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--page); }
+.check { display: flex; align-items: flex-start; gap: 8px; font-size: 13.5px; cursor: pointer; }
+.check input { accent-color: var(--accent); width: 16px; height: 16px; margin: 1px 0 0; flex: none; }
+.check:has(input:disabled) { opacity: 0.45; cursor: default; }
+.slider { display: grid; gap: 4px; }
+.slider input { width: 100%; accent-color: var(--accent); margin: 0; }
+.slider input:disabled { opacity: 0.4; }
+dl.read { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; padding-top: 14px; border-top: 1px solid var(--rule); }
+dl.read div { display: grid; gap: 2px; min-width: 0; }
+dl.read dt { font-size: 10.5px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); }
+dl.read dd { margin: 0; font-family: var(--f-mono); font-size: 16px; overflow-wrap: anywhere; }
+dl.read dd small { font-size: 11.5px; color: var(--muted); }
+.note { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.mini { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; padding: 10px 12px; background: var(--print-paper); border: 1px solid var(--print-rule); color: var(--print-ink); }
+.mini svg { height: 64px; width: auto; max-width: 100%; }
+.mini .fx { font-family: var(--f-mono); font-size: 12px; line-height: 1.6; color: var(--print-ink); }
+.key { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--muted); }
+.key span { display: inline-flex; align-items: center; gap: 6px; }
+.key i { width: 14px; height: 10px; display: inline-block; border: 1px solid var(--print-rule); }
+.readline { min-height: 2.9em; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.readline b { color: var(--text); font-weight: 700; }
+
+.sub { display: grid; gap: 14px; padding-top: 22px; border-top: 1px dashed var(--rule); scroll-margin-top: 64px; }
+.sub h3 { margin: 0; font-size: 15px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
+.source { font-family: var(--f-body); font-size: 15px; color: var(--muted); margin: 0; max-width: 84ch; }
+.source i { color: var(--text); }
+.source a { color: var(--accent); }
+button:focus-visible, input:focus-visible, a:focus-visible, canvas:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.r-bar { aspect-ratio: 10 / 7; }
+.mini svg.gen { height: 56px; }
+</style>
+<style>
+body { margin: 0; }
+/* The hidden attribute must beat the pages' own display rules (.slider, .check, ...). The artifact
+   wrapper's stylesheet used to provide this; self-hosted pages carry it themselves. */
+[hidden] { display: none !important; }
+nav.shell { font-family: var(--f-display); font-size: 12.5px; font-weight: 600; background: var(--page);
+  border-bottom: 1px solid var(--rule); display: flex; align-items: center; gap: 6px 18px;
+  padding: 9px max(16px, env(safe-area-inset-right, 0px)) 9px max(16px, env(safe-area-inset-left, 0px)); }
+nav.shell a { color: var(--text); text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+nav.shell a:hover { color: var(--accent); }
+nav.shell .home { letter-spacing: 0.07em; text-transform: uppercase; flex: none; }
+nav.shell .gap { flex: 1; }
+nav.shell .pn { color: var(--muted); font-weight: 500; }
+nav.shell .pn b { color: var(--text); font-weight: 600; }
+nav.shell a:hover .pn, nav.shell a:hover .pn b { color: var(--accent); }
+</style>
+</head>
+<body>
+<nav class="shell" aria-label="Site"><a class="home" href="index.html">Fractal Geometry Explorer</a><span class="gap"></span><a rel="prev" href="fournier-universe.html"><span class="pn">&#8592; <b>Plates 95–96</b></span></a><a rel="next" href="islands-clusters.html"><span class="pn"><b>Chapter 13 figures</b> &#8594;</span></a></nav>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 10, "Geometry of Turbulence; Intermittency" · pages 97–105</p>
+    <h1><span class="plate-no">Chapter 10</span><span class="lozenge" aria-hidden="true"></span><span>Turbulence and Intermittency</span></h1>
+    <p class="dek">Wind comes in gusts, the gusts in smaller gusts, down to scales no airplane feels — turbulent dissipation concentrates on a thinning set, a phenomenon called intermittency. Mandelbrot's claim: that set is a fractal, with a dimension measurements put around 2.5 to 2.6, and even defining "turbulent" requires one. This chapter prints no plates, so every figure here is this page's own illustration of its argument, built from the curdling of chapter 8 carried into space.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#record"><b>1</b> Gusts within gusts</a>
+    <a href="#curdling"><b>2</b> Curdling in space</a>
+    <a href="#sections"><b>3</b> Why D &gt; 2</a>
+    <a href="#spectrum"><b>4</b> The spectrum</a>
+  </nav>
+
+  <!-- ===================== 1: THE RECORD A PROBE READS ===================== -->
+  <section class="plate" id="record">
+    <div class="plate-head">
+      <p class="no">Pages 100–102 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Gusts within gusts: the record a probe reads</h2>
+      <p class="dim" id="dimA">base 9, N gusts per eddy · d = log N / log 9 · in space, D = 2 + d</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-bar zoomable" id="wA">
+          <canvas id="cA" role="img" aria-label="A curdled one-dimensional record of turbulent dissipation"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cAt">The record</strong> · <span id="cAn"></span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">In the Reynolds pipe, turbulence is all or nothing, and no geometry is called for. In the atmosphere it is not: "certain regions are marked by very high dissipation, while other regions seem by contrast nearly free of dissipation." A large airplane is shaken every so often; a smaller airplane feels each of those shocks as a burst of weaker shocks with calm stretches between, and a finer probe splits the bursts again. Each stage of refinement sharpens the turbulence onto a smaller fraction of the record. The model: curdle the record as in chapter 8, keeping N ninths of every gusty stretch.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mA" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Gusts per eddy, N (of 9)</span></div>
+          <div class="steps" id="nA" role="group" aria-label="Gusts per eddy"></div>
+          <div class="label-row"><span class="label">Curdle down to stage</span><span class="value" id="sAv">stage 5</span></div>
+          <div class="steps" id="sA" role="group" aria-label="Stage"></div>
+        </div>
+        <div class="group" id="probeWrap">
+          <div class="slider">
+            <div class="label-row"><span class="label">Probe size (the airplane)</span><span class="value" id="kAv"></span></div>
+            <input type="range" id="kA" min="0" max="5" step="1" value="1" aria-label="Probe size">
+          </div>
+        </div>
+        <div class="group">
+          <label class="check" for="fixedA"><input type="checkbox" id="fixedA"> Same gust positions in every eddy (de-randomized)</label>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="pA1">Natural turbulence (D = 2.5)</button>
+          <button type="button" class="btn" id="pA2">Wind tunnel (D = 3)</button>
+          <button type="button" class="btn" id="gustsA">New gusts</button>
+        </div>
+        <p class="readline" id="infoA" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Gust dimension d</dt><dd id="rAa">1/2</dd></div>
+          <div><dt>In space, D = 2 + d</dt><dd id="rAb">2.5</dd></div>
+          <div><dt>Gust intensity</dt><dd id="rAc">—</dd></div>
+          <div><dt>Turbulent, per probe</dt><dd id="rAd">—</dd></div>
+        </dl>
+        <p class="note">A reconstruction: the book describes these records in words and prints none. Every gusty stretch keeps exactly N of its 9 ninths, so the gusts' dimension is exactly d = log N/log 9 and the fixed total dissipation ends up uniform on what survives. Positions are drawn at random, seeded ("New gusts" redraws them). The opening draw was picked so that its first three gusts fall in separate ninths, which makes the split easy to see; most draws put some kept ninths side by side, where they merge into one longer gust. The checkbox reuses one set of positions everywhere, which is the chapter's own "de-randomized" curdling. A record at a point samples space along a line, so gusts of dimension d on the line mean support of dimension D = 2 + d in space — section 3 takes that up.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 2: CURDLING IN SPACE ===================== -->
+  <section class="plate" id="curdling">
+    <div class="plate-head">
+      <p class="no">Pages 102–103 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Curdling and fractally homogeneous turbulence</h2>
+      <p class="dim" id="dimB">base 3: keep N of 27 subeddies · D = log N / log 3 · density × 27/N per stage</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wB">
+          <canvas id="cB" role="img" aria-label="Curdling of the unit cube: the surviving subeddies after m stages"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cBt">The curds</strong> · <span id="cBn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Papers on intermittency speak of "blobs, rods, slabs, and ribbons" — shapes that fail to be self-similar. Mandelbrot instead lets the whole and its details come from one process: split each eddy into 27 subeddies of one third its side, and let the dissipation curdle into N of them. After m stages it sits, uniformly, on N<sup>m</sup> of the 27<sup>m</sup> cells; continued without end, the limit has dimension D = log N/log 3, and he names it <i>fractally homogeneous turbulence</i>. Keeping all 27 gives D = 3, G. I. Taylor's homogeneous turbulence: curdling allows the classic case, and the novel possibility D &lt; 3.</p>
+        <div class="mini" aria-label="The generator: the kept subcells of the 3 by 3 by 3 box, layer by layer">
+          <svg class="gen" viewBox="-0.2 -0.2 11.6 3.4" aria-hidden="true" id="miniB"></svg>
+          <div class="fx" id="miniBfx">N = 16 of 27</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mB" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group">
+          <div class="slider">
+            <div class="label-row"><span class="label">Subeddies kept, N</span><span class="value" id="nBv"></span></div>
+            <input type="range" id="nBs" min="1" max="27" step="1" value="16" aria-label="Subeddies kept">
+          </div>
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="sBv">stage 2</span></div>
+          <div class="steps" id="sB" role="group" aria-label="Stage"></div>
+        </div>
+        <div class="group" id="zBwrap" hidden>
+          <div class="slider">
+            <div class="label-row"><span class="label">Cut height</span><span class="value" id="zBv"></span></div>
+            <input type="range" id="zBs" min="0" max="0.999" step="0.001" value="0.42" aria-label="Cut height">
+          </div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="pB1">Intermittent (N = 16, D ≈ 2.52)</button>
+          <button type="button" class="btn" id="pB2">Taylor (N = 27, D = 3)</button>
+          <button type="button" class="btn" id="shufB">Shuffle the generator</button>
+        </div>
+        <p class="readline" id="infoB" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Dimension D</dt><dd id="rBa">—</dd></div>
+          <div><dt>Subeddies kept</dt><dd id="rBb">—</dd></div>
+          <div><dt>Dissipation density</dt><dd id="rBc">—</dd></div>
+          <div><dt id="tBd">—</dt><dd id="rBd">—</dd></div>
+        </dl>
+        <p class="note">A reconstruction: the chapter gives the rule (N = r<sup>−D</sup> of the r<sup>−3</sup> subeddies per stage, here r = 1/3) but no figure. The generator's cells are drawn at random once, seeded, then reused in every eddy — the "crude de-randomized form of the Novikov &amp; Stewart model" of chapter 23. Whether the limit set is a dust, stringy vortex tubes or layered vortex sheets is, the chapter stresses, an open question: the same D can be achieved by sets of any of those topologies, and the kurtosis measurements meant to settle it turn out to depend on D alone.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 3: WHY D > 2 ===================== -->
+  <section class="plate" id="sections">
+    <div class="plate-head">
+      <p class="no">Pages 103–104 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Why the probes say D &gt; 2</h2>
+      <p class="dim" id="dimC">a line meets a fractal of dimension D &gt; 2 with positive probability, and almost never one with D &lt; 2</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-lox zoomable" id="wC">
+          <canvas id="cC" role="img" aria-label="Probability that a straight probe still meets dissipation, stage by stage and in the limit"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cCt">Stage by stage</strong> · <span id="cCn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Run a straight probe — a hot-wire record, an airplane's path — through curdled turbulence. Inside each turbulent eddy the probe crosses a column of 3 subeddies, and each stays turbulent with probability 3<sup>D−3</sup>; so along the probe the gusts breed like a family tree with 3<sup>D−2</sup> children per generation on average. When D &lt; 2 the family dies out: almost every probe eventually reads laminar. When D &gt; 2 it survives forever with positive probability. Probes hit turbulence constantly — an experiment "repeated constantly, with the possible outcomes reduced to an alternative between never and often" — so the support of dissipation must satisfy D &gt; 2.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mC" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group">
+          <div class="slider">
+            <div class="label-row"><span class="label">Dimension D of the support</span><span class="value" id="DCv"></span></div>
+            <input type="range" id="DCs" min="1" max="3" step="0.01" value="2.55" aria-label="Dimension D">
+          </div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="pC1">Turbulence (D ≈ 2.55)</button>
+          <button type="button" class="btn" id="pC2">Galaxies (D ≈ 1.23)</button>
+          <button type="button" class="btn" id="pC3">Critical (D = 2)</button>
+        </div>
+        <p class="readline" id="infoC" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Children per generation</dt><dd id="rCa">—</dd></div>
+          <div><dt>Probe hits, in the limit</dt><dd id="rCb">—</dd></div>
+          <div><dt>Trace on the probe</dt><dd id="rCc">—</dd></div>
+          <div><dt>After 20 stages</dt><dd id="rCd">—</dd></div>
+        </dl>
+        <p class="note">Computed exactly for the randomized curdling (each subeddy kept with probability 3<sup>D−3</sup>; chapter 23 proves the underlying theorem for such cascades). The same sign of D − 2 separates this chapter from chapter 9: a probe's hits demand D &gt; 2 for turbulence, while the dark night sky — most lines from Earth never meeting a star — demands that galaxies project onto vanishing area, hence D &lt; 2, and their D ≈ 1.23. When D &gt; 2 the trace left on the probe is itself a dust of dimension D − 2, which is how the record of section 1 inherits d = D − 2.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 4: THE SPECTRUM (IN)EQUALITY ===================== -->
+  <section class="plate" id="spectrum">
+    <div class="plate-head">
+      <p class="no">Pages 104–105 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>The spectrum (in)equality</h2>
+      <p class="dim" id="dimD">⟨[v(x) − v(x+r)]²⟩ = |r|<sup>2/3 + B</sup> · B = (3 − D)/3 · D = 3 gives Kolmogorov's 2/3</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-lox zoomable" id="wD">
+          <canvas id="cD" role="img" aria-label="The velocity structure function and its exponent against the dimension D"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cDt">Structure function</strong> · <span id="cDn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Intermittency leaves a fingerprint on the spectrum. In fractally homogeneous turbulence the velocity difference across a distance r satisfies ⟨[v(x) − v(x+r)]²⟩ = |r|<sup>2/3 + B</sup> with B = (3 − D)/3 — stated by Mandelbrot in 1967, in the notation θ = D − 2. Taylor homogeneous turbulence has D = 3, B vanishes, and the classic Kolmogorov exponent 2/3 is left standing; concentrating the dissipation (D &lt; 3) steepens the exponent. The more general weighted curdling of chapter 23 gives the inequality B ≤ (3 − D)/3 instead.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mD" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group">
+          <div class="slider">
+            <div class="label-row"><span class="label">Dimension D of the support</span><span class="value" id="DDv"></span></div>
+            <input type="range" id="DDs" min="2" max="3" step="0.01" value="2.55" aria-label="Dimension D">
+          </div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="pD1">Measured (D ≈ 2.55)</button>
+          <button type="button" class="btn" id="pD2">Kolmogorov (D = 3)</button>
+        </div>
+        <p class="readline" id="infoD" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>B = (3 − D)/3</dt><dd id="rDa">—</dd></div>
+          <div><dt>Variance exponent</dt><dd id="rDb">—</dd></div>
+          <div><dt>Spectrum E(k)</dt><dd id="rDc">—</dd></div>
+          <div><dt>θ = D − 2 (1967)</dt><dd id="rDd">—</dd></div>
+        </dl>
+        <p class="note">The formulas are the chapter's; the charts are this page's way of drawing them. The β-model of Frisch, Nelkin &amp; Sulem (1978) grafts a dynamical vocabulary onto this same geometry — the chapter notes its mathematics and conclusions are identical. Measurements put D around 2.5 to 2.6, "but probably below 2.66", so the measured exponent sits a little above Kolmogorov's 2/3 — close enough that the 1941 theory predicted spectra so well while resting on an assumption, uniform dissipation, that the wind's gusts plainly violate.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 10, pages 97–105. The chapter prints no plates; every figure above is computed from the rules the text states, and each note says what was reconstructed. Companion pages: <a href="cantor-dust.html">Cantor Dust</a> (the curdling of chapter 8) and the forthcoming pages for chapter 9 (galaxies) and chapter 23 (random curdling).</p>
+</div>
+
+<script>
+// Shared drawing library: style constants, the zoomable canvas (snapshot while panning), chunked
+// paths, controls and small SVG figures. Loaded before each page's own scripts; pages may extend
+// PRINT with their own inks (PRINT.red = ..., PRINT.light = ...).
+const $ = (id) => document.getElementById(id);
+const fmt = (n) => n.toLocaleString('en-US');
+const PRINT = { paper: '#ecebe6', ink: '#151515', rule: '#c9c8c2', muted: '#66665f', accent: '#2f5f9e', red: '#c2452d', faint: '#bdbbb3', gray: '#8f8e88' };
+const RAMP = [[233, 185, 73], [217, 113, 59], [184, 66, 79], [125, 58, 120], [63, 79, 151], [43, 122, 138]];
+const ramp = (t, a = 1) => {
+  const x = Math.max(0, Math.min(1, t)) * (RAMP.length - 1), i = Math.min(RAMP.length - 2, Math.floor(x)), f = x - i;
+  const c = RAMP[i].map((v, k) => Math.round(v + (RAMP[i + 1][k] - v) * f));
+  return `rgba(${c[0]},${c[1]},${c[2]},${a})`;
+};
+const CAT = ['#151515', '#9a988f', '#2f5f9e', '#c2452d', '#3f8f6c', '#b58a2a', '#6b4e9b', '#5f8fae'];
+
+// ---------- shared plumbing ----------
+function figure(canvas, draw) {
+  const wrap = canvas.parentElement;
+  const f = { canvas, ctx: canvas.getContext('2d'), w: 1, h: 1, dpr: 1, draw };
+  const resize = () => {
+    f.dpr = Math.min(2, window.devicePixelRatio || 1);
+    f.w = wrap.clientWidth || 1; f.h = wrap.clientHeight || 1;
+    canvas.width = Math.round(f.w * f.dpr); canvas.height = Math.round(f.h * f.dpr);
+    f.draw();
+  };
+  new ResizeObserver(resize).observe(wrap);
+  return f;
+}
+function fitBox(f, bb, pad = 0.04) {
+  const w = Math.max(1e-9, bb.x1 - bb.x0), h = Math.max(1e-9, bb.y1 - bb.y0), s = Math.min(f.w / (w * (1 + 2 * pad)), f.h / (h * (1 + 2 * pad)));
+  return { s, ox: f.w / 2 - ((bb.x0 + bb.x1) / 2) * s, oy: f.h / 2 + ((bb.y0 + bb.y1) / 2) * s };
+}
+const toWorld = (f, v) => f.ctx.setTransform(f.dpr * v.s, 0, 0, -f.dpr * v.s, f.dpr * v.ox, f.dpr * v.oy);
+const toScreen = (f) => f.ctx.setTransform(f.dpr, 0, 0, f.dpr, 0, 0);
+function paper(f, color) { f.ctx.setTransform(1, 0, 0, 1, 0, 0); f.ctx.fillStyle = color; f.ctx.fillRect(0, 0, f.canvas.width, f.canvas.height); }
+function polyPath(P, closed = true, upto) {
+  const p = new Path2D(), m = upto === undefined ? P.length / 2 : upto;
+  p.moveTo(P[0], P[1]);
+  for (let i = 1; i < m; i++) p.lineTo(P[2 * i], P[2 * i + 1]);
+  if (closed) p.closePath();
+  return p;
+}
+function bbox(P, bb = { x0: Infinity, x1: -Infinity, y0: Infinity, y1: -Infinity }) {
+  for (let i = 0; i < P.length; i += 2) { bb.x0 = Math.min(bb.x0, P[i]); bb.x1 = Math.max(bb.x1, P[i]); bb.y0 = Math.min(bb.y0, P[i + 1]); bb.y1 = Math.max(bb.y1, P[i + 1]); }
+  return bb;
+}
+function stepButtons(el, values, text, aria, onPick) {
+  const bs = values.map((v) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.textContent = text(v); b.setAttribute('aria-label', aria(v));
+    b.addEventListener('click', () => onPick(v));
+    el.append(b);
+    return b;
+  });
+  const mark = (cur) => bs.forEach((b, i) => b.setAttribute('aria-pressed', String(values[i] === cur)));
+  mark.buttons = bs;
+  return mark;
+}
+// pan and zoom: a quick rescaled snapshot while moving, a full redraw once it settles
+function zoomable(wrapId, canvasId, fitOf, render, opts = {}) {
+  const maxZoom = opts.maxZoom || 400;
+  const wrap = $(wrapId), z = { view: null, user: false, snapView: null, raf: 0, full: 0 };
+  const snap = document.createElement('canvas');
+  const f = figure($(canvasId), () => draw());
+  function touch() { wrap.style.touchAction = z.view && z.view.s > z.view.fit * 1.02 ? 'none' : 'pan-y'; }
+  function draw() {
+    if (!z.view || !z.user) { z.view = fitOf(f); z.view.fit = z.view.s; z.user = false; touch(); }
+    render(f, z.view);
+    snap.width = f.canvas.width; snap.height = f.canvas.height; snap.getContext('2d').drawImage(f.canvas, 0, 0);
+    z.snapView = { s: z.view.s, ox: z.view.ox, oy: z.view.oy };
+  }
+  function quick() {
+    const v = z.view, k = v.s / z.snapView.s, c = f.ctx;
+    c.setTransform(1, 0, 0, 1, 0, 0); c.fillStyle = z.ground || PRINT.paper; c.fillRect(0, 0, f.canvas.width, f.canvas.height);
+    c.drawImage(snap, (v.ox - z.snapView.ox * k) * f.dpr, (v.oy - z.snapView.oy * k) * f.dpr, snap.width * k, snap.height * k);
+  }
+  function schedule() { if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; draw(); }); }
+  function moved() {
+    if (!z.snapView) { schedule(); return; }
+    if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; quick(); });
+    clearTimeout(z.full); z.full = setTimeout(schedule, 160);
+  }
+  function zoomAt(px, py, k) {
+    const v = z.view, ns = Math.min(v.fit * maxZoom, Math.max(v.fit * 0.8, v.s * k)), wx = (px - v.ox) / v.s, wy = (v.oy - py) / v.s;
+    v.s = ns; v.ox = px - wx * ns; v.oy = py + wy * ns; z.user = true; touch(); moved();
+  }
+  function pan(dx, dy) { z.view.ox += dx; z.view.oy += dy; z.user = true; moved(); }
+  wrap.querySelector('[data-z="in"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1.6));
+  wrap.querySelector('[data-z="out"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1 / 1.6));
+  wrap.querySelector('[data-z="fit"]').addEventListener('click', () => { z.user = false; schedule(); });
+  const pts = new Map();
+  let pinch = null, down = null;
+  const local = (e) => { const r = wrap.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+  wrap.addEventListener('pointerdown', (e) => {
+    if (e.target.closest('.view-tools')) return;
+    pts.set(e.pointerId, local(e));
+    down = pts.size === 1 ? { p: local(e), t: performance.now(), moved: 0 } : null;
+    try { wrap.setPointerCapture(e.pointerId); } catch (_) {}
+    if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), m: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2] }; }
+    wrap.classList.add('dragging');
+  });
+  wrap.addEventListener('pointermove', (e) => {
+    if (!pts.has(e.pointerId)) return;
+    const prev = pts.get(e.pointerId), cur = local(e);
+    pts.set(e.pointerId, cur);
+    if (down) down.moved = Math.max(down.moved, Math.hypot(cur[0] - down.p[0], cur[1] - down.p[1]));
+    if (pts.size === 2 && pinch) {
+      const [a, b] = [...pts.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]), m = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+      pan(m[0] - pinch.m[0], m[1] - pinch.m[1]);
+      if (pinch.d > 0) zoomAt(m[0], m[1], d / pinch.d);
+      pinch = { d, m };
+    } else if (pts.size === 1 && (e.pointerType !== 'touch' || z.view.s > z.view.fit * 1.02)) pan(cur[0] - prev[0], cur[1] - prev[1]);
+  });
+  const end = (e) => {
+    if (down && pts.size === 1 && down.moved < 5 && opts.onTap) { const [x, y] = local(e), v = z.view; opts.onTap((x - v.ox) / v.s, (v.oy - y) / v.s); }
+    down = null;
+    pts.delete(e.pointerId); if (pts.size < 2) pinch = null; if (!pts.size) wrap.classList.remove('dragging');
+  };
+  wrap.addEventListener('pointerup', end); wrap.addEventListener('pointercancel', (e) => { down = null; end(e); });
+  wrap.addEventListener('wheel', (e) => { if (!(e.ctrlKey || e.metaKey)) return; e.preventDefault(); const [x, y] = local(e); zoomAt(x, y, Math.exp(-e.deltaY * 0.0045)); }, { passive: false });
+  wrap.addEventListener('dblclick', (e) => { if (e.target.closest('.view-tools')) return; const [x, y] = local(e); zoomAt(x, y, e.shiftKey ? 0.5 : 2); });
+  return { f, z, schedule, refit: () => { z.user = false; schedule(); } };
+}
+// chunked paths: many small paths fill far faster than one path with a hundred thousand pieces
+function chunked(count, add, size = 512) {
+  const out = [];
+  let p = null;
+  for (let i = 0; i < count; i++) { if (i % size === 0) { p = new Path2D(); out.push(p); } add(p, i); }
+  return out;
+}
+// fill and outline in the same colour, so that tiles which only meet along an edge show no hairline seams
+function solid(c, paths, color, lw) {
+  c.fillStyle = color; c.strokeStyle = color; c.lineWidth = lw; c.lineJoin = 'miter';
+  for (const p of paths) { c.fill(p); c.stroke(p); }
+}
+const dot = (c, v, x, y, r = 4, color = PRINT.red) => { c.beginPath(); c.arc(v.ox + x * v.s, v.oy - y * v.s, r, 0, Math.PI * 2); c.fillStyle = color; c.fill(); c.strokeStyle = PRINT.paper; c.lineWidth = 1.5; c.stroke(); };
+
+// a polyline (Float64Array or [[x,y],...]) as SVG points with y flipped
+const svgPts = (P) => (P instanceof Float64Array ? Array.from({ length: P.length / 2 }, (_, i) => [P[2 * i], P[2 * i + 1]]) : P).map(([x, y]) => `${x.toFixed(4)},${(-y).toFixed(4)}`).join(' ');
+function miniCurve(id, P, dots = true) {
+  const pts = P instanceof Float64Array ? Array.from({ length: P.length / 2 }, (_, i) => [P[2 * i], P[2 * i + 1]]) : P;
+  $(id).innerHTML = `<line x1="0" y1="0" x2="1" y2="0" stroke="#8a8a84" stroke-width="0.008" stroke-dasharray="0.025 0.02"/>` +
+    `<polyline points="${svgPts(pts)}" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linejoin="round"/>` +
+    (dots ? `<g fill="currentColor">${pts.map(([x, y], i) => `<circle cx="${x.toFixed(4)}" cy="${(-y).toFixed(4)}" r="${i === 0 || i === pts.length - 1 ? 0.03 : 0.018}"/>`).join('')}</g>` : '');
+}
+function miniTree(id, links, dx = 0) {
+  const ends = new Set(), mid = new Set(), k = (x, y) => `${x.toFixed(4)},${y.toFixed(4)}`;
+  let s = '';
+  for (const [px, py, qx, qy] of links) {
+    s += `<line x1="${(px + dx).toFixed(4)}" y1="${(-py).toFixed(4)}" x2="${(qx + dx).toFixed(4)}" y2="${(-qy).toFixed(4)}" stroke="currentColor" stroke-width="0.02" stroke-linecap="round"/>`;
+    mid.add(k(px + dx, py)); mid.add(k(qx + dx, qy));
+  }
+  s += `<g fill="currentColor">${[...mid].map((p) => { const [x, y] = p.split(',').map(Number); const big = (Math.abs(x - dx) < 1e-6 || Math.abs(x - dx - 1) < 1e-6) && Math.abs(y) < 1e-6; return `<circle cx="${x}" cy="${-y}" r="${big ? 0.03 : 0.018}"/>`; }).join('')}</g>`;
+  return s;
+}
+// canvas transform for a similarity map f = [ar, ai, br, bi, m] composed with the view
+function setMap(f, c, v, fig) {
+  const [ar, ai, br, bi, m] = f, k = fig.dpr * v.s;
+  if (m) c.setTransform(k * ar, -k * ai, k * ai, k * ar, fig.dpr * (v.ox + v.s * br), fig.dpr * (v.oy - v.s * bi));
+  else c.setTransform(k * ar, -k * ai, -k * ai, -k * ar, fig.dpr * (v.ox + v.s * br), fig.dpr * (v.oy - v.s * bi));
+}
+const segPath = (segs, pick) => { const p = new Path2D(); for (const s of segs) if (!pick || pick(s)) { p.moveTo(s[0], s[1]); p.lineTo(s[2], s[3]); } return p; };
+// Plate 64's chevrons, measured from the plate: each interval a→b becomes a thin quadrilateral
+// pointing toward F, the corner the next stage would add (see DECISIONS.md)
+const CHEV_OUT = 0.43, CHEV_IN = 0.235;
+function chevronPaths(P, F, m) {
+  return chunked(m, (p, i) => {
+    const ax = P[2 * i], ay = P[2 * i + 1], bx = P[2 * i + 2], by = P[2 * i + 3], mx = (ax + bx) / 2, my = (ay + by) / 2;
+    const vx = F[2 * i] - mx, vy = F[2 * i + 1] - my;
+    p.moveTo(ax, ay); p.lineTo(mx + CHEV_OUT * vx, my + CHEV_OUT * vy); p.lineTo(bx, by); p.lineTo(mx + CHEV_IN * vx, my + CHEV_IN * vy); p.closePath();
+  });
+}
+
+// Chapter 10 prints no plates, so every figure on this page is the page's own illustration of
+// the chapter's text. The models: a fixed-count random curdling of [0, 1] in base 9 (the gusty
+// record a probe reads), the chapter's curdling of the unit cube in base 3 (fractally
+// homogeneous turbulence), the branching-process section argument for D > 2, and the spectrum
+// (in)equality B = (3 − D)/3.
+
+// seeded PRNG (mulberry32)
+function rng(seed) {
+  let a = seed >>> 0;
+  return () => {
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+// k distinct cells out of n (partial Fisher–Yates), seeded, ascending. The first k picks of a
+// given seed are a prefix of the first k + 1, so growing N adds curds without moving the rest.
+function pickCells(rand, n, k) {
+  const idx = Array.from({ length: n }, (_, i) => i);
+  for (let i = 0; i < k; i++) { const j = i + Math.floor(rand() * (n - i)); [idx[i], idx[j]] = [idx[j], idx[i]]; }
+  return idx.slice(0, k).sort((a, b) => a - b);
+}
+
+// curdle [0, 1] in base 9: every kept cell keeps exactly N of its 9 subcells, so the gusts'
+// dimension is exactly d = log N / log 9, and the dissipation (total mass 1 at every stage)
+// spreads uniformly — density (9/N)^m in every kept stage-m cell, zero elsewhere. `fixed` reuses
+// one set of N positions in every cell (the chapter's "de-randomized" curdling); otherwise every
+// cell draws its own positions from the same seed. Returns the starts of every stage 0..m
+// (stage k holds the N^k ancestors, of length 9^−k, of the stage-m cells).
+function curdleLine(N, m, seed, fixed) {
+  const rand = rng(seed), gen = pickCells(rand, 9, N), stages = [new Float64Array(1)];
+  let len = 1;
+  for (let s = 0; s < m; s++) {
+    const prev = stages[s], out = new Float64Array(prev.length * N);
+    let j = 0;
+    for (const a of prev) { const cells = fixed ? gen : pickCells(rand, 9, N); for (const c of cells) out[j++] = a + (c * len) / 9; }
+    stages.push(out); len /= 9;
+  }
+  return stages;
+}
+
+// curdle the unit cube in base 3: one generator (N of the 27 subcells, seeded), reused in every
+// cell — the chapter's curdling, "a crude de-randomized form" of the Novikov–Stewart model of
+// chapter 23. D = log N / log 3; dissipation density multiplies by 27/N at every stage.
+const cubeGen = (N, seed) => pickCells(rng(seed), 27, N).map((c) => [c % 3, ((c / 3) | 0) % 3, (c / 9) | 0]);
+function curdleCube(gen, m) {
+  let cells = [[0, 0, 0]], side = 1;
+  for (let s = 0; s < m; s++) {
+    const out = [], t = side / 3;
+    for (const [x, y, z] of cells) for (const [i, j, k] of gen) out.push([x + i * t, y + j * t, z + k * t]);
+    cells = out; side = t;
+  }
+  return { cells, side };
+}
+
+// the section argument, computed exactly. Randomize the curdling (base 3, each subcell kept
+// independently with probability p = 3^(D−3), so E(kept) = 27p and D = 3 + log₃ p). A straight
+// probe's trace crosses 3 subcells of each cell it was turbulent in, so the trace down the
+// cascade is a branching process with Binomial(3, p) offspring — mean 3p = 3^(D−2). It dies out
+// surely when D ≤ 2 and survives forever with positive probability when D > 2: extinction by
+// stage m iterates the generating function q → (1 − p + p·q)³ from q = 0.
+function hitCurve(D, M) {
+  const p = Math.pow(3, D - 3), out = [1];
+  let q = 0;
+  for (let m = 1; m <= M; m++) { const t = 1 - p + p * q; q = t * t * t; out.push(1 - q); }
+  return out;
+}
+const hitLimit = (D, it = 4000) => hitCurve(D, it)[it];
+
+// the spectrum (in)equality (Mandelbrot 1967k, 1976o): in fractally homogeneous turbulence
+// ⟨[v(x) − v(x+r)]²⟩ = |r|^(2/3 + B) with B = (3 − D)/3; weighted curdling gives B ≤ (3 − D)/3.
+const specB = (D) => (3 - D) / 3;
+
+(() => {
+  const pow = Math.pow, sup = (n) => String(n).replace(/\d/g, (d) => '⁰¹²³⁴⁵⁶⁷⁸⁹'[d]);
+  const sci = (x) => { if (x < 1000) return x >= 100 ? x.toFixed(0) : x.toFixed(x >= 1 ? 1 : 3); const [m, e] = x.toExponential(1).split('e'); return `${m}·10${sup(+e)}`; };
+  const pct = (x) => `${(100 * x).toFixed(x >= 0.1 ? 0 : 2)}%`;
+  const MONO = '500 10.5px "IBM Plex Mono", monospace';
+
+  // a screen-space chart frame with margins; returns the plot rectangle
+  function frame(c, f, ml = 52, mr = 14, mt = 14, mb = 36) {
+    const iw = f.w - ml - mr, ih = f.h - mt - mb;
+    c.strokeStyle = PRINT.rule; c.lineWidth = 1; c.strokeRect(ml, mt, iw, ih);
+    c.font = MONO;
+    return { ml, mt, iw, ih };
+  }
+  const xlabel = (c, f, r, s) => { c.fillStyle = PRINT.muted; c.textAlign = 'center'; c.textBaseline = 'top'; c.fillText(s, r.ml + r.iw / 2, f.h - 16); };
+  const ylabel = (c, r, s) => { c.save(); c.translate(14, r.mt + r.ih / 2); c.rotate(-Math.PI / 2); c.fillStyle = PRINT.muted; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(s, 0, 0); c.restore(); };
+
+  // ====================== 1: the record a probe reads ======================
+  // seed 56 puts the first three gusts in separated ninths (2, 4, 6; 1, 4, 7 de-randomized); most
+  // seeds put some kept ninths side by side, where they merge into one longer gust
+  const SEED_A = 56;
+  const stA = { mode: 'record', N: 3, m: 5, seed: SEED_A, fixed: false, k: 1 };
+  const mMaxA = (N) => { let m = 0; for (let v = 1; m < 7 && v * N <= 20000; m++) v *= N; return Math.max(1, m); };
+  const cacheA = {};
+  const dataA = () => {
+    const key = `${stA.N}|${stA.m}|${stA.seed}|${stA.fixed ? 1 : 0}`;
+    return cacheA[key] || (cacheA[key] = curdleLine(stA.N, stA.m, stA.seed, stA.fixed));
+  };
+  const PITCH = 0.085, THICK = 0.035;
+  const zA = zoomable('wA', 'cA', (f) => {
+    if (stA.mode === 'cascade') return fitBox(f, { x0: -0.02, x1: 1.02, y0: -(PITCH * stA.m + THICK + 0.02), y1: 0.02 }, 0.03);
+    return fitBox(f, { x0: -0.02, x1: 1.02, y0: -0.18, y1: 0.78 }, 0.03);
+  }, (f, v) => {
+    const c = f.ctx, stages = dataA();
+    paper(f, PRINT.paper); toWorld(f, v);
+    c.fillStyle = PRINT.ink;
+    const pen = 0.75 / v.s;                      // each gust keeps at least a pen's width on screen
+    const vx0 = -v.ox / v.s, vx1 = (f.w - v.ox) / v.s;
+    if (stA.mode === 'cascade') {
+      c.fillRect(0, -THICK, 1, THICK);
+      for (let k = 1; k <= stA.m; k++) {
+        const L = pow(9, 1 - k), w = L / 9, y = -(PITCH * k) - THICK, N = stA.N;
+        const kept = new Path2D(), empty = new Path2D();
+        if (w * v.s >= 3) {
+          // the parent's 9 slots: kept ones in ink, the rest faint, a hairline apart so that
+          // kept ninths side by side still read as separate pieces
+          const inset = Math.min(0.08 * w, 0.75 / v.s), parents = stages[k - 1], kids = stages[k];
+          for (let i = 0; i < parents.length; i++) {
+            const a = parents[i];
+            if (a + L < vx0 || a > vx1) continue;
+            const on = new Set();
+            for (let t = 0; t < N; t++) on.add(Math.round((kids[i * N + t] - a) / w));
+            for (let j = 0; j < 9; j++) (on.has(j) ? kept : empty).rect(a + j * w + inset, y, w - 2 * inset, THICK);
+          }
+          c.fillStyle = '#dcdad1'; c.fill(empty);
+        } else {
+          const len = Math.max(w, pen);
+          for (const a of stages[k]) if (a + len >= vx0 && a <= vx1) kept.rect(a, y, len, THICK);
+        }
+        c.fillStyle = PRINT.ink; c.fill(kept);
+      }
+    } else {
+      const len = Math.max(pow(9, -stA.m), pen), rec = new Path2D();
+      for (const a of stages[stA.m]) rec.rect(a, 0, len, 0.55);
+      c.fill(rec);
+      toScreen(f);
+      c.strokeStyle = PRINT.rule; c.lineWidth = 1;
+      c.beginPath(); c.moveTo(v.ox, v.oy); c.lineTo(v.ox + v.s, v.oy); c.stroke();
+      // the probe's verdict: windows of size 9^−k that contain any dissipation
+      toWorld(f, v);
+      const wk = pow(9, -stA.k), band = new Path2D();
+      for (const a of stages[stA.k]) band.rect(a, -0.125, wk, 0.055);
+      c.fillStyle = PRINT.red; c.fill(band);
+      toScreen(f);
+      const sy0 = v.oy + 0.07 * v.s, sh = 0.055 * v.s;
+      if (wk * v.s >= 4) {
+        // dividers between the probe's windows, so neighbouring turbulent windows count separately
+        c.strokeStyle = PRINT.paper; c.lineWidth = 1; c.beginPath();
+        for (let j = Math.max(1, Math.ceil(vx0 / wk)); j <= Math.min(Math.round(1 / wk) - 1, Math.floor(vx1 / wk)); j++) {
+          const x = v.ox + j * wk * v.s;
+          c.moveTo(x, sy0); c.lineTo(x, sy0 + sh);
+        }
+        c.stroke();
+      }
+      c.strokeStyle = PRINT.rule;
+      c.strokeRect(v.ox, sy0, v.s, sh);
+    }
+    toScreen(f);
+  });
+  const MODES_A = { record: 'The record', cascade: 'Stage by stage' };
+  const INFO_A = {
+    record: 'Black: the dissipation a perfect probe would read. Red: the stretches a probe of the chosen size calls turbulent — everything else it reads as laminar. The strip is divided into the stretches the probe reads. Shrink the probe and the turbulent fraction falls; zoom in and every burst splits again.',
+    cascade: 'Each row curdles the one above: every gusty stretch is cut into 9 ninths (the faint boxes) and N of them stay gusty (black). Kept ninths often sit side by side, and then merge into one longer gust. The total dissipation never changes, so what survives carries ever higher intensity — gusts within gusts, after the fashion of the Cantor bar of Plate 80. Rows finer than a pixel cannot show their split; zoom in to see it.',
+  };
+  function setA(refit) {
+    markMA(stA.mode); markNA(stA.N); markSA(stA.m);
+    const max = mMaxA(stA.N);
+    markSA.buttons.forEach((b, i) => { b.disabled = i + 1 > max; });
+    $('kA').max = stA.m; $('kA').value = stA.k;
+    $('probeWrap').hidden = stA.mode !== 'record';
+    const d = Math.log(stA.N) / Math.log(9);
+    $('dimA').textContent = `base 9, N = ${stA.N} gusts per eddy · d = log ${stA.N}/log 9 ≈ ${d.toFixed(4)} · in space, D = 2 + d ≈ ${(2 + d).toFixed(2)}`;
+    $('cAt').textContent = MODES_A[stA.mode];
+    $('cAn').textContent = stA.mode === 'cascade' ? `stages 0 to ${stA.m}` : `stage ${stA.m} · ${fmt(pow(stA.N, stA.m))} gusts · probe reads 9${sup(-stA.k)}-sized stretches`;
+    $('sAv').textContent = `stage ${stA.m}`;
+    $('kAv').textContent = stA.k === 0 ? 'the whole record' : `9${sup(-stA.k)} ≈ ${pow(9, -stA.k).toPrecision(2)}`;
+    $('infoA').innerHTML = INFO_A[stA.mode];
+    $('rAa').textContent = `${d.toFixed(3)}`;
+    $('rAb').textContent = `${(2 + d).toFixed(3)}`;
+    $('rAc').textContent = `${sci(pow(9 / stA.N, stA.m))}× the mean`;
+    $('rAd').textContent = pct(pow(stA.N / 9, stA.k));
+    if (refit) zA.refit(); else zA.schedule();
+  }
+  const markMA = stepButtons($('mA'), Object.keys(MODES_A), (k) => MODES_A[k], (k) => `Show: ${MODES_A[k]}`, (k) => { stA.mode = k; setA(true); });
+  const markNA = stepButtons($('nA'), [1, 2, 3, 4, 5, 6, 7, 8, 9], String, (N) => `${N} gusts per eddy`, (N) => { stA.N = N; stA.m = Math.min(stA.m, mMaxA(N)); stA.k = Math.min(stA.k, stA.m); setA(true); });
+  const markSA = stepButtons($('sA'), [1, 2, 3, 4, 5, 6, 7], String, (n) => `Stage ${n}`, (n) => { stA.m = n; stA.k = Math.min(stA.k, n); setA(stA.mode === 'cascade'); });
+  $('kA').addEventListener('input', (e) => { stA.k = +e.target.value; setA(false); });
+  $('fixedA').addEventListener('change', (e) => { stA.fixed = e.target.checked; setA(false); });
+  $('gustsA').addEventListener('click', () => { stA.seed = (stA.seed * 1664525 + 1013904223) >>> 0; setA(false); });
+  $('pA1').addEventListener('click', () => { Object.assign(stA, { mode: 'record', N: 3, m: 5, k: 1, seed: SEED_A }); setA(true); });
+  $('pA2').addEventListener('click', () => { Object.assign(stA, { mode: 'record', N: 9, m: 4, k: 1 }); setA(true); });
+
+  // ====================== 2: curdling in space ======================
+  const stB = { mode: 'curds', N: 16, m: 2, seed: 2, zc: 0.42 };
+  const mMaxB = (N) => { let m = 0; for (let v = 1; m < 4 && v * N <= 8000; m++) v *= N; return Math.max(1, m); };
+  const cacheB = {};
+  const genB = () => cubeGen(stB.N, stB.seed);
+  function dataB() {
+    const key = `${stB.N}|${stB.m}|${stB.seed}`;
+    if (!cacheB[key]) {
+      const { cells, side } = curdleCube(genB(), stB.m);
+      cells.sort((a, b) => a[0] + a[1] + a[2] - (b[0] + b[1] + b[2]));
+      cacheB[key] = { cells, side };
+    }
+    return cacheB[key];
+  }
+  const KISO = Math.cos(Math.PI / 6), TISO = 0.5;
+  const zB = zoomable('wB', 'cB', (f) => {
+    if (stB.mode === 'curds') return fitBox(f, { x0: -0.92, x1: 0.92, y0: -1.06, y1: 1.06 }, 0.02);
+    return fitBox(f, { x0: -0.02, x1: 1.02, y0: -0.02, y1: 1.02 }, 0.02);
+  }, (f, v) => {
+    const c = f.ctx, { cells, side } = dataB();
+    paper(f, PRINT.paper); toWorld(f, v);
+    if (stB.mode === 'curds') {
+      const lw = 0.5 / v.s, u = (x, y) => (x - y) * KISO, w = (x, y, z) => z - (x + y) * TISO;
+      const face = (pts, color) => {
+        c.beginPath(); c.moveTo(pts[0], pts[1]);
+        for (let i = 2; i < 8; i += 2) c.lineTo(pts[i], pts[i + 1]);
+        c.closePath(); c.fillStyle = color; c.strokeStyle = color; c.lineWidth = lw; c.fill(); c.stroke();
+      };
+      for (const [x, y, z] of cells) {
+        const s = side, x1 = x + s, y1 = y + s, z1 = z + s;
+        face([u(x, y), w(x, y, z1), u(x1, y), w(x1, y, z1), u(x1, y1), w(x1, y1, z1), u(x, y1), w(x, y1, z1)], '#d7d4c9');
+        face([u(x1, y), w(x1, y, z), u(x1, y1), w(x1, y1, z), u(x1, y1), w(x1, y1, z1), u(x1, y), w(x1, y, z1)], '#3e3d38');
+        face([u(x, y1), w(x, y1, z), u(x1, y1), w(x1, y1, z), u(x1, y1), w(x1, y1, z1), u(x, y1), w(x, y1, z1)], '#9a988f');
+      }
+    } else if (stB.mode === 'slice') {
+      const p = new Path2D();
+      for (const [x, y, z] of cells) if (z <= stB.zc && stB.zc < z + side) p.rect(x, y, side, side);
+      c.fillStyle = PRINT.ink; c.fill(p);
+      toScreen(f); c.strokeStyle = PRINT.rule; c.lineWidth = 1; c.strokeRect(v.ox, v.oy - v.s, v.s, v.s); toWorld(f, v);
+    } else {
+      const seen = new Set(), p = new Path2D(), g = Math.round(1 / side);
+      for (const [x, y] of cells) {
+        const key = Math.round(x * g) * (g + 1) + Math.round(y * g);
+        if (!seen.has(key)) { seen.add(key); p.rect(x, y, side, side); }
+      }
+      c.fillStyle = PRINT.ink; c.fill(p);
+      toScreen(f); c.strokeStyle = PRINT.rule; c.lineWidth = 1; c.strokeRect(v.ox, v.oy - v.s, v.s, v.s); toWorld(f, v);
+    }
+    toScreen(f);
+  });
+  function miniBdraw() {
+    const kept = new Set(genB().map(([i, j, k]) => `${i},${j},${k}`));
+    let s = '';
+    for (let z = 0; z < 3; z++) {
+      const x0 = z * 4.1;
+      for (let i = 0; i < 3; i++) for (let j = 0; j < 3; j++)
+        if (kept.has(`${i},${j},${z}`)) s += `<rect x="${x0 + i}" y="${2 - j}" width="1" height="1" fill="currentColor"/>`;
+      for (let t = 0; t <= 3; t++) s += `<line x1="${x0 + t}" y1="0" x2="${x0 + t}" y2="3" stroke="#8a8a84" stroke-width="0.05"/><line x1="${x0}" y1="${t}" x2="${x0 + 3}" y2="${t}" stroke="#8a8a84" stroke-width="0.05"/>`;
+    }
+    $('miniB').innerHTML = s;
+    $('miniBfx').textContent = `N = ${stB.N} of 27`;
+  }
+  const MODES_B = { curds: 'The curds', slice: 'A plane cut', sky: 'Projected on the sky' };
+  const INFO_B = {
+    curds: 'The subeddies still carrying dissipation after m stages of curdling. The generator (the chosen N of 27, shown layer by layer above) repeats inside every curd — the whole and its finest details come from the same process, so the limit is self-similar by construction.',
+    slice: 'Cut the cube with a plane: the curds it meets form a flat pattern of dimension D − 1. Slide the cut — some heights are rich and some are empty, which is intermittency seen edge-on.',
+    sky: 'Project every curd on one face, the way galaxies project on the sky. For D > 2 the projections pile up and cover almost everything in the limit; for D < 2 they cover a vanishing fraction — chapter 9\'s dark night sky, and section 3\'s other half.',
+  };
+  function setB(refit) {
+    markMB(stB.mode); markSB(stB.m);
+    const max = mMaxB(stB.N);
+    markSB.buttons.forEach((b, i) => { b.disabled = i > max; });
+    $('zBwrap').hidden = stB.mode !== 'slice';
+    const D = stB.N === 1 ? 0 : Math.log(stB.N) / Math.log(3), { cells, side } = dataB();
+    $('nBv').textContent = `N = ${stB.N} · D ≈ ${D.toFixed(3)}`;
+    $('sBv').textContent = `stage ${stB.m}`;
+    $('zBv').textContent = stB.zc.toFixed(3);
+    $('dimB').textContent = `base 3: keep N = ${stB.N} of 27 subeddies · D = log ${stB.N}/log 3 ≈ ${D.toFixed(4)} · density × ${(27 / stB.N).toFixed(2)} per stage`;
+    $('cBt').textContent = MODES_B[stB.mode];
+    $('cBn').textContent = `stage ${stB.m} · ${fmt(cells.length)} subeddies of side 3${sup(-stB.m)}`;
+    $('infoB').innerHTML = INFO_B[stB.mode];
+    $('rBa').textContent = D.toFixed(4);
+    $('rBb').textContent = `${fmt(pow(stB.N, stB.m))} of ${fmt(pow(27, stB.m))}`;
+    $('rBc').textContent = `${sci(pow(27 / stB.N, stB.m))}× the mean`;
+    if (stB.mode === 'slice') {
+      const n = cells.reduce((s, [, , z]) => s + (z <= stB.zc && stB.zc < z + side ? 1 : 0), 0);
+      $('tBd').textContent = 'The cut holds'; $('rBd').textContent = `${fmt(n)} cells · D − 1 ≈ ${Math.max(0, D - 1).toFixed(2)}`;
+    } else if (stB.mode === 'sky') {
+      const g = Math.round(1 / side), seen = new Set();
+      for (const [x, y] of cells) seen.add(Math.round(x * g) * (g + 1) + Math.round(y * g));
+      $('tBd').textContent = 'Sky covered'; $('rBd').textContent = pct(seen.size / (g * g));
+    } else { $('tBd').textContent = 'Each subeddy'; $('rBd').textContent = `side 3${sup(-stB.m)} ≈ ${pow(3, -stB.m).toFixed(stB.m > 2 ? 4 : 3)}`; }
+    miniBdraw();
+    if (refit) zB.refit(); else zB.schedule();
+  }
+  const markMB = stepButtons($('mB'), Object.keys(MODES_B), (k) => MODES_B[k], (k) => `Show: ${MODES_B[k]}`, (k) => { stB.mode = k; setB(true); });
+  const markSB = stepButtons($('sB'), [0, 1, 2, 3, 4], String, (n) => `Stage ${n}`, (n) => { stB.m = n; setB(false); });
+  $('nBs').addEventListener('input', (e) => { stB.N = +e.target.value; stB.m = Math.min(stB.m, mMaxB(stB.N)); setB(false); });
+  $('zBs').addEventListener('input', (e) => { stB.zc = +e.target.value; setB(false); });
+  $('shufB').addEventListener('click', () => { stB.seed = (stB.seed * 1664525 + 1013904223) >>> 0; setB(false); });
+  $('pB1').addEventListener('click', () => { Object.assign(stB, { mode: 'curds', N: 16, m: 2 }); $('nBs').value = 16; setB(true); });
+  $('pB2').addEventListener('click', () => { Object.assign(stB, { mode: 'curds', N: 27, m: 2 }); $('nBs').value = 27; setB(true); });
+
+  // ====================== 3: why the probes say D > 2 ======================
+  const stC = { mode: 'stages', D: 2.55 };
+  const MC = 20;
+  let limC = null;                     // the limit curve over D in [1, 3], computed once
+  const limCurve = () => limC || (limC = Array.from({ length: 201 }, (_, i) => hitLimit(1 + (2 * i) / 200)));
+  const zC = zoomable('wC', 'cC', (f) => fitBox(f, { x0: 0, x1: 1, y0: 0, y1: 1 }, 0), (f) => {
+    const c = f.ctx;
+    paper(f, PRINT.paper); toScreen(f);
+    const r = frame(c, f);
+    if (stC.mode === 'stages') {
+      const X = (m) => r.ml + (m / MC) * r.iw, Y = (h) => r.mt + (1 - h) * r.ih;
+      c.textAlign = 'center'; c.textBaseline = 'top'; c.fillStyle = PRINT.muted;
+      for (let m = 0; m <= MC; m += 5) c.fillText(String(m), X(m), r.mt + r.ih + 6);
+      c.textAlign = 'right'; c.textBaseline = 'middle';
+      for (const h of [0, 0.5, 1]) c.fillText(h.toFixed(1), r.ml - 6, Y(h));
+      xlabel(c, f, r, 'stages of curdling, m'); ylabel(c, r, 'P(probe still hits)');
+      const curve = (D, color, lw) => {
+        const hs = hitCurve(D, MC);
+        c.strokeStyle = color; c.lineWidth = lw; c.beginPath();
+        hs.forEach((h, m) => (m ? c.lineTo(X(m), Y(h)) : c.moveTo(X(0), Y(h))));
+        c.stroke();
+        return hs[MC];
+      };
+      c.textAlign = 'left'; c.textBaseline = 'middle'; c.font = MONO;
+      for (const D of [1.5, 2, 2.5, 3]) {
+        const end = curve(D, PRINT.faint, 1.4);
+        c.fillStyle = PRINT.muted; c.fillText(`D = ${D}`, X(MC) - 44, Y(end) + (D === 2 ? 10 : -8));
+      }
+      curve(stC.D, PRINT.red, 2.2);
+      c.fillStyle = PRINT.red; c.fillText(`D = ${stC.D.toFixed(2)}`, r.ml + 8, Y(hitCurve(stC.D, 3)[3]) - 10);
+    } else {
+      const X = (D) => r.ml + ((D - 1) / 2) * r.iw, Y = (h) => r.mt + (1 - h) * r.ih;
+      c.textAlign = 'center'; c.textBaseline = 'top'; c.fillStyle = PRINT.muted;
+      for (const D of [1, 1.5, 2, 2.5, 3]) c.fillText(D.toFixed(1), X(D), r.mt + r.ih + 6);
+      c.textAlign = 'right'; c.textBaseline = 'middle';
+      for (const h of [0, 0.5, 1]) c.fillText(h.toFixed(1), r.ml - 6, Y(h));
+      xlabel(c, f, r, 'dimension D of the support'); ylabel(c, r, 'P(probe hits, in the limit)');
+      // measured band for turbulent dissipation, and the galaxies' D
+      c.fillStyle = 'rgba(194,69,45,0.12)'; c.fillRect(X(2.5), r.mt, X(2.66) - X(2.5), r.ih);
+      c.fillStyle = PRINT.red; c.textAlign = 'center'; c.fillText('measured', (X(2.5) + X(2.66)) / 2, r.mt + r.ih - 18);
+      c.strokeStyle = PRINT.muted; c.setLineDash([5, 4]); c.beginPath(); c.moveTo(X(2), r.mt); c.lineTo(X(2), r.mt + r.ih); c.stroke(); c.setLineDash([]);
+      c.fillStyle = PRINT.muted; c.textAlign = 'left'; c.fillText('D = 2', X(2) + 5, r.mt + 20);
+      const L = limCurve();
+      c.strokeStyle = PRINT.ink; c.lineWidth = 2; c.beginPath();
+      L.forEach((h, i) => (i ? c.lineTo(X(1 + (2 * i) / 200), Y(h)) : c.moveTo(X(1), Y(h))));
+      c.stroke();
+      dotAt(c, X(1.23), Y(0), PRINT.accent); c.fillStyle = PRINT.accent; c.textAlign = 'left'; c.textBaseline = 'bottom'; c.fillText('galaxies, D ≈ 1.23', X(1.23) + 7, Y(0) - 5);
+      dotAt(c, X(stC.D), Y(hitLimit(stC.D)), PRINT.red);
+    }
+  });
+  const dotAt = (c, x, y, color) => { c.beginPath(); c.arc(x, y, 4.5, 0, 2 * Math.PI); c.fillStyle = color; c.fill(); c.strokeStyle = PRINT.paper; c.lineWidth = 1.5; c.stroke(); };
+  const MODES_C = { stages: 'Stage by stage', limit: 'The limit, against D' };
+  const INFO_C = {
+    stages: 'Each curve: the probability that a straight probe still meets dissipation after m stages. Below D = 2 every curve dies; above it they level off. D = 2 is the critical case — the family tree averages exactly one child, and dies out all the same, only slowly.',
+    limit: 'The limiting probability jumps away from zero exactly at D = 2. Galaxies (D ≈ 1.23) sit far below: almost no line of sight meets one, and the night sky is dark. Turbulent dissipation sits in the measured band above: probes hit it "often", never "never".',
+  };
+  function setC(refit) {
+    markMC(stC.mode);
+    const D = stC.D, lim = hitLimit(D), h20 = hitCurve(D, MC)[MC];
+    $('DCv').textContent = `D = ${D.toFixed(2)}`;
+    $('cCt').textContent = MODES_C[stC.mode];
+    $('cCn').textContent = `branching ratio 3^(D−2) ≈ ${pow(3, D - 2).toFixed(3)}`;
+    $('infoC').innerHTML = INFO_C[stC.mode];
+    $('rCa').textContent = pow(3, D - 2).toFixed(3);
+    $('rCb').textContent = D <= 2 ? '0 — dies out' : lim.toFixed(3);
+    $('rCc').textContent = D > 2 ? `a dust, d = ${(D - 2).toFixed(2)}` : 'empty in the limit';
+    $('rCd').textContent = h20.toFixed(3);
+    if (refit) zC.refit(); else zC.schedule();
+  }
+  const markMC = stepButtons($('mC'), Object.keys(MODES_C), (k) => MODES_C[k], (k) => `Show: ${MODES_C[k]}`, (k) => { stC.mode = k; setC(false); });
+  $('DCs').addEventListener('input', (e) => { stC.D = +e.target.value; setC(false); });
+  const presetC = (D) => { stC.D = D; $('DCs').value = D; setC(false); };
+  $('pC1').addEventListener('click', () => presetC(2.55));
+  $('pC2').addEventListener('click', () => presetC(1.23));
+  $('pC3').addEventListener('click', () => presetC(2));
+
+  // ====================== 4: the spectrum (in)equality ======================
+  const stD = { mode: 'lines', D: 2.55 };
+  const expo = (D) => 2 / 3 + specB(D);
+  const zD = zoomable('wD', 'cD', (f) => fitBox(f, { x0: 0, x1: 1, y0: 0, y1: 1 }, 0), (f) => {
+    const c = f.ctx;
+    paper(f, PRINT.paper); toScreen(f);
+    const r = frame(c, f);
+    if (stD.mode === 'lines') {
+      // log–log: r over three decades, ⟨Δv²⟩ = r^(2/3 + B) through (1, 1)
+      const X = (lr) => r.ml + ((lr + 3) / 3) * r.iw, Y = (ly) => r.mt + (-ly / 3) * r.ih;
+      c.fillStyle = PRINT.muted; c.textAlign = 'center'; c.textBaseline = 'top';
+      for (let e = -3; e <= 0; e++) {
+        const x = X(e);
+        if (e > -3) { c.strokeStyle = '#dddbd2'; c.beginPath(); c.moveTo(x, r.mt); c.lineTo(x, r.mt + r.ih); c.stroke(); }
+        c.fillText(`10${sup(e)}`, x, r.mt + r.ih + 6);
+      }
+      c.textAlign = 'right'; c.textBaseline = 'middle';
+      for (let e = -3; e <= 0; e++) {
+        const y = Y(e);
+        if (e > -3) { c.strokeStyle = '#dddbd2'; c.beginPath(); c.moveTo(r.ml, y); c.lineTo(r.ml + r.iw, y); c.stroke(); }
+        c.fillText(`10${sup(e)}`, r.ml - 6, y);
+      }
+      xlabel(c, f, r, 'separation r'); ylabel(c, r, '⟨[v(x) − v(x+r)]²⟩');
+      const line = (ex, color, dash, lw) => {
+        c.strokeStyle = color; c.lineWidth = lw; c.setLineDash(dash);
+        c.beginPath(); c.moveTo(X(-3), Y(-3 * ex)); c.lineTo(X(0), Y(0)); c.stroke(); c.setLineDash([]);
+      };
+      line(2 / 3, PRINT.accent, [6, 4], 1.4);
+      c.fillStyle = PRINT.accent; c.textAlign = 'left'; c.textBaseline = 'top'; c.fillText('Kolmogorov: slope 2/3 (D = 3)', X(-2.92), Y(-0.55));
+      line(expo(stD.D), PRINT.ink, [], 2.2);
+      c.fillStyle = PRINT.ink; c.textAlign = 'left'; c.textBaseline = 'top'; c.fillText(`D = ${stD.D.toFixed(2)}: slope ${expo(stD.D).toFixed(3)}`, X(-2.95), Y(-2.95 * expo(stD.D)) + 10);
+    } else {
+      const X = (D) => r.ml + (D - 2) * r.iw, Y = (ex) => r.mt + ((1.05 - ex) / 0.45) * r.ih;
+      c.fillStyle = PRINT.muted; c.textAlign = 'center'; c.textBaseline = 'top';
+      for (const D of [2, 2.25, 2.5, 2.75, 3]) c.fillText(D.toFixed(2), X(D), r.mt + r.ih + 6);
+      c.textAlign = 'right'; c.textBaseline = 'middle';
+      for (const ex of [2 / 3, 0.8, 0.9, 1]) c.fillText(ex === 2 / 3 ? '2/3' : ex.toFixed(1), r.ml - 6, Y(ex));
+      xlabel(c, f, r, 'dimension D of the support'); ylabel(c, r, 'variance exponent 2/3 + B');
+      // weighted curdling allows anything below the fractally homogeneous line, down to 2/3
+      c.fillStyle = 'rgba(47,95,158,0.10)'; c.beginPath();
+      c.moveTo(X(2), Y(2 / 3)); c.lineTo(X(2), Y(1)); c.lineTo(X(3), Y(2 / 3)); c.closePath(); c.fill();
+      c.fillStyle = 'rgba(194,69,45,0.12)'; c.fillRect(X(2.5), r.mt, X(2.66) - X(2.5), r.ih);
+      c.fillStyle = PRINT.red; c.textAlign = 'center'; c.fillText('measured D', (X(2.5) + X(2.66)) / 2, r.mt + 8);
+      c.strokeStyle = PRINT.accent; c.setLineDash([6, 4]); c.beginPath(); c.moveTo(X(2), Y(2 / 3)); c.lineTo(X(3), Y(2 / 3)); c.stroke(); c.setLineDash([]);
+      c.fillStyle = PRINT.accent; c.textAlign = 'left'; c.textBaseline = 'top'; c.fillText('Kolmogorov 2/3', X(2.03), Y(2 / 3) + 5);
+      c.strokeStyle = PRINT.ink; c.lineWidth = 2; c.beginPath(); c.moveTo(X(2), Y(1)); c.lineTo(X(3), Y(2 / 3)); c.stroke();
+      c.fillStyle = PRINT.ink; c.textBaseline = 'bottom'; c.fillText('B = (3 − D)/3', X(2.08), Y(expo(2.14)) - 6);
+      c.fillStyle = PRINT.muted; c.fillText('weighted curdling: B ≤ (3 − D)/3', X(2.2), Y(0.71) - 4);
+      dotAt(c, X(stD.D), Y(expo(stD.D)), PRINT.red);
+    }
+  });
+  const MODES_D = { lines: 'Structure function', exponent: 'Exponent against D' };
+  const INFO_D = {
+    lines: 'On log paper the structure function is a straight line of slope 2/3 + B. Concentrating the dissipation on a thinner set (smaller D) steepens it: nearby points more often fall in the same laminar stretch, so small-scale differences lose variance.',
+    exponent: 'The exponent against D. Fractally homogeneous turbulence sits on the line B = (3 − D)/3; weighted curdling fills the region below it. With the measured D ≈ 2.5–2.6, the correction B stays below ~0.17 — which is why Kolmogorov\'s 2/3 worked so well for decades.',
+  };
+  function setD(refit) {
+    markMD(stD.mode);
+    const D = stD.D, B = specB(D);
+    $('DDv').textContent = `D = ${D.toFixed(2)}`;
+    $('cDt').textContent = MODES_D[stD.mode];
+    $('cDn').textContent = `B = (3 − ${D.toFixed(2)})/3 ≈ ${B.toFixed(3)}`;
+    $('infoD').innerHTML = INFO_D[stD.mode];
+    $('rDa').textContent = B.toFixed(4);
+    $('rDb').textContent = `2/3 + B ≈ ${(2 / 3 + B).toFixed(4)}`;
+    $('rDc').textContent = `∝ k^−${(5 / 3 + B).toFixed(3)}`;
+    $('rDd').textContent = (D - 2).toFixed(2);
+    if (refit) zD.refit(); else zD.schedule();
+  }
+  const markMD = stepButtons($('mD'), Object.keys(MODES_D), (k) => MODES_D[k], (k) => `Show: ${MODES_D[k]}`, (k) => { stD.mode = k; setD(false); });
+  $('DDs').addEventListener('input', (e) => { stD.D = +e.target.value; setD(false); });
+  const presetD = (D) => { stD.D = D; $('DDs').value = D; setD(false); };
+  $('pD1').addEventListener('click', () => presetD(2.55));
+  $('pD2').addEventListener('click', () => presetD(3));
+
+  setA(true); setB(true); setC(true); setD(true);
+})();
+
+</script>
+
+</body>
+</html>

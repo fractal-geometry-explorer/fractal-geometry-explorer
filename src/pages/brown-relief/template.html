@@ -1,0 +1,303 @@
+<title>Brown Relief and Coastlines</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.r-land { aspect-ratio: 2 / 1; }
+.r-coast { aspect-ratio: 3 / 2; }
+.r-cont { aspect-ratio: 10 / 7; }
+.r-ham { aspect-ratio: 2 / 1; }
+.r-four { aspect-ratio: 10 / 16; max-width: 420px; }
+.r-isl { aspect-ratio: 10 / 13; max-width: 460px; }
+.canvas-wrap.dark { background: #101010; }
+.canvas-wrap.dark + figcaption { }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 28, "Relief and Coastlines" · pages 256–271</p>
+    <h1><span class="plate-no">Plates 264–271</span><span class="lozenge" aria-hidden="true"></span><span>Brown Relief and Coastlines</span></h1>
+    <p class="dek">Mountains like the Alps, Mandelbrot argues, are usefully modeled by fractal surfaces ruled by Brownian chance — and their zerosets, the points at ocean level, at last give a sensible model of coastlines. The ordinary Brown relief has surface dimension D = 5/2 and coastlines of D = 3/2, too rough for most of Earth; its fractional variants reach any dimension the data ask for. Every figure here is a fresh simulation, computed from the chapter's rules with the seed on display.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#land"><b>264–5</b> Lake landscapes</a>
+    <a href="#coast"><b>266–7</b> Coastlines</a>
+    <a href="#contour"><b>268</b> Contour lines</a>
+    <a href="#pangaea"><b>269</b> Pangaea</a>
+    <a href="#first"><b>270</b> First coastlines</a>
+    <a href="#island"><b>271</b> Island from the sea</a>
+  </nav>
+
+  <!-- ===================== PLATES 264-265: LAKE LANDSCAPES ===================== -->
+  <section class="plate" id="land">
+    <div class="plate-head">
+      <p class="no">Plates 264 and 265 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Brown lake landscapes, ordinary and fractional</h2>
+      <p class="dim">surface D = 3 − H, from ≈ 2.1 to 5/2 · every vertical cut is a (fractional) Brown line-to-line function</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-land zoomable" id="wA">
+          <canvas id="cA" role="img" aria-label="A shaded fractional Brown relief with white lakes"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cAt">Plate 265, top</strong> · <span id="cAn"></span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The top of Plate 265 is a fractional Brown relief of dimension fairly close to 2 — Mandelbrot's model of Earth's landscape. The other figures extrapolate it to higher D, ending at the top of Plate 264 with the ordinary Brown relief, "definitely rougher than most of Earth's relief": a beautiful long jump forward, but a crude model, begging to be returned to the bench. As in the book, the altitude is computed on a square grid, lit from 60° over the left, and seen from 25° over the base level; water fills every hollow below sea level.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">The four printed figures, clockwise</span></div>
+          <div class="steps words" id="mA" role="group" aria-label="Which printed figure"></div>
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Surface dimension D</span><span class="value" id="dAv"></span></div>
+          <input type="range" id="dAs" min="2.05" max="2.95" step="0.01" value="2.1" aria-label="Surface dimension">
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Sea level</span><span class="value" id="qAv"></span></div>
+          <input type="range" id="qAs" min="0" max="0.7" step="0.01" value="0.3" aria-label="Fraction of the land under water">
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plateA">Show Plate 265, top, as printed</button>
+          <button type="button" class="btn" id="seedA">New seed</button>
+        </div>
+        <p class="readline" id="infoA" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Surface D</dt><dd id="rAa">—</dd></div>
+          <div><dt>Coastline D</dt><dd id="rAb">—</dd></div>
+          <div><dt>Exponent H</dt><dd id="rAc">—</dd></div>
+          <div><dt>Seed</dt><dd id="rAd">—</dd></div>
+        </dl>
+        <p class="note">The caption gives only the two end dimensions, "D ≈ 2.1 to D = 5/2, proceeding clockwise", so the two middle figures' D here are evenly interpolated — a guess. The relief is built the book's way: a periodic surface synthesized by fast Fourier methods, then cropped to a central portion unaffected by periodicity. The vertical scale and the sea level are fitted by eye to the plates; the landscapes are random, so only their statistics — not their peaks — can match the print.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATES 266-267: COASTLINES AND ISLAND STRINGS ===================== -->
+  <section class="plate" id="coast">
+    <div class="plate-head">
+      <p class="no">Plates 266 and 267 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Brown coastlines, and island "strings"</h2>
+      <p class="dim">coastline D = surface D − 1 · 8/3 → 5/3 · 7/3 → 4/3 · 5/2 → 3/2</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-coast zoomable" id="wB">
+          <canvas id="cB" role="img" aria-label="Islands of a fractional Brown relief, land in black"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cBt">Plate 266</strong> · <span id="cBn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Slice a fractional Brown relief at sea level and fill the land black. These plates underline a newly discovered effect: when the relief's D reaches and exceeds 2.5, the ocean tends more and more to split into roundish separate "seas", each with a sharp individuality, while the islands come in "strings". The samples look anisotropic — yet the generating mechanism is perfectly isotropic. The coastline of Plate 270's kind was the first curve Mandelbrot had met that avoids itself, has a clear fractal dimension above 1, and is isotropic.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">The three printed figures</span></div>
+          <div class="steps words" id="mB" role="group" aria-label="Which printed figure"></div>
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Surface dimension D</span><span class="value" id="dBv"></span></div>
+          <input type="range" id="dBs" min="2.05" max="2.95" step="0.01" value="2.6667" aria-label="Surface dimension">
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Sea level</span><span class="value" id="qBv"></span></div>
+          <input type="range" id="qBs" min="0.02" max="0.8" step="0.01" value="0.28" aria-label="Fraction of the frame that is land">
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plateB">Show Plate 266 as printed</button>
+          <button type="button" class="btn" id="seedB">New seed</button>
+        </div>
+        <p class="readline" id="infoB" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Coastline D</dt><dd id="rBa">—</dd></div>
+          <div><dt>Land share</dt><dd id="rBb">—</dd></div>
+          <div><dt>Islands</dt><dd id="rBc">—</dd></div>
+          <div><dt>Seed</dt><dd id="rBd">—</dd></div>
+        </dl>
+        <p class="note">As in the book, each figure is a trimmed central portion of one period of a periodic variant of the process, which "diminishes the overall shape's dependence upon D" — actual Brownian coastlines' overall shapes differ more than these plates show. The land share is a slider because the captions do not state sea level; the printed figures' share was matched by eye. Islands under a few grid cells are left uncounted.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 268: CONTOUR LINES ===================== -->
+  <section class="plate" id="contour">
+    <div class="plate-head">
+      <p class="no">Plate 268 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Contour lines in fractional Brown landscapes</h2>
+      <p class="dim">same program and seed · top D ≈ 1.3333, bottom D ≈ 1.1667 · the side of a huge mountain</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-cont zoomable" id="wC">
+          <canvas id="cC" role="img" aria-label="Contour lines of a fractional Brown landscape on a strong slope"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cCt">Plate 268, top</strong> · <span id="cCn">the bold line is the coastline</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Here the relief has a strong overall slope — we see the <i>side</i> of a huge mountain, not its summit — and a few of its contour lines are drawn, the bold one being the coastline. Both figures use the same program and the same seed, only H changes. The curves seem much less "rugged" than Plate 267's of the same D: with a systematic slope the coastline differs from a straight line only by mild irregularities. Comparing them shows the wide margin left for the interplay between irregularity and fragmentation even after D is fixed.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">The two printed figures</span></div>
+          <div class="steps words" id="mC" role="group" aria-label="Which printed figure"></div>
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Coastline dimension D</span><span class="value" id="dCv"></span></div>
+          <input type="range" id="dCs" min="1.05" max="1.6" step="0.005" value="1.3333" aria-label="Coastline dimension">
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Overall slope</span><span class="value" id="sCv"></span></div>
+          <input type="range" id="sCs" min="0" max="8" step="0.1" value="5" aria-label="Overall slope in standard deviations across the frame">
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plateC">Show Plate 268, top, as printed</button>
+          <button type="button" class="btn" id="seedC">New seed</button>
+        </div>
+        <p class="readline" id="infoC" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Coastline D</dt><dd id="rCa">—</dd></div>
+          <div><dt>Exponent H</dt><dd id="rCb">—</dd></div>
+          <div><dt>Surface D</dt><dd id="rCc">—</dd></div>
+          <div><dt>Seed</dt><dd id="rCd">—</dd></div>
+        </dl>
+        <p class="note">The book's figures were made by a Poisson (fault) approximation; this page synthesizes the same statistics spectrally, so the curves can only match in character. The number of contour lines (two or three per figure in the print) and their spacing are set to read like the plate; at zero slope the section turns back into the summit-like coastlines of Plate 267.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 269: BROWNIAN PANGAEA ===================== -->
+  <section class="plate" id="pangaea">
+    <div class="plate-head">
+      <p class="no">Plate 269, and C9 (top) <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Brownian Pangaea</h2>
+      <p class="dim">Lévy's Brown sphere-to-line function Bo(P) · coastline D = 3/2 · three quarters of the area under water</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-ham zoomable" id="wD">
+          <canvas id="cD" role="img" aria-label="A Brownian Pangaea on a Hammer map"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>Hammer map</strong> · <span id="cDn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Let the base of the relief be a sphere. Lévy's Brown function from the sphere's points to altitudes was implemented on a computer here for the first time; sea level is adjusted so three quarters of the total area is under water, and the result is shown on a Hammer map, the projection favored by students of Wegener's continental drift. Like the primeval Pangaea, it is a blob of land dented by broad sinuses — on the sphere the Brownian rules involve a strong positive correlation below 60° and a strong negative one between antipodal points, so a big hill at P answers a big hole at its antipode.</p>
+        <div class="slider">
+          <div class="label-row"><span class="label">Under water</span><span class="value" id="qDv"></span></div>
+          <input type="range" id="qDs" min="0.4" max="0.95" step="0.01" value="0.75" aria-label="Fraction of the sphere's area under water">
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Faults</span><span class="value" id="fDv"></span></div>
+          <input type="range" id="fDs" min="200" max="4000" step="100" value="1600" aria-label="Number of great-circle faults">
+        </div>
+        <div class="group">
+          <label class="check" for="gratD"><input type="checkbox" id="gratD" checked> Graticule, as on the printed map</label>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plateD">Show Plate 269 as printed</button>
+          <button type="button" class="btn" id="seedD">New seed</button>
+        </div>
+        <p class="readline" id="infoD" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Coastline D</dt><dd>3/2</dd></div>
+          <div><dt>Under water</dt><dd id="rDb">—</dd></div>
+          <div><dt>Faults</dt><dd id="rDc">—</dd></div>
+          <div><dt>Seed</dt><dd id="rDd">—</dd></div>
+        </dl>
+        <p class="note">Bo(P) is built here by superimposing random great-circle faults — a plateau breaks along a random great circle, one side steps up and the other down — which converges to Lévy's function, the integral of white Gaussian noise over the hemisphere centred at P. The book says the real Pangaea is drawn with D ≈ 1.2 in geology books, while this model forces D = 3/2; only the degrees of wiggliness, not the local detail, are expected to resemble it. The graticule spacing was matched to the plate by eye.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 270: THE FIRST BROWN COASTLINES ===================== -->
+  <section class="plate" id="first">
+    <div class="plate-head">
+      <p class="no">Plate 270 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>The first known examples of Brown coastlines</h2>
+      <p class="dim">top to bottom: D near 1 · D = 1.3000 · D = 3/2 · D closer to 2</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-four zoomable" id="wE">
+          <canvas id="cE" role="img" aria-label="Four model coastlines of increasing dimension, stacked as printed"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cEt">As printed</strong> · <span id="cEn">four panels, one seed</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Mandelbrot's claim that fractional Brown functions are reasonable models of Earth's relief was originally founded on these four model coastlines, a sentimental carry-over from his 1975 French Essay. When D is near 1, the coastline is too straight to be realistic. At D = 1.3000 it "strongly reminds us of the real Atlas" — he finds echos of Africa, South America in mirror image, and Greenland. At D = 3/2 the guessing game is harder; closer to 2 it becomes specialized (Minnesota? Finland?), then impossible. Finer graphics favor D ≈ 1.2.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mE" role="group" aria-label="Printed panels or one panel"></div>
+        </div>
+        <div class="slider" id="dEwrap" hidden>
+          <div class="label-row"><span class="label">Coastline dimension D</span><span class="value" id="dEv"></span></div>
+          <input type="range" id="dEs" min="1.02" max="1.95" step="0.005" value="1.3" aria-label="Coastline dimension">
+        </div>
+        <div class="slider" id="qEwrap" hidden>
+          <div class="label-row"><span class="label">Sea level</span><span class="value" id="qEv"></span></div>
+          <input type="range" id="qEs" min="0.02" max="0.8" step="0.01" value="0.25" aria-label="Fraction of the frame that is land">
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plateE">Show Plate 270 as printed</button>
+          <button type="button" class="btn" id="seedE">New seed</button>
+        </div>
+        <p class="readline" id="infoE" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Panel D</dt><dd id="rEa">1.1 · 1.3 · 1.5 · 1.8</dd></div>
+          <div><dt>Coastline D</dt><dd id="rEb">—</dd></div>
+          <div><dt>Land share</dt><dd id="rEc">—</dd></div>
+          <div><dt>Seed</dt><dd id="rEd">—</dd></div>
+        </dl>
+        <p class="note">The caption names only "near 1", 1.3000, 3/2 and "closer to 2"; the first and last panels here use D = 1.1 and D = 1.8. The panels share one seed, like the originals ("the same program and seed"); their unequal heights follow the print. The growing amount of land down the page is reproduced by raising the land share per panel, fitted by eye — the caption does not state sea levels. The originals were drawn by the Poisson fault method and inked by hand; these are spectral simulations with the same statistics.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 271: AN ISLAND WITH VARYING SEA LEVEL ===================== -->
+  <section class="plate" id="island">
+    <div class="plate-head">
+      <p class="no">Plate 271 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Fractional Brown islands, emerging from the sea</h2>
+      <p class="dim">surface D = 2.3000 · one island, six sea levels · drawn as a raster, as on the 1976 CRT</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-isl dark zoomable" id="wF">
+          <canvas id="cF" role="img" aria-label="A fractional Brown island at six falling sea levels, drawn as white raster lines on black"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cFt">As printed</strong> · <span id="cFn">sea level falls from panel to panel</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Views of an island with varying sea level, from Mandelbrot 1975w — part of the first sequence of fractional Brown islands ever drawn, filmed in 1976 as the island emerged from the sea. The original was photographed from a cathode ray tube, and the raster lines make the sea seem to shimmer toward the horizon. The dimension, D = 2.3, is surprisingly high: early graphics could not show small detail, so the drawn landscapes seemed smoother than the D fed into the program, and D was raised beyond the evidence to compensate.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mF" role="group" aria-label="Printed panels or one island"></div>
+        </div>
+        <div class="slider" id="qFwrap" hidden>
+          <div class="label-row"><span class="label">Sea level</span><span class="value" id="qFv"></span></div>
+          <input type="range" id="qFs" min="0.01" max="0.6" step="0.005" value="0.2" aria-label="Fraction of the sheet above water">
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plateF">Show Plate 271 as printed</button>
+          <button type="button" class="btn" id="seedF">New seed</button>
+        </div>
+        <p class="readline" id="infoF" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Surface D</dt><dd>2.3000</dd></div>
+          <div><dt>Exponent H</dt><dd>0.7</dd></div>
+          <div><dt>Above water</dt><dd id="rFc">—</dd></div>
+          <div><dt>Seed</dt><dd id="rFd">—</dd></div>
+        </dl>
+        <p class="note">The six sea levels are not stated in the book; here they fall so the land grows from a few specks to near half the sheet, matching the print by eye. The relief is gently tapered toward the sheet's centre so that the island emerges in view rather than at the edge — a presentation choice, flagged here, not part of the model. No side lighting is simulated, as the caption notes: the raster alone shapes the relief.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 28, pages 256–271 (Plates 264–271). All figures are fresh seeded simulations built from the chapter's stated rules — fractional Brown surfaces by the book's own periodic Fourier shortcut, and Lévy's sphere function by great-circle faults; none is traced from the book, and the plates being random, only statistics can match. Companion page: <a href="./wiener-sausage.html">Wiener Sausage</a> (Brownian motion, chapter 25).</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>

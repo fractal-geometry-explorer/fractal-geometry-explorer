@@ -1,0 +1,753 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Random Curds</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>
+/* Layout: Hoyle curdling (218–219), Novikov–Stewart percolation (220–223) and the canonical-curdling concept, each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */
+:root {
+  --page: #e4e5e1;
+  --text: #1b1d1f;
+  --muted: #595e64;
+  --rule: #c4c7c1;
+  --surface: #f6f6f3;
+  --accent: #285895;
+  --f-display: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Newsreader", Georgia, "Times New Roman", serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* the figures are reproductions of printed plates, so their paper and inks stay the same in both themes */
+  --print-paper: #ecebe6;
+  --print-ink: #151515;
+  --print-rule: #c9c8c2;
+  --gain: rgba(47, 95, 158, 0.42);
+  --loss: rgba(186, 88, 44, 0.42);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --page: #111214; --text: #e5e5e1; --muted: #9a9fa6; --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --page: #111214; --text: #e5e5e1; --muted: #9a9fa6; --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--page); color: var(--text); font-family: var(--f-display); font-size: 14px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
+.wrap {
+  max-width: 1180px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 36px 64px;
+  display: grid; gap: 40px;
+}
+header.top { display: grid; gap: 10px; max-width: 820px; }
+.eyebrow { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+h1 {
+  margin: 0; display: flex; align-items: center; flex-wrap: wrap; gap: 0.18em 0.42em;
+  font-weight: 800; font-size: clamp(30px, 5.4vw, 54px); line-height: 1.02; letter-spacing: 0.01em; text-transform: uppercase; text-wrap: balance;
+}
+h1 .plate-no { font-weight: 600; text-transform: none; letter-spacing: 0; }
+.lozenge { display: inline-block; width: 0.42em; height: 0.42em; border: 0.075em solid currentColor; position: relative; top: -0.02em; }
+.lozenge::after { content: ""; position: absolute; inset: 0.1em; border: 0.05em solid currentColor; }
+.dek { margin: 0; font-family: var(--f-body); font-size: 19px; line-height: 1.45; max-width: 64ch; }
+
+nav.index {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+  padding: 10px max(16px, env(safe-area-inset-right, 0px)) 10px max(16px, env(safe-area-inset-left, 0px));
+  background: var(--page); border-bottom: 1px solid var(--rule);
+  display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none;
+}
+nav.index a {
+  flex: none; display: inline-flex; gap: 8px; align-items: baseline; padding: 6px 10px;
+  border: 1px solid var(--rule); background: var(--surface); color: var(--text); text-decoration: none; font-size: 13px; font-weight: 600;
+}
+nav.index a b { font-family: var(--f-mono); font-weight: 500; color: var(--accent); }
+nav.index a:hover { border-color: var(--text); }
+
+section.plate { display: grid; gap: 18px; scroll-margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--rule); }
+.plate-head { display: grid; gap: 4px; }
+.plate-head .no { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.plate-head h2 { margin: 0; font-size: clamp(22px, 3vw, 30px); font-weight: 800; line-height: 1.1; text-transform: uppercase; letter-spacing: 0.01em; text-wrap: balance; }
+.plate-head .dim { margin: 0; font-family: var(--f-mono); font-size: 13px; color: var(--muted); }
+.plate-body { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(280px, 1fr); gap: 32px; align-items: start; }
+@media (max-width: 899px) { .plate-body { grid-template-columns: minmax(0, 1fr); gap: 20px; } }
+figure.fig { margin: 0; display: grid; gap: 8px; min-width: 0; }
+.canvas-wrap { position: relative; width: 100%; max-width: 100%; background: var(--print-paper); outline: 1px solid var(--rule); overflow: hidden; }
+.canvas-wrap canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.r-sq { aspect-ratio: 1 / 1; }
+.r-lox { aspect-ratio: 5 / 4; }
+.zoomable { cursor: grab; touch-action: pan-y; }
+.zoomable.dragging { cursor: grabbing; }
+.view-tools { position: absolute; top: 10px; right: 10px; display: flex; gap: 6px; z-index: 2; }
+.view-tools button { min-width: 34px; height: 34px; padding: 0 10px; font: 600 15px/1 var(--f-display); color: var(--print-ink); background: #f7f7f3; border: 1px solid var(--print-rule); cursor: pointer; }
+figcaption { font-size: 13px; color: var(--muted); }
+figcaption strong { color: var(--text); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+
+.side { display: grid; gap: 18px; min-width: 0; align-content: start; }
+.side p.cap { margin: 0; font-family: var(--f-body); font-size: 17px; line-height: 1.55; max-width: 62ch; }
+.group { display: grid; gap: 8px; min-width: 0; }
+.label-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.label { font-size: 11.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.value { font-family: var(--f-mono); font-size: 12.5px; font-variant-numeric: tabular-nums; text-align: right; }
+.steps { display: flex; flex-wrap: wrap; gap: 6px; }
+.steps button {
+  min-width: 38px; height: 34px; padding: 0 10px; font: 600 13px/1 var(--f-mono); color: var(--text);
+  background: var(--surface); border: 1px solid var(--rule); cursor: pointer;
+}
+.steps.words button { font: 600 13px/1 var(--f-display); }
+.steps button[aria-pressed="true"] { background: var(--text); color: var(--page); border-color: var(--text); }
+.steps button:hover { border-color: var(--text); }
+.steps button:disabled { opacity: 0.35; cursor: default; border-color: var(--rule); }
+.btn-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.btn { padding: 8px 12px; font: 600 13px/1.2 var(--f-display); color: var(--text); background: var(--surface); border: 1px solid var(--rule); cursor: pointer; }
+.btn:hover { border-color: var(--text); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--page); }
+.check { display: flex; align-items: flex-start; gap: 8px; font-size: 13.5px; cursor: pointer; }
+.check input { accent-color: var(--accent); width: 16px; height: 16px; margin: 1px 0 0; flex: none; }
+.check:has(input:disabled) { opacity: 0.45; cursor: default; }
+.slider { display: grid; gap: 4px; }
+.slider input { width: 100%; accent-color: var(--accent); margin: 0; }
+.slider input:disabled { opacity: 0.4; }
+dl.read { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; padding-top: 14px; border-top: 1px solid var(--rule); }
+dl.read div { display: grid; gap: 2px; min-width: 0; }
+dl.read dt { font-size: 10.5px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); }
+dl.read dd { margin: 0; font-family: var(--f-mono); font-size: 16px; overflow-wrap: anywhere; }
+dl.read dd small { font-size: 11.5px; color: var(--muted); }
+.note { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.mini { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; padding: 10px 12px; background: var(--print-paper); border: 1px solid var(--print-rule); color: var(--print-ink); }
+.mini svg { height: 64px; width: auto; max-width: 100%; }
+.mini .fx { font-family: var(--f-mono); font-size: 12px; line-height: 1.6; color: var(--print-ink); }
+.key { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--muted); }
+.key span { display: inline-flex; align-items: center; gap: 6px; }
+.key i { width: 14px; height: 10px; display: inline-block; border: 1px solid var(--print-rule); }
+.readline { min-height: 2.9em; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.readline b { color: var(--text); font-weight: 700; }
+
+.sub { display: grid; gap: 14px; padding-top: 22px; border-top: 1px dashed var(--rule); scroll-margin-top: 64px; }
+.sub h3 { margin: 0; font-size: 15px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
+.source { font-family: var(--f-body); font-size: 15px; color: var(--muted); margin: 0; max-width: 84ch; }
+.source i { color: var(--text); }
+.source a { color: var(--accent); }
+button:focus-visible, input:focus-visible, a:focus-visible, canvas:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.r-bar { aspect-ratio: 2 / 1; }
+</style>
+<style>
+body { margin: 0; }
+/* The hidden attribute must beat the pages' own display rules (.slider, .check, ...). The artifact
+   wrapper's stylesheet used to provide this; self-hosted pages carry it themselves. */
+[hidden] { display: none !important; }
+nav.shell { font-family: var(--f-display); font-size: 12.5px; font-weight: 600; background: var(--page);
+  border-bottom: 1px solid var(--rule); display: flex; align-items: center; gap: 6px 18px;
+  padding: 9px max(16px, env(safe-area-inset-right, 0px)) 9px max(16px, env(safe-area-inset-left, 0px)); }
+nav.shell a { color: var(--text); text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+nav.shell a:hover { color: var(--accent); }
+nav.shell .home { letter-spacing: 0.07em; text-transform: uppercase; flex: none; }
+nav.shell .gap { flex: 1; }
+nav.shell .pn { color: var(--muted); font-weight: 500; }
+nav.shell .pn b { color: var(--text); font-weight: 600; }
+nav.shell a:hover .pn, nav.shell a:hover .pn b { color: var(--accent); }
+</style>
+</head>
+<body>
+<nav class="shell" aria-label="Site"><a class="home" href="index.html">Fractal Geometry Explorer</a><span class="gap"></span><a rel="prev" href="islands-clusters.html"><span class="pn">&#8592; <b>Chapter 13 figures</b></span></a><a rel="next" href="brown-trails.html"><span class="pn"><b>Plates 241–243</b> &#8594;</span></a></nav>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 23, "Random curds: contact clusters and fractal percolation" · pages 210–223</p>
+    <h1><span class="plate-no">Plates 218–223</span><span class="lozenge" aria-hidden="true"></span><span>Random Curds</span></h1>
+    <p class="dek">Curdling, the grid cascade that built the Cantor dust, turns random here: at each stage every surviving cell of a base-5 grid keeps a few of its subcells, chosen by chance. Five cubes of 125 give Hoyle's D = 1 model of galaxy clusters; keep most of the cells instead and the curd models turbulent dissipation, so dense that it splits into contact clusters, and the question becomes whether one of them percolates from one side of the grid to the other. Every figure is computed from the rules in the captions.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#hoyle"><b>218–219</b> Hoyle curdling</a>
+    <a href="#ns"><b>220–223</b> Novikov–Stewart percolation</a>
+    <a href="#birth"><b>concept</b> The Bienaymé effect</a>
+  </nav>
+
+  <!-- ===================== HOYLE ===================== -->
+  <section class="plate" id="hoyle">
+    <div class="plate-head">
+      <p class="no">Plates 218 and 219 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Hoyle's model by random curdling in a grid</h2>
+      <p class="dim">E = 3, base b = 5 · each cube collapses into N = 5 of its 125 subcubes · D = log 5/log 5 = 1</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wA">
+          <canvas id="cA" role="img" aria-label="Plane projection of Hoyle curdling"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cAt">Stages superposed</strong> · stage <span id="cAs">3</span> · <span id="cAn">125 cubes</span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">In Hoyle's model a very low density gas cloud collapses repeatedly: into clusters of galaxies, then galaxies, and so on. The book implements it in the simplest way. An initiator cube of side 1 is divided into 5³ = 125 subcubes, and the matter it holds collapses into 5 of them, chosen at random; then each survivor collapses in turn. Every stage multiplies the density by 25 and reduces the dimension toward D = 1. What is drawn is the projection of the cubes on a face of the initiator, since a dust this sparse leaves space essentially transparent.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="sAv"></span></div>
+          <div class="steps" id="sA" role="group" aria-label="Stage"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Draw</span></div>
+          <div class="steps words" id="mA" role="group" aria-label="Drawing"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate219">Show Plate 219 as printed</button>
+          <button type="button" class="btn" id="plate218">Plate 218</button>
+          <button type="button" class="btn" id="reseedA">New seed</button>
+        </div>
+        <p class="readline" id="infoA" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Cubes</dt><dd id="rAa">125</dd></div>
+          <div><dt>Squares after projection</dt><dd id="rAb">—</dd></div>
+          <div><dt>Cube side</dt><dd id="rAc">—</dd></div>
+          <div><dt>Dimension</dt><dd>D = 1</dd></div>
+        </dl>
+        <p class="note">A random plate is matched statistically, not stroke for stroke: the construction, base, counts and shades follow the captions, while the random choices and their seeds are this page's own. Plate 219 superposes stages 1–3 in darkening grays (read off the print at about 0.27, 0.52 and 0.82 of full ink); Plate 218 shows a fourth stage alone, from a different seed, whose upper part the book's page edge cuts off and happens to be empty. Hoyle's N = 5 is schematic; with Fournier's value N = 10²² (Plate 95) the curd's lacunarity would become very small.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== NOVIKOV–STEWART ===================== -->
+  <section class="plate" id="ns">
+    <div class="plate-head">
+      <p class="no">Plates 220 through 223 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Novikov–Stewart curds, followed by percolation</h2>
+      <p class="dim">plane grid, b = 5 · each eddy keeps N of its 25 subeddies · D = log N/log 5, a section of a spatial curd of dimension D + 1</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wB">
+          <canvas id="cB" role="img" aria-label="Novikov–Stewart random curd with contact clusters coloured"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cBt">N = 19</strong> · <span id="cBn"></span> · zoom in until each whey cell shows the print's small cross</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Novikov &amp; Stewart (1964) proposed that turbulent dissipation curdles: each cascade stage takes the precurd and curdles it further into N pieces smaller in the ratio r = 1/5. In turbulence D &gt; 2, so a plane cross section — which subtracts 1 from the dimension, by the rule that codimensions add — is what the plates show. The whey is gray. The curd splits into <i>contact clusters</i>: the connected pieces touching both the top and the bottom of the grid are the percolating ones, left white, and all the others are black.</p>
+        <div class="key" aria-hidden="true">
+          <span><i style="background:#ecebe6"></i> percolating cluster</span>
+          <span><i style="background:#1a1a1a"></i> other clusters</span>
+          <span><i style="background:#bdbcb8"></i> whey</span>
+        </div>
+        <div class="group slider">
+          <div class="label-row"><span class="label">Subeddies kept</span><span class="value" id="nBv">N = 19 of 25</span></div>
+          <input type="range" id="nB" min="13" max="25" step="1" value="19" aria-label="Subeddies kept per eddy">
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn" id="plate220">Plate 220</button>
+          <button type="button" class="btn" id="plate221">Plate 221</button>
+          <button type="button" class="btn" id="plate222">Plate 222</button>
+          <button type="button" class="btn" id="plate223">Plate 223</button>
+          <button type="button" class="btn" id="reseedB">New seed</button>
+        </div>
+        <p class="readline" id="infoB" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Section D = log N/log 5</dt><dd id="rBa">—</dd></div>
+          <div><dt>Spatial curd D + 1</dt><dd id="rBb">—</dd></div>
+          <div><dt>Contact clusters</dt><dd id="rBc">—</dd></div>
+          <div><dt>Percolates</dt><dd id="rBd">—</dd></div>
+        </dl>
+        <p class="note" id="noteB">The book's plates are one realization at stage 4, printed full bleed, so each shows about a 487 × 461 window of the full 625 × 625 square; this page draws the whole square. Plate 220 splices two prints of the same seed along a diagonal seam, with N = 24 in the lower right corner and N = 22 elsewhere; the preset reproduces the splice with the seam's measured position. The behaviour matches the captions statistically: with this model no seed in 60 percolated at N ≤ 16, two did at N = 18 ("a few seeds percolate already for N = 18"), and most did at N = 19. The three largest printed dimensions disagree with the caption's own formula: log 24/log 5 = 1.9746 (printed 1.9973), log 22/log 5 = 1.9203 (printed 1.9426), log 19/log 5 = 1.8295 (printed 1.8505); for N = 16 and 13 the printed 1.7227 and 1.5936 are exact. This page shows the computed values.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== BIENAYMÉ ===================== -->
+  <section class="plate" id="birth">
+    <div class="plate-head">
+      <p class="no">Pages 210–212, concept <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Canonical curdling and the Bienaymé effect</h2>
+      <p class="dim">each subinterval survives a coin toss of probability p · ⟨N⟩ = pb · D* = log ⟨N⟩/log b</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-bar" id="wC">
+          <canvas id="cC" role="img" aria-label="Rows of a canonical curdling cascade"></canvas>
+        </div>
+        <figcaption><strong>Canonical curdling</strong> · stage rows, as in the Cantor bar of Plate 80</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The chapter's cleanest definition of random curdling needs only coin tossing. Divide an interval into b subintervals; each survives with probability p, independently of the rest, and the cascade resumes inside every survivor. The number of children follows a birth-and-death process, and Irénée Bienaymé saw the fundamental alternative in 1845: when the expected count ⟨N⟩ = pb is 1 or less, the family line almost surely dies out and the cascade leaves the empty set; when ⟨N⟩ &gt; 1, it survives forever with positive probability and yields a random dust of dimension D* = log ⟨N⟩/log b. The threshold ⟨N⟩ = 1 is exactly D* = 0.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Base</span></div>
+          <div class="steps words" id="bC" role="group" aria-label="Base"></div>
+        </div>
+        <div class="group slider">
+          <div class="label-row"><span class="label">Survival probability</span><span class="value" id="pCv"></span></div>
+          <input type="range" id="pC" min="0.05" max="1" step="0.01" value="0.8" aria-label="Survival probability p">
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn" id="critC">Set p to the critical 1/b</button>
+          <button type="button" class="btn" id="reseedC">New seed</button>
+        </div>
+        <dl class="read">
+          <div><dt>⟨N⟩ = pb</dt><dd id="rCa">—</dd></div>
+          <div><dt>D*</dt><dd id="rCb">—</dd></div>
+          <div><dt>Chance the line dies out</dt><dd id="rCc">—</dd></div>
+          <div><dt>This realization</dt><dd id="rCd">—</dd></div>
+        </dl>
+        <p class="note">The chance of dying out is the smallest root of q = (1 − p + pq)<sup>b</sup>, computed here by iteration. Below the critical p = 1/b it is 1, and it falls steeply above. The spatial plates above use the <i>constrained</i> variant, where the count N is fixed and only the choice of cells is random; the book notes both give the same dimensions and the same section rules. Rows whose slugs fall under a pixel deposit their true ink coverage per pixel, so thin rows dim instead of banding.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 23, pages 210–223 (Plates 218 to 223). The random plates are matched statistically: the constructions, counts and shades follow the captions, and the notes under each figure say what was measured from the scans and what is this page's own choice. Companion pages: <a href="cantor-dust.html">Cantor Dust</a> (Plates 80–83, where curdling first appears) and <a href="wiener-sausage.html">Wiener Sausage</a> (chapter 25).</p>
+</div>
+
+<script>
+// Shared drawing library: style constants, the zoomable canvas (snapshot while panning), chunked
+// paths, controls and small SVG figures. Loaded before each page's own scripts; pages may extend
+// PRINT with their own inks (PRINT.red = ..., PRINT.light = ...).
+const $ = (id) => document.getElementById(id);
+const fmt = (n) => n.toLocaleString('en-US');
+const PRINT = { paper: '#ecebe6', ink: '#151515', rule: '#c9c8c2', muted: '#66665f', accent: '#2f5f9e', red: '#c2452d', faint: '#bdbbb3', gray: '#8f8e88' };
+const RAMP = [[233, 185, 73], [217, 113, 59], [184, 66, 79], [125, 58, 120], [63, 79, 151], [43, 122, 138]];
+const ramp = (t, a = 1) => {
+  const x = Math.max(0, Math.min(1, t)) * (RAMP.length - 1), i = Math.min(RAMP.length - 2, Math.floor(x)), f = x - i;
+  const c = RAMP[i].map((v, k) => Math.round(v + (RAMP[i + 1][k] - v) * f));
+  return `rgba(${c[0]},${c[1]},${c[2]},${a})`;
+};
+const CAT = ['#151515', '#9a988f', '#2f5f9e', '#c2452d', '#3f8f6c', '#b58a2a', '#6b4e9b', '#5f8fae'];
+
+// ---------- shared plumbing ----------
+function figure(canvas, draw) {
+  const wrap = canvas.parentElement;
+  const f = { canvas, ctx: canvas.getContext('2d'), w: 1, h: 1, dpr: 1, draw };
+  const resize = () => {
+    f.dpr = Math.min(2, window.devicePixelRatio || 1);
+    f.w = wrap.clientWidth || 1; f.h = wrap.clientHeight || 1;
+    canvas.width = Math.round(f.w * f.dpr); canvas.height = Math.round(f.h * f.dpr);
+    f.draw();
+  };
+  new ResizeObserver(resize).observe(wrap);
+  return f;
+}
+function fitBox(f, bb, pad = 0.04) {
+  const w = Math.max(1e-9, bb.x1 - bb.x0), h = Math.max(1e-9, bb.y1 - bb.y0), s = Math.min(f.w / (w * (1 + 2 * pad)), f.h / (h * (1 + 2 * pad)));
+  return { s, ox: f.w / 2 - ((bb.x0 + bb.x1) / 2) * s, oy: f.h / 2 + ((bb.y0 + bb.y1) / 2) * s };
+}
+const toWorld = (f, v) => f.ctx.setTransform(f.dpr * v.s, 0, 0, -f.dpr * v.s, f.dpr * v.ox, f.dpr * v.oy);
+const toScreen = (f) => f.ctx.setTransform(f.dpr, 0, 0, f.dpr, 0, 0);
+function paper(f, color) { f.ctx.setTransform(1, 0, 0, 1, 0, 0); f.ctx.fillStyle = color; f.ctx.fillRect(0, 0, f.canvas.width, f.canvas.height); }
+function polyPath(P, closed = true, upto) {
+  const p = new Path2D(), m = upto === undefined ? P.length / 2 : upto;
+  p.moveTo(P[0], P[1]);
+  for (let i = 1; i < m; i++) p.lineTo(P[2 * i], P[2 * i + 1]);
+  if (closed) p.closePath();
+  return p;
+}
+function bbox(P, bb = { x0: Infinity, x1: -Infinity, y0: Infinity, y1: -Infinity }) {
+  for (let i = 0; i < P.length; i += 2) { bb.x0 = Math.min(bb.x0, P[i]); bb.x1 = Math.max(bb.x1, P[i]); bb.y0 = Math.min(bb.y0, P[i + 1]); bb.y1 = Math.max(bb.y1, P[i + 1]); }
+  return bb;
+}
+function stepButtons(el, values, text, aria, onPick) {
+  const bs = values.map((v) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.textContent = text(v); b.setAttribute('aria-label', aria(v));
+    b.addEventListener('click', () => onPick(v));
+    el.append(b);
+    return b;
+  });
+  const mark = (cur) => bs.forEach((b, i) => b.setAttribute('aria-pressed', String(values[i] === cur)));
+  mark.buttons = bs;
+  return mark;
+}
+// pan and zoom: a quick rescaled snapshot while moving, a full redraw once it settles
+function zoomable(wrapId, canvasId, fitOf, render, opts = {}) {
+  const maxZoom = opts.maxZoom || 400;
+  const wrap = $(wrapId), z = { view: null, user: false, snapView: null, raf: 0, full: 0 };
+  const snap = document.createElement('canvas');
+  const f = figure($(canvasId), () => draw());
+  function touch() { wrap.style.touchAction = z.view && z.view.s > z.view.fit * 1.02 ? 'none' : 'pan-y'; }
+  function draw() {
+    if (!z.view || !z.user) { z.view = fitOf(f); z.view.fit = z.view.s; z.user = false; touch(); }
+    render(f, z.view);
+    snap.width = f.canvas.width; snap.height = f.canvas.height; snap.getContext('2d').drawImage(f.canvas, 0, 0);
+    z.snapView = { s: z.view.s, ox: z.view.ox, oy: z.view.oy };
+  }
+  function quick() {
+    const v = z.view, k = v.s / z.snapView.s, c = f.ctx;
+    c.setTransform(1, 0, 0, 1, 0, 0); c.fillStyle = z.ground || PRINT.paper; c.fillRect(0, 0, f.canvas.width, f.canvas.height);
+    c.drawImage(snap, (v.ox - z.snapView.ox * k) * f.dpr, (v.oy - z.snapView.oy * k) * f.dpr, snap.width * k, snap.height * k);
+  }
+  function schedule() { if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; draw(); }); }
+  function moved() {
+    if (!z.snapView) { schedule(); return; }
+    if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; quick(); });
+    clearTimeout(z.full); z.full = setTimeout(schedule, 160);
+  }
+  function zoomAt(px, py, k) {
+    const v = z.view, ns = Math.min(v.fit * maxZoom, Math.max(v.fit * 0.8, v.s * k)), wx = (px - v.ox) / v.s, wy = (v.oy - py) / v.s;
+    v.s = ns; v.ox = px - wx * ns; v.oy = py + wy * ns; z.user = true; touch(); moved();
+  }
+  function pan(dx, dy) { z.view.ox += dx; z.view.oy += dy; z.user = true; moved(); }
+  wrap.querySelector('[data-z="in"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1.6));
+  wrap.querySelector('[data-z="out"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1 / 1.6));
+  wrap.querySelector('[data-z="fit"]').addEventListener('click', () => { z.user = false; schedule(); });
+  const pts = new Map();
+  let pinch = null, down = null;
+  const local = (e) => { const r = wrap.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+  wrap.addEventListener('pointerdown', (e) => {
+    if (e.target.closest('.view-tools')) return;
+    pts.set(e.pointerId, local(e));
+    down = pts.size === 1 ? { p: local(e), t: performance.now(), moved: 0 } : null;
+    try { wrap.setPointerCapture(e.pointerId); } catch (_) {}
+    if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), m: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2] }; }
+    wrap.classList.add('dragging');
+  });
+  wrap.addEventListener('pointermove', (e) => {
+    if (!pts.has(e.pointerId)) return;
+    const prev = pts.get(e.pointerId), cur = local(e);
+    pts.set(e.pointerId, cur);
+    if (down) down.moved = Math.max(down.moved, Math.hypot(cur[0] - down.p[0], cur[1] - down.p[1]));
+    if (pts.size === 2 && pinch) {
+      const [a, b] = [...pts.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]), m = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+      pan(m[0] - pinch.m[0], m[1] - pinch.m[1]);
+      if (pinch.d > 0) zoomAt(m[0], m[1], d / pinch.d);
+      pinch = { d, m };
+    } else if (pts.size === 1 && (e.pointerType !== 'touch' || z.view.s > z.view.fit * 1.02)) pan(cur[0] - prev[0], cur[1] - prev[1]);
+  });
+  const end = (e) => {
+    if (down && pts.size === 1 && down.moved < 5 && opts.onTap) { const [x, y] = local(e), v = z.view; opts.onTap((x - v.ox) / v.s, (v.oy - y) / v.s); }
+    down = null;
+    pts.delete(e.pointerId); if (pts.size < 2) pinch = null; if (!pts.size) wrap.classList.remove('dragging');
+  };
+  wrap.addEventListener('pointerup', end); wrap.addEventListener('pointercancel', (e) => { down = null; end(e); });
+  wrap.addEventListener('wheel', (e) => { if (!(e.ctrlKey || e.metaKey)) return; e.preventDefault(); const [x, y] = local(e); zoomAt(x, y, Math.exp(-e.deltaY * 0.0045)); }, { passive: false });
+  wrap.addEventListener('dblclick', (e) => { if (e.target.closest('.view-tools')) return; const [x, y] = local(e); zoomAt(x, y, e.shiftKey ? 0.5 : 2); });
+  return { f, z, schedule, refit: () => { z.user = false; schedule(); } };
+}
+// chunked paths: many small paths fill far faster than one path with a hundred thousand pieces
+function chunked(count, add, size = 512) {
+  const out = [];
+  let p = null;
+  for (let i = 0; i < count; i++) { if (i % size === 0) { p = new Path2D(); out.push(p); } add(p, i); }
+  return out;
+}
+// fill and outline in the same colour, so that tiles which only meet along an edge show no hairline seams
+function solid(c, paths, color, lw) {
+  c.fillStyle = color; c.strokeStyle = color; c.lineWidth = lw; c.lineJoin = 'miter';
+  for (const p of paths) { c.fill(p); c.stroke(p); }
+}
+const dot = (c, v, x, y, r = 4, color = PRINT.red) => { c.beginPath(); c.arc(v.ox + x * v.s, v.oy - y * v.s, r, 0, Math.PI * 2); c.fillStyle = color; c.fill(); c.strokeStyle = PRINT.paper; c.lineWidth = 1.5; c.stroke(); };
+
+// a polyline (Float64Array or [[x,y],...]) as SVG points with y flipped
+const svgPts = (P) => (P instanceof Float64Array ? Array.from({ length: P.length / 2 }, (_, i) => [P[2 * i], P[2 * i + 1]]) : P).map(([x, y]) => `${x.toFixed(4)},${(-y).toFixed(4)}`).join(' ');
+function miniCurve(id, P, dots = true) {
+  const pts = P instanceof Float64Array ? Array.from({ length: P.length / 2 }, (_, i) => [P[2 * i], P[2 * i + 1]]) : P;
+  $(id).innerHTML = `<line x1="0" y1="0" x2="1" y2="0" stroke="#8a8a84" stroke-width="0.008" stroke-dasharray="0.025 0.02"/>` +
+    `<polyline points="${svgPts(pts)}" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linejoin="round"/>` +
+    (dots ? `<g fill="currentColor">${pts.map(([x, y], i) => `<circle cx="${x.toFixed(4)}" cy="${(-y).toFixed(4)}" r="${i === 0 || i === pts.length - 1 ? 0.03 : 0.018}"/>`).join('')}</g>` : '');
+}
+function miniTree(id, links, dx = 0) {
+  const ends = new Set(), mid = new Set(), k = (x, y) => `${x.toFixed(4)},${y.toFixed(4)}`;
+  let s = '';
+  for (const [px, py, qx, qy] of links) {
+    s += `<line x1="${(px + dx).toFixed(4)}" y1="${(-py).toFixed(4)}" x2="${(qx + dx).toFixed(4)}" y2="${(-qy).toFixed(4)}" stroke="currentColor" stroke-width="0.02" stroke-linecap="round"/>`;
+    mid.add(k(px + dx, py)); mid.add(k(qx + dx, qy));
+  }
+  s += `<g fill="currentColor">${[...mid].map((p) => { const [x, y] = p.split(',').map(Number); const big = (Math.abs(x - dx) < 1e-6 || Math.abs(x - dx - 1) < 1e-6) && Math.abs(y) < 1e-6; return `<circle cx="${x}" cy="${-y}" r="${big ? 0.03 : 0.018}"/>`; }).join('')}</g>`;
+  return s;
+}
+// canvas transform for a similarity map f = [ar, ai, br, bi, m] composed with the view
+function setMap(f, c, v, fig) {
+  const [ar, ai, br, bi, m] = f, k = fig.dpr * v.s;
+  if (m) c.setTransform(k * ar, -k * ai, k * ai, k * ar, fig.dpr * (v.ox + v.s * br), fig.dpr * (v.oy - v.s * bi));
+  else c.setTransform(k * ar, -k * ai, -k * ai, -k * ar, fig.dpr * (v.ox + v.s * br), fig.dpr * (v.oy - v.s * bi));
+}
+const segPath = (segs, pick) => { const p = new Path2D(); for (const s of segs) if (!pick || pick(s)) { p.moveTo(s[0], s[1]); p.lineTo(s[2], s[3]); } return p; };
+// Plate 64's chevrons, measured from the plate: each interval a→b becomes a thin quadrilateral
+// pointing toward F, the corner the next stage would add (see DECISIONS.md)
+const CHEV_OUT = 0.43, CHEV_IN = 0.235;
+function chevronPaths(P, F, m) {
+  return chunked(m, (p, i) => {
+    const ax = P[2 * i], ay = P[2 * i + 1], bx = P[2 * i + 2], by = P[2 * i + 3], mx = (ax + bx) / 2, my = (ay + by) / 2;
+    const vx = F[2 * i] - mx, vy = F[2 * i + 1] - my;
+    p.moveTo(ax, ay); p.lineTo(mx + CHEV_OUT * vx, my + CHEV_OUT * vy); p.lineTo(bx, by); p.lineTo(mx + CHEV_IN * vx, my + CHEV_IN * vy); p.closePath();
+  });
+}
+
+// Chapter 23 models: constrained random curdling on a base-5 grid.
+// Hoyle curdling (E = 3, N = 5): each surviving cube collapses into 5 of its 125 subcubes.
+// Novikov–Stewart curdling, drawn as its plane section: each square eddy keeps N of its
+// 25 subsquares. Following the book (Plate 223's caption), the 25 subeddies of every eddy
+// are stacked in random order once; lowering N "grays away" the top of each stack, so the
+// curds for every N are nested and come from one and the same set of random choices.
+const seeded = (s) => () => {
+  s |= 0; s = (s + 0x6d2b79f5) | 0;
+  let t = Math.imul(s ^ (s >>> 15), 1 | s);
+  t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+  return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+};
+
+// ---- Novikov–Stewart rank field ----
+// M[cell] = the highest stack rank (0..24) met along the cell's ancestry of eddies.
+// The cell belongs to the curd at threshold N exactly when M < N, so one field serves every N.
+const NS_STAGES = 4, NS_SIDE = 625;
+function rankField(seed) {
+  const rng = seeded(seed), M = new Uint8Array(NS_SIDE * NS_SIDE), perm = new Uint8Array(25);
+  for (let level = 1; level <= NS_STAGES; level++) {
+    const cells = Math.pow(5, NS_STAGES - level), nE = Math.pow(5, level - 1);
+    for (let ey = 0; ey < nE; ey++) for (let ex = 0; ex < nE; ex++) {
+      for (let k = 0; k < 25; k++) perm[k] = k;
+      for (let i = 24; i > 0; i--) { const j = (rng() * (i + 1)) | 0, t = perm[i]; perm[i] = perm[j]; perm[j] = t; }
+      for (let k = 0; k < 25; k++) {
+        const r = perm[k], x0 = (ex * 5 + k % 5) * cells, y0 = (ey * 5 + ((k / 5) | 0)) * cells;
+        for (let y = y0; y < y0 + cells; y++) { const row = y * NS_SIDE; for (let x = x0; x < x0 + cells; x++) if (r > M[row + x]) M[row + x] = r; }
+      }
+    }
+  }
+  return M;
+}
+// cls[cell]: 0 whey, 1 curd in a contact cluster that does not percolate (black in the book),
+// 2 curd in a percolating contact cluster, one touching both the top and the bottom (white).
+// Nof(x, y) gives the threshold per cell, so Plate 220's spliced corner works the same way.
+function classify(M, Nof) {
+  const S = NS_SIDE, id = new Int32Array(S * S).fill(-1);
+  const find = (i) => { let r = i; while (id[r] !== r) r = id[r]; while (id[i] !== r) { const n = id[i]; id[i] = r; i = n; } return r; };
+  for (let y = 0; y < S; y++) { const row = y * S; for (let x = 0; x < S; x++) if (M[row + x] < Nof(x, y)) id[row + x] = row + x; }
+  for (let y = 0; y < S; y++) for (let x = 0; x < S; x++) {
+    const i = y * S + x;
+    if (id[i] < 0) continue;
+    if (x + 1 < S && id[i + 1] >= 0) { const a = find(i), b = find(i + 1); if (a !== b) id[a] = b; }
+    if (y + 1 < S && id[i + S] >= 0) { const a = find(i), b = find(i + S); if (a !== b) id[a] = b; }
+  }
+  const top = new Set(), both = new Set();
+  for (let x = 0; x < S; x++) if (id[x] >= 0) top.add(find(x));
+  for (let x = 0; x < S; x++) { const i = (S - 1) * S + x; if (id[i] >= 0 && top.has(find(i))) both.add(find(i)); }
+  const cls = new Uint8Array(S * S), roots = new Set();
+  let curd = 0;
+  for (let i = 0; i < S * S; i++) if (id[i] >= 0) { const r = find(i); roots.add(r); cls[i] = both.has(r) ? 2 : 1; curd++; }
+  return { cls, clusters: roots.size, percolating: both.size, curd };
+}
+
+// ---- Hoyle curdling ----
+// Stages of cubes [x, y, z] on the 5^k lattice; each surviving cube picks 5 of its 125 subcubes.
+function hoyleStages(stages, seed) {
+  const rng = seeded(seed);
+  let cubes = [[0, 0, 0]];
+  const out = [];
+  for (let k = 1; k <= stages; k++) {
+    const next = [];
+    for (const [cx, cy, cz] of cubes) {
+      const picked = new Set();
+      while (picked.size < 5) picked.add((rng() * 125) | 0);
+      for (const p of picked) next.push([cx * 5 + (p % 5), cy * 5 + (((p / 5) | 0) % 5), cz * 5 + ((p / 25) | 0)]);
+    }
+    cubes = next;
+    out.push(cubes);
+  }
+  return out;
+}
+// plane projection: the distinct (x, y) squares the cubes of one stage project onto
+function project(cubes) {
+  const seen = new Set(), out = [];
+  for (const [x, y] of cubes) { const k = x * 100000 + y; if (!seen.has(k)) { seen.add(k); out.push([x, y]); } }
+  return out;
+}
+
+// ---- canonical curdling on the line (coin tossing) ----
+// rows[k] = surviving subintervals [start] at stage k, as integer positions on the base-b lattice
+function canonicalRows(b, p, stages, seed) {
+  const rng = seeded(seed);
+  let row = [0];
+  const rows = [row];
+  for (let k = 1; k <= stages && row.length; k++) {
+    const next = [];
+    for (const s of row) for (let j = 0; j < b; j++) if (rng() < p) next.push(s * b + j);
+    row = next;
+    rows.push(row);
+  }
+  return rows;
+}
+// extinction probability: the smallest root of q = (1 - p + p·q)^b
+function extinction(b, p) {
+  if (p * b <= 1) return 1;
+  let q = 0;
+  for (let i = 0; i < 200; i++) q = Math.pow(1 - p + p * q, b);
+  return q;
+}
+
+(() => {
+  const ink = [21, 21, 21], paperC = [236, 235, 230];
+  const shade = (a) => `rgb(${paperC.map((v, i) => Math.round(v + (ink[i] - v) * a)).join(',')})`;
+  const UNIT = { x0: 0, x1: 1, y0: 0, y1: 1 };
+  const log5 = Math.log(5);
+
+  // ================= Plates 218–219: Hoyle curdling =================
+  // Shades fitted to the print: the stage squares read at about 0.27, 0.52 and 0.82 of full ink.
+  const A_SHADES = [0.27, 0.52, 0.82, 0.9];
+  const A = { seed: 7, aloneSeed: 9, stage: 3, alone: false, stages: null, usedSeed: 7 };
+  const buildA = () => { A.usedSeed = A.alone ? A.aloneSeed : A.seed; A.stages = hoyleStages(4, A.usedSeed); };
+  buildA();
+  const zA = zoomable('wA', 'cA', (f) => fitBox(f, UNIT, 0.035), (f, v) => {
+    paper(f, PRINT.paper);
+    const c = f.ctx;
+    toScreen(f);
+    const ks = A.alone ? [A.stage] : Array.from({ length: A.stage }, (_, i) => i + 1);
+    for (const k of ks) {
+      const side = Math.pow(5, -k);
+      c.fillStyle = shade(A.alone ? 0.82 : A_SHADES[k - 1]);
+      for (const [x, y] of project(A.stages[k - 1])) c.fillRect(v.ox + x * side * v.s, v.oy - (y + 1) * side * v.s, side * v.s + 0.25, side * v.s + 0.25);
+    }
+    c.strokeStyle = PRINT.rule; c.lineWidth = 1;
+    c.strokeRect(v.ox, v.oy - v.s, v.s, v.s);
+  });
+  const sA = stepButtons($('sA'), [1, 2, 3, 4], (v) => String(v), (v) => `stage ${v}`, (v) => { A.stage = v; updateA(); });
+  const mA = stepButtons($('mA'), [0, 1], (v) => (v ? 'One stage alone' : 'Stages superposed'), (v) => (v ? 'one stage alone' : 'stages superposed'), (v) => { A.alone = !!v; updateA(); });
+  function updateA(refit) {
+    buildA();
+    sA(A.stage); mA(A.alone ? 1 : 0);
+    $('sAv').textContent = `stage ${A.stage}`;
+    const cubes = A.stages[A.stage - 1].length, squares = project(A.stages[A.stage - 1]).length;
+    $('cAt').textContent = A.alone ? 'One stage alone' : 'Stages superposed';
+    $('cAs').textContent = String(A.stage);
+    $('cAn').textContent = `${fmt(cubes)} cubes`;
+    $('rAa').textContent = fmt(cubes);
+    $('rAb').textContent = fmt(squares);
+    $('rAc').textContent = `5^−${A.stage} ≈ ${Math.pow(5, -A.stage).toPrecision(3)}`;
+    $('infoA').innerHTML = `Seed <b>${A.usedSeed}</b> · every surviving cube collapses into 5 of its 125 subcubes, so the k-precurd is 5<sup>k</sup> cubes of side 5<sup>−k</sup>, and D = log 5/log 5 = 1. The drawing is the projection on a face of the initiator cube.`;
+    if (refit) zA.refit(); else zA.schedule();
+  }
+  $('plate219').addEventListener('click', () => { A.alone = false; A.stage = 3; A.seed = 7; updateA(true); });
+  $('plate218').addEventListener('click', () => { A.alone = true; A.stage = 4; A.aloneSeed = 9; updateA(true); });
+  $('reseedA').addEventListener('click', () => { const s = (Math.random() * 1e9) | 0; if (A.alone) A.aloneSeed = s; else A.seed = s; updateA(); });
+
+  // ================= Plates 220–223: Novikov–Stewart =================
+  const S = 625;
+  const B = { seed: 1982, N: 19, splice: false, M: null, cache: new Map() };
+  B.M = rankField(B.seed);
+  // Plate 220's splice seam, measured from the scan: from 0.571 of the width on the bottom
+  // edge to 0.742 of the height (counted from the bottom) on the right edge. Below it, N = 24.
+  const SEAM = { bx: 0.571, ry: 0.742 };
+  const inCorner = (ux, uy) => uy < ((ux - SEAM.bx) * SEAM.ry) / (1 - SEAM.bx);
+  const NofSplice = (x, y) => (inCorner((x + 0.5) / S, 1 - (y + 0.5) / S) ? 24 : 22);
+  const CLS_COLORS = [shade(0.22), shade(0.95), shade(0)];
+  function fieldB() {
+    const key = B.splice ? 'splice' : B.N;
+    if (!B.cache.has(key)) {
+      const r = classify(B.M, B.splice ? NofSplice : () => B.N);
+      const img = new ImageData(S, S), d = img.data;
+      const rgb = CLS_COLORS.map((c) => c.match(/\d+/g).map(Number));
+      for (let i = 0; i < S * S; i++) { const [cr, cg, cb] = rgb[r.cls[i]]; d[4 * i] = cr; d[4 * i + 1] = cg; d[4 * i + 2] = cb; d[4 * i + 3] = 255; }
+      r.snapshot = document.createElement('canvas');
+      r.snapshot.width = S; r.snapshot.height = S;
+      r.snapshot.getContext('2d').putImageData(img, 0, 0);
+      B.cache.set(key, r);
+    }
+    return B.cache.get(key);
+  }
+  const zB = zoomable('wB', 'cB', (f) => fitBox(f, UNIT, 0.025), (f, v) => {
+    paper(f, PRINT.paper);
+    const c = f.ctx, r = fieldB(), cell = v.s / S, top = v.oy - v.s;
+    toScreen(f);
+    if (cell < 7) {
+      c.imageSmoothingEnabled = cell < 2;
+      c.drawImage(r.snapshot, v.ox, top, v.s, v.s);
+      c.imageSmoothingEnabled = true;
+    } else {
+      // zoomed far enough to draw the print's own texture: a small cross per whey cell
+      const x0 = Math.max(0, Math.floor(-v.ox / cell)), x1 = Math.min(S, Math.ceil((f.w - v.ox) / cell));
+      const y0 = Math.max(0, Math.floor(-top / cell)), y1 = Math.min(S, Math.ceil((f.h - top) / cell));
+      const arm = cell * 0.26, bar = cell * 0.12;
+      c.fillStyle = CLS_COLORS[1];
+      for (let y = y0; y < y1; y++) { const row = y * S, py = top + y * cell; for (let x = x0; x < x1; x++) if (r.cls[row + x] === 1) c.fillRect(v.ox + x * cell, py, cell + 0.25, cell + 0.25); }
+      c.fillStyle = shade(0.78);
+      for (let y = y0; y < y1; y++) {
+        const row = y * S, cy = top + (y + 0.5) * cell;
+        for (let x = x0; x < x1; x++) if (r.cls[row + x] === 0) {
+          const cx = v.ox + (x + 0.5) * cell;
+          c.fillRect(cx - arm, cy - bar / 2, 2 * arm, bar);
+          c.fillRect(cx - bar / 2, cy - arm, bar, 2 * arm);
+        }
+      }
+    }
+    if (B.splice) {
+      c.strokeStyle = PRINT.paper; c.lineWidth = Math.max(1.5, v.s / 900);
+      c.beginPath();
+      c.moveTo(v.ox + SEAM.bx * v.s, v.oy);
+      c.lineTo(v.ox + v.s, v.oy - SEAM.ry * v.s);
+      c.stroke();
+    }
+    c.strokeStyle = PRINT.rule; c.lineWidth = 1;
+    c.strokeRect(v.ox, top, v.s, v.s);
+  });
+  const dOf = (n) => Math.log(n) / log5;
+  const B_PRESETS = { plate220: 'splice', plate221: 19, plate222: 16, plate223: 13 };
+  function updateB(refit) {
+    $('nB').value = String(B.N);
+    $('nBv').textContent = B.splice ? 'N = 22, corner 24' : `N = ${B.N} of 25`;
+    const r = fieldB(), at = B.splice ? 'splice' : B.N;
+    for (const [id, v] of Object.entries(B_PRESETS)) $(id).setAttribute('aria-pressed', String(v === at));
+    $('rBa').textContent = B.splice ? `${dOf(22).toFixed(4)} | ${dOf(24).toFixed(4)}` : dOf(B.N).toFixed(4);
+    $('rBb').textContent = B.splice ? `${(1 + dOf(22)).toFixed(4)} | ${(1 + dOf(24)).toFixed(4)}` : (1 + dOf(B.N)).toFixed(4);
+    $('rBc').textContent = fmt(r.clusters);
+    $('rBd').textContent = r.percolating ? `yes · ${r.percolating === 1 ? 'one cluster' : r.percolating + ' clusters'}` : 'no';
+    $('cBt').textContent = B.splice ? 'Plate 220: two dimensions spliced' : `N = ${B.N}`;
+    $('cBn').textContent = `${fmt(r.curd)} of ${fmt(S * S)} cells are curd`;
+    $('infoB').innerHTML = `Seed <b>${B.seed}</b> · stage 4, a 625 × 625 grid. One random stacking of every eddy's 25 subeddies serves every N: lowering N "grays away" the top of each stack, so these curds are nested, as in the book.`;
+    if (refit) zB.refit(); else zB.schedule();
+  }
+  $('nB').addEventListener('input', () => { B.N = Number($('nB').value); B.splice = false; updateB(); });
+  for (const [id, v] of Object.entries(B_PRESETS)) $(id).addEventListener('click', () => { B.splice = v === 'splice'; if (v !== 'splice') B.N = v; updateB(true); });
+  $('reseedB').addEventListener('click', () => { B.seed = (Math.random() * 1e9) | 0; B.M = rankField(B.seed); B.cache.clear(); updateB(); });
+
+  // ================= Canonical curdling and the Bienaymé effect =================
+  const C = { b: 5, p: 0.8, seed: 11, rows: null };
+  const C_STAGES = { 3: 8, 5: 6 };
+  const buildC = () => { C.rows = canonicalRows(C.b, C.p, C_STAGES[C.b], C.seed); };
+  buildC();
+  const fC = figure($('cC'), () => {
+    paper(fC, PRINT.paper);
+    const c = fC.ctx;
+    c.setTransform(fC.dpr, 0, 0, fC.dpr, 0, 0);
+    const stages = C_STAGES[C.b], mx = 0.05 * fC.w, bw = fC.w - 2 * mx;
+    const pitch = fC.h / (stages + 1.7), th = pitch * 0.52, yTop = pitch * 0.5;
+    const cov = new Float32Array(Math.ceil(bw) + 2);
+    for (let k = 0; k < C.rows.length; k++) {
+      const y = yTop + k * pitch, w = bw * Math.pow(C.b, -k);
+      if (w >= 1) {
+        c.fillStyle = shade(0.92);
+        for (const s of C.rows[k]) c.fillRect(mx + s * w, y, Math.max(w - (w > 3 ? 0.6 : 0), 0.8), th);
+      } else {
+        // sub-pixel slugs: deposit true ink coverage per pixel column (see DECISIONS.md)
+        cov.fill(0);
+        for (const s of C.rows[k]) { const a = s * w, i = Math.floor(a); cov[i] += w * (1 - (a - i)); cov[i + 1] += w * (a - i); }
+        for (let i = 0; i < cov.length; i++) if (cov[i] > 0.004) { c.fillStyle = shade(0.92 * Math.min(1, cov[i])); c.fillRect(mx + i, y, 1, th); }
+      }
+      c.fillStyle = PRINT.muted; c.font = '11px "IBM Plex Mono", monospace';
+      c.fillText(String(k), mx * 0.25, y + th * 0.5 + 4);
+    }
+  });
+  const bC = stepButtons($('bC'), [3, 5], (v) => `b = ${v}`, (v) => `base ${v}`, (v) => { C.b = v; updateC(); });
+  function updateC() {
+    buildC();
+    bC(C.b);
+    const EN = C.b * C.p, died = C.rows.findIndex((r) => r.length === 0);
+    $('pCv').textContent = `p = ${C.p.toFixed(2)} · ⟨N⟩ = ${EN.toFixed(2)}`;
+    $('rCa').textContent = EN.toFixed(2);
+    $('rCb').textContent = EN > 1 ? (Math.log(EN) / Math.log(C.b)).toFixed(4) : 'none · dies out';
+    $('rCc').textContent = `${(extinction(C.b, C.p) * 100).toFixed(1)}%`;
+    $('rCd').textContent = died < 0 ? `alive at stage ${C_STAGES[C.b]}` : `died at stage ${died}`;
+    fC.draw();
+  }
+  $('pC').addEventListener('input', () => { C.p = Number($('pC').value); updateC(); });
+  $('critC').addEventListener('click', () => { C.p = Math.round(100 / C.b) / 100; $('pC').value = String(C.p); updateC(); });
+  $('reseedC').addEventListener('click', () => { C.seed = (Math.random() * 1e9) | 0; updateC(); });
+
+  updateA();
+  updateB();
+  updateC();
+})();
+
+</script>
+
+</body>
+</html>

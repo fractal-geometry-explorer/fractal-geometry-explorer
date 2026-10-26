@@ -67,8 +67,9 @@ Update this file in the same pull request as the work it records.
 
 | Plate | Page | Title | Kind | Status | Site page |
 | :- | :- | :- | :- | :- | :- |
-| 95 | 95 | Projection of Fournier's multiuniverse (D ≈ 0.8270) | exact | todo | |
-| 96 | 96 | A flat Fournier universe with D = 1 | exact | todo | |
+| 95 | 95 | Projection of Fournier's multiuniverse (D ≈ 0.8270) | exact | done | fournier-universe |
+| 96 | 96 | A flat Fournier universe with D = 1 | exact | done | fournier-universe |
+| (concept) | 97–105 | Geometry of turbulence; intermittency (chapter 10, no plates) | random | done | turbulence-intermittency |
 
 ## IV Scaling fractals (chapters 12–14)
 
@@ -113,28 +114,29 @@ Update this file in the same pull request as the work it records.
 
 | Plate | Page | Title | Kind | Status | Site page |
 | :- | :- | :- | :- | :- | :- |
-| 218–219 | 218–219 | Implementation of Hoyle's model by random curdling in a grid | random | todo | |
-| 220–223 | 220–223 | Novikov–Stewart random curds; contact clusters | random | todo | |
+| 218–219 | 218–219 | Implementation of Hoyle's model by random curdling in a grid | random | done | random-curds |
+| 220–223 | 220–223 | Novikov–Stewart random curds; contact clusters | random | done | random-curds |
 | 228 | 228 | Random Koch coastline (D = 1.6131) | random | todo | |
 | 229 | 229 | Random Peano curve (D = 2) | random | todo | |
 | 230 | 230 | Triangle and squig curve | random | todo | |
 | 231 | 231 | A hexa-squig coastline | random | todo | |
-| 241 | 240–241 | A random walk approximating a Brown line-to-line function, and its zeroset | random | todo | |
-| 242–243 | 242–243 | Brown hulls and islands; self-avoiding Brownian motion | random | todo | |
-| 246 | 246 | The computer "bug" (opus 1) | random | todo | |
+| 241 | 240–241 | A random walk approximating a Brown line-to-line function, and its zeroset | random | done | brown-trails |
+| 242–243 | 242–243 | Brown hulls and islands; self-avoiding Brownian motion | random | done | brown-trails |
+| 246 | 246 | The computer "bug" (opus 1) | random / art | done | midpoint-displacement |
 | (concept) | 232– | Brownian motion and the Wiener sausage | random | done | wiener-sausage |
+| (concept) | 232–239 | The Brown trail as a randomized Peano curve | random | done | brown-trails |
 
 ## IX Fractional Brown fractals (chapters 27–29)
 
 | Plate | Page | Title | Kind | Status | Site page |
 | :- | :- | :- | :- | :- | :- |
-| 255 | 255 | Fractional Brown trails (D ≈ 1.1111, 1.4285) | random | todo | |
-| 264–265 | 264–265 | Brown lake landscapes, ordinary and fractional | render | todo | |
-| 266–267 | 266–267 | Brown coastlines, and island "strings" | random | todo | |
-| 268 | 268 | Contour lines in fractional Brown landscapes | random | todo | |
-| 269, C9 (top) | 269 | Brownian Pangaea (coastline D = 3/2) | render | todo | |
-| 270 | 270 | The first known examples of Brown coastlines | random | todo | |
-| 271 | 271 | (landscape slices; confirm caption) | render | todo | |
+| 255 | 255 | Fractional Brown trails (D ≈ 1.1111, 1.4285) | random | done | fractional-trails |
+| 264–265 | 264–265 | Brown lake landscapes, ordinary and fractional | render | done | brown-relief |
+| 266–267 | 266–267 | Brown coastlines, and island "strings" | random | done | brown-relief |
+| 268 | 268 | Contour lines in fractional Brown landscapes | random | done | brown-relief |
+| 269, C9 (top) | 269 | Brownian Pangaea (coastline D = 3/2) | render | done | brown-relief |
+| 270 | 270 | The first known examples of Brown coastlines | random | done | brown-relief |
+| 271 | 271 | The first known examples of fractional Brown islands (D = 2.3000) | render | done | brown-relief |
 
 ## A book within the book, in colour (C1–C16, before chapter 30)
 
@@ -156,15 +158,15 @@ Update this file in the same pull request as the work it records.
 | :- | :- | :- | :- | :- | :- |
 | 285 | 285 | Random pattern of streets | random | todo | |
 | 286–287 | 286–287 | Paul Lévy's devilish staircases | random | todo | |
-| 293 | 293 | The computer "bug" as artist, opus 2 | random | todo | |
-| 295 | 295 | Nonrandom subordination: clustered fractal dust | exact | todo | |
-| 296–297 | 294–297 | Mandelbrot's early model clusters; Lévy flight and its stopovers (D = 1.26) | random | todo | |
-| 298 | 298 | Decrease of D by subordination | random | todo | |
-| 299 | 299 | Zooming toward a Lévy dust with D = 1.26 | random | todo | |
-| 300 | 300 | Circumnavigation of Lévy dusts | random | todo | |
-| 306–307 | 306–307 | Smallish round tremas, in white; random slices of "Swiss cheese" | random | todo | |
-| 308–309 | 308–309 | Larger round tremas, in black | random | todo | |
-| 318 | 318 | Carpets' lacunarity | exact | todo | |
+| 293 | 293 | The computer "bug" as artist, opus 2 | art | done | levy-dusts |
+| 295 | 295 | Nonrandom subordination: clustered fractal dust | exact | done | levy-dusts |
+| 296–297 | 294–297 | Mandelbrot's early model clusters; Lévy flight and its stopovers (D = 1.26) | random | done | levy-dusts |
+| 298 | 298 | Decrease of D by subordination | random | done | levy-dusts |
+| 299 | 299 | Zooming toward a Lévy dust with D = 1.26 | random | done | levy-dusts |
+| 300 | 300 | Circumnavigation of Lévy dusts | random | done | levy-dusts |
+| 306–307 | 306–307 | Smallish round tremas, in white; random slices of "Swiss cheese" | random | done | disc-tremas |
+| 308–309 | 308–309 | Larger round tremas, in black | random | done | disc-tremas |
+| 318 | 318 | Carpets' lacunarity | exact | done | carpets-lacunarity |
 | 323 | 323 | Effect of the trema generator upon lacunarity | random | todo | |
 | 325 | 324–325 | Fractal dust from nonspherical tremas (one octant on a spherical net) | random | todo | |
 
@@ -172,7 +174,22 @@ Update this file in the same pull request as the work it records.
 
 | Plate | Page | Title | Kind | Status | Site page |
 | :- | :- | :- | :- | :- | :- |
+| Figure, p. 329 | 329 | A spin impurity's spread: Pascal's triangle mod 2, whose downsized limit is the Sierpiński gasket | exact | done | lattice-physics |
+| (concept) | 326–333 | Weak against strong convergence; the self-avoiding walk (D = 4/3); Leopold–Langbein rivers | random | done | lattice-physics |
 | 340 | 340 | Original evidence for scaling in economics (cotton prices) | data | todo | |
+
+## XII Of men and ideas (chapters 40–42)
+
+| Plate | Page | Title | Kind | Status | Site page |
+| :- | :- | :- | :- | :- | :- |
+| (sketches) | 391–404 | Chapter 40, six biographical sketches: Bachelier, Fournier d'Albe, Hurst, Lévy, Richardson, Zipf | data | done | biographical-sketches |
+| Drawing, p. 404 | 404 | Jean Effel's lecture drawing, "fournir vos questions à mes réponses" | art | done | biographical-sketches |
+
+## XII Of men and ideas (chapters 40–42)
+
+| Plate | Page | Title | Kind | Status | Site page |
+| :- | :- | :- | :- | :- | :- |
+| (concept) | 405–421 | Historical sketches: chimeras, dimension, Poincaré, old scaling evidence, Weierstrass | — | done | historical-sketches |
 
 ## Front matter and the update for the second printing (pages 458–468)
 
@@ -186,11 +203,18 @@ Update this file in the same pull request as the work it records.
 Each chapter session should add the chapter's main ideas here, alongside its plates. Candidates so far:
 - similarity dimension (chapters 3 and 6);
 - coastline length against ruler size (chapter 5; partly on the Minkowski page);
-- intermittency (chapter 10);
+- random midpoint displacement, its creases, and Poisson strata (chapter 26; on the Plate 246 page);
 - length–area–volume relations (chapter 12);
 - percolation (chapter 13) — done, on islands-clusters (seeded bond-percolation lattice);
+- surfaces with positive volume: Cantor dusts of positive measure, Osgood's curve of positive area, and the arteries-and-veins model of flesh (chapter 15, which prints no plates);
 - the diameter exponent of trees (chapter 17);
-- 1/f noise and scaling nets (chapter 27);
+- canonical curdling, the Bienaymé birth-and-death criticality and D* = log ⟨N⟩/log b (chapter 23; on the random-curds page);
+- 1/f noise and scaling nets (chapter 27): the Joseph effect, Hurst's R/S and the spectrum are on the fractional-trails page;
+- island, lake and cup areas: Korčak's law Pr(A > a) = F·a⁻ᴮ with B = D/2, deadvalleys, cups and the Devil's terraces, the eroded Brown model (chapter 29, pages 272–276 — the chapter prints no figure);
+- global dependence in Brown relief, and the horizon (chapter 28);
 - Lévy flights and dusts (chapters 31–32);
-- lacunarity (chapter 34);
-- scaling in prices and in word frequencies (chapters 37–38).
+- disc and ball tremas: saturation, critical dimensions, lunar craters and galactic voids (chapter 33; the Moon-saturation section of the disc-tremas page);
+- lacunarity (chapter 34; on the carpets-lacunarity page, with the mid-line dusts, the gap census's prefactor F and the mass-in-a-window measures);
+- weak against strong convergence, and the self-avoiding walk (chapter 36 — done, on the lattice-physics page);
+- scaling in prices and in word frequencies (chapters 37–38);
+- the prehistory of dimension, scaling and the monsters (chapter 41): done, on the historical-sketches page.
