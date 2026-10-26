@@ -80,6 +80,10 @@
   let imgB = { key: '', img: null };            // the rastered curtain, reused while the view holds
   const PP = [236, 235, 230], KK = [21, 21, 21];
   const rOf = (t) => (stB.which === 'D' ? (t < 1e-4 ? 0 : Math.min(0.5, pow(2, -1 / t))) : Math.min(0.5, t / 2));
+  // switching curtains keeps the cut on the same dust: on the D curtain its height is D, on the r curtain 2r
+  const cutFor = (which, t) => (which === 'r' ? pow(2, 1 - 1 / t) : Math.LN2 / Math.log(2 / t));
+  const setWhich = (k) => { if (k !== stB.which) stB.cut = cutFor(k, stB.cut); stB.which = k; };
+  const small = (x, d) => (x >= pow(10, -d) ? x.toFixed(d) : x > 0 ? sci(x) : '0');
   const zB = zoomable('wB', 'cB', (f) => fitBox(f, { x0: -0.14, x1: 1.14, y0: -0.02, y1: 1.02 }, 0.02), (f, v) => {
     const c = f.ctx, W = f.canvas.width, H = f.canvas.height;
     const key = `${stB.which}|${W}|${H}|${v.s}|${v.ox}|${v.oy}`;
@@ -117,7 +121,7 @@
       c.strokeStyle = PRINT.red; c.lineWidth = 1.4; c.setLineDash([5, 4]);
       c.beginPath(); c.moveTo(v.ox - 0.02 * v.s, y); c.lineTo(v.ox + 1.02 * v.s, y); c.stroke(); c.setLineDash([]);
     }
-  }, { onTap: (wx, wy) => { if (wy >= 0 && wy <= 1 && wx >= -0.1 && wx <= 1.1) { stB.cut = Math.max(0.02, wy); stB.showCut = true; $('cutBs').value = stB.cut; setB(false); } } });
+  }, { onTap: (wx, wy) => { if (wy >= 0 && wy <= 1 && wx >= -0.1 && wx <= 1.1) { stB.cut = Math.max(0.02, wy); stB.showCut = true; setB(false); } } });
   const INFO_B = {
     D: 'Linear in D: the dimension falls off evenly from 1 to 0, so r = 2<sup>−1/D</sup>. Near the bottom r plunges and the folds rush to the corners.',
     r: 'Linear in r: the ratio falls off evenly from 1/2 to 0. The triadic dust, r = 1/3, sits two thirds of the way up.',
@@ -132,20 +136,21 @@
     $('cutWrap').hidden = !stB.showCut;
     if (stB.showCut) {
       const r = rOf(stB.cut);
-      $('cutBv').textContent = stB.which === 'D' ? `D = ${stB.cut.toFixed(3)}` : `r = ${(stB.cut / 2).toFixed(3)}`;
-      $('rBa').textContent = r.toFixed(4);
-      $('rBb').textContent = r > 1e-4 ? dustDim(2, r).toFixed(4) : '0';
+      $('cutBs').value = stB.cut;
+      $('cutBv').textContent = stB.which === 'D' ? `D = ${stB.cut.toFixed(3)}` : `r = ${small(stB.cut / 2, 3)}`;
+      $('rBa').textContent = small(r, 4);
+      $('rBb').textContent = r > 0 ? dustDim(2, r).toFixed(4) : '0';
       $('rBc').textContent = (1 - 2 * r).toFixed(4);
       $('rBd').textContent = r > 0.4999 ? '1' : '0';
     } else { $('rBa').textContent = $('rBb').textContent = $('rBc').textContent = '—'; $('rBd').textContent = '0'; }
     if (refit) zB.refit(); else zB.schedule();
   }
-  const markMB = stepButtons($('mB'), ['D', 'r'], (k) => (k === 'D' ? 'Linear in D (top figure)' : 'Linear in r (bottom figure)'), (k) => `Vertical coordinate ${k}`, (k) => { stB.which = k; setB(false); });
+  const markMB = stepButtons($('mB'), ['D', 'r'], (k) => (k === 'D' ? 'Linear in D (top figure)' : 'Linear in r (bottom figure)'), (k) => `Vertical coordinate ${k}`, (k) => { setWhich(k); setB(false); });
   $('markB').addEventListener('change', (e) => { stB.marks = e.target.checked; setB(false); });
   $('cutB').addEventListener('change', (e) => { stB.showCut = e.target.checked; setB(false); });
   $('cutBs').addEventListener('input', (e) => { stB.cut = +e.target.value; setB(false); });
-  $('plate81t').addEventListener('click', () => { Object.assign(stB, { which: 'D', marks: true, showCut: false }); setB(true); });
-  $('plate81b').addEventListener('click', () => { Object.assign(stB, { which: 'r', marks: true, showCut: false }); setB(true); });
+  $('plate81t').addEventListener('click', () => { setWhich('D'); Object.assign(stB, { marks: true, showCut: false }); setB(true); });
+  $('plate81b').addEventListener('click', () => { setWhich('r'); Object.assign(stB, { marks: true, showCut: false }); setB(true); });
 
   // ====================== Plate 83: the devil's staircase ======================
   const stC = { mode: 'printed', n: 5, m1: 0.18, m2: 0.65, dm: 0.125 };
