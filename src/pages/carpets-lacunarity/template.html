@@ -1,0 +1,163 @@
+<title>Carpets' Lacunarity</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.r-two { aspect-ratio: 15 / 8; }
+.mini svg.gen7 { height: 64px; aspect-ratio: 1 / 1; }
+.mini svg.gen { height: 40px; }
+.mini .pair { display: grid; gap: 4px; justify-items: center; }
+.mini .pair small { font-family: var(--f-mono); font-size: 10.5px; color: var(--print-ink); }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 34, "Texture: Gaps and Lacunarity; Cirri and Succolarity" · pages 310–318</p>
+    <h1><span class="plate-no">Plate 318</span><span class="lozenge" aria-hidden="true"></span><span>Carpets' Lacunarity</span></h1>
+    <p class="dek">Dimension does not say everything about how a fractal looks. Maps of real galaxies are fairly even; Mandelbrot's early models of them, with the very same D, were riddled with immense voids. Chapter 34 names what differs — <i>lacunarity</i>, from the Latin for gap — and its one plate makes the point with two Sierpiński carpets of identical dimension and utterly different texture. Every figure is computed from the rules in the caption.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#plate318"><b>318</b> The two carpets</a>
+    <a href="#midline"><b>cut</b> The mid-line dusts</a>
+    <a href="#measures"><b>F</b> Measuring lacunarity</a>
+  </nav>
+
+  <!-- ===================== PLATE 318: THE TWO CARPETS ===================== -->
+  <section class="plate" id="plate318">
+    <div class="plate-head">
+      <p class="no">Plate 318 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Two carpets, one dimension</h2>
+      <p class="dim">b = 1/r = 7, N = 40 · D = log 40/log 7 ≈ 1.8957 for both · only the tremas' arrangement differs</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-two zoomable" id="wA">
+          <canvas id="cA" role="img" aria-label="The two Sierpiński carpets of Plate 318, equal in dimension but different in lacunarity"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cAt">Both, as printed</strong> · <span id="cAn">stage 2, as the plate prints them</span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Divide a square into 7 × 7 cells and remove 9 of them — as one 3 × 3 block in the middle, or as 9 separate cells spread out between the rest. Either way N = 40 cells survive, so repeating the cut inside every kept cell leaves a carpet of the same dimension, D = log 40/log 7. "Clearly, D being the same in both cases is not obvious": the left carpet gives the impression of definitely larger gaps. It is the more <i>lacunar</i> one — and the chapter's measures below bear the impression out.</p>
+        <div class="mini" aria-label="The two generators: a 7 by 7 grid with 9 cells removed">
+          <div class="pair"><svg class="gen7" viewBox="0 0 7 7" shape-rendering="crispEdges" aria-hidden="true" id="miniAL"></svg><small>one 3×3 trema</small></div>
+          <div class="pair"><svg class="gen7" viewBox="0 0 7 7" shape-rendering="crispEdges" aria-hidden="true" id="miniAR"></svg><small>nine 1×1 tremas</small></div>
+          <div class="fx">b = 7, N = 40<br>D = log 40/log 7<br>≈ 1.8957</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Draw</span></div>
+          <div class="steps words" id="mA" role="group" aria-label="Which carpet"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="sAv">stage 2</span></div>
+          <div class="steps" id="sA" role="group" aria-label="Stage"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="preset318">Show Plate 318 as printed</button>
+        </div>
+        <p class="readline" id="infoA" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Cells kept</dt><dd id="rAa">1,600</dd></div>
+          <div><dt>Cell side</dt><dd id="rAb">7⁻² ≈ 0.0204</dd></div>
+          <div><dt>Ink area</dt><dd id="rAc">(40/49)² ≈ 0.666</dd></div>
+          <div><dt>Biggest trema (L · R)</dt><dd id="rAd">3/7 · 1/7</dd></div>
+        </dl>
+        <p class="note">The generators were read from the caption box of the scan at 600 dpi, and the printed figures are stage 2 of each — "shown above on 7 times larger scale", as the caption says of the generators. Rendered and laid over the scan, both figures agree with the book in every one of their 49 × 49 cells. Past stage 3 the drawing dims cells smaller than a pixel by their share of ink instead of drawing them, so deep stages keep the printed density. The caption also notes D ≈ 1.8957 is remarkably close to the dimension of Bernoulli percolation — a resemblance it calls misleading, the topologies being very different.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== THE MID-LINE DUSTS ===================== -->
+  <section class="plate" id="midline">
+    <div class="plate-head">
+      <p class="no">Pages 313–314 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Cut along the middle: two Cantor dusts</h2>
+      <p class="dim">both mid lines: N = 4, r = 1/7 · D = log 4/log 7 ≈ 0.7124 · clumped against spread-out pieces</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wB">
+          <canvas id="cB" role="img" aria-label="The Cantor dusts along the carpets' horizontal mid lines, with a sliding mass window"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>Curdling both mid lines</strong> · <span id="cBn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Lacunarity "makes sense on the line", so the chapter reads it off the carpets' horizontal mid sections. Both are Cantor dusts keeping N = 4 pieces of length r = 1/7 at every stage — but the left carpet's pieces sit in two clumps at the ends, leaving one big central gap, while the right carpet's are separated by three equal gaps. At one extreme a dust with N ≫ 1 "mimics" a few points, D = 0; at the other, a full interval, D = 1. The true D never budges.</p>
+        <div class="mini" aria-label="The two mid-line generators">
+          <div class="pair"><svg class="gen" viewBox="-0.06 -0.14 1.12 0.28" aria-hidden="true" id="miniBL"></svg><small>clumped · gap 3/7</small></div>
+          <div class="pair"><svg class="gen" viewBox="-0.06 -0.14 1.12 0.28" aria-hidden="true" id="miniBR"></svg><small>spread · gaps 1/7</small></div>
+          <div class="fx">N = 4, r = 1/7<br>D = log 4/log 7</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span></div>
+          <div class="steps" id="sB" role="group" aria-label="Stage"></div>
+        </div>
+        <div class="group">
+          <label class="check" for="winB"><input type="checkbox" id="winB"> Weigh the mass in a window</label>
+          <div id="winWrap" hidden>
+            <div class="slider">
+              <div class="label-row"><span class="label">Window</span><span class="value" id="tBv"></span></div>
+              <input type="range" id="tBs" min="0" max="1" step="0.002" value="0.42" aria-label="Window position">
+            </div>
+            <div class="label-row"><span class="label">Window width</span></div>
+            <div class="steps" id="wB2" role="group" aria-label="Window width"></div>
+          </div>
+        </div>
+        <p class="readline" id="infoB" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Mass, clumped</dt><dd id="rBa">—</dd></div>
+          <div><dt>Mass, spread out</dt><dd id="rBb">—</dd></div>
+          <div><dt>Dimension D</dt><dd id="rBc">0.7124</dd></div>
+          <div><dt>Gaps per stage (L · R)</dt><dd>1 of 3/7 · 3 of 1/7</dd></div>
+        </dl>
+        <p class="note">The book names these mid sections but draws them only inside the carpets, so the bar-by-stages layout here follows Plate 80's convention. Masses are those of the limit dust (each kept piece carries 1/4 of its parent's mass), not of the drawn stage. The book's example window has width 2R = 2/7: on the clumped dust its mass ranges from 0 to 1/2, on the spread-out dust it stays near the mean — the chapter's first signature of lacunarity.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== MEASURING LACUNARITY ===================== -->
+  <section class="plate" id="measures">
+    <div class="plate-head">
+      <p class="no">Pages 314–316 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Measuring lacunarity</h2>
+      <p class="dim">the gap census Nr(U &gt; u) ≈ F·u<sup>−D</sup> · the mass in a window W = M(2R) · lacunarity ⟨(W/⟨W⟩−1)²⟩</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wC">
+          <canvas id="cC" role="img" aria-label="Lacunarity measures: the gap census with its prefactor, and the distribution of window masses"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cCt">The gap census and F</strong> · <span id="cCn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Up to now only the exponent in prefactor × (quantity)<sup>exponent</sup> mattered; "the study of texture forces us to extend our attention to the prefactor." Chapter 8's census of gaps longer than u steps along F·u<sup>−D</sup> for both dusts — same slope, different height. And where no recursion is available (a random dust, say), the chapter weighs windows instead: how far does the mass W in a window stray from its mean? Low lacunarity, small spread; high lacunarity, large.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mC" role="group" aria-label="Which measure"></div>
+        </div>
+        <div class="group" id="wCwrap" hidden>
+          <div class="label-row"><span class="label">Window width</span></div>
+          <div class="steps" id="wC2" role="group" aria-label="Window width"></div>
+        </div>
+        <p class="readline" id="infoC" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt id="tCa">F, clumped</dt><dd id="rCa">—</dd></div>
+          <div><dt id="tCb">F, spread out</dt><dd id="rCb">—</dd></div>
+          <div><dt id="tCc">Slope</dt><dd id="rCc">—</dd></div>
+          <div><dt id="tCd">Gaps per stage</dt><dd id="rCd">—</dd></div>
+        </dl>
+        <p class="note">The book states these measures in prose and draws no chart, so both figures here are this page's illustrations of the text. The census prefactor is fitted through the stairs' corners; the mass histogram samples 4,000 window positions and keeps, as the chapter prescribes, only the windows that hit the dust. One exact curiosity: at the book's width 2R = 2/7 the spread-out dust weighs precisely 1/4 wherever the window sits — this generator deals mass perfectly evenly at that scale, so its lacunarity measure is 0 there; narrower windows restore a small spread. The chapter's other texture notion, <i>succolarity</i> — "to almost flow through", for fractals that nearly include percolating filaments — is raised but left unmeasured: "beyond the present elementary discussion." Chapter 35 controls both through tremas.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 34, pages 310–318 (Plate 318). Every figure is computed from the generators read off the caption; the stage-2 figures were verified against the scan cell for cell. Companion page: <a href="cantor-dust.html">Cantor Dust</a> (Plates 80–83), where the dusts and the gap census first appear.</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>
