@@ -1,0 +1,147 @@
+<title>Fractional Brown Trails</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.r-plate { aspect-ratio: 13 / 9; }
+@media (max-width: 599px) { .r-plate { aspect-ratio: 1 / 1; } }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 27, "River discharges; scaling nets and noises" · pages 247–255</p>
+    <h1><span class="plate-no">Plate 255</span><span class="lozenge" aria-hidden="true"></span><span>Fractional Brown Trails</span></h1>
+    <p class="dek">This chapter marks a turning point of the book: instead of building a fractal stage by stage, Mandelbrot declares the properties he wants — Gaussian, stationary, scaling — and then looks for a process that has them. The answer is fractional Brownian motion, invented to explain why wet and dry years on the Nile cluster into long floods and droughts. One parameter H tunes the persistence, and the same random seed drawn at two values of H gives the two trails of Plate 255.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#trails"><b>255</b> The trails</a>
+    <a href="#joseph"><b>concept</b> The Joseph Effect</a>
+    <a href="#hurst"><b>concept</b> R/S and 1/f noises</a>
+  </nav>
+
+  <!-- ===================== PLATE 255 ===================== -->
+  <section class="plate" id="trails">
+    <div class="plate-head">
+      <p class="no">Plate 255 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Fractional Brown trails</h2>
+      <p class="dim">Coordinates: two independent fractional Brown functions of exponent H · trail D = 1/H · printed: H = 0.9000, D ≈ 1.1111 (left) and H = 0.7000, D ≈ 1.4285 (right)</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-plate zoomable" id="wA">
+          <canvas id="cA" role="img" aria-label="Fractional Brown trails"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cAt">As printed</strong> · <span id="cAn">H = 0.9 and H = 0.7, same seed</span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">A trail of fractional Brownian motion: each coordinate is an independent fractional Brown function of the same exponent H, so the walker's displacement over a time Δt grows like Δt<sup>H</sup> instead of the ordinary √Δt. With H = 0.9 (left figure) the trend persists strongly in whatever direction it has embarked on, and the small convolutions are barely visible. The right figure runs the same program on the same pseudo-random seed with H = 0.7: the overall shape stays recognizable, but the smaller convolutions grow until they crowd the view.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mA" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="slider" id="hAwrap">
+          <div class="label-row"><span class="label">Persistence H</span><span class="value" id="hAv">H = 0.90</span></div>
+          <input type="range" id="hA" min="0.30" max="0.95" step="0.005" value="0.90" aria-label="Hurst exponent H">
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Steps</span><span class="value" id="nAv">4,096</span></div>
+          <div class="steps" id="nA" role="group" aria-label="Number of steps"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn" id="seedA">New seed</button>
+          <button type="button" class="btn primary" id="plate255">Show Plate 255 as printed</button>
+        </div>
+        <dl class="read">
+          <div><dt>Trail dimension</dt><dd id="rAa">1.1111 and 1.4285</dd></div>
+          <div><dt>Displacement law</dt><dd id="rAb">Δt⁰·⁹ and Δt⁰·⁷</dd></div>
+          <div><dt>Steps</dt><dd id="rAc">4,096</dd></div>
+          <div><dt>Seed</dt><dd id="rAd">2</dd></div>
+        </dl>
+        <p class="note">A random plate: the book's trails came from Mandelbrot &amp; Wallis's 1969 computer program and their seed, which the book does not record, so these trails match the plate statistically, not stroke for stroke. The noise here is exact fractional Gaussian noise (circulant embedding), not the periodic fast-Fourier shortcut the chapter warns about — the covariance is exact at every lag. As in the plate, moving H keeps the same seed, so the trail deforms coherently instead of being redrawn. For H below ½ the motion turns antipersistent and the trail law D = 1/H saturates at the plane's D = 2.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== JOSEPH EFFECT ===================== -->
+  <section class="plate" id="joseph">
+    <div class="plate-head">
+      <p class="no">Chapter 27 concept <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>River discharges and the Joseph Effect</h2>
+      <p class="dim">Graph of B<sub>H</sub>(t): D = 2 − H · its zeroset: D = 1 − H · increments' variance over Δt: |Δt|²ᴴ</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq" id="wB">
+          <canvas id="cB" role="img" aria-label="A fractional Brown function and its increments"></canvas>
+        </div>
+        <figcaption><strong>Model river record</strong> · <span id="cBn">1,024 years · H = 0.90</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Mandelbrot reads the stories of Joseph's seven fat and seven lean years, and of Noah's flood, as parables about rivers: wet and dry years cluster into long wet periods and droughts. Hurst found that real rivers are extraordinarily persistent — for the Nile, H ≈ 0.9. Here the lower curve plays the yearly discharges (fractional Gaussian noise) and the upper curve their running sum, the cumulated discharge B<sub>H</sub>(t). Slide H and watch persistence being injected into the very same sequence of chance: cycles and trends appear that no mechanism put there.</p>
+        <div class="slider">
+          <div class="label-row"><span class="label">Persistence H</span><span class="value" id="hBv">H = 0.90</span></div>
+          <input type="range" id="hB" min="0.10" max="0.95" step="0.005" value="0.90" aria-label="Hurst exponent H">
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn" id="nileB">The Nile (H = 0.9)</button>
+          <button type="button" class="btn" id="rhineB">The Rhine (H = ½)</button>
+          <button type="button" class="btn" id="seedB">New seed</button>
+        </div>
+        <dl class="read">
+          <div><dt>Graph of B_H</dt><dd id="rBa">D = 1.10</dd></div>
+          <div><dt>Its zeroset</dt><dd id="rBb">D = 0.10</dd></div>
+          <div><dt>Variance over Δt</dt><dd id="rBc">|Δt|¹·⁸⁰</dd></div>
+          <div><dt>Character</dt><dd id="rBd">persistent</dd></div>
+        </dl>
+        <p class="note">At H = ½ the increments are independent — white Gaussian noise, the Rhine, a river with "no Joseph legend". For H &gt; ½ the persistence extends forever: nearly every sample shows a few slow, nonperiodic cycles and a trend, whichever its duration, and none of it can be extrapolated. Mandelbrot aims this at economists, who like to decompose data into trend, cycles and noise: in fBm the trend and the cycles <i>are</i> the noise, and signify nothing. Below ½ the noise turns antipersistent, constantly turning back on itself.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== R/S AND NOISES ===================== -->
+  <section class="plate" id="hurst">
+    <div class="plate-head">
+      <p class="no">Chapter 27 concept <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Hurst's R/S, scaling noises and 1/f</h2>
+      <p class="dim">Hurst: R(d)/S(d) ∝ dᴴ · spectral density of the increments: ∝ 1/f^β with β = 2H − 1</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq" id="wC">
+          <canvas id="cC" role="img" aria-label="Rescaled range analysis"></canvas>
+        </div>
+        <figcaption><strong id="cCt">Hurst's diagram</strong> · <span id="cCn">8,192 years · H = 0.90</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap" id="capC">Hurst measured rivers with the rescaled range: over each span of d years, R(d) is the reservoir capacity ideal performance would have needed — the range of the cumulated, detrended discharge — and S(d) the standard deviation. White noise and every textbook process give R/S ∝ √d. The Nile's records instead gave R/S ∝ d<sup>0.9</sup>. The diagram plots R/S for the simulated discharges on doubly logarithmic paper, one dot per block of d years; the fitted slope recovers H.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Diagram</span></div>
+          <div class="steps words" id="mC" role="group" aria-label="Which diagram"></div>
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Persistence H</span><span class="value" id="hCv">H = 0.90</span></div>
+          <input type="range" id="hC" min="0.10" max="0.95" step="0.005" value="0.90" aria-label="Hurst exponent H">
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn" id="seedC">New seed</button>
+        </div>
+        <dl class="read">
+          <div><dt>H set</dt><dd id="rCa">0.90</dd></div>
+          <div><dt>Slope measured</dt><dd id="rCb">—</dd></div>
+          <div><dt>Theory</dt><dd id="rCc">H = 0.90</dd></div>
+          <div><dt>Noise</dt><dd id="rCd">1/f⁰·⁸⁰</dd></div>
+        </dl>
+        <p class="note" id="noteC">A noise is scaling when speeding the tape up only calls for turning the volume: fractional Gaussian noise is one, with spectral density ∝ 1/f^β, β = 2H − 1. Near H = 1 that is the famous "1/f noise". White noise is the flat case β = 0, H = ½. Mandelbrot proved 0 &lt; H &lt; 1 is forced: Hurst's measured slopes near 0.7–0.9 are a symptom of scaling, persistence with no time scale and no characteristic cycle.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 27, pages 247–255 (Plate 255). Every figure is computed, not traced: the noise is exact fractional Gaussian noise by circulant embedding, and the plate is matched statistically, as befits a random construction. Companion page: <a href="https://claude.ai/artifact/RvpGQi3Td4y7gZnjM1pukG" target="_blank" rel="noopener">Wiener Sausage</a> (ordinary Brownian motion, chapter 25).</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>

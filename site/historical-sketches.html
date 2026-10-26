@@ -1,0 +1,824 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Historical Sketches</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>
+/* Layout: six entry sections in book order, three with a figure beside the entry's text and controls, three as prose; a sticky index on top. One column under 900px. */
+:root {
+  --page: #e4e5e1;
+  --text: #1b1d1f;
+  --muted: #595e64;
+  --rule: #c4c7c1;
+  --surface: #f6f6f3;
+  --accent: #285895;
+  --f-display: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Newsreader", Georgia, "Times New Roman", serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* the figures are reproductions of printed plates, so their paper and inks stay the same in both themes */
+  --print-paper: #ecebe6;
+  --print-ink: #151515;
+  --print-rule: #c9c8c2;
+  --gain: rgba(47, 95, 158, 0.42);
+  --loss: rgba(186, 88, 44, 0.42);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --page: #111214; --text: #e5e5e1; --muted: #9a9fa6; --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --page: #111214; --text: #e5e5e1; --muted: #9a9fa6; --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--page); color: var(--text); font-family: var(--f-display); font-size: 14px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
+.wrap {
+  max-width: 1180px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 36px 64px;
+  display: grid; gap: 40px;
+}
+header.top { display: grid; gap: 10px; max-width: 820px; }
+.eyebrow { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+h1 {
+  margin: 0; display: flex; align-items: center; flex-wrap: wrap; gap: 0.18em 0.42em;
+  font-weight: 800; font-size: clamp(30px, 5.4vw, 54px); line-height: 1.02; letter-spacing: 0.01em; text-transform: uppercase; text-wrap: balance;
+}
+h1 .plate-no { font-weight: 600; text-transform: none; letter-spacing: 0; }
+.lozenge { display: inline-block; width: 0.42em; height: 0.42em; border: 0.075em solid currentColor; position: relative; top: -0.02em; }
+.lozenge::after { content: ""; position: absolute; inset: 0.1em; border: 0.05em solid currentColor; }
+.dek { margin: 0; font-family: var(--f-body); font-size: 19px; line-height: 1.45; max-width: 64ch; }
+
+nav.index {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+  padding: 10px max(16px, env(safe-area-inset-right, 0px)) 10px max(16px, env(safe-area-inset-left, 0px));
+  background: var(--page); border-bottom: 1px solid var(--rule);
+  display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none;
+}
+nav.index a {
+  flex: none; display: inline-flex; gap: 8px; align-items: baseline; padding: 6px 10px;
+  border: 1px solid var(--rule); background: var(--surface); color: var(--text); text-decoration: none; font-size: 13px; font-weight: 600;
+}
+nav.index a b { font-family: var(--f-mono); font-weight: 500; color: var(--accent); }
+nav.index a:hover { border-color: var(--text); }
+
+section.plate { display: grid; gap: 18px; scroll-margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--rule); }
+.plate-head { display: grid; gap: 4px; }
+.plate-head .no { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.plate-head h2 { margin: 0; font-size: clamp(22px, 3vw, 30px); font-weight: 800; line-height: 1.1; text-transform: uppercase; letter-spacing: 0.01em; text-wrap: balance; }
+.plate-head .dim { margin: 0; font-family: var(--f-mono); font-size: 13px; color: var(--muted); }
+.plate-body { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(280px, 1fr); gap: 32px; align-items: start; }
+@media (max-width: 899px) { .plate-body { grid-template-columns: minmax(0, 1fr); gap: 20px; } }
+figure.fig { margin: 0; display: grid; gap: 8px; min-width: 0; }
+.canvas-wrap { position: relative; width: 100%; max-width: 100%; background: var(--print-paper); outline: 1px solid var(--rule); overflow: hidden; }
+.canvas-wrap canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.r-sq { aspect-ratio: 1 / 1; }
+.r-lox { aspect-ratio: 5 / 4; }
+.zoomable { cursor: grab; touch-action: pan-y; }
+.zoomable.dragging { cursor: grabbing; }
+.view-tools { position: absolute; top: 10px; right: 10px; display: flex; gap: 6px; z-index: 2; }
+.view-tools button { min-width: 34px; height: 34px; padding: 0 10px; font: 600 15px/1 var(--f-display); color: var(--print-ink); background: #f7f7f3; border: 1px solid var(--print-rule); cursor: pointer; }
+figcaption { font-size: 13px; color: var(--muted); }
+figcaption strong { color: var(--text); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+
+.side { display: grid; gap: 18px; min-width: 0; align-content: start; }
+.side p.cap { margin: 0; font-family: var(--f-body); font-size: 17px; line-height: 1.55; max-width: 62ch; }
+.group { display: grid; gap: 8px; min-width: 0; }
+.label-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.label { font-size: 11.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.value { font-family: var(--f-mono); font-size: 12.5px; font-variant-numeric: tabular-nums; text-align: right; }
+.steps { display: flex; flex-wrap: wrap; gap: 6px; }
+.steps button {
+  min-width: 38px; height: 34px; padding: 0 10px; font: 600 13px/1 var(--f-mono); color: var(--text);
+  background: var(--surface); border: 1px solid var(--rule); cursor: pointer;
+}
+.steps.words button { font: 600 13px/1 var(--f-display); }
+.steps button[aria-pressed="true"] { background: var(--text); color: var(--page); border-color: var(--text); }
+.steps button:hover { border-color: var(--text); }
+.steps button:disabled { opacity: 0.35; cursor: default; border-color: var(--rule); }
+.btn-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.btn { padding: 8px 12px; font: 600 13px/1.2 var(--f-display); color: var(--text); background: var(--surface); border: 1px solid var(--rule); cursor: pointer; }
+.btn:hover { border-color: var(--text); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--page); }
+.check { display: flex; align-items: flex-start; gap: 8px; font-size: 13.5px; cursor: pointer; }
+.check input { accent-color: var(--accent); width: 16px; height: 16px; margin: 1px 0 0; flex: none; }
+.check:has(input:disabled) { opacity: 0.45; cursor: default; }
+.slider { display: grid; gap: 4px; }
+.slider input { width: 100%; accent-color: var(--accent); margin: 0; }
+.slider input:disabled { opacity: 0.4; }
+dl.read { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; padding-top: 14px; border-top: 1px solid var(--rule); }
+dl.read div { display: grid; gap: 2px; min-width: 0; }
+dl.read dt { font-size: 10.5px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); }
+dl.read dd { margin: 0; font-family: var(--f-mono); font-size: 16px; overflow-wrap: anywhere; }
+dl.read dd small { font-size: 11.5px; color: var(--muted); }
+.note { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.mini { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; padding: 10px 12px; background: var(--print-paper); border: 1px solid var(--print-rule); color: var(--print-ink); }
+.mini svg { height: 64px; width: auto; max-width: 100%; }
+.mini .fx { font-family: var(--f-mono); font-size: 12px; line-height: 1.6; color: var(--print-ink); }
+.key { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--muted); }
+.key span { display: inline-flex; align-items: center; gap: 6px; }
+.key i { width: 14px; height: 10px; display: inline-block; border: 1px solid var(--print-rule); }
+.readline { min-height: 2.9em; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.readline b { color: var(--text); font-weight: 700; }
+
+.sub { display: grid; gap: 14px; padding-top: 22px; border-top: 1px dashed var(--rule); scroll-margin-top: 64px; }
+.sub h3 { margin: 0; font-size: 15px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
+.source { font-family: var(--f-body); font-size: 15px; color: var(--muted); margin: 0; max-width: 84ch; }
+.source i { color: var(--text); }
+.source a { color: var(--accent); }
+button:focus-visible, input:focus-visible, a:focus-visible, canvas:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.prose { display: grid; gap: 14px; max-width: 72ch; }
+.prose p { margin: 0; font-family: var(--f-body); font-size: 17px; line-height: 1.55; }
+.prose p q { font-style: italic; }
+.prose .aside { font-size: 14.5px; color: var(--muted); }
+.timeline { margin: 0; padding: 0; list-style: none; display: grid; gap: 7px; }
+.timeline li { display: grid; grid-template-columns: 86px minmax(0, 1fr); gap: 10px; align-items: baseline; font-size: 13.5px; line-height: 1.4; }
+.timeline b { font-family: var(--f-mono); font-weight: 500; color: var(--accent); font-size: 12.5px; }
+.timeline span i { font-family: var(--f-body); }
+.r-wide { aspect-ratio: 8 / 5; }
+</style>
+<style>
+body { margin: 0; }
+/* The hidden attribute must beat the pages' own display rules (.slider, .check, ...). The artifact
+   wrapper's stylesheet used to provide this; self-hosted pages carry it themselves. */
+[hidden] { display: none !important; }
+nav.shell { font-family: var(--f-display); font-size: 12.5px; font-weight: 600; background: var(--page);
+  border-bottom: 1px solid var(--rule); display: flex; align-items: center; gap: 6px 18px;
+  padding: 9px max(16px, env(safe-area-inset-right, 0px)) 9px max(16px, env(safe-area-inset-left, 0px)); }
+nav.shell a { color: var(--text); text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+nav.shell a:hover { color: var(--accent); }
+nav.shell .home { letter-spacing: 0.07em; text-transform: uppercase; flex: none; }
+nav.shell .gap { flex: 1; }
+nav.shell .pn { color: var(--muted); font-weight: 500; }
+nav.shell .pn b { color: var(--text); font-weight: 600; }
+nav.shell a:hover .pn, nav.shell a:hover .pn b { color: var(--accent); }
+</style>
+</head>
+<body>
+<nav class="shell" aria-label="Site"><a class="home" href="index.html">Fractal Geometry Explorer</a><span class="gap"></span><a rel="prev" href="biographical-sketches.html"><span class="pn">&#8592; <b>Pages 391–404</b></span></a></nav>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 41, "Historical sketches" · pages 405–421</p>
+    <h1><span class="plate-no">Chapter 41</span><span class="lozenge" aria-hidden="true"></span><span>Historical Sketches</span></h1>
+    <p class="dek">The book closes with stories: how the ideas behind fractals kept surfacing for centuries before anyone could use them. Leibniz asking what a fractional derivative would be, Henry Smith building "Cantor" dusts before Cantor, Poincaré meeting a dust in celestial mechanics, and decades of measurements that decayed by power laws while everyone waited for an exponential. This chapter prints no plates; the figures below are this site's own illustrations of three of its stories.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#chimeras"><b>405</b> Chimeras</a>
+    <a href="#brown"><b>408</b> Brown and Einstein</a>
+    <a href="#dimension"><b>409</b> Dimension</a>
+    <a href="#poincare"><b>413</b> Poincaré</a>
+    <a href="#scaling"><b>417</b> Old evidence of scaling</a>
+    <a href="#weierstrass"><b>420</b> Weierstrass</a>
+  </nav>
+
+  <!-- ===================== CHIMERAS ===================== -->
+  <section class="plate" id="chimeras">
+    <div class="plate-head">
+      <p class="no">Pages 405–408 and 412–413 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Chimeras, the chain of being, and "Natura non facit saltus"</h2>
+      <p class="dim">Aristotle's in-between animals · Leibniz's fractional differentials, 1695 · Kant's worlds within worlds, 1755</p>
+    </div>
+    <div class="prose">
+      <p>Gauss said that a finished building should show no trace of its scaffolding, and mathematicians often quote him as licence to ignore their field's history. Mandelbrot takes the other side, and ends the book with stories gathered, as he puts it, in library forays prompted by a passion for Leibniz and Poincaré.</p>
+      <p>The oldest thread is the "principle of continuity", or plenitude. Aristotle held that the gap between any two living species can be bridged by other species, and was fascinated by in-between animals — chimeras, in the mythological sense. Leibniz believed in the principle deeply, and it sat close to the core of his mathematics. Writing to de l'Hospital in 1695, days after inventing his notation for the k-th derivative, he asked what a derivative of fractional order would be, answered himself with an infinite series, and added that <q>one day these paradoxes will yield useful consequences, since there is hardly a paradox without utility</q>. Fractional integro-differentiation returns in earnest in chapter 27, at the heart of fractional Brownian motion.</p>
+      <p>Mandelbrot reads the monster sets of Cantor, Peano and Koch as mathematical chimeras in exactly this tradition — in-between shapes, with the Hausdorff dimension as the scale that orders them. The Cantor dust even defuses an ancient paradox: it is divisible without end, yet nowhere continuous. And the practical scientists of chapters 10 and 35, stuck between "peas, spaghetti, or lettuce" when describing turbulence, or between streams and isolated points when describing galaxy clustering, were calling for in-between shapes without knowing the pedigree of the wish.</p>
+      <p>Kant belongs in the same story. His 1755 description of the heavens — nebulae as Milky Ways, which combine into higher systems, and those into higher ones still, <q>no end but an abyss... without bound</q> — is a full hierarchical universe, a century and a half before Charlier, the astronomer who usually gets the credit (see Plate 95's chapter).</p>
+      <p>The principle's best-known wording, <i>Natura non facit saltus</i> — nature makes no jumps — has its own sketch. It is usually credited to Linné, who was in fact translating Leibniz in passing. But Mandelbrot traced the exact Latin to 1613, well before Leibniz: a fifteen-page pamphlet on the "giant Theutobocus", bones dug up near Grenoble and shown to Louis XIII. The bones were a mastodon's, the pamphlet a pseudonymous prospectus for a circus attraction, and the phrase most likely a stock saying of the time — so the question of its origin, he concludes, is not yet closed.</p>
+    </div>
+  </section>
+
+  <!-- ===================== BROWN AND EINSTEIN ===================== -->
+  <section class="plate" id="brown">
+    <div class="plate-head">
+      <p class="no">Pages 408–409 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Brownian motion, Einstein, and Henry Smith's dusts</h2>
+      <p class="dim">Brown, 1828 · Einstein, 1905 · Smith, 1875 · Volterra, 1881</p>
+    </div>
+    <div class="prose">
+      <p>Two stories about credit. The first is Brownian motion, which a biologist discovered before 1800 and another biologist, Robert Brown, showed in 1828 to be physical rather than biological in nature — the vital step, which is why Mandelbrot thinks the adjective "Brownian" is not undeserved. The phenomenon then sat so far from fame that Brown's biography in the 1878 Britannica does not mention it.</p>
+      <p>The surprise is that Einstein did not set out to explain those observations. His 1905 paper opens by predicting, from the molecular-kinetic theory of heat, that suspended particles must perform visible movements — and adds that these might be identical with the so-called Brownian molecular motion, but that the information available to him was too imprecise to form a judgment. Only afterwards, he wrote in 1906, did physicists tell him the motions matched; and in a 1948 letter to Besso he recalled having deduced it from mechanics <q>without knowing that anyone had already observed anything of the kind</q>. The theory came first; the century-old observations caught up with it. Perrin's experiments (his drawings are Plate 13) completed the story by 1909.</p>
+      <p>The second story starts from a wit's remark that crediting Brownian motion to Brown violates a law of eponymy, fame being incompatible with so plain a name. The same law may explain the "Cantor" dust. Henry Smith, Savilian professor of geometry at Oxford, showed in 1875 that Riemann's theory of integration fails on certain sets of points — and the counterexamples he built were the Cantor dust of chapter 8 and the positive-measure dust of chapter 15, years before Cantor's 1883 paper. Volterra reconstructed the second in 1881. Neither did much with his example, Mandelbrot notes, but then neither did Cantor; yet Smith is never mentioned as a claimant.</p>
+    </div>
+  </section>
+
+  <!-- ===================== DIMENSION ===================== -->
+  <section class="plate" id="dimension">
+    <div class="plate-head">
+      <p class="no">Pages 409–412 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Dimension, from Euclid to Menger</h2>
+      <p class="dim">topological dimension by cuts and coverings · for the plane, fine coverings force points in 3 sets, never need 4</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-wide" id="wBr">
+          <canvas id="cBr" role="img" aria-label="A brick paving of the plane, where no point touches more than three bricks"></canvas>
+        </div>
+        <figcaption><strong>Lebesgue's bricks</strong> · tap the paving to count the bricks a point touches</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Lebesgue observed in 1911 that a square can be covered by arbitrarily small "bricks" so that no point lies in more than three of them — lay the courses like a bricklayer, so no four corners meet — and conjectured that three cannot be avoided: in any sufficiently fine covering, some point must touch at least three bricks. Brouwer proved it in 1913. The count is E + 1 in E dimensions, so the humble brick wall carries a topologically invariant definition of dimension.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Lay the bricks</span></div>
+          <div class="steps words" id="mBr" role="group" aria-label="How the bricks are laid"></div>
+        </div>
+        <div class="group slider">
+          <div class="label-row"><span class="label">Brick size</span><span class="value" id="szBrv">1/8 of the height</span></div>
+          <input type="range" id="szBr" min="4" max="14" step="1" value="8" aria-label="Bricks per column">
+        </div>
+        <p class="readline" id="infoBr" aria-live="polite">Tap anywhere. Near an edge or a corner, the probe snaps to it.</p>
+        <dl class="read">
+          <div><dt>Worst point touches</dt><dd id="rBrA">3 bricks</dd></div>
+          <div><dt>So the plane's dimension</dt><dd>3 − 1 = 2</dd></div>
+        </dl>
+        <p class="note">The chapter quotes this story from Hurewicz &amp; Wallman's 1941 monograph. The book prints no figure; the running-bond paving drawn here is our choice of the standard one. Offset courses meet at most 3 to a point; aligned courses waste the bound, meeting 4 at every corner.</p>
+      </div>
+    </div>
+    <div class="prose">
+      <p>The figure sits at the end of a long road. Dimension underlies the opening definitions of Euclid's <i>Elements</i> — a point has no part, a line is breadthless length, the extremities of a surface are lines — and Plato has Socrates told that after plane surfaces comes <q>the dimension of cubes and of everything that has depth</q>. Then the concept slept. Riemann remarked in his 1854 dissertation that it had never been studied. And when Cantor mapped the line one-to-one onto the plane, and Peano mapped an interval continuously onto a square, the two celebrated monsters together exploded the vague idea that dimension is "the number of parameters": the first showed one-to-one maps can change it, the second that continuous maps can raise it.</p>
+      <p>The reaction was not curiosity but revulsion. Hermite, in an 1883 letter: <q>to read Cantor's writings seems a veritable torture... and no one among us is tempted to follow</q>. Poincaré answered more constructively, in 1903 and 1912, by defining dimension inductively through cuts: a continuum that finite sets of points suffice to divide has dimension one; one that cuts of dimension one suffice to divide has dimension two; and so on. Brouwer made the idea precise and topologically invariant in 1913, Menger and Urysohn recreated and improved it in 1922, and Lebesgue's bricks gave an independent covering route to the same integer.</p>
+      <p class="aside">The book is careful to add that these definitions measure something different from fractal dimension: an island's coastline is topologically of dimension 1 however wiggly it is, while its fractal dimension runs above 1. Fractional dimension itself arrived "near fully armed" with Hausdorff in 1919 — with one strange footnote: Bertrand Russell, in 1897, cites one Delboeuf as speaking of geometries with m/n dimensions, and Mandelbrot's search through Delboeuf's works found no further trace of it. He closes the entry with a word of thanks to Georges Bouligand, whose Cantor–Minkowski–Bouligand dimension (the box dimension used across this site) is less satisfactory than Hausdorff's but initiated him, as a student, to modern mathematics.</p>
+      <ol class="timeline" aria-label="A short timeline of dimension">
+        <li><b>~300 BC</b><span>Euclid's definitions: point, breadthless length, surface, solid.</span></li>
+        <li><b>1854</b><span>Riemann notes that dimension has never been studied.</span></li>
+        <li><b>1877–1890</b><span>Cantor's line-to-plane map, then Peano's square-filling curve, break the parameter-count idea.</span></li>
+        <li><b>1903–1912</b><span>Poincaré defines dimension inductively, by what it takes to cut a continuum.</span></li>
+        <li><b>1911</b><span>Lebesgue's bricks; Brouwer proves E-space differs topologically from E₀-space.</span></li>
+        <li><b>1913</b><span>Brouwer's precise, invariant integer dimension.</span></li>
+        <li><b>1919</b><span>Hausdorff's fractional dimension, the <i>D</i> of this book.</span></li>
+        <li><b>1922</b><span>Menger and Urysohn, independently, rebuild and refine the topological theory.</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ===================== POINCARE ===================== -->
+  <section class="plate" id="poincare">
+    <div class="plate-head">
+      <p class="no">Pages 413–416 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Poincaré and fractal attractors</h2>
+      <p class="dim">New Methods in Celestial Mechanics, 1892 · the first student of "strange" attractors</p>
+    </div>
+    <div class="prose">
+      <p>This entry, Mandelbrot says, is the one that changed his own work: texts by Poincaré that reached him while the 1977 <i>Fractals</i> was in proof led to the research of chapters 18 to 20. His verdict is split. Yes, Poincaré was the first student of fractal ("strange") attractors; no, nothing in his work makes him a precursor of the fractal geometry of visible Nature.</p>
+      <p>The famous passage is in the <i>New Methods in Celestial Mechanics</i> of 1892. Following the two curves attached to a doubly asymptotic solution of the three-body problem, Poincaré sees that <q>their intersection points form a sort of infinitely tight grid</q>, each curve folding on itself without ever crossing itself, and declines to draw it: <q>the complexity of this shape... I do not even attempt to illustrate</q>. He then lists the possible forms of such a set, the last being that it has vanishing area — the analog, he writes, of a Cantor dust. The monsters could enter abstract mathematical physics, when need arose, even for Cantor's fiercest critic.</p>
+      <p>And earlier still, within a year of Cantor's 1883 paper, Cantor-like dusts had appeared in orthodox mathematics: Hadamard's eulogy recalls that Poincaré showed the singularities of automorphic functions form either a whole circle or a Cantor dust — before Bendixson and Cantor himself found such sets. Painlevé insisted on the same relation between function theory and the dusts. Denjoy answered a question of Poincaré's in 1932 by showing a solution of a differential equation on the torus can cut a meridian in exactly a prescribed Cantor dust, and wrote that the dust <q>seems to correspond to a very deep reality</q>. These remarks found no echo in their time; they sat in eulogies, waiting.</p>
+      <p class="aside">A technical tidbit closes the entry. Poincaré asked in 1890 for the probability distributions whose maximum-likelihood estimate of a parameter is a sample average — and found what is now called the Gibbs canonical distribution, rediscovered by Szilard in 1925 and, through the sufficiency property named by Koopman, Pitman and Darmois around 1935, the base of the Szilard–Mandelbrot presentation of statistical thermodynamics.</p>
+    </div>
+  </section>
+
+  <!-- ===================== SCALING: OLD EVIDENCE ===================== -->
+  <section class="plate" id="scaling">
+    <div class="plate-head">
+      <p class="no">Pages 417–420 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Scaling: the oldest evidence, and the durable panaceas</h2>
+      <p class="dim">decay ∝ t<sup>−γ</sup> · Weber's silk threads, 1835 · Leyden jars, 1854 · von Schweidler's 200-day watch, 1907</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-wide" id="wDe">
+          <canvas id="cDe" role="img" aria-label="Hyperbolic decay against exponential decay, on doubly logarithmic axes"></canvas>
+        </div>
+        <figcaption><strong>Hyperbolic decay</strong> · log–log axes, one second to one year · <span id="cDes">the shaded band is von Schweidler's measured range</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">On these doubly logarithmic axes a scaling decay t<sup>−γ</sup> is a straight line, while an exponential hugs 1 and then plunges at its relaxation time τ — whatever τ is, it cannot stay near a power law for long. Hopkinson's 1878 panacea answered: glass is a mixture of silicates, so let the decay be a mixture of a few exponentials. The dashed curve shows the best such mixture; watch how many exponentials it takes to counterfeit a straight line across seven decades, and how it sags between its relaxation times and dives after the last one.</p>
+        <div class="group slider">
+          <div class="label-row"><span class="label">Exponent γ</span><span class="value" id="gDev">γ = 0.30</span></div>
+          <input type="range" id="gDe" min="10" max="100" step="1" value="30" aria-label="Exponent gamma">
+        </div>
+        <div class="group">
+          <label class="check" for="expDe"><input type="checkbox" id="expDe" checked> One exponential, exp(−t/τ)</label>
+          <div class="slider" id="tauWrap">
+            <div class="label-row"><span class="label">Its relaxation time τ</span><span class="value" id="tDev">τ = 10³ s</span></div>
+            <input type="range" id="tDe" min="10" max="65" step="1" value="30" aria-label="Relaxation time, log scale">
+          </div>
+        </div>
+        <div class="group">
+          <label class="check" for="mixDe"><input type="checkbox" id="mixDe" checked> Hopkinson's panacea: a mixture of exponentials</label>
+          <div class="slider" id="mixWrap">
+            <div class="label-row"><span class="label">Exponentials in the mixture</span><span class="value" id="kDev">k = 3</span></div>
+            <input type="range" id="kDe" min="2" max="24" step="1" value="3" aria-label="Number of exponentials">
+          </div>
+        </div>
+        <dl class="read">
+          <div><dt>Mixture's worst error</dt><dd id="rDeA">—</dd></div>
+          <div><dt>Over the measured band</dt><dd>10² s → 1.6 × 10⁷ s</dd></div>
+        </dl>
+        <p class="note">An illustration, not a data plot: the chapter reports the experiments but prints no figure, and no 1907 data is traced here. Von Schweidler measured a Leyden jar's discharge at 100-second intervals, then less often, for 16 million seconds — 200 days, through summer and winter — and the hyperbolic decay continued on the dot. With infinitely many exponentials weighted as in Euler's gamma integral the mixture is exact — which is the "distributed relaxation times" panacea, and is circular: t<sup>−γ</sup> is simply rewritten as itself.</p>
+      </div>
+    </div>
+    <div class="prose">
+      <p>The earliest observation now readable as scaling is from around 1835: on Gauss's urging, Wilhelm Weber studied the silk threads that suspended moving coils in instruments, and found that after a load is removed the thread's slow return follows t<sup>−γ</sup> — hyperbolic in time, not exponential, as everyone expected then and, Mandelbrot adds, expects to this day. Kohlrausch found the same law in 1847, and again in 1854 for the discharge of Leyden jars; Jacques Curie's thesis found dielectrics of both kinds; Kelvin, Maxwell and Boltzmann all touched the problem. A show of interest by names of that order, the chapter observes, is evidently not enough to make a problem worth studying: it fell into extreme obscurity instead.</p>
+      <p>Each generation then rediscovers the same dead ends. Mixtures of a few exponentials fail as soon as data cover several decades; mixtures of infinitely many succeed trivially and explain nothing; and the hope that scaling is a transient that will be cut off exponentially "if only we watch longer" ran into von Schweidler's 200 days, and into 1/f noises that held through every longer vigil — while, as with the galaxies of chapter 9, the search for the cutoff distracts from describing the scaling range itself.</p>
+      <p class="aside">Theory kept pace with the measurements, quietly. Leibniz, tightening Euclid's axioms, defined the straight line by self-similarity: <q>a curve, any part of which is similar to the whole, and it alone has this property, not only among curves but among sets</q> — a claim, the book notes, that can be proved today. Delboeuf reinvented the thought in 1860; Maxims 64 and 69 of the <i>Monadology</i> hold that minute portions of the world are precisely as complex and organized as large ones; and Laplace remarked in 1842 that under Newtonian attraction <q>the universe reduced to the smallest imaginable space would always present the same appearance to observers</q> — the laws of nature only permit us to observe relative dimensions.</p>
+    </div>
+  </section>
+
+  <!-- ===================== WEIERSTRASS ===================== -->
+  <section class="plate" id="weierstrass">
+    <div class="plate-head">
+      <p class="no">Pages 420–421 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Weierstrass functions: continuous, nowhere differentiable</h2>
+      <p class="dim">W(t) = Σ b<sup>−nH</sup> cos(2π bⁿt) · graph's box dimension D = 2 − H · read at the Berlin Academy, 1872 · never published by its author</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-wide zoomable" id="wW">
+          <canvas id="cW" role="img" aria-label="The Weierstrass function"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cWt">Weierstrass function</strong> · <span id="cWn">drag to pan, pinch or Ctrl/⌘ + scroll to zoom</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">A sum of cosines, each b times faster and b<sup>H</sup> times smaller than the last. The sum converges everywhere, so the graph is an unbroken curve; yet the wiggles never die away under magnification, and the curve has a tangent nowhere (Hardy proved it for every H ≤ 1; H = 1 is Cellérier's limit case, with D = 1). Zooming t by b and height by b<sup>H</sup> returns the graph to itself, up to a smooth remainder — the self-affinity that gives the graph its box dimension D = 2 − H.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Function</span></div>
+          <div class="steps words" id="mW" role="group" aria-label="Which function"></div>
+        </div>
+        <div class="group slider" id="hWrap">
+          <div class="label-row"><span class="label">Exponent H</span><span class="value" id="hWv">H = 0.50 · D = 1.50</span></div>
+          <input type="range" id="hW" min="20" max="100" step="1" value="50" aria-label="Exponent H">
+        </div>
+        <div class="group slider" id="bWrap">
+          <div class="label-row"><span class="label">Frequency ratio b</span><span class="value" id="bWv">b = 3.0</span></div>
+          <input type="range" id="bW" min="15" max="60" step="1" value="30" aria-label="Frequency ratio b">
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn" data-d="1.2">D = 1.2</button>
+          <button type="button" class="btn" data-d="1.5">D = 1.5</button>
+          <button type="button" class="btn" data-d="1.8">D = 1.8</button>
+          <button type="button" class="btn primary" id="gerverW">Riemann's graph at Gerver's point</button>
+        </div>
+        <dl class="read">
+          <div><dt>Dimension of the graph</dt><dd id="rWa">D = 1.5</dd></div>
+          <div><dt>Terms drawn</dt><dd id="rWb">—</dd></div>
+        </dl>
+        <p class="note" id="noteW">The story's cast: Riemann is said to have told his students around 1861 that Σ n<sup>−2</sup> sin(n²t) is continuous and nondifferentiable — no proof survives, and none could be complete: Gerver proved in 1970 that it has a finite derivative, −1/2, at points t = πp/q with p and q odd (the red tangent above). Bolzano had built a close analog in 1834 without noticing the property. Cellérier, in Geneva, wrote the case H = 1 in a folder marked <q>Can be published as is</q> — published only in 1890, after his death. Weierstrass read his function at the Berlin Academy in 1872 and never published it; the world learned of it through DuBois Reymond in 1875, a convenient birthdate for the great crisis of mathematics. The mathematics of these functions — spectra, modified forms, their kin — is chapter 39's entry.</p>
+      </div>
+    </div>
+    <div class="prose">
+      <p>Farkas Bolyai told his son that discoveries come like violets in spring, on every side at once, and co-inventors rush to print. Here events ran the other way: everyone sat on it. DuBois Reymond, announcing the function, confessed <q>I cannot get rid of the thought that [they] will lead to the limit of our intellect</q>; Gauss had hidden non-Euclidean geometry for fear of the uproar of the Boeotians; Mittag-Leffler would later advise Cantor to withhold his boldest findings until the world was ready. Rarely, the chapter remarks, has the avant-garde been so reluctant.</p>
+      <p class="aside">Since the Weierstrass function is often used to argue that mathematics and physics are best divorced, the chapter ends with its discoverer's own view. In his 1857 inaugural lecture, Weierstrass said the physicist should not see in mathematics a mere auxiliary discipline, nor the mathematician treat the physicist's questions as a collection of examples — after all, it was pure speculation about conic sections that, centuries later, turned out to describe the planets' orbits. The book's last word on it: AMEN.</p>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 41, pages 405–421. The chapter is text only and prints no plates, so nothing here reproduces printed artwork: the brick paving, the decay chart and the function graphs are this site's own illustrations of the chapter's stories, computed from the formulas named in the captions. Quotations follow the chapter's own translations. Companion pages: <a href="cantor-dust.html">Cantor Dust</a> (the dusts Smith built first) and the Brownian-motion demo on <a href="wiener-sausage.html">Wiener Sausage</a>.</p>
+</div>
+
+<script>
+// Shared drawing library: style constants, the zoomable canvas (snapshot while panning), chunked
+// paths, controls and small SVG figures. Loaded before each page's own scripts; pages may extend
+// PRINT with their own inks (PRINT.red = ..., PRINT.light = ...).
+const $ = (id) => document.getElementById(id);
+const fmt = (n) => n.toLocaleString('en-US');
+const PRINT = { paper: '#ecebe6', ink: '#151515', rule: '#c9c8c2', muted: '#66665f', accent: '#2f5f9e', red: '#c2452d', faint: '#bdbbb3', gray: '#8f8e88' };
+const RAMP = [[233, 185, 73], [217, 113, 59], [184, 66, 79], [125, 58, 120], [63, 79, 151], [43, 122, 138]];
+const ramp = (t, a = 1) => {
+  const x = Math.max(0, Math.min(1, t)) * (RAMP.length - 1), i = Math.min(RAMP.length - 2, Math.floor(x)), f = x - i;
+  const c = RAMP[i].map((v, k) => Math.round(v + (RAMP[i + 1][k] - v) * f));
+  return `rgba(${c[0]},${c[1]},${c[2]},${a})`;
+};
+const CAT = ['#151515', '#9a988f', '#2f5f9e', '#c2452d', '#3f8f6c', '#b58a2a', '#6b4e9b', '#5f8fae'];
+
+// ---------- shared plumbing ----------
+function figure(canvas, draw) {
+  const wrap = canvas.parentElement;
+  const f = { canvas, ctx: canvas.getContext('2d'), w: 1, h: 1, dpr: 1, draw };
+  const resize = () => {
+    f.dpr = Math.min(2, window.devicePixelRatio || 1);
+    f.w = wrap.clientWidth || 1; f.h = wrap.clientHeight || 1;
+    canvas.width = Math.round(f.w * f.dpr); canvas.height = Math.round(f.h * f.dpr);
+    f.draw();
+  };
+  new ResizeObserver(resize).observe(wrap);
+  return f;
+}
+function fitBox(f, bb, pad = 0.04) {
+  const w = Math.max(1e-9, bb.x1 - bb.x0), h = Math.max(1e-9, bb.y1 - bb.y0), s = Math.min(f.w / (w * (1 + 2 * pad)), f.h / (h * (1 + 2 * pad)));
+  return { s, ox: f.w / 2 - ((bb.x0 + bb.x1) / 2) * s, oy: f.h / 2 + ((bb.y0 + bb.y1) / 2) * s };
+}
+const toWorld = (f, v) => f.ctx.setTransform(f.dpr * v.s, 0, 0, -f.dpr * v.s, f.dpr * v.ox, f.dpr * v.oy);
+const toScreen = (f) => f.ctx.setTransform(f.dpr, 0, 0, f.dpr, 0, 0);
+function paper(f, color) { f.ctx.setTransform(1, 0, 0, 1, 0, 0); f.ctx.fillStyle = color; f.ctx.fillRect(0, 0, f.canvas.width, f.canvas.height); }
+function polyPath(P, closed = true, upto) {
+  const p = new Path2D(), m = upto === undefined ? P.length / 2 : upto;
+  p.moveTo(P[0], P[1]);
+  for (let i = 1; i < m; i++) p.lineTo(P[2 * i], P[2 * i + 1]);
+  if (closed) p.closePath();
+  return p;
+}
+function bbox(P, bb = { x0: Infinity, x1: -Infinity, y0: Infinity, y1: -Infinity }) {
+  for (let i = 0; i < P.length; i += 2) { bb.x0 = Math.min(bb.x0, P[i]); bb.x1 = Math.max(bb.x1, P[i]); bb.y0 = Math.min(bb.y0, P[i + 1]); bb.y1 = Math.max(bb.y1, P[i + 1]); }
+  return bb;
+}
+function stepButtons(el, values, text, aria, onPick) {
+  const bs = values.map((v) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.textContent = text(v); b.setAttribute('aria-label', aria(v));
+    b.addEventListener('click', () => onPick(v));
+    el.append(b);
+    return b;
+  });
+  const mark = (cur) => bs.forEach((b, i) => b.setAttribute('aria-pressed', String(values[i] === cur)));
+  mark.buttons = bs;
+  return mark;
+}
+// pan and zoom: a quick rescaled snapshot while moving, a full redraw once it settles
+function zoomable(wrapId, canvasId, fitOf, render, opts = {}) {
+  const maxZoom = opts.maxZoom || 400;
+  const wrap = $(wrapId), z = { view: null, user: false, snapView: null, raf: 0, full: 0 };
+  const snap = document.createElement('canvas');
+  const f = figure($(canvasId), () => draw());
+  function touch() { wrap.style.touchAction = z.view && z.view.s > z.view.fit * 1.02 ? 'none' : 'pan-y'; }
+  function draw() {
+    if (!z.view || !z.user) { z.view = fitOf(f); z.view.fit = z.view.s; z.user = false; touch(); }
+    render(f, z.view);
+    snap.width = f.canvas.width; snap.height = f.canvas.height; snap.getContext('2d').drawImage(f.canvas, 0, 0);
+    z.snapView = { s: z.view.s, ox: z.view.ox, oy: z.view.oy };
+  }
+  function quick() {
+    const v = z.view, k = v.s / z.snapView.s, c = f.ctx;
+    c.setTransform(1, 0, 0, 1, 0, 0); c.fillStyle = z.ground || PRINT.paper; c.fillRect(0, 0, f.canvas.width, f.canvas.height);
+    c.drawImage(snap, (v.ox - z.snapView.ox * k) * f.dpr, (v.oy - z.snapView.oy * k) * f.dpr, snap.width * k, snap.height * k);
+  }
+  function schedule() { if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; draw(); }); }
+  function moved() {
+    if (!z.snapView) { schedule(); return; }
+    if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; quick(); });
+    clearTimeout(z.full); z.full = setTimeout(schedule, 160);
+  }
+  function zoomAt(px, py, k) {
+    const v = z.view, ns = Math.min(v.fit * maxZoom, Math.max(v.fit * 0.8, v.s * k)), wx = (px - v.ox) / v.s, wy = (v.oy - py) / v.s;
+    v.s = ns; v.ox = px - wx * ns; v.oy = py + wy * ns; z.user = true; touch(); moved();
+  }
+  function pan(dx, dy) { z.view.ox += dx; z.view.oy += dy; z.user = true; moved(); }
+  wrap.querySelector('[data-z="in"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1.6));
+  wrap.querySelector('[data-z="out"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1 / 1.6));
+  wrap.querySelector('[data-z="fit"]').addEventListener('click', () => { z.user = false; schedule(); });
+  const pts = new Map();
+  let pinch = null, down = null;
+  const local = (e) => { const r = wrap.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+  wrap.addEventListener('pointerdown', (e) => {
+    if (e.target.closest('.view-tools')) return;
+    pts.set(e.pointerId, local(e));
+    down = pts.size === 1 ? { p: local(e), t: performance.now(), moved: 0 } : null;
+    try { wrap.setPointerCapture(e.pointerId); } catch (_) {}
+    if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), m: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2] }; }
+    wrap.classList.add('dragging');
+  });
+  wrap.addEventListener('pointermove', (e) => {
+    if (!pts.has(e.pointerId)) return;
+    const prev = pts.get(e.pointerId), cur = local(e);
+    pts.set(e.pointerId, cur);
+    if (down) down.moved = Math.max(down.moved, Math.hypot(cur[0] - down.p[0], cur[1] - down.p[1]));
+    if (pts.size === 2 && pinch) {
+      const [a, b] = [...pts.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]), m = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+      pan(m[0] - pinch.m[0], m[1] - pinch.m[1]);
+      if (pinch.d > 0) zoomAt(m[0], m[1], d / pinch.d);
+      pinch = { d, m };
+    } else if (pts.size === 1 && (e.pointerType !== 'touch' || z.view.s > z.view.fit * 1.02)) pan(cur[0] - prev[0], cur[1] - prev[1]);
+  });
+  const end = (e) => {
+    if (down && pts.size === 1 && down.moved < 5 && opts.onTap) { const [x, y] = local(e), v = z.view; opts.onTap((x - v.ox) / v.s, (v.oy - y) / v.s); }
+    down = null;
+    pts.delete(e.pointerId); if (pts.size < 2) pinch = null; if (!pts.size) wrap.classList.remove('dragging');
+  };
+  wrap.addEventListener('pointerup', end); wrap.addEventListener('pointercancel', (e) => { down = null; end(e); });
+  wrap.addEventListener('wheel', (e) => { if (!(e.ctrlKey || e.metaKey)) return; e.preventDefault(); const [x, y] = local(e); zoomAt(x, y, Math.exp(-e.deltaY * 0.0045)); }, { passive: false });
+  wrap.addEventListener('dblclick', (e) => { if (e.target.closest('.view-tools')) return; const [x, y] = local(e); zoomAt(x, y, e.shiftKey ? 0.5 : 2); });
+  return { f, z, schedule, refit: () => { z.user = false; schedule(); } };
+}
+// chunked paths: many small paths fill far faster than one path with a hundred thousand pieces
+function chunked(count, add, size = 512) {
+  const out = [];
+  let p = null;
+  for (let i = 0; i < count; i++) { if (i % size === 0) { p = new Path2D(); out.push(p); } add(p, i); }
+  return out;
+}
+// fill and outline in the same colour, so that tiles which only meet along an edge show no hairline seams
+function solid(c, paths, color, lw) {
+  c.fillStyle = color; c.strokeStyle = color; c.lineWidth = lw; c.lineJoin = 'miter';
+  for (const p of paths) { c.fill(p); c.stroke(p); }
+}
+const dot = (c, v, x, y, r = 4, color = PRINT.red) => { c.beginPath(); c.arc(v.ox + x * v.s, v.oy - y * v.s, r, 0, Math.PI * 2); c.fillStyle = color; c.fill(); c.strokeStyle = PRINT.paper; c.lineWidth = 1.5; c.stroke(); };
+
+// a polyline (Float64Array or [[x,y],...]) as SVG points with y flipped
+const svgPts = (P) => (P instanceof Float64Array ? Array.from({ length: P.length / 2 }, (_, i) => [P[2 * i], P[2 * i + 1]]) : P).map(([x, y]) => `${x.toFixed(4)},${(-y).toFixed(4)}`).join(' ');
+function miniCurve(id, P, dots = true) {
+  const pts = P instanceof Float64Array ? Array.from({ length: P.length / 2 }, (_, i) => [P[2 * i], P[2 * i + 1]]) : P;
+  $(id).innerHTML = `<line x1="0" y1="0" x2="1" y2="0" stroke="#8a8a84" stroke-width="0.008" stroke-dasharray="0.025 0.02"/>` +
+    `<polyline points="${svgPts(pts)}" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linejoin="round"/>` +
+    (dots ? `<g fill="currentColor">${pts.map(([x, y], i) => `<circle cx="${x.toFixed(4)}" cy="${(-y).toFixed(4)}" r="${i === 0 || i === pts.length - 1 ? 0.03 : 0.018}"/>`).join('')}</g>` : '');
+}
+function miniTree(id, links, dx = 0) {
+  const ends = new Set(), mid = new Set(), k = (x, y) => `${x.toFixed(4)},${y.toFixed(4)}`;
+  let s = '';
+  for (const [px, py, qx, qy] of links) {
+    s += `<line x1="${(px + dx).toFixed(4)}" y1="${(-py).toFixed(4)}" x2="${(qx + dx).toFixed(4)}" y2="${(-qy).toFixed(4)}" stroke="currentColor" stroke-width="0.02" stroke-linecap="round"/>`;
+    mid.add(k(px + dx, py)); mid.add(k(qx + dx, qy));
+  }
+  s += `<g fill="currentColor">${[...mid].map((p) => { const [x, y] = p.split(',').map(Number); const big = (Math.abs(x - dx) < 1e-6 || Math.abs(x - dx - 1) < 1e-6) && Math.abs(y) < 1e-6; return `<circle cx="${x}" cy="${-y}" r="${big ? 0.03 : 0.018}"/>`; }).join('')}</g>`;
+  return s;
+}
+// canvas transform for a similarity map f = [ar, ai, br, bi, m] composed with the view
+function setMap(f, c, v, fig) {
+  const [ar, ai, br, bi, m] = f, k = fig.dpr * v.s;
+  if (m) c.setTransform(k * ar, -k * ai, k * ai, k * ar, fig.dpr * (v.ox + v.s * br), fig.dpr * (v.oy - v.s * bi));
+  else c.setTransform(k * ar, -k * ai, -k * ai, -k * ar, fig.dpr * (v.ox + v.s * br), fig.dpr * (v.oy - v.s * bi));
+}
+const segPath = (segs, pick) => { const p = new Path2D(); for (const s of segs) if (!pick || pick(s)) { p.moveTo(s[0], s[1]); p.lineTo(s[2], s[3]); } return p; };
+// Plate 64's chevrons, measured from the plate: each interval a→b becomes a thin quadrilateral
+// pointing toward F, the corner the next stage would add (see DECISIONS.md)
+const CHEV_OUT = 0.43, CHEV_IN = 0.235;
+function chevronPaths(P, F, m) {
+  return chunked(m, (p, i) => {
+    const ax = P[2 * i], ay = P[2 * i + 1], bx = P[2 * i + 2], by = P[2 * i + 3], mx = (ax + bx) / 2, my = (ay + by) / 2;
+    const vx = F[2 * i] - mx, vy = F[2 * i + 1] - my;
+    p.moveTo(ax, ay); p.lineTo(mx + CHEV_OUT * vx, my + CHEV_OUT * vy); p.lineTo(bx, by); p.lineTo(mx + CHEV_IN * vx, my + CHEV_IN * vy); p.closePath();
+  });
+}
+
+// Historical Sketches (chapter 41): three illustrations of the chapter's stories.
+// 1. Lebesgue's bricks — a running-bond paving where no point touches more than 3 bricks.
+// 2. Hyperbolic decay against exponentials and Hopkinson's mixtures, on log–log axes.
+// 3. The Weierstrass function, and Riemann's function with Gerver's tangent.
+'use strict';
+
+const MONO = '500 11px "IBM Plex Mono", ui-monospace, monospace';
+
+/* ===================== 1. Lebesgue's bricks ===================== */
+(() => {
+  const state = { n: 8, offset: true, probe: null }; // probe: {xf, yf} as fractions of the canvas
+  const f = figure($('cBr'), draw);
+
+  const rowOff = (r, w) => (state.offset && ((r % 2) + 2) % 2 === 1) ? w / 2 : 0;
+
+  // closed bricks containing (x, y), on the infinite paving (rows may run past the canvas)
+  function countBricks(x, y) {
+    const h = f.h / state.n, w = 2 * h, eps = 1e-6 * h;
+    const rows = [];
+    const rf = y / h, r0 = Math.floor(rf + eps);
+    rows.push(r0);
+    if (Math.abs(y - r0 * h) < eps) rows.push(r0 - 1);
+    const hit = new Set();
+    for (const r of rows) {
+      const off = rowOff(r, w), xf = (x - off) / w, m0 = Math.floor(xf + eps);
+      hit.add(r + ':' + m0);
+      if (Math.abs((x - off) - m0 * w) < eps) hit.add(r + ':' + (m0 - 1));
+    }
+    return hit.size;
+  }
+
+  // snap a tap to the nearest edge or corner within reach, so exact counts are possible by hand
+  function snap(x, y) {
+    const h = f.h / state.n, w = 2 * h, tol = Math.min(10, h * 0.3);
+    const ky = Math.round(y / h);
+    const onY = Math.abs(y - ky * h) < tol;
+    if (onY) y = ky * h;
+    const r = onY ? ky : Math.floor(y / h);           // for a point on an edge, snap x to that edge's row grid
+    const off = rowOff(r, w), kx = Math.round((x - off) / w);
+    const onX = Math.abs((x - off) - kx * w) < tol;
+    if (onX) x = off + kx * w;
+    const kind = onX && onY ? 'a corner' : (onX || onY ? 'an edge' : 'an interior point');
+    return { x, y, kind };
+  }
+
+  function placeAtCorner() {
+    const h = f.h / state.n, w = 2 * h, r = Math.floor(state.n / 2), off = rowOff(r, w);
+    const m = Math.round((f.w / 2 - off) / w);
+    state.probe = { xf: (off + m * w) / f.w, yf: (r * h) / f.h };
+  }
+
+  function draw() {
+    if (!state.probe) placeAtCorner();
+    const c = f.ctx, h = f.h / state.n, w = 2 * h;
+    paper(f, PRINT.paper);
+    c.setTransform(f.dpr, 0, 0, f.dpr, 0, 0);
+    for (let r = 0; r < state.n; r++) {
+      const off = rowOff(r, w);
+      for (let m = -1; off + m * w < f.w; m++) {
+        const x = off + m * w;
+        if (((m % 2) + 2) % 2 === 0) { c.fillStyle = 'rgba(21,21,21,0.05)'; c.fillRect(x, r * h, w, h); }
+        c.strokeStyle = PRINT.ink; c.lineWidth = 1.25;
+        c.strokeRect(x, r * h, w, h);
+      }
+    }
+    const p = snap(state.probe.xf * f.w, state.probe.yf * f.h);
+    const nB = countBricks(p.x, p.y);
+    c.beginPath(); c.arc(p.x, p.y, 5.5, 0, Math.PI * 2);
+    c.fillStyle = PRINT.red; c.fill(); c.strokeStyle = PRINT.paper; c.lineWidth = 2; c.stroke();
+    $('infoBr').innerHTML = `The marked point is <b>${p.kind}</b>: it lies in <b>${nB} brick${nB > 1 ? 's' : ''}</b> (closed bricks counted). Near an edge or a corner, the probe snaps to it.`;
+  }
+
+  const markMode = stepButtons($('mBr'), [true, false],
+    (v) => v ? 'Offset courses' : 'Aligned grid',
+    (v) => v ? 'Offset courses, the bricklayer’s bond' : 'Aligned grid',
+    (v) => { state.offset = v; state.probe = null; markMode(v); $('rBrA').textContent = v ? '3 bricks' : '4 bricks'; draw(); });
+  markMode(true);
+
+  $('szBr').addEventListener('input', () => {
+    state.n = +$('szBr').value; state.probe = null;
+    $('szBrv').textContent = `1/${state.n} of the height`;
+    draw();
+  });
+
+  $('cBr').parentElement.addEventListener('pointerdown', (e) => {
+    const r = $('cBr').parentElement.getBoundingClientRect();
+    state.probe = { xf: (e.clientX - r.left) / f.w, yf: (e.clientY - r.top) / f.h };
+    draw();
+  });
+})();
+
+/* ===================== 2. Hyperbolic decay ===================== */
+(() => {
+  const XD = 7.5, YD = 5;                       // decades drawn: t in [1, 10^7.5] s, f in [10^-5, 1]
+  const BAND = [2, Math.log10(1.6e7)];          // von Schweidler's measured range
+  const state = { g: 0.3, exp: true, ltau: 3.0, mix: true, k: 3 };
+  const f = figure($('cDe'), draw);
+
+  function draw() {
+    const c = f.ctx, L = 48, R = 14, T = 14, B = 32, W = f.w - L - R, H = f.h - T - B;
+    const X = (d) => L + (d / XD) * W, Y = (d) => T + (-d / YD) * H;   // d = log10
+    paper(f, PRINT.paper);
+    c.setTransform(f.dpr, 0, 0, f.dpr, 0, 0);
+
+    // measured band, grid, axes
+    c.fillStyle = 'rgba(47,95,158,0.07)';
+    c.fillRect(X(BAND[0]), T, X(BAND[1]) - X(BAND[0]), H);
+    c.strokeStyle = PRINT.rule; c.lineWidth = 1;
+    for (let d = 0; d <= 7; d++) { c.beginPath(); c.moveTo(X(d), T); c.lineTo(X(d), T + H); c.stroke(); }
+    for (let d = 0; d >= -YD; d--) { c.beginPath(); c.moveTo(L, Y(d)); c.lineTo(L + W, Y(d)); c.stroke(); }
+    c.fillStyle = PRINT.muted; c.font = MONO; c.textAlign = 'center'; c.textBaseline = 'top';
+    const xlab = { 0: '1 s', 2: '10²', 4: '10⁴', 6: '10⁶' };
+    for (const d in xlab) c.fillText(xlab[d], X(+d), T + H + 6);
+    c.textAlign = 'right'; c.textBaseline = 'middle';
+    for (let d = 0; d >= -YD; d -= 1) c.fillText(d === 0 ? '1' : '10' + '⁻' + '⁰¹²³⁴⁵'[-d], L - 6, Y(d));
+    c.textAlign = 'center'; c.textBaseline = 'top';
+    for (const [t, name] of [[60, 'minute'], [3600, 'hour'], [86400, 'day'], [3.156e7, 'year']]) {
+      const x = X(Math.log10(t));
+      c.strokeStyle = PRINT.faint; c.beginPath(); c.moveTo(x, T); c.lineTo(x, T + 7); c.stroke();
+      c.fillStyle = PRINT.gray; c.fillText(name, x, T + 10);
+    }
+
+    c.save(); c.beginPath(); c.rect(L, T, W, H); c.clip();
+    const M = 260, hyp = (lt) => -state.g * lt;                        // log10 f for t^-gamma
+    const line = (lf, color, width, dash) => {
+      c.strokeStyle = color; c.lineWidth = width; c.setLineDash(dash || []);
+      c.beginPath();
+      for (let i = 0; i <= M; i++) { const lt = (i / M) * XD, d = lf(lt); (i ? c.lineTo : c.moveTo).call(c, X(lt), Y(Math.max(d, -YD - 1))); }
+      c.stroke(); c.setLineDash([]);
+    };
+    line(hyp, PRINT.ink, 2.4);
+
+    if (state.exp) line((lt) => Math.pow(10, lt - state.ltau) * -Math.LOG10E, PRINT.accent, 1.8);   // log10 exp(-t/tau)
+
+    let worst = 1;
+    if (state.mix) {
+      // k relaxation times, log-spaced; weights tau^-gamma are the log-discretised gamma integral
+      const taus = [], ws = [];
+      for (let j = 0; j < state.k; j++) { const d = 0.4 + ((j + 0.5) / state.k) * 6.7; taus.push(Math.pow(10, d)); ws.push(Math.pow(10, -d * state.g)); }
+      const mixLog = (lt) => { const t = Math.pow(10, lt); let s = 0; for (let j = 0; j < state.k; j++) s += ws[j] * Math.exp(-t / taus[j]); return Math.log10(Math.max(s, 1e-300)); };
+      let bias = 0;                                                     // scale the mixture to the hyperbola over the measured band
+      const S = 64;
+      for (let i = 0; i <= S; i++) { const lt = BAND[0] + (i / S) * (BAND[1] - BAND[0]); bias += hyp(lt) - mixLog(lt); }
+      bias /= S + 1;
+      for (let i = 0; i <= S; i++) { const lt = BAND[0] + (i / S) * (BAND[1] - BAND[0]); worst = Math.max(worst, Math.pow(10, Math.abs(hyp(lt) - (mixLog(lt) + bias)))); }
+      line((lt) => mixLog(lt) + bias, PRINT.red, 1.8, [6, 4]);
+    }
+    c.restore();
+
+    // labels along the curves
+    c.font = MONO; c.textAlign = 'left'; c.textBaseline = 'bottom';
+    c.fillStyle = PRINT.ink; c.fillText('t⁻ᵞ  (scaling)', X(4.45), Y(hyp(4.45)) - 5);
+    if (state.exp) { c.fillStyle = PRINT.accent; c.fillText('exp(−t/τ)', X(Math.min(state.ltau, 6.1)) + 6, Y(-0.43) - 4); }
+    if (state.mix) { c.fillStyle = PRINT.red; c.textBaseline = 'top'; c.fillText(`mixture of ${state.k}`, X(0.35), Y(hyp(0.35)) + 8); }
+
+    $('rDeA').textContent = state.mix ? (worst >= 10 ? `× ${worst.toFixed(0)} off` : `× ${worst.toFixed(2)} off`) : '—';
+  }
+
+  $('gDe').addEventListener('input', () => { state.g = +$('gDe').value / 100; $('gDev').textContent = `γ = ${state.g.toFixed(2)}`; draw(); });
+  $('tDe').addEventListener('input', () => { state.ltau = +$('tDe').value / 10; $('tDev').textContent = `τ = 10${sup(state.ltau)} s`; draw(); });
+  $('kDe').addEventListener('input', () => { state.k = +$('kDe').value; $('kDev').textContent = `k = ${state.k}`; draw(); });
+  $('expDe').addEventListener('change', () => { state.exp = $('expDe').checked; $('tauWrap').hidden = !state.exp; draw(); });
+  $('mixDe').addEventListener('change', () => { state.mix = $('mixDe').checked; $('mixWrap').hidden = !state.mix; draw(); });
+  function sup(x) { // 10^x with one decimal as superscript text
+    const s = (Math.round(x * 10) / 10).toString();
+    return [...s].map((ch) => ({ '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '.': '˙' }[ch] || ch)).join('');
+  }
+})();
+
+/* ===================== 3. Weierstrass and Riemann ===================== */
+(() => {
+  const TAU = Math.PI * 2;
+  const state = { mode: 'weier', H: 0.5, b: 3.0 };
+  const FMAX = 1e9;   // frequencies past this would lose cos() to floating-point error
+
+  const fitOf = (f) => state.mode === 'weier'
+    ? fitBox(f, { x0: 0, x1: 1, y0: -1.12, y1: 1.12 }, 0.02)
+    : fitBox(f, { x0: 0, x1: TAU, y0: -1.0, y1: 1.0 }, 0.02);
+
+  function render(f, v) {
+    const c = f.ctx;
+    paper(f, PRINT.paper);
+    const wx0 = (0 - v.ox) / v.s, wx1 = (f.w - v.ox) / v.s;
+
+    // baseline and unit ticks
+    toWorld(f, v);
+    c.beginPath(); c.moveTo(wx0, 0); c.lineTo(wx1, 0);
+    c.strokeStyle = PRINT.rule; c.lineWidth = 1 / v.s; c.stroke();
+    toScreen(f);
+    c.strokeStyle = PRINT.rule; c.fillStyle = PRINT.gray; c.font = MONO; c.textAlign = 'center'; c.textBaseline = 'bottom';
+    const step = state.mode === 'weier' ? 0.5 : Math.PI;
+    for (let k = Math.ceil(wx0 / step); k * step <= wx1; k++) {
+      const x = v.ox + k * step * v.s;
+      c.beginPath(); c.moveTo(x, f.h - 12); c.lineTo(x, f.h - 6); c.stroke();
+      c.fillText(state.mode === 'weier' ? (k * step).toString() : (k === 0 ? '0' : (k === 1 ? 'π' : k + 'π')), x, f.h - 14);
+    }
+
+    let terms, y;
+    const M = Math.max(900, Math.min(4200, Math.round(f.w * (state.mode === 'weier' ? 4 : 2))));
+    if (state.mode === 'weier') {
+      const { b, H } = state, A = 1 / (1 - Math.pow(b, -H));            // sup of the sum, so the plot fits [-1, 1]
+      const amps = [], freqs = [];
+      for (let n = 0, fr = 1, am = 1; n < 500; n++, fr *= b, am *= Math.pow(b, -H)) {
+        if (fr > FMAX || (am / A) * v.s * 1.1 < 0.2 && n > 2) break;    // drop terms finer than a fifth of a pixel
+        amps.push(am / A); freqs.push(fr * TAU);
+      }
+      terms = amps.length;
+      y = (t) => { let s = 0; for (let n = 0; n < terms; n++) s += amps[n] * Math.cos(freqs[n] * t); return s; };
+    } else {
+      terms = Math.max(400, Math.min(9000, Math.ceil(2.5 * v.s)));      // tail of sum(1/n^2) past N is about 1/N
+      y = (t) => { let s = 0; for (let n = 1; n <= terms; n++) s += Math.sin(n * n * t) / (n * n); return s; };
+    }
+
+    const p = new Path2D();
+    for (let i = 0; i <= M; i++) {
+      const t = wx0 + (i / M) * (wx1 - wx0), py = v.oy - y(t) * v.s, px = v.ox + t * v.s;
+      if (i) p.lineTo(px, py); else p.moveTo(px, py);
+    }
+    c.strokeStyle = PRINT.ink; c.lineWidth = 1.1; c.lineJoin = 'round'; c.stroke(p);
+
+    if (state.mode === 'riemann') {                                     // Gerver's point: R'(pi) = -1/2
+      const gx = v.ox + Math.PI * v.s;
+      c.strokeStyle = PRINT.red; c.lineWidth = 1.4; c.setLineDash([7, 5]);
+      c.beginPath(); c.moveTo(v.ox + wx0 * v.s, v.oy + (wx0 - Math.PI) * 0.5 * v.s);
+      c.lineTo(v.ox + wx1 * v.s, v.oy + (wx1 - Math.PI) * 0.5 * v.s);
+      c.stroke(); c.setLineDash([]);
+      c.beginPath(); c.arc(gx, v.oy, 4.5, 0, TAU); c.fillStyle = PRINT.red; c.fill();
+      c.strokeStyle = PRINT.paper; c.lineWidth = 1.5; c.stroke();
+    }
+    $('rWb').textContent = fmt(terms);
+  }
+
+  const zw = zoomable('wW', 'cW', fitOf, render, { maxZoom: 300 });
+
+  function applyView(bb) {
+    const v = fitBox(zw.f, bb, 0.02);
+    zw.z.view = { s: v.s, ox: v.ox, oy: v.oy, fit: fitOf(zw.f).s };
+    zw.z.user = true; zw.schedule();
+  }
+
+  function setMode(m) {
+    state.mode = m; markMode(m);
+    $('hWrap').hidden = $('bWrap').hidden = m !== 'weier';
+    $('cWt').textContent = m === 'weier' ? 'Weierstrass function' : 'Riemann’s function Σ n⁻² sin(n²t)';
+    $('rWa').textContent = m === 'weier' ? `D = ${(2 - state.H).toFixed(2)}` : 'see the note';
+    zw.refit();
+  }
+  const markMode = stepButtons($('mW'), ['weier', 'riemann'],
+    (v) => v === 'weier' ? 'Weierstrass' : 'Riemann',
+    (v) => v === 'weier' ? 'The Weierstrass function' : 'Riemann’s function',
+    setMode);
+  markMode('weier');
+
+  const showH = () => { $('hWv').textContent = `H = ${state.H.toFixed(2)} · D = ${(2 - state.H).toFixed(2)}`; $('rWa').textContent = `D = ${(2 - state.H).toFixed(2)}`; };
+  $('hW').addEventListener('input', () => { state.H = +$('hW').value / 100; showH(); zw.schedule(); });
+  $('bW').addEventListener('input', () => { state.b = +$('bW').value / 10; $('bWv').textContent = `b = ${state.b.toFixed(1)}`; zw.schedule(); });
+  for (const btn of document.querySelectorAll('#weierstrass [data-d]')) {
+    btn.addEventListener('click', () => {
+      state.H = Math.round((2 - +btn.dataset.d) * 100) / 100;
+      $('hW').value = String(state.H * 100); showH();
+      if (state.mode !== 'weier') setMode('weier'); else zw.refit();
+    });
+  }
+  $('gerverW').addEventListener('click', () => {
+    if (state.mode !== 'riemann') setMode('riemann');
+    applyView({ x0: Math.PI - 0.085, x1: Math.PI + 0.085, y0: -0.062, y1: 0.062 });
+  });
+})();
+
+</script>
+
+</body>
+</html>
