@@ -1,0 +1,853 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fournier Universes</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>
+/* Layout: Plate 95 (the multiuniverse, flat and in space), Plate 96 (the flat D = 1 pattern) and the chapter's mass-and-dark-sky concept, each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */
+:root {
+  --page: #e4e5e1;
+  --text: #1b1d1f;
+  --muted: #595e64;
+  --rule: #c4c7c1;
+  --surface: #f6f6f3;
+  --accent: #285895;
+  --f-display: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Newsreader", Georgia, "Times New Roman", serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* the figures are reproductions of printed plates, so their paper and inks stay the same in both themes */
+  --print-paper: #ecebe6;
+  --print-ink: #151515;
+  --print-rule: #c9c8c2;
+  --gain: rgba(47, 95, 158, 0.42);
+  --loss: rgba(186, 88, 44, 0.42);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --page: #111214; --text: #e5e5e1; --muted: #9a9fa6; --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --page: #111214; --text: #e5e5e1; --muted: #9a9fa6; --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--page); color: var(--text); font-family: var(--f-display); font-size: 14px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
+.wrap {
+  max-width: 1180px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 36px 64px;
+  display: grid; gap: 40px;
+}
+header.top { display: grid; gap: 10px; max-width: 820px; }
+.eyebrow { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+h1 {
+  margin: 0; display: flex; align-items: center; flex-wrap: wrap; gap: 0.18em 0.42em;
+  font-weight: 800; font-size: clamp(30px, 5.4vw, 54px); line-height: 1.02; letter-spacing: 0.01em; text-transform: uppercase; text-wrap: balance;
+}
+h1 .plate-no { font-weight: 600; text-transform: none; letter-spacing: 0; }
+.lozenge { display: inline-block; width: 0.42em; height: 0.42em; border: 0.075em solid currentColor; position: relative; top: -0.02em; }
+.lozenge::after { content: ""; position: absolute; inset: 0.1em; border: 0.05em solid currentColor; }
+.dek { margin: 0; font-family: var(--f-body); font-size: 19px; line-height: 1.45; max-width: 64ch; }
+
+nav.index {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+  padding: 10px max(16px, env(safe-area-inset-right, 0px)) 10px max(16px, env(safe-area-inset-left, 0px));
+  background: var(--page); border-bottom: 1px solid var(--rule);
+  display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none;
+}
+nav.index a {
+  flex: none; display: inline-flex; gap: 8px; align-items: baseline; padding: 6px 10px;
+  border: 1px solid var(--rule); background: var(--surface); color: var(--text); text-decoration: none; font-size: 13px; font-weight: 600;
+}
+nav.index a b { font-family: var(--f-mono); font-weight: 500; color: var(--accent); }
+nav.index a:hover { border-color: var(--text); }
+
+section.plate { display: grid; gap: 18px; scroll-margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--rule); }
+.plate-head { display: grid; gap: 4px; }
+.plate-head .no { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.plate-head h2 { margin: 0; font-size: clamp(22px, 3vw, 30px); font-weight: 800; line-height: 1.1; text-transform: uppercase; letter-spacing: 0.01em; text-wrap: balance; }
+.plate-head .dim { margin: 0; font-family: var(--f-mono); font-size: 13px; color: var(--muted); }
+.plate-body { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(280px, 1fr); gap: 32px; align-items: start; }
+@media (max-width: 899px) { .plate-body { grid-template-columns: minmax(0, 1fr); gap: 20px; } }
+figure.fig { margin: 0; display: grid; gap: 8px; min-width: 0; }
+.canvas-wrap { position: relative; width: 100%; max-width: 100%; background: var(--print-paper); outline: 1px solid var(--rule); overflow: hidden; }
+.canvas-wrap canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.r-sq { aspect-ratio: 1 / 1; }
+.r-lox { aspect-ratio: 5 / 4; }
+.zoomable { cursor: grab; touch-action: pan-y; }
+.zoomable.dragging { cursor: grabbing; }
+.view-tools { position: absolute; top: 10px; right: 10px; display: flex; gap: 6px; z-index: 2; }
+.view-tools button { min-width: 34px; height: 34px; padding: 0 10px; font: 600 15px/1 var(--f-display); color: var(--print-ink); background: #f7f7f3; border: 1px solid var(--print-rule); cursor: pointer; }
+figcaption { font-size: 13px; color: var(--muted); }
+figcaption strong { color: var(--text); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+
+.side { display: grid; gap: 18px; min-width: 0; align-content: start; }
+.side p.cap { margin: 0; font-family: var(--f-body); font-size: 17px; line-height: 1.55; max-width: 62ch; }
+.group { display: grid; gap: 8px; min-width: 0; }
+.label-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.label { font-size: 11.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.value { font-family: var(--f-mono); font-size: 12.5px; font-variant-numeric: tabular-nums; text-align: right; }
+.steps { display: flex; flex-wrap: wrap; gap: 6px; }
+.steps button {
+  min-width: 38px; height: 34px; padding: 0 10px; font: 600 13px/1 var(--f-mono); color: var(--text);
+  background: var(--surface); border: 1px solid var(--rule); cursor: pointer;
+}
+.steps.words button { font: 600 13px/1 var(--f-display); }
+.steps button[aria-pressed="true"] { background: var(--text); color: var(--page); border-color: var(--text); }
+.steps button:hover { border-color: var(--text); }
+.steps button:disabled { opacity: 0.35; cursor: default; border-color: var(--rule); }
+.btn-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.btn { padding: 8px 12px; font: 600 13px/1.2 var(--f-display); color: var(--text); background: var(--surface); border: 1px solid var(--rule); cursor: pointer; }
+.btn:hover { border-color: var(--text); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--page); }
+.check { display: flex; align-items: flex-start; gap: 8px; font-size: 13.5px; cursor: pointer; }
+.check input { accent-color: var(--accent); width: 16px; height: 16px; margin: 1px 0 0; flex: none; }
+.check:has(input:disabled) { opacity: 0.45; cursor: default; }
+.slider { display: grid; gap: 4px; }
+.slider input { width: 100%; accent-color: var(--accent); margin: 0; }
+.slider input:disabled { opacity: 0.4; }
+dl.read { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; padding-top: 14px; border-top: 1px solid var(--rule); }
+dl.read div { display: grid; gap: 2px; min-width: 0; }
+dl.read dt { font-size: 10.5px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); }
+dl.read dd { margin: 0; font-family: var(--f-mono); font-size: 16px; overflow-wrap: anywhere; }
+dl.read dd small { font-size: 11.5px; color: var(--muted); }
+.note { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.mini { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; padding: 10px 12px; background: var(--print-paper); border: 1px solid var(--print-rule); color: var(--print-ink); }
+.mini svg { height: 64px; width: auto; max-width: 100%; }
+.mini .fx { font-family: var(--f-mono); font-size: 12px; line-height: 1.6; color: var(--print-ink); }
+.key { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--muted); }
+.key span { display: inline-flex; align-items: center; gap: 6px; }
+.key i { width: 14px; height: 10px; display: inline-block; border: 1px solid var(--print-rule); }
+.readline { min-height: 2.9em; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.readline b { color: var(--text); font-weight: 700; }
+
+.sub { display: grid; gap: 14px; padding-top: 22px; border-top: 1px dashed var(--rule); scroll-margin-top: 64px; }
+.sub h3 { margin: 0; font-size: 15px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
+.source { font-family: var(--f-body); font-size: 15px; color: var(--muted); margin: 0; max-width: 84ch; }
+.source i { color: var(--text); }
+.source a { color: var(--accent); }
+button:focus-visible, input:focus-visible, a:focus-visible, canvas:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.mini svg.gen { height: 72px; }
+</style>
+<style>
+body { margin: 0; }
+/* The hidden attribute must beat the pages' own display rules (.slider, .check, ...). The artifact
+   wrapper's stylesheet used to provide this; self-hosted pages carry it themselves. */
+[hidden] { display: none !important; }
+nav.shell { font-family: var(--f-display); font-size: 12.5px; font-weight: 600; background: var(--page);
+  border-bottom: 1px solid var(--rule); display: flex; align-items: center; gap: 6px 18px;
+  padding: 9px max(16px, env(safe-area-inset-right, 0px)) 9px max(16px, env(safe-area-inset-left, 0px)); }
+nav.shell a { color: var(--text); text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+nav.shell a:hover { color: var(--accent); }
+nav.shell .home { letter-spacing: 0.07em; text-transform: uppercase; flex: none; }
+nav.shell .gap { flex: 1; }
+nav.shell .pn { color: var(--muted); font-weight: 500; }
+nav.shell .pn b { color: var(--text); font-weight: 600; }
+nav.shell a:hover .pn, nav.shell a:hover .pn b { color: var(--accent); }
+</style>
+</head>
+<body>
+<nav class="shell" aria-label="Site"><a class="home" href="index.html">Fractal Geometry Explorer</a><span class="gap"></span><a rel="prev" href="cantor-dust.html"><span class="pn">&#8592; <b>Plates 80–83</b></span></a><a rel="next" href="turbulence-intermittency.html"><span class="pn"><b>Intermittency</b> &#8594;</span></a></nav>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 9, "Fractal View of Galaxy Clusters" · pages 84–96</p>
+    <h1><span class="plate-no">Plates 95–96</span><span class="lozenge" aria-hidden="true"></span><span>Fournier Universes</span></h1>
+    <p class="dek">Galaxies gather into clusters, the clusters into superclusters, and no survey has found the scale where it stops. Mandelbrot reads the evidence as a fractal dust: the mass within distance R of us grows as M(R) ∝ R<sup>D</sup> with D well below 3, so the universe has no global density. The first fully described model is E. E. Fournier d'Albe's 1907 multiuniverse — worlds within worlds within worlds — which these two plates draw. Every figure is computed from the rules in the captions.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#p95"><b>95</b> Fournier's multiuniverse</a>
+    <a href="#p96"><b>96</b> A flat universe with D = 1</a>
+    <a href="#mass"><b>M(R)</b> Mass and the dark sky</a>
+  </nav>
+
+  <!-- ===================== PLATE 95: FOURNIER'S MULTIUNIVERSE ===================== -->
+  <section class="plate" id="p95">
+    <div class="plate-head">
+      <p class="no">Plate 95 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Projection of Fournier's multiuniverse</h2>
+      <p class="dim" id="dimA">N = 7, 1/r = 7 · in space D = log 7/log 7 = 1 · on the page N = 5, D = log 5/log 7 ≈ 0.8270</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wA">
+          <canvas id="cA" role="img" aria-label="Fournier's multiuniverse: a quincunx of quincunxes of quincunxes of dots"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cAt">As printed</strong> · <span id="cAn">order 3 · 125 dots</span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Fournier's construction starts with a centered regular octahedron: four balls at the corners of a square whose diagonal is 12 units, one ball at the centre, and two more above and below the page at the same distance of 6. Each ball of radius 1 is a <i>stellar aggregate of order 0</i>. The smallest sphere holding all seven — radius 7 — is an aggregate of order 1; seven copies of it, placed the same way, make an aggregate of order 2, and so on without end. Each order multiplies the number of balls and the radius by the same 7, so the mass within radius R grows as M(R) ∝ R: dimension 1. The plate shows the order-3 aggregate to exact scale — at once its projection and its equatorial section, since the two polar balls of every aggregate hide exactly behind its centre dot.</p>
+        <div class="mini" aria-label="An aggregate of order 1, seen flat">
+          <svg class="gen" viewBox="-1.15 -1.15 2.3 2.3" aria-hidden="true" id="miniA"></svg>
+          <div class="fx" id="miniAfx">N = 7, 1/r = 7<br>5 dots on the page</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mA" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Order</span><span class="value" id="sAv">order 3</span></div>
+          <div class="steps" id="sA" role="group" aria-label="Order of the aggregate"></div>
+        </div>
+        <div class="group">
+          <div class="slider">
+            <div class="label-row"><span class="label">World ratio 1/r</span><span class="value" id="rAv">7</span></div>
+            <input type="range" id="rAs" min="3.1" max="12" step="0.01" value="7" aria-label="World ratio">
+          </div>
+          <label class="check" for="endA" id="endAwrap"><input type="checkbox" id="endA"> Interpolate without end: zooming in splits every ball into the aggregate of the next order down (orders −1, −2, …)</label>
+          <div class="slider" id="turnAwrap" hidden>
+            <div class="label-row"><span class="label">Turn</span><span class="value" id="turnAv">0°</span></div>
+            <input type="range" id="turnAs" min="-180" max="180" step="1" value="0" aria-label="Turn about the polar axis">
+          </div>
+          <div class="slider" id="tiltAwrap" hidden>
+            <div class="label-row"><span class="label">Tilt</span><span class="value" id="tiltAv">0°</span></div>
+            <input type="range" id="tiltAs" min="0" max="90" step="1" value="0" aria-label="Tilt toward a side view">
+          </div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate95">Show Plate 95 as printed</button>
+        </div>
+        <p class="readline" id="infoA" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Balls in space</dt><dd id="rAa">343</dd></div>
+          <div><dt>Dots on the page</dt><dd id="rAb">125</dd></div>
+          <div><dt>D in space</dt><dd id="rAc">1</dd></div>
+          <div><dt>D on the page</dt><dd id="rAd">0.8270</dd></div>
+        </dl>
+        <p class="note">Checked against the scan at 600 dpi: the plate's 125 dots sit on this exact three-level pattern — the fitted ratio between levels is 7.000, and the dots themselves are the order-0 balls drawn to scale, as the caption's "represents to scale" claims. The dots scatter about their exact positions by about 0.2 mm, which looks like hand drafting; this page draws exact positions. The text leaves the square's turn open, and the plate prints its corners on the diagonals, as here. The balls stop overlapping once 1/r &gt; 3, and the book notes D in space can then take any value up to log 7/log 3 ≈ 1.7712 — try the ratio slider.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 96: A FLAT FOURNIER UNIVERSE ===================== -->
+  <section class="plate" id="p96">
+    <div class="plate-head">
+      <p class="no">Plate 96 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>A flat Fournier universe with D = 1</h2>
+      <p class="dim" id="dimB">N = 5, 1/r = 5 · D = log 5/log 5 = 1 · carried one order further than Plate 95</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wB">
+          <canvas id="cB" role="img" aria-label="A flat Fournier universe: four orders of quincunxes with ratio 5"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cBt">As printed</strong> · <span id="cBn">order 4 · 625 dots</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Plate 95, "being drawn to exact scale, is not only hard to print and to see, but potentially misleading": the picture is not a universe of dimension 1 but its planar projection, of dimension log 5/log 7 ≈ 0.8270 &lt; 1. Projecting flattens the polar balls into the centre dots, and the five that remain shrink by 7 while multiplying only by 5. To leave no wrong impression, the book re-runs the construction directly in the plane with 1/r = 5: now the five dots multiply exactly as fast as they shrink, and D = log 5/log 5 = 1. Because the pattern shrinks more slowly, it can be "carried one step further than is possible in Plate 95": four orders, 625 dots.</p>
+        <div class="mini" aria-label="An aggregate of order 1 with ratio 5">
+          <svg class="gen" viewBox="-1.15 -1.15 2.3 2.3" aria-hidden="true" id="miniB"></svg>
+          <div class="fx" id="miniBfx">N = 5, 1/r = 5<br>D = 1</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Order</span><span class="value" id="sBv">order 4</span></div>
+          <div class="steps" id="sB" role="group" aria-label="Order of the aggregate"></div>
+        </div>
+        <div class="group">
+          <div class="slider">
+            <div class="label-row"><span class="label">World ratio 1/r</span><span class="value" id="rBv">5</span></div>
+            <input type="range" id="rBs" min="3.1" max="12" step="0.01" value="5" aria-label="World ratio">
+          </div>
+          <label class="check" for="endB"><input type="checkbox" id="endB"> Interpolate without end as you zoom</label>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate96">Show Plate 96 as printed</button>
+        </div>
+        <p class="readline" id="infoB" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Dots</dt><dd id="rBa">625</dd></div>
+          <div><dt>Dimension</dt><dd id="rBb">1</dd></div>
+          <div><dt>Radius</dt><dd id="rBc">5⁴ = 625</dd></div>
+          <div><dt>Mass within R</dt><dd id="rBd">∝ R<sup>1</sup></dd></div>
+        </dl>
+        <p class="note">Checked against the scan: all 625 dots match this exact four-level pattern (fitted ratio 4.98, consistent with 5 given the ~0.5 mm placement scatter of the drafting; this page draws exact positions). The scan also shows four stray specks that belong to the printing, not the pattern. The smallest printed dots come out a touch larger than order-0 balls drawn to scale would be.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CONCEPT: MASS, DENSITY AND THE DARK SKY ===================== -->
+  <section class="plate" id="mass">
+    <div class="plate-head">
+      <p class="no">Chapter 9, pages 85–93 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Mass, density and the dark night sky</h2>
+      <p class="dim">M(R) ∝ R<sup>D</sup> · approximate density M(R)/(4/3)πR³ ∝ R<sup>D−3</sup> → 0 · D &lt; 2 keeps the night sky dark</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wC">
+          <canvas id="cC" role="img" aria-label="Mass within radius R of the central ball, on logarithmic axes"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cCt">Mass within R</strong> · <span id="cCn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Centre a sphere of radius R on Earth, weigh the mass M(R) inside, and let R grow. If the universe had a global density, M(R)/R³ would settle to it; de Vaucouleurs observed instead that the estimated density keeps falling, like R<sup>D−3</sup> with D ≈ 1.23 — the signature of a fractal dust. Fournier argued D must be exactly 1: if M(R) ∝ R, the gravitational potential GM/R at the edge of every world ball is the same, so nowhere do stars fall in at anything near the speed of light — and indeed no star moves faster than c/300. Hoyle's 1953 theory of galaxy formation, a cascade of gas clouds collapsing and splitting into five at each stage, reaches D = 1 from the Jeans criterion by a different road.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mC" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group" id="genCwrap">
+          <div class="label-row"><span class="label">Universe</span></div>
+          <div class="steps words" id="gC" role="group" aria-label="Which universe"></div>
+        </div>
+        <p class="readline" id="infoC" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Slope D</dt><dd id="rCa">1</dd></div>
+          <div><dt>Density trend</dt><dd id="rCb">R⁻²</dd></div>
+          <div><dt>Sky covered (this universe)</dt><dd id="rCc">—</dd></div>
+          <div><dt>Sky covered (uniform)</dt><dd id="rCd">—</dd></div>
+        </dl>
+        <p class="note" id="noteC">The staircase is counted from the model itself: distances from the central ball to every other ball, out to the order the chart shows. It climbs along M = R and, between aggregate radii, sags down to M = R/7 — exactly the band the chapter describes ("for intermediate values of R, M(R) is smaller, reaching down to R/7"). The sky view backs the caption of Plate 95: a universe of dimension D &lt; 2 projects onto a set of directions of zero area, so "in some directions the sky would appear quite black, although there is an infinite succession of universes" — the Blazing Sky Effect (often miscredited to Olbers) is exorcised geometrically, with no need to deny the clustering.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 9, pages 84–96 (Plates 95 and 96). Every figure is computed from the rules in the captions; ratios and scales were verified against the scans, as noted under each figure. Companion page: <a href="cantor-dust.html">Cantor Dust</a> (Plates 80–83) — the Fournier universe is its construction "imbedded in space instead of the line".</p>
+</div>
+
+<script>
+// Shared drawing library: style constants, the zoomable canvas (snapshot while panning), chunked
+// paths, controls and small SVG figures. Loaded before each page's own scripts; pages may extend
+// PRINT with their own inks (PRINT.red = ..., PRINT.light = ...).
+const $ = (id) => document.getElementById(id);
+const fmt = (n) => n.toLocaleString('en-US');
+const PRINT = { paper: '#ecebe6', ink: '#151515', rule: '#c9c8c2', muted: '#66665f', accent: '#2f5f9e', red: '#c2452d', faint: '#bdbbb3', gray: '#8f8e88' };
+const RAMP = [[233, 185, 73], [217, 113, 59], [184, 66, 79], [125, 58, 120], [63, 79, 151], [43, 122, 138]];
+const ramp = (t, a = 1) => {
+  const x = Math.max(0, Math.min(1, t)) * (RAMP.length - 1), i = Math.min(RAMP.length - 2, Math.floor(x)), f = x - i;
+  const c = RAMP[i].map((v, k) => Math.round(v + (RAMP[i + 1][k] - v) * f));
+  return `rgba(${c[0]},${c[1]},${c[2]},${a})`;
+};
+const CAT = ['#151515', '#9a988f', '#2f5f9e', '#c2452d', '#3f8f6c', '#b58a2a', '#6b4e9b', '#5f8fae'];
+
+// ---------- shared plumbing ----------
+function figure(canvas, draw) {
+  const wrap = canvas.parentElement;
+  const f = { canvas, ctx: canvas.getContext('2d'), w: 1, h: 1, dpr: 1, draw };
+  const resize = () => {
+    f.dpr = Math.min(2, window.devicePixelRatio || 1);
+    f.w = wrap.clientWidth || 1; f.h = wrap.clientHeight || 1;
+    canvas.width = Math.round(f.w * f.dpr); canvas.height = Math.round(f.h * f.dpr);
+    f.draw();
+  };
+  new ResizeObserver(resize).observe(wrap);
+  return f;
+}
+function fitBox(f, bb, pad = 0.04) {
+  const w = Math.max(1e-9, bb.x1 - bb.x0), h = Math.max(1e-9, bb.y1 - bb.y0), s = Math.min(f.w / (w * (1 + 2 * pad)), f.h / (h * (1 + 2 * pad)));
+  return { s, ox: f.w / 2 - ((bb.x0 + bb.x1) / 2) * s, oy: f.h / 2 + ((bb.y0 + bb.y1) / 2) * s };
+}
+const toWorld = (f, v) => f.ctx.setTransform(f.dpr * v.s, 0, 0, -f.dpr * v.s, f.dpr * v.ox, f.dpr * v.oy);
+const toScreen = (f) => f.ctx.setTransform(f.dpr, 0, 0, f.dpr, 0, 0);
+function paper(f, color) { f.ctx.setTransform(1, 0, 0, 1, 0, 0); f.ctx.fillStyle = color; f.ctx.fillRect(0, 0, f.canvas.width, f.canvas.height); }
+function polyPath(P, closed = true, upto) {
+  const p = new Path2D(), m = upto === undefined ? P.length / 2 : upto;
+  p.moveTo(P[0], P[1]);
+  for (let i = 1; i < m; i++) p.lineTo(P[2 * i], P[2 * i + 1]);
+  if (closed) p.closePath();
+  return p;
+}
+function bbox(P, bb = { x0: Infinity, x1: -Infinity, y0: Infinity, y1: -Infinity }) {
+  for (let i = 0; i < P.length; i += 2) { bb.x0 = Math.min(bb.x0, P[i]); bb.x1 = Math.max(bb.x1, P[i]); bb.y0 = Math.min(bb.y0, P[i + 1]); bb.y1 = Math.max(bb.y1, P[i + 1]); }
+  return bb;
+}
+function stepButtons(el, values, text, aria, onPick) {
+  const bs = values.map((v) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.textContent = text(v); b.setAttribute('aria-label', aria(v));
+    b.addEventListener('click', () => onPick(v));
+    el.append(b);
+    return b;
+  });
+  const mark = (cur) => bs.forEach((b, i) => b.setAttribute('aria-pressed', String(values[i] === cur)));
+  mark.buttons = bs;
+  return mark;
+}
+// pan and zoom: a quick rescaled snapshot while moving, a full redraw once it settles
+function zoomable(wrapId, canvasId, fitOf, render, opts = {}) {
+  const maxZoom = opts.maxZoom || 400;
+  const wrap = $(wrapId), z = { view: null, user: false, snapView: null, raf: 0, full: 0 };
+  const snap = document.createElement('canvas');
+  const f = figure($(canvasId), () => draw());
+  function touch() { wrap.style.touchAction = z.view && z.view.s > z.view.fit * 1.02 ? 'none' : 'pan-y'; }
+  function draw() {
+    if (!z.view || !z.user) { z.view = fitOf(f); z.view.fit = z.view.s; z.user = false; touch(); }
+    render(f, z.view);
+    snap.width = f.canvas.width; snap.height = f.canvas.height; snap.getContext('2d').drawImage(f.canvas, 0, 0);
+    z.snapView = { s: z.view.s, ox: z.view.ox, oy: z.view.oy };
+  }
+  function quick() {
+    const v = z.view, k = v.s / z.snapView.s, c = f.ctx;
+    c.setTransform(1, 0, 0, 1, 0, 0); c.fillStyle = z.ground || PRINT.paper; c.fillRect(0, 0, f.canvas.width, f.canvas.height);
+    c.drawImage(snap, (v.ox - z.snapView.ox * k) * f.dpr, (v.oy - z.snapView.oy * k) * f.dpr, snap.width * k, snap.height * k);
+  }
+  function schedule() { if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; draw(); }); }
+  function moved() {
+    if (!z.snapView) { schedule(); return; }
+    if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; quick(); });
+    clearTimeout(z.full); z.full = setTimeout(schedule, 160);
+  }
+  function zoomAt(px, py, k) {
+    const v = z.view, ns = Math.min(v.fit * maxZoom, Math.max(v.fit * 0.8, v.s * k)), wx = (px - v.ox) / v.s, wy = (v.oy - py) / v.s;
+    v.s = ns; v.ox = px - wx * ns; v.oy = py + wy * ns; z.user = true; touch(); moved();
+  }
+  function pan(dx, dy) { z.view.ox += dx; z.view.oy += dy; z.user = true; moved(); }
+  wrap.querySelector('[data-z="in"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1.6));
+  wrap.querySelector('[data-z="out"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1 / 1.6));
+  wrap.querySelector('[data-z="fit"]').addEventListener('click', () => { z.user = false; schedule(); });
+  const pts = new Map();
+  let pinch = null, down = null;
+  const local = (e) => { const r = wrap.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+  wrap.addEventListener('pointerdown', (e) => {
+    if (e.target.closest('.view-tools')) return;
+    pts.set(e.pointerId, local(e));
+    down = pts.size === 1 ? { p: local(e), t: performance.now(), moved: 0 } : null;
+    try { wrap.setPointerCapture(e.pointerId); } catch (_) {}
+    if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), m: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2] }; }
+    wrap.classList.add('dragging');
+  });
+  wrap.addEventListener('pointermove', (e) => {
+    if (!pts.has(e.pointerId)) return;
+    const prev = pts.get(e.pointerId), cur = local(e);
+    pts.set(e.pointerId, cur);
+    if (down) down.moved = Math.max(down.moved, Math.hypot(cur[0] - down.p[0], cur[1] - down.p[1]));
+    if (pts.size === 2 && pinch) {
+      const [a, b] = [...pts.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]), m = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+      pan(m[0] - pinch.m[0], m[1] - pinch.m[1]);
+      if (pinch.d > 0) zoomAt(m[0], m[1], d / pinch.d);
+      pinch = { d, m };
+    } else if (pts.size === 1 && (e.pointerType !== 'touch' || z.view.s > z.view.fit * 1.02)) pan(cur[0] - prev[0], cur[1] - prev[1]);
+  });
+  const end = (e) => {
+    if (down && pts.size === 1 && down.moved < 5 && opts.onTap) { const [x, y] = local(e), v = z.view; opts.onTap((x - v.ox) / v.s, (v.oy - y) / v.s); }
+    down = null;
+    pts.delete(e.pointerId); if (pts.size < 2) pinch = null; if (!pts.size) wrap.classList.remove('dragging');
+  };
+  wrap.addEventListener('pointerup', end); wrap.addEventListener('pointercancel', (e) => { down = null; end(e); });
+  wrap.addEventListener('wheel', (e) => { if (!(e.ctrlKey || e.metaKey)) return; e.preventDefault(); const [x, y] = local(e); zoomAt(x, y, Math.exp(-e.deltaY * 0.0045)); }, { passive: false });
+  wrap.addEventListener('dblclick', (e) => { if (e.target.closest('.view-tools')) return; const [x, y] = local(e); zoomAt(x, y, e.shiftKey ? 0.5 : 2); });
+  return { f, z, schedule, refit: () => { z.user = false; schedule(); } };
+}
+// chunked paths: many small paths fill far faster than one path with a hundred thousand pieces
+function chunked(count, add, size = 512) {
+  const out = [];
+  let p = null;
+  for (let i = 0; i < count; i++) { if (i % size === 0) { p = new Path2D(); out.push(p); } add(p, i); }
+  return out;
+}
+// fill and outline in the same colour, so that tiles which only meet along an edge show no hairline seams
+function solid(c, paths, color, lw) {
+  c.fillStyle = color; c.strokeStyle = color; c.lineWidth = lw; c.lineJoin = 'miter';
+  for (const p of paths) { c.fill(p); c.stroke(p); }
+}
+const dot = (c, v, x, y, r = 4, color = PRINT.red) => { c.beginPath(); c.arc(v.ox + x * v.s, v.oy - y * v.s, r, 0, Math.PI * 2); c.fillStyle = color; c.fill(); c.strokeStyle = PRINT.paper; c.lineWidth = 1.5; c.stroke(); };
+
+// a polyline (Float64Array or [[x,y],...]) as SVG points with y flipped
+const svgPts = (P) => (P instanceof Float64Array ? Array.from({ length: P.length / 2 }, (_, i) => [P[2 * i], P[2 * i + 1]]) : P).map(([x, y]) => `${x.toFixed(4)},${(-y).toFixed(4)}`).join(' ');
+function miniCurve(id, P, dots = true) {
+  const pts = P instanceof Float64Array ? Array.from({ length: P.length / 2 }, (_, i) => [P[2 * i], P[2 * i + 1]]) : P;
+  $(id).innerHTML = `<line x1="0" y1="0" x2="1" y2="0" stroke="#8a8a84" stroke-width="0.008" stroke-dasharray="0.025 0.02"/>` +
+    `<polyline points="${svgPts(pts)}" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linejoin="round"/>` +
+    (dots ? `<g fill="currentColor">${pts.map(([x, y], i) => `<circle cx="${x.toFixed(4)}" cy="${(-y).toFixed(4)}" r="${i === 0 || i === pts.length - 1 ? 0.03 : 0.018}"/>`).join('')}</g>` : '');
+}
+function miniTree(id, links, dx = 0) {
+  const ends = new Set(), mid = new Set(), k = (x, y) => `${x.toFixed(4)},${y.toFixed(4)}`;
+  let s = '';
+  for (const [px, py, qx, qy] of links) {
+    s += `<line x1="${(px + dx).toFixed(4)}" y1="${(-py).toFixed(4)}" x2="${(qx + dx).toFixed(4)}" y2="${(-qy).toFixed(4)}" stroke="currentColor" stroke-width="0.02" stroke-linecap="round"/>`;
+    mid.add(k(px + dx, py)); mid.add(k(qx + dx, qy));
+  }
+  s += `<g fill="currentColor">${[...mid].map((p) => { const [x, y] = p.split(',').map(Number); const big = (Math.abs(x - dx) < 1e-6 || Math.abs(x - dx - 1) < 1e-6) && Math.abs(y) < 1e-6; return `<circle cx="${x}" cy="${-y}" r="${big ? 0.03 : 0.018}"/>`; }).join('')}</g>`;
+  return s;
+}
+// canvas transform for a similarity map f = [ar, ai, br, bi, m] composed with the view
+function setMap(f, c, v, fig) {
+  const [ar, ai, br, bi, m] = f, k = fig.dpr * v.s;
+  if (m) c.setTransform(k * ar, -k * ai, k * ai, k * ar, fig.dpr * (v.ox + v.s * br), fig.dpr * (v.oy - v.s * bi));
+  else c.setTransform(k * ar, -k * ai, -k * ai, -k * ar, fig.dpr * (v.ox + v.s * br), fig.dpr * (v.oy - v.s * bi));
+}
+const segPath = (segs, pick) => { const p = new Path2D(); for (const s of segs) if (!pick || pick(s)) { p.moveTo(s[0], s[1]); p.lineTo(s[2], s[3]); } return p; };
+// Plate 64's chevrons, measured from the plate: each interval a→b becomes a thin quadrilateral
+// pointing toward F, the corner the next stage would add (see DECISIONS.md)
+const CHEV_OUT = 0.43, CHEV_IN = 0.235;
+function chevronPaths(P, F, m) {
+  return chunked(m, (p, i) => {
+    const ax = P[2 * i], ay = P[2 * i + 1], bx = P[2 * i + 2], by = P[2 * i + 3], mx = (ax + bx) / 2, my = (ay + by) / 2;
+    const vx = F[2 * i] - mx, vy = F[2 * i + 1] - my;
+    p.moveTo(ax, ay); p.lineTo(mx + CHEV_OUT * vx, my + CHEV_OUT * vy); p.lineTo(bx, by); p.lineTo(mx + CHEV_IN * vx, my + CHEV_IN * vy); p.closePath();
+  });
+}
+
+// Chapter 9 geometry: Fournier aggregates. An aggregate of order k is a sphere of radius rho^k
+// (the order-0 ball has radius 1) holding copies of the aggregate of order k − 1. Their centres
+// sit at the aggregate's centre and at distance d = R − R/rho from it — the distance at which a
+// copy touches the enclosing sphere. In the plane the four outer copies go to the diagonal
+// corners (±e, ±e), e = d/√2, as the plates print them; in space the octahedron adds two more
+// copies on the axis through the centre, which project onto the centre.
+const SQ2 = Math.SQRT2;
+const FLAT_OFF = [[0, 0], [1, 1], [1, -1], [-1, 1], [-1, -1]];
+
+// the 5^orders dot centres of a flat aggregate of the given order, as [x0, y0, x1, y1, ...]
+function quincunx(orders, rho) {
+  let pts = new Float64Array([0, 0]);
+  for (let j = 1; j <= orders; j++) {
+    const e = (Math.pow(rho, j) - Math.pow(rho, j - 1)) / SQ2;
+    const out = new Float64Array(pts.length * 5);
+    let o = 0;
+    for (let i = 0; i < pts.length; i += 2)
+      for (const [sx, sy] of FLAT_OFF) { out[o++] = pts[i] + sx * e; out[o++] = pts[i + 1] + sy * e; }
+    pts = out;
+  }
+  return pts;
+}
+
+// the 7^orders ball centres of the octahedral aggregate, as [x0, y0, z0, x1, ...]
+function octahedral(orders, rho) {
+  let pts = new Float64Array([0, 0, 0]);
+  for (let j = 1; j <= orders; j++) {
+    const d = Math.pow(rho, j) - Math.pow(rho, j - 1), e = d / SQ2;
+    const offs = [[0, 0, 0], [e, e, 0], [e, -e, 0], [-e, e, 0], [-e, -e, 0], [0, 0, d], [0, 0, -d]];
+    const out = new Float64Array(pts.length * 7);
+    let o = 0;
+    for (let i = 0; i < pts.length; i += 3)
+      for (const [sx, sy, sz] of offs) { out[o++] = pts[i] + sx; out[o++] = pts[i + 1] + sy; out[o++] = pts[i + 2] + sz; }
+    pts = out;
+  }
+  return pts;
+}
+
+// draw the flat aggregate into view v, pruning subtrees outside the screen. Finite mode stops at
+// the order-0 balls, drawn to scale but never smaller than minPx (the plates' pen does the same).
+// Endless mode instead keeps subdividing any ball big enough on screen into the five balls of the
+// next order down (the book's interpolation to orders −1, −2, …), so zooming never ends.
+function drawFlat(c, v, w, h, rho, orders, endless, minPx) {
+  const splitPx = 2.6;                           // a ball bigger than this splits (endless mode)
+  let dots = 0;
+  (function rec(x, y, R, order) {
+    const sx = v.ox + x * v.s, sy = v.oy - y * v.s, sr = R * v.s;
+    if (sx + sr < 0 || sx - sr > w || sy + sr < 0 || sy - sr > h) return;
+    const leaf = endless ? sr <= splitPx || order <= -40 : order <= 0;
+    if (leaf) {
+      const r = Math.max(sr * (endless ? 0.5 : 1), minPx);
+      if (r > 2) { c.beginPath(); c.arc(sx, sy, r, 0, 2 * Math.PI); c.fill(); }
+      else c.fillRect(sx - r, sy - r, 2 * r, 2 * r);
+      dots++;
+      return;
+    }
+    const Rs = R / rho, e = (R - Rs) / SQ2;
+    for (const [ox, oy] of FLAT_OFF) rec(x + ox * e, y + oy * e, Rs, order - 1);
+  })(0, 0, Math.pow(rho, orders), orders);
+  return dots;
+}
+
+// sorted distances from the central ball to every ball of the aggregate (its own centre included,
+// at distance 0), so that M(R) = how many entries are ≤ R
+function massRadii(pts, dim) {
+  const n = pts.length / dim, out = new Float64Array(n);
+  for (let i = 0; i < n; i++) {
+    const x = pts[i * dim], y = pts[i * dim + 1], z = dim === 3 ? pts[i * dim + 2] : 0;
+    out[i] = Math.hypot(x, y, z);
+  }
+  out.sort();
+  return out;
+}
+
+// directions from the central ball to every other ball, as a covered/empty histogram of the
+// full circle: bins[b] = true when some ball lies within that bin of directions
+function skyBins(pts, nbins) {
+  const bins = new Uint8Array(nbins);
+  for (let i = 0; i < pts.length; i += 2) {
+    const x = pts[i], y = pts[i + 1];
+    if (x === 0 && y === 0) continue;
+    const a = Math.atan2(y, x);
+    bins[((Math.round((a / (2 * Math.PI)) * nbins) % nbins) + nbins) % nbins] = 1;
+  }
+  return bins;
+}
+
+// deterministic uniform scatter for the comparison sky (mulberry32)
+function uniformDisc(n, radius, seed) {
+  let s = seed >>> 0;
+  const rnd = () => { s = (s + 0x6d2b79f5) >>> 0; let t = Math.imul(s ^ (s >>> 15), 1 | s); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  const out = new Float64Array(2 * n);
+  for (let i = 0; i < n; i++) {
+    const r = radius * Math.sqrt(rnd()), a = 2 * Math.PI * rnd();
+    out[2 * i] = r * Math.cos(a); out[2 * i + 1] = r * Math.sin(a);
+  }
+  return out;
+}
+
+(() => {
+  const pow = Math.pow, log = Math.log;
+  const Dspace = (rho) => log(7) / log(rho);
+  const Dflat = (rho) => log(5) / log(rho);
+  const dfmt = (x) => (Math.abs(x - 1) < 1e-9 ? '1' : x.toFixed(4));
+  const rfmt = (rho) => (Math.abs(rho - Math.round(rho)) < 1e-9 ? String(Math.round(rho)) : rho.toFixed(2));
+
+  // an order-1 aggregate as a small figure: the enclosing circle and its five visible balls
+  function aggMini(id, rho) {
+    const e = (1 - 1 / rho) / Math.SQRT2, r = 1 / rho;
+    const balls = [[0, 0], [e, e], [e, -e], [-e, e], [-e, -e]];
+    $(id).innerHTML = `<circle cx="0" cy="0" r="1" fill="none" stroke="#8a8a84" stroke-width="0.02" stroke-dasharray="0.05 0.04"/>` +
+      balls.map(([x, y]) => `<circle cx="${x.toFixed(4)}" cy="${(-y).toFixed(4)}" r="${r.toFixed(4)}" fill="currentColor"/>`).join('');
+  }
+
+  // ====================== Plate 95: Fournier's multiuniverse ======================
+  const stA = { mode: 'printed', order: 3, rho: 7, endless: false, turn: 0, tilt: 0 };
+  let octLast = { key: '', pts: null };          // one entry: the ratio slider would flood a map
+  const octPts = (order, rho) => {
+    const key = `${order}|${rho}`;
+    if (octLast.key !== key) octLast = { key, pts: octahedral(order, rho) };
+    return octLast.pts;
+  };
+  const zA = zoomable('wA', 'cA', (f) => {
+    const R = pow(stA.rho, stA.order);
+    return fitBox(f, { x0: -R, x1: R, y0: -R, y1: R }, 0.035);
+  }, (f, v) => {
+    const c = f.ctx;
+    paper(f, PRINT.paper);
+    c.setTransform(f.dpr, 0, 0, f.dpr, 0, 0);
+    c.fillStyle = PRINT.ink;
+    if (stA.mode === 'printed') {
+      drawFlat(c, v, f.w, f.h, stA.rho, stA.order, stA.endless, 1.1);
+    } else {
+      const pts = octPts(stA.order, stA.rho);
+      const ta = (stA.turn * Math.PI) / 180, ti = (stA.tilt * Math.PI) / 180;
+      const ca = Math.cos(ta), sa = Math.sin(ta), ct = Math.cos(ti), st = Math.sin(ti);
+      const r = Math.max(v.s, 1.1);
+      for (let i = 0; i < pts.length; i += 3) {
+        const x = pts[i] * ca - pts[i + 1] * sa, y = pts[i] * sa + pts[i + 1] * ca, z = pts[i + 2];
+        const sx = v.ox + x * v.s, sy = v.oy - (y * ct + z * st) * v.s;
+        if (sx < -r || sx > f.w + r || sy < -r || sy > f.h + r) continue;
+        if (r > 2) { c.beginPath(); c.arc(sx, sy, r, 0, 2 * Math.PI); c.fill(); }
+        else c.fillRect(sx - r, sy - r, 2 * r, 2 * r);
+      }
+    }
+    toScreen(f);
+  }, { maxZoom: 100000 });
+  const MODES_A = { printed: 'On the page', space: 'Turn it in space' };
+  const INFO_A = {
+    printed: 'The projection and the equatorial section coincide: each dot you see stands for up to three balls, stacked along your line of sight. On the page the pattern multiplies its dots by 5 while growing by 7, so what is printed has dimension log 5/log 7 — less than the universe it depicts.',
+    space: 'The same aggregate with its polar balls shown. At tilt 0° you look straight down the polar axis and see the plate; tilt, and each centre dot splits into three. A generic projection keeps all 7<sup>k</sup> balls apart — the plate\'s view is the exception, chosen so the picture stays readable.',
+  };
+  function setA(refit) {
+    markMA(stA.mode); markSA(stA.order);
+    const rho = stA.rho, n = stA.order;
+    $('endAwrap').hidden = stA.mode !== 'printed';
+    $('turnAwrap').hidden = $('tiltAwrap').hidden = stA.mode !== 'space';
+    $('cAt').textContent = stA.mode === 'printed' ? (rho === 7 && n === 3 && !stA.endless ? 'As printed' : 'On the page') : 'In space';
+    $('cAn').textContent = `order ${n} · ${fmt(pow(stA.mode === 'space' ? 7 : 5, n))} ${stA.mode === 'space' ? 'balls' : 'dots'}${stA.endless ? ' · zoom in forever' : ''}`;
+    $('sAv').textContent = `order ${n}`;
+    $('rAv').textContent = rfmt(rho);
+    $('turnAv').textContent = `${stA.turn}°`; $('tiltAv').textContent = `${stA.tilt}°`;
+    $('infoA').innerHTML = INFO_A[stA.mode];
+    $('dimA').textContent = `N = 7, 1/r = ${rfmt(rho)} · in space D = log 7/log ${rfmt(rho)} ${rho === 7 ? '= 1' : '≈ ' + dfmt(Dspace(rho))} · on the page N = 5, D = log 5/log ${rfmt(rho)} ≈ ${Dflat(rho).toFixed(4)}`;
+    $('rAa').textContent = fmt(pow(7, n));
+    $('rAb').textContent = fmt(pow(5, n));
+    $('rAc').textContent = dfmt(Dspace(rho));
+    $('rAd').textContent = dfmt(Dflat(rho));
+    aggMini('miniA', rho);
+    $('miniAfx').innerHTML = `N = 7, 1/r = ${rfmt(rho)}<br>5 dots on the page`;
+    if (refit) zA.refit(); else zA.schedule();
+  }
+  const markMA = stepButtons($('mA'), Object.keys(MODES_A), (k) => MODES_A[k], (k) => `Show: ${MODES_A[k]}`, (k) => { stA.mode = k; setA(true); });
+  const markSA = stepButtons($('sA'), [1, 2, 3, 4, 5], String, (n) => `Order ${n}`, (n) => { stA.order = n; setA(true); });
+  $('rAs').addEventListener('input', (e) => { stA.rho = +e.target.value; setA(true); });
+  $('endA').addEventListener('change', (e) => { stA.endless = e.target.checked; setA(false); });
+  $('turnAs').addEventListener('input', (e) => { stA.turn = +e.target.value; setA(false); });
+  $('tiltAs').addEventListener('input', (e) => { stA.tilt = +e.target.value; setA(false); });
+  $('plate95').addEventListener('click', () => {
+    Object.assign(stA, { mode: 'printed', order: 3, rho: 7, endless: false });
+    $('rAs').value = 7; $('endA').checked = false;
+    setA(true);
+  });
+
+  // ====================== Plate 96: a flat Fournier universe ======================
+  const stB = { order: 4, rho: 5, endless: false };
+  const zB = zoomable('wB', 'cB', (f) => {
+    const R = pow(stB.rho, stB.order);
+    return fitBox(f, { x0: -R, x1: R, y0: -R, y1: R }, 0.035);
+  }, (f, v) => {
+    const c = f.ctx;
+    paper(f, PRINT.paper);
+    c.setTransform(f.dpr, 0, 0, f.dpr, 0, 0);
+    c.fillStyle = PRINT.ink;
+    drawFlat(c, v, f.w, f.h, stB.rho, stB.order, stB.endless, 1.1);
+    toScreen(f);
+  }, { maxZoom: 100000 });
+  function setB(refit) {
+    markSB(stB.order);
+    const rho = stB.rho, n = stB.order, D = Dflat(rho);
+    $('cBt').textContent = rho === 5 && n === 4 && !stB.endless ? 'As printed' : 'The flat pattern';
+    $('cBn').textContent = `order ${n} · ${fmt(pow(5, n))} dots${stB.endless ? ' · zoom in forever' : ''}`;
+    $('sBv').textContent = `order ${n}`;
+    $('rBv').textContent = rfmt(rho);
+    $('dimB').textContent = `N = 5, 1/r = ${rfmt(rho)} · D = log 5/log ${rfmt(rho)} ${rho === 5 ? '= 1' : '≈ ' + dfmt(D)} · carried one order further than Plate 95`;
+    $('infoB').innerHTML = rho === 5
+      ? 'With 1/r = 5 the five balls shrink exactly as fast as they multiply: D = 1, Hoyle\'s value, in the plane for all to see.'
+      : `With 1/r = ${rfmt(rho)} the pattern keeps N = 5 but D = ${dfmt(D)}: any dimension below log 5/log 3 ≈ 1.4650 can be reached by spreading or crowding the same five balls.`;
+    $('rBa').textContent = fmt(pow(5, n));
+    $('rBb').textContent = dfmt(D);
+    $('rBc').textContent = `${rfmt(rho)}${'⁰¹²³⁴⁵⁶⁷⁸⁹'[n]} = ${fmt(Math.round(pow(rho, n)))}`;
+    $('rBd').innerHTML = `∝ R<sup>${dfmt(D)}</sup>`;
+    aggMini('miniB', rho);
+    $('miniBfx').innerHTML = `N = 5, 1/r = ${rfmt(rho)}<br>D = ${dfmt(D)}`;
+    if (refit) zB.refit(); else zB.schedule();
+  }
+  const markSB = stepButtons($('sB'), [1, 2, 3, 4, 5], String, (n) => `Order ${n}`, (n) => { stB.order = n; setB(true); });
+  $('rBs').addEventListener('input', (e) => { stB.rho = +e.target.value; setB(true); });
+  $('endB').addEventListener('change', (e) => { stB.endless = e.target.checked; setB(false); });
+  $('plate96').addEventListener('click', () => {
+    Object.assign(stB, { order: 4, rho: 5, endless: false });
+    $('rBs').value = 5; $('endB').checked = false;
+    setB(true);
+  });
+
+  // ====================== Chapter 9: mass, density and the dark sky ======================
+  // each universe for the M(R) chart: how its points are built, its per-order multiplier N and
+  // ratio rho (the guide lines are M = R^D and M = R^D/N)
+  const GENS_C = {
+    f7: { label: 'Fournier, N = 7', pts: () => massRadii(octahedral(5, 7), 3), N: 7, rho: 7, cap: 'N = 7 octahedral universe · orders 0 to 5' },
+    h5: { label: 'Flat, N = 5', pts: () => massRadii(quincunx(6, 5), 2), N: 5, rho: 5, cap: 'flat N = 5 universe · orders 0 to 6' },
+    p7: { label: "Plate 95's page pattern", pts: () => massRadii(quincunx(6, 7), 2), N: 5, rho: 7, cap: 'the printed pattern · orders 0 to 6' },
+  };
+  const stC = { mode: 'mass', gen: 'f7' };
+  const massCache = {};
+  const massOf = (g) => massCache[g] || (massCache[g] = GENS_C[g].pts());
+  const SKY_BINS = 1440;
+  let skyData = null;
+  function skyOf() {
+    if (skyData) return skyData;
+    const R = pow(5, 6);
+    const four = quincunx(6, 5), unif = uniformDisc(four.length / 2, R, 20261025);
+    const cover = (bins) => { let k = 0; for (const b of bins) k += b; return k / bins.length; };
+    const fb = skyBins(four, SKY_BINS), ub = skyBins(unif, SKY_BINS);
+    return (skyData = { R, four, unif, fb, ub, fCover: cover(fb), uCover: cover(ub) });
+  }
+  const SUP = (n) => String(n).replace(/\d/g, (d) => '⁰¹²³⁴⁵⁶⁷⁸⁹'[d]);
+  const zC = zoomable('wC', 'cC', (f) => fitBox(f, { x0: 0, x1: 1, y0: 0, y1: 1 }, 0), (f, v) => {
+    const c = f.ctx;
+    paper(f, PRINT.paper);
+    toScreen(f);
+    if (stC.mode === 'mass') {
+      const G = GENS_C[stC.gen], dist = massOf(stC.gen), D = log(G.N) / log(G.rho);
+      const ml = 56, mr = 14, mt = 14, mb = 36, iw = f.w - ml - mr, ih = f.h - mt - mb;
+      const lx0 = Math.log10(0.8), lx1 = Math.log10(dist[dist.length - 1]) + 0.25;
+      const ly0 = Math.log10(0.8), ly1 = Math.log10(dist.length) + 0.25;
+      const X = (u) => ml + ((Math.log10(u) - lx0) / (lx1 - lx0)) * iw;
+      const Y = (n) => mt + ih - ((Math.log10(n) - ly0) / (ly1 - ly0)) * ih;
+      c.strokeStyle = PRINT.rule; c.lineWidth = 1; c.strokeRect(ml, mt, iw, ih);
+      c.fillStyle = PRINT.muted; c.font = '500 10.5px "IBM Plex Mono", monospace'; c.textAlign = 'center'; c.textBaseline = 'top';
+      for (let e = 0; e <= Math.floor(lx1); e++) {
+        const x = ml + ((e - lx0) / (lx1 - lx0)) * iw;
+        c.strokeStyle = '#dddbd2'; c.beginPath(); c.moveTo(x, mt); c.lineTo(x, mt + ih); c.stroke();
+        c.fillText(`10${SUP(e)}`, x, mt + ih + 6);
+      }
+      c.textAlign = 'right'; c.textBaseline = 'middle';
+      for (let e = 0; e <= Math.floor(ly1); e++) {
+        const y = mt + ih - ((e - ly0) / (ly1 - ly0)) * ih;
+        c.strokeStyle = '#dddbd2'; c.beginPath(); c.moveTo(ml, y); c.lineTo(ml + iw, y); c.stroke();
+        c.fillText(`10${SUP(e)}`, ml - 6, y);
+      }
+      c.textAlign = 'center'; c.textBaseline = 'top'; c.fillText('radius R (order-0 balls = 1)', ml + iw / 2, f.h - 15);
+      c.save(); c.translate(14, mt + ih / 2); c.rotate(-Math.PI / 2); c.textBaseline = 'middle'; c.fillText('mass M(R)', 0, 0); c.restore();
+      // the two guide lines M = R^D and M = R^D/N, then the counted staircase between them
+      const uA = pow(10, lx0), uB = pow(10, lx1);
+      for (const [den, color] of [[1, PRINT.red], [G.N, PRINT.gray]]) {
+        c.strokeStyle = color; c.lineWidth = 1.4; c.setLineDash([6, 4]); c.beginPath();
+        c.moveTo(X(uA), Y(Math.max(0.8, pow(uA, D) / den)));
+        c.lineTo(X(uB), Y(pow(uB, D) / den));
+        c.stroke(); c.setLineDash([]);
+      }
+      c.strokeStyle = PRINT.ink; c.lineWidth = 2; c.lineJoin = 'round'; c.beginPath();
+      c.moveTo(X(0.8), Y(1));
+      let m = 1;
+      for (let i = 1; i < dist.length; i++) {
+        if (i + 1 < dist.length && dist[i + 1] - dist[i] < 1e-9) continue;
+        c.lineTo(X(dist[i]), Y(m)); c.lineTo(X(dist[i]), Y(i + 1)); m = i + 1;
+      }
+      c.lineTo(X(uB), Y(m));
+      c.stroke();
+      c.fillStyle = PRINT.red; c.textAlign = 'left'; c.textBaseline = 'top';
+      c.fillText(`M = R${D === 1 ? '' : SUP(0) + '·⁸²⁷'}  (slope D = ${D === 1 ? '1' : D.toFixed(4)})`, ml + 10, mt + 8);
+      c.fillStyle = PRINT.gray;
+      c.fillText(`sags to M = R${D === 1 ? '' : SUP(0) + '·⁸²⁷'}/${G.N}`, ml + 10, mt + 24);
+    } else {
+      const S = skyOf();
+      const cx = [f.w * 0.27, f.w * 0.73], cy = f.h * 0.46, rr = Math.min(f.w * 0.21, f.h * 0.36);
+      const draw = (k, pts, bins, label) => {
+        const s = (rr * 0.94) / S.R;
+        c.fillStyle = PRINT.ink;
+        for (let i = 0; i < pts.length; i += 2) {
+          const x = cx[k] + pts[i] * s, y = cy - pts[i + 1] * s;
+          c.fillRect(x - 0.5, y - 0.5, 1.1, 1.1);
+        }
+        c.strokeStyle = PRINT.rule; c.lineWidth = 1;
+        c.beginPath(); c.arc(cx[k], cy, rr, 0, 2 * Math.PI); c.stroke();
+        c.strokeStyle = PRINT.red; c.lineWidth = 5;
+        let b0 = -1;
+        for (let b = 0; b <= bins.length; b++) {
+          const on = b < bins.length && bins[b];
+          if (on && b0 < 0) b0 = b;
+          if (!on && b0 >= 0) {
+            const a0 = (b0 / bins.length) * 2 * Math.PI, a1 = (b / bins.length) * 2 * Math.PI;
+            c.beginPath(); c.arc(cx[k], cy, rr, -a1, -a0); c.stroke();
+            b0 = -1;
+          }
+        }
+        c.fillStyle = PRINT.muted; c.font = '600 12px "IBM Plex Mono", monospace'; c.textAlign = 'center'; c.textBaseline = 'top';
+        c.fillText(label, cx[k], cy + rr + 12);
+      };
+      draw(0, S.four, S.fb, `Fournier flat, D = 1 · sky ${(S.fCover * 100).toFixed(0)}% lit`);
+      draw(1, S.unif, S.ub, `uniform scatter, D = 2 · sky ${(S.uCover * 100).toFixed(0)}% lit`);
+    }
+  });
+  const MODES_C = { mass: 'Mass within R', sky: 'The sky from inside' };
+  const INFO_C = {
+    mass: 'Count the balls within distance R of the central one, on log paper. The count climbs the dashed line M = R<sup>D</sup>, sagging between aggregate radii exactly as the chapter says. The approximate density M(R)/R³ therefore dies away — the universe has no global density, only a dimension.',
+    sky: 'Stand on the central ball and mark every direction in which some other ball lies (red rim). In the Fournier universe whole reaches of the horizon stay black however many orders you add; scatter the same number of balls uniformly and almost every direction is lit — Kepler\'s "blazing sky". The marks here go down to the 15,625 balls shown; the limit set of lit directions only gets thinner relative to the dark gaps.',
+  };
+  function setC(refit) {
+    markMC(stC.mode); markGC(stC.gen);
+    $('genCwrap').hidden = stC.mode !== 'mass';
+    $('cCt').textContent = MODES_C[stC.mode];
+    $('infoC').innerHTML = INFO_C[stC.mode];
+    if (stC.mode === 'mass') {
+      const G = GENS_C[stC.gen], D = log(G.N) / log(G.rho);
+      $('cCn').textContent = G.cap;
+      $('rCa').textContent = dfmt(D);
+      $('rCb').innerHTML = `∝ R<sup>−${(3 - D).toFixed(D === 1 ? 0 : 2)}</sup>`;
+      $('rCc').textContent = $('rCd').textContent = '—';
+    } else {
+      const S = skyOf();
+      $('cCn').textContent = `${fmt(S.four.length / 2)} balls each, seen from the central ball`;
+      $('rCa').textContent = '1 and 2';
+      $('rCb').textContent = '—';
+      $('rCc').textContent = `${(S.fCover * 100).toFixed(1)}%`;
+      $('rCd').textContent = `${(S.uCover * 100).toFixed(1)}%`;
+    }
+    if (refit) zC.refit(); else zC.schedule();
+  }
+  const markMC = stepButtons($('mC'), Object.keys(MODES_C), (k) => MODES_C[k], (k) => `Show: ${MODES_C[k]}`, (k) => { stC.mode = k; setC(true); });
+  const markGC = stepButtons($('gC'), Object.keys(GENS_C), (k) => GENS_C[k].label, (k) => `Universe: ${GENS_C[k].label}`, (k) => { stC.gen = k; setC(false); });
+
+  setA(true); setB(true); setC(true);
+})();
+
+</script>
+
+</body>
+</html>
