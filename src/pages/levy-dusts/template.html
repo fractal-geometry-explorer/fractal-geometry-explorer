@@ -1,0 +1,277 @@
+<title>Spatial Lévy Dusts</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.r-two { aspect-ratio: 10 / 9; }
+.mini svg.gen { height: 70px; }
+.seedline { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.seedline .value { text-align: left; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 32, "Subordination; spatial Lévy dusts; ordered galaxies" · pages 288–300</p>
+    <h1><span class="plate-no">Plates 293–300</span><span class="lozenge" aria-hidden="true"></span><span>Spatial Lévy Dusts</span></h1>
+    <p class="dek">Mandelbrot's early model of galaxy clusters: a rocket jumps in random directions, and when the jump lengths follow the hyperbolic law Pr(U&gt;u) = u<sup>−D</sup>, its stopovers form a dust of any dimension D below 2 — clustered into seeming hierarchies although none was put in. The chapter builds these dusts by <i>subordination</i>: run Brownian motion, but keep only the moments in a fractal subset of time. Every figure here is computed from the rules in the captions; the random ones are seeded, matched to the plates statistically rather than point for point.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#bug"><b>293</b> The bug, opus 2</a>
+    <a href="#subord"><b>295</b> Nonrandom subordination</a>
+    <a href="#flight"><b>296–297</b> Lévy flight</a>
+    <a href="#cascade"><b>298</b> Decrease of D</a>
+    <a href="#zoom"><b>299</b> Zooming in</a>
+    <a href="#strip"><b>300</b> Circumnavigation</a>
+  </nav>
+
+  <!-- ===================== PLATE 293: THE BUG ===================== -->
+  <section class="plate" id="bug">
+    <div class="plate-head">
+      <p class="no">Plate 293 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>The computer "bug" as artist, opus 2</h2>
+      <p class="dim">a faulty run of the program behind Plate 69 · the strict order designed into that plate is hidden here</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wBug">
+          <canvas id="cBug" role="img" aria-label="A snowflake sweep drawn with a deliberate bug"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cBugT">Snowflake sweep, bugged</strong> · <span id="cBugN">stage 3</span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Plate 293 is the output of the program that was meant to draw the snowflake sweep of Plate 69, with a bug in it. Mandelbrot kept the recorded output after the bug was found and fixed: "the change that had been wrought by a single tiny bug in a critical place had gone well beyond anything we had expected", and the result "could pass for High Art". The book never says what the bug was, so the plate cannot be reproduced. Instead, this figure runs the same program — the 13-interval snowflake sweep, filled on one side — and lets you plant a bug of your own in a critical place: pick legs of the generator and corrupt how their copies are placed.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">The bug</span></div>
+          <div class="steps words" id="bugKind" role="group" aria-label="Which bug to plant"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Legs it hits</span><span class="value" id="bugLegV">leg 5</span></div>
+          <div class="steps" id="bugLeg" role="group" aria-label="Which legs the bug hits"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="bugSV">stage 3</span></div>
+          <div class="steps" id="bugS" role="group" aria-label="Stage"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn" id="bugNone">No bug (Plate 69's curve)</button>
+        </div>
+        <dl class="read">
+          <div><dt>Intervals</dt><dd id="bugRa">2,197</dd></div>
+          <div><dt>Self-contact</dt><dd id="bugRb">none</dd></div>
+        </dl>
+        <p class="note">The bug of the printed plate was never recorded, so this is an homage, not a reproduction: the same program, a different bug. The uncorrupted curve is exactly Plate 69's sweep (decoded on the Sweeps, Rivers and Trees page), drawn here with the region on its right filled solid; each bug flips the mirror or the direction of the chosen legs' copies, the kind of one-line slip the caption describes. The printed opus is on page 293 of the book, and opus 1 — a different accident — is Plate 246.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 295: NONRANDOM SUBORDINATION ===================== -->
+  <section class="plate" id="subord">
+    <div class="plate-head">
+      <p class="no">Plate 295 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Nonrandom subordination: a clustered dust with D&nbsp;=&nbsp;1</h2>
+      <p class="dim">N = 16, r = 1/16 · D = 1, subordinate to a Koch curve of D = 3/2 · subordinator D = log 16/log 64 = 2/3 · (2/3) × (3/2) = 1</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-two zoomable" id="w295">
+          <canvas id="c295" role="img" aria-label="The clustered fractal dust of Plate 295"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>Subordinate dust</strong> · stage <span id="c295s">2</span> · <span id="c295n">256 pieces</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Subordination, before any randomness: take the Koch generator of Plate 49 — eight legs of length 1/4, dimension log 8/log 4 = 3/2 — and imagine a rubber band stretched along it. Pin the nine corners, cut each leg in the middle, and let the 16 pieces snap back to their unstretched length 1/16. Repeat inside every piece. The limit is a dust with N = 16 and r = 1/16, so D = 1: the dimension of a line, in a set that is nothing like one. The only points kept are the positions of the Koch motion at a fractal subset of time of dimension log 16/log 64 = 2/3, and (2/3) × (3/2) = 1 is the rule of multiplication of dimensions.</p>
+        <div class="mini" aria-label="The generator, cut">
+          <svg class="gen" viewBox="-0.05 -0.4 1.1 0.8" aria-hidden="true" id="mini295"></svg>
+          <div class="fx">8 legs of 1/4, each cut<br>16 pieces of 1/16 · D = 1</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="s295v">stage 2</span></div>
+          <div class="steps" id="s295" role="group" aria-label="Stage"></div>
+          <label class="check" for="under295"><input type="checkbox" id="under295"> Show the Koch curve the dust rides on</label>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate295">Show Plate 295 as printed</button>
+        </div>
+        <dl class="read">
+          <div><dt>Pieces</dt><dd id="r295a">256</dd></div>
+          <div><dt>Dimension</dt><dd>16 · (1/16)<sup>D</sup> = 1 → D = 1</dd></div>
+          <div><dt>Largest gap law</dt><dd id="r295b">—</dd></div>
+          <div><dt>Topology</dt><dd>a dust (D<sub>T</sub> = 0)</dd></div>
+        </dl>
+        <p class="note">This figure matches the printed plate exactly: the scan's 137 marks are the stage-2 pieces — nine clusters per stage-1 piece, one for each corner of the generator, with the seven interior corners shared between neighbouring pieces (16 × 9 − 7 = 137) — and every mark sits on the computed dust to about a milliradius of the figure. The caption's frequency law for the snap-back gaps, Nr(G ≥ u) ∝ u<sup>−1</sup>, is verified numerically in the readout.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATES 296–297: LEVY FLIGHT ===================== -->
+  <section class="plate" id="flight">
+    <div class="plate-head">
+      <p class="no">Plates 296 and 297, caption on page 294 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Lévy flight and its stopovers: model clusters with D&nbsp;=&nbsp;1.2600</h2>
+      <p class="dim">jumps isotropic in space, lengths Pr(U&gt;u) = u<sup>−D</sup> for u ≥ 1 · D = 1.26, near the D ≈ 1.23 of actual galaxies</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wFl">
+          <canvas id="cFl" role="img" aria-label="A Lévy flight's trail and its stopovers"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cFlT">Trail, and stopovers in negative</strong> · <span id="cFlN">10,000 stopovers</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">A Lévy flight in 3-space: from each stopover the rocket jumps in a random, isotropic direction, and the jump length obeys the hyperbolic law above. Two independent flights leave the origin, standing for one flight watched forward and backward in time, so every stopover has the same claim to be the Center of the World — the conditional cosmographic principle. The top figure draws the trail with its "contrails"; the bottom figure wipes the jumps away, takes a photographic negative, and each remaining cell of a fine grid is a star or a galaxy. The plates are the projections of one flight on two perpendicular planes: the book suggests holding it half open to see the cluster in space.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="flMode" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Projection</span></div>
+          <div class="steps words" id="flProj" role="group" aria-label="Projection plane"></div>
+        </div>
+        <label class="slider" for="flD">
+          <span class="label-row"><span class="label">Dimension of the jump law</span><span class="value" id="flDv">D = 1.26</span></span>
+          <input type="range" id="flD" min="50" max="200" value="126">
+        </label>
+        <div class="group">
+          <div class="label-row"><span class="label">Stopovers</span></div>
+          <div class="steps" id="flN" role="group" aria-label="Number of stopovers"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate296">Show Plate 296 as printed</button>
+          <button type="button" class="btn" id="plate297">Plate 297</button>
+          <button type="button" class="btn" id="flSeed">New seed</button>
+        </div>
+        <p class="readline" id="flInfo" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Measured D</dt><dd id="flRa">—</dd></div>
+          <div><dt>Longest jump</dt><dd id="flRb">—</dd></div>
+        </dl>
+        <p class="note">A random plate: the match is statistical, not stroke for stroke. The seed is shown and can be rerolled; the presets use a fixed seed. The measured D fits log M(R) against log R around the origin — the caption's claim that the number of stopovers within distance R grows like R<sup>D</sup>. At D = 2 the law loses its infinite variance and the flight becomes Rayleigh-like; the clusters dissolve.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 298: DECREASE OF D ===================== -->
+  <section class="plate" id="cascade">
+    <div class="plate-head">
+      <p class="no">Plate 298 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Decrease of D by subordination</h2>
+      <p class="dim">a planar Brown trail, D = 2, decimated again and again · subordinator D = 2<sup>−1/6</sup> ≈ 0.89 · D = 1.78, 1.59, 1.41, 1.26, 1.12, 1.00, 0.89</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wCas">
+          <canvas id="cCas" role="img" aria-label="Subordinate dusts of a Brownian trail"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cCasT">Subordinate dust</strong> · <span id="cCasN">D = 1.78</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Start from a planar Brownian trail, whose dimension is 2. Keep only the moments of time in a linear Lévy dust of dimension α = 2<sup>−1/6</sup> ≈ 0.89, and the trail's dimension drops to 2α = 1.78. Ride a second decimation on the first and it drops to 1.59; each further subordination multiplies D by 0.89, down to 0.89 itself. For D close to 2 a "ghost" of the continuous Brown trail still shows; as D falls, clustering sharpens — not because points concentrate, but because most points disappear, leaving ever more apparent hierarchic levels. The black staircase beside each dust is the Lévy staircase: how time was decimated to make this dust from its predecessor.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Dust</span><span class="value" id="casV">D = 1.78</span></div>
+          <div class="steps" id="casS" role="group" aria-label="Which subordinate dust"></div>
+          <label class="check" for="casStair"><input type="checkbox" id="casStair" checked> Lévy staircase beside the dust, as printed</label>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate298">Show Plate 298 as printed</button>
+          <button type="button" class="btn" id="casSeed">New seed</button>
+        </div>
+        <p class="readline" id="casInfo" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Points kept</dt><dd id="casRa">—</dd></div>
+          <div><dt>Measured D</dt><dd id="casRb">—</dd></div>
+        </dl>
+        <p class="note">The D = 1.00 view is, by construction, a Cauchy flight's dust — the text's example of subordination, where the "humorless" sections of a Brownian trail in 4-space have dimension exactly 1. The plate prints seven panels from one experiment; here one canvas steps through the same seven dusts of one seeded trail, so each is genuinely a decimation of the one before.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 299: ZOOM ===================== -->
+  <section class="plate" id="zoom">
+    <div class="plate-head">
+      <p class="no">Plate 299 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Zooming toward a Lévy dust with D&nbsp;=&nbsp;1.2600</h2>
+      <p class="dim">each step divides the field of vision by b = 3 · the detail changes, the broad lines do not</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wZm">
+          <canvas id="cZm" role="img" aria-label="A planar Lévy dust seen through shrinking windows"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>Lévy dust, D = 1.26</strong> · <span id="cZmN">view 1 of 6</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The book's six windows are one planar Lévy cluster of 12,500,000 positions seen from a spaceship that closes in: between views, the distance and the field of vision divide by b = 3. Because the dust is statistically self-similar, the structure in the window changes in detail but stays the same in kind. Here the same experiment runs live: step from view to view, or pan and zoom freely; the square marks the next window.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">View</span><span class="value" id="zmV">view 1 · whole cluster</span></div>
+          <div class="steps" id="zmS" role="group" aria-label="Which window"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Positions</span></div>
+          <div class="steps" id="zmN" role="group" aria-label="Number of positions"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate299">Show Plate 299 as printed</button>
+          <button type="button" class="btn" id="zmSeed">New seed</button>
+        </div>
+        <p class="readline" id="zmInfo" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Stopovers in view</dt><dd id="zmRa">—</dd></div>
+          <div><dt>Window side</dt><dd id="zmRb">—</dd></div>
+        </dl>
+        <p class="note">The printed cluster used 12.5 million positions on a 1970s mainframe; this page defaults to 2 million so phones keep up, with 8 million a tap away. Each view recentres on the flight's origin, as the plate recentres on the cluster. Expect about 3<sup>−1.26</sup> ≈ 1/4 of the stopovers to survive each step into the next window.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 300: CIRCUMNAVIGATION ===================== -->
+  <section class="plate" id="strip">
+    <div class="plate-head">
+      <p class="no">Plate 300 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Circumnavigation of Lévy clusters, D&nbsp;=&nbsp;1.3000</h2>
+      <p class="dim">one spatial cluster, many directions of view · the shape is highly sample dependent</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wNav">
+          <canvas id="cNav" role="img" aria-label="A spatial Lévy cluster viewed from a moving direction"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>Spatial Lévy cluster</strong> · <span id="cNavN">view 1 of 7</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">A small, isolated spatial Lévy cluster looks very different from different directions — as different as two fresh simulations of the same dimension. The book prints a "strip" of seven views to be followed clockwise around the plate; here the same cluster turns under a slider, or steps through the strip's seven directions.</p>
+        <label class="slider" for="navA">
+          <span class="label-row"><span class="label">Direction of view</span><span class="value" id="navAv">0°</span></span>
+          <input type="range" id="navA" min="0" max="360" value="0">
+        </label>
+        <div class="group">
+          <div class="label-row"><span class="label">The strip's views</span></div>
+          <div class="steps" id="navS" role="group" aria-label="Which of the seven views"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate300">Show Plate 300 as printed</button>
+          <button type="button" class="btn" id="navSeed">New seed</button>
+        </div>
+        <p class="readline" id="navInfo" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Stopovers</dt><dd id="navRa">—</dd></div>
+          <div><dt>Measured D</dt><dd id="navRb">—</dd></div>
+        </dl>
+        <p class="note">Random, matched statistically: the printed strip's own sample cannot be recovered, so the seed here is fixed but arbitrary. The projection is orthographic, turning about the vertical axis through the cluster's centre of mass, with the grid-cell rendering of Plates 296–297.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 32, pages 288–300 (Plates 293 to 300). Every figure is computed from the rules in the captions; Plate 295 is reproduced exactly, the Lévy flights are seeded statistical matches, and Plate 293's bug is an homage, as noted under each figure. Companion pages: <a href="https://claude.ai/artifact/QxRja4otEyH8dMeU8Uy4UY" target="_blank" rel="noopener">Sweeps, Rivers and Trees</a> (Plate 69, whose program the bug corrupted), <a href="https://claude.ai/artifact/91wGC9EtnwxZp8MZJ4MF6N" target="_blank" rel="noopener">Quadric Koch Islands</a> (Plate 49, whose generator Plate 295 subordinates) and <a href="https://claude.ai/artifact/RvpGQi3Td4y7gZnjM1pukG" target="_blank" rel="noopener">Wiener Sausage</a> (Brownian motion, the subordinand).</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>
