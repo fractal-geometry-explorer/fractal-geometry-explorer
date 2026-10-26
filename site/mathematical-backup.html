@@ -1,0 +1,1385 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mathematical Backup</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>
+/* Layout: five concept sections (self-affinity, covering and dimension, Lévy stability, R/S analysis, Weierstrass), each a computed figure beside its caption, then a guide to the chapter's remaining entries; a sticky index on top. One column under 900px. */
+:root {
+  --page: #e4e5e1;
+  --text: #1b1d1f;
+  --muted: #595e64;
+  --rule: #c4c7c1;
+  --surface: #f6f6f3;
+  --accent: #285895;
+  --f-display: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Newsreader", Georgia, "Times New Roman", serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* the figures are reproductions of printed plates, so their paper and inks stay the same in both themes */
+  --print-paper: #ecebe6;
+  --print-ink: #151515;
+  --print-rule: #c9c8c2;
+  --gain: rgba(47, 95, 158, 0.42);
+  --loss: rgba(186, 88, 44, 0.42);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --page: #111214; --text: #e5e5e1; --muted: #9a9fa6; --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --page: #111214; --text: #e5e5e1; --muted: #9a9fa6; --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--page); color: var(--text); font-family: var(--f-display); font-size: 14px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
+.wrap {
+  max-width: 1180px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 36px 64px;
+  display: grid; gap: 40px;
+}
+header.top { display: grid; gap: 10px; max-width: 820px; }
+.eyebrow { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+h1 {
+  margin: 0; display: flex; align-items: center; flex-wrap: wrap; gap: 0.18em 0.42em;
+  font-weight: 800; font-size: clamp(30px, 5.4vw, 54px); line-height: 1.02; letter-spacing: 0.01em; text-transform: uppercase; text-wrap: balance;
+}
+h1 .plate-no { font-weight: 600; text-transform: none; letter-spacing: 0; }
+.lozenge { display: inline-block; width: 0.42em; height: 0.42em; border: 0.075em solid currentColor; position: relative; top: -0.02em; }
+.lozenge::after { content: ""; position: absolute; inset: 0.1em; border: 0.05em solid currentColor; }
+.dek { margin: 0; font-family: var(--f-body); font-size: 19px; line-height: 1.45; max-width: 64ch; }
+
+nav.index {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+  padding: 10px max(16px, env(safe-area-inset-right, 0px)) 10px max(16px, env(safe-area-inset-left, 0px));
+  background: var(--page); border-bottom: 1px solid var(--rule);
+  display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none;
+}
+nav.index a {
+  flex: none; display: inline-flex; gap: 8px; align-items: baseline; padding: 6px 10px;
+  border: 1px solid var(--rule); background: var(--surface); color: var(--text); text-decoration: none; font-size: 13px; font-weight: 600;
+}
+nav.index a b { font-family: var(--f-mono); font-weight: 500; color: var(--accent); }
+nav.index a:hover { border-color: var(--text); }
+
+section.plate { display: grid; gap: 18px; scroll-margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--rule); }
+.plate-head { display: grid; gap: 4px; }
+.plate-head .no { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.plate-head h2 { margin: 0; font-size: clamp(22px, 3vw, 30px); font-weight: 800; line-height: 1.1; text-transform: uppercase; letter-spacing: 0.01em; text-wrap: balance; }
+.plate-head .dim { margin: 0; font-family: var(--f-mono); font-size: 13px; color: var(--muted); }
+.plate-body { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(280px, 1fr); gap: 32px; align-items: start; }
+@media (max-width: 899px) { .plate-body { grid-template-columns: minmax(0, 1fr); gap: 20px; } }
+figure.fig { margin: 0; display: grid; gap: 8px; min-width: 0; }
+.canvas-wrap { position: relative; width: 100%; max-width: 100%; background: var(--print-paper); outline: 1px solid var(--rule); overflow: hidden; }
+.canvas-wrap canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.r-sq { aspect-ratio: 1 / 1; }
+.r-lox { aspect-ratio: 5 / 4; }
+.zoomable { cursor: grab; touch-action: pan-y; }
+.zoomable.dragging { cursor: grabbing; }
+.view-tools { position: absolute; top: 10px; right: 10px; display: flex; gap: 6px; z-index: 2; }
+.view-tools button { min-width: 34px; height: 34px; padding: 0 10px; font: 600 15px/1 var(--f-display); color: var(--print-ink); background: #f7f7f3; border: 1px solid var(--print-rule); cursor: pointer; }
+figcaption { font-size: 13px; color: var(--muted); }
+figcaption strong { color: var(--text); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+
+.side { display: grid; gap: 18px; min-width: 0; align-content: start; }
+.side p.cap { margin: 0; font-family: var(--f-body); font-size: 17px; line-height: 1.55; max-width: 62ch; }
+.group { display: grid; gap: 8px; min-width: 0; }
+.label-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.label { font-size: 11.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.value { font-family: var(--f-mono); font-size: 12.5px; font-variant-numeric: tabular-nums; text-align: right; }
+.steps { display: flex; flex-wrap: wrap; gap: 6px; }
+.steps button {
+  min-width: 38px; height: 34px; padding: 0 10px; font: 600 13px/1 var(--f-mono); color: var(--text);
+  background: var(--surface); border: 1px solid var(--rule); cursor: pointer;
+}
+.steps.words button { font: 600 13px/1 var(--f-display); }
+.steps button[aria-pressed="true"] { background: var(--text); color: var(--page); border-color: var(--text); }
+.steps button:hover { border-color: var(--text); }
+.steps button:disabled { opacity: 0.35; cursor: default; border-color: var(--rule); }
+.btn-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.btn { padding: 8px 12px; font: 600 13px/1.2 var(--f-display); color: var(--text); background: var(--surface); border: 1px solid var(--rule); cursor: pointer; }
+.btn:hover { border-color: var(--text); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--page); }
+.check { display: flex; align-items: flex-start; gap: 8px; font-size: 13.5px; cursor: pointer; }
+.check input { accent-color: var(--accent); width: 16px; height: 16px; margin: 1px 0 0; flex: none; }
+.check:has(input:disabled) { opacity: 0.45; cursor: default; }
+.slider { display: grid; gap: 4px; }
+.slider input { width: 100%; accent-color: var(--accent); margin: 0; }
+.slider input:disabled { opacity: 0.4; }
+dl.read { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; padding-top: 14px; border-top: 1px solid var(--rule); }
+dl.read div { display: grid; gap: 2px; min-width: 0; }
+dl.read dt { font-size: 10.5px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); }
+dl.read dd { margin: 0; font-family: var(--f-mono); font-size: 16px; overflow-wrap: anywhere; }
+dl.read dd small { font-size: 11.5px; color: var(--muted); }
+.note { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.mini { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; padding: 10px 12px; background: var(--print-paper); border: 1px solid var(--print-rule); color: var(--print-ink); }
+.mini svg { height: 64px; width: auto; max-width: 100%; }
+.mini .fx { font-family: var(--f-mono); font-size: 12px; line-height: 1.6; color: var(--print-ink); }
+.key { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--muted); }
+.key span { display: inline-flex; align-items: center; gap: 6px; }
+.key i { width: 14px; height: 10px; display: inline-block; border: 1px solid var(--print-rule); }
+.readline { min-height: 2.9em; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.readline b { color: var(--text); font-weight: 700; }
+
+.sub { display: grid; gap: 14px; padding-top: 22px; border-top: 1px dashed var(--rule); scroll-margin-top: 64px; }
+.sub h3 { margin: 0; font-size: 15px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
+.source { font-family: var(--f-body); font-size: 15px; color: var(--muted); margin: 0; max-width: 84ch; }
+.source i { color: var(--text); }
+.source a { color: var(--accent); }
+button:focus-visible, input:focus-visible, a:focus-visible, canvas:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.r-tall { aspect-ratio: 7 / 6; }
+.r-chart { aspect-ratio: 16 / 10; }
+.entries { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px 32px; }
+.entries p { margin: 0; font-family: var(--f-body); font-size: 15.5px; line-height: 1.5; }
+.entries p b { font-family: var(--f-display); font-size: 12.5px; letter-spacing: 0.05em; text-transform: uppercase; display: block; margin-bottom: 2px; }
+</style>
+<style>
+body { margin: 0; }
+/* The hidden attribute must beat the pages' own display rules (.slider, .check, ...). The artifact
+   wrapper's stylesheet used to provide this; self-hosted pages carry it themselves. */
+[hidden] { display: none !important; }
+nav.shell { font-family: var(--f-display); font-size: 12.5px; font-weight: 600; background: var(--page);
+  border-bottom: 1px solid var(--rule); display: flex; align-items: center; gap: 6px 18px;
+  padding: 9px max(16px, env(safe-area-inset-right, 0px)) 9px max(16px, env(safe-area-inset-left, 0px)); }
+nav.shell a { color: var(--text); text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+nav.shell a:hover { color: var(--accent); }
+nav.shell .home { letter-spacing: 0.07em; text-transform: uppercase; flex: none; }
+nav.shell .gap { flex: 1; }
+nav.shell .pn { color: var(--muted); font-weight: 500; }
+nav.shell .pn b { color: var(--text); font-weight: 600; }
+nav.shell a:hover .pn, nav.shell a:hover .pn b { color: var(--accent); }
+</style>
+</head>
+<body>
+<nav class="shell" aria-label="Site"><a class="home" href="index.html">Fractal Geometry Explorer</a><span class="gap"></span><a rel="prev" href="power-laws.html"><span class="pn">&#8592; <b>Chapter 38</b></span></a><a rel="next" href="biographical-sketches.html"><span class="pn"><b>Pages 391–404</b> &#8594;</span></a></nav>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 39, "Mathematical Backup and Addenda" · pages 349–390</p>
+    <h1><span class="plate-no">Chapter 39</span><span class="lozenge" aria-hidden="true"></span><span>Mathematical Backup</span></h1>
+    <p class="dek">The book ends on a mathematical dictionary: "complicated formulas and mathematical definitions and references, avoided elsewhere, are brought together in this chapter." Its forty-two pages print no plates at all — only nineteen alphabetical entries, from self-affinity to the Weierstrass function. This page computes the entries that can be drawn: what self-affine means, how a covering by balls defines dimension, what Lévy stability does to sums, how R/S reads long-run dependence, and why the Weierstrass function had to be repaired twice.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#affine"><b>1</b> Self-affinity</a>
+    <a href="#cover"><b>2</b> Covering and dimension</a>
+    <a href="#stable"><b>3</b> Lévy stability</a>
+    <a href="#rs"><b>4</b> R/S analysis</a>
+    <a href="#weierstrass"><b>5</b> Weierstrass</a>
+    <a href="#entries"><b>6</b> The other entries</a>
+  </nav>
+
+  <!-- ===================== 1 · SELF-SIMILARITY AND SELF-AFFINITY ===================== -->
+  <section class="plate" id="affine">
+    <div class="plate-head">
+      <p class="no">Pages 349–356 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Self-similar and self-affine</h2>
+      <p class="dim" id="dimA">B&#8205;<sub>H</sub>: scale t by h, X by h<sup>H</sup> · graph D = 2 − H · zeroset D = 1 − H</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-tall zoomable" id="wA">
+          <canvas id="cA" role="img" aria-label="A fractional Brown function and a rescaled piece of it"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cAt">Rescaling a piece</strong> · <span id="cAn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">A similarity shrinks every coordinate by the same ratio r; an <i>affinity</i> gives each coordinate its own ratio. The chapter's first entry fixes both words, because the graph of a Brown function can never be self-similar: time and height are different quantities. It is <i>self-affine</i> — take the piece over [0,&#8202;h], stretch time by 1/h and height by 1/h<sup>H</sup>, and the result is statistically indistinguishable from the whole. That holds for exactly one exponent: the H the function was built with. The entry BROWN FRACTAL SETS catalogues these functions; H = 1/2 is ordinary Brownian motion, H ≠ 1/2 the fractional ones of chapter 27, persistent above 1/2 and antipersistent below.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mA" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">The function's exponent H</span><span class="value" id="hAv"></span></div>
+          <input type="range" id="hAs" min="0.1" max="0.9" step="0.05" value="0.5" aria-label="Exponent H">
+        </div>
+        <div class="group" id="aWrap">
+          <div class="label-row"><span class="label">Take the piece over [0, h]</span></div>
+          <div class="steps" id="wAs" role="group" aria-label="Window h"></div>
+          <div class="slider">
+            <div class="label-row"><span class="label">Height rescaling power α</span><span class="value" id="aAv"></span></div>
+            <input type="range" id="aAs" min="0.05" max="1" step="0.01" value="0.5" aria-label="Rescaling exponent alpha">
+          </div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="presetA">The Brown case: H = 1/2, α = H</button>
+          <button type="button" class="btn" id="seedA">New sample</button>
+        </div>
+        <p class="readline" id="infoA" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Graph dimension</dt><dd id="rAa">1.5</dd></div>
+          <div><dt>Zeroset dimension</dt><dd id="rAb">0.5</dd></div>
+          <div><dt>Past × future correlation</dt><dd id="rAc">0</dd></div>
+          <div><dt>Height ratio, piece / whole</dt><dd id="rAd">—</dd></div>
+        </dl>
+        <p class="note">The chapter prints no figure, so this one is the page's own illustration of the entry. The sample is drawn by circulant embedding (Davies &amp; Harte), which gives the increments their exact covariance — not the approximate midpoint trick of chapter 26. The correlation readout is the entry's formula 2<sup>2H−1</sup> − 1 for the correlation between past and future increments: zero only in the Brown case, and independent of t — which the entry notes "most students of randomness begin by being surprised" about.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 2 · DIMENSION FROM COVERINGS ===================== -->
+  <section class="plate" id="cover">
+    <div class="plate-head">
+      <p class="no">Pages 356–365 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Covering by balls, and the dimension in the jump</h2>
+      <p class="dim" id="dimB">N(ρ) balls of radius ρ · log N(ρ)/log(1/ρ) → D · the d-measure jumps from ∞ to 0 at d = D</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-chart zoomable" id="wB">
+          <canvas id="cB" role="img" aria-label="A fractal set covered by balls, and the Hausdorff measure jump"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cBt">Covering</strong> · <span id="cBn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Every acceptable fractal dimension is metric, not topological: it comes from covering the set with balls of radius ρ. Counting the most economical cover gives N(ρ), and log&#8202;N(ρ)/log(1/ρ) settles toward a limit as ρ shrinks. Hausdorff went further: weigh each ball by the test function h(ρ) = γ(d)ρ<sup>d</sup> — the volume a ball of radius ρ <i>would</i> have in dimension d — and add. Besicovitch proved the striking law: for every set there is one critical D such that the total is infinite for every d &lt; D and zero for every d &gt; D. That jump <em>is</em> the Hausdorff–Besicovitch dimension, and "to a physicist, this definition means that D is a critical dimension."</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mB" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">The set</span></div>
+          <div class="steps words" id="setB" role="group" aria-label="Which set"></div>
+        </div>
+        <div class="group" id="sBwrap">
+          <div class="label-row"><span class="label">Stage (smaller balls)</span><span class="value" id="sBv"></span></div>
+          <div class="steps" id="sB" role="group" aria-label="Stage"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="presetB">Cover the Koch curve</button>
+        </div>
+        <p class="readline" id="infoB" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Balls N(ρ)</dt><dd id="rBa">—</dd></div>
+          <div><dt>Radius ρ</dt><dd id="rBb">—</dd></div>
+          <div><dt>log N / log (1/ρ)</dt><dd id="rBc">—</dd></div>
+          <div><dt>Exact D</dt><dd id="rBd">—</dd></div>
+        </dl>
+        <p class="note">The covering drawn here is the natural one — one ball per stage-n piece of the construction, the smallest ball holding its piece — not provably the minimal N(ρ), which is why the counted exponent approaches D from a distance. The measure chart uses the chapter's own γ(d) = [Γ(1/2)]<sup>d</sup>/Γ(1 + d/2); the curves for shrinking ρ pivot about d = D because N·ρ<sup>D</sup> is constant for an exactly self-similar set. Both figures are this page's illustrations; the chapter prints none.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 3 · LÉVY STABILITY ===================== -->
+  <section class="plate" id="stable">
+    <div class="plate-head">
+      <p class="no">Pages 367–373 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Lévy stable random variables</h2>
+      <p class="dim" id="dimC">s₁X₁ + s₂X₂ = sX with s₁<sup>D</sup> + s₂<sup>D</sup> = s<sup>D</sup> · long tails ∝ x<sup>−D−1</sup> · closed forms only at Gauss, Cauchy and D = 1/2</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-chart zoomable" id="wC">
+          <canvas id="cC" role="img" aria-label="Lévy stable probability densities"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cCt">The density</strong> · <span id="cCn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The Gaussian is "scaling under addition": the sum of two independent copies is again Gaussian. Paul Lévy asked which other laws satisfy the same functional equation, s₁X₁ + s₂X₂ = sX, with the sizes balanced by s₁<sup>D</sup> + s₂<sup>D</sup> = s<sup>D</sup>, and found a family for every exponent 0 &lt; D ≤ 2 and skewness −1 ≤ β ≤ 1. "Until my work, the stable variables were deemed 'pathological' or even 'monstrous'" — yet for D &lt; 2 their long tails follow exactly the hyperbolic law of chapter 38, which is why they rule Lévy dusts and flights, cotton prices and the Holtsmark attraction of the stars. The second figure draws the entry's strangest consequence: given a large sum, the most likely split is not half-and-half but one addend taking nearly all of it.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mC" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Exponent D</span><span class="value" id="dCv"></span></div>
+          <input type="range" id="dCs" min="0.5" max="2" step="0.01" value="1" aria-label="Exponent D">
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Skewness β</span><span class="value" id="bCv"></span></div>
+          <input type="range" id="bCs" min="-1" max="1" step="0.05" value="0" aria-label="Skewness beta">
+        </div>
+        <div class="slider" id="uWrap" hidden>
+          <div class="label-row"><span class="label">The observed sum u</span><span class="value" id="uCv"></span></div>
+          <input type="range" id="uCs" min="0" max="8" step="0.1" value="3" aria-label="Observed sum u">
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="preC">Cauchy: D = 1</button>
+          <button type="button" class="btn" id="preG">Gauss: D = 2</button>
+          <button type="button" class="btn" id="preL">Brown recurrence: D = 1/2, β = 1</button>
+        </div>
+        <p class="readline" id="infoC" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Long tail</dt><dd id="rCa">—</dd></div>
+          <div><dt>Mean ⟨X⟩</dt><dd id="rCb">—</dd></div>
+          <div><dt>Variance ⟨X²⟩</dt><dd id="rCc">—</dd></div>
+          <div><dt>Closed form</dt><dd id="rCd">—</dd></div>
+        </dl>
+        <p class="note">Outside D = 2, (D = 1, β = 0) and (D = 1/2, β = 1) no closed form exists, so the curves are computed by inverting the characteristic function with a fast Fourier transform — the method the entry itself recommends as making "this task much lighter". Where a closed form exists, it is overlaid dashed as a check (the curves agree to within plotting accuracy). The extreme asymmetric case β = 1 with D &lt; 1 vanishes for x &lt; 0, as the entry states: it is the stable subordinator behind the Lévy staircase of Plate 286.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 4 · R/S ANALYSIS ===================== -->
+  <section class="plate" id="rs">
+    <div class="plate-head">
+      <p class="no">Pages 385–387 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Statistical analysis using R/S</h2>
+      <p class="dim" id="dimD">Q(d) = R(d)/S(d) ∝ d<sup>J</sup> · J = 1/2: no long-run dependence · J = H for fractional Gauss noise · robust when ⟨X²⟩ = ∞</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-chart zoomable" id="wD">
+          <canvas id="cD" role="img" aria-label="A sample record and its rescaled-range pox plot"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cDt">R/S pox plot</strong> · <span id="cDn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Two assumptions were "a matter of course" in practical statistics: finite variance, and short-run dependence. Mandelbrot's case studies broke both, so correlations and spectra — which assume ⟨X²⟩ &lt; ∞ — could not measure the long-run dependence he had injected to explain the Hurst phenomenon. His alternative is the <i>rescaled range</i>: over each span of length d, take the running sum, detrend it by its own bridge, and divide its range R by the span's standard deviation S. If R/S grows like d<sup>J</sup>, the exponent J — the Hurst coefficient — reads off long-run dependence while staying "robust with respect to the marginal distribution": even a wild infinite-variance noise gives J = 1/2 as long as it has no memory.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">The record X(t)</span></div>
+          <div class="steps words" id="pD" role="group" aria-label="Which process"></div>
+        </div>
+        <div class="slider" id="hDwrap">
+          <div class="label-row"><span class="label">Exponent H of the noise</span><span class="value" id="hDv"></span></div>
+          <input type="range" id="hDs" min="0.1" max="0.9" step="0.05" value="0.7" aria-label="Exponent H">
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="presetD">The Hurst case: fractional noise, H = 0.7</button>
+          <button type="button" class="btn" id="seedD">New sample</button>
+        </div>
+        <p class="readline" id="infoD" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Fitted J</dt><dd id="rDa">—</dd></div>
+          <div><dt>J in theory</dt><dd id="rDb">—</dd></div>
+          <div><dt>Variance of the law</dt><dd id="rDc">—</dd></div>
+          <div><dt>Sample length</dt><dd id="rDd">2,048</dd></div>
+        </dl>
+        <p class="note">Each dot is one span's R/S; the line is fitted through the mean at each lag. On samples this short the fit sits a few hundredths above the theoretical J (the small-lag transient that Mandelbrot 1975w handles by proof rather than by fitting) — rerun with new samples to see the spread. The Lévy record uses a symmetric stable noise with D = 1.5, whose variance is infinite: correlations would be meaningless on it, yet J stays near 1/2. The chapter prints no figure for this entry either.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 5 · WEIERSTRASS ===================== -->
+  <section class="plate" id="weierstrass">
+    <div class="plate-head">
+      <p class="no">Pages 388–390 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Weierstrass functions and kin</h2>
+      <p class="dim" id="dimE">W₀(t) = (1−w²)<sup>−1/2</sup> Σ₀<sup>∞</sup> wⁿ exp(2πibⁿt) · w = b<sup>−H</sup> · graph D = 2 − H, conjectured</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-chart zoomable" id="wE">
+          <canvas id="cE" role="img" aria-label="The Weierstrass function and its variants"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cEt">Weierstrass cosine</strong> · <span id="cEn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Weierstrass's function — a sum of cosines at frequencies b, b², b³, … with amplitudes wⁿ = b<sup>−Hn</sup> — is continuous but nowhere differentiable. The entry retells both facts as spectral catastrophes. Differentiating multiplies each amplitude by its frequency, and the resulting energy diverges at high frequencies: the same <i>ultraviolet catastrophe</i> that killed blackbody theory around 1900, "the same divergence killed the old physics and the old mathematics". And the original series starts at frequency 1, which clashes with scaling at the low end; letting n run to −∞ cures it but diverges — the <i>infrared catastrophe</i> — unless one first subtracts W(0). The repaired W₁ is exactly self-affine about t = 0: squeeze time by b, shrink height by w, and the curve maps onto itself.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mE" role="group" aria-label="Which variant"></div>
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Dimension D (H = 2 − D)</span><span class="value" id="dEv"></span></div>
+          <input type="range" id="dEs" min="1.05" max="1.95" step="0.05" value="1.5" aria-label="Dimension D">
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Base b</span><span class="value" id="bEv"></span></div>
+          <input type="range" id="bEs" min="1.2" max="4" step="0.1" value="1.5" aria-label="Base b">
+        </div>
+        <div class="group" id="zWrap">
+          <div class="label-row"><span class="label">Rescale: t → bᵐt, X → wᵐX</span><span class="value" id="zEv"></span></div>
+          <div class="steps" id="zE" role="group" aria-label="Rescaling power m"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="presetE">b = 1.5, D = 1.5</button>
+          <button type="button" class="btn" id="seedE" hidden>New randomization</button>
+        </div>
+        <p class="readline" id="infoE" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>H</dt><dd id="rEa">—</dd></div>
+          <div><dt>w = b⁻ᴴ</dt><dd id="rEb">—</dd></div>
+          <div><dt>Graph D (conjectured)</dt><dd id="rEc">—</dd></div>
+          <div><dt>Zeroset D (conjectured)</dt><dd id="rEd">—</dd></div>
+        </dl>
+        <p class="note">The curves are partial sums cut only where a term's wavelength falls below a pixel, so zooming the rescale buttons is exact, not cosmetic. "Graph D = 2 − H" is stated in the entry as Mandelbrot's conjecture from the Lipschitz–Hölder bound 1 ≤ D ≤ 2 − H (for integer b it was proved only in 2018, by W. Shen). The Gauss-randomized variant multiplies each Fourier coefficient by an independent complex Gaussian — the entry's "next step toward realism", an approximate fractional Brown function with a discrete spectrum. The function's history — Bolzano to Riemann to Weierstrass 1872 — is told in chapter 41's <a href="historical-sketches.html#weierstrass">Historical Sketches</a> entry.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 6 · THE OTHER ENTRIES ===================== -->
+  <section class="plate" id="entries">
+    <div class="plate-head">
+      <p class="no">Pages 349–390 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>The other entries, briefly</h2>
+      <p class="dim">a reader's map of the rest of the dictionary</p>
+    </div>
+    <div class="entries">
+      <p><b>Detrending and the Brown bridge</b> Brown motion over [0, 2π] splits into a straight trend with random slope plus a <i>Brown bridge</i> pinned to equal endpoints — and only for Brown motion are the two independent. The entry warns that applied statisticians detrend samples of unknown origin as if this always worked: "this last implicit assumption is quite unwarranted."</p>
+      <p><b>Fractional integro-differentiation</b> B&#8205;<sub>H</sub> is the Riemann–Liouville fractional integral of order H − 1/2 of white noise: multiplying the Fourier transform by (1/f)<sup>H+1/2</sup> deserves the name integration of fractional order. Integration smooths (persistence), differentiation roughens.</p>
+      <p><b>Fourier dimension and Salem sets</b> How fast can the Fourier transform of a measure on a set decay? The best exponent defines a second dimension D&#8205;<sub>F</sub> ≤ D, which also feels arithmetic: the triadic Cantor dust has D&#8205;<sub>F</sub> = 0, while random dusts are typically <i>Salem sets</i> with D&#8205;<sub>F</sub> = D. Since D&#8205;<sub>F</sub> is easy to estimate from data, it can stand in for D.</p>
+      <p><b>On the definition of "fractal"</b> Mandelbrot would rather have no definition — his 1975 essay had none. The 1977 one, D &gt; D&#8205;<sub>T</sub>, excludes sets he would prefer to include: the devil's staircase of Plate 83 "is intuitively a fractal", yet D = 1 = D&#8205;<sub>T</sub>. "Lacking other criteria, I set the border in such a way as to achieve a short definition."</p>
+      <p><b>Similarity dimension: its pitfalls</b> The set of trema endpoints of the Cantor dust is self-similar with the same N and r as the dust itself — but it is countable, so its Hausdorff–Besicovitch dimension is 0. Similarity dimension can overstate; adding the limit points restores agreement.</p>
+      <p><b>Scaling under truncation</b> The hyperbolic distribution Pr(U &gt; u) = u<sup>−D</sup> is the only one for which the rescaled tail "U/u₀, knowing U &gt; u₀" does not depend on the cutoff u₀ — a two-line proof in the entry, and the reason truncated data keep looking the same.</p>
+      <p><b>Nonlacunar fractals</b> Can a fractal meet every ball of space? Yes, but it must be a measure, not a closed set. De Wijs's ore model and Besicovitch's weighted curdling share mass unevenly among thirds forever: the limit is everywhere dense, with a concentrate of dimension D = −Σ π&#8205;ᵢ log₃ π&#8205;ᵢ — an entropy. This is the seed of what became multifractals.</p>
+      <p><b>Potentials, capacities, Frostman dimension</b> The mass within radius R growing like R<sup>D</sup> ties D to the convergence of potential integrals: Frostman proved the Hausdorff–Besicovitch D is exactly the capacity dimension of potential theory. The entry uses it to restate why D = 1 pairs with Newton's 1/R kernel in the cosmological chapters.</p>
+      <p><b>Stationarity (degrees of)</b> Mathematicians define it on the generating rules; practitioners "hold narrower views" and call any sample with a 1/f<sup>B</sup> spectrum, B &gt; 0, nonstationary. The entry defends the gray zone — sporadic processes, conditional stationarity, weak against strong mixing — because the book's models live there.</p>
+      <p><b>Music: two properties of scaling</b> Tempered scales place fundamentals at frequencies bⁿ — the spectrum of a Weierstrass function. And Voss &amp; Clarke found the power and the instantaneous frequency of music from Bach to the Beatles are 1/f noises; random music triggered by a 1/f source sounds the most music-like.</p>
+      <p><b>Indicator and coindicator functions</b> For a dust, the indicator function (1 on the set) is useless almost everywhere; Mandelbrot's coindicator is constant on each gap with independent random values — a function that carries the set's structure where analysis can reach it.</p>
+      <p><b>Dimensions that add and multiply</b> Rules of thumb with precise hypotheses: products of independent sets add dimensions; intersections add codimensions E − D, so two Brown trails (D = 2) intersect in space E &lt; 4 and miss for E ≥ 4; projections give min(E₀, D); subordination multiplies.</p>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 39, pages 349–390. The chapter is the book's mathematical reference and prints no plates; every figure on this page is computed from the entry's own formulas and marked as this page's illustration. The Weierstrass sums were checked against the printed formulas on pages 388–389. Companion pages: <a href="wiener-sausage.html">Wiener Sausage</a> (Brownian motion) and <a href="cantor-dust.html">Cantor Dust</a> (Plates 80–83).</p>
+</div>
+
+<script>
+// Shared drawing library: style constants, the zoomable canvas (snapshot while panning), chunked
+// paths, controls and small SVG figures. Loaded before each page's own scripts; pages may extend
+// PRINT with their own inks (PRINT.red = ..., PRINT.light = ...).
+const $ = (id) => document.getElementById(id);
+const fmt = (n) => n.toLocaleString('en-US');
+const PRINT = { paper: '#ecebe6', ink: '#151515', rule: '#c9c8c2', muted: '#66665f', accent: '#2f5f9e', red: '#c2452d', faint: '#bdbbb3', gray: '#8f8e88' };
+const RAMP = [[233, 185, 73], [217, 113, 59], [184, 66, 79], [125, 58, 120], [63, 79, 151], [43, 122, 138]];
+const ramp = (t, a = 1) => {
+  const x = Math.max(0, Math.min(1, t)) * (RAMP.length - 1), i = Math.min(RAMP.length - 2, Math.floor(x)), f = x - i;
+  const c = RAMP[i].map((v, k) => Math.round(v + (RAMP[i + 1][k] - v) * f));
+  return `rgba(${c[0]},${c[1]},${c[2]},${a})`;
+};
+const CAT = ['#151515', '#9a988f', '#2f5f9e', '#c2452d', '#3f8f6c', '#b58a2a', '#6b4e9b', '#5f8fae'];
+
+// ---------- shared plumbing ----------
+function figure(canvas, draw) {
+  const wrap = canvas.parentElement;
+  const f = { canvas, ctx: canvas.getContext('2d'), w: 1, h: 1, dpr: 1, draw };
+  const resize = () => {
+    f.dpr = Math.min(2, window.devicePixelRatio || 1);
+    f.w = wrap.clientWidth || 1; f.h = wrap.clientHeight || 1;
+    canvas.width = Math.round(f.w * f.dpr); canvas.height = Math.round(f.h * f.dpr);
+    f.draw();
+  };
+  new ResizeObserver(resize).observe(wrap);
+  return f;
+}
+function fitBox(f, bb, pad = 0.04) {
+  const w = Math.max(1e-9, bb.x1 - bb.x0), h = Math.max(1e-9, bb.y1 - bb.y0), s = Math.min(f.w / (w * (1 + 2 * pad)), f.h / (h * (1 + 2 * pad)));
+  return { s, ox: f.w / 2 - ((bb.x0 + bb.x1) / 2) * s, oy: f.h / 2 + ((bb.y0 + bb.y1) / 2) * s };
+}
+const toWorld = (f, v) => f.ctx.setTransform(f.dpr * v.s, 0, 0, -f.dpr * v.s, f.dpr * v.ox, f.dpr * v.oy);
+const toScreen = (f) => f.ctx.setTransform(f.dpr, 0, 0, f.dpr, 0, 0);
+function paper(f, color) { f.ctx.setTransform(1, 0, 0, 1, 0, 0); f.ctx.fillStyle = color; f.ctx.fillRect(0, 0, f.canvas.width, f.canvas.height); }
+function polyPath(P, closed = true, upto) {
+  const p = new Path2D(), m = upto === undefined ? P.length / 2 : upto;
+  p.moveTo(P[0], P[1]);
+  for (let i = 1; i < m; i++) p.lineTo(P[2 * i], P[2 * i + 1]);
+  if (closed) p.closePath();
+  return p;
+}
+function bbox(P, bb = { x0: Infinity, x1: -Infinity, y0: Infinity, y1: -Infinity }) {
+  for (let i = 0; i < P.length; i += 2) { bb.x0 = Math.min(bb.x0, P[i]); bb.x1 = Math.max(bb.x1, P[i]); bb.y0 = Math.min(bb.y0, P[i + 1]); bb.y1 = Math.max(bb.y1, P[i + 1]); }
+  return bb;
+}
+function stepButtons(el, values, text, aria, onPick) {
+  const bs = values.map((v) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.textContent = text(v); b.setAttribute('aria-label', aria(v));
+    b.addEventListener('click', () => onPick(v));
+    el.append(b);
+    return b;
+  });
+  const mark = (cur) => bs.forEach((b, i) => b.setAttribute('aria-pressed', String(values[i] === cur)));
+  mark.buttons = bs;
+  return mark;
+}
+// pan and zoom: a quick rescaled snapshot while moving, a full redraw once it settles
+function zoomable(wrapId, canvasId, fitOf, render, opts = {}) {
+  const maxZoom = opts.maxZoom || 400;
+  const wrap = $(wrapId), z = { view: null, user: false, snapView: null, raf: 0, full: 0 };
+  const snap = document.createElement('canvas');
+  const f = figure($(canvasId), () => draw());
+  function touch() { wrap.style.touchAction = z.view && z.view.s > z.view.fit * 1.02 ? 'none' : 'pan-y'; }
+  function draw() {
+    if (!z.view || !z.user) { z.view = fitOf(f); z.view.fit = z.view.s; z.user = false; touch(); }
+    render(f, z.view);
+    snap.width = f.canvas.width; snap.height = f.canvas.height; snap.getContext('2d').drawImage(f.canvas, 0, 0);
+    z.snapView = { s: z.view.s, ox: z.view.ox, oy: z.view.oy };
+  }
+  function quick() {
+    const v = z.view, k = v.s / z.snapView.s, c = f.ctx;
+    c.setTransform(1, 0, 0, 1, 0, 0); c.fillStyle = z.ground || PRINT.paper; c.fillRect(0, 0, f.canvas.width, f.canvas.height);
+    c.drawImage(snap, (v.ox - z.snapView.ox * k) * f.dpr, (v.oy - z.snapView.oy * k) * f.dpr, snap.width * k, snap.height * k);
+  }
+  function schedule() { if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; draw(); }); }
+  function moved() {
+    if (!z.snapView) { schedule(); return; }
+    if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; quick(); });
+    clearTimeout(z.full); z.full = setTimeout(schedule, 160);
+  }
+  function zoomAt(px, py, k) {
+    const v = z.view, ns = Math.min(v.fit * maxZoom, Math.max(v.fit * 0.8, v.s * k)), wx = (px - v.ox) / v.s, wy = (v.oy - py) / v.s;
+    v.s = ns; v.ox = px - wx * ns; v.oy = py + wy * ns; z.user = true; touch(); moved();
+  }
+  function pan(dx, dy) { z.view.ox += dx; z.view.oy += dy; z.user = true; moved(); }
+  wrap.querySelector('[data-z="in"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1.6));
+  wrap.querySelector('[data-z="out"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1 / 1.6));
+  wrap.querySelector('[data-z="fit"]').addEventListener('click', () => { z.user = false; schedule(); });
+  const pts = new Map();
+  let pinch = null, down = null;
+  const local = (e) => { const r = wrap.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+  wrap.addEventListener('pointerdown', (e) => {
+    if (e.target.closest('.view-tools')) return;
+    pts.set(e.pointerId, local(e));
+    down = pts.size === 1 ? { p: local(e), t: performance.now(), moved: 0 } : null;
+    try { wrap.setPointerCapture(e.pointerId); } catch (_) {}
+    if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), m: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2] }; }
+    wrap.classList.add('dragging');
+  });
+  wrap.addEventListener('pointermove', (e) => {
+    if (!pts.has(e.pointerId)) return;
+    const prev = pts.get(e.pointerId), cur = local(e);
+    pts.set(e.pointerId, cur);
+    if (down) down.moved = Math.max(down.moved, Math.hypot(cur[0] - down.p[0], cur[1] - down.p[1]));
+    if (pts.size === 2 && pinch) {
+      const [a, b] = [...pts.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]), m = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+      pan(m[0] - pinch.m[0], m[1] - pinch.m[1]);
+      if (pinch.d > 0) zoomAt(m[0], m[1], d / pinch.d);
+      pinch = { d, m };
+    } else if (pts.size === 1 && (e.pointerType !== 'touch' || z.view.s > z.view.fit * 1.02)) pan(cur[0] - prev[0], cur[1] - prev[1]);
+  });
+  const end = (e) => {
+    if (down && pts.size === 1 && down.moved < 5 && opts.onTap) { const [x, y] = local(e), v = z.view; opts.onTap((x - v.ox) / v.s, (v.oy - y) / v.s); }
+    down = null;
+    pts.delete(e.pointerId); if (pts.size < 2) pinch = null; if (!pts.size) wrap.classList.remove('dragging');
+  };
+  wrap.addEventListener('pointerup', end); wrap.addEventListener('pointercancel', (e) => { down = null; end(e); });
+  wrap.addEventListener('wheel', (e) => { if (!(e.ctrlKey || e.metaKey)) return; e.preventDefault(); const [x, y] = local(e); zoomAt(x, y, Math.exp(-e.deltaY * 0.0045)); }, { passive: false });
+  wrap.addEventListener('dblclick', (e) => { if (e.target.closest('.view-tools')) return; const [x, y] = local(e); zoomAt(x, y, e.shiftKey ? 0.5 : 2); });
+  return { f, z, schedule, refit: () => { z.user = false; schedule(); } };
+}
+// chunked paths: many small paths fill far faster than one path with a hundred thousand pieces
+function chunked(count, add, size = 512) {
+  const out = [];
+  let p = null;
+  for (let i = 0; i < count; i++) { if (i % size === 0) { p = new Path2D(); out.push(p); } add(p, i); }
+  return out;
+}
+// fill and outline in the same colour, so that tiles which only meet along an edge show no hairline seams
+function solid(c, paths, color, lw) {
+  c.fillStyle = color; c.strokeStyle = color; c.lineWidth = lw; c.lineJoin = 'miter';
+  for (const p of paths) { c.fill(p); c.stroke(p); }
+}
+const dot = (c, v, x, y, r = 4, color = PRINT.red) => { c.beginPath(); c.arc(v.ox + x * v.s, v.oy - y * v.s, r, 0, Math.PI * 2); c.fillStyle = color; c.fill(); c.strokeStyle = PRINT.paper; c.lineWidth = 1.5; c.stroke(); };
+
+// a polyline (Float64Array or [[x,y],...]) as SVG points with y flipped
+const svgPts = (P) => (P instanceof Float64Array ? Array.from({ length: P.length / 2 }, (_, i) => [P[2 * i], P[2 * i + 1]]) : P).map(([x, y]) => `${x.toFixed(4)},${(-y).toFixed(4)}`).join(' ');
+function miniCurve(id, P, dots = true) {
+  const pts = P instanceof Float64Array ? Array.from({ length: P.length / 2 }, (_, i) => [P[2 * i], P[2 * i + 1]]) : P;
+  $(id).innerHTML = `<line x1="0" y1="0" x2="1" y2="0" stroke="#8a8a84" stroke-width="0.008" stroke-dasharray="0.025 0.02"/>` +
+    `<polyline points="${svgPts(pts)}" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linejoin="round"/>` +
+    (dots ? `<g fill="currentColor">${pts.map(([x, y], i) => `<circle cx="${x.toFixed(4)}" cy="${(-y).toFixed(4)}" r="${i === 0 || i === pts.length - 1 ? 0.03 : 0.018}"/>`).join('')}</g>` : '');
+}
+function miniTree(id, links, dx = 0) {
+  const ends = new Set(), mid = new Set(), k = (x, y) => `${x.toFixed(4)},${y.toFixed(4)}`;
+  let s = '';
+  for (const [px, py, qx, qy] of links) {
+    s += `<line x1="${(px + dx).toFixed(4)}" y1="${(-py).toFixed(4)}" x2="${(qx + dx).toFixed(4)}" y2="${(-qy).toFixed(4)}" stroke="currentColor" stroke-width="0.02" stroke-linecap="round"/>`;
+    mid.add(k(px + dx, py)); mid.add(k(qx + dx, qy));
+  }
+  s += `<g fill="currentColor">${[...mid].map((p) => { const [x, y] = p.split(',').map(Number); const big = (Math.abs(x - dx) < 1e-6 || Math.abs(x - dx - 1) < 1e-6) && Math.abs(y) < 1e-6; return `<circle cx="${x}" cy="${-y}" r="${big ? 0.03 : 0.018}"/>`; }).join('')}</g>`;
+  return s;
+}
+// canvas transform for a similarity map f = [ar, ai, br, bi, m] composed with the view
+function setMap(f, c, v, fig) {
+  const [ar, ai, br, bi, m] = f, k = fig.dpr * v.s;
+  if (m) c.setTransform(k * ar, -k * ai, k * ai, k * ar, fig.dpr * (v.ox + v.s * br), fig.dpr * (v.oy - v.s * bi));
+  else c.setTransform(k * ar, -k * ai, -k * ai, -k * ar, fig.dpr * (v.ox + v.s * br), fig.dpr * (v.oy - v.s * bi));
+}
+const segPath = (segs, pick) => { const p = new Path2D(); for (const s of segs) if (!pick || pick(s)) { p.moveTo(s[0], s[1]); p.lineTo(s[2], s[3]); } return p; };
+// Plate 64's chevrons, measured from the plate: each interval a→b becomes a thin quadrilateral
+// pointing toward F, the corner the next stage would add (see DECISIONS.md)
+const CHEV_OUT = 0.43, CHEV_IN = 0.235;
+function chevronPaths(P, F, m) {
+  return chunked(m, (p, i) => {
+    const ax = P[2 * i], ay = P[2 * i + 1], bx = P[2 * i + 2], by = P[2 * i + 3], mx = (ax + bx) / 2, my = (ay + by) / 2;
+    const vx = F[2 * i] - mx, vy = F[2 * i + 1] - my;
+    p.moveTo(ax, ay); p.lineTo(mx + CHEV_OUT * vx, my + CHEV_OUT * vy); p.lineTo(bx, by); p.lineTo(mx + CHEV_IN * vx, my + CHEV_IN * vy); p.closePath();
+  });
+}
+
+// Chapter 39 numerics. The chapter prints no figures, so everything here computes the entry's own
+// formulas: fractional Gaussian noise by circulant embedding (Davies–Harte, exact covariance),
+// Lévy stable densities by FFT inversion of the characteristic function (the book's equation (L)
+// with (A:D)), ball coverings of the triadic sets, R/S statistics, and the Weierstrass sums.
+
+// ---------- seeded randomness ----------
+function mulberry(seed) {
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function gaussMaker(rand) {
+  let spare = null;
+  return () => {
+    if (spare !== null) { const v = spare; spare = null; return v; }
+    let u, v, s;
+    do { u = 2 * rand() - 1; v = 2 * rand() - 1; s = u * u + v * v; } while (s >= 1 || s === 0);
+    const m = Math.sqrt((-2 * Math.log(s)) / s);
+    spare = v * m;
+    return u * m;
+  };
+}
+
+// ---------- FFT: iterative radix-2, in place, length a power of two ----------
+function fft(re, im) {
+  const n = re.length;
+  for (let i = 1, j = 0; i < n; i++) {
+    let bit = n >> 1;
+    for (; j & bit; bit >>= 1) j ^= bit;
+    j ^= bit;
+    if (i < j) { let t = re[i]; re[i] = re[j]; re[j] = t; t = im[i]; im[i] = im[j]; im[j] = t; }
+  }
+  for (let len = 2; len <= n; len <<= 1) {
+    const ang = (-2 * Math.PI) / len, wr = Math.cos(ang), wi = Math.sin(ang);
+    for (let i = 0; i < n; i += len) {
+      let cr = 1, ci = 0;
+      for (let k = 0; k < len / 2; k++) {
+        const a = i + k, b = a + len / 2;
+        const xr = re[b] * cr - im[b] * ci, xi = re[b] * ci + im[b] * cr;
+        re[b] = re[a] - xr; im[b] = im[a] - xi;
+        re[a] += xr; im[a] += xi;
+        const nr = cr * wr - ci * wi; ci = cr * wi + ci * wr; cr = nr;
+      }
+    }
+  }
+}
+
+// ---------- fractional Gaussian noise, exact, by circulant embedding (Davies–Harte) ----------
+// Returns n unit-variance increments of B_H at unit steps; cov(k) = (|k+1|^2H − 2|k|^2H + |k−1|^2H)/2.
+function fgn(H, n, seed) {
+  const m = 2 * n, g = Math.pow;
+  const cov = (k) => 0.5 * (g(k + 1, 2 * H) - 2 * g(k, 2 * H) + g(Math.abs(k - 1), 2 * H));
+  const re = new Float64Array(m), im = new Float64Array(m);
+  for (let k = 0; k <= n; k++) re[k] = cov(k);
+  for (let k = 1; k < n; k++) re[m - k] = re[k];
+  fft(re, im);                                   // eigenvalues of the circulant (theoretically ≥ 0)
+  const lam = re.map((v) => Math.max(0, v));
+  const rnd = gaussMaker(mulberry(seed));
+  const vr = new Float64Array(m), vi = new Float64Array(m);
+  vr[0] = Math.sqrt(lam[0]) * rnd();
+  vr[n] = Math.sqrt(lam[n]) * rnd();
+  for (let j = 1; j < n; j++) {
+    const s = Math.sqrt(lam[j] / 2), a = s * rnd(), b = s * rnd();
+    vr[j] = a; vi[j] = b; vr[m - j] = a; vi[m - j] = -b;
+  }
+  fft(vr, vi);
+  const out = new Float64Array(n), norm = 1 / Math.sqrt(m);
+  for (let k = 0; k < n; k++) out[k] = vr[k] * norm;
+  return out;
+}
+// B_H on [0,1] from its increments, scaled so that B(t+Δ) − B(t) has sd Δ^H: self-affine with exponent H
+function fbmFromFgn(inc, H) {
+  const n = inc.length, B = new Float64Array(n + 1), s = Math.pow(n, -H);
+  for (let k = 0; k < n; k++) B[k + 1] = B[k] + inc[k] * s;
+  return B;
+}
+
+// ---------- Lévy stable densities: invert the characteristic function with the FFT ----------
+// Standard (S1) form: log φ(f) = −|f|^D [1 − iβ tan(πD/2) sgn f], and for D = 1 the tangent is
+// replaced by −(2/π) ln|f|. The book's three closed forms come out exactly: D=2 (Gauss, variance 2),
+// D=1, β=0 (Cauchy 1/π(1+x²)), D=1/2, β=1 (the Brown recurrence density (2π)^(−1/2) e^(−1/2x) x^(−3/2)).
+function stableGrid(D, beta) {
+  const N = 8192;
+  const F = Math.max(60, Math.pow(Math.log(1e9), 1 / D));   // e^(−F^D) ≈ 1e−9: no truncation ringing
+  const df = (2 * F) / N, dx = (2 * Math.PI) / (N * df);
+  const re = new Float64Array(N), im = new Float64Array(N);
+  const t2 = D === 1 ? 0 : Math.tan((Math.PI * D) / 2);
+  for (let j = 0; j < N; j++) {
+    const f = (j - N / 2) * df, af = Math.abs(f);
+    if (af < 1e-12) { re[j] = (j % 2 ? -1 : 1); continue; }
+    const mag = Math.exp(-Math.pow(af, D));
+    const phase = D === 1 ? -beta * (2 / Math.PI) * Math.sign(f) * af * Math.log(af)
+      : beta * t2 * Math.sign(f) * Math.pow(af, D);
+    const sgn = j % 2 ? -1 : 1;                 // ×(−1)^j recentres the transform
+    re[j] = sgn * mag * Math.cos(phase); im[j] = sgn * mag * Math.sin(phase);
+  }
+  fft(re, im);
+  const p = new Float64Array(N), c = df / (2 * Math.PI);
+  for (let k = 0; k < N; k++) p[k] = Math.max(0, (k % 2 ? -1 : 1) * c * re[k]);
+  return { p, x0: (-N / 2) * dx, dx, N };
+}
+const stableAt = (G, x) => {
+  const u = (x - G.x0) / G.dx, i = Math.floor(u);
+  if (i < 0 || i >= G.N - 1) return 0;
+  const f = u - i;
+  return G.p[i] * (1 - f) + G.p[i + 1] * f;
+};
+// one sample of a symmetric stable variable (Chambers–Mallows–Stuck)
+function stableSample(D, rand) {
+  const th = Math.PI * (rand() - 0.5), E = -Math.log(1 - rand());
+  if (D === 1) return Math.tan(th);
+  return (Math.sin(D * th) / Math.pow(Math.cos(th), 1 / D)) * Math.pow(Math.cos((1 - D) * th) / E, (1 - D) / D);
+}
+
+// ---------- Γ(x) (Lanczos) and the d-dimensional unit ball volume γ(d) = Γ(1/2)^d / Γ(1 + d/2) ----------
+function gammaFn(x) {
+  const g = [676.5203681218851, -1259.1392167224028, 771.32342877765313, -176.61502916214059,
+    12.507343278686905, -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7];
+  if (x < 0.5) return Math.PI / (Math.sin(Math.PI * x) * gammaFn(1 - x));
+  x -= 1;
+  let a = 0.99999999999980993;
+  for (let i = 0; i < 8; i++) a += g[i] / (x + i + 1);
+  const t = x + 7.5;
+  return Math.sqrt(2 * Math.PI) * Math.pow(t, x + 0.5) * Math.exp(-t) * a;
+}
+const ballVol = (d) => Math.pow(Math.PI, d / 2) / gammaFn(1 + d / 2);
+
+// ---------- the sets that get covered: triadic Koch curve, triadic Cantor dust, an interval ----------
+function kochPoints(depth) {
+  let P = [0, 0, 1, 0];
+  for (let s = 0; s < depth; s++) {
+    const out = new Float64Array((P.length / 2 - 1) * 4 * 2 + 2);
+    let j = 0;
+    const push = (x, y) => { out[j++] = x; out[j++] = y; };
+    push(P[0], P[1]);
+    for (let i = 0; i + 3 < P.length; i += 2) {
+      const ax = P[i], ay = P[i + 1], bx = P[i + 2], by = P[i + 3];
+      const dx = (bx - ax) / 3, dy = (by - ay) / 3;
+      const px = ax + dx, py = ay + dy, qx = ax + 2 * dx, qy = ay + 2 * dy;
+      const tx = px + dx / 2 - dy * (Math.sqrt(3) / 2), ty = py + dy / 2 + dx * (Math.sqrt(3) / 2);
+      push(px, py); push(tx, ty); push(qx, qy); push(bx, by);
+    }
+    P = out;
+  }
+  return P instanceof Float64Array ? P : new Float64Array(P);
+}
+// the covering of stage n: one ball per stage-n piece — centre of the piece's box, radius reaching
+// its farthest point (all pieces are congruent, so the radius is computed once)
+function coverBalls(P, pieces) {
+  const per = (P.length / 2 - 1) / pieces;        // points per piece (segments)
+  const balls = new Float64Array(2 * pieces);
+  let r = 0;
+  for (let k = 0; k < pieces; k++) {
+    const i0 = 2 * Math.round(k * per), i1 = 2 * Math.round((k + 1) * per);
+    let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+    for (let i = i0; i <= i1; i += 2) { x0 = Math.min(x0, P[i]); x1 = Math.max(x1, P[i]); y0 = Math.min(y0, P[i + 1]); y1 = Math.max(y1, P[i + 1]); }
+    const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2;
+    balls[2 * k] = cx; balls[2 * k + 1] = cy;
+    if (k === 0) for (let i = i0; i <= i1; i += 2) r = Math.max(r, Math.hypot(P[i] - cx, P[i + 1] - cy));
+  }
+  return { balls, r };
+}
+// starts of the 2^n triadic Cantor pieces of length 3^−n
+function cantorStarts(n) {
+  let starts = [0], len = 1;
+  for (let k = 0; k < n; k++) {
+    const out = new Float64Array(starts.length * 2);
+    let j = 0;
+    for (const a of starts) { out[j++] = a; out[j++] = a + (2 * len) / 3; }
+    starts = out; len /= 3;
+  }
+  return { starts, len };
+}
+
+// ---------- R/S: the self-rescaled self-adjusted range, pox-plotted over the lag d ----------
+// Within a block of length d: R = range of the cumulative sum detrended by its own bridge,
+// S = the block's standard deviation; Q = R/S. J is the slope of log Q against log d.
+function rsBlocks(X, d) {
+  const out = [];
+  for (let s = 0; s + d <= X.length; s += d) {
+    let sum = 0, sq = 0;
+    for (let i = s; i < s + d; i++) { sum += X[i]; sq += X[i] * X[i]; }
+    const mean = sum / d, S = Math.sqrt(Math.max(1e-300, sq / d - mean * mean));
+    let acc = 0, mn = 0, mx = 0;
+    for (let i = s; i < s + d; i++) {
+      acc += X[i] - mean;                         // cumulative sum minus the bridge trend
+      if (acc < mn) mn = acc;
+      if (acc > mx) mx = acc;
+    }
+    out.push((mx - mn) / S);
+  }
+  return out;
+}
+function rsAnalysis(X, lags) {
+  const pts = [];
+  for (const d of lags) {
+    const qs = rsBlocks(X, d).map((q) => Math.log10(Math.max(1e-12, q)));
+    if (!qs.length) continue;
+    pts.push({ d, qs, mean: qs.reduce((a, b) => a + b, 0) / qs.length });
+  }
+  // least squares through the means
+  let sx = 0, sy = 0, sxx = 0, sxy = 0, n = 0;
+  for (const p of pts) { const x = Math.log10(p.d); sx += x; sy += p.mean; sxx += x * x; sxy += x * p.mean; n++; }
+  const J = (n * sxy - sx * sy) / (n * sxx - sx * sx), b0 = (sy - J * sx) / n;
+  return { pts, J, b0 };
+}
+
+// ---------- Weierstrass sums (limits checked on the scan at 200 dpi, page 388–389) ----------
+// W0(t) = (1−w²)^(−1/2) Σ_{n≥0} w^n exp(2πi b^n t), w = b^(−H) = b^(D−2).
+// Modified: W1(t) − W1(0) = (1−w²)^(−1/2) Σ_{n=−∞}^{∞} w^n [exp(2πi b^n t) − 1].
+// Real (cosine) parts, evaluated with the frequency cut fMax (terms above it are below a pixel):
+function weierW0(t, b, w, fMax) {
+  let s = 0, freq = 1, amp = 1;
+  while (freq <= fMax && amp > 1e-6) { s += amp * Math.cos(2 * Math.PI * freq * t); freq *= b; amp *= w; }
+  return s / Math.sqrt(1 - w * w);
+}
+function weierW1(t, b, w, fMax) {
+  let s = 0, freq = 1, amp = 1;
+  while (freq <= fMax && amp > 1e-6) { s += amp * (Math.cos(2 * Math.PI * freq * t) - 1); freq *= b; amp *= w; }
+  freq = 1 / b; amp = 1 / w;                      // n < 0: converges, continuous and differentiable
+  for (let n = 0; n < 240; n++) {
+    const term = amp * (Math.cos(2 * Math.PI * freq * t) - 1);
+    s += term;
+    if (Math.abs(amp * freq) * 7 * Math.abs(t) < 1e-5) break;   // |cos(x)−1| ≤ x²/2 bound kicked in
+    freq /= b; amp /= w;
+  }
+  return s / Math.sqrt(1 - w * w);
+}
+// Gauss randomized: each term × a complex Gaussian factor (zero mean, unit variance), drawn per n
+function weierGaussFactors(seed, nMin, nMax) {
+  const rnd = gaussMaker(mulberry(seed)), out = new Map();
+  for (let n = nMin; n <= nMax; n++) out.set(n, [rnd() * Math.SQRT1_2, rnd() * Math.SQRT1_2]);
+  return out;
+}
+function weierGauss(t, b, w, fMax, fac, nMin) {
+  let s = 0;
+  for (let n = nMin, freq = Math.pow(b, nMin), amp = Math.pow(w, nMin); freq <= fMax && n < nMin + 400; n++, freq *= b, amp *= w) {
+    if (amp < 1e-6 && n > 0) break;
+    const g = fac.get(n);
+    if (!g) continue;
+    const c = Math.cos(2 * Math.PI * freq * t) - 1, sn = Math.sin(2 * Math.PI * freq * t);
+    s += amp * (g[0] * c - g[1] * sn);
+  }
+  return s / Math.sqrt(1 - w * w);
+}
+
+(() => {
+  const sup = (n) => String(n).replace(/\d/g, (d) => '⁰¹²³⁴⁵⁶⁷⁸⁹'[d]);
+  const sci = (x) => {
+    if (x === 0) return '0';
+    if (x >= 0.001) return x.toFixed(x >= 0.1 ? 3 : 4);
+    const [m, e] = x.toExponential(1).split('e');
+    return `${m}·10⁻${sup(-e)}`;
+  };
+  const MONO = '"IBM Plex Mono", monospace';
+  // a screen-space chart frame; draws the box and returns pixel mappers
+  function frame(c, f, mg, xlab, ylab) {
+    const { l, r, t, b } = mg, iw = f.w - l - r, ih = f.h - t - b;
+    c.strokeStyle = PRINT.rule; c.lineWidth = 1; c.strokeRect(l, t, iw, ih);
+    c.fillStyle = PRINT.muted; c.font = `500 10.5px ${MONO}`;
+    if (xlab) { c.textAlign = 'center'; c.textBaseline = 'top'; c.fillText(xlab, l + iw / 2, f.h - 15); }
+    if (ylab) { c.save(); c.translate(13, t + ih / 2); c.rotate(-Math.PI / 2); c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(ylab, 0, 0); c.restore(); }
+    return { l, t, iw, ih, X: (u) => l + u * iw, Y: (u) => t + ih - u * ih };
+  }
+  const gridline = (c, x0, y0, x1, y1) => { c.strokeStyle = '#dddbd2'; c.lineWidth = 1; c.beginPath(); c.moveTo(x0, y0); c.lineTo(x1, y1); c.stroke(); };
+
+  // ====================== 1 · self-similar and self-affine ======================
+  const stA = { H: 0.5, alpha: 0.5, win: 0.25, mode: 'rescale', seed: 1 };
+  const cacheA = {};
+  function dataA() {
+    const key = `${stA.H}|${stA.seed}`;
+    if (!cacheA[key]) {
+      const B = fbmFromFgn(fgn(stA.H, 2048, 90 + stA.seed * 7), stA.H);
+      let m = 0;
+      for (let i = 0; i < B.length; i++) m = Math.max(m, Math.abs(B[i]));
+      cacheA[key] = { B, m };
+    }
+    return cacheA[key];
+  }
+  const tracePath = (B, X, Y, t0, t1, scale) => {
+    const p = new Path2D(), n = B.length - 1;
+    for (let px = 0; px <= 480; px++) {
+      const tt = px / 480, t = t0 + tt * (t1 - t0), u = t * n, i = Math.min(n - 1, Math.floor(u)), fr = u - i;
+      const v = (B[i] * (1 - fr) + B[i + 1] * fr) * scale;
+      if (px) p.lineTo(X(tt), Y(v)); else p.moveTo(X(tt), Y(v));
+    }
+    return p;
+  };
+  const zA = zoomable('wA', 'cA', (f) => fitBox(f, { x0: 0, x1: 1, y0: 0, y1: 1 }), (f) => {
+    const c = f.ctx;
+    paper(f, PRINT.paper); toScreen(f);
+    const { B, m } = dataA(), n = B.length - 1;
+    const panel = (t, h, title) => {
+      const l = 46, r = 12, iw = f.w - l - r;
+      c.strokeStyle = PRINT.rule; c.strokeRect(l, t, iw, h);
+      c.fillStyle = PRINT.muted; c.font = `500 10.5px ${MONO}`; c.textAlign = 'left'; c.textBaseline = 'bottom';
+      c.fillText(title, l, t - 4);
+      const mid = t + h / 2;
+      gridline(c, l, mid, l + iw, mid);
+      return { X: (u) => l + u * iw, Y: (v) => mid - (v / (1.1 * m)) * (h / 2), l, t, iw, h };
+    };
+    const short = f.w < 540;
+    if (stA.mode === 'rescale') {
+      const hTop = Math.round((f.h - 24 - 54 - 14) / 2), hBot = hTop;
+      const top = panel(22, hTop, short ? `B(t) · H = ${stA.H.toFixed(2)}` : `the whole function B(t), t in [0, 1] · H = ${stA.H.toFixed(2)}`);
+      // the chosen piece
+      c.fillStyle = 'rgba(47,95,158,0.14)';
+      c.fillRect(top.X(0), top.t, top.X(stA.win) - top.X(0), top.h);
+      c.strokeStyle = PRINT.accent; c.lineWidth = 1; c.strokeRect(top.X(0), top.t, top.X(stA.win) - top.X(0), top.h);
+      c.strokeStyle = PRINT.ink; c.lineWidth = 1.4; c.stroke(tracePath(B, top.X, top.Y, 0, 1, 1));
+      const bot = panel(hTop + 76, hBot, short ? `the piece, ×${Math.round(1 / stA.win)}, α = ${stA.alpha.toFixed(2)}` : `the piece over [0, ${fracLabel(stA.win)}], time × ${Math.round(1 / stA.win)}, height × (1/h)^α, α = ${stA.alpha.toFixed(2)}`);
+      c.save(); c.beginPath(); c.rect(bot.l, bot.t, bot.iw, bot.h); c.clip();
+      c.strokeStyle = PRINT.accent; c.lineWidth = 1.4; c.stroke(tracePath(B, bot.X, bot.Y, 0, stA.win, Math.pow(stA.win, -stA.alpha)));
+      c.restore();
+    } else {
+      const h = f.h - 70, top = panel(26, h, `B(t) and its zeroset · H = ${stA.H.toFixed(2)}`);
+      c.strokeStyle = PRINT.ink; c.lineWidth = 1.4; c.stroke(tracePath(B, top.X, top.Y, 0, 1, 1));
+      c.strokeStyle = PRINT.red; c.lineWidth = 1.4;
+      let count = 0;
+      c.beginPath();
+      for (let i = 1; i <= n; i++) {
+        if ((B[i - 1] < 0 && B[i] >= 0) || (B[i - 1] >= 0 && B[i] < 0)) {
+          const x = top.X((i - 0.5) / n);
+          c.moveTo(x, top.t + h + 6); c.lineTo(x, top.t + h + 16);
+          count++;
+        }
+      }
+      c.stroke();
+      stA.crossings = count;
+      c.fillStyle = PRINT.muted; c.font = `500 10.5px ${MONO}`; c.textAlign = 'left'; c.textBaseline = 'top';
+      c.fillText(`${count} crossings of 0 at this resolution — a dust of dimension 1 − H = ${(1 - stA.H).toFixed(2)}`, top.X(0), top.t + h + 20);
+    }
+  });
+  function fracLabel(w) { return { 0.5: '1/2', 0.25: '1/4', 0.125: '1/8', 0.0625: '1/16' }[w] || w.toFixed(3); }
+  const INFO_A = {
+    rescale: (ok) => `Both panels use the same vertical ruler. ${ok
+      ? '<b>α = H:</b> the stretched piece has the same visual roughness and sweep as the whole — the two are statistically indistinguishable, which is what self-affine means.'
+      : 'With α ≠ H the piece comes out visibly flatter or wilder than the whole: the affinity only closes with the function’s own exponent. Slide α toward H.'}`,
+    zeros: 'The instants where B(t) = 0 form a dust like Cantor’s, of dimension 1 − H: persistence (large H) makes crossings rarer, antipersistence crowds them. Chapter 8’s fractal errors are modeled on exactly such zerosets.',
+  };
+  function setA(redraw = true) {
+    markMA(stA.mode); markWA(stA.win);
+    $('aWrap').hidden = stA.mode !== 'rescale';
+    $('hAv').textContent = `H = ${stA.H.toFixed(2)}`;
+    $('aAv').textContent = `α = ${stA.alpha.toFixed(2)}`;
+    const ok = Math.abs(stA.alpha - stA.H) < 0.026;
+    $('infoA').innerHTML = stA.mode === 'rescale' ? INFO_A.rescale(ok) : INFO_A.zeros;
+    $('cAt').textContent = stA.mode === 'rescale' ? 'Rescaling a piece' : 'The zeroset';
+    $('cAn').textContent = stA.mode === 'rescale'
+      ? `h = ${fracLabel(stA.win)} · the piece, stretched, below the whole`
+      : 'red ticks mark the crossings of zero';
+    $('rAa').textContent = (2 - stA.H).toFixed(2);
+    $('rAb').textContent = (1 - stA.H).toFixed(2);
+    $('rAc').textContent = (Math.pow(2, 2 * stA.H - 1) - 1).toFixed(3);
+    if (stA.mode === 'rescale') {
+      const { B } = dataA(), n = B.length - 1;
+      let w0 = 0, w1 = 0, p0 = 0, p1 = 0;
+      for (let i = 0; i <= n; i++) {
+        w0 = Math.min(w0, B[i]); w1 = Math.max(w1, B[i]);
+        if (i <= n * stA.win) { p0 = Math.min(p0, B[i]); p1 = Math.max(p1, B[i]); }
+      }
+      $('rAd').textContent = `${((p1 - p0) * Math.pow(stA.win, -stA.alpha) / (w1 - w0)).toFixed(2)}×`;
+    } else $('rAd').textContent = '—';
+    if (redraw) zA.schedule();
+  }
+  const markMA = stepButtons($('mA'), ['rescale', 'zeros'], (k) => (k === 'rescale' ? 'Rescale a piece' : 'The zeroset'), (k) => `Show ${k}`, (k) => { stA.mode = k; setA(); });
+  const markWA = stepButtons($('wAs'), [0.5, 0.25, 0.125, 0.0625], fracLabel, (w) => `Window ${fracLabel(w)}`, (w) => { stA.win = w; setA(); });
+  $('hAs').addEventListener('input', (e) => { stA.H = +e.target.value; setA(); });
+  $('aAs').addEventListener('input', (e) => { stA.alpha = +e.target.value; setA(); });
+  $('seedA').addEventListener('click', () => { stA.seed++; setA(); });
+  $('presetA').addEventListener('click', () => { Object.assign(stA, { H: 0.5, alpha: 0.5, mode: 'rescale' }); $('hAs').value = 0.5; $('aAs').value = 0.5; setA(); });
+
+  // ====================== 2 · covering by balls ======================
+  const KOCH = kochPoints(8);
+  const stB = { set: 'koch', mode: 'cover', n: 2 };
+  const SETS_B = {
+    koch: { label: 'Koch curve', D: Math.log(4) / Math.log(3), maxN: 6, count: (n) => Math.pow(4, n) },
+    dust: { label: 'Cantor dust', D: Math.log(2) / Math.log(3), maxN: 7, count: (n) => Math.pow(2, n) },
+    line: { label: 'An interval', D: 1, maxN: 5, count: (n) => Math.pow(3, n) },
+  };
+  const cacheB = {};
+  function ballsB(set, n) {
+    const key = `${set}|${n}`;
+    if (cacheB[key]) return cacheB[key];
+    let out;
+    if (set === 'koch') out = coverBalls(KOCH, Math.pow(4, n));
+    else {
+      const { starts, len } = set === 'dust' ? cantorStarts(n) : { starts: Array.from({ length: Math.pow(3, n) }, (_, i) => i / Math.pow(3, n)), len: Math.pow(3, -n) };
+      const balls = new Float64Array(2 * starts.length);
+      for (let i = 0; i < starts.length; i++) { balls[2 * i] = starts[i] + len / 2; balls[2 * i + 1] = 0; }
+      out = { balls, r: len / 2 };
+    }
+    return (cacheB[key] = out);
+  }
+  let kochPath = null;
+  const zB = zoomable('wB', 'cB', (f) => {
+    if (stB.mode === 'jump') return fitBox(f, { x0: 0, x1: 1, y0: 0, y1: 1 }, 0);
+    if (stB.set === 'koch') return fitBox(f, { x0: -0.06, x1: 1.06, y0: -0.1, y1: 0.4 }, 0.02);
+    return fitBox(f, { x0: -0.06, x1: 1.06, y0: -0.22, y1: 0.22 }, 0.02);
+  }, (f, v) => {
+    const c = f.ctx, S = SETS_B[stB.set];
+    paper(f, PRINT.paper);
+    if (stB.mode === 'cover') {
+      toWorld(f, v);
+      const { balls, r } = ballsB(stB.set, stB.n);
+      c.fillStyle = 'rgba(194,69,45,0.10)'; c.strokeStyle = PRINT.red; c.lineWidth = 1 / v.s;
+      for (const p of chunked(balls.length / 2, (p, i) => { p.moveTo(balls[2 * i] + r, balls[2 * i + 1]); p.arc(balls[2 * i], balls[2 * i + 1], r, 0, 2 * Math.PI); }, 1024)) { c.fill(p); c.stroke(p); }
+      c.strokeStyle = PRINT.ink; c.lineWidth = Math.max(1.1 / v.s, Math.min(2 / v.s, 0.002));
+      if (stB.set === 'koch') { if (!kochPath) kochPath = polyPath(KOCH, false); c.stroke(kochPath); }
+      else if (stB.set === 'line') { c.beginPath(); c.moveTo(0, 0); c.lineTo(1, 0); c.stroke(); }
+      else {
+        const { starts, len } = cantorStarts(8), bar = new Path2D();
+        for (const a of starts) bar.rect(a, -0.004, len, 0.008);
+        c.fillStyle = PRINT.ink; c.fill(bar);
+      }
+      toScreen(f);
+    } else {
+      toScreen(f);
+      const fr = frame(c, f, { l: 52, r: 14, t: 14, b: 34 }, 'trial dimension d', 'log₁₀ Σ γ(d) ρᵈ');
+      const y0 = -3, y1 = 3, X = (d) => fr.X(d / 2), Y = (lg) => fr.Y((Math.min(y1, Math.max(y0, lg)) - y0) / (y1 - y0));
+      c.font = `500 10.5px ${MONO}`; c.textAlign = 'center'; c.textBaseline = 'top'; c.fillStyle = PRINT.muted;
+      for (let d = 0; d <= 2; d += 0.5) { gridline(c, X(d), fr.t, X(d), fr.t + fr.ih); c.fillText(d.toFixed(1), X(d), fr.t + fr.ih + 5); }
+      gridline(c, fr.l, Y(0), fr.l + fr.iw, Y(0));
+      const rOf = (n) => (stB.set === 'koch' ? ballsB('koch', 1).r * Math.pow(3, 1 - n) : Math.pow(3, -n) / 2);
+      for (let n = 1; n <= 7; n++) {
+        const N = S.count(n), rho = rOf(n);
+        c.strokeStyle = ramp(n / 7); c.lineWidth = n === 7 ? 2 : 1.3; c.beginPath();
+        for (let k = 0; k <= 120; k++) {
+          const d = (2 * k) / 120, lg = Math.log10(N) + Math.log10(ballVol(d)) + d * Math.log10(rho);
+          const x = X(d), y = Y(lg);
+          if (k) c.lineTo(x, y); else c.moveTo(x, y);
+        }
+        c.stroke();
+      }
+      c.strokeStyle = PRINT.red; c.lineWidth = 1.4; c.setLineDash([6, 4]);
+      c.beginPath(); c.moveTo(X(S.D), fr.t); c.lineTo(X(S.D), fr.t + fr.ih); c.stroke(); c.setLineDash([]);
+      c.fillStyle = PRINT.red; c.textAlign = S.D > 1.4 ? 'right' : 'left'; c.textBaseline = 'top';
+      c.fillText(`D = ${S.D.toFixed(4)}`, X(S.D) + (S.D > 1.4 ? -6 : 6), fr.t + 6);
+      c.fillStyle = PRINT.muted; c.textAlign = 'left';
+      c.fillText('↑ d < D: blows up', X(0.06), Y(2.6));
+      c.textAlign = 'right'; c.fillText('d > D: dies ↓', X(1.97), Y(-2.2));
+    }
+  });
+  const INFO_B = {
+    cover: 'One ball per piece of the construction: each stage multiplies the count and shrinks the radius, and the exponent log N/log(1/ρ) closes in on D. For the interval it is exactly 1 — dimension by covering recovers the standard one.',
+    jump: 'Each curve is one radius ρ: the total measure Σ γ(d)ρᵈ against the trial dimension d. As ρ shrinks (yellow → blue) the curves swing like a gate hinged at d = D: below D the total grows without bound, above D it collapses to zero. The hinge is the Hausdorff–Besicovitch dimension.',
+  };
+  function setB(refit) {
+    markMB(stB.mode); markSetB(stB.set); markSB(stB.n);
+    const S = SETS_B[stB.set];
+    stB.n = Math.min(stB.n, S.maxN);
+    markSB(stB.n);
+    markSB.buttons.forEach((b, i) => { b.disabled = i + 1 > S.maxN; });
+    $('sBwrap').hidden = stB.mode !== 'cover';
+    $('sBv').textContent = `stage ${stB.n}`;
+    $('cBt').textContent = stB.mode === 'cover' ? `Covering: ${S.label}` : `The measure against d`;
+    $('cBn').textContent = stB.mode === 'cover' ? `${fmt(S.count(stB.n))} balls` : `${S.label} · one curve per radius ρ`;
+    $('infoB').innerHTML = INFO_B[stB.mode];
+    const { r } = stB.mode === 'cover' ? ballsB(stB.set, stB.n) : { r: 0 };
+    const N = S.count(stB.n);
+    $('rBa').textContent = stB.mode === 'cover' ? fmt(N) : '—';
+    $('rBb').textContent = stB.mode === 'cover' ? sci(r) : '—';
+    $('rBc').textContent = stB.mode === 'cover' ? (Math.log(N) / Math.log(1 / r)).toFixed(4) : '—';
+    $('rBd').textContent = S.D === 1 ? '1' : `${S.D.toFixed(4)}${stB.set === 'koch' ? ' = log 4/log 3' : ' = log 2/log 3'}`;
+    $('dimB').textContent = stB.mode === 'cover'
+      ? `N(ρ) balls of radius ρ · log N(ρ)/log(1/ρ) → D · ${S.label}: D = ${S.D.toFixed(4)}`
+      : `Σ over the cover of γ(d) ρᵈ · infinite for d < D, zero for d > D · ${S.label}: D = ${S.D.toFixed(4)}`;
+    if (refit) zB.refit(); else zB.schedule();
+  }
+  const markMB = stepButtons($('mB'), ['cover', 'jump'], (k) => (k === 'cover' ? 'Cover with balls' : 'The d-measure jump'), (k) => `Show ${k}`, (k) => { stB.mode = k; setB(true); });
+  const markSetB = stepButtons($('setB'), Object.keys(SETS_B), (k) => SETS_B[k].label, (k) => `Set: ${SETS_B[k].label}`, (k) => { stB.set = k; setB(true); });
+  const markSB = stepButtons($('sB'), [1, 2, 3, 4, 5, 6, 7], String, (n) => `Stage ${n}`, (n) => { stB.n = n; setB(false); });
+  $('presetB').addEventListener('click', () => { Object.assign(stB, { set: 'koch', mode: 'cover', n: 2 }); setB(true); });
+
+  // ====================== 3 · Lévy stability ======================
+  const stC = { D: 1, beta: 0, mode: 'density', u: 3 };
+  let gridC = { key: '', G: null };
+  function densC() {
+    const key = `${stC.D}|${stC.beta}`;
+    if (gridC.key !== key) gridC = { key, G: stableGrid(stC.D, stC.beta) };
+    return gridC.G;
+  }
+  const closedC = () => {
+    if (stC.D === 2) return { name: 'Gauss', f: (x) => Math.exp(-x * x / 4) / (2 * Math.sqrt(Math.PI)) };
+    if (stC.D === 1 && stC.beta === 0) return { name: 'Cauchy', f: (x) => 1 / (Math.PI * (1 + x * x)) };
+    if (stC.D === 0.5 && Math.abs(stC.beta) === 1) {
+      const s = Math.sign(stC.beta);
+      return { name: 'Brown recurrence', f: (x) => (s * x > 0 ? Math.exp(-1 / (2 * s * x)) / (Math.sqrt(2 * Math.PI) * Math.pow(s * x, 1.5)) : 0) };
+    }
+    return null;
+  };
+  const zC = zoomable('wC', 'cC', (f) => fitBox(f, { x0: 0, x1: 1, y0: 0, y1: 1 }), (f) => {
+    const c = f.ctx;
+    paper(f, PRINT.paper); toScreen(f);
+    const G = densC();
+    if (stC.mode === 'density') {
+      const x0 = -7, x1 = 7;
+      let pm = 0;
+      for (let x = x0; x <= x1; x += 0.02) pm = Math.max(pm, stableAt(G, x));
+      const fr = frame(c, f, { l: 46, r: 14, t: 14, b: 34 }, 'x', 'p(x)');
+      const X = (x) => fr.X((x - x0) / (x1 - x0)), Y = (p) => fr.Y(Math.min(1, p / (1.07 * pm)));
+      c.font = `500 10.5px ${MONO}`; c.fillStyle = PRINT.muted; c.textAlign = 'center'; c.textBaseline = 'top';
+      for (let x = -6; x <= 6; x += 2) { gridline(c, X(x), fr.t, X(x), fr.t + fr.ih); c.fillText(String(x), X(x), fr.t + fr.ih + 5); }
+      const cf = closedC();
+      if (cf) {
+        c.strokeStyle = PRINT.red; c.lineWidth = 2.2; c.setLineDash([2, 5]); c.beginPath();
+        for (let k = 0; k <= 560; k++) { const x = x0 + ((x1 - x0) * k) / 560; const y = Y(cf.f(x)); if (k) c.lineTo(X(x), y); else c.moveTo(X(x), y); }
+        c.stroke(); c.setLineDash([]);
+        c.fillStyle = PRINT.red; c.textAlign = 'left'; c.textBaseline = 'bottom'; c.fillText(`dashed red: the closed form (${cf.name})`, fr.l + 8, fr.t + fr.ih - 6);
+      }
+      c.strokeStyle = PRINT.ink; c.lineWidth = 1.6; c.beginPath();
+      for (let k = 0; k <= 560; k++) { const x = x0 + ((x1 - x0) * k) / 560; const y = Y(stableAt(G, x)); if (k) c.lineTo(X(x), y); else c.moveTo(X(x), y); }
+      c.stroke();
+    } else {
+      // the conditional density of one addend, the sum of two being u
+      const u = stC.u, s = Math.pow(2, 1 / stC.D), p2u = stableAt(G, u / s) / s;
+      const y0 = Math.min(-4, u - 10), y1 = Math.max(4, u + 4) + 2;
+      const q = (y) => (p2u > 0 ? (stableAt(G, y) * stableAt(G, u - y)) / p2u : 0);
+      let qm = 0;
+      for (let y = y0; y <= y1; y += 0.02) qm = Math.max(qm, q(y));
+      const fr = frame(c, f, { l: 46, r: 14, t: 14, b: 34 }, 'one addend y, the sum being u', 'density of y');
+      const X = (y) => fr.X((y - y0) / (y1 - y0)), Y = (p) => fr.Y(Math.min(1, p / (1.07 * (qm || 1))));
+      const marks = [[0, 'y = 0'], [u / 2, 'u/2'], [u, 'y = u']];
+      c.font = `500 10.5px ${MONO}`;
+      for (const [y, lb] of marks) {
+        c.strokeStyle = PRINT.rule; c.setLineDash([4, 4]); c.beginPath(); c.moveTo(X(y), fr.t); c.lineTo(X(y), fr.t + fr.ih); c.stroke(); c.setLineDash([]);
+        c.fillStyle = PRINT.muted; c.textAlign = 'center'; c.textBaseline = 'top'; c.fillText(lb, X(y), fr.t + 5);
+      }
+      c.strokeStyle = PRINT.ink; c.lineWidth = 1.6; c.beginPath();
+      for (let k = 0; k <= 640; k++) { const y = y0 + ((y1 - y0) * k) / 640; const yy = Y(q(y)); if (k) c.lineTo(X(y), yy); else c.moveTo(X(y), yy); }
+      c.stroke();
+    }
+  });
+  const INFO_C = {
+    density: () => `All these laws keep their shape under addition. ${stC.D === 2 ? 'At D = 2 the tails are the Gaussian’s — the one stable law with finite variance.' : `With D = ${stC.D.toFixed(2)} the tail${Math.abs(stC.beta) === 1 ? ' on one side' : 's'} fall${Math.abs(stC.beta) === 1 ? 's' : ''} off as x⁻ᴰ⁻¹ — slow enough that the variance diverges.`} β tilts the law: at β = ±1 and D < 1 it vanishes on one whole side.`,
+    addend: () => `Two independent copies added up to u = ${stC.u.toFixed(1)}. ${stC.D === 2 ? 'In the Gaussian case the conditional law of one addend is a bell at u/2, whatever u: fair shares.' : stC.bimodal ? 'The middle has become the least likely split: one addend took nearly all of u, the other nearly none. This is the clustering of Lévy flights and the inequity of chapter 37’s price records.' : 'For small u the split is still unimodal near u/2. Raise u: past a threshold the density bifurcates into two humps near 0 and u.'}`,
+  };
+  function setC() {
+    markMC(stC.mode);
+    $('uWrap').hidden = stC.mode !== 'addend';
+    $('dCv').textContent = `D = ${stC.D.toFixed(2)}`;
+    $('bCv').textContent = `β = ${stC.beta.toFixed(2)}`;
+    $('uCv').textContent = `u = ${stC.u.toFixed(1)}`;
+    $('cCt').textContent = stC.mode === 'density' ? 'The density' : 'One addend of a sum';
+    $('cCn').textContent = `D = ${stC.D.toFixed(2)}, β = ${stC.beta.toFixed(2)}`;
+    const cf = closedC();
+    $('rCa').textContent = stC.D === 2 ? 'e⁻ˣ²/⁴' : `∝ |x|⁻${(stC.D + 1).toFixed(2)}`;
+    $('rCb').textContent = stC.D > 1 ? '0' : 'undefined';
+    $('rCc').textContent = stC.D === 2 ? '2' : '∞';
+    $('rCd').textContent = cf ? cf.name : 'none — computed';
+    if (stC.mode === 'addend') {
+      const G = densC(), u = stC.u, s = Math.pow(2, 1 / stC.D), p2u = stableAt(G, u / s) / s;
+      const q = (y) => (p2u > 0 ? (stableAt(G, y) * stableAt(G, u - y)) / p2u : 0);
+      stC.bimodal = q(u / 2) < Math.max(q(0), q(u)) * 0.999;
+    }
+    zC.schedule();
+    $('infoC').innerHTML = INFO_C[stC.mode]();
+  }
+  const markMC = stepButtons($('mC'), ['density', 'addend'], (k) => (k === 'density' ? 'The density' : 'One addend of a sum'), (k) => `Show ${k}`, (k) => { stC.mode = k; setC(); });
+  $('dCs').addEventListener('input', (e) => { stC.D = +e.target.value; setC(); });
+  $('bCs').addEventListener('input', (e) => { stC.beta = +e.target.value; setC(); });
+  $('uCs').addEventListener('input', (e) => { stC.u = +e.target.value; setC(); });
+  const preC = (D, b) => { stC.D = D; stC.beta = b; $('dCs').value = D; $('bCs').value = b; setC(); };
+  $('preG').addEventListener('click', () => preC(2, 0));
+  $('preC').addEventListener('click', () => preC(1, 0));
+  $('preL').addEventListener('click', () => preC(0.5, 1));
+
+  // ====================== 4 · R/S analysis ======================
+  const stD = { proc: 'fgn', H: 0.7, seed: 2 };
+  const PROCS_D = { gauss: 'White Gauss', fgn: 'Fractional Gauss', levy: 'White Lévy, D = 1.5', walk: 'A random walk' };
+  const THEORY_D = { gauss: () => 0.5, fgn: () => stD.H, levy: () => 0.5, walk: () => 1 };
+  const LAGS_D = [8, 16, 32, 64, 128, 256, 512];
+  const cacheD = {};
+  function dataD() {
+    const key = `${stD.proc}|${stD.proc === 'fgn' ? stD.H : ''}|${stD.seed}`;
+    if (!cacheD[key]) {
+      const n = 2048;
+      let X;
+      if (stD.proc === 'fgn') X = fgn(stD.H, n, 40 + stD.seed * 13);
+      else {
+        X = new Float64Array(n);
+        const rand = mulberry(40 + stD.seed * 13), g = gaussMaker(rand);
+        if (stD.proc === 'levy') for (let i = 0; i < n; i++) X[i] = stableSample(1.5, rand);
+        else {
+          let acc = 0;
+          for (let i = 0; i < n; i++) { const v = g(); X[i] = stD.proc === 'walk' ? (acc += v) : v; }
+        }
+      }
+      cacheD[key] = { X, rs: rsAnalysis(X, LAGS_D) };
+    }
+    return cacheD[key];
+  }
+  const zD = zoomable('wD', 'cD', (f) => fitBox(f, { x0: 0, x1: 1, y0: 0, y1: 1 }), (f) => {
+    const c = f.ctx;
+    paper(f, PRINT.paper); toScreen(f);
+    const { X, rs } = dataD();
+    // the record, on a thin strip
+    const sh = Math.round(f.h * 0.2), l = 52, iw = f.w - l - 14;
+    c.strokeStyle = PRINT.rule; c.strokeRect(l, 10, iw, sh);
+    const sorted = Array.from(X).sort((a, b) => a - b);
+    const lo = sorted[Math.floor(0.004 * X.length)], hi = sorted[Math.ceil(0.996 * X.length) - 1];
+    const sy = (v) => 10 + sh - ((Math.min(hi, Math.max(lo, v)) - lo) / (hi - lo || 1)) * (sh - 4) - 2;
+    c.strokeStyle = PRINT.ink; c.lineWidth = 0.8; c.beginPath();
+    for (let i = 0; i < X.length; i++) { const x = l + (i / (X.length - 1)) * iw; if (i) c.lineTo(x, sy(X[i])); else c.moveTo(x, sy(X[i])); }
+    c.stroke();
+    c.fillStyle = PRINT.muted; c.font = `500 10.5px ${MONO}`; c.textAlign = 'left'; c.textBaseline = 'top';
+    c.fillText(`the record X(t) · ${PROCS_D[stD.proc]}${stD.proc === 'fgn' ? `, H = ${stD.H.toFixed(2)}` : ''}`, l, sh + 15);
+    // the pox plot
+    const top = sh + 34;
+    const fr = { l, t: top, iw, ih: f.h - top - 34 };
+    c.strokeStyle = PRINT.rule; c.strokeRect(fr.l, fr.t, fr.iw, fr.ih);
+    const lx0 = Math.log10(LAGS_D[0]) - 0.15, lx1 = Math.log10(LAGS_D[LAGS_D.length - 1]) + 0.15;
+    let qlo = Infinity, qhi = -Infinity;
+    for (const p of rs.pts) for (const q of p.qs) { qlo = Math.min(qlo, q); qhi = Math.max(qhi, q); }
+    const pad = 0.12 * (qhi - qlo);
+    qlo -= pad; qhi += pad;
+    const PX = (ld) => fr.l + ((ld - lx0) / (lx1 - lx0)) * fr.iw;
+    const PY = (lq) => fr.t + fr.ih - ((lq - qlo) / (qhi - qlo)) * fr.ih;
+    c.fillStyle = PRINT.muted; c.textAlign = 'center'; c.textBaseline = 'top';
+    for (const d of LAGS_D) { gridline(c, PX(Math.log10(d)), fr.t, PX(Math.log10(d)), fr.t + fr.ih); c.fillText(String(d), PX(Math.log10(d)), fr.t + fr.ih + 5); }
+    c.fillText('lag d (log scale) — each dot is one span’s R/S', fr.l + fr.iw / 2, f.h - 15);
+    c.save(); c.translate(13, fr.t + fr.ih / 2); c.rotate(-Math.PI / 2); c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText('log₁₀ R/S', 0, 0); c.restore();
+    c.fillStyle = 'rgba(47,95,158,0.45)';
+    for (const p of rs.pts) for (const q of p.qs) { c.beginPath(); c.arc(PX(Math.log10(p.d)), PY(q), 2.2, 0, 2 * Math.PI); c.fill(); }
+    c.fillStyle = PRINT.ink;
+    for (const p of rs.pts) { c.beginPath(); c.arc(PX(Math.log10(p.d)), PY(p.mean), 4, 0, 2 * Math.PI); c.fill(); }
+    c.strokeStyle = PRINT.red; c.lineWidth = 1.6; c.setLineDash([6, 4]); c.beginPath();
+    c.moveTo(PX(lx0), PY(rs.b0 + rs.J * lx0)); c.lineTo(PX(lx1), PY(rs.b0 + rs.J * lx1)); c.stroke(); c.setLineDash([]);
+    c.fillStyle = PRINT.red; c.textAlign = 'left'; c.textBaseline = 'bottom';
+    c.fillText(`slope J = ${rs.J.toFixed(2)}`, fr.l + 10, PY(rs.b0 + rs.J * lx0) - 6);
+  });
+  const INFO_D = {
+    gauss: 'No memory, finite variance: the benchmark. R/S grows like √d, so the fitted slope sits near J = 1/2 (a touch above on short samples).',
+    fgn: 'The increments of a fractional Brown function: genuinely long-run dependent. The slope follows the noise’s own H — persistence tips it above 1/2, antipersistence below.',
+    levy: 'Infinite variance — the record is all spikes and ⟨X²⟩ means nothing — yet the spikes carry no memory, and J stays near 1/2. This robustness against the marginal law is the technique’s principal virtue.',
+    walk: 'A record that is only stationary when differenced. R/S saturates its range: J = 1, the technique’s signal that the record itself, not its increments, should have been analyzed.',
+  };
+  function setD() {
+    markPD(stD.proc);
+    $('hDwrap').hidden = stD.proc !== 'fgn';
+    $('hDv').textContent = `H = ${stD.H.toFixed(2)}`;
+    const { rs } = dataD();
+    $('cDt').textContent = 'R/S pox plot';
+    $('cDn').textContent = `${PROCS_D[stD.proc]}${stD.proc === 'fgn' ? `, H = ${stD.H.toFixed(2)}` : ''} · fitted J = ${rs.J.toFixed(2)}`;
+    $('infoD').innerHTML = INFO_D[stD.proc];
+    $('rDa').textContent = rs.J.toFixed(2);
+    const th = THEORY_D[stD.proc]();
+    $('rDb').textContent = stD.proc === 'fgn' ? `H = ${th.toFixed(2)}` : String(th);
+    $('rDc').textContent = { gauss: '1', fgn: '1', levy: '∞', walk: 'grows with t' }[stD.proc];
+    zD.schedule();
+  }
+  const markPD = stepButtons($('pD'), Object.keys(PROCS_D), (k) => PROCS_D[k], (k) => `Record: ${PROCS_D[k]}`, (k) => { stD.proc = k; setD(); });
+  $('hDs').addEventListener('input', (e) => { stD.H = +e.target.value; setD(); });
+  $('seedD').addEventListener('click', () => { stD.seed++; setD(); });
+  $('presetD').addEventListener('click', () => { Object.assign(stD, { proc: 'fgn', H: 0.7 }); $('hDs').value = 0.7; setD(); });
+
+  // ====================== 5 · Weierstrass ======================
+  const stE = { mode: 'w0', D: 1.5, b: 1.5, m: 0, seed: 3 };
+  let facE = { key: '', fac: null };
+  function factorsE() {
+    const key = String(stE.seed);
+    if (facE.key !== key) facE = { key, fac: weierGaussFactors(1234 + stE.seed * 11, -40, 120) };
+    return facE.fac;
+  }
+  const MODES_E = { w0: 'Original W₀', w1: 'Modified W₁', rand: 'Gauss randomized', spec: 'Energy spectrum' };
+  function curveE(mode, m, cols) {
+    const b = stE.b, H = 2 - stE.D, w = Math.pow(b, -H);
+    const bm = Math.pow(b, m), wm = Math.pow(w, m), fMax = (2.2 * cols) / bm;
+    const out = new Float64Array(cols + 1);
+    const fac = mode === 'rand' ? factorsE() : null;
+    const base = mode === 'w0' ? weierW0(0, b, w, fMax) : 0;
+    for (let k = 0; k <= cols; k++) {
+      const t = (k / cols) * bm;
+      out[k] = wm * (mode === 'w0' ? weierW0(t, b, w, fMax) - base : mode === 'w1' ? weierW1(t, b, w, fMax) : weierGauss(t, b, w, fMax, fac, -40));
+    }
+    return out;
+  }
+  const zE = zoomable('wE', 'cE', (f) => fitBox(f, { x0: 0, x1: 1, y0: 0, y1: 1 }), (f) => {
+    const c = f.ctx;
+    paper(f, PRINT.paper); toScreen(f);
+    const b = stE.b, H = 2 - stE.D, w = Math.pow(b, -H);
+    if (stE.mode === 'spec') {
+      const fr = frame(c, f, { l: 52, r: 14, t: 14, b: 34 }, 'log₁₀ frequency f', 'log₁₀ energy');
+      const lb = Math.log10(b), x0 = -2.6, x1 = 4.2;
+      const nLo = Math.ceil(x0 / lb), nHi = Math.floor(x1 / lb);
+      const yOf = (n) => 2 * n * Math.log10(w);
+      let yMin = Math.min(yOf(nHi), yOf(nLo)) - 0.5, yMax = Math.max(yOf(nHi), yOf(nLo)) + 0.5;
+      const X = (lx) => fr.X((lx - x0) / (x1 - x0)), Y = (ly) => fr.Y((ly - yMin) / (yMax - yMin));
+      c.font = `500 10.5px ${MONO}`; c.fillStyle = PRINT.muted; c.textAlign = 'center'; c.textBaseline = 'top';
+      for (let e = Math.ceil(x0); e <= Math.floor(x1); e++) { gridline(c, X(e), fr.t, X(e), fr.t + fr.ih); c.fillText(`10${e < 0 ? '⁻' : ''}${sup(Math.abs(e))}`, X(e), fr.t + fr.ih + 5); }
+      for (let n = nLo; n <= nHi; n++) {
+        const lx = n * lb, added = n < 0;
+        c.strokeStyle = added ? PRINT.accent : PRINT.ink; c.lineWidth = added ? 1.4 : 2;
+        if (added) c.setLineDash([3, 3]);
+        c.beginPath(); c.moveTo(X(lx), fr.t + fr.ih); c.lineTo(X(lx), Y(yOf(n))); c.stroke(); c.setLineDash([]);
+      }
+      c.strokeStyle = PRINT.red; c.lineWidth = 1.4; c.setLineDash([6, 4]);
+      c.beginPath(); c.moveTo(X(x0), Y(-2 * H * x0)); c.lineTo(X(x1), Y(-2 * H * x1)); c.stroke(); c.setLineDash([]);
+      c.fillStyle = PRINT.red; c.textAlign = 'right'; c.textBaseline = 'bottom'; c.fillText(`f⁻²ᴴ, H = ${H.toFixed(2)}`, X(x1 - 0.1), Y(-2 * H * (x1 - 0.1)) - 8);
+      c.fillStyle = PRINT.accent; c.textAlign = 'left'; c.textBaseline = 'bottom';
+      c.fillText('dashed blue: the lines W₁ adds below f = 1', fr.l + 8, fr.t + fr.ih - 6);
+    } else {
+      const cols = Math.min(760, Math.max(320, Math.round(f.w)));
+      const ref = curveE(stE.mode === 'rand' ? 'rand' : stE.mode, 0, cols);
+      let lo = Infinity, hi = -Infinity;
+      for (const v of ref) { lo = Math.min(lo, v); hi = Math.max(hi, v); }
+      const pad = 0.1 * (hi - lo || 1);
+      lo -= pad; hi += pad;
+      const fr = frame(c, f, { l: 46, r: 12, t: 14, b: 30 }, stE.m ? `t, after t → b${sup(stE.m)}t, X → w${sup(stE.m)}X` : 't from 0 to 1', null);
+      const X = (k) => fr.l + (k / cols) * fr.iw, Y = (v) => fr.t + fr.ih - ((Math.min(hi, Math.max(lo, v)) - lo) / (hi - lo)) * fr.ih;
+      gridline(c, fr.l, Y(0), fr.l + fr.iw, Y(0));
+      if (stE.m > 0) {
+        c.strokeStyle = PRINT.gray; c.lineWidth = 1.1; c.beginPath();
+        for (let k = 0; k <= cols; k++) { if (k) c.lineTo(X(k), Y(ref[k])); else c.moveTo(X(k), Y(ref[k])); }
+        c.stroke();
+      }
+      const cur = stE.m === 0 ? ref : curveE(stE.mode === 'rand' ? 'rand' : stE.mode, stE.m, cols);
+      c.strokeStyle = PRINT.ink; c.lineWidth = 1.4; c.beginPath();
+      for (let k = 0; k <= cols; k++) { if (k) c.lineTo(X(k), Y(cur[k])); else c.moveTo(X(k), Y(cur[k])); }
+      c.stroke();
+      if (stE.m > 0) {
+        c.fillStyle = PRINT.muted; c.font = `500 10.5px ${MONO}`; c.textAlign = 'left'; c.textBaseline = 'top';
+        c.fillText(stE.mode === 'w1' ? 'gray: the unrescaled curve — it coincides' : 'gray: the unrescaled curve — it does not coincide', fr.l + 8, fr.t + 6);
+      }
+    }
+  });
+  const INFO_E = {
+    w0: () => (stE.m === 0
+      ? 'The original sum, frequencies bⁿ from n = 0 up. It is periodic with period 1 — its spectrum stops at f = 1, so it cannot be scaling at the low-frequency end.'
+      : 'Rescaled: time squeezed by b, height by w, m times over. The fine wiggles map onto each other but the sweep does not — the missing frequencies below f = 1 (the IR cutoff) break self-affinity.'),
+    w1: () => (stE.m === 0
+      ? 'Subtract W(0) first, then let n run to −∞: the added low-frequency terms converge and are smooth, and the sum is scaling down to f = 0.'
+      : 'Rescaled: wᵐ[W₁(bᵐt) − W₁(0)] lands exactly on the unrescaled curve, for every m — the repaired function is self-affine about its focal time t = 0.'),
+    rand: () => 'Every Fourier coefficient multiplied by its own complex Gaussian: a stationary random cousin of W₁ whose spectrum is as close to the fractional Brown function’s f⁻²ᴴ⁻¹ as a discrete spectrum can be. Rescaling now reproduces the law, not the sample.',
+    spec: () => 'Energy against frequency, on log paper: spectral lines at f = bⁿ with energies w²ⁿ sit on the scaling line f⁻²ᴴ. Weierstrass’s sum keeps only n ≥ 0 (black); extending to n < 0 (dashed blue) is the infrared repair that W₁ survives by first subtracting W(0).',
+  };
+  function setE() {
+    markME(stE.mode); markZE(stE.m);
+    const H = 2 - stE.D, w = Math.pow(stE.b, -H);
+    $('zWrap').hidden = stE.mode === 'spec';
+    $('seedE').hidden = stE.mode !== 'rand';
+    $('dEv').textContent = `D = ${stE.D.toFixed(2)}`;
+    $('bEv').textContent = `b = ${stE.b.toFixed(1)}`;
+    $('zEv').textContent = stE.m === 0 ? 'as is' : `m = ${stE.m}: ×b${sup(stE.m)} in, ×w${sup(stE.m)} down`;
+    $('cEt').textContent = MODES_E[stE.mode];
+    $('cEn').textContent = `b = ${stE.b.toFixed(1)}, H = ${H.toFixed(2)}, w = b⁻ᴴ = ${w.toFixed(3)}`;
+    $('infoE').innerHTML = INFO_E[stE.mode]();
+    $('rEa').textContent = H.toFixed(2);
+    $('rEb').textContent = w.toFixed(4);
+    $('rEc').textContent = (2 - H).toFixed(2);
+    $('rEd').textContent = (1 - H).toFixed(2);
+    $('dimE').innerHTML = `W₀(t) = (1−w²)<sup>−1/2</sup> Σ₀<sup>∞</sup> wⁿ exp(2πibⁿt) · w = b⁻ᴴ = ${w.toFixed(3)} · graph D = ${(2 - H).toFixed(2)}, conjectured`;
+    zE.schedule();
+  }
+  const markME = stepButtons($('mE'), Object.keys(MODES_E), (k) => MODES_E[k], (k) => `Show ${MODES_E[k]}`, (k) => { stE.mode = k; setE(); });
+  const markZE = stepButtons($('zE'), [0, 1, 2, 3], (m) => (m === 0 ? '×1' : `×b${sup(m)}`), (m) => `Rescale ${m} times`, (m) => { stE.m = m; setE(); });
+  $('dEs').addEventListener('input', (e) => { stE.D = +e.target.value; setE(); });
+  $('bEs').addEventListener('input', (e) => { stE.b = +e.target.value; setE(); });
+  $('seedE').addEventListener('click', () => { stE.seed++; setE(); });
+  $('presetE').addEventListener('click', () => { Object.assign(stE, { D: 1.5, b: 1.5, m: 0, mode: 'w0' }); $('dEs').value = 1.5; $('bEs').value = 1.5; setE(); });
+
+  setA(); setB(true); setC(); setD(); setE();
+})();
+
+</script>
+
+</body>
+</html>

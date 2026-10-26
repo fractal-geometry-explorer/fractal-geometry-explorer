@@ -1,0 +1,231 @@
+<title>Random Chains and Squigs</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.mini svg.gen { height: 72px; }
+.minis { display: flex; flex-wrap: wrap; gap: 8px; }
+.minis .mini { flex: 1 1 150px; }
+.seedline { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.seedline .value { font-family: var(--f-mono); font-size: 13px; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 24, "Random Chains and Squigs" · pages 224–231</p>
+    <h1><span class="plate-no">Plates 228–231</span><span class="lozenge" aria-hidden="true"></span><span>Random Chains and Squigs</span></h1>
+    <p class="dek">Chapter 23's random curdling lets every cell evolve on its own, so whether the result hangs together is left to chance. This chapter constrains the recursion so the limit is guaranteed to be a connected, self-avoiding curve. Random chains generalize Koch and Peano curves by tossing a coin between generators; squigs refine a river's valley one halving at a time, and their dimension comes out near 4/3. Every figure is computed from the rules in the captions, with the seed shown.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#chain"><b>228</b> Random Koch coastline</a>
+    <a href="#peano"><b>229</b> Random Peano curve</a>
+    <a href="#squig"><b>230</b> Triangle and squig</a>
+    <a href="#hexa"><b>231</b> Hexa-squig coastline</a>
+  </nav>
+
+  <!-- ===================== PLATE 228 ===================== -->
+  <section class="plate" id="chain">
+    <div class="plate-head">
+      <p class="no">Plate 228 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Random Koch coastline</h2>
+      <p class="dim">Two generators on a square lattice · N = 18, b = 6, both · D = log 18 / log 6 ≈ 1.6131</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wA">
+          <canvas id="cA" role="img" aria-label="Random Koch coastline with satellite islands"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cAt">Random Koch island</strong> · stage <span id="cAs">3</span> · <span id="cAn"></span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">A Koch curve with a prescribed D and no self-contact can often be built in several ways on the same grid, between the same endpoints. Whenever two different generators fit within the same overall outline, the construction is randomized by tossing a coin between them at every interval of every stage. The book's two generators each take 18 steps of length 1/6. The second is Plate 53's. In the first, six of the steps break off as a closed ring — so wherever the coin lands that way, a satellite island splits off the coast, and the islands grow their own islands.</p>
+        <div class="minis">
+          <div class="mini" aria-label="Generator with the island ring">
+            <svg class="gen" viewBox="-0.05 -0.44 1.1 0.84" aria-hidden="true" id="miniKA"></svg>
+            <div class="fx">splits an island</div>
+          </div>
+          <div class="mini" aria-label="Plate 53's generator">
+            <svg class="gen" viewBox="-0.05 -0.44 1.1 0.84" aria-hidden="true" id="miniKB"></svg>
+            <div class="fx">one piece<br>(Plate 53)</div>
+          </div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Draw</span></div>
+          <div class="steps words" id="mA" role="group" aria-label="Drawing"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="sAv">stage 3</span></div>
+          <div class="steps" id="sA" role="group" aria-label="Stage"></div>
+        </div>
+        <div class="seedline">
+          <button type="button" class="btn" id="seedA">New seed</button>
+          <span class="value" id="seedAv">seed 7</span>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate228">Show Plate 228 as printed</button>
+        </div>
+        <dl class="read">
+          <div><dt>Coast steps</dt><dd id="rAa">—</dd></div>
+          <div><dt>Islands</dt><dd id="rAb">—</dd></div>
+          <div><dt>Dimension</dt><dd>1.6131</dd></div>
+          <div><dt>Check Σrᴰ</dt><dd>18·(1/6)ᴰ = 1</dd></div>
+        </dl>
+        <p class="note">Both generators were read exactly from the caption box: they visit the same 19 lattice points, and differ only in which 18 of the edges they use. The disconnected ring in the first is the book's own drawing, not a misprint — it is what seeds the plate's satellite islands. The square initiator and the even coin are our reading; the caption fixes neither, saying only that the initial shape's symmetries remain visible. Self-avoidance of the random mixture was checked exactly on the lattice for 20 seeds.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 229 ===================== -->
+  <section class="plate" id="peano">
+    <div class="plate-head">
+      <p class="no">Plate 229 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Random Peano curve</h2>
+      <p class="dim">N = 4, r = 1/2 · D = 2 · the sweep of a triangle, randomized</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wB">
+          <canvas id="cB" role="img" aria-label="Random Peano curve sweeping a triangle"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cBt">Random sweep</strong> · stage <span id="cBs">5</span> · <span id="cBn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The generator takes the interval's equilateral triangle and threads its four half-size subtriangles: up the left side, across the top, down to the base's midpoint, and out. Its flipped form is the mirror image through the interval's midpoint, and visits the base point first. Every interval of every stage carries such a triangle — its <i>shelter</i> — and is replaced inside it by the straight or the flipped thread. Tossing a fair coin between the two at every interval is the randomization: the two focal points are symmetric with respect to the midpoint, and either choice sweeps on, so the limit fills its region with D = 2.</p>
+        <div class="minis">
+          <div class="mini" aria-label="The straight generator">
+            <svg class="gen" viewBox="-0.05 -0.5 1.1 0.6" aria-hidden="true" id="miniPS"></svg>
+            <div class="fx">straight</div>
+          </div>
+          <div class="mini" aria-label="The flipped generator">
+            <svg class="gen" viewBox="-0.05 -0.5 1.1 0.6" aria-hidden="true" id="miniPF"></svg>
+            <div class="fx">flipped</div>
+          </div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Randomisation</span></div>
+          <div class="steps words" id="gB" role="group" aria-label="Randomisation"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Draw</span></div>
+          <div class="steps words" id="mB" role="group" aria-label="Drawing"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="sBv">stage 5</span></div>
+          <div class="steps" id="sB" role="group" aria-label="Stage"></div>
+        </div>
+        <div class="seedline">
+          <button type="button" class="btn" id="seedB">New seed</button>
+          <span class="value" id="seedBv">seed 9</span>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate229">Show Plate 229 as printed</button>
+        </div>
+        <p class="readline" id="infoB" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Intervals</dt><dd id="rBa">—</dd></div>
+          <div><dt>Dimension</dt><dd>2</dd></div>
+        </dl>
+        <p class="note">The generator and the caption's second stage are reproduced exactly (the printed second stage alternates straight and flipped, our deterministic setting). The full plate is matched in character, not stroke for stroke: its printed sweep visibly wanders outside the triangle — the apex sits about 14% above the equilateral point — which the caption's brief description does not explain. "Kept in the triangle" is the simplest rule that fits both caption diagrams; "wandering" also re-tosses each shelter's side at fine stages, and reproduces the plate's ragged silhouette. The spiky rendering follows the caption — each interval detours through the centre of its shelter — with the detour points of every stage kept, which is what produces the plate's long slivers.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 230 ===================== -->
+  <section class="plate" id="squig">
+    <div class="plate-head">
+      <p class="no">Plate 230 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Triangle and squig curve</h2>
+      <p class="dim">Links per stage: 1 (probability 1/4) or 3 (probability 3/4), mean 2.5 · D = log 2.5 / log 2 ≈ 1.3219</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wC">
+          <canvas id="cC" role="img" aria-label="Squig curve burrowing into its valley"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cCt">Squig valley</strong> · stage <span id="cCs">8</span> · <span id="cCn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The simplest squig models a river burrowing into its valley. The valley is a chain of triangles, each touching the next through a shared side. To refine it, halve every shared side and toss a coin for which half the river keeps. Those choices fix the finer valley completely: inside each triangle the new chain runs through 1 of its four subtriangles when the kept halves meet at a corner, and through 3 of them otherwise. The valley narrows forever and closes down on a curve. Mandelbrot conjectured, and Peyrière proved, that its dimension is log 2.5/log 2.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Draw</span></div>
+          <div class="steps words" id="mC" role="group" aria-label="Drawing"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="sCv">stage 8</span></div>
+          <div class="steps" id="sC" role="group" aria-label="Stage"></div>
+        </div>
+        <label class="slider" for="pC">
+          <div class="label-row"><span class="label">Bias p, the probability of the left half</span><span class="value" id="pCv">p = 0.50 · D ≈ 1.3219</span></div>
+          <input type="range" id="pC" min="5" max="95" value="50" step="5">
+        </label>
+        <div class="seedline">
+          <button type="button" class="btn" id="seedC">New seed</button>
+          <span class="value" id="seedCv">seed 4</span>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate230">Show Plate 230 as printed</button>
+        </div>
+        <p class="readline" id="infoC" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Links</dt><dd id="rCa">—</dd></div>
+          <div><dt>Mean per link</dt><dd id="rCb">2.5</dd></div>
+          <div><dt>Dimension</dt><dd id="rCc">≈ 1.3219</dd></div>
+        </dl>
+        <p class="note">The plate superposes the stages in grays, the early ones at one scale and stages 6 to 10 enlarged; here all stages share one scale and the canvas zooms instead. The bias slider is the chapter's asymmetric squig: with an observer looking downstream, D = log(3 − p² − (1−p)²) / log 2, which runs from 1 to log 2.5/log 2 (the book's second convention, an observer at the triangle's centre, runs on up to log 3/log 2). The branching view is the chapter's river tree — the drawing in the text's facing column, page 227: the subtriangles the river leaves behind drain into it by the same halving rule, and the tree fills the triangle.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 231 ===================== -->
+  <section class="plate" id="hexa">
+    <div class="plate-head">
+      <p class="no">Plate 231 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>A hexa-squig coastline</h2>
+      <p class="dim">Six squigs strung into a self-avoiding loop · D ≈ 4/3</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wD">
+          <canvas id="cD" role="img" aria-label="Hexa-squig coastline"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cDt">Hexa-squig</strong> · stage <span id="cDs">10</span> · <span id="cDn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">String six squigs together around a hexagon of six triangles and the chain closes into a self-avoiding loop: a coastline. Its dimension is very close to 4/3 — a value that keeps reappearing wherever self-avoidance rules, from the boundary of the Brownian hull (Plate 243) to self-avoiding random walks. That this crude construction lands on the same number is, for Mandelbrot, no coincidence, and a hint about the geometric structure of the plane.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Draw</span></div>
+          <div class="steps words" id="mD" role="group" aria-label="Drawing"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="sDv">stage 10</span></div>
+          <div class="steps" id="sD" role="group" aria-label="Stage"></div>
+        </div>
+        <div class="seedline">
+          <button type="button" class="btn" id="seedD">New seed</button>
+          <span class="value" id="seedDv">seed 2</span>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate231">Show Plate 231 as printed</button>
+        </div>
+        <dl class="read">
+          <div><dt>Links</dt><dd id="rDa">—</dd></div>
+          <div><dt>Squig D</dt><dd>1.3219</dd></div>
+          <div><dt>Loop area</dt><dd id="rDb">—</dd></div>
+        </dl>
+        <p class="note">The initiator is the ring of six triangles around the hexagon's centre, refined by the same halving rule as Plate 230, cyclically. The printed plate is one sample; ours are matched statistically, with the seed shown. The white region is the inside of the loop, as in the print.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 24, pages 224–231 (Plates 228 to 231). Every figure is computed from the rules in the captions; random plates are matched statistically, with the seed shown. The squig dimension log 2.5/log 2 was proved by J. Peyrière (1978). Companion pages: <a href="quadric-islands.html">Quadric Koch Islands</a> (Plates 49–55, the second generator's home) and <a href="snow-sweeps.html">Sweeps, Rivers and Trees</a> (Plates 68–73, the deterministic triangle sweeps).</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>

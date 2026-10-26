@@ -1,0 +1,1247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Islands, Clusters and Percolation</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>
+/* Layout: six sections in page order (Koch islands 117-118, islands and lakes 121, nonlumped curdling 124, cross-lumped 125, knotted Peano 126, Bernoulli percolation 126-130), each a computed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */
+:root {
+  --page: #e4e5e1;
+  --text: #1b1d1f;
+  --muted: #595e64;
+  --rule: #c4c7c1;
+  --surface: #f6f6f3;
+  --accent: #285895;
+  --f-display: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Newsreader", Georgia, "Times New Roman", serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* the figures are reproductions of printed plates, so their paper and inks stay the same in both themes */
+  --print-paper: #ecebe6;
+  --print-ink: #151515;
+  --print-rule: #c9c8c2;
+  --gain: rgba(47, 95, 158, 0.42);
+  --loss: rgba(186, 88, 44, 0.42);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --page: #111214; --text: #e5e5e1; --muted: #9a9fa6; --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --page: #111214; --text: #e5e5e1; --muted: #9a9fa6; --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--page); color: var(--text); font-family: var(--f-display); font-size: 14px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
+.wrap {
+  max-width: 1180px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 36px 64px;
+  display: grid; gap: 40px;
+}
+header.top { display: grid; gap: 10px; max-width: 820px; }
+.eyebrow { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+h1 {
+  margin: 0; display: flex; align-items: center; flex-wrap: wrap; gap: 0.18em 0.42em;
+  font-weight: 800; font-size: clamp(30px, 5.4vw, 54px); line-height: 1.02; letter-spacing: 0.01em; text-transform: uppercase; text-wrap: balance;
+}
+h1 .plate-no { font-weight: 600; text-transform: none; letter-spacing: 0; }
+.lozenge { display: inline-block; width: 0.42em; height: 0.42em; border: 0.075em solid currentColor; position: relative; top: -0.02em; }
+.lozenge::after { content: ""; position: absolute; inset: 0.1em; border: 0.05em solid currentColor; }
+.dek { margin: 0; font-family: var(--f-body); font-size: 19px; line-height: 1.45; max-width: 64ch; }
+
+nav.index {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+  padding: 10px max(16px, env(safe-area-inset-right, 0px)) 10px max(16px, env(safe-area-inset-left, 0px));
+  background: var(--page); border-bottom: 1px solid var(--rule);
+  display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none;
+}
+nav.index a {
+  flex: none; display: inline-flex; gap: 8px; align-items: baseline; padding: 6px 10px;
+  border: 1px solid var(--rule); background: var(--surface); color: var(--text); text-decoration: none; font-size: 13px; font-weight: 600;
+}
+nav.index a b { font-family: var(--f-mono); font-weight: 500; color: var(--accent); }
+nav.index a:hover { border-color: var(--text); }
+
+section.plate { display: grid; gap: 18px; scroll-margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--rule); }
+.plate-head { display: grid; gap: 4px; }
+.plate-head .no { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.plate-head h2 { margin: 0; font-size: clamp(22px, 3vw, 30px); font-weight: 800; line-height: 1.1; text-transform: uppercase; letter-spacing: 0.01em; text-wrap: balance; }
+.plate-head .dim { margin: 0; font-family: var(--f-mono); font-size: 13px; color: var(--muted); }
+.plate-body { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(280px, 1fr); gap: 32px; align-items: start; }
+@media (max-width: 899px) { .plate-body { grid-template-columns: minmax(0, 1fr); gap: 20px; } }
+figure.fig { margin: 0; display: grid; gap: 8px; min-width: 0; }
+.canvas-wrap { position: relative; width: 100%; max-width: 100%; background: var(--print-paper); outline: 1px solid var(--rule); overflow: hidden; }
+.canvas-wrap canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.r-sq { aspect-ratio: 1 / 1; }
+.r-lox { aspect-ratio: 5 / 4; }
+.zoomable { cursor: grab; touch-action: pan-y; }
+.zoomable.dragging { cursor: grabbing; }
+.view-tools { position: absolute; top: 10px; right: 10px; display: flex; gap: 6px; z-index: 2; }
+.view-tools button { min-width: 34px; height: 34px; padding: 0 10px; font: 600 15px/1 var(--f-display); color: var(--print-ink); background: #f7f7f3; border: 1px solid var(--print-rule); cursor: pointer; }
+figcaption { font-size: 13px; color: var(--muted); }
+figcaption strong { color: var(--text); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+
+.side { display: grid; gap: 18px; min-width: 0; align-content: start; }
+.side p.cap { margin: 0; font-family: var(--f-body); font-size: 17px; line-height: 1.55; max-width: 62ch; }
+.group { display: grid; gap: 8px; min-width: 0; }
+.label-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.label { font-size: 11.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.value { font-family: var(--f-mono); font-size: 12.5px; font-variant-numeric: tabular-nums; text-align: right; }
+.steps { display: flex; flex-wrap: wrap; gap: 6px; }
+.steps button {
+  min-width: 38px; height: 34px; padding: 0 10px; font: 600 13px/1 var(--f-mono); color: var(--text);
+  background: var(--surface); border: 1px solid var(--rule); cursor: pointer;
+}
+.steps.words button { font: 600 13px/1 var(--f-display); }
+.steps button[aria-pressed="true"] { background: var(--text); color: var(--page); border-color: var(--text); }
+.steps button:hover { border-color: var(--text); }
+.steps button:disabled { opacity: 0.35; cursor: default; border-color: var(--rule); }
+.btn-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.btn { padding: 8px 12px; font: 600 13px/1.2 var(--f-display); color: var(--text); background: var(--surface); border: 1px solid var(--rule); cursor: pointer; }
+.btn:hover { border-color: var(--text); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--page); }
+.check { display: flex; align-items: flex-start; gap: 8px; font-size: 13.5px; cursor: pointer; }
+.check input { accent-color: var(--accent); width: 16px; height: 16px; margin: 1px 0 0; flex: none; }
+.check:has(input:disabled) { opacity: 0.45; cursor: default; }
+.slider { display: grid; gap: 4px; }
+.slider input { width: 100%; accent-color: var(--accent); margin: 0; }
+.slider input:disabled { opacity: 0.4; }
+dl.read { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; padding-top: 14px; border-top: 1px solid var(--rule); }
+dl.read div { display: grid; gap: 2px; min-width: 0; }
+dl.read dt { font-size: 10.5px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); }
+dl.read dd { margin: 0; font-family: var(--f-mono); font-size: 16px; overflow-wrap: anywhere; }
+dl.read dd small { font-size: 11.5px; color: var(--muted); }
+.note { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.mini { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; padding: 10px 12px; background: var(--print-paper); border: 1px solid var(--print-rule); color: var(--print-ink); }
+.mini svg { height: 64px; width: auto; max-width: 100%; }
+.mini .fx { font-family: var(--f-mono); font-size: 12px; line-height: 1.6; color: var(--print-ink); }
+.key { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--muted); }
+.key span { display: inline-flex; align-items: center; gap: 6px; }
+.key i { width: 14px; height: 10px; display: inline-block; border: 1px solid var(--print-rule); }
+.readline { min-height: 2.9em; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.readline b { color: var(--text); font-weight: 700; }
+
+.sub { display: grid; gap: 14px; padding-top: 22px; border-top: 1px dashed var(--rule); scroll-margin-top: 64px; }
+.sub h3 { margin: 0; font-size: 15px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
+.source { font-family: var(--f-body); font-size: 15px; color: var(--muted); margin: 0; max-width: 84ch; }
+.source i { color: var(--text); }
+.source a { color: var(--accent); }
+button:focus-visible, input:focus-visible, a:focus-visible, canvas:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.mini svg.gen { height: 66px; }
+.minis { display: flex; flex-wrap: wrap; gap: 8px; }
+.minis .mini { flex: 1 1 120px; }
+.gengrid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; }
+.gengrid button { padding: 6px 0 2px; display: grid; justify-items: center; gap: 2px; background: var(--surface); border: 1px solid var(--rule); cursor: pointer; color: var(--text); font: 600 12px/1 var(--f-mono); }
+.gengrid button svg { width: 34px; height: 34px; display: block; }
+.gengrid button[aria-pressed="true"] { background: var(--text); color: var(--page); border-color: var(--text); }
+.gengrid button[aria-pressed="true"] svg rect.on { fill: var(--page); }
+.gengrid svg rect.on { fill: currentColor; }
+.gengrid svg rect.frame { fill: none; stroke: currentColor; stroke-opacity: 0.45; }
+</style>
+<style>
+body { margin: 0; }
+/* The hidden attribute must beat the pages' own display rules (.slider, .check, ...). The artifact
+   wrapper's stylesheet used to provide this; self-hosted pages carry it themselves. */
+[hidden] { display: none !important; }
+nav.shell { font-family: var(--f-display); font-size: 12.5px; font-weight: 600; background: var(--page);
+  border-bottom: 1px solid var(--rule); display: flex; align-items: center; gap: 6px 18px;
+  padding: 9px max(16px, env(safe-area-inset-right, 0px)) 9px max(16px, env(safe-area-inset-left, 0px)); }
+nav.shell a { color: var(--text); text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+nav.shell a:hover { color: var(--accent); }
+nav.shell .home { letter-spacing: 0.07em; text-transform: uppercase; flex: none; }
+nav.shell .gap { flex: 1; }
+nav.shell .pn { color: var(--muted); font-weight: 500; }
+nav.shell .pn b { color: var(--text); font-weight: 600; }
+nav.shell a:hover .pn, nav.shell a:hover .pn b { color: var(--accent); }
+</style>
+</head>
+<body>
+<nav class="shell" aria-label="Site"><a class="home" href="index.html">Fractal Geometry Explorer</a><span class="gap"></span><a rel="prev" href="length-area.html"><span class="pn">&#8592; <b>Plate 115</b></span></a><a rel="next" href="umbrella-trees.html"><span class="pn"><b>Plate 155</b> &#8594;</span></a></nav>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 13, "Islands, clusters, and percolation; diameter–number relations" · pages 116–130</p>
+    <h1><span class="plate-no">Chapter 13</span><span class="lozenge" aria-hidden="true"></span><span>Islands, Clusters and Percolation</span></h1>
+    <p class="dek">How many islands surround Britain's coast? When a Koch generator is allowed to split into disconnected pieces, each stage seeds new islands, and their sizes follow the empirical law Korčak found in atlases: the number of islands larger than a is proportional to a<sup>−D/2</sup>. The same diameter–number relation governs clusters made by curdling and by Peano curves with controlled self-contacts, and it gives a geometric language for a central problem of physics: percolation. Every figure is computed from the rules in the chapter.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#korcak"><b>117–120</b> Koch islands</a>
+    <a href="#lakes"><b>121</b> Islands and lakes</a>
+    <a href="#curdling"><b>124</b> Curdling clusters</a>
+    <a href="#cross"><b>125</b> Cross-lumped</a>
+    <a href="#peano"><b>126</b> Knotted Peano</a>
+    <a href="#perc"><b>126–130</b> Percolation</a>
+  </nav>
+
+  <!-- ===================== KOCH ISLANDS ===================== -->
+  <section class="plate" id="korcak">
+    <div class="plate-head">
+      <p class="no">Figures, pages 117–118 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>A Koch continent and its islands</h2>
+      <p class="dim" id="dimA">N = 16, r = 1/8 · D = log 16/log 8 = 4/3 · each coastline D<sub>c</sub> = log 10/log 8 ≈ 1.1073</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wA">
+          <canvas id="cA" role="img" aria-label="Koch continent and islands"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cAt">Continent and islands</strong> · stage <span id="cAs">3</span> · <span id="cAn"></span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The generator splits into two parts. A connected broken line of N<sub>c</sub> links joins 0 to 1: the <i>coastline generator</i>. The remaining N − N<sub>c</sub> links form a closed loop that seeds a new island at every stage: the <i>island generator</i>. Sub-islands always stay on the sea side — left of the coastline going from 0 to 1, left of the island loop going clockwise. The limit has two dimensions: D = log N/log(1/r) for all coastlines lumped together, D<sub>c</sub> = log N<sub>c</sub>/log(1/r) for each one alone. In the second generator the coastline is straight: its islands are plain rectangles, and D measures fragmentation alone, not wiggliness.</p>
+        <div class="minis">
+          <div class="mini" aria-label="Generator of page 117">
+            <svg class="gen" viewBox="-0.06 -0.48 1.12 0.6" aria-hidden="true" id="miniA1"></svg>
+            <div class="fx">p. 117 · N<sub>c</sub> = 10, D<sub>c</sub> ≈ 1.107</div>
+          </div>
+          <div class="mini" aria-label="Generator of page 118">
+            <svg class="gen" viewBox="-0.06 -0.48 1.12 0.6" aria-hidden="true" id="miniA2"></svg>
+            <div class="fx">p. 118 · N<sub>c</sub> = 8, D<sub>c</sub> = 1</div>
+          </div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Generator</span></div>
+          <div class="steps words" id="gA" role="group" aria-label="Generator"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mA" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="sAv">stage 3</span></div>
+          <div class="steps" id="sA" role="group" aria-label="Stage"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="preA1">Show the p. 117 figure</button>
+          <button type="button" class="btn" id="preA2">p. 118</button>
+        </div>
+        <p class="readline" id="infoA" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Links</dt><dd id="rAa">—</dd></div>
+          <div><dt>Islands so far</dt><dd id="rAb">—</dd></div>
+          <div><dt>D</dt><dd>4/3</dd></div>
+          <div><dt>D<sub>c</sub></dt><dd id="rAc">—</dd></div>
+        </dl>
+        <p class="note">The generators are read off the two caption boxes; the step in the p. 117 coastline sits on [3/8, 4/8], and each island floats one lattice unit above the coast. The book draws only the generator and the island generator's next stage, so the placement of every copy as drawn (no mirror, no reversal) is the simplest choice consistent with those drawings; the p. 121 figure below, which the book does print at an advanced stage, confirms that choice. The Korčak staircase counts the islands of this construction by diameter λ = √a: as λ shrinks by r, the count multiplies by N, so the staircase descends with log–log slope −D.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ISLANDS AND LAKES ===================== -->
+  <section class="plate" id="lakes">
+    <div class="plate-head">
+      <p class="no">Figure, page 121 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Islands and lakes, nested without bound</h2>
+      <p class="dim">N = 18, r = 1/6 · D = log 18/log 6 ≈ 1.6131 · every coastline is rectifiable: D<sub>c</sub> = 1</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wB">
+          <canvas id="cB" role="img" aria-label="Islands and lakes teragon"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cBt">Advanced teragon</strong> · stage <span id="cBs">3</span> · <span id="cBn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Relieve the island generator from the requirement of staying to the left. Placed to the right of the coastline it digs lakes instead of raising islands, and one generator may carry both. This one adds, to a straight six-link coastline, one island loop above and one lake loop below. Initiated by a square, it nests islands within lakes within islands without bound: the final fractal is a σ-loop. The land never reaches a continent — extrapolated outward, the biggest island is almost surely found to lie off a bigger island's shore, and so on ad infinitum.</p>
+        <div class="mini" aria-label="Generator of page 121">
+          <svg class="gen" viewBox="-0.06 -0.44 1.12 0.84" aria-hidden="true" id="miniB"></svg>
+          <div class="fx">N = 18, r = 1/6, D ≈ 1.6131</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mB" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="sBv">stage 3</span></div>
+          <div class="steps" id="sB" role="group" aria-label="Stage"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="preB">Show the p. 121 teragon as printed</button>
+        </div>
+        <p class="readline" id="infoB" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Links</dt><dd id="rBa">—</dd></div>
+          <div><dt>Islands</dt><dd id="rBb">—</dd></div>
+          <div><dt>Lakes</dt><dd id="rBc">—</dd></div>
+          <div><dt>Deepest nesting</dt><dd id="rBd">—</dd></div>
+        </dl>
+        <p class="note">The island sits over [1/6, 3/6] and the lake under [3/6, 5/6], read off the caption box at 600 dpi. The printed teragon is the third stage on a square initiator; this reconstruction reproduces its pinwheel of four lakes, the four islands floating off the sides, and their satellites. The area of an island may be taken as total area or as land within its coastline — the choice moves the prefactor of Nr(A &gt; a), never the exponent D/2.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== NONLUMPED CURDLING ===================== -->
+  <section class="plate" id="curdling">
+    <div class="plate-head">
+      <p class="no">Figure, page 124 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Nonlumped curdling clusters</h2>
+      <p class="dim" id="dimC">Generator A: N = 12 of b² = 16 cells · D = log 12/log 4 ≈ 1.7925</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wC">
+          <canvas id="cC" role="img" aria-label="Curdling clusters"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cCt">Curdling</strong> · stage <span id="cCs">3</span> · <span id="cCn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Cantor curdling carried to the plane: keep N of the b × b cells, then curdle each kept cell in turn. The limit has zero area, and its topology is set entirely by which cells the generator keeps. A keeps a ring and stays connected — a Sierpiński carpet relative, met again in Chapter 14. F keeps four corners and crumbles to dust. B, C and E split into <i>preclusters</i> that thin and wiggle forever: B's largest piece is a straight interval, C's a fractal tree with D<sub>c</sub> = log 7/log 4, and E's F-shaped pieces keep splitting, so its clusters, too, end as intervals.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Generator</span></div>
+          <div class="gengrid" id="gC" role="group" aria-label="Generator"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Colour</span></div>
+          <div class="steps words" id="mC" role="group" aria-label="Colouring"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="sCv">stage 3</span></div>
+          <div class="steps" id="sC" role="group" aria-label="Stage"></div>
+        </div>
+        <p class="readline" id="infoC" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Cells</dt><dd id="rCa">—</dd></div>
+          <div><dt>Clusters</dt><dd id="rCb">—</dd></div>
+          <div><dt>Largest</dt><dd id="rCc">—</dd></div>
+          <div><dt>D<sub>c</sub> of largest</dt><dd id="rCd">—</dd></div>
+        </dl>
+        <p class="note">The five kept-cell patterns were read off the page at 600 dpi; the second stages printed under them follow from the patterns, with nothing left to choose. Because each newborn precluster lies inside a single cell of the previous lattice ("nonlumped"), the cluster dimension is log N<sub>c</sub>/log b with N<sub>c</sub> an integer — at most the largest component of the generator, a maximum B and C attain and E does not. The D<sub>c</sub> readout is measured from the largest cluster at the drawn stage.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CROSS-LUMPED ===================== -->
+  <section class="plate" id="cross">
+    <div class="plate-head">
+      <p class="no">Figure, page 125 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Cross-lumped curdling clusters</h2>
+      <p class="dim" id="dimD">Left generator: N = 5 of 9 cells · D = log 5/log 3 ≈ 1.4650</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wD">
+          <canvas id="cD" role="img" aria-label="Cross-lumped curdling clusters"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cDt">Cross-lumped curdling</strong> · stage <span id="cDs">4</span> · <span id="cDn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Now let kept cells in different cells of the coarser lattice touch: each newborn precluster "cross lumps" contributions from several of them. Every contact cluster then combines an integer number of copies of itself at scale 1/b with many lumped-in copies at smaller scales 1/b<sup>m</sup>, so the cluster dimension solves Σ a<sub>m</sub>x<sup>m</sup> = 1 with x = b<sup>−D<sub>c</sub></sup> — and b<sup>D<sub>c</sub></sup> need not be an integer. The diameter–number relation Nr(Λ &gt; λ) ∝ λ<sup>−D</sup> still holds for small λ.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Generator</span></div>
+          <div class="gengrid" id="gD" role="group" aria-label="Generator"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Colour</span></div>
+          <div class="steps words" id="mD" role="group" aria-label="Colouring"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="sDv">stage 4</span></div>
+          <div class="steps" id="sD" role="group" aria-label="Stage"></div>
+        </div>
+        <p class="readline" id="infoD" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Cells</dt><dd id="rDa">—</dd></div>
+          <div><dt>Clusters</dt><dd id="rDb">—</dd></div>
+          <div><dt>Largest</dt><dd id="rDc">—</dd></div>
+          <div><dt>D<sub>c</sub> measured</dt><dd id="rDd">—</dd></div>
+        </dl>
+        <p class="note">The two kept-cell patterns were read off the page at 600 dpi. For the left generator the vertical pieces lump into one straight spine: the largest cluster grows exactly 3× per stage, D<sub>c</sub> = 1. For the right one the measured growth ratio climbs toward ≈ 5.84 per stage, giving the fractional D<sub>c</sub> ≈ 1.60 &lt; D ≈ 1.63 — the book's point that b<sup>D<sub>c</sub></sup> "need not be an integer deducible from the generator by simple inspection". Estimating D from large diameters is biased low, as the chapter warns.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== KNOTTED PEANO ===================== -->
+  <section class="plate" id="peano">
+    <div class="plate-head">
+      <p class="no">Figure, page 126 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Knotted Peano monsters, tamed</h2>
+      <p class="dim">N = 17, r = 1/√17 · D = 2 · one self-contact per copy of the generator</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wE">
+          <canvas id="cE" role="img" aria-label="Knotted Peano curve"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cEt">Knotted Peano curve</strong> · stage <span id="cEs">2</span> · <span id="cEn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">A plane-filling collection of clusters (D = 2) cannot be made by curdling. Mandelbrot's alternative is a Peano curve whose teragons never cross themselves but touch themselves at carefully controlled points. Each point of self-contact "knots off" an open precluster; chunks of it are knotted away in turn, and what survives thins down to a highly ramified curve — a contact cluster whose diameter is fixed at birth, with the familiar distribution Nr(Λ &gt; λ) ∝ λ<sup>−2</sup>. These clusters are limits not of curves but of the open components of a curve's complement.</p>
+        <div class="mini" aria-label="Generator of page 126">
+          <svg class="gen" viewBox="-0.24 -1.02 1.32 1.12" aria-hidden="true" id="miniE"></svg>
+          <div class="fx">17 links on a lattice tilted by arctan ¼</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mE" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="sEv">stage 2</span></div>
+          <div class="steps" id="sE" role="group" aria-label="Stage"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="preE">Show the p. 126 figure as printed</button>
+        </div>
+        <p class="readline" id="infoE" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Links</dt><dd id="rEa">—</dd></div>
+          <div><dt>Self-contacts</dt><dd id="rEb">—</dd></div>
+          <div><dt>Crossings</dt><dd>0</dd></div>
+          <div><dt>D</dt><dd>2</dd></div>
+        </dl>
+        <p class="note">The generator's 17 vertices were measured from the scan: 17 links of length 1/√17 running from (0,0) to (4,−1) on the tilted lattice, with one vertex visited twice. Each link's placement (as drawn or reversed; no mirrors) was fitted to the printed second stage, which this reconstruction reproduces with a mean deviation of 0.01 px at 600 dpi. At every stage the teragon repeats no edge and visits no vertex more than twice — contacts, never crossings.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PERCOLATION ===================== -->
+  <section class="plate" id="perc">
+    <div class="plate-head">
+      <p class="no">Pages 126–130 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Bernoulli percolation</h2>
+      <p class="dim">Bond percolation on the square lattice · p<sub>crit</sub> = ½ · critical clusters D<sub>c</sub> ≈ 1.89 (for E = 2)</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wF">
+          <canvas id="cF" role="img" aria-label="Bond percolation lattice"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>Bernoulli lattice</strong> · <span id="cFn"></span> · copper in ink, the largest cluster in blue, a percolating cluster in red</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Build a lattice of sticks, each independently copper with probability p and insulating vinyl otherwise. Maximal connected sets of copper sticks are <i>copper clusters</i>; when one joins top to bottom, current flows and the lattice <i>percolates</i>. Hammersley's remarkable finding is a threshold: as the lattice grows, percolation becomes almost certain for p &gt; p<sub>crit</sub> and almost impossible for p &lt; p<sub>crit</sub> — and for bonds on the square lattice p<sub>crit</sub> = ½ exactly. At the threshold the clusters are "all skin and no flesh", ramified and stringy at every scale. Mandelbrot's conjecture, since accepted: critical clusters are fractal σ-curves with D = 2 and 1 &lt; D<sub>c</sub> &lt; D.</p>
+        <label class="slider" for="pF">
+          <div class="label-row"><span class="label">Probability of copper</span><span class="value" id="pFv">p = 0.50</span></div>
+          <input type="range" id="pF" min="0" max="100" value="50">
+        </label>
+        <div class="group">
+          <div class="label-row"><span class="label">Lattice</span><span class="value" id="nFv">48 × 48</span></div>
+          <div class="steps" id="nF" role="group" aria-label="Lattice size"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn" id="seedF">New throw of the die</button>
+          <button type="button" class="btn primary" id="preF">Back to p = ½, seed 1</button>
+        </div>
+        <p class="readline" id="infoF" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Percolates</dt><dd id="rFa">—</dd></div>
+          <div><dt>Copper sticks</dt><dd id="rFb">—</dd></div>
+          <div><dt>Largest cluster</dt><dd id="rFc">—</dd></div>
+          <div><dt>Seed</dt><dd id="rFd">1</dd></div>
+        </dl>
+        <p class="note">The lattice is a seeded simulation — press "New throw" for another. Matching percolation's exponents to the σ-cluster geometry gives D<sub>c</sub> = E/(τ−1) = E/(1+δ<sup>−1</sup>) and D<sub>c</sub> = 1 + (E−η)/2; for E = 2 these agree at D<sub>c</sub> ≈ 1.89. Early simulations gave the biased estimate ≈ 1.77 — close to the mass exponent Q = 2D<sub>c</sub> − D, which briefly misled several authors, Mandelbrot included, into calling Q a dimension. The chapter's p. 129 initiators for noncritical clusters (a ring of eight ½ξ squares for p &lt; p<sub>crit</sub>, the even-coordinate grid lines for p &gt; p<sub>crit</sub>) set the outer cutoff ξ; they are described, not drawn, here.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 13, pages 116–130. Every figure is computed from the rules in the chapter's text and caption boxes; the knotted Peano placements and the p. 121 teragon were fitted to the scans as noted under each figure. The percolation lattice is a simulation of the physics the chapter models, not a reproduction of a printed figure. Companion page: <a href="snow-sweeps.html">Sweeps, Rivers and Trees</a> (Plates 68–73).</p>
+</div>
+
+<script>
+// Shared drawing library: style constants, the zoomable canvas (snapshot while panning), chunked
+// paths, controls and small SVG figures. Loaded before each page's own scripts; pages may extend
+// PRINT with their own inks (PRINT.red = ..., PRINT.light = ...).
+const $ = (id) => document.getElementById(id);
+const fmt = (n) => n.toLocaleString('en-US');
+const PRINT = { paper: '#ecebe6', ink: '#151515', rule: '#c9c8c2', muted: '#66665f', accent: '#2f5f9e', red: '#c2452d', faint: '#bdbbb3', gray: '#8f8e88' };
+const RAMP = [[233, 185, 73], [217, 113, 59], [184, 66, 79], [125, 58, 120], [63, 79, 151], [43, 122, 138]];
+const ramp = (t, a = 1) => {
+  const x = Math.max(0, Math.min(1, t)) * (RAMP.length - 1), i = Math.min(RAMP.length - 2, Math.floor(x)), f = x - i;
+  const c = RAMP[i].map((v, k) => Math.round(v + (RAMP[i + 1][k] - v) * f));
+  return `rgba(${c[0]},${c[1]},${c[2]},${a})`;
+};
+const CAT = ['#151515', '#9a988f', '#2f5f9e', '#c2452d', '#3f8f6c', '#b58a2a', '#6b4e9b', '#5f8fae'];
+
+// ---------- shared plumbing ----------
+function figure(canvas, draw) {
+  const wrap = canvas.parentElement;
+  const f = { canvas, ctx: canvas.getContext('2d'), w: 1, h: 1, dpr: 1, draw };
+  const resize = () => {
+    f.dpr = Math.min(2, window.devicePixelRatio || 1);
+    f.w = wrap.clientWidth || 1; f.h = wrap.clientHeight || 1;
+    canvas.width = Math.round(f.w * f.dpr); canvas.height = Math.round(f.h * f.dpr);
+    f.draw();
+  };
+  new ResizeObserver(resize).observe(wrap);
+  return f;
+}
+function fitBox(f, bb, pad = 0.04) {
+  const w = Math.max(1e-9, bb.x1 - bb.x0), h = Math.max(1e-9, bb.y1 - bb.y0), s = Math.min(f.w / (w * (1 + 2 * pad)), f.h / (h * (1 + 2 * pad)));
+  return { s, ox: f.w / 2 - ((bb.x0 + bb.x1) / 2) * s, oy: f.h / 2 + ((bb.y0 + bb.y1) / 2) * s };
+}
+const toWorld = (f, v) => f.ctx.setTransform(f.dpr * v.s, 0, 0, -f.dpr * v.s, f.dpr * v.ox, f.dpr * v.oy);
+const toScreen = (f) => f.ctx.setTransform(f.dpr, 0, 0, f.dpr, 0, 0);
+function paper(f, color) { f.ctx.setTransform(1, 0, 0, 1, 0, 0); f.ctx.fillStyle = color; f.ctx.fillRect(0, 0, f.canvas.width, f.canvas.height); }
+function polyPath(P, closed = true, upto) {
+  const p = new Path2D(), m = upto === undefined ? P.length / 2 : upto;
+  p.moveTo(P[0], P[1]);
+  for (let i = 1; i < m; i++) p.lineTo(P[2 * i], P[2 * i + 1]);
+  if (closed) p.closePath();
+  return p;
+}
+function bbox(P, bb = { x0: Infinity, x1: -Infinity, y0: Infinity, y1: -Infinity }) {
+  for (let i = 0; i < P.length; i += 2) { bb.x0 = Math.min(bb.x0, P[i]); bb.x1 = Math.max(bb.x1, P[i]); bb.y0 = Math.min(bb.y0, P[i + 1]); bb.y1 = Math.max(bb.y1, P[i + 1]); }
+  return bb;
+}
+function stepButtons(el, values, text, aria, onPick) {
+  const bs = values.map((v) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.textContent = text(v); b.setAttribute('aria-label', aria(v));
+    b.addEventListener('click', () => onPick(v));
+    el.append(b);
+    return b;
+  });
+  const mark = (cur) => bs.forEach((b, i) => b.setAttribute('aria-pressed', String(values[i] === cur)));
+  mark.buttons = bs;
+  return mark;
+}
+// pan and zoom: a quick rescaled snapshot while moving, a full redraw once it settles
+function zoomable(wrapId, canvasId, fitOf, render, opts = {}) {
+  const maxZoom = opts.maxZoom || 400;
+  const wrap = $(wrapId), z = { view: null, user: false, snapView: null, raf: 0, full: 0 };
+  const snap = document.createElement('canvas');
+  const f = figure($(canvasId), () => draw());
+  function touch() { wrap.style.touchAction = z.view && z.view.s > z.view.fit * 1.02 ? 'none' : 'pan-y'; }
+  function draw() {
+    if (!z.view || !z.user) { z.view = fitOf(f); z.view.fit = z.view.s; z.user = false; touch(); }
+    render(f, z.view);
+    snap.width = f.canvas.width; snap.height = f.canvas.height; snap.getContext('2d').drawImage(f.canvas, 0, 0);
+    z.snapView = { s: z.view.s, ox: z.view.ox, oy: z.view.oy };
+  }
+  function quick() {
+    const v = z.view, k = v.s / z.snapView.s, c = f.ctx;
+    c.setTransform(1, 0, 0, 1, 0, 0); c.fillStyle = z.ground || PRINT.paper; c.fillRect(0, 0, f.canvas.width, f.canvas.height);
+    c.drawImage(snap, (v.ox - z.snapView.ox * k) * f.dpr, (v.oy - z.snapView.oy * k) * f.dpr, snap.width * k, snap.height * k);
+  }
+  function schedule() { if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; draw(); }); }
+  function moved() {
+    if (!z.snapView) { schedule(); return; }
+    if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; quick(); });
+    clearTimeout(z.full); z.full = setTimeout(schedule, 160);
+  }
+  function zoomAt(px, py, k) {
+    const v = z.view, ns = Math.min(v.fit * maxZoom, Math.max(v.fit * 0.8, v.s * k)), wx = (px - v.ox) / v.s, wy = (v.oy - py) / v.s;
+    v.s = ns; v.ox = px - wx * ns; v.oy = py + wy * ns; z.user = true; touch(); moved();
+  }
+  function pan(dx, dy) { z.view.ox += dx; z.view.oy += dy; z.user = true; moved(); }
+  wrap.querySelector('[data-z="in"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1.6));
+  wrap.querySelector('[data-z="out"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1 / 1.6));
+  wrap.querySelector('[data-z="fit"]').addEventListener('click', () => { z.user = false; schedule(); });
+  const pts = new Map();
+  let pinch = null, down = null;
+  const local = (e) => { const r = wrap.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+  wrap.addEventListener('pointerdown', (e) => {
+    if (e.target.closest('.view-tools')) return;
+    pts.set(e.pointerId, local(e));
+    down = pts.size === 1 ? { p: local(e), t: performance.now(), moved: 0 } : null;
+    try { wrap.setPointerCapture(e.pointerId); } catch (_) {}
+    if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), m: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2] }; }
+    wrap.classList.add('dragging');
+  });
+  wrap.addEventListener('pointermove', (e) => {
+    if (!pts.has(e.pointerId)) return;
+    const prev = pts.get(e.pointerId), cur = local(e);
+    pts.set(e.pointerId, cur);
+    if (down) down.moved = Math.max(down.moved, Math.hypot(cur[0] - down.p[0], cur[1] - down.p[1]));
+    if (pts.size === 2 && pinch) {
+      const [a, b] = [...pts.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]), m = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+      pan(m[0] - pinch.m[0], m[1] - pinch.m[1]);
+      if (pinch.d > 0) zoomAt(m[0], m[1], d / pinch.d);
+      pinch = { d, m };
+    } else if (pts.size === 1 && (e.pointerType !== 'touch' || z.view.s > z.view.fit * 1.02)) pan(cur[0] - prev[0], cur[1] - prev[1]);
+  });
+  const end = (e) => {
+    if (down && pts.size === 1 && down.moved < 5 && opts.onTap) { const [x, y] = local(e), v = z.view; opts.onTap((x - v.ox) / v.s, (v.oy - y) / v.s); }
+    down = null;
+    pts.delete(e.pointerId); if (pts.size < 2) pinch = null; if (!pts.size) wrap.classList.remove('dragging');
+  };
+  wrap.addEventListener('pointerup', end); wrap.addEventListener('pointercancel', (e) => { down = null; end(e); });
+  wrap.addEventListener('wheel', (e) => { if (!(e.ctrlKey || e.metaKey)) return; e.preventDefault(); const [x, y] = local(e); zoomAt(x, y, Math.exp(-e.deltaY * 0.0045)); }, { passive: false });
+  wrap.addEventListener('dblclick', (e) => { if (e.target.closest('.view-tools')) return; const [x, y] = local(e); zoomAt(x, y, e.shiftKey ? 0.5 : 2); });
+  return { f, z, schedule, refit: () => { z.user = false; schedule(); } };
+}
+// chunked paths: many small paths fill far faster than one path with a hundred thousand pieces
+function chunked(count, add, size = 512) {
+  const out = [];
+  let p = null;
+  for (let i = 0; i < count; i++) { if (i % size === 0) { p = new Path2D(); out.push(p); } add(p, i); }
+  return out;
+}
+// fill and outline in the same colour, so that tiles which only meet along an edge show no hairline seams
+function solid(c, paths, color, lw) {
+  c.fillStyle = color; c.strokeStyle = color; c.lineWidth = lw; c.lineJoin = 'miter';
+  for (const p of paths) { c.fill(p); c.stroke(p); }
+}
+const dot = (c, v, x, y, r = 4, color = PRINT.red) => { c.beginPath(); c.arc(v.ox + x * v.s, v.oy - y * v.s, r, 0, Math.PI * 2); c.fillStyle = color; c.fill(); c.strokeStyle = PRINT.paper; c.lineWidth = 1.5; c.stroke(); };
+
+// a polyline (Float64Array or [[x,y],...]) as SVG points with y flipped
+const svgPts = (P) => (P instanceof Float64Array ? Array.from({ length: P.length / 2 }, (_, i) => [P[2 * i], P[2 * i + 1]]) : P).map(([x, y]) => `${x.toFixed(4)},${(-y).toFixed(4)}`).join(' ');
+function miniCurve(id, P, dots = true) {
+  const pts = P instanceof Float64Array ? Array.from({ length: P.length / 2 }, (_, i) => [P[2 * i], P[2 * i + 1]]) : P;
+  $(id).innerHTML = `<line x1="0" y1="0" x2="1" y2="0" stroke="#8a8a84" stroke-width="0.008" stroke-dasharray="0.025 0.02"/>` +
+    `<polyline points="${svgPts(pts)}" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linejoin="round"/>` +
+    (dots ? `<g fill="currentColor">${pts.map(([x, y], i) => `<circle cx="${x.toFixed(4)}" cy="${(-y).toFixed(4)}" r="${i === 0 || i === pts.length - 1 ? 0.03 : 0.018}"/>`).join('')}</g>` : '');
+}
+function miniTree(id, links, dx = 0) {
+  const ends = new Set(), mid = new Set(), k = (x, y) => `${x.toFixed(4)},${y.toFixed(4)}`;
+  let s = '';
+  for (const [px, py, qx, qy] of links) {
+    s += `<line x1="${(px + dx).toFixed(4)}" y1="${(-py).toFixed(4)}" x2="${(qx + dx).toFixed(4)}" y2="${(-qy).toFixed(4)}" stroke="currentColor" stroke-width="0.02" stroke-linecap="round"/>`;
+    mid.add(k(px + dx, py)); mid.add(k(qx + dx, qy));
+  }
+  s += `<g fill="currentColor">${[...mid].map((p) => { const [x, y] = p.split(',').map(Number); const big = (Math.abs(x - dx) < 1e-6 || Math.abs(x - dx - 1) < 1e-6) && Math.abs(y) < 1e-6; return `<circle cx="${x}" cy="${-y}" r="${big ? 0.03 : 0.018}"/>`; }).join('')}</g>`;
+  return s;
+}
+// canvas transform for a similarity map f = [ar, ai, br, bi, m] composed with the view
+function setMap(f, c, v, fig) {
+  const [ar, ai, br, bi, m] = f, k = fig.dpr * v.s;
+  if (m) c.setTransform(k * ar, -k * ai, k * ai, k * ar, fig.dpr * (v.ox + v.s * br), fig.dpr * (v.oy - v.s * bi));
+  else c.setTransform(k * ar, -k * ai, -k * ai, -k * ar, fig.dpr * (v.ox + v.s * br), fig.dpr * (v.oy - v.s * bi));
+}
+const segPath = (segs, pick) => { const p = new Path2D(); for (const s of segs) if (!pick || pick(s)) { p.moveTo(s[0], s[1]); p.lineTo(s[2], s[3]); } return p; };
+// Plate 64's chevrons, measured from the plate: each interval a→b becomes a thin quadrilateral
+// pointing toward F, the corner the next stage would add (see DECISIONS.md)
+const CHEV_OUT = 0.43, CHEV_IN = 0.235;
+function chevronPaths(P, F, m) {
+  return chunked(m, (p, i) => {
+    const ax = P[2 * i], ay = P[2 * i + 1], bx = P[2 * i + 2], by = P[2 * i + 3], mx = (ax + bx) / 2, my = (ay + by) / 2;
+    const vx = F[2 * i] - mx, vy = F[2 * i + 1] - my;
+    p.moveTo(ax, ay); p.lineTo(mx + CHEV_OUT * vx, my + CHEV_OUT * vy); p.lineTo(bx, by); p.lineTo(mx + CHEV_IN * vx, my + CHEV_IN * vy); p.closePath();
+  });
+}
+
+// Chapter 13 machinery: Koch sigma-loops (islands and lakes), curdling clusters,
+// the knotted Peano generator and seeded Bernoulli bond percolation.
+// Conventions: a sigma-loop generator lives on the lattice of side 1/b over [0, 1].
+// Its coast links replace the interval itself; its island loops (traversed clockwise,
+// land inside on the right of travel) seed new islands on the water side of every
+// link, and its lake loops (counterclockwise, water inside on the left) seed lakes
+// on the land side. Levels count nesting: sea 0, land 1, lake water 2, and so on.
+
+// ---- the three generators read off pages 117, 118 and 121 ----
+const SIGMA_GENS = {
+  g117: {
+    b: 8, name: 'p. 117',
+    coast: [[0, 0], [1, 0], [2, 0], [3, 0], [3, 1], [4, 1], [4, 0], [5, 0], [6, 0], [7, 0], [8, 0]],
+    islands: [[[1, 1], [1, 2], [1, 3], [2, 3], [2, 2], [2, 1]]],
+    lakes: [],
+  },
+  g118: {
+    b: 8, name: 'p. 118',
+    coast: [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0], [7, 0], [8, 0]],
+    islands: [[[1, 1], [1, 2], [1, 3], [2, 3], [3, 3], [3, 2], [3, 1], [2, 1]]],
+    lakes: [],
+  },
+  g121: {
+    b: 6, name: 'p. 121',
+    coast: [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0]],
+    islands: [[[1, 1], [1, 2], [2, 2], [3, 2], [3, 1], [2, 1]]],
+    lakes: [[[3, -2], [4, -2], [5, -2], [5, -1], [4, -1], [3, -1]]],
+  },
+};
+for (const g of Object.values(SIGMA_GENS)) {
+  const norm = (pts) => pts.map(([x, y]) => [x / g.b, y / g.b]);
+  g.coastN = norm(g.coast); g.islandsN = g.islands.map(norm); g.lakesN = g.lakes.map(norm);
+  g.N = (g.coast.length - 1) + g.islands.reduce((s, L) => s + L.length, 0) + g.lakes.reduce((s, L) => s + L.length, 0);
+  g.Nc = g.coast.length - 1;
+  g.D = Math.log(g.N) / Math.log(g.b);
+  g.Dc = Math.log(g.Nc) / Math.log(g.b);
+}
+
+// Refine every link of every path: the coast replaces the link, each island loop and
+// lake loop becomes a new closed path. A path carries W (water level on the left of
+// its links) and G (land level on the right); a loop also carries lvl, its region's
+// level (odd regions are land, even are water). born = the stage the loop appeared.
+function sigmaRefine(paths, gen) {
+  const out = [];
+  for (const path of paths) {
+    const P = path.pts, n = P.length / 2, m = path.closed ? n : n - 1, Q = [];
+    for (let i = 0; i < m; i++) {
+      const ax = P[2 * i], ay = P[2 * i + 1], bx = P[2 * ((i + 1) % n)], by = P[2 * ((i + 1) % n) + 1];
+      const sx = bx - ax, sy = by - ay;                       // similarity z -> a + s·z
+      const map = ([x, y]) => [ax + sx * x - sy * y, ay + sy * x + sx * y];
+      for (let k = 0; k < gen.coastN.length - 1; k++) Q.push(...map(gen.coastN[k]));
+      for (const L of gen.islandsN) out.push({ pts: new Float64Array(L.flatMap(map)), closed: true, W: path.W, G: path.W + 1, lvl: path.W + 1, born: path.stage + 1 });
+      for (const L of gen.lakesN) out.push({ pts: new Float64Array(L.flatMap(map)), closed: true, W: path.G + 1, G: path.G, lvl: path.G + 1, born: path.stage + 1 });
+    }
+    if (!path.closed) Q.push(P[2 * n - 2], P[2 * n - 1]);
+    out.push({ ...path, pts: new Float64Array(Q) });
+  }
+  for (const p of out) p.stage = (paths.stage || 0) + 1;
+  return out;
+}
+function sigmaBuild(genKey, initiator, stages) {
+  const gen = SIGMA_GENS[genKey];
+  let paths = initiator === 'square'
+    ? [{ pts: new Float64Array([0, 0, 0, 1, 1, 1, 1, 0]), closed: true, W: 0, G: 1, lvl: 1, born: 0, stage: 0 }]
+    : [{ pts: new Float64Array([0, 0, 1, 0]), closed: false, W: 0, G: 1, lvl: 1, born: 0, stage: 0 }];
+  for (let s = 0; s < stages; s++) { paths.stage = s; paths = sigmaRefine(paths, gen); }
+  return paths;
+}
+
+// ---- curdling generators: kept cells of a b x b grid, read off pages 124-125 ----
+const CURD_GENS = {
+  A: { b: 4, rows: ['####', '#..#', '#..#', '####'], page: '124' },
+  B: { b: 4, rows: ['#..#', '#...', '#.#.', '#.#.'], page: '124' },
+  C: { b: 4, rows: ['#.#.', '#...', '####', '#...'], page: '124' },
+  E: { b: 4, rows: ['###.', '#...', '###.', '#...'], page: '124' },
+  F: { b: 4, rows: ['#..#', '....', '....', '#..#'], page: '124' },
+  X1: { b: 3, rows: ['#.#', '#..', '#.#'], page: '125' },
+  X2: { b: 3, rows: ['#.#', '#..', '###'], page: '125' },
+};
+for (const g of Object.values(CURD_GENS)) {
+  g.cells = [];
+  g.rows.forEach((r, i) => { for (let j = 0; j < r.length; j++) if (r[j] === '#') g.cells.push([i, j]); });
+  g.N = g.cells.length;
+  g.D = Math.log(g.N) / Math.log(g.b);
+}
+// iterate the curdling to stage k: cells are [row, col] in a b^k grid
+function curdle(genKey, k) {
+  const g = CURD_GENS[genKey];
+  let cur = g.cells;
+  for (let s = 1; s < k; s++) {
+    const next = new Array(cur.length * g.N);
+    let t = 0;
+    for (const [I, J] of cur) for (const [i, j] of g.cells) next[t++] = [I * g.b + i, J * g.b + j];
+    cur = next;
+  }
+  return cur;
+}
+// connected components (4-neighbour) of a cell set; returns a label per cell and sizes
+function clusters(cells, side) {
+  const idx = new Map();
+  cells.forEach(([i, j], k) => idx.set(i * side + j, k));
+  const label = new Int32Array(cells.length).fill(-1), sizes = [];
+  for (let k = 0; k < cells.length; k++) {
+    if (label[k] >= 0) continue;
+    const id = sizes.length;
+    let count = 0;
+    const stack = [k];
+    label[k] = id;
+    while (stack.length) {
+      const a = stack.pop(), [i, j] = cells[a];
+      count++;
+      for (const key of [(i + 1) * side + j, (i - 1) * side + j, i * side + j + 1, i * side + j - 1]) {
+        const b = idx.get(key);
+        if (b !== undefined && label[b] < 0) { label[b] = id; stack.push(b); }
+      }
+    }
+    sizes.push(count);
+  }
+  return { label, sizes };
+}
+
+// ---- the knotted Peano generator of page 126 ----
+// 17 links of length 1/sqrt(17) on the lattice tilted by arctan(1/4); the lattice
+// coordinates and the per-link codes (0 as drawn, 2 placed from the far end and run
+// backward) were fitted to the printed second stage (mean distance 0.01 px at 600 dpi).
+const KP_PTS = [[0, 0], [1, 0], [2, 0], [2, 1], [1, 1], [1, 2], [1, 3], [2, 3], [2, 2], [3, 2], [3, 3], [4, 3], [4, 2], [3, 2], [3, 1], [4, 1], [4, 0], [4, -1]];
+const KP_CODES = [0, 2, 2, 0, 2, 0, 0, 2, 0, 2, 0, 0, 0, 2, 2, 0, 2];
+const KP_OM = [4, -1];                                   // end-to-end in lattice units
+const KP_Z = KP_PTS.map(([m, n]) => {                    // normalised: start 0, end 1
+  const d = KP_OM[0] * KP_OM[0] + KP_OM[1] * KP_OM[1];
+  return [(m * KP_OM[0] + n * KP_OM[1]) / d, (n * KP_OM[0] - m * KP_OM[1]) / d];
+});
+const KP_CH = KP_CODES.map((c, k) => {
+  const rv = (c >> 1) & 1, a = KP_Z[rv ? k + 1 : k], b = KP_Z[rv ? k : k + 1];
+  return [b[0] - a[0], b[1] - a[1], a[0], a[1], rv];     // z -> A z + B, as [Ar, Ai, Br, Bi, rev]
+});
+function knottedCurve(stages) {
+  let leaves = [[1, 0, 0, 0, 0]];
+  for (let s = 0; s < stages; s++) {
+    const out = new Array(leaves.length * 17);
+    let t = 0;
+    for (const [Ar, Ai, Br, Bi, rev] of leaves) {
+      for (let q = 0; q < 17; q++) {
+        const [ar, ai, br, bi, r2] = KP_CH[rev ? 16 - q : q];
+        out[t++] = [Ar * ar - Ai * ai, Ar * ai + Ai * ar, Ar * br - Ai * bi + Br, Ar * bi + Ai * br + Bi, rev ^ r2];
+      }
+    }
+    leaves = out;
+  }
+  const P = new Float64Array(2 * leaves.length + 2);
+  leaves.forEach(([Ar, Ai, Br, Bi, rev], i) => {
+    P[2 * i + 2] = rev ? Br : Ar + Br;
+    P[2 * i + 3] = rev ? Bi : Ai + Bi;
+  });
+  return P;
+}
+// count the self-contacts: vertices visited twice (the teragon repeats no edge)
+function knottedContacts(P) {
+  const seen = new Set();
+  let twice = 0;
+  for (let i = 0; i < P.length; i += 2) {
+    const k = Math.round(P[i] * 1e7) + ':' + Math.round(P[i + 1] * 1e7);
+    if (seen.has(k)) twice++; else seen.add(k);
+  }
+  return twice;
+}
+
+// ---- seeded Bernoulli bond percolation on an n x n site lattice ----
+function mulberry32(seed) {
+  let a = seed >>> 0;
+  return () => {
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function percolation(n, p, seed) {
+  const rnd = mulberry32(seed);
+  // bonds: H[i][j] joins (i,j)-(i,j+1), V[i][j] joins (i,j)-(i+1,j); copper with probability p
+  const H = new Uint8Array(n * (n - 1)), V = new Uint8Array((n - 1) * n);
+  for (let i = 0; i < H.length; i++) H[i] = rnd() < p ? 1 : 0;
+  for (let i = 0; i < V.length; i++) V[i] = rnd() < p ? 1 : 0;
+  // union-find over sites plus two virtual nodes: top (n*n) and bottom (n*n+1)
+  const parent = new Int32Array(n * n + 2);
+  for (let i = 0; i < parent.length; i++) parent[i] = i;
+  const find = (x) => { while (parent[x] !== x) { parent[x] = parent[parent[x]]; x = parent[x]; } return x; };
+  const union = (a, b) => { const ra = find(a), rb = find(b); if (ra !== rb) parent[ra] = rb; };
+  for (let i = 0; i < n; i++) for (let j = 0; j < n - 1; j++) if (H[i * (n - 1) + j]) union(i * n + j, i * n + j + 1);
+  for (let i = 0; i < n - 1; i++) for (let j = 0; j < n; j++) if (V[i * n + j]) union(i * n + j, (i + 1) * n + j);
+  for (let j = 0; j < n; j++) { union(j, n * n); union((n - 1) * n + j, n * n + 1); }
+  const percolates = find(n * n) === find(n * n + 1);
+  // cluster sizes in copper sticks; a bond belongs to the cluster of its endpoints
+  const sticks = new Map();
+  const addStick = (site) => { const r = find(site); sticks.set(r, (sticks.get(r) || 0) + 1); };
+  for (let i = 0; i < n; i++) for (let j = 0; j < n - 1; j++) if (H[i * (n - 1) + j]) addStick(i * n + j);
+  for (let i = 0; i < n - 1; i++) for (let j = 0; j < n; j++) if (V[i * n + j]) addStick(i * n + j);
+  let bigRoot = -1, bigSize = 0, total = 0;
+  const percRoot = find(n * n);
+  for (const [r, s] of sticks) { total += s; if (s > bigSize) { bigSize = s; bigRoot = r; } }
+  return { n, H, V, find, percolates, bigRoot, bigSize, total, percRoot };
+}
+
+(() => {
+
+  // small helper: a sigma-loop generator as a mini SVG (coast with dots, loops)
+  function sigMini(id, gen) {
+    const b = gen.b, pt = ([x, y]) => `${(x / b).toFixed(4)},${(-y / b).toFixed(4)}`;
+    const loopPts = (L) => L.map(pt).join(' ');
+    let s = `<polyline points="${gen.coast.map(pt).join(' ')}" fill="none" stroke="currentColor" stroke-width="0.016" stroke-linejoin="round"/>`;
+    for (const L of gen.islands.concat(gen.lakes)) s += `<polygon points="${loopPts(L)}" fill="none" stroke="currentColor" stroke-width="0.016"/>`;
+    const dots = (pts, closed) => pts.map(([x, y], i) => `<circle cx="${(x / b).toFixed(4)}" cy="${(-y / b).toFixed(4)}" r="${!closed && (i === 0 || i === pts.length - 1) ? 0.03 : 0.016}"/>`).join('');
+    s += `<g fill="currentColor">${dots(gen.coast, false)}${gen.islands.concat(gen.lakes).map((L) => dots(L, true)).join('')}</g>`;
+    $(id).innerHTML = s;
+  }
+
+  // paint a sigma-loop teragon: initiator and loops in creation order, land in ink,
+  // water in paper (or by nesting level)
+  function paintSigma(c, paths, opts) {
+    const loops = paths.filter((p) => p.closed).sort((a, b) => a.born - b.born);
+    const chain = paths.find((p) => !p.closed);
+    if (chain) {
+      const P = chain.pts, p = new Path2D();
+      p.moveTo(P[0], P[1]);
+      for (let i = 2; i < P.length; i += 2) p.lineTo(P[i], P[i + 1]);
+      p.lineTo(1, -0.22); p.lineTo(0, -0.22); p.closePath();
+      c.fillStyle = opts.level ? opts.level(1) : PRINT.ink; c.fill(p);
+    }
+    for (const L of loops) {
+      const p = polyPath(L.pts, true);
+      c.fillStyle = opts.level ? opts.level(L.lvl) : (L.lvl % 2 ? PRINT.ink : PRINT.paper);
+      c.fill(p);
+    }
+  }
+  function strokeSigma(c, paths, w) {
+    const p = new Path2D();
+    for (const q of paths) {
+      const P = q.pts;
+      p.moveTo(P[0], P[1]);
+      for (let i = 2; i < P.length; i += 2) p.lineTo(P[i], P[i + 1]);
+      if (q.closed) p.closePath();
+    }
+    c.strokeStyle = PRINT.ink; c.lineJoin = 'round'; c.lineWidth = w; c.stroke(p);
+  }
+  const shoelace = (P) => {
+    let a = 0;
+    for (let i = 0; i < P.length; i += 2) { const j = (i + 2) % P.length; a += P[i] * P[j + 1] - P[j] * P[i + 1]; }
+    return Math.abs(a) / 2;
+  };
+
+  // ====================== pages 117-118: Koch continent and islands ======================
+  const stA = { gen: 'g117', n: 3, mode: 'map' };
+  const cacheA = {};
+  function dataA() {
+    const key = `${stA.gen}|${stA.n}`;
+    if (cacheA[key]) return cacheA[key];
+    const paths = sigmaBuild(stA.gen, 'line', stA.n);
+    const islands = paths.filter((p) => p.closed);
+    const links = paths.reduce((s, p) => s + p.pts.length / 2 - (p.closed ? 0 : 1), 0);
+    // Korcak staircase: island diameters λ = √a, counted from the largest down
+    const lam = islands.map((L) => Math.sqrt(shoelace(L.pts))).sort((a, b) => b - a);
+    return (cacheA[key] = { paths, islands, links, lam });
+  }
+  const zA = zoomable('wA', 'cA', (f) => {
+    if (stA.mode === 'korcak') return fitBox(f, { x0: 0, x1: 1, y0: 0, y1: 1 }, 0.1);
+    return fitBox(f, { x0: -0.05, x1: 1.05, y0: -0.24, y1: 0.62 }, 0.03);
+  }, (f, v) => {
+    const c = f.ctx, D = dataA(), gen = SIGMA_GENS[stA.gen];
+    paper(f, PRINT.paper); toWorld(f, v);
+    if (stA.mode === 'korcak') {
+      toScreen(f);
+      const X = (x) => v.ox + x * v.s, Y = (y) => v.oy - y * v.s;
+      const lam = D.lam, n = lam.length;
+      c.strokeStyle = PRINT.muted; c.lineWidth = 1.2;
+      c.beginPath(); c.moveTo(X(0), Y(1)); c.lineTo(X(0), Y(0)); c.lineTo(X(1), Y(0)); c.stroke();
+      c.fillStyle = PRINT.muted; c.font = '12px "IBM Plex Mono", monospace'; c.textAlign = 'center';
+      c.fillText('log λ  (island diameter √a) →', X(0.5), Y(0) + 26);
+      c.save(); c.translate(X(0) - 14, Y(0.5)); c.rotate(-Math.PI / 2); c.fillText('log Nr(Λ > λ) →', 0, 0); c.restore();
+      if (n) {
+        const lo = Math.log10(lam[n - 1]) - 0.25, hi = Math.log10(lam[0]) + 0.25, ymax = Math.log10(n) + 0.25;
+        const px = (l) => X((Math.log10(l) - lo) / (hi - lo)), py = (k) => Y(Math.log10(k) / ymax);
+        // distinct diameters (one per cohort) with their cumulative counts
+        const steps = [];
+        for (let k = 0; k < n; k++) if (k === n - 1 || Math.abs(lam[k + 1] - lam[k]) > 1e-9 * lam[k]) steps.push([lam[k], k + 1]);
+        c.strokeStyle = PRINT.accent; c.lineWidth = 2; c.beginPath();
+        c.moveTo(px(steps[0][0]), py(1));
+        for (let i = 0; i < steps.length; i++) {
+          const [l, cnt] = steps[i];
+          c.lineTo(px(l), py(cnt));
+          c.lineTo(px(i + 1 < steps.length ? steps[i + 1][0] : Math.pow(10, lo)), py(cnt));
+        }
+        c.stroke();
+        // guide of slope −D through the first step
+        c.strokeStyle = PRINT.red; c.setLineDash([6, 5]); c.lineWidth = 1.5; c.beginPath();
+        const l1 = Math.log10(lam[0]), g = (l) => Math.log10(1) + gen.D * (l1 - l);
+        c.moveTo(px(lam[0]), Y(g(l1) / ymax)); c.lineTo(X(0.02), Y(g(lo + 0.02 * (hi - lo)) / ymax));
+        c.stroke(); c.setLineDash([]);
+        c.fillStyle = PRINT.red; c.textAlign = 'left'; c.fillText(`slope −D = −${gen.D.toFixed(4)}`, X(0.12), Y(0.9));
+      }
+      return;
+    }
+    const w = Math.max(0.5, Math.min(2, Math.pow(1 / gen.b, stA.n) * v.s * 0.1)) / v.s;
+    if (stA.mode === 'map') paintSigma(c, D.paths, {});
+    else strokeSigma(c, D.paths, w);
+    toScreen(f); dot(c, v, 0, 0); dot(c, v, 1, 0);
+  });
+  const MODES_A = { map: 'Land and sea', teragon: 'Teragon', korcak: 'Korčak staircase' };
+  const INFO_A = {
+    map: 'Everything below the coastline, and inside every island, is land. Each stage multiplies the number of islands by N = 16 and shrinks the newborn ones by r = 1/8.',
+    teragon: 'The broken lines themselves: the coastline from 0 to 1 and the closed island loops seeded so far.',
+    korcak: 'Islands counted by diameter, on log–log axes. The counts climb in steps of factor N as λ falls by factor r, so the staircase hugs the dashed line of slope −D: the generalized Korčak law Nr(Λ > λ) = Fλ⁻ᴰ.',
+  };
+  function setA(refit) {
+    const D = dataA(), gen = SIGMA_GENS[stA.gen];
+    markGA(stA.gen); markMA(stA.mode); markSA(stA.n);
+    $('sAv').textContent = `stage ${stA.n}`; $('cAs').textContent = stA.n;
+    $('cAn').textContent = `${fmt(D.links)} links`;
+    $('cAt').textContent = MODES_A[stA.mode];
+    $('rAa').textContent = fmt(D.links); $('rAb').textContent = fmt(D.islands.length);
+    $('rAc').textContent = stA.gen === 'g117' ? 'log 10/log 8 ≈ 1.1073' : '1 (rectifiable)';
+    $('dimA').innerHTML = stA.gen === 'g117'
+      ? 'N = 16, r = 1/8 · D = log 16/log 8 = 4/3 · each coastline D<sub>c</sub> = log 10/log 8 ≈ 1.1073'
+      : 'N = 16, r = 1/8 · D = log 16/log 8 = 4/3 · straight coastline generator: D<sub>c</sub> = 1';
+    $('infoA').innerHTML = INFO_A[stA.mode];
+    if (refit) zA.refit(); else zA.schedule();
+  }
+  const markGA = stepButtons($('gA'), ['g117', 'g118'], (g) => SIGMA_GENS[g].name, (g) => `Generator of ${SIGMA_GENS[g].name}`, (g) => { stA.gen = g; setA(false); });
+  const markMA = stepButtons($('mA'), Object.keys(MODES_A), (k) => MODES_A[k], (k) => `Show: ${MODES_A[k]}`, (k) => { stA.mode = k; setA(true); });
+  const markSA = stepButtons($('sA'), [1, 2, 3, 4], String, (n) => `Stage ${n}`, (n) => { stA.n = n; setA(false); });
+  $('preA1').addEventListener('click', () => { Object.assign(stA, { gen: 'g117', n: 3, mode: 'map' }); setA(true); });
+  $('preA2').addEventListener('click', () => { Object.assign(stA, { gen: 'g118', n: 3, mode: 'map' }); setA(true); });
+  sigMini('miniA1', SIGMA_GENS.g117); sigMini('miniA2', SIGMA_GENS.g118);
+
+  // ====================== page 121: islands and lakes ======================
+  const stB = { n: 3, mode: 'print' };
+  const cacheB = {};
+  function dataB() {
+    const key = stB.n;
+    if (cacheB[key]) return cacheB[key];
+    const paths = sigmaBuild('g121', 'square', stB.n);
+    const loops = paths.filter((p) => p.born > 0);
+    const links = paths.reduce((s, p) => s + p.pts.length / 2, 0);
+    return (cacheB[key] = {
+      paths, links,
+      islands: loops.filter((p) => p.lvl % 2 === 1).length,
+      lakes: loops.filter((p) => p.lvl % 2 === 0).length,
+      depth: Math.max(1, ...loops.map((p) => p.lvl)),
+    });
+  }
+  const LVL_COLORS = ['#b9cdd9', PRINT.ink, '#7aa2b8', '#3d3d39', '#4c7e97', '#6a6a63', '#2f5f7e'];
+  const zB = zoomable('wB', 'cB', (f) => fitBox(f, { x0: -0.45, x1: 1.45, y0: -0.45, y1: 1.45 }, 0.02), (f, v) => {
+    const c = f.ctx, D = dataB();
+    paper(f, stB.mode === 'depth' ? LVL_COLORS[0] : PRINT.paper); toWorld(f, v);
+    if (stB.mode === 'teragon') strokeSigma(c, D.paths, Math.max(0.5, Math.min(2, Math.pow(1 / 6, stB.n) * v.s * 0.1)) / v.s);
+    else paintSigma(c, D.paths, stB.mode === 'depth' ? { level: (l) => LVL_COLORS[Math.min(l, LVL_COLORS.length - 1)] } : {});
+    toScreen(f);
+  });
+  const MODES_B = { print: 'As printed', depth: 'By nesting level', teragon: 'Teragon' };
+  const INFO_B = {
+    print: 'Land in ink, water in paper. The outer coast of the big island stays a perfect square at every stage, because this generator\'s coastline is straight: all the dimension lives in the fragmentation.',
+    depth: 'Each region tinted by how deep it nests: sea, island, lake-in-island, island-in-lake, and so on. The deepest level drawn grows by two with every stage.',
+    teragon: 'All the coastlines at once: the σ-loop. Every loop is a separate closed curve; together they bound the nested land and water.',
+  };
+  function setB(refit) {
+    const D = dataB();
+    markMB(stB.mode); markSB(stB.n);
+    $('sBv').textContent = `stage ${stB.n}`; $('cBs').textContent = stB.n; $('cBn').textContent = `${fmt(D.links)} links`;
+    $('cBt').textContent = MODES_B[stB.mode];
+    $('rBa').textContent = fmt(D.links); $('rBb').textContent = fmt(D.islands); $('rBc').textContent = fmt(D.lakes);
+    $('rBd').textContent = `level ${D.depth}`;
+    $('infoB').innerHTML = INFO_B[stB.mode];
+    if (refit) zB.refit(); else zB.schedule();
+  }
+  const markMB = stepButtons($('mB'), Object.keys(MODES_B), (k) => MODES_B[k], (k) => `Show: ${MODES_B[k]}`, (k) => { stB.mode = k; setB(false); });
+  const markSB = stepButtons($('sB'), [0, 1, 2, 3], String, (n) => `Stage ${n}`, (n) => { stB.n = n; setB(false); });
+  $('preB').addEventListener('click', () => { Object.assign(stB, { n: 3, mode: 'print' }); setB(true); });
+  sigMini('miniB', SIGMA_GENS.g121);
+
+  // ====================== pages 124-125: curdling clusters ======================
+  function gridSvg(gen) {
+    const b = gen.b, u = 30 / b;
+    let s = `<svg viewBox="-1 -1 32 32" aria-hidden="true"><rect class="frame" x="0" y="0" width="30" height="30" stroke-width="1.5"/>`;
+    for (const [i, j] of gen.cells) s += `<rect class="on" x="${(j * u).toFixed(2)}" y="${(i * u).toFixed(2)}" width="${u.toFixed(2)}" height="${u.toFixed(2)}"/>`;
+    return s + '</svg>';
+  }
+  const CLUSTER_COLORS = ['#2f5f9e', '#c2452d', '#3f8f6c', '#b58a2a', '#6b4e9b', '#5f8fae', '#8a6a4f', '#4f8a84'];
+  function curdSection(ids, keys, maxStage, dims, info) {
+    const st = { gen: keys[0], n: Math.min(3, maxStage), mode: 'clusters' };
+    const cache = {};
+    function data() {
+      const key = `${st.gen}|${st.n}`;
+      if (cache[key]) return cache[key];
+      const g = CURD_GENS[st.gen], side = Math.pow(g.b, st.n), cells = curdle(st.gen, st.n);
+      const cl = clusters(cells, side);
+      const order = cl.sizes.map((s, i) => [s, i]).sort((a, b) => b[0] - a[0]);
+      const rank = new Int32Array(cl.sizes.length);
+      order.forEach(([, i], r) => { rank[i] = r; });
+      return (cache[key] = { g, side, cells, cl, rank, big: order.length ? order[0][0] : 0 });
+    }
+    const z = zoomable(ids.w, ids.c, (f) => fitBox(f, { x0: 0, x1: data().side, y0: 0, y1: data().side }, 0.02), (f, v) => {
+      const c = f.ctx, D = data(), side = D.side;
+      paper(f, PRINT.paper); toWorld(f, v);
+      const groups = new Map();
+      D.cells.forEach(([i, j], k) => {
+        const col = st.mode === 'ink' ? PRINT.ink : (D.rank[D.cl.label[k]] === 0 ? PRINT.ink : CLUSTER_COLORS[D.rank[D.cl.label[k]] % CLUSTER_COLORS.length]);
+        if (!groups.has(col)) groups.set(col, new Path2D());
+        groups.get(col).rect(j, side - 1 - i, 1, 1);
+      });
+      for (const [col, p] of groups) solid(c, [p], col, 0.5 / v.s);
+      toScreen(f);
+    });
+    function set(refit) {
+      const D = data();
+      markG(st.gen); markM(st.mode); markS(st.n);
+      $(ids.sv).textContent = `stage ${st.n}`; $(ids.cs).textContent = st.n; $(ids.cn).textContent = `${fmt(D.cells.length)} cells of side ${D.g.b}⁻${st.n > 9 ? st.n : '¹²³⁴⁵⁶'[st.n - 1]}`;
+      $(ids.ct).textContent = `Generator ${st.gen.replace('X1', '(left)').replace('X2', '(right)')}`;
+      $(ids.ra).textContent = fmt(D.cells.length); $(ids.rb).textContent = fmt(D.cl.sizes.length); $(ids.rc).textContent = `${fmt(D.big)} cells`;
+      $(ids.rd).textContent = (Math.log(D.big) / Math.log(Math.pow(D.g.b, st.n))).toFixed(4);
+      $(ids.dim).innerHTML = dims[st.gen];
+      $(ids.info).innerHTML = info[st.gen];
+      if (refit) z.refit(); else z.schedule();
+    }
+    const markG = ((el) => {
+      const mark = { fns: [] };
+      const bs = keys.map((k) => {
+        const b = document.createElement('button');
+        b.type = 'button'; b.innerHTML = gridSvg(CURD_GENS[k]) + `<span>${k.replace('X1', 'left').replace('X2', 'right')}</span>`;
+        b.setAttribute('aria-label', `Generator ${k}`);
+        b.addEventListener('click', () => { st.gen = k; set(true); });
+        el.append(b);
+        return b;
+      });
+      return (cur) => bs.forEach((b, i) => b.setAttribute('aria-pressed', String(keys[i] === cur)));
+    })($(ids.g));
+    const markM = stepButtons($(ids.m), ['clusters', 'ink'], (k) => (k === 'clusters' ? 'By cluster' : 'All ink'), (k) => `Colour: ${k}`, (k) => { st.mode = k; set(false); });
+    const markS = stepButtons($(ids.s), Array.from({ length: maxStage }, (_, i) => i + 1), String, (n) => `Stage ${n}`, (n) => { st.n = n; set(true); });
+    return { set, st };
+  }
+  const secC = curdSection(
+    { w: 'wC', c: 'cC', g: 'gC', m: 'mC', s: 'sC', sv: 'sCv', cs: 'cCs', cn: 'cCn', ct: 'cCt', ra: 'rCa', rb: 'rCb', rc: 'rCc', rd: 'rCd', dim: 'dimC', info: 'infoC' },
+    ['A', 'B', 'C', 'E', 'F'], 4,
+    {
+      A: 'Generator A: N = 12 of b² = 16 cells · D = log 12/log 4 ≈ 1.7925 · connected: one cluster, a curve',
+      B: 'Generator B: N = 7 · D = log 7/log 4 ≈ 1.4037 · largest cluster an interval, D<sub>c</sub> = 1',
+      C: 'Generator C: N = 8 · D = log 8/log 4 = 1.5 · largest cluster a tree, D<sub>c</sub> = log 7/log 4 ≈ 1.4037',
+      E: 'Generator E: N = 8 · D = log 8/log 4 = 1.5 · the F-shaped pieces keep splitting: D<sub>c</sub> → 1',
+      F: 'Generator F: N = 4 · D = log 4/log 4 = 1 · a dust, akin to the Fournier model of Chapter 9',
+    },
+    {
+      A: 'The kept ring touches ring to ring, so every stage stays one connected precurd. The limit is a curve of zero area: a relative of the Sierpiński carpet of Chapter 14.',
+      B: 'The left column reproduces itself and stays a column: the largest cluster has exactly 4ᵏ cells at stage k, an interval in the limit. The other kept cells spin off ever-thinner satellites.',
+      C: 'The largest component of the generator has 7 cells in a T shape, and each stage keeps it connected: the limit cluster is a fractal tree, and the maximum D꜀ = log 7/log 4 is attained.',
+      E: 'The 8 kept cells form one connected F, but its copies do not hold together: the largest cluster has only 2·4ᵏ cells at stage k, so the limit clusters are straight intervals after all — the maximum is not attained.',
+      F: 'Four corner cells, never touching: by stage 2 every cluster is a single cell, and the limit is a dust of dimension 1 that no cell ever rejoins.',
+    }
+  );
+  const secD = curdSection(
+    { w: 'wD', c: 'cD', g: 'gD', m: 'mD', s: 'sD', sv: 'sDv', cs: 'cDs', cn: 'cDn', ct: 'cDt', ra: 'rDa', rb: 'rDb', rc: 'rDc', rd: 'rDd', dim: 'dimD', info: 'infoD' },
+    ['X1', 'X2'], 6,
+    {
+      X1: 'Left generator: N = 5 of 9 cells · D = log 5/log 3 ≈ 1.4650 · spine cluster D<sub>c</sub> = 1',
+      X2: 'Right generator: N = 6 of 9 cells · D = log 6/log 3 ≈ 1.6309 · largest cluster D<sub>c</sub> ≈ 1.60, fractional b^D<sub>c</sub>',
+    },
+    {
+      X1: 'The left column\'s copies stack across cell borders into one unbroken spine — cross lumping. The spine grows exactly 3× per stage (D꜀ = 1); the corner cells shed separate flecks that lump into short dashes.',
+      X2: 'The L of column-plus-row lumps with the corner cell\'s copies into one large cluster whose growth ratio climbs toward ≈ 5.84 per stage: D꜀ ≈ 1.60, strictly between 1 and D. No integer power of 3 matches it.',
+    }
+  );
+
+  // ====================== page 126: knotted Peano ======================
+  const stE = { n: 2, mode: 'curve' };
+  const cacheE = {};
+  function dataE() {
+    const key = stE.n;
+    if (cacheE[key]) return cacheE[key];
+    const P = knottedCurve(stE.n);
+    return (cacheE[key] = { P, path: polyPath(P, false), box: bbox(P), contacts: knottedContacts(P), flood: null });
+  }
+  function floodE(D) {
+    if (D.flood) return D.flood;
+    const S = 1024, pad = 18, bb = D.box;
+    const sc = (S - 2 * pad) / Math.max(bb.x1 - bb.x0, bb.y1 - bb.y0);
+    const off = document.createElement('canvas'); off.width = S; off.height = S;
+    const c = off.getContext('2d', { willReadFrequently: true });
+    c.setTransform(sc, 0, 0, -sc, pad - bb.x0 * sc, S - pad + bb.y0 * sc);
+    c.strokeStyle = '#000'; c.lineWidth = 2.6 / sc; c.lineJoin = 'round'; c.stroke(D.path);
+    const img = c.getImageData(0, 0, S, S), a = img.data;
+    const label = new Int32Array(S * S).fill(-1);
+    const comps = [];
+    for (let start = 0; start < S * S; start++) {
+      if (label[start] >= 0 || a[4 * start + 3] > 60) continue;
+      const id = comps.length, stack = [start];
+      label[start] = id;
+      let size = 0, edge = false;
+      while (stack.length) {
+        const k = stack.pop(), x = k % S, y = (k / S) | 0;
+        size++;
+        if (x === 0 || y === 0 || x === S - 1 || y === S - 1) edge = true;
+        for (const q of [k - 1, k + 1, k - S, k + S]) {
+          if (q < 0 || q >= S * S || label[q] >= 0 || a[4 * q + 3] > 60) continue;
+          if ((q === k - 1 && x === 0) || (q === k + 1 && x === S - 1)) continue;
+          label[q] = id; stack.push(q);
+        }
+      }
+      comps.push({ size, edge });
+    }
+    // tint every knotted-off cell (the components that do not touch the border)
+    const toRGB = (h) => [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)];
+    const pal = CLUSTER_COLORS.map(toRGB), paperC = toRGB(PRINT.paper);
+    const out = c.createImageData(S, S);
+    for (let k = 0; k < S * S; k++) {
+      const l = label[k];
+      let col = paperC, al = 255;
+      if (l < 0) col = [21, 21, 21];
+      else if (!comps[l].edge) { const p = pal[l % pal.length]; col = [(p[0] + paperC[0]) >> 1, (p[1] + paperC[1]) >> 1, (p[2] + paperC[2]) >> 1]; }
+      out.data[4 * k] = col[0]; out.data[4 * k + 1] = col[1]; out.data[4 * k + 2] = col[2]; out.data[4 * k + 3] = al;
+    }
+    c.setTransform(1, 0, 0, 1, 0, 0); c.putImageData(out, 0, 0);
+    const inner = comps.filter((q) => !q.edge).length;
+    return (D.flood = { off, sc, pad, S, inner });
+  }
+  const zE = zoomable('wE', 'cE', (f) => fitBox(f, dataE().box, 0.05), (f, v) => {
+    const c = f.ctx, D = dataE();
+    paper(f, PRINT.paper);
+    if (stE.mode === 'clusters' && stE.n <= 3) {
+      const F = floodE(D), bb = D.box;
+      // the offscreen bitmap is square: it covers M = max(w, h) of the bbox plus margins
+      const m = F.pad / F.sc, M = Math.max(bb.x1 - bb.x0, bb.y1 - bb.y0);
+      toScreen(f);
+      c.imageSmoothingEnabled = stE.n < 3;
+      c.drawImage(F.off, v.ox + (bb.x0 - m) * v.s, v.oy - (bb.y0 + M + m) * v.s, (M + 2 * m) * v.s, (M + 2 * m) * v.s);
+    } else {
+      toWorld(f, v);
+      const w = Math.max(0.4, Math.min(2.2, Math.pow(1 / Math.sqrt(17), stE.n) * v.s * 0.14)) / v.s;
+      c.strokeStyle = PRINT.ink; c.lineJoin = 'round'; c.lineWidth = w; c.stroke(D.path);
+      toScreen(f);
+    }
+    dot(c, v, 0, 0); dot(c, v, 1, 0);
+  });
+  const MODES_E = { curve: 'Teragon', clusters: 'Knotted-off preclusters' };
+  function setE(refit) {
+    const D = dataE();
+    markME(stE.mode); markSE(stE.n);
+    markSE.buttons.forEach((b, i) => { b.disabled = stE.mode === 'clusters' && i + 1 > 3; });
+    $('sEv').textContent = `stage ${stE.n}`; $('cEs').textContent = stE.n; $('cEn').textContent = `${fmt(D.P.length / 2 - 1)} links`;
+    $('cEt').textContent = MODES_E[stE.mode];
+    $('rEa').textContent = fmt(D.P.length / 2 - 1); $('rEb').textContent = fmt(D.contacts);
+    $('infoE').innerHTML = stE.mode === 'curve'
+      ? 'The teragon, drawn from start dot to end dot. Every copy of the generator contributes one new pinch point where the curve touches itself without crossing.'
+      : `Each tinted patch is an open precluster knotted off by the self-contacts${stE.n <= 3 ? ` — ${fmt(floodE(D).inner)} of them at this stage` : ''}. As the construction proceeds, each is further pinched, and thins toward a ramified contact cluster of dimension D꜀ &lt; 2.`;
+    if (refit) zE.refit(); else zE.schedule();
+  }
+  const markME = stepButtons($('mE'), Object.keys(MODES_E), (k) => MODES_E[k], (k) => `Show: ${MODES_E[k]}`, (k) => { stE.mode = k; if (k === 'clusters' && stE.n > 3) stE.n = 3; setE(false); });
+  const markSE = stepButtons($('sE'), [1, 2, 3, 4], String, (n) => `Stage ${n}`, (n) => { stE.n = n; setE(true); });
+  $('preE').addEventListener('click', () => { Object.assign(stE, { n: 2, mode: 'curve' }); setE(true); });
+  miniCurve('miniE', KP_Z);
+
+  // ====================== pages 126-130: Bernoulli percolation ======================
+  const stF = { p: 0.5, n: 48, seed: 1 };
+  let simF = null;
+  function dataF() {
+    // the seed is independent of p, so dragging the slider only adds or removes sticks
+    if (!simF) simF = percolation(stF.n, stF.p, (stF.seed * 1000003 + stF.n) >>> 0);
+    return simF;
+  }
+  const zF = zoomable('wF', 'cF', (f) => fitBox(f, { x0: 0, x1: stF.n - 1, y0: 0, y1: stF.n - 1 }, 0.03), (f, v) => {
+    const c = f.ctx, S = dataF(), n = S.n;
+    paper(f, PRINT.paper); toWorld(f, v);
+    const vinyl = new Path2D(), copper = new Path2D(), big = new Path2D(), perc = new Path2D();
+    const pick = (site) => {
+      const r = S.find(site);
+      if (S.percolates && r === S.percRoot) return perc;
+      if (r === S.bigRoot) return big;
+      return copper;
+    };
+    for (let i = 0; i < n; i++) for (let j = 0; j < n - 1; j++) {
+      const p = S.H[i * (n - 1) + j] ? pick(i * n + j) : vinyl;
+      p.moveTo(j, n - 1 - i); p.lineTo(j + 1, n - 1 - i);
+    }
+    for (let i = 0; i < n - 1; i++) for (let j = 0; j < n; j++) {
+      const p = S.V[i * n + j] ? pick(i * n + j) : vinyl;
+      p.moveTo(j, n - 1 - i); p.lineTo(j, n - 2 - i);
+    }
+    c.lineCap = 'round';
+    c.strokeStyle = '#dedcd4'; c.lineWidth = 0.1; c.stroke(vinyl);
+    c.strokeStyle = PRINT.ink; c.lineWidth = 0.22; c.stroke(copper);
+    c.strokeStyle = PRINT.accent; c.lineWidth = 0.26; c.stroke(big);
+    c.strokeStyle = PRINT.red; c.lineWidth = 0.26; c.stroke(perc);
+    toScreen(f);
+  });
+  function setF(refit) {
+    simF = null;
+    const S = dataF();
+    markNF(stF.n);
+    $('pF').value = Math.round(stF.p * 100);
+    $('pFv').textContent = `p = ${stF.p.toFixed(2)}`;
+    $('nFv').textContent = `${stF.n} × ${stF.n}`;
+    $('cFn').textContent = `${stF.n} × ${stF.n} sites, p = ${stF.p.toFixed(2)}`;
+    $('rFa').textContent = S.percolates ? 'yes (top to bottom)' : 'no';
+    $('rFb').textContent = `${fmt(S.total)} of ${fmt(2 * stF.n * (stF.n - 1))}`;
+    $('rFc').textContent = `${fmt(S.bigSize)} sticks`;
+    $('rFd').textContent = String(stF.seed);
+    $('infoF').textContent = stF.p < 0.45 ? 'Well below the threshold: only small clusters, and the lattice almost never percolates.'
+      : stF.p > 0.55 ? 'Well above the threshold: one giant copper cluster spans the lattice almost surely.'
+        : 'Near p = ½, the critical point: clusters of every size, ramified and stringy — the regime the chapter\'s fractal model addresses.';
+    if (refit) zF.refit(); else zF.schedule();
+  }
+  const markNF = stepButtons($('nF'), [24, 48, 96], String, (n) => `${n} by ${n}`, (n) => { stF.n = n; setF(true); });
+  $('pF').addEventListener('input', (e) => { stF.p = e.target.value / 100; setF(false); });
+  $('seedF').addEventListener('click', () => { stF.seed++; setF(false); });
+  $('preF').addEventListener('click', () => { Object.assign(stF, { p: 0.5, seed: 1 }); setF(false); });
+
+  setA(true); setB(true); secC.set(true); secD.set(true); setE(true); setF(true);
+})();
+
+</script>
+
+</body>
+</html>

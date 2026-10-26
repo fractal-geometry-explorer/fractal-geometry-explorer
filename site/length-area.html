@@ -1,0 +1,979 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Length–Area Relations</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>
+/* Layout: the length-area relation demo (five similar islands and one yardstick, with its log-log chart), the digitised Plate 115 chart, and the area-volume section with the brain-folds cartoon, each a figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */
+:root {
+  --page: #e4e5e1;
+  --text: #1b1d1f;
+  --muted: #595e64;
+  --rule: #c4c7c1;
+  --surface: #f6f6f3;
+  --accent: #285895;
+  --f-display: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Newsreader", Georgia, "Times New Roman", serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* the figures are reproductions of printed plates, so their paper and inks stay the same in both themes */
+  --print-paper: #ecebe6;
+  --print-ink: #151515;
+  --print-rule: #c9c8c2;
+  --gain: rgba(47, 95, 158, 0.42);
+  --loss: rgba(186, 88, 44, 0.42);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --page: #111214; --text: #e5e5e1; --muted: #9a9fa6; --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --page: #111214; --text: #e5e5e1; --muted: #9a9fa6; --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--page); color: var(--text); font-family: var(--f-display); font-size: 14px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
+.wrap {
+  max-width: 1180px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 36px 64px;
+  display: grid; gap: 40px;
+}
+header.top { display: grid; gap: 10px; max-width: 820px; }
+.eyebrow { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+h1 {
+  margin: 0; display: flex; align-items: center; flex-wrap: wrap; gap: 0.18em 0.42em;
+  font-weight: 800; font-size: clamp(30px, 5.4vw, 54px); line-height: 1.02; letter-spacing: 0.01em; text-transform: uppercase; text-wrap: balance;
+}
+h1 .plate-no { font-weight: 600; text-transform: none; letter-spacing: 0; }
+.lozenge { display: inline-block; width: 0.42em; height: 0.42em; border: 0.075em solid currentColor; position: relative; top: -0.02em; }
+.lozenge::after { content: ""; position: absolute; inset: 0.1em; border: 0.05em solid currentColor; }
+.dek { margin: 0; font-family: var(--f-body); font-size: 19px; line-height: 1.45; max-width: 64ch; }
+
+nav.index {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+  padding: 10px max(16px, env(safe-area-inset-right, 0px)) 10px max(16px, env(safe-area-inset-left, 0px));
+  background: var(--page); border-bottom: 1px solid var(--rule);
+  display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none;
+}
+nav.index a {
+  flex: none; display: inline-flex; gap: 8px; align-items: baseline; padding: 6px 10px;
+  border: 1px solid var(--rule); background: var(--surface); color: var(--text); text-decoration: none; font-size: 13px; font-weight: 600;
+}
+nav.index a b { font-family: var(--f-mono); font-weight: 500; color: var(--accent); }
+nav.index a:hover { border-color: var(--text); }
+
+section.plate { display: grid; gap: 18px; scroll-margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--rule); }
+.plate-head { display: grid; gap: 4px; }
+.plate-head .no { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.plate-head h2 { margin: 0; font-size: clamp(22px, 3vw, 30px); font-weight: 800; line-height: 1.1; text-transform: uppercase; letter-spacing: 0.01em; text-wrap: balance; }
+.plate-head .dim { margin: 0; font-family: var(--f-mono); font-size: 13px; color: var(--muted); }
+.plate-body { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(280px, 1fr); gap: 32px; align-items: start; }
+@media (max-width: 899px) { .plate-body { grid-template-columns: minmax(0, 1fr); gap: 20px; } }
+figure.fig { margin: 0; display: grid; gap: 8px; min-width: 0; }
+.canvas-wrap { position: relative; width: 100%; max-width: 100%; background: var(--print-paper); outline: 1px solid var(--rule); overflow: hidden; }
+.canvas-wrap canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.r-sq { aspect-ratio: 1 / 1; }
+.r-lox { aspect-ratio: 5 / 4; }
+.zoomable { cursor: grab; touch-action: pan-y; }
+.zoomable.dragging { cursor: grabbing; }
+.view-tools { position: absolute; top: 10px; right: 10px; display: flex; gap: 6px; z-index: 2; }
+.view-tools button { min-width: 34px; height: 34px; padding: 0 10px; font: 600 15px/1 var(--f-display); color: var(--print-ink); background: #f7f7f3; border: 1px solid var(--print-rule); cursor: pointer; }
+figcaption { font-size: 13px; color: var(--muted); }
+figcaption strong { color: var(--text); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+
+.side { display: grid; gap: 18px; min-width: 0; align-content: start; }
+.side p.cap { margin: 0; font-family: var(--f-body); font-size: 17px; line-height: 1.55; max-width: 62ch; }
+.group { display: grid; gap: 8px; min-width: 0; }
+.label-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.label { font-size: 11.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.value { font-family: var(--f-mono); font-size: 12.5px; font-variant-numeric: tabular-nums; text-align: right; }
+.steps { display: flex; flex-wrap: wrap; gap: 6px; }
+.steps button {
+  min-width: 38px; height: 34px; padding: 0 10px; font: 600 13px/1 var(--f-mono); color: var(--text);
+  background: var(--surface); border: 1px solid var(--rule); cursor: pointer;
+}
+.steps.words button { font: 600 13px/1 var(--f-display); }
+.steps button[aria-pressed="true"] { background: var(--text); color: var(--page); border-color: var(--text); }
+.steps button:hover { border-color: var(--text); }
+.steps button:disabled { opacity: 0.35; cursor: default; border-color: var(--rule); }
+.btn-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.btn { padding: 8px 12px; font: 600 13px/1.2 var(--f-display); color: var(--text); background: var(--surface); border: 1px solid var(--rule); cursor: pointer; }
+.btn:hover { border-color: var(--text); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--page); }
+.check { display: flex; align-items: flex-start; gap: 8px; font-size: 13.5px; cursor: pointer; }
+.check input { accent-color: var(--accent); width: 16px; height: 16px; margin: 1px 0 0; flex: none; }
+.check:has(input:disabled) { opacity: 0.45; cursor: default; }
+.slider { display: grid; gap: 4px; }
+.slider input { width: 100%; accent-color: var(--accent); margin: 0; }
+.slider input:disabled { opacity: 0.4; }
+dl.read { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; padding-top: 14px; border-top: 1px solid var(--rule); }
+dl.read div { display: grid; gap: 2px; min-width: 0; }
+dl.read dt { font-size: 10.5px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); }
+dl.read dd { margin: 0; font-family: var(--f-mono); font-size: 16px; overflow-wrap: anywhere; }
+dl.read dd small { font-size: 11.5px; color: var(--muted); }
+.note { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.mini { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; padding: 10px 12px; background: var(--print-paper); border: 1px solid var(--print-rule); color: var(--print-ink); }
+.mini svg { height: 64px; width: auto; max-width: 100%; }
+.mini .fx { font-family: var(--f-mono); font-size: 12px; line-height: 1.6; color: var(--print-ink); }
+.key { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--muted); }
+.key span { display: inline-flex; align-items: center; gap: 6px; }
+.key i { width: 14px; height: 10px; display: inline-block; border: 1px solid var(--print-rule); }
+.readline { min-height: 2.9em; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.readline b { color: var(--text); font-weight: 700; }
+
+.sub { display: grid; gap: 14px; padding-top: 22px; border-top: 1px dashed var(--rule); scroll-margin-top: 64px; }
+.sub h3 { margin: 0; font-size: 15px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
+.source { font-family: var(--f-body); font-size: 15px; color: var(--muted); margin: 0; max-width: 84ch; }
+.source i { color: var(--text); }
+.source a { color: var(--accent); }
+button:focus-visible, input:focus-visible, a:focus-visible, canvas:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.r-21 { aspect-ratio: 2 / 1; }
+.r-43 { aspect-ratio: 4 / 3; }
+.mini .fx b { font-family: var(--f-display); letter-spacing: 0.04em; }
+.side p.cap b { font-family: var(--f-display); font-size: 14px; letter-spacing: 0.04em; text-transform: uppercase; }
+</style>
+<style>
+body { margin: 0; }
+/* The hidden attribute must beat the pages' own display rules (.slider, .check, ...). The artifact
+   wrapper's stylesheet used to provide this; self-hosted pages carry it themselves. */
+[hidden] { display: none !important; }
+nav.shell { font-family: var(--f-display); font-size: 12.5px; font-weight: 600; background: var(--page);
+  border-bottom: 1px solid var(--rule); display: flex; align-items: center; gap: 6px 18px;
+  padding: 9px max(16px, env(safe-area-inset-right, 0px)) 9px max(16px, env(safe-area-inset-left, 0px)); }
+nav.shell a { color: var(--text); text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+nav.shell a:hover { color: var(--accent); }
+nav.shell .home { letter-spacing: 0.07em; text-transform: uppercase; flex: none; }
+nav.shell .gap { flex: 1; }
+nav.shell .pn { color: var(--muted); font-weight: 500; }
+nav.shell .pn b { color: var(--text); font-weight: 600; }
+nav.shell a:hover .pn, nav.shell a:hover .pn b { color: var(--accent); }
+</style>
+</head>
+<body>
+<nav class="shell" aria-label="Site"><a class="home" href="index.html">Fractal Geometry Explorer</a><span class="gap"></span><a rel="prev" href="turbulence-intermittency.html"><span class="pn">&#8592; <b>Intermittency</b></span></a><a rel="next" href="islands-clusters.html"><span class="pn"><b>Chapter 13 figures</b> &#8594;</span></a></nav>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 12, "Length–Area–Volume Relations" · pages 109–115</p>
+    <h1><span class="plate-no">Plate 115</span><span class="lozenge" aria-hidden="true"></span><span>Length–Area Relations</span></h1>
+    <p class="dek">For circles, length = 2√π·√area; for squares, length = 4·√area. Within any family of similar standard shapes, length divided by √area is one number, fixed by the shape. Fractal coastlines break the rule — their length is infinite — but Mandelbrot repairs it: measure the coast with a yardstick G, and (G-length)<sup>1/D</sup> stands in for the length. The repaired ratio explains why rivers seem to defy geometry, and it fits six decades of clouds and rain areas on one straight line.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#relation"><b>§</b> The fractal relation</a>
+    <a href="#rivers"><b>§</b> The Missouri river</a>
+    <a href="#plate115"><b>115</b> Clouds and rain</a>
+    <a href="#areavolume"><b>§</b> Area and volume</a>
+  </nav>
+
+  <!-- ===================== THE FRACTAL LENGTH-AREA RELATION ===================== -->
+  <section class="plate" id="relation">
+    <div class="plate-head">
+      <p class="no">Pages 110–111 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>The fractal length–area relation</h2>
+      <p class="dim" id="dimA">(G-length) ∝ (G-area)<sup>D/2</sup> at a fixed yardstick G · Koch island D = log 4/log 3 ≈ 1.2619</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-21 zoomable" id="wA">
+          <canvas id="cA" role="img" aria-label="Geometrically similar islands measured with one yardstick"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>Five similar islands, one yardstick</strong> · the walked polygon in red over each coast · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+        <div class="canvas-wrap r-21">
+          <canvas id="cA2" role="img" aria-label="Log-log chart of G-length against G-area for the five islands"></canvas>
+        </div>
+        <figcaption><strong>G-length against G-area</strong> · log–log · the line has slope D/2</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Take geometrically similar islands with coastlines of dimension D &gt; 1. Their true lengths are infinite, so length/√area is useless. Instead walk each coast with dividers set to one and the same yardstick G, planting a vertex every G: the number of steps times G is the <i>G-length</i>. Mandelbrot's claim: at fixed G the ratio (G-length)<sup>1/D</sup>/(G-area)<sup>1/2</sup> takes the same value for every island in the family — so on a log–log chart of G-length against area, similar islands line up with slope D/2. For standard shapes D = 1 and the slope is the familiar 1/2.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Family of islands</span></div>
+          <div class="steps words" id="shA" role="group" aria-label="Island family"></div>
+        </div>
+        <div class="group slider">
+          <div class="label-row"><span class="label">Yardstick G</span><span class="value" id="gAv">G = 0.25</span></div>
+          <input type="range" id="gA" min="0" max="100" value="55" aria-label="Yardstick length">
+        </div>
+        <p class="readline" id="infoA" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Slope of the fit</dt><dd id="rAslope">—</dd></div>
+          <div><dt>D from the slope</dt><dd id="rAd">—</dd></div>
+          <div><dt>True D</dt><dd id="rAtrue">—</dd></div>
+          <div><dt>Spread of the fractal ratio</dt><dd id="rAratio">—</dd></div>
+        </dl>
+        <p class="note">The islands' linear sizes are 1, 2, 4, 8 and 16, so their areas span a factor of 256. Each coast is a teragon carried far enough that its edges are much shorter than G, and the red polygons are genuine divider walks on it. Change G: the G-lengths all change, but the slope — and so D — stays. The proof in the book is three lines: with the island-sized yardstick G* = (G-area)<sup>1/2</sup>/1000 the polygons are similar, and switching from G* to G multiplies each length by (G/G*)<sup>1−D</sup>. The fitted D wobbles a little as G moves — a real effect of divider walks on Koch curves, whose measured length oscillates log-periodically with the yardstick — so it hovers around the true value rather than converging to it.</p>
+      </div>
+    </div>
+
+    <div class="sub" id="rivers">
+      <h3>How winding is the Missouri river?</h3>
+      <div class="plate-body">
+        <div class="side">
+          <p class="cap">Hack (1957) measured rivers and found (basin area)<sup>0.5</sup> ∝ (river length)<sup>1/1.2</sup> — early writers read the odd exponent as proof that big basins are long and thin while small ones are chubby. The length–area relation explains it with self-similar basins instead: if the river is a fractal curve of dimension D from source to mouth, then (river's G-length)<sup>1/D</sup> and (basin's G-area)<sup>1/2</sup> are both proportional to the straight distance from source to mouth. Hack's exponent gives D = 1.2: the local wiggles of the banks and the enormous global bends are equally irregular.</p>
+          <p class="cap">For rivers longer than about 100 km, J. E. Mueller finds the exponent drifts back to standard, D = 1 — maps of extremely long rivers are more nearly straight, suggesting the self-similarity has an outer cutoff of the order of 100 km. The cumulative length of <i>all</i> the rivers in a basin should by the same argument be proportional to the basin's area.</p>
+        </div>
+        <div class="side">
+          <div class="mini" aria-label="The length-area relation and measured dimensions">
+            <div class="fx"><b>Hack's rivers</b> · D = 1.2<br><b>Snowflake-sweep rivers</b> (Plates 68–69) · D ≈ 1.2618<br><b>Peano–Gosper rivers</b> (Plates 70–71) · D ≈ 1.1291<br><b>Peano's own curve</b> (Plate 63) · D = 1, off the mark<br><b>Arrowhead rivers</b> (Plate 141) · D = 1, watersheds 1.5849</div>
+          </div>
+          <p class="note">The recursive models of chapter 7 bracket the measured value from both sides, but none was designed for it: that rivers and watersheds share one D is a feature of those models, not a logical necessity.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 115 ===================== -->
+  <section class="plate" id="plate115">
+    <div class="plate-head">
+      <p class="no">Plate 115 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Log (perimeter) versus log (area) for clouds and rain areas</h2>
+      <p class="dim">Perimeter ∝ area<sup>D/2</sup> with D = 4/3, fitted over at least six orders of magnitude · from Lovejoy 1982</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-43">
+          <canvas id="cB" role="img" aria-label="Log-log chart of perimeter against area for clouds and rain areas"></canvas>
+        </div>
+        <figcaption><strong id="cBt">Plate 115, redrawn from the digitised points</strong> · <span id="cBn">71 points</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The book's hunch that fractals model clouds was confirmed by Lovejoy's area–perimeter graph. The data combine radar observations of tropical Atlantic rain areas (rain rate above 0.2 mm/hr, filled dots) with geostationary-satellite infrared observations of cloud areas over the Indian Ocean (cloud-top temperature below −10 °C, open circles). The areas run from 1 km² to over 1,000,000 km² — "very few graphs in meteorology involve all the available data over an enormous range of sizes, and are nearly as straight as this one." The perimeter is measured at a fixed pixel yardstick, so by the length–area relation the slope is D/2.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <label class="check" for="kCloud"><input type="checkbox" id="kCloud" checked> Clouds (○) — satellite infrared</label>
+          <label class="check" for="kRain"><input type="checkbox" id="kRain" checked> Rain areas (●) — radar</label>
+          <label class="check" for="kBook"><input type="checkbox" id="kBook" checked> The printed line (slope 0.678)</label>
+          <label class="check" for="kFit"><input type="checkbox" id="kFit"> Least-squares fit of the shown points</label>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate115btn">Show Plate 115 as printed</button>
+        </div>
+        <p class="readline" id="infoB" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Points shown</dt><dd id="rBn">71</dd></div>
+          <div><dt>Fitted slope</dt><dd id="rBslope">—</dd></div>
+          <div><dt>D = 2 × slope</dt><dd id="rBd">—</dd></div>
+          <div><dt>Scatter (rms)</dt><dd id="rBrms">—</dd></div>
+        </dl>
+        <p class="note">The 71 points were digitised from the scan at 600 dpi: 55 clouds and 16 rain areas, each centre good to about 0.006 of a decade. A least-squares refit of all of them gives slope 0.674, D = 1.35 — Lovejoy's published value — which the book rounds to 4/3; the line printed on the plate has slope 0.678. The largest cloud stretched from central Africa to south India, far beyond the thickness of the atmosphere, which is too often taken as the outer cutoff of atmospheric turbulence.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== AREA-VOLUME ===================== -->
+  <section class="plate" id="areavolume">
+    <div class="plate-head">
+      <p class="no">Pages 112–115 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>The area–volume relation</h2>
+      <p class="dim">(G-area)<sup>1/D</sup> ∝ (G-volume)<sup>1/3</sup> · mammalian pia: A ∝ V<sup>D/3</sup> with D ≈ 2.73 to 2.79</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq">
+          <canvas id="cC" role="img" aria-label="Cartoon of a brain section whose cortex folds as the brain grows"></canvas>
+        </div>
+        <figcaption><strong>Why big brains fold</strong> · a cartoon section: gray matter as a ribbon of fixed thickness along the "pia"</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The same derivation works in space: a domain bounded by a fractal surface of dimension D obeys (G-area)<sup>1/D</sup> ∝ (G-volume)<sup>1/3</sup>. Mandelbrot's favourite case is the mammalian brain. Gray matter is roughly a layer of fixed thickness ε spread along the brain's surface membrane, the <i>pia</i>; and across species the ratio of white to gray matter is roughly constant. Then the pia's area must grow like the brain's whole volume, A ∝ V — which the area–volume relation reads as D = 3, a surface that comes within ε of filling space. A mouse's cortex can stay smooth; a whale's must fold, and the folding is purely geometric — no threat from Dolphin or Whale. The measured exponent is a little lower: A ∝ V<sup>D/3</sup> with D/3 ≈ 0.91–0.93 (Jerison), so the pia is only partly space-filling, D between 2.73 and 2.79.</p>
+        <div class="group slider">
+          <div class="label-row"><span class="label">Brain size</span><span class="value" id="gCv">—</span></div>
+          <input type="range" id="gC" min="0" max="100" value="35" aria-label="Brain size">
+        </div>
+        <label class="check" for="kJerison"><input type="checkbox" id="kJerison"> Fold only as much as the data say — A ∝ V^0.92, D ≈ 2.76 — instead of A ∝ V, D = 3</label>
+        <dl class="read">
+          <div><dt>Section area ("volume")</dt><dd id="rCv">—</dd></div>
+          <div><dt>Pia length ("area")</dt><dd id="rCa">—</dd></div>
+          <div><dt>Folding ratio</dt><dd id="rCf">—</dd></div>
+          <div><dt>Implied D</dt><dd id="rCd">—</dd></div>
+        </dl>
+        <p class="note">This figure is a cartoon, not a fractal construction: a two-dimensional section in which the "pia" is a wiggly circle whose length is forced to track the section's area the way the pia's area tracks brain volume. The wiggle count is solved numerically; sulci in real brains are not sinusoids. Mandelbrot proposes no specific construction for the pia either — the chapter's claim is only about the exponent.</p>
+      </div>
+    </div>
+
+    <div class="sub" id="membranes">
+      <h3>Micro-droplets, lungs and living membranes</h3>
+      <div class="plate-body">
+        <div class="side">
+          <p class="cap">Condensation gave the relation its first physical case: Frenkel, Band and Bijl pictured a vapour as isolated molecules with occasional bound clusters, and M. E. Fisher proposed that a condensing droplet's area and volume are related by area<sup>1/D</sup> ∝ volume<sup>1/3</sup>. Fisher evaluated D analytically with no concern for geometry; the unavoidable conjecture is that droplet surfaces are fractals of dimension D.</p>
+          <p class="cap">Living membranes supplied more. Light microscopy put the human lung's alveolar area near 80 m², electron microscopy near 140 m² — a discrepancy that dissolves once the membrane is fractal, D ≈ 2.17 over a wide range of scales (Weibel). In liver cells, Paumgartner and Weibel reconciled conflicting area-per-volume estimates with D ≈ 2.09 for the outer mitochondrial membrane, 2.53 for the inner ones, and 1.72 for the endoplasmic reticulum.</p>
+        </div>
+        <div class="side">
+          <p class="cap"><b>Modular computer geometry.</b> Rent's rule, credited within IBM to E. Rent: a module with C components talks to its surroundings through about T ∝ C<sup>D/E</sup> terminals. Keyes's reading is exactly the area–volume relation — components fill the module's volume, connections pass through its surface, so C<sup>1/E</sup> and T<sup>1/D</sup> both measure the module's radius. Early circuits gave D/E = 2/3, the standard surface-to-volume exponent. A shift register has T = 2 however big C is: D = 0. Full parallelism needs T = C: D = E, a Peano boundary. Everything between is a boundary of fractal dimension.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 12, pages 109–115 (Plate 115, after Lovejoy 1982). The Plate 115 points are digitised from the scan; every other figure is computed from the rules in the text, with reconstructions flagged in the notes. Companion pages: <a href="snow-sweeps.html">Sweeps, Rivers and Trees</a> (Plates 68–73, the rivers compared here) and <a href="quadric-islands.html">Quadric Koch Islands</a> (Plates 49–55, one of the island families measured above).</p>
+</div>
+
+<script>
+// Shared geometry library: similarity maps, decorated generators and their cascades, tree
+// cascades, rounding arcs and the similarity-dimension solver. Conventions are in DECISIONS.md:
+// a generator is a list of points on [0, 1] plus a code per interval (bit 0: mirror the copy,
+// bit 1: place it from the interval's far end, which also reverses its traversal).
+const R3 = Math.sqrt(3);
+// ---- similarity maps z -> A·z + B or A·conj(z) + B, as [ar, ai, br, bi, m] ----
+const C = {
+  mul: (ar, ai, br, bi) => [ar * br - ai * bi, ar * bi + ai * br],
+  comp(f, g) {                       // f∘g
+    const [a1r, a1i, b1r, b1i, m1] = f, [a2r, a2i0, b2r, b2i0, m2] = g;
+    const a2i = m1 ? -a2i0 : a2i0, b2i = m1 ? -b2i0 : b2i0;
+    const [ar, ai] = C.mul(a1r, a1i, a2r, a2i), [tr, ti] = C.mul(a1r, a1i, b2r, b2i);
+    return [ar, ai, tr + b1r, ti + b1i, m1 ^ m2];
+  },
+  app(f, x, y) { const [ar, ai, br, bi, m] = f, yy = m ? -y : y; return [ar * x - ai * yy + br, ar * yy + ai * x + bi]; },
+};
+const ID = [1, 0, 0, 0, 0];
+// A decorated generator is a list of children [map, rev]: the curve on [0,1] is the concatenation of the curves
+// map(curve), each run backwards when rev = 1. Built from the generator's points and per-interval codes
+// (bit 0: mirror; bit 1: run the interval backwards, i.e. place the generator on it from its far end).
+function genFromCodes(P, codes) {
+  return codes.map((c, k) => {
+    const rv = c >> 1, m = c & 1;
+    const [ax, ay] = rv ? P[k + 1] : P[k], [bx, by] = rv ? P[k] : P[k + 1];
+    return [[bx - ax, by - ay, ax, ay, m], rv];
+  });
+}
+const MX = [-1, 0, 1, 0, 1];                    // z -> 1 − conj z: mirror in the line x = 1/2
+const mirrorGen = (G) => G.slice().reverse().map(([f, r]) => [C.comp(MX, f), r ^ 1]);
+function substituteLeg(G, leg, H) {
+  const [f, r] = G[leg], sub = (r ? H.slice().reverse() : H).map(([g, s]) => [C.comp(f, g), r ^ s]);
+  return G.slice(0, leg).concat(sub, G.slice(leg + 1));
+}
+const normaliseGen = (G) => G.map(([f, r]) => (r ? [C.comp(f, MX), 0] : [f, 0]));
+// leaves of the cascade, in the order the curve runs through them: [map, rev]
+function leaves(gens) {
+  const out = [];
+  const rec = (f, rev, d) => {
+    if (d === gens.length) { out.push([f, rev]); return; }
+    const kids = gens[d];
+    if (rev) for (let k = kids.length - 1; k >= 0; k--) rec(C.comp(f, kids[k][0]), rev ^ kids[k][1], d + 1);
+    else for (let k = 0; k < kids.length; k++) rec(C.comp(f, kids[k][0]), rev ^ kids[k][1], d + 1);
+  };
+  rec(ID, 0, 0);
+  return out;
+}
+function curveOf(gens) {
+  const L = leaves(gens), P = new Float64Array(2 * L.length + 2);
+  P[0] = 0; P[1] = 0;
+  L.forEach(([f, rev], i) => { const [x, y] = C.app(f, rev ? 0 : 1, 0); P[2 * i + 2] = x; P[2 * i + 3] = y; });
+  return P;
+}
+
+// a 60° arc from a to b bulging to `side` (+1: left of a→b), sampled at n+1 points (a included, b excluded)
+function arcPts(ax, ay, bx, by, side, n, out) {
+  const dx = bx - ax, dy = by - ay, L = Math.hypot(dx, dy), mx = (ax + bx) / 2, my = (ay + by) / 2;
+  const cx = mx + dy * side * (R3 / 2), cy = my - dx * side * (R3 / 2);       // centre on the other side
+  const a0 = Math.atan2(ay - cy, ax - cx);
+  let da = Math.atan2(by - cy, bx - cx) - a0;
+  while (da > Math.PI) da -= 2 * Math.PI;
+  while (da < -Math.PI) da += 2 * Math.PI;
+  for (let t = 0; t < n; t++) { const a = a0 + (da * t) / n; out.push(cx + L * Math.cos(a), cy + L * Math.sin(a)); }
+}
+
+// ---- tree cascades: every link is replaced by the tree generator placed on it ----
+// links: [[px,py,qx,qy],...] in the generator's frame; codes as above (bit 0 mirror, bit 1 placed from the far
+// end). `level` counts how many times a link's ancestry left the generator's main channel (`main` marks it).
+function treeCascade(links, codes, main, n) {
+  const G = links.map(([px, py, qx, qy], k) => {
+    const c = codes[k], [ax, ay, bx, by] = c & 2 ? [qx, qy, px, py] : [px, py, qx, qy];
+    return [bx - ax, by - ay, ax, ay, c & 1];
+  });
+  let maps = [[ID, 0]];
+  for (let s = 0; s < n; s++) {
+    const out = [];
+    for (const [f, lv] of maps) for (let k = 0; k < G.length; k++) out.push([C.comp(f, G[k]), lv + (main[k] ? 0 : 1)]);
+    maps = out;
+  }
+  return maps.map(([f, lv]) => [f[2], f[3], f[0] + f[2], f[1] + f[3], lv]);
+}
+// erase the streams near the sources: links on a chain from a source (an end point other than 0 and 1) up to the
+// first junction
+function clipSources(segs, rounds = 1) {
+  let cur = segs;
+  const q = (v) => Math.round(v * 1e7);
+  for (let r = 0; r < rounds; r++) {
+    const deg = new Map(), K = (x, y) => q(x) + ',' + q(y);
+    for (const s of cur) for (const k of [K(s[0], s[1]), K(s[2], s[3])]) deg.set(k, (deg.get(k) || 0) + 1);
+    const keep = (x, y) => (Math.abs(x) < 1e-9 && Math.abs(y) < 1e-9) || (Math.abs(x - 1) < 1e-9 && Math.abs(y) < 1e-9);
+    // walk each chain inward from a source
+    const adj = new Map();
+    cur.forEach((s, i) => { for (const k of [K(s[0], s[1]), K(s[2], s[3])]) { if (!adj.has(k)) adj.set(k, []); adj.get(k).push(i); } });
+    const dead = new Set();
+    for (const [k, d] of deg) {
+      if (d !== 1) continue;
+      const [x, y] = k.split(',').map((v) => Number(v) / 1e7);
+      if (keep(x, y)) continue;
+      let at = k, prev = -1;
+      for (let guard = 0; guard < 1e6; guard++) {
+        const nxt = adj.get(at).filter((i) => i !== prev && !dead.has(i));
+        if (nxt.length !== 1) break;
+        const i = nxt[0]; dead.add(i); prev = i;
+        const s = cur[i], k1 = K(s[0], s[1]), k2 = K(s[2], s[3]); at = k1 === at ? k2 : k1;
+        const [x2, y2] = at.split(',').map((v) => Number(v) / 1e7);
+        if (deg.get(at) !== 2 || keep(x2, y2)) break;
+      }
+    }
+    cur = cur.filter((_, i) => !dead.has(i));
+  }
+  return cur;
+}
+
+// the dimension D: the unique real root of G(D) = Σ r_m^D = 1 (G is strictly decreasing)
+function dimension(rs) {
+  let lo = 0.01, hi = 8;
+  for (let i = 0; i < 90; i++) { const mid = (lo + hi) / 2, g = rs.reduce((s, r) => s + Math.pow(r, mid), 0); if (g > 1) lo = mid; else hi = mid; }
+  return (lo + hi) / 2;
+}
+
+// Shared drawing library: style constants, the zoomable canvas (snapshot while panning), chunked
+// paths, controls and small SVG figures. Loaded before each page's own scripts; pages may extend
+// PRINT with their own inks (PRINT.red = ..., PRINT.light = ...).
+const $ = (id) => document.getElementById(id);
+const fmt = (n) => n.toLocaleString('en-US');
+const PRINT = { paper: '#ecebe6', ink: '#151515', rule: '#c9c8c2', muted: '#66665f', accent: '#2f5f9e', red: '#c2452d', faint: '#bdbbb3', gray: '#8f8e88' };
+const RAMP = [[233, 185, 73], [217, 113, 59], [184, 66, 79], [125, 58, 120], [63, 79, 151], [43, 122, 138]];
+const ramp = (t, a = 1) => {
+  const x = Math.max(0, Math.min(1, t)) * (RAMP.length - 1), i = Math.min(RAMP.length - 2, Math.floor(x)), f = x - i;
+  const c = RAMP[i].map((v, k) => Math.round(v + (RAMP[i + 1][k] - v) * f));
+  return `rgba(${c[0]},${c[1]},${c[2]},${a})`;
+};
+const CAT = ['#151515', '#9a988f', '#2f5f9e', '#c2452d', '#3f8f6c', '#b58a2a', '#6b4e9b', '#5f8fae'];
+
+// ---------- shared plumbing ----------
+function figure(canvas, draw) {
+  const wrap = canvas.parentElement;
+  const f = { canvas, ctx: canvas.getContext('2d'), w: 1, h: 1, dpr: 1, draw };
+  const resize = () => {
+    f.dpr = Math.min(2, window.devicePixelRatio || 1);
+    f.w = wrap.clientWidth || 1; f.h = wrap.clientHeight || 1;
+    canvas.width = Math.round(f.w * f.dpr); canvas.height = Math.round(f.h * f.dpr);
+    f.draw();
+  };
+  new ResizeObserver(resize).observe(wrap);
+  return f;
+}
+function fitBox(f, bb, pad = 0.04) {
+  const w = Math.max(1e-9, bb.x1 - bb.x0), h = Math.max(1e-9, bb.y1 - bb.y0), s = Math.min(f.w / (w * (1 + 2 * pad)), f.h / (h * (1 + 2 * pad)));
+  return { s, ox: f.w / 2 - ((bb.x0 + bb.x1) / 2) * s, oy: f.h / 2 + ((bb.y0 + bb.y1) / 2) * s };
+}
+const toWorld = (f, v) => f.ctx.setTransform(f.dpr * v.s, 0, 0, -f.dpr * v.s, f.dpr * v.ox, f.dpr * v.oy);
+const toScreen = (f) => f.ctx.setTransform(f.dpr, 0, 0, f.dpr, 0, 0);
+function paper(f, color) { f.ctx.setTransform(1, 0, 0, 1, 0, 0); f.ctx.fillStyle = color; f.ctx.fillRect(0, 0, f.canvas.width, f.canvas.height); }
+function polyPath(P, closed = true, upto) {
+  const p = new Path2D(), m = upto === undefined ? P.length / 2 : upto;
+  p.moveTo(P[0], P[1]);
+  for (let i = 1; i < m; i++) p.lineTo(P[2 * i], P[2 * i + 1]);
+  if (closed) p.closePath();
+  return p;
+}
+function bbox(P, bb = { x0: Infinity, x1: -Infinity, y0: Infinity, y1: -Infinity }) {
+  for (let i = 0; i < P.length; i += 2) { bb.x0 = Math.min(bb.x0, P[i]); bb.x1 = Math.max(bb.x1, P[i]); bb.y0 = Math.min(bb.y0, P[i + 1]); bb.y1 = Math.max(bb.y1, P[i + 1]); }
+  return bb;
+}
+function stepButtons(el, values, text, aria, onPick) {
+  const bs = values.map((v) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.textContent = text(v); b.setAttribute('aria-label', aria(v));
+    b.addEventListener('click', () => onPick(v));
+    el.append(b);
+    return b;
+  });
+  const mark = (cur) => bs.forEach((b, i) => b.setAttribute('aria-pressed', String(values[i] === cur)));
+  mark.buttons = bs;
+  return mark;
+}
+// pan and zoom: a quick rescaled snapshot while moving, a full redraw once it settles
+function zoomable(wrapId, canvasId, fitOf, render, opts = {}) {
+  const maxZoom = opts.maxZoom || 400;
+  const wrap = $(wrapId), z = { view: null, user: false, snapView: null, raf: 0, full: 0 };
+  const snap = document.createElement('canvas');
+  const f = figure($(canvasId), () => draw());
+  function touch() { wrap.style.touchAction = z.view && z.view.s > z.view.fit * 1.02 ? 'none' : 'pan-y'; }
+  function draw() {
+    if (!z.view || !z.user) { z.view = fitOf(f); z.view.fit = z.view.s; z.user = false; touch(); }
+    render(f, z.view);
+    snap.width = f.canvas.width; snap.height = f.canvas.height; snap.getContext('2d').drawImage(f.canvas, 0, 0);
+    z.snapView = { s: z.view.s, ox: z.view.ox, oy: z.view.oy };
+  }
+  function quick() {
+    const v = z.view, k = v.s / z.snapView.s, c = f.ctx;
+    c.setTransform(1, 0, 0, 1, 0, 0); c.fillStyle = z.ground || PRINT.paper; c.fillRect(0, 0, f.canvas.width, f.canvas.height);
+    c.drawImage(snap, (v.ox - z.snapView.ox * k) * f.dpr, (v.oy - z.snapView.oy * k) * f.dpr, snap.width * k, snap.height * k);
+  }
+  function schedule() { if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; draw(); }); }
+  function moved() {
+    if (!z.snapView) { schedule(); return; }
+    if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; quick(); });
+    clearTimeout(z.full); z.full = setTimeout(schedule, 160);
+  }
+  function zoomAt(px, py, k) {
+    const v = z.view, ns = Math.min(v.fit * maxZoom, Math.max(v.fit * 0.8, v.s * k)), wx = (px - v.ox) / v.s, wy = (v.oy - py) / v.s;
+    v.s = ns; v.ox = px - wx * ns; v.oy = py + wy * ns; z.user = true; touch(); moved();
+  }
+  function pan(dx, dy) { z.view.ox += dx; z.view.oy += dy; z.user = true; moved(); }
+  wrap.querySelector('[data-z="in"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1.6));
+  wrap.querySelector('[data-z="out"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1 / 1.6));
+  wrap.querySelector('[data-z="fit"]').addEventListener('click', () => { z.user = false; schedule(); });
+  const pts = new Map();
+  let pinch = null, down = null;
+  const local = (e) => { const r = wrap.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+  wrap.addEventListener('pointerdown', (e) => {
+    if (e.target.closest('.view-tools')) return;
+    pts.set(e.pointerId, local(e));
+    down = pts.size === 1 ? { p: local(e), t: performance.now(), moved: 0 } : null;
+    try { wrap.setPointerCapture(e.pointerId); } catch (_) {}
+    if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), m: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2] }; }
+    wrap.classList.add('dragging');
+  });
+  wrap.addEventListener('pointermove', (e) => {
+    if (!pts.has(e.pointerId)) return;
+    const prev = pts.get(e.pointerId), cur = local(e);
+    pts.set(e.pointerId, cur);
+    if (down) down.moved = Math.max(down.moved, Math.hypot(cur[0] - down.p[0], cur[1] - down.p[1]));
+    if (pts.size === 2 && pinch) {
+      const [a, b] = [...pts.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]), m = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+      pan(m[0] - pinch.m[0], m[1] - pinch.m[1]);
+      if (pinch.d > 0) zoomAt(m[0], m[1], d / pinch.d);
+      pinch = { d, m };
+    } else if (pts.size === 1 && (e.pointerType !== 'touch' || z.view.s > z.view.fit * 1.02)) pan(cur[0] - prev[0], cur[1] - prev[1]);
+  });
+  const end = (e) => {
+    if (down && pts.size === 1 && down.moved < 5 && opts.onTap) { const [x, y] = local(e), v = z.view; opts.onTap((x - v.ox) / v.s, (v.oy - y) / v.s); }
+    down = null;
+    pts.delete(e.pointerId); if (pts.size < 2) pinch = null; if (!pts.size) wrap.classList.remove('dragging');
+  };
+  wrap.addEventListener('pointerup', end); wrap.addEventListener('pointercancel', (e) => { down = null; end(e); });
+  wrap.addEventListener('wheel', (e) => { if (!(e.ctrlKey || e.metaKey)) return; e.preventDefault(); const [x, y] = local(e); zoomAt(x, y, Math.exp(-e.deltaY * 0.0045)); }, { passive: false });
+  wrap.addEventListener('dblclick', (e) => { if (e.target.closest('.view-tools')) return; const [x, y] = local(e); zoomAt(x, y, e.shiftKey ? 0.5 : 2); });
+  return { f, z, schedule, refit: () => { z.user = false; schedule(); } };
+}
+// chunked paths: many small paths fill far faster than one path with a hundred thousand pieces
+function chunked(count, add, size = 512) {
+  const out = [];
+  let p = null;
+  for (let i = 0; i < count; i++) { if (i % size === 0) { p = new Path2D(); out.push(p); } add(p, i); }
+  return out;
+}
+// fill and outline in the same colour, so that tiles which only meet along an edge show no hairline seams
+function solid(c, paths, color, lw) {
+  c.fillStyle = color; c.strokeStyle = color; c.lineWidth = lw; c.lineJoin = 'miter';
+  for (const p of paths) { c.fill(p); c.stroke(p); }
+}
+const dot = (c, v, x, y, r = 4, color = PRINT.red) => { c.beginPath(); c.arc(v.ox + x * v.s, v.oy - y * v.s, r, 0, Math.PI * 2); c.fillStyle = color; c.fill(); c.strokeStyle = PRINT.paper; c.lineWidth = 1.5; c.stroke(); };
+
+// a polyline (Float64Array or [[x,y],...]) as SVG points with y flipped
+const svgPts = (P) => (P instanceof Float64Array ? Array.from({ length: P.length / 2 }, (_, i) => [P[2 * i], P[2 * i + 1]]) : P).map(([x, y]) => `${x.toFixed(4)},${(-y).toFixed(4)}`).join(' ');
+function miniCurve(id, P, dots = true) {
+  const pts = P instanceof Float64Array ? Array.from({ length: P.length / 2 }, (_, i) => [P[2 * i], P[2 * i + 1]]) : P;
+  $(id).innerHTML = `<line x1="0" y1="0" x2="1" y2="0" stroke="#8a8a84" stroke-width="0.008" stroke-dasharray="0.025 0.02"/>` +
+    `<polyline points="${svgPts(pts)}" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linejoin="round"/>` +
+    (dots ? `<g fill="currentColor">${pts.map(([x, y], i) => `<circle cx="${x.toFixed(4)}" cy="${(-y).toFixed(4)}" r="${i === 0 || i === pts.length - 1 ? 0.03 : 0.018}"/>`).join('')}</g>` : '');
+}
+function miniTree(id, links, dx = 0) {
+  const ends = new Set(), mid = new Set(), k = (x, y) => `${x.toFixed(4)},${y.toFixed(4)}`;
+  let s = '';
+  for (const [px, py, qx, qy] of links) {
+    s += `<line x1="${(px + dx).toFixed(4)}" y1="${(-py).toFixed(4)}" x2="${(qx + dx).toFixed(4)}" y2="${(-qy).toFixed(4)}" stroke="currentColor" stroke-width="0.02" stroke-linecap="round"/>`;
+    mid.add(k(px + dx, py)); mid.add(k(qx + dx, qy));
+  }
+  s += `<g fill="currentColor">${[...mid].map((p) => { const [x, y] = p.split(',').map(Number); const big = (Math.abs(x - dx) < 1e-6 || Math.abs(x - dx - 1) < 1e-6) && Math.abs(y) < 1e-6; return `<circle cx="${x}" cy="${-y}" r="${big ? 0.03 : 0.018}"/>`; }).join('')}</g>`;
+  return s;
+}
+// canvas transform for a similarity map f = [ar, ai, br, bi, m] composed with the view
+function setMap(f, c, v, fig) {
+  const [ar, ai, br, bi, m] = f, k = fig.dpr * v.s;
+  if (m) c.setTransform(k * ar, -k * ai, k * ai, k * ar, fig.dpr * (v.ox + v.s * br), fig.dpr * (v.oy - v.s * bi));
+  else c.setTransform(k * ar, -k * ai, -k * ai, -k * ar, fig.dpr * (v.ox + v.s * br), fig.dpr * (v.oy - v.s * bi));
+}
+const segPath = (segs, pick) => { const p = new Path2D(); for (const s of segs) if (!pick || pick(s)) { p.moveTo(s[0], s[1]); p.lineTo(s[2], s[3]); } return p; };
+// Plate 64's chevrons, measured from the plate: each interval a→b becomes a thin quadrilateral
+// pointing toward F, the corner the next stage would add (see DECISIONS.md)
+const CHEV_OUT = 0.43, CHEV_IN = 0.235;
+function chevronPaths(P, F, m) {
+  return chunked(m, (p, i) => {
+    const ax = P[2 * i], ay = P[2 * i + 1], bx = P[2 * i + 2], by = P[2 * i + 3], mx = (ax + bx) / 2, my = (ay + by) / 2;
+    const vx = F[2 * i] - mx, vy = F[2 * i + 1] - my;
+    p.moveTo(ax, ay); p.lineTo(mx + CHEV_OUT * vx, my + CHEV_OUT * vy); p.lineTo(bx, by); p.lineTo(mx + CHEV_IN * vx, my + CHEV_IN * vy); p.closePath();
+  });
+}
+
+// Chapter 12: length-area-volume relations. Data and geometry for the page.
+
+// ---- Plate 115: Lovejoy's perimeter-area graph, digitised from the scan ----
+// Each row is [log10(area in km²), log10(perimeter in km), kind], kind 0 = cloud (open circle),
+// kind 1 = rain area (filled dot). 71 points were read off the 600 dpi scan; centres are good to
+// about 2 px ≈ 0.006 of a decade. The printed fitted line is logP = 0.678·logA + 0.555.
+const P115 = [
+  [0.007, 0.616, 1], [0.302, 0.769, 1], [0.609, 1.015, 1], [0.705, 0.964, 1], [0.789, 1.213, 1], [0.913, 1.162, 1],
+  [1.09, 1.306, 1], [1.385, 1.372, 1], [1.421, 1.66, 1], [1.613, 1.771, 0], [1.767, 1.837, 1], [1.896, 1.894, 0],
+  [2.01, 1.996, 0], [2.08, 1.99, 0], [2.2, 2.11, 0], [2.218, 2.005, 1], [2.296, 2.143, 0], [2.35, 2.191, 0],
+  [2.384, 2.26, 1], [2.477, 2.281, 0], [2.534, 2.251, 1], [2.573, 2.368, 0], [2.72, 2.482, 1], [2.913, 2.629, 0],
+  [2.931, 2.557, 0], [3.009, 2.716, 0], [3.045, 2.521, 0], [3.081, 2.617, 1], [3.216, 2.677, 0], [3.223, 2.476, 0],
+  [3.295, 2.788, 0], [3.346, 2.914, 0], [3.406, 2.785, 0], [3.556, 2.959, 0], [3.65, 3.118, 1], [3.662, 2.911, 0],
+  [3.725, 3.046, 0], [3.764, 3.184, 0], [3.767, 3.31, 0], [3.83, 3.193, 0], [3.881, 3.217, 0], [3.947, 3.067, 0],
+  [4.002, 3.352, 0], [4.056, 3.232, 0], [4.116, 3.07, 0], [4.236, 3.37, 0], [4.263, 3.535, 0], [4.498, 3.628, 0],
+  [4.513, 3.556, 0], [4.546, 3.592, 0], [4.573, 3.466, 0], [4.573, 3.733, 0], [4.678, 3.586, 0], [4.729, 3.664, 0],
+  [4.829, 3.802, 0], [4.919, 3.82, 0], [4.967, 3.967, 0], [4.976, 4.099, 0], [5.138, 3.877, 0], [5.165, 3.931, 0],
+  [5.262, 4.09, 0], [5.301, 4.162, 0], [5.301, 4.327, 0], [5.355, 4.261, 0], [5.418, 4.174, 0], [5.466, 4.381, 0],
+  [5.607, 4.486, 0], [5.716, 4.516, 0], [5.812, 4.402, 0], [5.872, 4.702, 0], [6.077, 4.903, 0]];
+const PRINTED_LINE = { slope: 0.678, b: 0.555 };
+
+function leastSquares(rows) {
+  const n = rows.length;
+  if (n < 2) return null;
+  let sx = 0, sy = 0, sxx = 0, sxy = 0;
+  for (const [x, y] of rows) { sx += x; sy += y; sxx += x * x; sxy += x * y; }
+  const slope = (n * sxy - sx * sy) / (n * sxx - sx * sx), b = (sy - slope * sx) / n;
+  let ss = 0;
+  for (const [x, y] of rows) { const r = y - (slope * x + b); ss += r * r; }
+  return { slope, b, rms: Math.sqrt(ss / n), n };
+}
+
+// ---- island coastlines, as teragons on closed initiators ----
+// Triadic Koch island: 4 pieces of 1/3, D = log 4/log 3. Quadric island of Plate 51: 8 pieces of 1/4
+// on the square lattice, D = 3/2. Both from the shared cascade; the circle is the standard shape.
+const KOCH_GEN = genFromCodes([[0, 0], [1 / 3, 0], [1 / 2, R3 / 6], [2 / 3, 0], [1, 0]], [0, 0, 0, 0]);
+const QUAD_GEN = genFromCodes([[0, 0], [1 / 4, 0], [1 / 4, 1 / 4], [1 / 2, 1 / 4], [1 / 2, 0], [1 / 2, -1 / 4], [3 / 4, -1 / 4], [3 / 4, 0], [1, 0]], [0, 0, 0, 0, 0, 0, 0, 0]);
+const SHAPES = {
+  koch: { name: 'Koch island', D: Math.log(4) / Math.log(3), r: 1 / 3, maxN: 7, gen: KOCH_GEN,
+    // clockwise, so the bumps (left of each side) point outward
+    sides: [[0, 0], [0.5, R3 / 2], [1, 0]] },
+  quad: { name: 'Quadric island', D: 1.5, r: 1 / 4, maxN: 6, gen: QUAD_GEN,
+    sides: [[0, 0], [0, 1], [1, 1], [1, 0]] },
+  circle: { name: 'Circle', D: 1, r: 1, maxN: 0, gen: null, sides: null },
+};
+// closed teragon of a shape at linear scale s (base of side = s), as a Float64Array of x,y
+const teragonCache = {};
+function islandTeragon(shape, n) {
+  const key = `${shape}|${n}`;
+  if (teragonCache[key]) return teragonCache[key];
+  let P;
+  if (shape === 'circle') {
+    const m = 720;
+    P = new Float64Array(2 * m);
+    for (let i = 0; i < m; i++) { const a = (2 * Math.PI * i) / m; P[2 * i] = 0.5 + 0.5 * Math.cos(a); P[2 * i + 1] = R3 / 6 + 0.5 * Math.sin(a); }
+  } else {
+    const S = SHAPES[shape], side = curveOf(Array.from({ length: n }, () => S.gen)), m = side.length / 2 - 1, V = S.sides;
+    P = new Float64Array(2 * m * V.length);
+    for (let v = 0; v < V.length; v++) {
+      const [ax, ay] = V[v], [bx, by] = V[(v + 1) % V.length], ur = bx - ax, ui = by - ay;
+      for (let i = 0; i < m; i++) {
+        const x = side[2 * i], y = side[2 * i + 1];
+        P[2 * (v * m + i)] = ax + ur * x - ui * y;
+        P[2 * (v * m + i) + 1] = ay + ui * x + ur * y;
+      }
+    }
+  }
+  return (teragonCache[key] = P);
+}
+function shoelace(P) {
+  let a = 0;
+  const n = P.length / 2;
+  for (let i = 0; i < n; i++) { const j = (i + 1) % n; a += P[2 * i] * P[2 * j + 1] - P[2 * j] * P[2 * i + 1]; }
+  return Math.abs(a) / 2;
+}
+// stage fine enough that the teragon's edges are far shorter than the yardstick
+function stageFor(shape, scale, G) {
+  const S = SHAPES[shape];
+  if (shape === 'circle') return 0;
+  let n = Math.ceil(Math.log((4 * scale) / G) / Math.log(1 / S.r));
+  return Math.max(2, Math.min(S.maxN, n));
+}
+
+// ---- the divider walk: approximate a closed coastline by a polygon of side G ----
+// From an anchor, march along the teragon to the first point at chord distance G, plant the next
+// vertex there, and repeat until the walk returns to the start. The leftover closing chord counts
+// as a fraction of a step. Returns the polygon (for drawing) and the fractional step count.
+function dividerWalk(P, G, scale, ox, oy) {
+  const n = P.length / 2, G2 = G * G;
+  const X = (i) => P[2 * (i % n)] * scale + ox, Y = (i) => P[2 * (i % n) + 1] * scale + oy;
+  let ax = X(0), ay = Y(0), i = 0;
+  const poly = [ax, ay];
+  let steps = 0, guard = 0;
+  while (i < n && guard++ < 1e6) {
+    // find the first segment ahead whose far end leaves the circle of radius G around the anchor
+    let j = i, found = -1;
+    while (j < n) {
+      const dx = X(j + 1) - ax, dy = Y(j + 1) - ay;
+      if (dx * dx + dy * dy >= G2) { found = j; break; }
+      j++;
+    }
+    if (found < 0) break; // the rest of the coast stays within one yardstick of the anchor
+    // solve |p(t) - a| = G on the segment
+    const px = X(found), py = Y(found), qx = X(found + 1), qy = Y(found + 1);
+    const ux = qx - px, uy = qy - py, wx = px - ax, wy = py - ay;
+    const A = ux * ux + uy * uy, B = 2 * (ux * wx + uy * wy), Cc = wx * wx + wy * wy - G2;
+    const disc = Math.max(0, B * B - 4 * A * Cc), t = A > 0 ? (-B + Math.sqrt(disc)) / (2 * A) : 1;
+    ax = px + ux * Math.min(1, Math.max(0, t)); ay = py + uy * Math.min(1, Math.max(0, t));
+    poly.push(ax, ay);
+    steps++;
+    i = found + (t >= 1 ? 1 : 0);
+    if (found >= n - 1 && t >= 1) break;
+  }
+  // close back to the start
+  const cx = X(0) - ax, cy = Y(0) - ay, leftover = Math.hypot(cx, cy) / G;
+  poly.push(X(0), Y(0));
+  return { poly, steps: steps + leftover };
+}
+
+// ---- a log-log chart frame drawn in screen space; returns logx,logy -> pixels ----
+function chartFrame(f, spec) {
+  const c = f.ctx;
+  paper(f, PRINT.paper); toScreen(f);
+  const L = spec.left || 46, Rm = 12, T = 12, Bm = 34;
+  const w = f.w - L - Rm, h = f.h - T - Bm;
+  const X = (lx) => L + ((lx - spec.x0) / (spec.x1 - spec.x0)) * w;
+  const Y = (ly) => T + h - ((ly - spec.y0) / (spec.y1 - spec.y0)) * h;
+  c.strokeStyle = PRINT.ink; c.lineWidth = 1.2;
+  c.beginPath(); c.moveTo(L, T); c.lineTo(L, T + h); c.lineTo(L + w, T + h); c.stroke();
+  c.fillStyle = PRINT.muted; c.textAlign = 'center'; c.textBaseline = 'top';
+  const pow = (e) => (e === 0 ? '1' : e === 1 ? '10' : `10${String(e).replace(/-?\d/g, (d) => '⁰¹²³⁴⁵⁶⁷⁸⁹'[+d] || '⁻')}`);
+  for (let e = Math.ceil(spec.x0); e <= Math.floor(spec.x1); e++) {
+    const x = X(e);
+    c.strokeStyle = PRINT.rule; c.lineWidth = 1; c.beginPath(); c.moveTo(x, T); c.lineTo(x, T + h); c.stroke();
+    c.strokeStyle = PRINT.ink; c.beginPath(); c.moveTo(x, T + h); c.lineTo(x, T + h + 4); c.stroke();
+    c.font = '11px "IBM Plex Mono", monospace'; c.fillText(pow(e), x, T + h + 7);
+  }
+  c.textAlign = 'right'; c.textBaseline = 'middle';
+  for (let e = Math.ceil(spec.y0); e <= Math.floor(spec.y1); e++) {
+    const y = Y(e);
+    c.strokeStyle = PRINT.rule; c.lineWidth = 1; c.beginPath(); c.moveTo(L, y); c.lineTo(L + w, y); c.stroke();
+    c.strokeStyle = PRINT.ink; c.beginPath(); c.moveTo(L - 4, y); c.lineTo(L, y); c.stroke();
+    c.font = '11px "IBM Plex Mono", monospace'; c.fillText(pow(e), L - 7, y);
+  }
+  c.fillStyle = PRINT.ink; c.font = '600 11px "Schibsted Grotesk", sans-serif';
+  c.textAlign = 'center'; c.textBaseline = 'alphabetic';
+  c.fillText(spec.xlabel, L + w / 2, f.h - 6);
+  c.save(); c.translate(12, T + h / 2); c.rotate(-Math.PI / 2); c.fillText(spec.ylabel, 0, 0); c.restore();
+  return { X, Y, L, T, w, h,
+    line(slope, b, color, dash) {
+      c.save(); c.beginPath(); c.rect(L, T, w, h); c.clip();
+      c.strokeStyle = color; c.lineWidth = 1.4; if (dash) c.setLineDash(dash);
+      c.beginPath(); c.moveTo(X(spec.x0), Y(slope * spec.x0 + b)); c.lineTo(X(spec.x1), Y(slope * spec.x1 + b)); c.stroke();
+      c.restore();
+    },
+    cloud(lx, ly, r = 4) { c.beginPath(); c.arc(X(lx), Y(ly), r, 0, 2 * Math.PI); c.fillStyle = PRINT.paper; c.fill(); c.strokeStyle = PRINT.ink; c.lineWidth = 1.3; c.stroke(); },
+    rain(lx, ly, r = 4) { c.beginPath(); c.arc(X(lx), Y(ly), r, 0, 2 * Math.PI); c.fillStyle = PRINT.ink; c.fill(); },
+  };
+}
+
+// ---- the folded cortex of the brain-folds cartoon ----
+// A circle of radius R with radial wiggles r(φ) = R0 + a·sin(kφ), where k is chosen so the curve's
+// length is close to the target L. A cartoon of folding, not a fractal construction.
+function cortexCurve(R, L) {
+  const a = Math.min(0.24 * R, 0.13);
+  const R0 = R - a - 0.02;
+  const len = (k) => {
+    let s = 0;
+    const m = Math.max(720, 16 * k);
+    let x0 = R0, y0 = 0;
+    for (let i = 1; i <= m; i++) {
+      const t = (2 * Math.PI * i) / m, r = R0 + a * Math.sin(k * t);
+      const x = r * Math.cos(t), y = r * Math.sin(t);
+      s += Math.hypot(x - x0, y - y0); x0 = x; y0 = y;
+    }
+    return s;
+  };
+  let lo = 0, hi = 400;
+  if (len(0) >= L) hi = 0;
+  for (let it = 0; it < 24 && hi - lo > 0.5; it++) { const mid = (lo + hi) / 2; if (len(mid) < L) lo = mid; else hi = mid; }
+  const k = Math.round((lo + hi) / 2);
+  const m = Math.max(720, 16 * k), pts = new Float64Array(2 * m);
+  for (let i = 0; i < m; i++) {
+    const t = (2 * Math.PI * i) / m, r = R0 + a * Math.sin(k * t);
+    pts[2 * i] = r * Math.cos(t); pts[2 * i + 1] = r * Math.sin(t);
+  }
+  let s = 0;
+  for (let i = 0; i < m; i++) { const j = (i + 1) % m; s += Math.hypot(pts[2 * j] - pts[2 * i], pts[2 * j + 1] - pts[2 * i + 1]); }
+  return { pts, k, length: s, a };
+}
+
+(() => {
+
+  // ====================== The fractal length-area relation ======================
+  const SIZES = [1, 2, 4, 8, 16];
+  const GAP = 1.2;
+  const stA = { shape: 'koch', g: 55 };
+  const gOf = (v) => 0.04 * Math.pow(2 / 0.04, v / 100);
+
+  const layoutCache = {};
+  function layoutA(shape) {
+    if (layoutCache[shape]) return layoutCache[shape];
+    const bb = bbox(islandTeragon(shape, shape === 'circle' ? 0 : 3));
+    const isles = [];
+    let x = 0;
+    for (const s of SIZES) {
+      isles.push({ s, ox: x - bb.x0 * s, oy: -bb.y0 * s, w: (bb.x1 - bb.x0) * s });
+      x += (bb.x1 - bb.x0) * s + GAP;
+    }
+    const top = (bb.y1 - bb.y0) * SIZES[SIZES.length - 1];
+    return (layoutCache[shape] = { isles, box: { x0: -0.3, x1: x - GAP + 0.3, y0: -0.4, y1: top + 0.4 } });
+  }
+  // the walks: one divider walk per island, at a stage fine enough for this G. Drawing uses a
+  // coarser teragon (its error is below a pixel), cached as a Path2D — a million-point path per
+  // frame is the kind of cost DECISIONS.md warns about.
+  const pathCache = {};
+  function displayPath(shape) {
+    if (pathCache[shape]) return pathCache[shape];
+    const n = shape === 'circle' ? 0 : shape === 'koch' ? 6 : 4;
+    return (pathCache[shape] = polyPath(islandTeragon(shape, n), true));
+  }
+  let measA = null;
+  function measureA() {
+    const G = gOf(stA.g), L = layoutA(stA.shape), out = [];
+    for (const isle of L.isles) {
+      const n = stageFor(stA.shape, isle.s, G);
+      const P = islandTeragon(stA.shape, n);
+      const walk = dividerWalk(P, G, isle.s, isle.ox, isle.oy);
+      out.push({ isle, n, walk, area: shoelace(P) * isle.s * isle.s, glen: walk.steps * G });
+    }
+    const rows = out.map((o) => [Math.log10(o.area), Math.log10(o.glen)]);
+    return (measA = { G, out, rows, fit: leastSquares(rows) });
+  }
+
+  const zA = zoomable('wA', 'cA', (f) => fitBox(f, layoutA(stA.shape).box, 0.02), (f, v) => {
+    const c = f.ctx, M = measA || measureA();
+    paper(f, PRINT.paper); toWorld(f, v);
+    const shapePath = displayPath(stA.shape);
+    for (const o of M.out) {
+      c.save(); c.translate(o.isle.ox, o.isle.oy); c.scale(o.isle.s, o.isle.s);
+      c.fillStyle = '#e2e0d8'; c.fill(shapePath);
+      c.strokeStyle = '#a9a79f'; c.lineWidth = 0.7 / (v.s * o.isle.s); c.stroke(shapePath);
+      c.restore();
+      c.strokeStyle = PRINT.red; c.lineJoin = 'round'; c.lineWidth = 1.4 / v.s;
+      c.stroke(polyPath(o.walk.poly, false));
+    }
+    toScreen(f);
+    // yardstick vertices, when they are far enough apart to read
+    if (M.G * v.s > 14) {
+      for (const o of M.out) {
+        const p = o.walk.poly;
+        for (let i = 0; i < p.length - 2; i += 2) {
+          c.beginPath(); c.arc(v.ox + p[i] * v.s, v.oy - p[i + 1] * v.s, 2.4, 0, 2 * Math.PI);
+          c.fillStyle = PRINT.red; c.fill();
+        }
+      }
+    }
+  });
+  const fA2 = figure($('cA2'), () => {
+    const M = measA || measureA(), S = SHAPES[stA.shape];
+    const xs = M.rows.map((r) => r[0]), ys = M.rows.map((r) => r[1]);
+    const x0 = Math.min(...xs) - 0.4, x1 = Math.max(...xs) + 0.4;
+    const y0 = Math.min(...ys) - 0.4, y1 = Math.max(...ys) + 0.4;
+    const ch = chartFrame(fA2, { x0, x1, y0, y1, xlabel: 'G-area', ylabel: 'G-length', left: 52 });
+    ch.line(S.D / 2, M.fit.b + (M.fit.slope - S.D / 2) * ((x0 + x1) / 2), PRINT.accent, [5, 4]);
+    ch.line(M.fit.slope, M.fit.b, PRINT.ink);
+    for (const [x, y] of M.rows) ch.rain(x, y, 4.5);
+  });
+  function setA(refitView) {
+    const M = measureA(), S = SHAPES[stA.shape], G = M.G;
+    markShA(stA.shape);
+    $('gAv').textContent = `G = ${G.toFixed(G < 0.1 ? 3 : 2)}`;
+    const Dfit = 2 * M.fit.slope;
+    $('rAslope').textContent = M.fit.slope.toFixed(3);
+    $('rAd').textContent = Dfit.toFixed(3);
+    $('rAtrue').textContent = S.D.toFixed(4) + (stA.shape === 'koch' ? ' (log 4/log 3)' : stA.shape === 'quad' ? ' (3/2)' : ' (standard)');
+    const ratios = M.out.map((o) => Math.pow(o.glen, 1 / S.D) / Math.sqrt(o.area));
+    const mean = ratios.reduce((a, b) => a + b, 0) / ratios.length;
+    const spread = (Math.max(...ratios) - Math.min(...ratios)) / mean;
+    $('rAratio').textContent = `±${(100 * spread / 2).toFixed(1)}%`;
+    const n1 = M.out[0], n5 = M.out[M.out.length - 1];
+    $('infoA').innerHTML = stA.shape === 'circle'
+      ? `A standard family: the walk takes <b>${n1.walk.steps.toFixed(1)}</b> steps around the smallest circle and <b>${n5.walk.steps.toFixed(1)}</b> around the largest, and the slope is the classical 1/2. The ratio length/√area is 2√π ≈ 3.545 for every circle, whatever G is.`
+      : `With this G the smallest island's coast measures <b>${n1.glen.toFixed(2)}</b> and the largest <b>${n5.glen.toFixed(1)}</b>. Shrink G: every G-length grows without bound (the coasts are fractal), yet the slope — and the ratio (G-length)<sup>1/D</sup>/√(G-area), constant across islands to the spread shown — keeps reporting the same D.`;
+    $('dimA').innerHTML = `(G-length) ∝ (G-area)<sup>D/2</sup> at a fixed yardstick G · ${S.name} D = ${stA.shape === 'koch' ? 'log 4/log 3 ≈ 1.2619' : stA.shape === 'quad' ? 'log 8/log 4 = 3/2' : '1'}`;
+    if (refitView) zA.refit(); else zA.schedule();
+    fA2.draw();
+  }
+  const markShA = stepButtons($('shA'), ['koch', 'quad', 'circle'], (k) => SHAPES[k].name, (k) => `Family: ${SHAPES[k].name}`, (k) => { stA.shape = k; setA(true); });
+  $('gA').addEventListener('input', (e) => { stA.g = +e.target.value; setA(false); });
+
+  // ====================== Plate 115 ======================
+  const stB = { cloud: true, rain: true, book: true, fit: false };
+  const fB = figure($('cB'), () => {
+    const ch = chartFrame(fB, { x0: -0.35, x1: 6.5, y0: 0.3, y1: 5.2, xlabel: 'area (km²)', ylabel: 'perimeter (km)', left: 52 });
+    const shown = P115.filter((p) => (p[2] ? stB.rain : stB.cloud));
+    if (stB.book) ch.line(PRINTED_LINE.slope, PRINTED_LINE.b, PRINT.ink);
+    const fit = leastSquares(shown);
+    if (stB.fit && fit) ch.line(fit.slope, fit.b, PRINT.red, [6, 4]);
+    for (const [x, y, k] of shown) { if (k) ch.rain(x, y); else ch.cloud(x, y); }
+    return fit;
+  });
+  function setB() {
+    for (const [id, k] of [['kCloud', 'cloud'], ['kRain', 'rain'], ['kBook', 'book'], ['kFit', 'fit']]) $(id).checked = stB[k];
+    const shown = P115.filter((p) => (p[2] ? stB.rain : stB.cloud));
+    const fit = leastSquares(shown);
+    $('rBn').textContent = `${fmt(shown.length)}`;
+    $('cBn').textContent = `${fmt(shown.length)} point${shown.length === 1 ? '' : 's'}`;
+    $('rBslope').textContent = fit ? fit.slope.toFixed(3) : '—';
+    $('rBd').textContent = fit ? (2 * fit.slope).toFixed(3) : '—';
+    $('rBrms').textContent = fit ? `${fit.rms.toFixed(3)} decades` : '—';
+    $('infoB').innerHTML = !stB.cloud && !stB.rain ? 'Nothing shown — tick clouds or rain areas.'
+      : stB.cloud && stB.rain ? 'Rain areas carry the small end of the chart and clouds the large end, with an overlap near 10²–10⁴ km²; one straight line serves both. The printed line is solid ink; the least-squares refit is dashed red.'
+      : stB.cloud ? 'The satellite clouds alone: slope and dimension barely move, since they dominate the fit.'
+      : 'The radar rain areas alone cover about four decades at the small end and give nearly the same dimension — the book\'s point: one D from local wiggles to continental scales.';
+    fB.draw();
+  }
+  for (const [id, k] of [['kCloud', 'cloud'], ['kRain', 'rain'], ['kBook', 'book'], ['kFit', 'fit']]) {
+    $(id).addEventListener('change', (e) => { stB[k] = e.target.checked; setB(); });
+  }
+  $('plate115btn').addEventListener('click', () => { Object.assign(stB, { cloud: true, rain: true, book: true, fit: false }); setB(); });
+
+  // ====================== Area-volume: why big brains fold ======================
+  const stC = { v: 35, jerison: false };
+  const EPS = 0.045, GRAY = 0.55, R_MIN = 0.35, R_MAX = 1.6;
+  const rOf = (v) => R_MIN * Math.pow(R_MAX / R_MIN, v / 100);
+  function targetL(R) {
+    const full = (GRAY * Math.PI * R * R) / EPS;
+    if (!stC.jerison) return full;
+    const L0 = (GRAY * Math.PI * R_MIN * R_MIN) / EPS;
+    return L0 * Math.pow((R * R) / (R_MIN * R_MIN), 0.92);
+  }
+  const fC = figure($('cC'), () => {
+    const c = fC.ctx, R = rOf(stC.v), L = targetL(R);
+    const cx = cortexCurve(R, L);
+    paper(fC, PRINT.paper);
+    const v = fitBox(fC, { x0: -R_MAX - 0.15, x1: R_MAX + 0.15, y0: -R_MAX - 0.15, y1: R_MAX + 0.15 }, 0.02);
+    toWorld(fC, v);
+    c.beginPath(); c.arc(0, 0, R, 0, 2 * Math.PI); c.fillStyle = '#f6f5ee'; c.fill();
+    c.strokeStyle = '#a9a79f'; c.lineWidth = 1 / v.s; c.stroke();
+    const p = polyPath(cx.pts, true);
+    c.strokeStyle = '#9b9a93'; c.lineJoin = 'round'; c.lineWidth = 2 * EPS; c.stroke(p); // the gray matter ribbon
+    c.strokeStyle = PRINT.ink; c.lineWidth = 1.2 / v.s; c.stroke(p);                     // the pia
+    toScreen(fC);
+    fC.last = cx;
+  });
+  function setC() {
+    const R = rOf(stC.v), A = Math.PI * R * R, A0 = Math.PI * R_MIN * R_MIN;
+    fC.draw();
+    const cx = fC.last;
+    $('gCv').textContent = `×${(A / A0).toFixed(1)} the smallest`;
+    $('rCv').textContent = A.toFixed(2);
+    $('rCa').textContent = cx.length.toFixed(1);
+    $('rCf').textContent = `${(cx.length / (2 * Math.PI * R)).toFixed(1)}× the circle`;
+    $('rCd').textContent = stC.jerison ? '≈ 2.76' : '3 (space-filling)';
+  }
+  $('gC').addEventListener('input', (e) => { stC.v = +e.target.value; setC(); });
+  $('kJerison').addEventListener('change', (e) => { stC.jerison = e.target.checked; setC(); });
+
+  setA(true); setB(); setC();
+})();
+
+</script>
+
+</body>
+</html>

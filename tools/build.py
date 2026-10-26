@@ -131,21 +131,25 @@ def index_page(pages):
         if e['part'] not in parts:
             parts.append(e['part'])
     order = book_order(pages)
+    is_colour = lambda p: bool(re.search(r'\bC\d', p['plates']))
     bypart = {}
     for part in parts:
         m = re.search(r'chapters (\d+)–(\d+)', part) or re.search(r'chapters (\d+)-(\d+)', part)
         if m:
             lo, hi = int(m.group(1)), int(m.group(2))
-            bypart[part] = [p for p in order if lo <= p['chapter'] <= hi]
+            bypart[part] = [p for p in order if lo <= p['chapter'] <= hi and not is_colour(p)]
+        elif 'C1' in part:                 # the colour signature, shelved by its plate letters
+            bypart[part] = [p for p in order if is_colour(p)]
         else:
             bypart[part] = []
     sections = []
     for part in parts:
         todo = sum(1 for e in plates if e['part'] == part and e['status'] != 'done')
-        cards = ''.join(
-            f'<a href="{p["slug"]}.html"><b>{html.escape(p["plates"])}</b><span>{html.escape(p["title"])}</span>'
-            f'<small>Chapter {p["chapter"]}</small></a>'
-            for p in bypart[part])
+        def card(p):
+            shelf = 'Colour plates' if is_colour(p) else 'Chapter {}'.format(p['chapter'])
+            return (f'<a href="{p["slug"]}.html"><b>{html.escape(p["plates"])}</b><span>{html.escape(p["title"])}</span>'
+                    f'<small>{shelf}</small></a>')
+        cards = ''.join(card(p) for p in bypart[part])
         left = f'<p class="left">{todo} plate group{"s" if todo != 1 else ""} still to build.</p>' if todo else ''
         if not cards and not left:
             continue
