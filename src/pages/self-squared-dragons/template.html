@@ -1,0 +1,298 @@
+<title>Self-Squared Dragons</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.mini svg.gen { height: 72px; }
+.r-wide { aspect-ratio: 10 / 7; }
+.r-tall { aspect-ratio: 7 / 8; }
+.r-strip { aspect-ratio: 16 / 5; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 19, "Cantor and Fatou Dusts; Self-Squared Dragons" · pages 180–192</p>
+    <h1><span class="plate-no">Plates 185–192</span><span class="lozenge" aria-hidden="true"></span><span>Self-Squared Dragons</span></h1>
+    <p class="dek">Squaring a number is as elementary as arithmetic gets. Iterate it — with one constant added, z → λz(1−z) or x → x²−μ — and "Pandora's boxes of possibilities" open: dusts, dragons and whole atlases of shapes that the map leaves invariant, which Mandelbrot calls self-squared. This chapter is where the book draws the parameter maps now universally called the Mandelbrot set, published here and in Mandelbrot's 1980 paper for the first time. Every figure is computed from the rules in the captions.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#v"><b>ƒ</b> Dust from a map</a>
+    <a href="#p185"><b>185</b> Real λ</a>
+    <a href="#p187"><b>187</b> The drape</a>
+    <a href="#p188"><b>188–9</b> Separators</a>
+    <a href="#p190"><b>190–1</b> Dragons</a>
+    <a href="#p192"><b>192</b> Fatou dusts</a>
+  </nav>
+
+  <!-- ===================== PAGES 180–182: THE INVERTED V ===================== -->
+  <section class="plate" id="v">
+    <div class="plate-head">
+      <p class="no">Pages 180–182 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>The Cantor dust from a nonlinear map</h2>
+      <p class="dim" id="dimV">f(x) = {½ − |x − ½|} / r, r = 1/3 · the largest bounded invariant set is the Cantor dust</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wV">
+          <canvas id="cV" role="img" aria-label="Graphical iteration of the inverted-V map, whose invariant set is the Cantor dust"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cVt">Inverted V</strong> · <span id="cVn"></span> · tap to choose x₀</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Chapter 8 built the Cantor dust by cutting out middle thirds. Here the same dust appears with no cutting at all: it is the largest bounded set that the "inverted V" map leaves invariant. Start anywhere and iterate. Anything below 0 races to −∞; the open middle third rises above 1 and is thrown out on the next step, the middle thirds of what remains follow one step later — and what never leaves is exactly the dust. A nonlinear formula has swallowed the whole cascade, outer cutoff included.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Map</span></div>
+          <div class="steps words" id="mV" role="group" aria-label="Which map"></div>
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label" id="pVl">Ratio r</span><span class="value" id="pVv">1/3</span></div>
+          <input type="range" id="pVs" min="0.18" max="0.5" step="0.001" value="0.3333" aria-label="Map parameter">
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Starting point x₀</span><span class="value" id="xVv">0.74</span></div>
+          <input type="range" id="xVs" min="0" max="1" step="0.0005" value="0.74" aria-label="Starting point">
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Iterations drawn</span><span class="value" id="sVv">20</span></div>
+          <div class="steps" id="sV" role="group" aria-label="Iterations"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="presetV">The triadic dust, r = 1/3</button>
+          <button type="button" class="btn" id="presetV2">A point of the dust</button>
+        </div>
+        <p class="readline" id="infoV" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Fate of x₀</dt><dd id="rVa">—</dd></div>
+          <div><dt>Leaves [0, 1] at step</dt><dd id="rVb">—</dd></div>
+          <div><dt>Dust dimension</dt><dd id="rVc">0.6309</dd></div>
+          <div><dt>Peak f(½)</dt><dd id="rVd">1.5</dd></div>
+        </dl>
+        <p class="note">The book states the map and the invariance argument but prints no figure for them; this drawing — graph, diagonal and cobweb — is ours. The rows under the graph mark the points that survive 1, 2, 3… steps; they are the stages of the Cantor construction. The second map, λx(1−x), is the "squaring generator" the rest of the chapter iterates: for λ &gt; 4 it plays the V's role and its dust is Plate 192.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 185: REAL LAMBDA ===================== -->
+  <section class="plate" id="p185">
+    <div class="plate-head">
+      <p class="no">Plate 185 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Self-squared fractal curves for real λ</h2>
+      <p class="dim">z → λz(1−z) · filled sets for λ = 1, 1.5, 2, 2.5, 3 · nuclear λ for w = 2 is 1 + √5 ≈ 3.2361</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wE">
+          <canvas id="cE" role="img" aria-label="Maximal bounded self-squared domains for real lambda"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cEt">As printed, left</strong> · <span id="cEn">five domains superposed</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The left side of the plate stacks the maximal bounded self-squared domains for λ = 1, 1.5, 2.0, 2.5 and 3.0, one gray over another; the central black shape spans the segment [0, 1]. λ = 1 is the <i>scallop shell</i>; λ = 2 is an exact circle; and λ = 3 Mandelbrot nicknamed the <i>San Marco dragon</i> — "a mathematician's wild extrapolation of the skyline of the Basilica in Venice, together with its reflection in a flooded Piazza." The right side shows the nuclear λ of the period-2 atom, turned 90° to fit the page.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mE" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="slider" id="lEwrap">
+          <div class="label-row"><span class="label">λ (real)</span><span class="value" id="lEv">3</span></div>
+          <input type="range" id="lEs" min="0.25" max="4" step="0.0005" value="3" aria-label="Lambda">
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate185L">Show Plate 185, left</button>
+          <button type="button" class="btn" id="plate185R">Right</button>
+          <button type="button" class="btn" id="sanmarco">San Marco, λ = 3</button>
+        </div>
+        <p class="readline" id="infoE" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>λ</dt><dd id="rEa">1 … 3</dd></div>
+          <div><dt>μ = λ²/4 − λ/2</dt><dd id="rEb">—</dd></div>
+          <div><dt>Orbit of ½</dt><dd id="rEc">—</dd></div>
+          <div><dt>Fixed points</dt><dd id="rEd">0 and 1 − 1/λ</dd></div>
+        </dl>
+        <p class="note" id="noteE">The caption prints the right side's value as λ = 3.3260680, but the nuclear λ of the period-2 atom — defined by f(f(½)) = ½, as the caption itself says — is 1 + √5 = 3.2360680…: two digits are transposed in the book. The figure here uses the true nucleus, and matches the plate. In the left figure the five domains nest, so each deeper gray is one more set; the shading is ours, chosen to match the print.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 187: THE DRAPE ===================== -->
+  <section class="plate" id="p187">
+    <div class="plate-head">
+      <p class="no">Plate 187 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Composite of self-squared curves for real λ</h2>
+      <p class="dim">horizontal sections λ from 1 to 4 · the drape's belt, at λ = 2, is an exact circle</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-tall zoomable" id="wD">
+          <canvas id="cD" role="img" aria-label="The drape: self-squared shapes for real lambda stacked into a sculpture"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cDt">The drape</strong> · <span id="cDn">sections stacked from λ = 1 at the base to λ = 4 at the top</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">This "draped sculpture was made within a computer's memory, by a process that amounts to whittling away all points in an initial cube whose iterates converge to infinity." Each horizontal section is the maximal bounded self-squared shape for one real λ; the λ axis runs up the sculpture. At λ = 2 the section is a circle — the drape's "belt". The <i>pleats</i>, pressed in below the belt and out above it, are the scallops of Plate 185 moving continuously with λ.</p>
+        <div class="slider">
+          <div class="label-row"><span class="label">Cut the drape at λ</span><span class="value" id="lDv">2.00</span></div>
+          <input type="range" id="lDs" min="1" max="4" step="0.005" value="2" aria-label="Section lambda">
+        </div>
+        <div class="group">
+          <label class="check" for="cutD"><input type="checkbox" id="cutD"> Mark the cut on the sculpture</label>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate187">Show Plate 187 as printed</button>
+        </div>
+        <p class="readline" id="infoD" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Section at λ</dt><dd id="rDa">2.00</dd></div>
+          <div><dt>Its μ</dt><dd id="rDb">0</dd></div>
+          <div><dt>Width of section</dt><dd id="rDc">—</dd></div>
+          <div><dt>Behaviour</dt><dd id="rDd">circle</dd></div>
+        </dl>
+        <p class="note">A reconstruction, not a copy: the book's plate is a shaded 3D rendering, while this figure draws the same stack of sections as a contour "waterfall" seen from the front and slightly above — nearer sections hide what is behind them. The caption's "wall" behind the drape, with its corrugated stripes of island molecules, and the fractal tree at the top of the drape, are described in the caption but are beyond this redrawing; the sections themselves are computed exactly.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATES 188-189: THE SEPARATORS ===================== -->
+  <section class="plate" id="p188">
+    <div class="plate-head">
+      <p class="no">Plates 188 and 189 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>The separators of z → λz(1−z) and z → z²−μ</h2>
+      <p class="dim">black: the critical orbit stays bounded · μ = λ²/4 − λ/2 · the μ-map is the Mandelbrot set</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-wide zoomable" id="wM">
+          <canvas id="cM" role="img" aria-label="The mu-map and lambda-map: parameter planes of the quadratic map"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cMt">μ-map</strong> · <span id="cMn">bottom Plate 188</span> · zoom re-computes, so keep diving; tap to read λ and μ</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The topology of a self-squared set depends on where the parameter lies with respect to a ramified curve S that Mandelbrot "discovered and now calls separator" — the connected boundary of the black shape. Inside S the open domain splits into <i>atoms</i> joined at <i>bonds</i>; atoms carry periods; bifurcation multiplies the period at every outbound bond crossing, and the "island molecules" offshore are shaped like the whole map. In the λ-map the corona of sprouts hangs on two empty discs, |λ| ≤ 1 and |λ−2| ≤ 1; the receptor bonds sit at λ = exp(2πim/n) and λ = 2 − exp(2πim/n).</p>
+        <div class="mini" aria-label="The lambda plane: two unit discs with sprout angles">
+          <svg class="gen" viewBox="-1.35 -1.25 4.7 2.5" aria-hidden="true" id="miniM"></svg>
+          <div class="fx">λ-plane<br>μ = λ²/4 − λ/2</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Map</span></div>
+          <div class="steps words" id="mM" role="group" aria-label="Which map"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate188">Show Plate 188 as printed</button>
+          <button type="button" class="btn" id="plate189">Plate 189</button>
+        </div>
+        <p class="readline" id="infoM" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Tapped λ</dt><dd id="rMa">—</dd></div>
+          <div><dt>Its μ</dt><dd id="rMb">—</dd></div>
+          <div><dt>Critical orbit</dt><dd id="rMc">—</dd></div>
+          <div><dt>Cycle period</dt><dd id="rMd">—</dd></div>
+        </dl>
+        <div class="btn-row">
+          <button type="button" class="btn" id="toLab" disabled>Send this λ to the dragon lab ↓</button>
+        </div>
+        <p class="note">These are the first published pictures of the set now named after Mandelbrot: the μ-map is the Mandelbrot set drawn for z² − μ, so it is the mirror image of today's usual picture (cusp at μ = −¼, tip at μ = 2). Every view is computed from the definition — black where the critical orbit stays bounded — with a distance estimate for the filaments, which the book's grid misses; its caption even warns that the lemniscate domains "seem disconnected, but in fact they connect outside the grid used in the computation." The lemniscate view superposes the domains |f<sub>n</sub>(½)| &lt; R exactly as bottom-left Plate 189 does, and the 100-fold view sits where bottom-right Plate 189 sits, in the channel near λ = 1.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATES 190-191: THE DRAGONS ===================== -->
+  <section class="plate" id="p190">
+    <div class="plate-head">
+      <p class="no">Plates 190 and 191 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Self-squared dragons; approach to the "Peano" limit</h2>
+      <p class="dim">λ in a sprout at θ = 2πm/n → n heads around every articulation · heft and twist set by the cycle's multiplier</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-tall zoomable" id="wL">
+          <canvas id="cL" role="img" aria-label="Self-squared dragon: the Julia set of lambda z (1 minus z)"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cLt">Plate 191</strong> · <span id="cLn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">"To watch a dragon in the process of self-squaring would be a fascinating sight!" — a molting that detaches the skin of belly and back, stretches it to twice its length, folds it around both sides and re-attaches every fold. The best dragons obtain where λ lies in a sprout of Plate 189 at θ/2π = m/n: around each articulation point there are n heads or tails. A nice <i>heft</i> comes from sitting well inside the sprout, a nice <i>twist</i> from leaning toward a subsprout; "starved" of flesh by infinitely many bifurcations, a dragon collapses into a skeletal branched curve, and in an offshore island it becomes a σ-dragon. As n → ∞ the sprouts crowd toward λ = 1 and the dragons strain toward a "hermit-dragon" filling a scallop shell to the brim — a self-squared Peano curve, D = 2, which dies as a curve the moment it gets there.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">The plates</span></div>
+          <div class="steps words" id="pL" role="group" aria-label="Plate presets"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Sprout: heads n</span><span class="value" id="nLv">25</span></div>
+          <div class="steps" id="nL" role="group" aria-label="Sprout order"></div>
+          <div class="slider">
+            <div class="label-row"><span class="label">Heft (into the sprout)</span><span class="value" id="hLv">0.98</span></div>
+            <input type="range" id="hLs" min="0.55" max="0.995" step="0.005" value="0.98" aria-label="Multiplier modulus">
+          </div>
+          <div class="slider">
+            <div class="label-row"><span class="label">Twist (toward a subsprout)</span><span class="value" id="tLv">1/8</span></div>
+            <input type="range" id="tLs" min="0" max="0.3" step="0.0025" value="0.125" aria-label="Multiplier angle">
+          </div>
+          <label class="check" for="skinL"><input type="checkbox" id="skinL"> Skin only (the book's dusty prints)</label>
+        </div>
+        <p class="readline" id="infoL" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>λ</dt><dd id="rLa">—</dd></div>
+          <div><dt>μ</dt><dd id="rLb">—</dd></div>
+          <div><dt>Cycle</dt><dd id="rLc">—</dd></div>
+          <div><dt>Topological dimension</dt><dd id="rLd">2 (has flesh)</dd></div>
+        </dl>
+        <p class="note" id="noteL">The book names no λ for any dragon, so all four presets are reconstructions fitted to the scans by eye. Plate 191: λ in the period-25 sprout with multiplier 0.98·e<sup>2πi/8</sup> (the caption puts it in an island offshore the bond at θ = 2π/n; the sprout value matched the print better). Plate 190, starved: the period-doubling limit in the 1/10 sprout. Plate 190, twist: the root of the 1/7 subsprout of the 1/6 sprout. Plate 190, σ-dragon: the nucleus of a period-102 island in the channel near λ = 1, found where bottom-right Plate 189 looks. The thin figures are drawn as the set's skin, the way the book's own dusty prints show them; these must not be confused with the self-similar dragons of Plates 66–67.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 192: FATOU DUSTS ===================== -->
+  <section class="plate" id="p192">
+    <div class="plate-head">
+      <p class="no">Plate 192 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Real self-squared Fatou dusts on [0, 1]</h2>
+      <p class="dim">λ > 4 · −4/λ runs from −1 up to 0 · black: the first k iterates stay in [0, 1]</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wF">
+          <canvas id="cF" role="img" aria-label="Real Fatou dusts for every lambda greater than 4, stacked by minus four over lambda"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cFt">As printed</strong> · <span id="cFn">tremas of order 1 to 5</span> · tap a row to read its λ</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Fatou 1906 — "a masterpiece of an odd literary genre," the squirreled-away Comptes Rendus note — points out that when λ is real and λ &gt; 4 (or λ &lt; −2), the largest bounded invariant set of λx(1−x) is a dust in [0, 1]: a close relative of the Cantor dust, with the map itself supplying the cascade. Each horizontal line of this diagram is one λ; the mid trema is where the first step throws x above 1, its end points x₁ and x₂ solve λx(1−x) = 1 and draw a parabola; the preimages of the tremas open the tremas of every following order.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Tremas of order 1 to</span><span class="value" id="kFv">5</span></div>
+          <div class="steps" id="kF" role="group" aria-label="Trema order"></div>
+        </div>
+        <div class="group">
+          <label class="check" for="parF"><input type="checkbox" id="parF"> Draw the first tremas' parabola</label>
+          <label class="check" for="rowF"><input type="checkbox" id="rowF"> Read a row (or tap the figure)</label>
+          <div class="slider" id="rowFwrap" hidden>
+            <div class="label-row"><span class="label">Row −4/λ</span><span class="value" id="rowFv"></span></div>
+            <input type="range" id="rowFs" min="-0.995" max="-0.02" step="0.0025" value="-0.6" aria-label="Row position">
+          </div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate192">Show Plate 192 as printed</button>
+        </div>
+        <p class="readline" id="infoF" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>λ at the row</dt><dd id="rFa">—</dd></div>
+          <div><dt>Mid trema x₁, x₂</dt><dd id="rFb">—</dd></div>
+          <div><dt>Dust dimension D</dt><dd id="rFc">—</dd></div>
+          <div><dt>Surviving length</dt><dd id="rFd">—</dd></div>
+        </dl>
+        <p class="note">Computed exactly from the caption's rule: a point is black when its first k iterates stay inside [0, 1], which is precisely the complement of the tremas of order 1 to k. The vertical coordinate −4/λ makes room for every λ from 4 (bottom, where the dust is fattest and the mid trema closes) to ∞ (top). The dimension readout is a box-count estimate for the row's dust; at λ = 4 exactly the invariant set is all of [0, 1].</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 19, pages 180–192 (Plates 185, 187, 188–189, 190–191 and 192). Every figure is computed by iterating z → λz(1−z) or x → x² − μ; the dragons' λ values are reconstructions fitted to the scans, as noted. Companion pages: <a href="https://claude.ai/artifact/6EmzLTVdLKdNvpiUt94pog" target="_blank" rel="noopener">Square and Dragon Sweeps</a> (the self-similar dragons of Plates 66–67) and <a href="https://claude.ai/artifact/1diKiTcEwLkJpZaVA2gQ11" target="_blank" rel="noopener">Cantor Dust</a> (Plates 80–83).</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>

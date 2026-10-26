@@ -1,0 +1,1437 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Self-Squared Dragons</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>
+/* Layout: the inverted-V map (pages 180-182), real-lambda curves (185), the drape (187), the separators (188-189), the dragon lab (190-191) and the Fatou dusts (192), each a computed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */
+:root {
+  --page: #e4e5e1;
+  --text: #1b1d1f;
+  --muted: #595e64;
+  --rule: #c4c7c1;
+  --surface: #f6f6f3;
+  --accent: #285895;
+  --f-display: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Newsreader", Georgia, "Times New Roman", serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* the figures are reproductions of printed plates, so their paper and inks stay the same in both themes */
+  --print-paper: #ecebe6;
+  --print-ink: #151515;
+  --print-rule: #c9c8c2;
+  --gain: rgba(47, 95, 158, 0.42);
+  --loss: rgba(186, 88, 44, 0.42);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --page: #111214; --text: #e5e5e1; --muted: #9a9fa6; --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --page: #111214; --text: #e5e5e1; --muted: #9a9fa6; --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--page); color: var(--text); font-family: var(--f-display); font-size: 14px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
+.wrap {
+  max-width: 1180px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 36px 64px;
+  display: grid; gap: 40px;
+}
+header.top { display: grid; gap: 10px; max-width: 820px; }
+.eyebrow { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+h1 {
+  margin: 0; display: flex; align-items: center; flex-wrap: wrap; gap: 0.18em 0.42em;
+  font-weight: 800; font-size: clamp(30px, 5.4vw, 54px); line-height: 1.02; letter-spacing: 0.01em; text-transform: uppercase; text-wrap: balance;
+}
+h1 .plate-no { font-weight: 600; text-transform: none; letter-spacing: 0; }
+.lozenge { display: inline-block; width: 0.42em; height: 0.42em; border: 0.075em solid currentColor; position: relative; top: -0.02em; }
+.lozenge::after { content: ""; position: absolute; inset: 0.1em; border: 0.05em solid currentColor; }
+.dek { margin: 0; font-family: var(--f-body); font-size: 19px; line-height: 1.45; max-width: 64ch; }
+
+nav.index {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+  padding: 10px max(16px, env(safe-area-inset-right, 0px)) 10px max(16px, env(safe-area-inset-left, 0px));
+  background: var(--page); border-bottom: 1px solid var(--rule);
+  display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none;
+}
+nav.index a {
+  flex: none; display: inline-flex; gap: 8px; align-items: baseline; padding: 6px 10px;
+  border: 1px solid var(--rule); background: var(--surface); color: var(--text); text-decoration: none; font-size: 13px; font-weight: 600;
+}
+nav.index a b { font-family: var(--f-mono); font-weight: 500; color: var(--accent); }
+nav.index a:hover { border-color: var(--text); }
+
+section.plate { display: grid; gap: 18px; scroll-margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--rule); }
+.plate-head { display: grid; gap: 4px; }
+.plate-head .no { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.plate-head h2 { margin: 0; font-size: clamp(22px, 3vw, 30px); font-weight: 800; line-height: 1.1; text-transform: uppercase; letter-spacing: 0.01em; text-wrap: balance; }
+.plate-head .dim { margin: 0; font-family: var(--f-mono); font-size: 13px; color: var(--muted); }
+.plate-body { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(280px, 1fr); gap: 32px; align-items: start; }
+@media (max-width: 899px) { .plate-body { grid-template-columns: minmax(0, 1fr); gap: 20px; } }
+figure.fig { margin: 0; display: grid; gap: 8px; min-width: 0; }
+.canvas-wrap { position: relative; width: 100%; max-width: 100%; background: var(--print-paper); outline: 1px solid var(--rule); overflow: hidden; }
+.canvas-wrap canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.r-sq { aspect-ratio: 1 / 1; }
+.r-lox { aspect-ratio: 5 / 4; }
+.zoomable { cursor: grab; touch-action: pan-y; }
+.zoomable.dragging { cursor: grabbing; }
+.view-tools { position: absolute; top: 10px; right: 10px; display: flex; gap: 6px; z-index: 2; }
+.view-tools button { min-width: 34px; height: 34px; padding: 0 10px; font: 600 15px/1 var(--f-display); color: var(--print-ink); background: #f7f7f3; border: 1px solid var(--print-rule); cursor: pointer; }
+figcaption { font-size: 13px; color: var(--muted); }
+figcaption strong { color: var(--text); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+
+.side { display: grid; gap: 18px; min-width: 0; align-content: start; }
+.side p.cap { margin: 0; font-family: var(--f-body); font-size: 17px; line-height: 1.55; max-width: 62ch; }
+.group { display: grid; gap: 8px; min-width: 0; }
+.label-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.label { font-size: 11.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.value { font-family: var(--f-mono); font-size: 12.5px; font-variant-numeric: tabular-nums; text-align: right; }
+.steps { display: flex; flex-wrap: wrap; gap: 6px; }
+.steps button {
+  min-width: 38px; height: 34px; padding: 0 10px; font: 600 13px/1 var(--f-mono); color: var(--text);
+  background: var(--surface); border: 1px solid var(--rule); cursor: pointer;
+}
+.steps.words button { font: 600 13px/1 var(--f-display); }
+.steps button[aria-pressed="true"] { background: var(--text); color: var(--page); border-color: var(--text); }
+.steps button:hover { border-color: var(--text); }
+.steps button:disabled { opacity: 0.35; cursor: default; border-color: var(--rule); }
+.btn-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.btn { padding: 8px 12px; font: 600 13px/1.2 var(--f-display); color: var(--text); background: var(--surface); border: 1px solid var(--rule); cursor: pointer; }
+.btn:hover { border-color: var(--text); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--page); }
+.check { display: flex; align-items: flex-start; gap: 8px; font-size: 13.5px; cursor: pointer; }
+.check input { accent-color: var(--accent); width: 16px; height: 16px; margin: 1px 0 0; flex: none; }
+.check:has(input:disabled) { opacity: 0.45; cursor: default; }
+.slider { display: grid; gap: 4px; }
+.slider input { width: 100%; accent-color: var(--accent); margin: 0; }
+.slider input:disabled { opacity: 0.4; }
+dl.read { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; padding-top: 14px; border-top: 1px solid var(--rule); }
+dl.read div { display: grid; gap: 2px; min-width: 0; }
+dl.read dt { font-size: 10.5px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); }
+dl.read dd { margin: 0; font-family: var(--f-mono); font-size: 16px; overflow-wrap: anywhere; }
+dl.read dd small { font-size: 11.5px; color: var(--muted); }
+.note { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.mini { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; padding: 10px 12px; background: var(--print-paper); border: 1px solid var(--print-rule); color: var(--print-ink); }
+.mini svg { height: 64px; width: auto; max-width: 100%; }
+.mini .fx { font-family: var(--f-mono); font-size: 12px; line-height: 1.6; color: var(--print-ink); }
+.key { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--muted); }
+.key span { display: inline-flex; align-items: center; gap: 6px; }
+.key i { width: 14px; height: 10px; display: inline-block; border: 1px solid var(--print-rule); }
+.readline { min-height: 2.9em; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.readline b { color: var(--text); font-weight: 700; }
+
+.sub { display: grid; gap: 14px; padding-top: 22px; border-top: 1px dashed var(--rule); scroll-margin-top: 64px; }
+.sub h3 { margin: 0; font-size: 15px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
+.source { font-family: var(--f-body); font-size: 15px; color: var(--muted); margin: 0; max-width: 84ch; }
+.source i { color: var(--text); }
+.source a { color: var(--accent); }
+button:focus-visible, input:focus-visible, a:focus-visible, canvas:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.mini svg.gen { height: 72px; }
+.r-wide { aspect-ratio: 10 / 7; }
+.r-tall { aspect-ratio: 7 / 8; }
+.r-strip { aspect-ratio: 16 / 5; }
+</style>
+<style>
+body { margin: 0; }
+/* The hidden attribute must beat the pages' own display rules (.slider, .check, ...). The artifact
+   wrapper's stylesheet used to provide this; self-hosted pages carry it themselves. */
+[hidden] { display: none !important; }
+nav.shell { font-family: var(--f-display); font-size: 12.5px; font-weight: 600; background: var(--page);
+  border-bottom: 1px solid var(--rule); display: flex; align-items: center; gap: 6px 18px;
+  padding: 9px max(16px, env(safe-area-inset-right, 0px)) 9px max(16px, env(safe-area-inset-left, 0px)); }
+nav.shell a { color: var(--text); text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+nav.shell a:hover { color: var(--accent); }
+nav.shell .home { letter-spacing: 0.07em; text-transform: uppercase; flex: none; }
+nav.shell .gap { flex: 1; }
+nav.shell .pn { color: var(--muted); font-weight: 500; }
+nav.shell .pn b { color: var(--text); font-weight: 600; }
+nav.shell a:hover .pn, nav.shell a:hover .pn b { color: var(--accent); }
+</style>
+</head>
+<body>
+<nav class="shell" aria-label="Site"><a class="home" href="index.html">Fractal Geometry Explorer</a><span class="gap"></span><a rel="prev" href="diameter-exponent.html"><span class="pn">&#8592; <b>Plates 163–165</b></span></a><a rel="next" href="random-curds.html"><span class="pn"><b>Plates 218–223</b> &#8594;</span></a></nav>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 19, "Cantor and Fatou Dusts; Self-Squared Dragons" · pages 180–192</p>
+    <h1><span class="plate-no">Plates 185–192</span><span class="lozenge" aria-hidden="true"></span><span>Self-Squared Dragons</span></h1>
+    <p class="dek">Squaring a number is as elementary as arithmetic gets. Iterate it — with one constant added, z → λz(1−z) or x → x²−μ — and "Pandora's boxes of possibilities" open: dusts, dragons and whole atlases of shapes that the map leaves invariant, which Mandelbrot calls self-squared. This chapter is where the book draws the parameter maps now universally called the Mandelbrot set, published here and in Mandelbrot's 1980 paper for the first time. Every figure is computed from the rules in the captions.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#v"><b>ƒ</b> Dust from a map</a>
+    <a href="#p185"><b>185</b> Real λ</a>
+    <a href="#p187"><b>187</b> The drape</a>
+    <a href="#p188"><b>188–9</b> Separators</a>
+    <a href="#p190"><b>190–1</b> Dragons</a>
+    <a href="#p192"><b>192</b> Fatou dusts</a>
+  </nav>
+
+  <!-- ===================== PAGES 180–182: THE INVERTED V ===================== -->
+  <section class="plate" id="v">
+    <div class="plate-head">
+      <p class="no">Pages 180–182 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>The Cantor dust from a nonlinear map</h2>
+      <p class="dim" id="dimV">f(x) = {½ − |x − ½|} / r, r = 1/3 · the largest bounded invariant set is the Cantor dust</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wV">
+          <canvas id="cV" role="img" aria-label="Graphical iteration of the inverted-V map, whose invariant set is the Cantor dust"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cVt">Inverted V</strong> · <span id="cVn"></span> · tap to choose x₀</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Chapter 8 built the Cantor dust by cutting out middle thirds. Here the same dust appears with no cutting at all: it is the largest bounded set that the "inverted V" map leaves invariant. Start anywhere and iterate. Anything below 0 races to −∞; the open middle third rises above 1 and is thrown out on the next step, the middle thirds of what remains follow one step later — and what never leaves is exactly the dust. A nonlinear formula has swallowed the whole cascade, outer cutoff included.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Map</span></div>
+          <div class="steps words" id="mV" role="group" aria-label="Which map"></div>
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label" id="pVl">Ratio r</span><span class="value" id="pVv">1/3</span></div>
+          <input type="range" id="pVs" min="0.18" max="0.5" step="0.001" value="0.3333" aria-label="Map parameter">
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Starting point x₀</span><span class="value" id="xVv">0.74</span></div>
+          <input type="range" id="xVs" min="0" max="1" step="0.0005" value="0.74" aria-label="Starting point">
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Iterations drawn</span><span class="value" id="sVv">20</span></div>
+          <div class="steps" id="sV" role="group" aria-label="Iterations"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="presetV">The triadic dust, r = 1/3</button>
+          <button type="button" class="btn" id="presetV2">A point of the dust</button>
+        </div>
+        <p class="readline" id="infoV" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Fate of x₀</dt><dd id="rVa">—</dd></div>
+          <div><dt>Leaves [0, 1] at step</dt><dd id="rVb">—</dd></div>
+          <div><dt>Dust dimension</dt><dd id="rVc">0.6309</dd></div>
+          <div><dt>Peak f(½)</dt><dd id="rVd">1.5</dd></div>
+        </dl>
+        <p class="note">The book states the map and the invariance argument but prints no figure for them; this drawing — graph, diagonal and cobweb — is ours. The rows under the graph mark the points that survive 1, 2, 3… steps; they are the stages of the Cantor construction. The second map, λx(1−x), is the "squaring generator" the rest of the chapter iterates: for λ &gt; 4 it plays the V's role and its dust is Plate 192.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 185: REAL LAMBDA ===================== -->
+  <section class="plate" id="p185">
+    <div class="plate-head">
+      <p class="no">Plate 185 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Self-squared fractal curves for real λ</h2>
+      <p class="dim">z → λz(1−z) · filled sets for λ = 1, 1.5, 2, 2.5, 3 · nuclear λ for w = 2 is 1 + √5 ≈ 3.2361</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wE">
+          <canvas id="cE" role="img" aria-label="Maximal bounded self-squared domains for real lambda"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cEt">As printed, left</strong> · <span id="cEn">five domains superposed</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The left side of the plate stacks the maximal bounded self-squared domains for λ = 1, 1.5, 2.0, 2.5 and 3.0, one gray over another; the central black shape spans the segment [0, 1]. λ = 1 is the <i>scallop shell</i>; λ = 2 is an exact circle; and λ = 3 Mandelbrot nicknamed the <i>San Marco dragon</i> — "a mathematician's wild extrapolation of the skyline of the Basilica in Venice, together with its reflection in a flooded Piazza." The right side shows the nuclear λ of the period-2 atom, turned 90° to fit the page.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mE" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="slider" id="lEwrap">
+          <div class="label-row"><span class="label">λ (real)</span><span class="value" id="lEv">3</span></div>
+          <input type="range" id="lEs" min="0.25" max="4" step="0.0005" value="3" aria-label="Lambda">
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate185L">Show Plate 185, left</button>
+          <button type="button" class="btn" id="plate185R">Right</button>
+          <button type="button" class="btn" id="sanmarco">San Marco, λ = 3</button>
+        </div>
+        <p class="readline" id="infoE" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>λ</dt><dd id="rEa">1 … 3</dd></div>
+          <div><dt>μ = λ²/4 − λ/2</dt><dd id="rEb">—</dd></div>
+          <div><dt>Orbit of ½</dt><dd id="rEc">—</dd></div>
+          <div><dt>Fixed points</dt><dd id="rEd">0 and 1 − 1/λ</dd></div>
+        </dl>
+        <p class="note" id="noteE">The caption prints the right side's value as λ = 3.3260680, but the nuclear λ of the period-2 atom — defined by f(f(½)) = ½, as the caption itself says — is 1 + √5 = 3.2360680…: two digits are transposed in the book. The figure here uses the true nucleus, and matches the plate. In the left figure the five domains nest, so each deeper gray is one more set; the shading is ours, chosen to match the print.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 187: THE DRAPE ===================== -->
+  <section class="plate" id="p187">
+    <div class="plate-head">
+      <p class="no">Plate 187 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Composite of self-squared curves for real λ</h2>
+      <p class="dim">horizontal sections λ from 1 to 4 · the drape's belt, at λ = 2, is an exact circle</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-tall zoomable" id="wD">
+          <canvas id="cD" role="img" aria-label="The drape: self-squared shapes for real lambda stacked into a sculpture"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cDt">The drape</strong> · <span id="cDn">sections stacked from λ = 1 at the base to λ = 4 at the top</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">This "draped sculpture was made within a computer's memory, by a process that amounts to whittling away all points in an initial cube whose iterates converge to infinity." Each horizontal section is the maximal bounded self-squared shape for one real λ; the λ axis runs up the sculpture. At λ = 2 the section is a circle — the drape's "belt". The <i>pleats</i>, pressed in below the belt and out above it, are the scallops of Plate 185 moving continuously with λ.</p>
+        <div class="slider">
+          <div class="label-row"><span class="label">Cut the drape at λ</span><span class="value" id="lDv">2.00</span></div>
+          <input type="range" id="lDs" min="1" max="4" step="0.005" value="2" aria-label="Section lambda">
+        </div>
+        <div class="group">
+          <label class="check" for="cutD"><input type="checkbox" id="cutD"> Mark the cut on the sculpture</label>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate187">Show Plate 187 as printed</button>
+        </div>
+        <p class="readline" id="infoD" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Section at λ</dt><dd id="rDa">2.00</dd></div>
+          <div><dt>Its μ</dt><dd id="rDb">0</dd></div>
+          <div><dt>Width of section</dt><dd id="rDc">—</dd></div>
+          <div><dt>Behaviour</dt><dd id="rDd">circle</dd></div>
+        </dl>
+        <p class="note">A reconstruction, not a copy: the book's plate is a shaded 3D rendering, while this figure draws the same stack of sections as a contour "waterfall" seen from the front and slightly above — nearer sections hide what is behind them. The caption's "wall" behind the drape, with its corrugated stripes of island molecules, and the fractal tree at the top of the drape, are described in the caption but are beyond this redrawing; the sections themselves are computed exactly.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATES 188-189: THE SEPARATORS ===================== -->
+  <section class="plate" id="p188">
+    <div class="plate-head">
+      <p class="no">Plates 188 and 189 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>The separators of z → λz(1−z) and z → z²−μ</h2>
+      <p class="dim">black: the critical orbit stays bounded · μ = λ²/4 − λ/2 · the μ-map is the Mandelbrot set</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-wide zoomable" id="wM">
+          <canvas id="cM" role="img" aria-label="The mu-map and lambda-map: parameter planes of the quadratic map"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cMt">μ-map</strong> · <span id="cMn">bottom Plate 188</span> · zoom re-computes, so keep diving; tap to read λ and μ</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The topology of a self-squared set depends on where the parameter lies with respect to a ramified curve S that Mandelbrot "discovered and now calls separator" — the connected boundary of the black shape. Inside S the open domain splits into <i>atoms</i> joined at <i>bonds</i>; atoms carry periods; bifurcation multiplies the period at every outbound bond crossing, and the "island molecules" offshore are shaped like the whole map. In the λ-map the corona of sprouts hangs on two empty discs, |λ| ≤ 1 and |λ−2| ≤ 1; the receptor bonds sit at λ = exp(2πim/n) and λ = 2 − exp(2πim/n).</p>
+        <div class="mini" aria-label="The lambda plane: two unit discs with sprout angles">
+          <svg class="gen" viewBox="-1.35 -1.25 4.7 2.5" aria-hidden="true" id="miniM"></svg>
+          <div class="fx">λ-plane<br>μ = λ²/4 − λ/2</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Map</span></div>
+          <div class="steps words" id="mM" role="group" aria-label="Which map"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate188">Show Plate 188 as printed</button>
+          <button type="button" class="btn" id="plate189">Plate 189</button>
+        </div>
+        <p class="readline" id="infoM" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Tapped λ</dt><dd id="rMa">—</dd></div>
+          <div><dt>Its μ</dt><dd id="rMb">—</dd></div>
+          <div><dt>Critical orbit</dt><dd id="rMc">—</dd></div>
+          <div><dt>Cycle period</dt><dd id="rMd">—</dd></div>
+        </dl>
+        <div class="btn-row">
+          <button type="button" class="btn" id="toLab" disabled>Send this λ to the dragon lab ↓</button>
+        </div>
+        <p class="note">These are the first published pictures of the set now named after Mandelbrot: the μ-map is the Mandelbrot set drawn for z² − μ, so it is the mirror image of today's usual picture (cusp at μ = −¼, tip at μ = 2). Every view is computed from the definition — black where the critical orbit stays bounded — with a distance estimate for the filaments, which the book's grid misses; its caption even warns that the lemniscate domains "seem disconnected, but in fact they connect outside the grid used in the computation." The lemniscate view superposes the domains |f<sub>n</sub>(½)| &lt; R exactly as bottom-left Plate 189 does, and the 100-fold view sits where bottom-right Plate 189 sits, in the channel near λ = 1.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATES 190-191: THE DRAGONS ===================== -->
+  <section class="plate" id="p190">
+    <div class="plate-head">
+      <p class="no">Plates 190 and 191 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Self-squared dragons; approach to the "Peano" limit</h2>
+      <p class="dim">λ in a sprout at θ = 2πm/n → n heads around every articulation · heft and twist set by the cycle's multiplier</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-tall zoomable" id="wL">
+          <canvas id="cL" role="img" aria-label="Self-squared dragon: the Julia set of lambda z (1 minus z)"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cLt">Plate 191</strong> · <span id="cLn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">"To watch a dragon in the process of self-squaring would be a fascinating sight!" — a molting that detaches the skin of belly and back, stretches it to twice its length, folds it around both sides and re-attaches every fold. The best dragons obtain where λ lies in a sprout of Plate 189 at θ/2π = m/n: around each articulation point there are n heads or tails. A nice <i>heft</i> comes from sitting well inside the sprout, a nice <i>twist</i> from leaning toward a subsprout; "starved" of flesh by infinitely many bifurcations, a dragon collapses into a skeletal branched curve, and in an offshore island it becomes a σ-dragon. As n → ∞ the sprouts crowd toward λ = 1 and the dragons strain toward a "hermit-dragon" filling a scallop shell to the brim — a self-squared Peano curve, D = 2, which dies as a curve the moment it gets there.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">The plates</span></div>
+          <div class="steps words" id="pL" role="group" aria-label="Plate presets"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Sprout: heads n</span><span class="value" id="nLv">25</span></div>
+          <div class="steps" id="nL" role="group" aria-label="Sprout order"></div>
+          <div class="slider">
+            <div class="label-row"><span class="label">Heft (into the sprout)</span><span class="value" id="hLv">0.98</span></div>
+            <input type="range" id="hLs" min="0.55" max="0.995" step="0.005" value="0.98" aria-label="Multiplier modulus">
+          </div>
+          <div class="slider">
+            <div class="label-row"><span class="label">Twist (toward a subsprout)</span><span class="value" id="tLv">1/8</span></div>
+            <input type="range" id="tLs" min="0" max="0.3" step="0.0025" value="0.125" aria-label="Multiplier angle">
+          </div>
+          <label class="check" for="skinL"><input type="checkbox" id="skinL"> Skin only (the book's dusty prints)</label>
+        </div>
+        <p class="readline" id="infoL" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>λ</dt><dd id="rLa">—</dd></div>
+          <div><dt>μ</dt><dd id="rLb">—</dd></div>
+          <div><dt>Cycle</dt><dd id="rLc">—</dd></div>
+          <div><dt>Topological dimension</dt><dd id="rLd">2 (has flesh)</dd></div>
+        </dl>
+        <p class="note" id="noteL">The book names no λ for any dragon, so all four presets are reconstructions fitted to the scans by eye. Plate 191: λ in the period-25 sprout with multiplier 0.98·e<sup>2πi/8</sup> (the caption puts it in an island offshore the bond at θ = 2π/n; the sprout value matched the print better). Plate 190, starved: the period-doubling limit in the 1/10 sprout. Plate 190, twist: the root of the 1/7 subsprout of the 1/6 sprout. Plate 190, σ-dragon: the nucleus of a period-102 island in the channel near λ = 1, found where bottom-right Plate 189 looks. The thin figures are drawn as the set's skin, the way the book's own dusty prints show them; these must not be confused with the self-similar dragons of Plates 66–67.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 192: FATOU DUSTS ===================== -->
+  <section class="plate" id="p192">
+    <div class="plate-head">
+      <p class="no">Plate 192 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Real self-squared Fatou dusts on [0, 1]</h2>
+      <p class="dim">λ > 4 · −4/λ runs from −1 up to 0 · black: the first k iterates stay in [0, 1]</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wF">
+          <canvas id="cF" role="img" aria-label="Real Fatou dusts for every lambda greater than 4, stacked by minus four over lambda"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cFt">As printed</strong> · <span id="cFn">tremas of order 1 to 5</span> · tap a row to read its λ</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Fatou 1906 — "a masterpiece of an odd literary genre," the squirreled-away Comptes Rendus note — points out that when λ is real and λ &gt; 4 (or λ &lt; −2), the largest bounded invariant set of λx(1−x) is a dust in [0, 1]: a close relative of the Cantor dust, with the map itself supplying the cascade. Each horizontal line of this diagram is one λ; the mid trema is where the first step throws x above 1, its end points x₁ and x₂ solve λx(1−x) = 1 and draw a parabola; the preimages of the tremas open the tremas of every following order.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Tremas of order 1 to</span><span class="value" id="kFv">5</span></div>
+          <div class="steps" id="kF" role="group" aria-label="Trema order"></div>
+        </div>
+        <div class="group">
+          <label class="check" for="parF"><input type="checkbox" id="parF"> Draw the first tremas' parabola</label>
+          <label class="check" for="rowF"><input type="checkbox" id="rowF"> Read a row (or tap the figure)</label>
+          <div class="slider" id="rowFwrap" hidden>
+            <div class="label-row"><span class="label">Row −4/λ</span><span class="value" id="rowFv"></span></div>
+            <input type="range" id="rowFs" min="-0.995" max="-0.02" step="0.0025" value="-0.6" aria-label="Row position">
+          </div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate192">Show Plate 192 as printed</button>
+        </div>
+        <p class="readline" id="infoF" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>λ at the row</dt><dd id="rFa">—</dd></div>
+          <div><dt>Mid trema x₁, x₂</dt><dd id="rFb">—</dd></div>
+          <div><dt>Dust dimension D</dt><dd id="rFc">—</dd></div>
+          <div><dt>Surviving length</dt><dd id="rFd">—</dd></div>
+        </dl>
+        <p class="note">Computed exactly from the caption's rule: a point is black when its first k iterates stay inside [0, 1], which is precisely the complement of the tremas of order 1 to k. The vertical coordinate −4/λ makes room for every λ from 4 (bottom, where the dust is fattest and the mid trema closes) to ∞ (top). The dimension readout is a box-count estimate for the row's dust; at λ = 4 exactly the invariant set is all of [0, 1].</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 19, pages 180–192 (Plates 185, 187, 188–189, 190–191 and 192). Every figure is computed by iterating z → λz(1−z) or x → x² − μ; the dragons' λ values are reconstructions fitted to the scans, as noted. Companion pages: <a href="dragon-sweeps.html">Square and Dragon Sweeps</a> (the self-similar dragons of Plates 66–67) and <a href="koch-plates.html">Cantor Dust</a> (Plates 80–83).</p>
+</div>
+
+<script>
+// Shared drawing library: style constants, the zoomable canvas (snapshot while panning), chunked
+// paths, controls and small SVG figures. Loaded before each page's own scripts; pages may extend
+// PRINT with their own inks (PRINT.red = ..., PRINT.light = ...).
+const $ = (id) => document.getElementById(id);
+const fmt = (n) => n.toLocaleString('en-US');
+const PRINT = { paper: '#ecebe6', ink: '#151515', rule: '#c9c8c2', muted: '#66665f', accent: '#2f5f9e', red: '#c2452d', faint: '#bdbbb3', gray: '#8f8e88' };
+const RAMP = [[233, 185, 73], [217, 113, 59], [184, 66, 79], [125, 58, 120], [63, 79, 151], [43, 122, 138]];
+const ramp = (t, a = 1) => {
+  const x = Math.max(0, Math.min(1, t)) * (RAMP.length - 1), i = Math.min(RAMP.length - 2, Math.floor(x)), f = x - i;
+  const c = RAMP[i].map((v, k) => Math.round(v + (RAMP[i + 1][k] - v) * f));
+  return `rgba(${c[0]},${c[1]},${c[2]},${a})`;
+};
+const CAT = ['#151515', '#9a988f', '#2f5f9e', '#c2452d', '#3f8f6c', '#b58a2a', '#6b4e9b', '#5f8fae'];
+
+// ---------- shared plumbing ----------
+function figure(canvas, draw) {
+  const wrap = canvas.parentElement;
+  const f = { canvas, ctx: canvas.getContext('2d'), w: 1, h: 1, dpr: 1, draw };
+  const resize = () => {
+    f.dpr = Math.min(2, window.devicePixelRatio || 1);
+    f.w = wrap.clientWidth || 1; f.h = wrap.clientHeight || 1;
+    canvas.width = Math.round(f.w * f.dpr); canvas.height = Math.round(f.h * f.dpr);
+    f.draw();
+  };
+  new ResizeObserver(resize).observe(wrap);
+  return f;
+}
+function fitBox(f, bb, pad = 0.04) {
+  const w = Math.max(1e-9, bb.x1 - bb.x0), h = Math.max(1e-9, bb.y1 - bb.y0), s = Math.min(f.w / (w * (1 + 2 * pad)), f.h / (h * (1 + 2 * pad)));
+  return { s, ox: f.w / 2 - ((bb.x0 + bb.x1) / 2) * s, oy: f.h / 2 + ((bb.y0 + bb.y1) / 2) * s };
+}
+const toWorld = (f, v) => f.ctx.setTransform(f.dpr * v.s, 0, 0, -f.dpr * v.s, f.dpr * v.ox, f.dpr * v.oy);
+const toScreen = (f) => f.ctx.setTransform(f.dpr, 0, 0, f.dpr, 0, 0);
+function paper(f, color) { f.ctx.setTransform(1, 0, 0, 1, 0, 0); f.ctx.fillStyle = color; f.ctx.fillRect(0, 0, f.canvas.width, f.canvas.height); }
+function polyPath(P, closed = true, upto) {
+  const p = new Path2D(), m = upto === undefined ? P.length / 2 : upto;
+  p.moveTo(P[0], P[1]);
+  for (let i = 1; i < m; i++) p.lineTo(P[2 * i], P[2 * i + 1]);
+  if (closed) p.closePath();
+  return p;
+}
+function bbox(P, bb = { x0: Infinity, x1: -Infinity, y0: Infinity, y1: -Infinity }) {
+  for (let i = 0; i < P.length; i += 2) { bb.x0 = Math.min(bb.x0, P[i]); bb.x1 = Math.max(bb.x1, P[i]); bb.y0 = Math.min(bb.y0, P[i + 1]); bb.y1 = Math.max(bb.y1, P[i + 1]); }
+  return bb;
+}
+function stepButtons(el, values, text, aria, onPick) {
+  const bs = values.map((v) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.textContent = text(v); b.setAttribute('aria-label', aria(v));
+    b.addEventListener('click', () => onPick(v));
+    el.append(b);
+    return b;
+  });
+  const mark = (cur) => bs.forEach((b, i) => b.setAttribute('aria-pressed', String(values[i] === cur)));
+  mark.buttons = bs;
+  return mark;
+}
+// pan and zoom: a quick rescaled snapshot while moving, a full redraw once it settles
+function zoomable(wrapId, canvasId, fitOf, render, opts = {}) {
+  const maxZoom = opts.maxZoom || 400;
+  const wrap = $(wrapId), z = { view: null, user: false, snapView: null, raf: 0, full: 0 };
+  const snap = document.createElement('canvas');
+  const f = figure($(canvasId), () => draw());
+  function touch() { wrap.style.touchAction = z.view && z.view.s > z.view.fit * 1.02 ? 'none' : 'pan-y'; }
+  function draw() {
+    if (!z.view || !z.user) { z.view = fitOf(f); z.view.fit = z.view.s; z.user = false; touch(); }
+    render(f, z.view);
+    snap.width = f.canvas.width; snap.height = f.canvas.height; snap.getContext('2d').drawImage(f.canvas, 0, 0);
+    z.snapView = { s: z.view.s, ox: z.view.ox, oy: z.view.oy };
+  }
+  function quick() {
+    const v = z.view, k = v.s / z.snapView.s, c = f.ctx;
+    c.setTransform(1, 0, 0, 1, 0, 0); c.fillStyle = z.ground || PRINT.paper; c.fillRect(0, 0, f.canvas.width, f.canvas.height);
+    c.drawImage(snap, (v.ox - z.snapView.ox * k) * f.dpr, (v.oy - z.snapView.oy * k) * f.dpr, snap.width * k, snap.height * k);
+  }
+  function schedule() { if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; draw(); }); }
+  function moved() {
+    if (!z.snapView) { schedule(); return; }
+    if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; quick(); });
+    clearTimeout(z.full); z.full = setTimeout(schedule, 160);
+  }
+  function zoomAt(px, py, k) {
+    const v = z.view, ns = Math.min(v.fit * maxZoom, Math.max(v.fit * 0.8, v.s * k)), wx = (px - v.ox) / v.s, wy = (v.oy - py) / v.s;
+    v.s = ns; v.ox = px - wx * ns; v.oy = py + wy * ns; z.user = true; touch(); moved();
+  }
+  function pan(dx, dy) { z.view.ox += dx; z.view.oy += dy; z.user = true; moved(); }
+  wrap.querySelector('[data-z="in"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1.6));
+  wrap.querySelector('[data-z="out"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1 / 1.6));
+  wrap.querySelector('[data-z="fit"]').addEventListener('click', () => { z.user = false; schedule(); });
+  const pts = new Map();
+  let pinch = null, down = null;
+  const local = (e) => { const r = wrap.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+  wrap.addEventListener('pointerdown', (e) => {
+    if (e.target.closest('.view-tools')) return;
+    pts.set(e.pointerId, local(e));
+    down = pts.size === 1 ? { p: local(e), t: performance.now(), moved: 0 } : null;
+    try { wrap.setPointerCapture(e.pointerId); } catch (_) {}
+    if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), m: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2] }; }
+    wrap.classList.add('dragging');
+  });
+  wrap.addEventListener('pointermove', (e) => {
+    if (!pts.has(e.pointerId)) return;
+    const prev = pts.get(e.pointerId), cur = local(e);
+    pts.set(e.pointerId, cur);
+    if (down) down.moved = Math.max(down.moved, Math.hypot(cur[0] - down.p[0], cur[1] - down.p[1]));
+    if (pts.size === 2 && pinch) {
+      const [a, b] = [...pts.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]), m = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+      pan(m[0] - pinch.m[0], m[1] - pinch.m[1]);
+      if (pinch.d > 0) zoomAt(m[0], m[1], d / pinch.d);
+      pinch = { d, m };
+    } else if (pts.size === 1 && (e.pointerType !== 'touch' || z.view.s > z.view.fit * 1.02)) pan(cur[0] - prev[0], cur[1] - prev[1]);
+  });
+  const end = (e) => {
+    if (down && pts.size === 1 && down.moved < 5 && opts.onTap) { const [x, y] = local(e), v = z.view; opts.onTap((x - v.ox) / v.s, (v.oy - y) / v.s); }
+    down = null;
+    pts.delete(e.pointerId); if (pts.size < 2) pinch = null; if (!pts.size) wrap.classList.remove('dragging');
+  };
+  wrap.addEventListener('pointerup', end); wrap.addEventListener('pointercancel', (e) => { down = null; end(e); });
+  wrap.addEventListener('wheel', (e) => { if (!(e.ctrlKey || e.metaKey)) return; e.preventDefault(); const [x, y] = local(e); zoomAt(x, y, Math.exp(-e.deltaY * 0.0045)); }, { passive: false });
+  wrap.addEventListener('dblclick', (e) => { if (e.target.closest('.view-tools')) return; const [x, y] = local(e); zoomAt(x, y, e.shiftKey ? 0.5 : 2); });
+  return { f, z, schedule, refit: () => { z.user = false; schedule(); } };
+}
+// chunked paths: many small paths fill far faster than one path with a hundred thousand pieces
+function chunked(count, add, size = 512) {
+  const out = [];
+  let p = null;
+  for (let i = 0; i < count; i++) { if (i % size === 0) { p = new Path2D(); out.push(p); } add(p, i); }
+  return out;
+}
+// fill and outline in the same colour, so that tiles which only meet along an edge show no hairline seams
+function solid(c, paths, color, lw) {
+  c.fillStyle = color; c.strokeStyle = color; c.lineWidth = lw; c.lineJoin = 'miter';
+  for (const p of paths) { c.fill(p); c.stroke(p); }
+}
+const dot = (c, v, x, y, r = 4, color = PRINT.red) => { c.beginPath(); c.arc(v.ox + x * v.s, v.oy - y * v.s, r, 0, Math.PI * 2); c.fillStyle = color; c.fill(); c.strokeStyle = PRINT.paper; c.lineWidth = 1.5; c.stroke(); };
+
+// a polyline (Float64Array or [[x,y],...]) as SVG points with y flipped
+const svgPts = (P) => (P instanceof Float64Array ? Array.from({ length: P.length / 2 }, (_, i) => [P[2 * i], P[2 * i + 1]]) : P).map(([x, y]) => `${x.toFixed(4)},${(-y).toFixed(4)}`).join(' ');
+function miniCurve(id, P, dots = true) {
+  const pts = P instanceof Float64Array ? Array.from({ length: P.length / 2 }, (_, i) => [P[2 * i], P[2 * i + 1]]) : P;
+  $(id).innerHTML = `<line x1="0" y1="0" x2="1" y2="0" stroke="#8a8a84" stroke-width="0.008" stroke-dasharray="0.025 0.02"/>` +
+    `<polyline points="${svgPts(pts)}" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linejoin="round"/>` +
+    (dots ? `<g fill="currentColor">${pts.map(([x, y], i) => `<circle cx="${x.toFixed(4)}" cy="${(-y).toFixed(4)}" r="${i === 0 || i === pts.length - 1 ? 0.03 : 0.018}"/>`).join('')}</g>` : '');
+}
+function miniTree(id, links, dx = 0) {
+  const ends = new Set(), mid = new Set(), k = (x, y) => `${x.toFixed(4)},${y.toFixed(4)}`;
+  let s = '';
+  for (const [px, py, qx, qy] of links) {
+    s += `<line x1="${(px + dx).toFixed(4)}" y1="${(-py).toFixed(4)}" x2="${(qx + dx).toFixed(4)}" y2="${(-qy).toFixed(4)}" stroke="currentColor" stroke-width="0.02" stroke-linecap="round"/>`;
+    mid.add(k(px + dx, py)); mid.add(k(qx + dx, qy));
+  }
+  s += `<g fill="currentColor">${[...mid].map((p) => { const [x, y] = p.split(',').map(Number); const big = (Math.abs(x - dx) < 1e-6 || Math.abs(x - dx - 1) < 1e-6) && Math.abs(y) < 1e-6; return `<circle cx="${x}" cy="${-y}" r="${big ? 0.03 : 0.018}"/>`; }).join('')}</g>`;
+  return s;
+}
+// canvas transform for a similarity map f = [ar, ai, br, bi, m] composed with the view
+function setMap(f, c, v, fig) {
+  const [ar, ai, br, bi, m] = f, k = fig.dpr * v.s;
+  if (m) c.setTransform(k * ar, -k * ai, k * ai, k * ar, fig.dpr * (v.ox + v.s * br), fig.dpr * (v.oy - v.s * bi));
+  else c.setTransform(k * ar, -k * ai, -k * ai, -k * ar, fig.dpr * (v.ox + v.s * br), fig.dpr * (v.oy - v.s * bi));
+}
+const segPath = (segs, pick) => { const p = new Path2D(); for (const s of segs) if (!pick || pick(s)) { p.moveTo(s[0], s[1]); p.lineTo(s[2], s[3]); } return p; };
+// Plate 64's chevrons, measured from the plate: each interval a→b becomes a thin quadrilateral
+// pointing toward F, the corner the next stage would add (see DECISIONS.md)
+const CHEV_OUT = 0.43, CHEV_IN = 0.235;
+function chevronPaths(P, F, m) {
+  return chunked(m, (p, i) => {
+    const ax = P[2 * i], ay = P[2 * i + 1], bx = P[2 * i + 2], by = P[2 * i + 3], mx = (ax + bx) / 2, my = (ay + by) / 2;
+    const vx = F[2 * i] - mx, vy = F[2 * i + 1] - my;
+    p.moveTo(ax, ay); p.lineTo(mx + CHEV_OUT * vx, my + CHEV_OUT * vy); p.lineTo(bx, by); p.lineTo(mx + CHEV_IN * vx, my + CHEV_IN * vy); p.closePath();
+  });
+}
+
+// Chapter 19 core: iteration of z -> lam*z*(1-z) and x -> x^2 - mu, rasterised Julia sets and
+// parameter maps (distance-estimate rendering), Newton solvers for nuclei and multipliers, the
+// drape silhouettes of Plate 187, and the Fatou-dust diagram of Plate 192.
+
+const MU = (lr, li) => [lr * lr / 4 - li * li / 4 - lr / 2, lr * li / 2 - li / 2]; // mu = lam^2/4 - lam/2
+
+// ---------- orbit tools ----------
+// attracting cycle reached from the critical point 1/2, if any: { p, zr, zi } or null
+function cycleOf(lr, li, itmax = 60000) {
+  // a long warmup, because a multiplier of modulus 0.98 needs thousands of turns to settle
+  let zr = 0.5, zi = 0, R2 = Math.max(100, lr * lr + li * li);
+  for (let i = 0; i < itmax; i++) {
+    const ar = 1 - zr, ai = -zi;                       // 1 - z
+    const mr = zr * ar - zi * ai, mi = zr * ai + zi * ar; // z(1-z)
+    zr = lr * mr - li * mi; zi = lr * mi + li * mr;
+    if (zr * zr + zi * zi > R2) return null;
+  }
+  const z0r = zr, z0i = zi;
+  for (let p = 1; p <= 600; p++) {
+    const ar = 1 - zr, ai = -zi;
+    const mr = zr * ar - zi * ai, mi = zr * ai + zi * ar;
+    zr = lr * mr - li * mi; zi = lr * mi + li * mr;
+    const dr = zr - z0r, di = zi - z0i;
+    if (dr * dr + di * di < 1e-20) return { p, zr: z0r, zi: z0i };
+  }
+  return null;
+}
+// f^p(1/2) and d/dlam f^p(1/2), both complex, for the parameter-plane Newton
+function critOrbit(lr, li, p) {
+  let zr = 0.5, zi = 0, dr = 0, di = 0;
+  for (let k = 0; k < p; k++) {
+    const ar = 1 - zr, ai = -zi;
+    const mr = zr * ar - zi * ai, mi = zr * ai + zi * ar;       // z(1-z)
+    const sr = 1 - 2 * zr, si = -2 * zi;                        // 1-2z
+    const tr = lr * sr - li * si, ti = lr * si + li * sr;       // lam(1-2z)
+    const ndr = mr + tr * dr - ti * di, ndi = mi + tr * di + ti * dr;
+    zr = lr * mr - li * mi; zi = lr * mi + li * mr;
+    dr = ndr; di = ndi;
+  }
+  return [zr, zi, dr, di];
+}
+// Newton for f^p(1/2) = 1/2: the nucleus (superstable centre) of a period-p atom
+function nucleus(p, lr, li) {
+  for (let it = 0; it < 120; it++) {
+    const [zr, zi, dr, di] = critOrbit(lr, li, p);
+    const gr = zr - 0.5, gi = zi;
+    const dn = dr * dr + di * di;
+    if (dn < 1e-30) break;
+    const sr = (gr * dr + gi * di) / dn, si = (gi * dr - gr * di) / dn;
+    lr -= sr; li -= si;
+    if (sr * sr + si * si < 1e-26) break;
+  }
+  return [lr, li];
+}
+// first guess for the sprout of period n at angle 2*pi*m/n on the unit circle |lam| = 1
+function sproutGuess(n, m) {
+  const th = 2 * Math.PI * m / n, r = 1 + 2 * Math.abs(Math.sin(Math.PI * m / n)) / (n * n) + 1 / (n * n);
+  return [r * Math.cos(th), r * Math.sin(th)];
+}
+// 2D complex Newton for f^n(z)=z, (f^n)'(z)=sigma: the lam whose period-n cycle has multiplier sigma
+function lamForSigma(n, sr, si, lr, li) {
+  // start z on the attracting cycle reached from 1/2
+  let zr = 0.5, zi = 0;
+  for (let i = 0; i < 2500; i++) {
+    const ar = 1 - zr, ai = -zi;
+    const mr = zr * ar - zi * ai, mi = zr * ai + zi * ar;
+    const nr = lr * mr - li * mi, ni = lr * mi + li * mr;
+    zr = nr; zi = ni;
+  }
+  const G = (zr, zi, lr, li) => {
+    let wr = zr, wi = zi, dr = 1, di = 0;
+    for (let k = 0; k < n; k++) {
+      const sr1 = 1 - 2 * wr, si1 = -2 * wi;
+      const tr = lr * sr1 - li * si1, ti = lr * si1 + li * sr1;
+      const ndr = dr * tr - di * ti, ndi = dr * ti + di * tr;
+      const ar = 1 - wr, ai = -wi;
+      const mr = wr * ar - wi * ai, mi = wr * ai + wi * ar;
+      wr = lr * mr - li * mi; wi = lr * mi + li * mr;
+      dr = ndr; di = ndi;
+    }
+    return [wr - zr, wi - zi, dr - sr, di - si];
+  };
+  const h = 1e-7;
+  for (let it = 0; it < 90; it++) {
+    const [g1r, g1i, g2r, g2i] = G(zr, zi, lr, li);
+    if (g1r * g1r + g1i * g1i < 1e-24 && g2r * g2r + g2i * g2i < 1e-24) break;
+    const [a1r, a1i, c1r, c1i] = G(zr + h, zi, lr, li);
+    const [b1r, b1i, d1r, d1i] = G(zr, zi, lr + h, li);
+    // complex Jacobian entries a = dg1/dz, b = dg1/dlam, c = dg2/dz, d = dg2/dlam
+    const ar = (a1r - g1r) / h, ai = (a1i - g1i) / h;
+    const br = (b1r - g1r) / h, bi = (b1i - g1i) / h;
+    const cr = (c1r - g2r) / h, ci = (c1i - g2i) / h;
+    const dr = (d1r - g2r) / h, di = (d1i - g2i) / h;
+    const detr = ar * dr - ai * di - (br * cr - bi * ci), deti = ar * di + ai * dr - (br * ci + bi * cr);
+    const dn = detr * detr + deti * deti;
+    if (dn < 1e-30) break;
+    // dz = (g1*d - g2*b)/det, dlam = (a*g2 - c*g1)/det
+    const n1r = g1r * dr - g1i * di - (g2r * br - g2i * bi), n1i = g1r * di + g1i * dr - (g2r * bi + g2i * br);
+    const n2r = ar * g2r - ai * g2i - (cr * g1r - ci * g1i), n2i = ar * g2i + ai * g2r - (cr * g1i + ci * g1r);
+    const dzr = (n1r * detr + n1i * deti) / dn, dzi = (n1i * detr - n1r * deti) / dn;
+    const dlr = (n2r * detr + n2i * deti) / dn, dli = (n2i * detr - n2r * deti) / dn;
+    zr -= dzr; zi -= dzi; lr -= dlr; li -= dli;
+    if (dlr * dlr + dli * dli < 1e-26) break;
+  }
+  return [lr, li];
+}
+
+// ---------- rasterisers ----------
+// Each one fills an ImageData at CSS resolution for the current view; the caller scales it up.
+const PAPER_RGB = [236, 235, 230], INK_RGB = [21, 21, 21];
+function putPix(d, o, t) { // t in [0,1]: 0 paper, 1 ink
+  d[o] = PAPER_RGB[0] + (INK_RGB[0] - PAPER_RGB[0]) * t;
+  d[o + 1] = PAPER_RGB[1] + (INK_RGB[1] - PAPER_RGB[1]) * t;
+  d[o + 2] = PAPER_RGB[2] + (INK_RGB[2] - PAPER_RGB[2]) * t;
+  d[o + 3] = 255;
+}
+
+// Julia set of lam*z*(1-z). mode 'fill': interior and boundary in ink. mode 'line': boundary only
+// (how the book printed its thin dragons). turn: sample the plane turned 90 degrees about z = 1/2.
+// cyc (from cycleOf) lets interior pixels stop as soon as the orbit reaches the attracting cycle.
+function rasterJulia(img, v, dpr, lam, opts = {}) {
+  const { itmax = 320, mode = 'fill', turn = false, cyc = null } = opts;
+  const W = img.width, H = img.height, d = img.data;
+  const lr = lam[0], li = lam[1];
+  // a thinner threshold for skin-only prints, nearer the book's sparse inverse-iteration dots
+  const R2 = Math.max(100, 4 * (lr * lr + li * li)), px = 1 / v.s, thr = px * (mode === 'line' ? 0.45 : 0.75);
+  const cp = cyc ? cyc.p : 0, cr = cyc ? cyc.zr : 0, ci = cyc ? cyc.zi : 0;
+  for (let j = 0; j < H; j++) {
+    const wy = (v.oy - (j + 0.5)) / v.s;
+    for (let i = 0; i < W; i++) {
+      const wx = ((i + 0.5) - v.ox) / v.s;
+      let zr = turn ? 0.5 + wy : wx, zi = turn ? -(wx - 0.5) : wy;
+      let dr = 1, di = 0, inside = true, t = 0, near = 0;
+      for (let k = 0; k < itmax; k++) {
+        const sr = 1 - 2 * zr, si = -2 * zi;
+        const tr = lr * sr - li * si, ti = lr * si + li * sr;
+        const ndr = dr * tr - di * ti, ndi = dr * ti + di * tr;
+        const ar = 1 - zr, ai = -zi;
+        const mr = zr * ar - zi * ai, mi = zr * ai + zi * ar;
+        zr = lr * mr - li * mi; zi = lr * mi + li * mr;
+        dr = ndr; di = ndi;
+        const q = zr * zr + zi * zi;
+        if (q > R2) {
+          inside = false;
+          const az = Math.sqrt(q), ad = Math.sqrt(dr * dr + di * di);
+          const dist = ad > 1e-300 ? az * Math.log(az) / ad : 0;
+          t = dist < thr ? 1 : 0;
+          break;
+        }
+        if (cp) {
+          const er = zr - cr, ei = zi - ci;
+          if (er * er + ei * ei < 1e-9) { near++; if (near > 1) break; } // reached the cycle: interior
+        }
+      }
+      if (inside) t = mode === 'fill' ? 1 : 0;
+      putPix(d, (j * W + i) * 4, t);
+    }
+  }
+}
+
+// Overlay of filled sets for several real lams (Plate 185, left): count how many keep the point
+function rasterOverlay(img, v, lams, itmax = 280) {
+  const W = img.width, H = img.height, d = img.data, K = lams.length;
+  for (let j = 0; j < H; j++) {
+    const wy = (v.oy - (j + 0.5)) / v.s;
+    for (let i = 0; i < W; i++) {
+      const wx = ((i + 0.5) - v.ox) / v.s;
+      let n = 0;
+      for (let q = 0; q < K; q++) {
+        const L = lams[q];
+        let zr = wx, zi = wy, inb = true;
+        for (let k = 0; k < itmax; k++) {
+          const ar = 1 - zr, ai = -zi;
+          const mr = zr * ar - zi * ai, mi = zr * ai + zi * ar;
+          const nzr = L * mr, nzi = L * mi;
+          zr = nzr; zi = nzi;
+          if (zr * zr + zi * zi > 100) { inb = false; break; }
+        }
+        if (inb) n++;
+      }
+      putPix(d, (j * W + i) * 4, n === 0 ? 0 : 0.12 + 0.82 * (n / K));
+    }
+  }
+}
+
+// Parameter maps. kind 'mu': x -> x^2 - mu, orbit of 0, black = bounded (bottom Plate 188).
+// kind 'lam': orbit of 1/2 under lam*z*(1-z), black = bounded, the two discs left empty (top 189).
+// kind 'inv': the lam-map seen through the inversion lam' = 1 + 1/(lam - 1) (top Plate 188);
+//   world x is Im(lam'), world y is Re(lam') - 1/2, so the sprout images line up along y = 0.
+// band = true also shades the escape count in stepped grays: the lemniscates of bottom Plate 189.
+function rasterParam(img, v, kind, opts = {}) {
+  const { itmax = 420, band = false, discs = true } = opts;
+  const W = img.width, H = img.height, d = img.data;
+  const px = 1 / v.s, thr = px * 0.7;
+  for (let j = 0; j < H; j++) {
+    const wy = (v.oy - (j + 0.5)) / v.s;
+    for (let i = 0; i < W; i++) {
+      const wx = ((i + 0.5) - v.ox) / v.s;
+      let pr, pi, thrPix = thr; // the lam (or mu) this pixel asks about, and the pixel size in lam units
+      if (kind === 'inv') {
+        const ar = wy + 0.5 - 1, ai = wx, dn = ar * ar + ai * ai; // lam' - 1
+        if (dn < 1e-12) { putPix(d, (j * W + i) * 4, 0); continue; }
+        pr = 1 + ar / dn; pi = -ai / dn;
+        thrPix = thr / dn; // the inversion shrinks lam-plane distances by |lam' - 1|^2
+      } else { pr = wx; pi = wy; }
+      let zr, zi, dr, di;
+      if (kind === 'mu') { zr = 0; zi = 0; dr = 0; di = 0; }
+      else { zr = 0.5; zi = 0; dr = 0; di = 0; }
+      let bounded = true, t = 0, n = 0;
+      for (let k = 0; k < itmax; k++) {
+        if (kind === 'mu') {
+          // z' = 2 z dz - 1 ; z = z^2 - mu
+          const ndr = 2 * (zr * dr - zi * di) - 1, ndi = 2 * (zr * di + zi * dr);
+          const nzr = zr * zr - zi * zi - pr, nzi = 2 * zr * zi - pi;
+          zr = nzr; zi = nzi; dr = ndr; di = ndi;
+        } else {
+          // dz = z(1-z) + lam(1-2z) dz ; z = lam z (1-z)
+          const ar = 1 - zr, ai = -zi;
+          const mr = zr * ar - zi * ai, mi = zr * ai + zi * ar;
+          const sr = 1 - 2 * zr, si = -2 * zi;
+          const tr = pr * sr - pi * si, ti = pr * si + pi * sr;
+          const ndr = mr + tr * dr - ti * di, ndi = mi + tr * di + ti * dr;
+          zr = pr * mr - pi * mi; zi = pr * mi + pi * mr;
+          dr = ndr; di = ndi;
+        }
+        const q = zr * zr + zi * zi;
+        if (q > 10000) {
+          bounded = false; n = k;
+          const az = Math.sqrt(q), ad = Math.sqrt(dr * dr + di * di);
+          const dist = ad > 1e-300 ? az * Math.log(az) / ad : 0;
+          t = dist < thrPix ? 1 : 0;
+          break;
+        }
+      }
+      if (bounded) {
+        t = 1;
+        if (kind !== 'mu' && discs) {
+          const inA = pr * pr + pi * pi < 1, inB = (pr - 2) * (pr - 2) + pi * pi < 1;
+          if (inA || inB) t = 0; // the empty discs of the lam-map
+        }
+      } else if (band && t === 0) {
+        // stepped lemniscate grays: domains |f_n(1/2)| < R nest as n grows
+        const g = Math.max(0, Math.min(0.5, (n - 4) * 0.035));
+        t = g;
+      }
+      putPix(d, (j * W + i) * 4, t);
+    }
+  }
+}
+
+// Plate 192: along row y = -4/lam, black where the first `order` iterates of x stay in [0, 1].
+// Three subsamples per pixel keep the thin high-lambda fingers printing, as the book's ink does.
+function rasterFatou(img, v, order) {
+  const W = img.width, H = img.height, d = img.data;
+  for (let j = 0; j < H; j++) {
+    const wy = (v.oy - (j + 0.5)) / v.s;
+    const lam = wy < -1e-4 && wy >= -1 ? -4 / wy : 0;
+    for (let i = 0; i < W; i++) {
+      let t = 0;
+      if (lam >= 4) {
+        for (let sub = 0; sub < 3 && !t; sub++) {
+          const wx = ((i + 0.17 + 0.33 * sub) - v.ox) / v.s;
+          if (wx < 0 || wx > 1) continue;
+          let x = wx, ok = true;
+          for (let k = 0; k < order; k++) { x = lam * x * (1 - x); if (x < 0 || x > 1) { ok = false; break; } }
+          if (ok) t = 1;
+        }
+      }
+      putPix(d, (j * W + i) * 4, t);
+    }
+  }
+}
+
+// ---------- Plate 187: silhouettes of the drape ----------
+// For each real lam in `lams`, the half-height ymax(x) of the filled set over a row of columns
+// (the set is symmetric about the real axis). Coarse sweep down, then bisection.
+function drapeProfiles(lams, cols, x0 = -0.72, x1 = 1.72, itmax = 130) {
+  const inSet = (lr, xr, yi) => {
+    let zr = xr, zi = yi;
+    for (let k = 0; k < itmax; k++) {
+      const ar = 1 - zr, ai = -zi;
+      const mr = zr * ar - zi * ai, mi = zr * ai + zi * ar;
+      zr = lr * mr; zi = lr * mi;
+      if (zr * zr + zi * zi > 100) return false;
+    }
+    return true;
+  };
+  const out = [];
+  for (const lam of lams) {
+    const prof = new Float64Array(cols);
+    for (let c = 0; c < cols; c++) {
+      const x = x0 + (x1 - x0) * c / (cols - 1);
+      // coarse down-sweep to bracket the silhouette's top, then bisect
+      let top = -1;
+      for (let y = 1.25; y > 0.015; y -= 0.06) if (inSet(lam, x, y)) { top = y; break; }
+      if (top < 0) { prof[c] = inSet(lam, x, 0) ? 0.012 : -1; continue; }
+      let lo = top, hi = Math.min(1.25, top + 0.06);
+      for (let b = 0; b < 7; b++) { const mid = (lo + hi) / 2; if (inSet(lam, x, mid)) lo = mid; else hi = mid; }
+      prof[c] = lo;
+    }
+    out.push({ lam, prof });
+  }
+  return out;
+}
+
+(() => {
+  const sup = (n) => String(n).replace(/\d/g, (d) => '⁰¹²³⁴⁵⁶⁷⁸⁹'[d]);
+  const f2 = (x, k = 4) => Number(x.toFixed(k)).toString();
+  const cplx = (re, im, k = 4) => `${f2(re, k)} ${im < 0 ? '−' : '+'} ${f2(Math.abs(im), k)}i`;
+  const muOf = (lr, li) => MU(lr, li);
+
+  // raster canvases: an ImageData at CSS resolution, cached while the view and mode hold
+  function rasterFig(wrapId, canvasId, fitOf, key, make, overlay, opts = {}) {
+    const cache = { key: '', cv: null };
+    const z = zoomable(wrapId, canvasId, fitOf, (f, v) => {
+      const W = Math.max(1, Math.round(f.w)), H = Math.max(1, Math.round(f.h));
+      const k = `${key()}|${W}|${H}|${v.s.toFixed(4)}|${v.ox.toFixed(2)}|${v.oy.toFixed(2)}`;
+      if (cache.key !== k) {
+        const cv = document.createElement('canvas');
+        cv.width = W; cv.height = H;
+        const img = cv.getContext('2d').createImageData(W, H);
+        make(img, v);
+        cv.getContext('2d').putImageData(img, 0, 0);
+        cache.key = k; cache.cv = cv;
+      }
+      const c = f.ctx;
+      c.setTransform(f.dpr, 0, 0, f.dpr, 0, 0);
+      c.imageSmoothingEnabled = true;
+      c.drawImage(cache.cv, 0, 0, f.w, f.h);
+      if (overlay) overlay(f, v);
+      toScreen(f);
+    }, opts);
+    return z;
+  }
+  // how much deeper to iterate as the view dives
+  const zoomIter = (base, v) => Math.min(3500, Math.round(base * (1 + 0.45 * Math.max(0, Math.log2(v.s / (v.fit || v.s))))));
+
+  // ====================== Pages 180-182: the inverted V ======================
+  const stV = { map: 'v', p: 1 / 3, x0: 0.74, steps: 20 };
+  const fV = (x) => stV.map === 'v' ? (0.5 - Math.abs(x - 0.5)) / stV.p : stV.p * x * (1 - x);
+  const zV = zoomable('wV', 'cV', (f) => fitBox(f, { x0: -0.1, x1: 1.1, y0: -0.52, y1: 1.6 }, 0.03), (f, v) => {
+    const c = f.ctx;
+    paper(f, PRINT.paper); toWorld(f, v);
+    const lw = (w) => { c.lineWidth = w / v.s; };
+    // unit square and diagonal
+    c.strokeStyle = PRINT.rule; lw(1);
+    c.strokeRect(0, 0, 1, 1);
+    c.beginPath(); c.moveTo(-0.08, -0.08); c.lineTo(1.35, 1.35); c.stroke();
+    // axis
+    c.strokeStyle = PRINT.muted; lw(1.2);
+    c.beginPath(); c.moveTo(-0.1, 0); c.lineTo(1.1, 0); c.stroke();
+    // survival rows: the points whose first k iterates stay in [0, 1]
+    const ROWS = 5, N = 1100;
+    for (let k = 1; k <= ROWS; k++) {
+      const y = -0.1 - 0.075 * k;
+      c.strokeStyle = PRINT.ink; lw(5);
+      c.beginPath();
+      let run = false;
+      for (let i = 0; i <= N; i++) {
+        const x = i / N;
+        let t = x, ok = true;
+        for (let s = 0; s < k; s++) { t = fV(t); if (t < 0 || t > 1) { ok = false; break; } }
+        if (ok && !run) { c.moveTo(x, y); run = true; }
+        else if (!ok && run) { c.lineTo((i - 0.5) / N, y); run = false; }
+      }
+      if (run) c.lineTo(1, y);
+      c.stroke();
+    }
+    // the graph, clipped just under the axis so it stays off the survival rows
+    c.strokeStyle = PRINT.accent; lw(2.2);
+    c.beginPath();
+    let pen = false;
+    for (let i = 0; i <= 320; i++) {
+      const x = -0.08 + 1.26 * i / 320, y = fV(x);
+      if (y < -0.07) { pen = false; continue; }
+      if (!pen) { c.moveTo(x, y); pen = true; } else c.lineTo(x, y);
+    }
+    c.stroke();
+    // cobweb
+    let x = stV.x0, y = 0;
+    c.strokeStyle = PRINT.red; lw(1.5);
+    c.beginPath(); c.moveTo(x, 0);
+    for (let s = 0; s < stV.steps; s++) {
+      const fx = fV(x);
+      c.lineTo(x, fx);
+      if (fx < -0.5 || fx > 1.62) { y = fx; break; }
+      c.lineTo(fx, fx);
+      x = fx; y = fx;
+      if (x < -0.5) break;
+    }
+    c.stroke();
+    dot(c, { ox: v.ox, oy: v.oy, s: v.s }, stV.x0, 0, 4, PRINT.red);
+    toScreen(f);
+  }, { onTap: (wx) => { if (wx >= 0 && wx <= 1) { stV.x0 = wx; $('xVs').value = wx; setV(false); } } });
+
+  const MODES_V = { v: 'Inverted V', q: 'Squaring λx(1−x)' };
+  function setV(refit) {
+    markMV(stV.map); markSV(stV.steps);
+    const isV = stV.map === 'v';
+    $('pVl').textContent = isV ? 'Ratio r' : 'λ';
+    $('pVs').min = isV ? 0.18 : 1; $('pVs').max = isV ? 0.5 : 4.6; $('pVs').value = stV.p;
+    $('pVv').textContent = isV ? (Math.abs(stV.p - 1 / 3) < 0.002 ? '1/3' : f2(stV.p, 3)) : f2(stV.p, 3);
+    $('xVv').textContent = f2(stV.x0, 3);
+    $('sVv').textContent = String(stV.steps);
+    $('dimV').textContent = isV
+      ? 'f(x) = {½ − |x − ½|} / r · the largest bounded invariant set is a Cantor dust'
+      : 'f(x) = λx(1−x), the squaring generator · for λ > 4 the invariant set is the Fatou dust of Plate 192';
+    $('cVt').textContent = MODES_V[stV.map];
+    $('cVn').textContent = isV ? `r = ${$('pVv').textContent}: peak ${f2(0.5 / stV.p, 3)}` : `λ = ${f2(stV.p, 3)}: peak ${f2(stV.p / 4, 3)}`;
+    // fate of x0
+    let x = stV.x0, leave = 0, fate = 'stays in [0, 1]';
+    for (let s = 1; s <= 4000; s++) { x = fV(x); if ((x < 0 || x > 1) && !leave) leave = s; if (x < -1e100) break; }
+    if (leave) fate = 'runs to −∞';
+    $('rVa').textContent = fate;
+    $('rVb').textContent = leave ? String(leave) : 'never (within 4000)';
+    const D = isV ? Math.log(2) / Math.log(1 / stV.p) : (stV.p > 4 ? Math.log(2) / Math.log(stV.p) : 1);
+    $('rVc').textContent = isV ? f2(D, 4) : (stV.p > 4 ? `≈ ${f2(D, 4)}` : '— (not a dust)');
+    $('rVd').textContent = isV ? f2(0.5 / stV.p, 4) : f2(stV.p / 4, 4);
+    $('infoV').innerHTML = leave
+      ? `x₀ = ${f2(stV.x0, 3)} stays ${leave - 1} step${leave === 2 ? '' : 's'} before leaving [0, 1]; from there every iterate falls below 0 and the orbit "proceeds directly to −∞".`
+      : `x₀ = ${f2(stV.x0, 3)} never leaves [0, 1]: it belongs to the invariant set. The rows under the graph are the survivors of 1 to 5 steps — the construction stages of the dust.`;
+    if (refit) zV.refit(); else zV.schedule();
+  }
+  const markMV = stepButtons($('mV'), Object.keys(MODES_V), (k) => MODES_V[k], (k) => MODES_V[k], (k) => {
+    stV.map = k; stV.p = k === 'v' ? 1 / 3 : 4.2; setV(true);
+  });
+  const markSV = stepButtons($('sV'), [5, 10, 20, 40], String, (n) => `${n} iterations`, (n) => { stV.steps = n; setV(false); });
+  $('pVs').addEventListener('input', () => { stV.p = +$('pVs').value; setV(false); });
+  $('xVs').addEventListener('input', () => { stV.x0 = +$('xVs').value; setV(false); });
+  $('presetV').addEventListener('click', () => { Object.assign(stV, { map: 'v', p: 1 / 3, x0: 0.74, steps: 20 }); setV(true); });
+  $('presetV2').addEventListener('click', () => { Object.assign(stV, { map: 'v', p: 1 / 3, x0: 0.25, steps: 20 }); setV(false); });
+
+  // ====================== Plate 185: real lambda ======================
+  const LAMS_185 = [1, 1.5, 2, 2.5, 3];
+  const stE = { mode: 'overlay', lam: 3, turn: false };
+  let cycE = null;
+  const zE = rasterFig('wE', 'cE', (f) => {
+    if (stE.mode === 'single' && stE.turn) return fitBox(f, { x0: -0.45, x1: 1.45, y0: -0.95, y1: 0.95 }, 0.02);
+    return fitBox(f, { x0: -0.85, x1: 1.85, y0: -1.35, y1: 1.35 }, 0.02);
+  }, () => `${stE.mode}|${stE.lam}|${stE.turn}`, (img, v) => {
+    if (stE.mode === 'overlay') rasterOverlay(img, v, LAMS_185, zoomIter(200, v));
+    else rasterJulia(img, v, 1, [stE.lam, 0], { itmax: zoomIter(300, v), mode: 'fill', turn: stE.turn, cyc: cycE });
+  });
+  function setE(refit) {
+    markME(stE.mode);
+    $('lEwrap').hidden = stE.mode !== 'single';
+    $('lEv').textContent = f2(stE.lam, 7);
+    if (stE.mode === 'overlay') {
+      $('cEt').textContent = 'As printed, left';
+      $('cEn').textContent = 'five domains superposed, λ = 1, 1.5, 2, 2.5, 3';
+      $('rEa').textContent = '1 … 3';
+      $('rEb').textContent = '−¼ … ¾';
+      $('rEc').textContent = 'bounded for all five';
+      $('infoE').innerHTML = 'Darker gray = one more of the five domains contains the point. They nest: the λ = 1 scallop holds them all, and the black centre — common to all five — spans [0, 1].';
+    } else {
+      cycE = cycleOf(stE.lam, 0);
+      const [mr, mi] = muOf(stE.lam, 0);
+      $('cEt').textContent = stE.turn ? 'As printed, right' : 'One λ';
+      $('cEn').textContent = `λ = ${f2(stE.lam, 7)}${stE.turn ? ', turned 90° as in the book' : ''}`;
+      $('rEa').textContent = f2(stE.lam, 7);
+      $('rEb').textContent = f2(mr, 5);
+      $('rEc').textContent = cycE ? (cycE.p === 1 ? 'settles to a point' : `settles to a ${cycE.p}-cycle`) : 'no attracting cycle';
+      $('infoE').innerHTML = stE.lam === 2 ? 'λ = 2: the one perfectly smooth case — the domain is the exact circle |z − ½| = ½, the drape\'s "belt" in Plate 187.'
+        : Math.abs(stE.lam - 3.2360679774997896) < 1e-6 ? 'The nuclear λ of the period-2 atom: the critical point ½ is itself on the 2-cycle, ½ → λ/4 ≈ 0.809 → ½. The book prints 3.3260680 — two digits transposed.'
+        : stE.lam === 3 ? 'λ = 3: the San Marco dragon, at the bond where the period-1 atom meets the period-2 atom. The basilica, its reflection, and infinitely many smaller domes.'
+        : `The maximal bounded self-squared domain for λ = ${f2(stE.lam, 4)}. Drag the slider: the shape deforms continuously with λ.`;
+    }
+    $('rEd').textContent = stE.mode === 'single' ? `0 and ${f2(1 - 1 / stE.lam, 4)}` : '0 and 1 − 1/λ';
+    if (refit) zE.refit(); else zE.schedule();
+  }
+  const markME = stepButtons($('mE'), ['overlay', 'single'], (k) => (k === 'overlay' ? 'Five λ superposed' : 'One λ'), (k) => k, (k) => { stE.mode = k; stE.turn = false; setE(true); });
+  $('lEs').addEventListener('input', () => { stE.lam = +$('lEs').value; stE.mode = 'single'; stE.turn = false; markME('single'); $('lEwrap').hidden = false; setE(false); });
+  $('plate185L').addEventListener('click', () => { Object.assign(stE, { mode: 'overlay', turn: false }); setE(true); });
+  $('plate185R').addEventListener('click', () => { Object.assign(stE, { mode: 'single', lam: 1 + Math.sqrt(5), turn: true }); $('lEs').value = stE.lam; setE(true); });
+  $('sanmarco').addEventListener('click', () => { Object.assign(stE, { mode: 'single', lam: 3, turn: false }); $('lEs').value = 3; setE(true); });
+
+  // ====================== Plate 187: the drape ======================
+  const stD = { cutLam: 2, mark: false };
+  const TILT = 0.52, YS = 1.0;
+  let drape = null; // { slices: [{lam, prof}], x0, x1 }
+  const zD = zoomable('wD', 'cD', (f) => fitBox(f, { x0: -0.8, x1: 1.8, y0: -0.75, y1: 3.2 }, 0.02), (f, v) => {
+    const c = f.ctx;
+    paper(f, PRINT.paper); toWorld(f, v);
+    c.lineJoin = 'round';
+    if (!drape) {
+      c.strokeStyle = PRINT.rule; c.lineWidth = 1.2 / v.s;
+      c.strokeRect(-0.72, -0.62, 2.44, 3.76);
+      toScreen(f);
+      c.fillStyle = PRINT.muted; c.font = '600 13px "Schibsted Grotesk", sans-serif'; c.textAlign = 'center';
+      c.fillText('computing the sections…', f.w / 2, f.h / 2);
+      return;
+    }
+    const S = drape.slices, X0 = drape.x0, X1 = drape.x1, cols = S[0].prof.length;
+    const xAt = (ci) => X0 + (X1 - X0) * ci / (cols - 1);
+    for (let si = S.length - 1; si >= 0; si--) {
+      const { lam, prof } = S[si], Y = (lam - 1) * YS;
+      // closed outline per run of non-empty columns: back edge out, front edge home
+      let runs = [];
+      let a = -1;
+      for (let ci = 0; ci < cols; ci++) {
+        if (prof[ci] >= 0 && a < 0) a = ci;
+        if ((prof[ci] < 0 || ci === cols - 1) && a >= 0) { runs.push([a, prof[ci] < 0 ? ci - 1 : ci]); a = -1; }
+      }
+      c.beginPath();
+      for (const [a0, b0] of runs) {
+        for (let ci = a0; ci <= b0; ci++) { const y = Y + TILT * prof[ci]; if (ci === a0) c.moveTo(xAt(ci), y); else c.lineTo(xAt(ci), y); }
+        for (let ci = b0; ci >= a0; ci--) c.lineTo(xAt(ci), Y - TILT * prof[ci]);
+        c.closePath();
+      }
+      c.fillStyle = PRINT.paper; c.fill();
+      c.strokeStyle = 'rgba(21,21,21,0.62)'; c.lineWidth = 1.05 / v.s; c.stroke();
+    }
+    if (stD.mark) {
+      // the section nearest the slider's lambda, in red
+      let best = 0;
+      for (let si = 0; si < S.length; si++) if (Math.abs(S[si].lam - stD.cutLam) < Math.abs(S[best].lam - stD.cutLam)) best = si;
+      const { lam, prof } = S[best], Y = (lam - 1) * YS;
+      c.beginPath();
+      let pen = false;
+      for (let ci = 0; ci < prof.length; ci++) {
+        if (prof[ci] < 0) { pen = false; continue; }
+        const y = Y - TILT * prof[ci];
+        if (!pen) { c.moveTo(xAt(ci), y); pen = true; } else c.lineTo(xAt(ci), y);
+      }
+      c.strokeStyle = PRINT.red; c.lineWidth = 2 / v.s; c.stroke();
+    }
+    toScreen(f);
+  });
+  function computeDrape() {
+    // in slabs, so the page stays responsive and the figure fills in as it computes
+    const SL = 120, COLS = 240;
+    const all = { slices: [], x0: -0.72, x1: 1.72 };
+    let i = 0;
+    const slab = () => {
+      const t0 = performance.now();
+      while (i < SL && performance.now() - t0 < 36) {
+        const lam = 1 + 3 * i / (SL - 1);
+        all.slices.push(drapeProfiles([lam], COLS, all.x0, all.x1)[0]);
+        i++;
+      }
+      drape = all;
+      zD.schedule();
+      if (i < SL) setTimeout(slab, 0);
+      else setD(false);
+    };
+    setTimeout(slab, 0);
+  }
+  function setD(refit) {
+    const lam = stD.cutLam, [mr] = muOf(lam, 0), cyc = cycleOf(lam, 0);
+    $('lDv').textContent = f2(lam, 3);
+    $('rDa').textContent = f2(lam, 3);
+    $('rDb').textContent = f2(mr, 4);
+    if (drape && drape.slices.length) {
+      let best = 0;
+      for (let si = 0; si < drape.slices.length; si++) if (Math.abs(drape.slices[si].lam - lam) < Math.abs(drape.slices[best].lam - lam)) best = si;
+      const prof = drape.slices[best].prof;
+      let lo = Infinity, hi = -Infinity;
+      for (let ci = 0; ci < prof.length; ci++) if (prof[ci] >= 0) { const x = drape.x0 + (drape.x1 - drape.x0) * ci / (prof.length - 1); lo = Math.min(lo, x); hi = Math.max(hi, x); }
+      $('rDc').textContent = hi > lo ? f2(hi - lo, 3) : '—';
+    } else $('rDc').textContent = '…';
+    $('rDd').textContent = Math.abs(lam - 2) < 0.004 ? 'circle (the belt)' : cyc ? (cyc.p === 1 ? 'one attracting point' : `attracting ${cyc.p}-cycle`) : 'no attracting cycle';
+    $('infoD').innerHTML = lam < 2 ? 'Below the belt the pleats press <b>in</b>: the scallops of λ near 1 point inward.'
+      : lam > 2 ? 'Above the belt the pleats press <b>out</b>, and past λ = 3 the sections sprout the buds of period doubling.'
+      : 'The belt: at λ = 2 the drape\'s section is a perfect circle.';
+    zD.schedule();
+    if (refit) zD.refit();
+  }
+  $('lDs').addEventListener('input', () => { stD.cutLam = +$('lDs').value; stD.mark = true; $('cutD').checked = true; setD(false); });
+  $('cutD').addEventListener('change', () => { stD.mark = $('cutD').checked; zD.schedule(); });
+  $('plate187').addEventListener('click', () => { stD.cutLam = 2; stD.mark = false; $('cutD').checked = false; $('lDs').value = 2; setD(true); });
+  computeDrape();
+
+  // ====================== Plates 188-189: the separators ======================
+  const VIEWS_M = {
+    mu:   { bb: { x0: -0.7, x1: 2.3, y0: -1.1, y1: 1.1 }, itmax: 380, band: false, kind: 'mu' },
+    lam:  { bb: { x0: -1.45, x1: 3.45, y0: -1.8, y1: 1.8 }, itmax: 380, band: false, kind: 'lam' },
+    inv:  { bb: { x0: 0.15, x1: 2.65, y0: -0.45, y1: 0.45 }, itmax: 1500, band: false, kind: 'inv' },
+    lem:  { bb: { x0: 2.22, x1: 2.88, y0: 0.62, y1: 1.26 }, itmax: 220, band: true, kind: 'lam' },
+    tree: { bb: { x0: 0.995, x1: 1.009, y0: 0.0558, y1: 0.0698 }, itmax: 2500, band: false, kind: 'lam' },
+  };
+  const stM = { mode: 'mu', tap: null };
+  const zM = rasterFig('wM', 'cM', (f) => fitBox(f, VIEWS_M[stM.mode].bb, 0.02), () => stM.mode, (img, v) => {
+    const V = VIEWS_M[stM.mode];
+    rasterParam(img, v, V.kind, { itmax: zoomIter(V.itmax, v), band: V.band, discs: true });
+  }, (f, v) => {
+    if (stM.tap && stM.mode !== 'inv') {
+      const [wx, wy] = stM.tap.world;
+      dot(f.ctx, v, wx, wy, 4.5, PRINT.red);
+    }
+  }, { maxZoom: 500000, onTap: (wx, wy) => {
+    let lr, li;
+    if (stM.mode === 'mu') { // tapped a mu; give the lambda on the Re >= 1 side
+      const sr = 1 + 4 * wx, si = 4 * wy, m = Math.hypot(sr, si), a = Math.atan2(si, sr) / 2, rt = Math.sqrt(m);
+      lr = 1 + rt * Math.cos(a); li = rt * Math.sin(a);
+    } else if (stM.mode === 'inv') {
+      const ar = wy + 0.5 - 1, ai = wx, dn = ar * ar + ai * ai;
+      if (dn < 1e-12) return;
+      lr = 1 + ar / dn; li = -ai / dn;
+    } else { lr = wx; li = wy; }
+    stM.tap = { lam: [lr, li], world: stM.mode === 'mu' ? [wx, wy] : stM.mode === 'inv' ? null : [wx, wy] };
+    if (stM.mode === 'inv') stM.tap.world = [wx, wy];
+    setM(false);
+  } });
+  const MODES_M = { mu: 'μ-map', lam: 'λ-map', inv: 'Inverted λ-map', lem: 'Lemniscates', tree: '100-fold tree' };
+  const CAPS_M = {
+    mu: ['μ-map', 'bottom Plate 188 — the Mandelbrot set, for z → z²−μ'],
+    lam: ['λ-map', 'top Plate 189 — the corona and its two empty discs'],
+    inv: ['Inverted λ-map', 'top Plate 188 — the sprouts strung along a line by λ → 1 + 1/(λ−1)'],
+    lem: ['Lemniscates', 'bottom-left Plate 189 — near the 3-bond λ = 2 − exp(−2πi/3)'],
+    tree: ['100-fold tree', 'bottom-right Plate 189 — the channel near λ = 2 − exp(−2πi/100)'],
+  };
+  const INFO_M = {
+    mu: 'The μ in the black area are those whose critical orbit (from z₀ = 0) fails to escape. The large cusp is μ = −¼; the right-most point is μ = 2. Zoom anywhere: the view recomputes, and the island molecules are "shaped like the whole μ-map, except for a nonlinear distortion".',
+    lam: 'Black: the orbit of z₀ = ½ stays bounded, less the two empty discs |λ| ≤ 1 and |λ−2| ≤ 1 where it settles to a fixed point. The corona splits into sprouts rooted at the receptor bonds λ = exp(2πim/n) and 2 − exp(2πim/n); the map is symmetric about Re λ = 1.',
+    inv: 'The λ-map inverted about λ = 1. Both circles of bonds become straight lines, and "corresponding points" of the sprouts line up — the book offers this as confirmation that the perceived circles through sprout roots are true circles.',
+    lem: 'The gray steps are the domains |f<sub>n</sub>(½)| &lt; R for growing n: algebraic curves called lemniscates, whose limit is the separator S. The black period-3 sprout hangs at the bond 2 − exp(−2πi/3).',
+    tree: 'Deep in the channel between the two discs, near the bond of order 100: the white strip is where the critical orbit still escapes — after thousands of iterations — and the dusty chains along its walls are hundred-fold trees of sprouts and islands. (This view iterates deepest, so it takes a few seconds.) The book notes it "shares striking features with the z-map in Plate 191".',
+  };
+  function setM(refit) {
+    markMM(stM.mode);
+    $('cMt').textContent = CAPS_M[stM.mode][0];
+    $('cMn').textContent = CAPS_M[stM.mode][1];
+    $('infoM').innerHTML = INFO_M[stM.mode];
+    if (stM.tap) {
+      const [lr, li] = stM.tap.lam, [mr, mi] = muOf(lr, li);
+      const cyc = cycleOf(lr, li);
+      $('rMa').textContent = cplx(lr, li, 5);
+      $('rMb').textContent = cplx(mr, mi, 5);
+      $('rMc').textContent = cyc ? 'bounded' : 'escapes';
+      $('rMd').textContent = cyc ? String(cyc.p) : '—';
+      $('toLab').disabled = false;
+    }
+    miniMapM();
+    if (refit) zM.refit(); else zM.schedule();
+  }
+  function miniMapM() {
+    const dotM = stM.tap ? `<circle cx="${stM.tap.lam[0].toFixed(3)}" cy="${(-stM.tap.lam[1]).toFixed(3)}" r="0.07" fill="#c2452d"/>` : '';
+    $('miniM').innerHTML =
+      `<line x1="-1.3" y1="0" x2="3.3" y2="0" stroke="#8a8a84" stroke-width="0.016" stroke-dasharray="0.05 0.04"/>` +
+      `<circle cx="0" cy="0" r="1" fill="none" stroke="currentColor" stroke-width="0.03"/>` +
+      `<circle cx="2" cy="0" r="1" fill="none" stroke="currentColor" stroke-width="0.03"/>` +
+      `<g fill="currentColor">${[0, 1, 2, 3].map((x) => `<circle cx="${x}" cy="0" r="0.045"/>`).join('')}</g>` +
+      `<g font-size="0.26" fill="currentColor" font-family="IBM Plex Mono, monospace" text-anchor="middle">` +
+      `<text x="0" y="0.42">0</text><text x="1" y="0.42">1</text><text x="2" y="0.42">2</text><text x="3" y="0.42">3</text></g>` + dotM;
+  }
+  const markMM = stepButtons($('mM'), Object.keys(MODES_M), (k) => MODES_M[k], (k) => MODES_M[k], (k) => { stM.mode = k; setM(true); });
+  $('plate188').addEventListener('click', () => { stM.mode = 'mu'; setM(true); });
+  $('plate189').addEventListener('click', () => { stM.mode = 'lam'; setM(true); });
+
+  // ====================== Plates 190-191: the dragon lab ======================
+  const PRESETS_L = {
+    p191: { lam: [0.969284, 0.24774506], line: false, itmax: 450, n: 25, s: 0.98, w: 0.125, bb: { x0: -0.5, x1: 1.5, y0: -1.05, y1: 1.05 },
+      t: ['Plate 191', 'the "Peano" dragon: n = 25 heads around every articulation'],
+      i: 'Twenty-five heads around every articulation point, and whorls all the way down. As n grows these dragons strain toward the hermit-dragon that would fill a λ = 1 scallop to the brim.' },
+    starved: { lam: [0.83309563, 0.60035559], line: true, itmax: 700, n: 10, s: 1, w: 0, bb: { x0: -0.55, x1: 1.55, y0: -0.8, y1: 0.8 },
+      cyc: 'none: the doubling limit', dim: '1 (skeletal curve)',
+      t: ['Plate 190, top left', 'a starved dragon: the period-doubling limit in the 1/10 sprout'],
+      i: 'Infinitely many bifurcations and no flesh left: at the period-doubling limit point of the sprout the dragon "collapses into a skeletal branched curve" — topological dimension 1.' },
+    twist: { lam: [0.52345446, 0.86392232], line: true, itmax: 700, n: 6, s: 1, w: 1 / 7, bb: { x0: -0.7, x1: 1.7, y0: -0.9, y1: 0.9 },
+      cyc: 'neutral (parabolic bond)', dim: '2, pinched at every joint',
+      t: ['Plate 190, top right', 'a dragon with a twist: at the 1/7 subsprout of the 1/6 sprout'],
+      i: 'Lean λ toward a subsprout of order 4 to 10 and every articulation picks up a spiral twist — "one subsprout yields a leftward, the other a rightward, twist."' },
+    sigma: { lam: [0.99820131, 0.06156126], line: true, itmax: 2200, n: null, s: null, w: null, bb: { x0: -0.75, x1: 1.75, y0: -1.15, y1: 1.15 },
+      t: ['Plate 190, bottom', 'a σ-dragon: λ in an offshore island (period 102) near λ = 1'],
+      i: 'λ sits in an island molecule, not on the continent: the dragon is still connected, but its flesh gathers in scattered beads strung on near-invisible dust — a σ-dragon. "The σ introduces no new loop."' },
+  };
+  const stL = { lam: PRESETS_L.p191.lam.slice(), line: false, itmax: 450, n: 25, s: 0.98, w: 0.125, bb: PRESETS_L.p191.bb, preset: 'p191' };
+  let cycL = cycleOf(stL.lam[0], stL.lam[1]);
+  const zL = rasterFig('wL', 'cL', (f) => fitBox(f, stL.bb, 0.02), () => `${stL.lam[0]},${stL.lam[1]}|${stL.line}|${stL.itmax}`, (img, v) => {
+    rasterJulia(img, v, 1, stL.lam, { itmax: zoomIter(stL.itmax, v), mode: stL.line ? 'line' : 'fill', cyc: cycL });
+  }, null, { maxZoom: 20000 });
+  const FRACS = [[0, '0'], [1 / 12, '1/12'], [1 / 10, '1/10'], [1 / 8, '1/8'], [1 / 7, '1/7'], [1 / 6, '1/6'], [1 / 5, '1/5'], [1 / 4, '1/4']];
+  const fracName = (w) => { let best = FRACS[0]; for (const q of FRACS) if (Math.abs(q[0] - w) < Math.abs(best[0] - w)) best = q; return Math.abs(best[0] - w) < 0.004 ? best[1] : f2(w, 3); };
+  function solveL() {
+    const [gr, gi] = sproutGuess(stL.n, 1);
+    const [nr, ni] = nucleus(stL.n, gr, gi);
+    const s = Math.min(stL.s, 0.995), th = 2 * Math.PI * stL.w;
+    const [lr, li] = lamForSigma(stL.n, s * Math.cos(th), s * Math.sin(th), nr, ni);
+    if (!isFinite(lr) || !isFinite(li) || Math.hypot(lr - nr, li - ni) > 0.6) {
+      $('infoL').innerHTML = 'The multiplier equation did not settle for these controls — showing the sprout\'s nucleus instead.';
+      return [nr, ni];
+    }
+    return [lr, li];
+  }
+  function setL(refit, solved) {
+    const P = stL.preset && PRESETS_L[stL.preset];
+    markPL(stL.preset || '—');
+    markNL(stL.n);
+    $('nLv').textContent = String(stL.n ?? '—');
+    $('hLv').textContent = stL.s === null ? '—' : f2(stL.s, 3);
+    $('tLv').textContent = stL.w === null ? '—' : fracName(stL.w);
+    $('skinL').checked = stL.line;
+    cycL = cycleOf(stL.lam[0], stL.lam[1]);
+    const [mr, mi] = muOf(stL.lam[0], stL.lam[1]);
+    $('rLa').textContent = cplx(stL.lam[0], stL.lam[1], 6);
+    $('rLb').textContent = cplx(mr, mi, 6);
+    $('rLc').textContent = (P && P.cyc) || (cycL ? `attracting, period ${cycL.p}` : 'none attracting');
+    $('rLd').textContent = (P && P.dim) || (cycL ? (stL.line ? '2, drawn as its skin' : '2 (has flesh)') : '≤ 1, or thin parabolic flesh');
+    if (P) { $('cLt').textContent = P.t[0]; $('cLn').textContent = P.t[1]; $('infoL').innerHTML = P.i; }
+    else {
+      $('cLt').textContent = 'Dragon lab';
+      $('cLn').textContent = `λ = ${cplx(stL.lam[0], stL.lam[1], 5)}`;
+      if (!solved) $('infoL').innerHTML = cycL
+        ? `λ sits in a period-${cycL.p} atom: the dragon has flesh. Nudge heft toward 1 or twist toward a fraction m/n to crumple the skin.`
+        : 'No attracting cycle here: λ is on or outside the separator, and what remains of the dragon is skeleton or dust.';
+    }
+    if (refit) zL.refit(); else zL.schedule();
+  }
+  const PL_KEYS = { starved: '190 starved', twist: '190 twist', sigma: '190 σ', p191: '191' };
+  const markPL = stepButtons($('pL'), Object.keys(PL_KEYS), (k) => PL_KEYS[k], (k) => `Preset ${PL_KEYS[k]}`, (k) => {
+    const P = PRESETS_L[k];
+    Object.assign(stL, { lam: P.lam.slice(), line: P.line, itmax: P.itmax, n: P.n ?? stL.n, s: P.s ?? stL.s, w: P.w ?? stL.w, bb: P.bb, preset: k });
+    if (P.s !== null) { $('hLs').value = P.s === 1 ? 0.995 : P.s; }
+    if (P.w !== null) $('tLs').value = P.w;
+    setL(true);
+  });
+  const markNL = stepButtons($('nL'), [3, 4, 5, 6, 7, 8, 10, 12, 16, 20, 25, 32], String, (n) => `n = ${n}`, (n) => {
+    stL.n = n; stL.preset = null; stL.s = +$('hLs').value; stL.w = +$('tLs').value;
+    stL.lam = solveL(); stL.itmax = 500; stL.bb = { x0: -0.7, x1: 1.7, y0: -0.95, y1: 0.95 };
+    setL(true, true);
+  });
+  let lagL = 0;
+  const solveFromSliders = () => {
+    clearTimeout(lagL);
+    lagL = setTimeout(() => {
+      stL.preset = null; stL.s = +$('hLs').value; stL.w = +$('tLs').value;
+      stL.lam = solveL(); stL.itmax = 500;
+      setL(false, true);
+    }, 120);
+  };
+  $('hLs').addEventListener('input', solveFromSliders);
+  $('tLs').addEventListener('input', solveFromSliders);
+  $('skinL').addEventListener('change', () => { stL.line = $('skinL').checked; stL.preset = null; setL(false); });
+  $('toLab').addEventListener('click', () => {
+    if (!stM.tap) return;
+    stL.lam = stM.tap.lam.slice(); stL.preset = null; stL.itmax = 800;
+    const cyc = cycleOf(stL.lam[0], stL.lam[1]);
+    stL.line = !cyc;
+    stL.bb = { x0: -0.7, x1: 1.7, y0: -0.95, y1: 0.95 };
+    setL(true);
+    document.getElementById('p190').scrollIntoView({ behavior: 'smooth' });
+  });
+
+  // ====================== Plate 192: Fatou dusts ======================
+  const stF = { k: 5, par: false, row: false, rowY: -0.6 };
+  const zF = rasterFig('wF', 'cF', (f) => fitBox(f, { x0: -0.04, x1: 1.04, y0: -1.03, y1: 0.015 }, 0.015), () => `fatou|${stF.k}`, (img, v) => {
+    rasterFatou(img, v, stF.k);
+  }, (f, v) => {
+    const c = f.ctx;
+    toWorld(f, v);
+    if (stF.par) {
+      c.beginPath();
+      for (let i = 0; i <= 300; i++) {
+        const y = -1 + i / 300 * 0.985, lam = -4 / y, h = Math.sqrt(Math.max(0, 0.25 - 1 / lam));
+        const x1 = 0.5 - h;
+        if (i === 0) c.moveTo(x1, y); else c.lineTo(x1, y);
+      }
+      for (let i = 300; i >= 0; i--) {
+        const y = -1 + i / 300 * 0.985, lam = -4 / y, h = Math.sqrt(Math.max(0, 0.25 - 1 / lam));
+        c.lineTo(0.5 + h, y);
+      }
+      c.strokeStyle = PRINT.red; c.lineWidth = 1.6 / v.s; c.setLineDash([0.02, 0.014]); c.stroke(); c.setLineDash([]);
+    }
+    if (stF.row) {
+      c.strokeStyle = PRINT.accent; c.lineWidth = 1.8 / v.s;
+      c.beginPath(); c.moveTo(-0.03, stF.rowY); c.lineTo(1.03, stF.rowY); c.stroke();
+    }
+    toScreen(f);
+  }, { onTap: (wx, wy) => { if (wy <= -0.02 && wy >= -1) { stF.rowY = wy; stF.row = true; $('rowF').checked = true; $('rowFwrap').hidden = false; $('rowFs').value = wy; setF(false); } } });
+  function setF(refit) {
+    markKF(stF.k);
+    $('kFv').textContent = String(stF.k);
+    $('cFt').textContent = stF.k === 5 ? 'As printed' : 'Deeper than the print';
+    $('cFn').textContent = `tremas of order 1 to ${stF.k}`;
+    $('rowFwrap').hidden = !stF.row;
+    if (stF.row) {
+      const lam = -4 / stF.rowY, h = Math.sqrt(Math.max(0, 0.25 - 1 / lam));
+      $('rowFv').textContent = f2(stF.rowY, 3);
+      $('rFa').textContent = f2(lam, 3);
+      $('rFb').textContent = `${f2(0.5 - h, 4)}, ${f2(0.5 + h, 4)}`;
+      // box-count estimate over the deep stage, and the surviving length at stage k
+      const N = 8192;
+      let surv = 0, deep = 0;
+      for (let i = 0; i < N; i++) {
+        const x0 = (i + 0.5) / N;
+        let x = x0, ok = true;
+        for (let s = 0; s < stF.k; s++) { x = lam * x * (1 - x); if (x < 0 || x > 1) { ok = false; break; } }
+        if (ok) surv++;
+        x = x0; ok = true;
+        for (let s = 0; s < 24; s++) { x = lam * x * (1 - x); if (x < 0 || x > 1) { ok = false; break; } }
+        if (ok) deep++;
+      }
+      $('rFc').textContent = deep > 1 ? `≈ ${f2(Math.log(deep) / Math.log(N), 3)}` : '→ 0';
+      $('rFd').textContent = `${f2(surv / N, 4)} at stage ${stF.k}`;
+      $('infoF').innerHTML = lam < 4.5
+        ? 'Just above λ = 4 the mid trema is a sliver and the dust is almost the whole of [0, 1]; its dimension falls from 1 as λ grows.'
+        : 'The larger λ, the wider every trema: the dust thins toward the two ends of [0, 1], and D falls toward 0.';
+    } else {
+      $('rFa').textContent = '—'; $('rFb').textContent = '—'; $('rFc').textContent = '—'; $('rFd').textContent = '—';
+      $('infoF').innerHTML = 'Each row is one Fatou dust, sliced at stage ' + stF.k + '. Tap a row to read its λ, its mid trema and a dimension estimate.';
+    }
+    if (refit) zF.refit(); else zF.schedule();
+  }
+  const markKF = stepButtons($('kF'), [1, 2, 3, 4, 5, 6, 7, 8], String, (k) => `order ${k}`, (k) => { stF.k = k; setF(false); });
+  $('parF').addEventListener('change', () => { stF.par = $('parF').checked; zF.schedule(); });
+  $('rowF').addEventListener('change', () => { stF.row = $('rowF').checked; $('rowFwrap').hidden = !stF.row; setF(false); });
+  $('rowFs').addEventListener('input', () => { stF.rowY = +$('rowFs').value; setF(false); });
+  $('plate192').addEventListener('click', () => { Object.assign(stF, { k: 5, par: false, row: false }); $('parF').checked = false; $('rowF').checked = false; setF(true); });
+
+  // ---------- first paint ----------
+  setV(false); setE(false); setM(false); setL(false); setF(false); setD(false);
+})();
+
+</script>
+
+</body>
+</html>

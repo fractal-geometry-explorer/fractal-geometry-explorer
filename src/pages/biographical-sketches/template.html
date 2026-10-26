@@ -1,0 +1,218 @@
+<title>Biographical Sketches</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.r-time { aspect-ratio: 4 / 3; }
+.r-time canvas { cursor: default; }
+.bio { display: grid; gap: 14px; align-content: start; min-width: 0; }
+.bio p { margin: 0; font-family: var(--f-body); font-size: 17px; line-height: 1.55; max-width: 62ch; }
+.bio .verse { margin: 2px 0 2px 1.5em; font-family: var(--f-body); font-style: italic; font-size: 16px; line-height: 1.5; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 40, "Biographical sketches" · pages 391–404</p>
+    <h1><span class="plate-no">Chapter 40</span><span class="lozenge" aria-hidden="true"></span><span>Biographical Sketches</span></h1>
+    <p class="dek">The last part of the book turns from figures to people. This chapter prints no plates: it is six portraits of precursors Mandelbrot calls mavericks — scientists whose entry into the mainstream was postponed, and in two cases came only after death. The one figure on this page is ours: the six lives on a shared timeline, computed from the dates the chapter itself gives.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#lives"><b>391</b> Six lives</a>
+    <a href="#bachelier"><b>392</b> Bachelier</a>
+    <a href="#fournier"><b>396</b> Fournier d'Albe</a>
+    <a href="#hurst"><b>396</b> Hurst</a>
+    <a href="#levy"><b>398</b> Lévy</a>
+    <a href="#richardson"><b>401</b> Richardson</a>
+    <a href="#zipf"><b>403</b> Zipf</a>
+  </nav>
+
+  <!-- ===================== TIMELINE ===================== -->
+  <section class="plate" id="lives">
+    <div class="plate-head">
+      <p class="no">Pages 391–392 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Six lives on one clock</h2>
+      <p class="dim" id="livesDim">Six mavericks · born 1868–1902 · red marks the works and turns the chapter singles out</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-time" id="wT">
+          <canvas id="cT" role="img" aria-label="Timeline of the six lives sketched in chapter 40, with the works the chapter singles out marked on each life"></canvas>
+        </div>
+        <figcaption><strong>The six sketches as a timeline</strong> · <span id="cTm">calendar years</span> · hover or tap a mark to read it; tap a name to jump to its sketch</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">A life story that is interesting to tell, the chapter begins, is rarely the reward of those who keep to the mainstream of science. Mandelbrot's word for his heroes is <i>maverick</i>: when the prologue of each life ends, the hero is still unbranded, and recognition comes late or never arrives in time. Their shared key seems to be time to spare. The prelude's examples set the tone — Felix Hausdorff gave his first 35 years to philosophy, poetry and the theatre before the 1914 masterpiece that names the Hausdorff dimension, and D'Arcy Thompson was 57 when <i>On Growth and Form</i> appeared. The cliché that science is a young man's game fails for everyone in this chapter.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Time axis</span></div>
+          <div class="steps words" id="mT" role="group" aria-label="Time axis"></div>
+        </div>
+        <p class="cap" id="capT">Calendar time, 1860s to 1980s. Switch to ages to line the six births up: the red marks drift far to the right, and two fall beyond the end of their own life bar.</p>
+        <p class="readline" id="infoT" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Lives</dt><dd>6</dd></div>
+          <div><dt>Years covered</dt><dd>1868–1978</dd></div>
+          <div><dt>Marks after age 65</dt><dd id="rTa">—</dd></div>
+          <div><dt>Posthumous marks</dt><dd id="rTb">—</dd></div>
+        </dl>
+        <p class="note">Every bar and mark is set from a date or an age printed in the chapter, nothing else. Where the chapter gives only an age — Hurst's papers at 71 and 75, Lévy's turn to probability near 40, his books at 50 and 60, his seat at the Académie when nearly 80, Richardson's doctorate at 47, Bachelier's Dijon candidacy ("1928, give or take a year") — the year is computed from the birth year and the mark is labelled ≈.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== BACHELIER ===================== -->
+  <section class="plate" id="bachelier">
+    <div class="plate-head">
+      <p class="no">Pages 392–395 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Louis Bachelier, 1870–1946</h2>
+      <p class="dim">The mathematics of Brownian motion, written down in 1900 — five years before Einstein, for the price of bonds</p>
+    </div>
+    <div class="plate-body">
+      <div class="bio">
+        <p>On March 19, 1900, Bachelier defended a doctoral dissertation in Paris titled "Mathematical theory of speculation" — speculation meaning the ups and downs of the market in French state bonds, not philosophy. In it, and in a 1913 paper, an astonishing share of the mathematical theory of Brownian motion is worked out before the physicists: the diffusion of probability, the distribution of the maximum, and a construction of what is now called the Wiener function, before Wiener. The function X(t) stood for the price of a bond at time t. The committee was unimpressed and gave the thesis the near-insulting grade <i>mention honorable</i>, and it had no direct influence on anyone.</p>
+        <p>His career never recovered from one mathematical slip. Standing for a chair at Dijon around 1928, he was blackballed after Paul Lévy confirmed an error in the 1913 paper: Bachelier let his zigzag keep a constant speed as its steps shrank, where the speed must grow as the steps shorten for the limit to exist. Reading Kolmogorov in 1931, Lévy came upon "der Bacheliers Fall", looked at the work again, and wrote that the error, though repeated everywhere, had not stopped Bachelier from seeing — before Einstein and before Wiener — important properties of the process. The two were reconciled by letter. Only very late did Bachelier receive a professorship, at the tiny University of Besançon.</p>
+        <p>Henri Poincaré's official report on the thesis had in fact praised "an original and precise mind" and the strange chapter titled "Radiation of probability", where probability spreads like heat — then Poincaré, notorious for lapses of memory, forgot the thesis when Brownian diffusion became physics. Economics now credits Bachelier with the martingale, the proper formulation of a fair game and of an efficient market (chapter 37), and with the idea that prices follow Brownian motion. The thesis was translated into English sixty years after its defense. Mandelbrot's diligent search turned up odd scraps of recollection and not a single photograph, and his sketch ends by asking whether anyone knows more.</p>
+      </div>
+      <div class="side">
+        <dl class="read">
+          <div><dt>Thesis defended</dt><dd>1900<small> · aged 29</small></dd></div>
+          <div><dt>Grade received</dt><dd><small>mention </small>honorable</dd></div>
+          <div><dt>Blackballed at Dijon</dt><dd>≈1928</dd></div>
+          <div><dt>English translation</dt><dd>≈1960<small> · posthumous</small></dd></div>
+        </dl>
+        <p class="note">The process Bachelier reached for is the one simulated on this site's <a href="wiener-sausage.html">Wiener Sausage</a> page: Brownian motion, where displacement grows as the square root of time — exactly the scaling his 1913 construction missed. Prices and scaling return in chapter 37.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FOURNIER ===================== -->
+  <section class="plate" id="fournier">
+    <div class="plate-head">
+      <p class="no">Page 396 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Edmund Edward Fournier d'Albe, 1868–1933</h2>
+      <p class="dim">Two New Worlds, 1907 · the first galaxy clustering model precise enough to yield D = 1</p>
+    </div>
+    <div class="plate-body">
+      <div class="bio">
+        <p>Fournier d'Albe chose to live as a free-lance science journalist and inventor. He built the optophone, a prosthesis meant to let the blind "hear" letters, and was the first to transmit a television signal from London. His name recalled Huguenot ancestry; his education was partly German, his A.B. earned at evening college in London, and a stint in Dublin turned him into an Irish patriot and a militant of a Pan-Celtic movement. He was also a spiritualist and a religious mystic.</p>
+        <p>He is remembered for <i>Two New Worlds</i> (1907). At publication, Nature found its arguments "simple and reasonable" and The Times its speculations "curious and attractive"; his obituaries in both somehow failed to mention it, and the book became nearly impossible to find. Mandelbrot grants that most of it is wild — but Fournier was the first to restate the old intuition of Kant and Lambert about clustered galaxies in terms precise enough that one can conclude today that the galaxies should satisfy D = 1. For that, the chapter says, we owe him something of lasting value — a lasting footnote rather than greatness, but a real one.</p>
+      </div>
+      <div class="side">
+        <dl class="read">
+          <div><dt>Two New Worlds</dt><dd>1907<small> · aged 39</small></dd></div>
+          <div><dt>Its claim today</dt><dd>D = 1</dd></div>
+        </dl>
+        <p class="note">Fournier's hierarchical universe is the subject of chapter 9 and Plates 95–96, still to build on this site. Lévy, below, rediscovered the same model at nineteen and thought it too simple to publish.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== HURST ===================== -->
+  <section class="plate" id="hurst">
+    <div class="plate-head">
+      <p class="no">Pages 396–398 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Harold Edwin Hurst, 1880–1978</h2>
+      <p class="dim">R(d)/S(d) grows like dᴴ with H ≈ 0.7, where standard chance says d^0.5 · papers read at 71 and 75</p>
+    </div>
+    <div class="plate-body">
+      <div class="bio">
+        <p>Hurst was hailed as perhaps the foremost Nilologist of all time and called "Abu Nil", the Father of the Nile. The son of a village builder near Leicester, he left school at fifteen, taught as a pupil teacher while attending evening classes, and at twenty won a scholarship to Oxford as a noncollegiate student. Weak in mathematics but very strong in practical work, he took — to everyone's surprise — a first-class honors degree in physics. In 1906 he went to Egypt for a short stay. It lasted 62 years, and its most fruitful part came after he turned 65.</p>
+        <p>His problem was the Aswan reservoir: storage must ride out not one dry year but runs of them. With exceptionally long records and no pressure of time, he compared the Nile against the standard model of chance — white noise — through a statistic of his own design, the rescaled range R(d)/S(d) of chapters 28 and 39. Theory says it should grow like d^0.5. The Nile's records, and many others, grow like dᴴ with H about 0.7. He read his two long papers on the discovery at the ages of 71 and 75, and only then did its importance become recognized. Feller found here "a problem which is interesting from both a statistical and a mathematical point of view" — though both he and E. H. Lloyd, Mandelbrot notes, had unwittingly misread the claim, one never learning and one forgetting that R had been divided by S.</p>
+        <p>The chapter draws the general moral plainly: when a result is truly unexpected, it is hard to comprehend even for those best disposed to listen. Mandelbrot's fractional Brownian motion, in chapter 28, arose as a direct response to the Hurst phenomenon.</p>
+      </div>
+      <div class="side">
+        <dl class="read">
+          <div><dt>To Egypt</dt><dd>1906<small> · stayed 62 years</small></dd></div>
+          <div><dt>Hurst's law</dt><dd>R/S ∝ dᴴ</dd></div>
+          <div><dt>Measured H</dt><dd>≈ 0.7</dd></div>
+          <div><dt>Papers read at</dt><dd>71, 75</dd></div>
+        </dl>
+        <p class="note">Ordinary Brownian motion — the H = 0.5 case Hurst's data refused — is simulated on the <a href="wiener-sausage.html">Wiener Sausage</a> page. Fractional Brownian motion and the plates it draws belong to chapters 27–29, still to build.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== LEVY ===================== -->
+  <section class="plate" id="levy">
+    <div class="plate-head">
+      <p class="no">Pages 398–401 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Paul Lévy, 1886–1971</h2>
+      <p class="dim">Probability begun near 40, major books at 50 and 60, Poincaré's seat at the Académie when nearly 80</p>
+    </div>
+    <div class="plate-body">
+      <div class="bio">
+        <p>Lévy acknowledged no pupil, but came closest to being Mandelbrot's mentor. He lived long enough to be recognized as possibly the greatest probabilist of all time, and — when nearly eighty — to occupy at the Académie des Sciences the seat that had been Poincaré's, then Hadamard's. Yet almost to the end the Establishment kept him at arm's length: Poincaré's old university chair eluded him repeatedly, and even his offers of noncredit lectures were accepted reluctantly. His post was professor of mathematical analysis at the École Polytechnique, and he became interested in probability only near forty, when asked for a lecture on errors in the firing of guns. His major books came at fifty and sixty, and working alone he transformed probability from a small collection of odd results into a discipline whose methods are so direct as to be classical.</p>
+        <p>At nineteen, in 1904, he independently discovered the Fournier model of the universe, and found "the argument so simple" that he published it only twenty-five years later, after overhearing Perrin and Langevin get the Bentley paradox wrong. "Too simple to publish" recurs through his recollections: history tends to reverse such judgments. His written courses were no majestic procession of definitions and lemmas but a tumultuous flood of remarks and observations, unpopular with students cramming for examinations; a critic could say of his work, as Lebesgue said in praise of Camille Jordan, that one cannot generally see anything from a very high peak. John von Neumann put it differently in 1954: "Lévy is like a visitor from a strange planet."</p>
+        <p>His papers were long held insufficiently rigorous — the very charge that had sunk Bachelier, whose Dijon examiner Lévy had been. Rigor came later, from intellectual grandchildren who call themselves "probabilists turned bourgeois"; Mandelbrot fears too much was paid for the acceptance, and places Lévy's almost unique greatness in being at once the forerunner and the classic of his field.</p>
+      </div>
+      <div class="side">
+        <dl class="read">
+          <div><dt>Fournier universe</dt><dd>1904<small> · aged 19</small></dd></div>
+          <div><dt>Turn to probability</dt><dd>≈1926<small> · near 40</small></dd></div>
+          <div><dt>Major books</dt><dd><small>at </small>50, 60</dd></div>
+          <div><dt>Académie seat</dt><dd>≈1965<small> · nearly 80</small></dd></div>
+        </dl>
+        <p class="note">Lévy's stable distributions, flights and dusts drive chapters 31–32 and their plates, still to build on this site; the Lévy devil's staircases are Plates 286–287. The Brownian motion he helped tame is on the <a href="wiener-sausage.html">Wiener Sausage</a> page.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== RICHARDSON ===================== -->
+  <section class="plate" id="richardson">
+    <div class="plate-head">
+      <p class="no">Pages 401–403 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Lewis Fry Richardson, 1881–1953</h2>
+      <p class="dim">Weather Prediction by Numerical Process, 1922 · the coastline paper, posthumous, 1961</p>
+    </div>
+    <div class="plate-body">
+      <div class="bio">
+        <p>Even by this chapter's standards, Richardson's life refused to integrate in any one direction. An austere Quaker — and, incidentally, uncle of the actor Sir Ralph Richardson — he took his Cambridge B.A. in physics, mathematics, chemistry, biology and zoology, being uncertain which career to follow. Having quarreled with Cambridge, he later refused to pay ten pounds for the M.A. that a doctorate required, matriculated instead at London University where he was already lecturing, sat examinations beside his own pupils, and took his doctorate at 47 — in mathematical psychology. A conscientious objector, he resigned from the Meteorological Office when it joined the new Air Ministry after the 1914–1918 war.</p>
+        <p><i>Weather Prediction by Numerical Process</i> (1922) is the work of a practical visionary: it was viewed as disreputable for twenty years — his finite-difference steps were unsuitable, a danger no one yet understood — and reprinted as a classic after thirty-three. It nevertheless won him election to the Royal Society, and five of its lines reached the highest level of fame, being quoted anonymously:</p>
+        <p class="verse">Big whorls have little whorls,<br>Which feed on their velocity;<br>And little whorls have lesser whorls,<br>And so on to viscosity<br>(in the molecular sense).</p>
+        <p>The verse parodies Swift's fleas — and pointedly not De Morgan's variant, in which little fleas have greater fleas in turn: Richardson believed turbulence cascades in one direction only, from large eddies to small. His 1926 paper asks "Does the wind possess a velocity?" — a question that "improves on acquaintance" — and studies diffusion without one, mentioning in passing the Weierstrass function, continuous but nowhere differentiable. What a pity, Mandelbrot writes, that he failed to notice it is scaling; G. I. Taylor adds that he missed the Kolmogorov spectrum by a hair's breadth. He was also a careful and thrifty experimenter, shooting steel marbles into clouds to gauge the wind, and measuring turbulent diffusion in 1948 by throwing a sack of parsnips off a bridge over the Cape Cod Canal and watching from the next bridge downstream.</p>
+        <p>An inheritance let him retire early to the statistics of deadly quarrels between states, pursued on the side since 1919; two books appeared after his death. Among the posthumous papers is Richardson 1961, the measurement of coastline lengths that chapter 5 begins with and that, Mandelbrot says, had such an influence on the genesis of the whole Essay.</p>
+      </div>
+      <div class="side">
+        <dl class="read">
+          <div><dt>Weather Prediction</dt><dd>1922</dd></div>
+          <div><dt>Doctorate</dt><dd>≈1928<small> · aged 47</small></dd></div>
+          <div><dt>Wind velocity paper</dt><dd>1926</dd></div>
+          <div><dt>Coastline paper</dt><dd>1961<small> · posthumous</small></dd></div>
+        </dl>
+        <p class="note">Measuring a coast with ever-shorter rulers — Richardson's posthumous data — is the method behind the <a href="minkowski-sausage.html">Minkowski Sausage</a> page; his empirical chart itself is Plate 33, still to build. The whorls verse is quoted from Richardson 1922.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ZIPF ===================== -->
+  <section class="plate" id="zipf">
+    <div class="plate-head">
+      <p class="no">Pages 403–404 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>George Kingsley Zipf, 1902–1950</h2>
+      <p class="dim">Human Behavior and the Principle of Least Effort, 1949, apparently at the author's own expense</p>
+    </div>
+    <div class="plate-body">
+      <div class="bio">
+        <p>Zipf, an American scholar, started as a philologist and came to describe himself as a statistical human ecologist. For twenty years a Lecturer at Harvard, he died just after publishing <i>Human Behavior and the Principle of Least Effort</i> (1949), apparently at his own expense. Like Fournier's book, the chapter says, it is one of those works in which flashes of genius are nearly overwhelmed by a gangue of wild notions and extravagance — on one page the shape of sexual organs, on another a defense of the Anschluss because it improved a formula's fit.</p>
+        <p>The lasting part is the drumbeat of its figures and tables: in the statistics of social science, the best combination of mathematical convenience and empirical fit is very often a scaling, "hyperbolic" distribution — a straight line on a doubly logarithmic graph. Natural scientists recognize in Zipf's laws the counterparts of scaling laws that physics accepts with no extraordinary emotion; when Zipf, and Pareto before him, followed the same procedure in the social sciences, the conclusion collided with the reigning Gaussian dogma, and the resistance was fierce. Mandelbrot judges Zipf's own universal belief without merit — frequency distributions are not always hyperbolic — and his verbal explanations empty, yet credits the failure to heed him with part of the backwardness of the fields that ignored him. Word frequencies and the examples that hold up are the matter of chapter 38.</p>
+        <p>The debt is personal: at a critical point in his life, Mandelbrot read J. L. Walsh's wise review of <i>Human Behavior</i>, which mentioned only what was good. "I owe a great deal to Zipf through Walsh."</p>
+      </div>
+      <div class="side">
+        <dl class="read">
+          <div><dt>Human Behavior</dt><dd>1949<small> · aged 47</small></dd></div>
+          <div><dt>Zipf's laws</dt><dd><small>scaling / </small>hyperbolic</dd></div>
+        </dl>
+        <p class="note">Scaling in word frequencies and in prices — the part of Zipf and Pareto that survives — is the matter of chapters 37–38, still to build on this site.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="note">The chapter closes, on page 404, with its only picture: a 1964 drawing by the French cartoonist Jean Effel, reproduced in the book by his kind permission. A lecturer at his podium tells a crowd of reporters, "Gentlemen of the press, kindly supply your questions to my answers" — printed beside Mandelbrot's fondest hope, that the reader will ask many further questions to his answers. The drawing is Effel's and stays with the book; it is described here rather than reproduced.</p>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 40, pages 391–404. The chapter prints no plates; the timeline above is computed from the dates and ages printed in its text, with computed years marked ≈. Companion pages on this site: <a href="minkowski-sausage.html">Minkowski Sausage</a> (coastline measurement, chapter 5) and <a href="wiener-sausage.html">Wiener Sausage</a> (Brownian motion, chapter 25).</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>

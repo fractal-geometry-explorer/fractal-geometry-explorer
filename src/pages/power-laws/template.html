@@ -1,0 +1,185 @@
+<title>Scaling Without Geometry</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.mini svg.gen { height: 46px; }
+.r-ch { aspect-ratio: 10 / 7; }
+.readline b { font-family: var(--f-mono); font-weight: 500; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 38, "Scaling and Power Laws Without Geometry" · pages 341–348</p>
+    <h1><span class="plate-no">Chapter 38</span><span class="lozenge" aria-hidden="true"></span><span>Scaling Without Geometry</span></h1>
+    <p class="dek">The one chapter where the Essay drops geometry altogether: scaling defined for plain random variables. Hyperbolic laws Pr(U &gt; u) = Fu<sup>−D</sup> breed paradoxes of expectation, explain Zipf's law of word frequencies through a scaling tree of letters, and give Pareto's law of incomes a hierarchy to live in. The chapter prints no plates, so every figure below is this page's illustration of its formulas.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#paradox"><b>u⁻ᴰ</b> Expectation paradoxes</a>
+    <a href="#zipf"><b>P(ρ)</b> Zipf's law</a>
+    <a href="#temperature"><b>D</b> Temperature of discourse</a>
+    <a href="#salaries"><b>rᵏ</b> Pareto salaries</a>
+  </nav>
+
+  <!-- ===================== HYPERBOLIC DISTRIBUTIONS AND THE EXPECTATION PARADOXES ===================== -->
+  <section class="plate" id="paradox">
+    <div class="plate-head">
+      <p class="no">Chapter 38, pages 341–344 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Hyperbolic distributions and the Lindy effect</h2>
+      <p class="dim">Pr(U &gt; u) = Fu⁻ᴰ · past any u₀ the tail is the whole law rescaled · E(U | U &gt; u₀) = u₀·D/(D − 1)</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-ch">
+          <canvas id="cA" role="img" aria-label="The hyperbolic distribution: its scaling tail and its paradoxical expectations"></canvas>
+        </div>
+        <figcaption><strong id="cAt">The scaling tail</strong> · <span id="cAn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">A random variable U is <i>hyperbolic</i> when Pr(U &gt; u) = Fu<sup>−D</sup>. Its defining habit is scaling: condition on having passed any threshold u₀ and the distribution beyond is the whole law all over again, only rescaled. When D &gt; 1 the conditional expectation is u₀·D/(D − 1) — a result that "suggests endless paradoxical stories": the Lindy effect ("the future career expectation of a television comedian is proportional to his past exposure"), the young poets' cemetery, the receding shore.</p>
+        <div class="mini" aria-label="The chapter's formulas">
+          <div class="fx">Pr(U &gt; u) = F·u⁻ᴰ<br>E(U | U &gt; u₀) = u₀·D/(D − 1)</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mA" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="slider" id="Dg">
+          <div class="label-row"><span class="label">Exponent D</span><span class="value" id="DvA">D = 2.00</span></div>
+          <input type="range" id="DsA" min="0.6" max="3" step="0.05" value="2" aria-label="Exponent D">
+        </div>
+        <div class="slider" id="u0g">
+          <div class="label-row"><span class="label">Threshold u₀</span><span class="value" id="u0vA">u₀ = 3.0</span></div>
+          <input type="range" id="u0sA" min="1" max="100" step="0.5" value="3" aria-label="Threshold u0">
+        </div>
+        <div class="group" id="tAg" hidden>
+          <div class="label-row"><span class="label">True distribution</span></div>
+          <div class="steps words" id="tA" role="group" aria-label="True distribution"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="lindyA">Lotka's authors: D = 2</button>
+          <button type="button" class="btn" id="shoreA">The receding shore: D = 1.25</button>
+          <button type="button" class="btn" id="newA" hidden>New sample</button>
+        </div>
+        <p class="readline" id="infoA" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Exponent D</dt><dd id="rAa">2.00</dd></div>
+          <div><dt>E(U | U &gt; u₀) / u₀</dt><dd id="rAb">2.000</dd></div>
+          <div><dt>Expected future / past</dt><dd id="rAc">1.000</dd></div>
+          <div><dt>Median of U</dt><dd id="rAd">1.414</dd></div>
+        </dl>
+        <p class="note">The book argues these paradoxes in words and prints no figure, so the charts are this page's illustrations. The parables check out numerically: Lotka's D = 2 makes the expected future equal the past, and the lake widths 1600·N<sup>−0.8</sup> restate the Korčak distribution of Chapters 12 and 30 with D = 1/0.8 = 1.25, whose expected shore recedes five times faster than you sail. The "mixed bag" view reproduces the robustness argument of <i>New methods of statistical economics</i> (Mandelbrot 1963e) with filters of our choosing: each dataset is pooled from three batches scaled by random factors between 1/10 and 10.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ZIPF'S LAW OF WORD FREQUENCIES ===================== -->
+  <section class="plate" id="zipf">
+    <div class="plate-head">
+      <p class="no">Chapter 38, pages 344–347 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Zipf's law of word frequencies</h2>
+      <p class="dim" id="dimB">P = F(ρ + V)^(−1/D) · D = log N/log(1/r) · V = 1/(N − 1)</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-ch zoomable" id="wB">
+          <canvas id="cB" role="img" aria-label="Zipf's law: rank against frequency, and the scaling lexicographic tree behind it"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cBt">The law</strong> · <span id="cBn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Rank the words of one speaker's discourse by decreasing frequency. Zipf's empirical law says the probability of the word of rank ρ is near-universally P ∝ 1/ρ — and in Mandelbrot's second approximation, his first published result, P = F(ρ + V)<sup>−1/D</sup>. The explanation needs no linguistics: let discourse be a stream of independent letters — N proper letters of probability r each, the "improper letter" space with the remainder 1 − Nr — and the lexicographic tree of all words is scaling: every branch is a reduced copy of the whole tree. The law drops out, with D = log N/log(1/r) measuring the richness of vocabulary.</p>
+        <div class="mini" aria-label="The generator: a space share and N letter shares">
+          <svg class="gen" viewBox="-0.06 -0.14 1.12 0.28" aria-hidden="true" id="miniBsvg"></svg>
+          <div class="fx">space 1 − Nr, letters r each<br>D = log N/log(1/r)</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mB" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Proper letters, N</span></div>
+          <div class="steps" id="nB" role="group" aria-label="Number of letters"></div>
+          <div class="slider">
+            <div class="label-row"><span class="label">Letter probability r</span><span class="value" id="rvB">r = 0.2500</span></div>
+            <input type="range" id="rsB" min="0" max="1" step="0.001" value="0.3" aria-label="Letter probability r">
+          </div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="engB">An English-like alphabet</button>
+          <button type="button" class="btn" id="twoB">Two letters, r = 1/4</button>
+          <button type="button" class="btn" id="newB" hidden>New sample</button>
+        </div>
+        <p class="readline" id="infoB" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Dimension D</dt><dd id="rBa">0.5000</dd></div>
+          <div><dt>V = 1/(N − 1)</dt><dd id="rBb">1.0000</dd></div>
+          <div><dt>Prefactor F</dt><dd id="rBc">—</dd></div>
+          <div><dt>P₀ (the bare space)</dt><dd id="rBd">0.5000</dd></div>
+        </dl>
+        <p class="note">The chapter prints no figure; these drawings illustrate its formulas. The book stops at "approximating ρ through the average of its bounds" and the normalization F⁻¹ = Σ(ρ + V)<sup>−1/D</sup>; carrying that average through gives the closed form F = P₀(V(N + 1)/2)<sup>1/D</sup> used here — our own algebra, exact for the simplest tree. The identification of the word set with a Cantor-like dust of dimension D is the book's; the tree drawing generalizes its base-(N + 1) description to arbitrary r by giving each letter a share r, which reduces to the book's digits when r = 1/(N + 1).</p>
+      </div>
+    </div>
+    <div class="sub" id="temperature">
+      <h3>The temperature of discourse</h3>
+      <p class="cap">The deviations from the classical case allow a second reading, patterned after statistical thermodynamics: the cost of coding a word plays energy, Shannon's information plays entropy, and D comes out as the "temperature of discourse" — the hotter the discourse, the higher the probability of rare words. The standard case is D &lt; 1, where the dictionary may be infinite. But rare, unquestionable cases show D &gt; 1, and then the series Σ(ρ + V)<sup>−1/D</sup> diverges: ΣP = 1 can only hold if the dictionary is <i>finite</i>. In the book's data this happens only where the vocabulary is artificially limited from outside — Latin inserts in a non-Latin text — and since a finite set of points is no fractal, this D is not a fractal dimension.</p>
+      <p class="note">Mandelbrot's dichotomy came first as language statistics; its physical counterpart was recognized independently by Norman Ramsey — a body hotter than "infinitely hot" needs a negative inverse temperature, which likewise demands a finite upper bound on energy (see Mandelbrot 1970p for the parallelism).</p>
+    </div>
+  </section>
+
+  <!-- ===================== THE PARETO LAW FOR SALARIES ===================== -->
+  <section class="plate" id="salaries">
+    <div class="plate-head">
+      <p class="no">Chapter 38, pages 347–348 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>The Pareto law for salaries</h2>
+      <p class="dim" id="dimC">level k: N^k members at pay r^k · D = log N/log(1/r) · empirically D ≈ 2</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wC">
+          <canvas id="cC" role="img" aria-label="Lydall's salary hierarchy: the income pyramid and the rank–income law"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cCt">The pyramid</strong> · <span id="cCn"></span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Pareto found that the number of people with income above u falls off like u<sup>−D</sup>. The chapter's scaling model (after Lydall 1959) is another abstract tree: the organization chart of a hierarchy in which every member has N subordinates, each paid r times their superior. Level k then holds N<sup>k</sup> members earning r<sup>k</sup>, and "the formalism used for Zipf's law applies without change" — with a D that "does not seem to have any fractal interpretation worth writing down". The greater D, the lower the inequality; empirically D is ordinarily near 2.</p>
+        <div class="mini" aria-label="The hierarchy's rule">
+          <div class="fx">everyone: N subordinates at pay × r<br>ρ ≈ −V + U⁻ᴰFᴰ</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mC" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Subordinates, N</span></div>
+          <div class="steps" id="nC" role="group" aria-label="Number of subordinates"></div>
+          <div class="slider">
+            <div class="label-row"><span class="label">Pay ratio r</span><span class="value" id="rvC"></span></div>
+            <input type="range" id="rsC" min="0" max="1" step="0.001" value="0.66" aria-label="Pay ratio r">
+          </div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="d2C">Show D = 2, as observed</button>
+        </div>
+        <p class="readline" id="infoC" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Exponent D</dt><dd id="rCa">2.000</dd></div>
+          <div><dt>Members in all</dt><dd id="rCb">511</dd></div>
+          <div><dt>Top pay / bottom pay</dt><dd id="rCc">16×</dd></div>
+          <div><dt>r·√N</dt><dd id="rCd">1.000 (D = 2)</dd></div>
+        </dl>
+        <p class="note">The book draws no figure; the pyramid is this page's rendering of the text's remark — inverse income plotted downward, floor area equal to head count, "base equal to the square of the height" at D = 2 (both axes are scaled independently to fit). Lydall's model has a catch the book points out: at D = 2 the smallest possible 1/r, reached at N = 2, is √2 — a 41% raise per level, unrealistically high. So within real hierarchies D &gt; 2, and a population's overall D ≈ 2 must come mostly from differences <i>between</i> hierarchies.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 38, pages 341–348. This chapter prints no plates, so nothing on this page reproduces printed art: every figure is computed from the chapter's formulas, with this page's own choices flagged under each one. Companion page: <a href="cantor-dust.html">Cantor Dust</a> — the dust whose dimension D reappears here, first behind the words and then not at all behind the salaries.</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>
