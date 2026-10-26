@@ -177,6 +177,7 @@ Update this file in the same pull request as the work it records.
 | Figure, p. 329 | 329 | A spin impurity's spread: Pascal's triangle mod 2, whose downsized limit is the Sierpiński gasket | exact | done | lattice-physics |
 | (concept) | 326–333 | Weak against strong convergence; the self-avoiding walk (D = 4/3); Leopold–Langbein rivers | random | done | lattice-physics |
 | 340 | 340 | Original evidence for scaling in economics (cotton prices) | data | done | cotton-prices |
+| (concept) | 341–348 | Scaling without geometry: expectation paradoxes, Zipf's law, Pareto salaries | exact | done | power-laws |
 
 ## XII Of men and ideas (chapters 40–42)
 
@@ -184,13 +185,7 @@ Update this file in the same pull request as the work it records.
 | :- | :- | :- | :- | :- | :- |
 | (sketches) | 391–404 | Chapter 40, six biographical sketches: Bachelier, Fournier d'Albe, Hurst, Lévy, Richardson, Zipf | data | done | biographical-sketches |
 | Drawing, p. 404 | 404 | Jean Effel's lecture drawing, "fournir vos questions à mes réponses" | art | done | biographical-sketches |
-
-## XII Of men and ideas (chapters 40–42)
-
-| Plate | Page | Title | Kind | Status | Site page |
-| :- | :- | :- | :- | :- | :- |
 | (concept) | 405–421 | Historical sketches: chimeras, dimension, Poincaré, old scaling evidence, Weierstrass | — | done | historical-sketches |
-| (concept) | 341–348 | Scaling without geometry: expectation paradoxes, Zipf's law, Pareto salaries | exact | done | power-laws |
 | (concept) | 349–390 | Chapter 39, Mathematical backup: self-affinity, covering and dimension, Lévy stability, R/S, Weierstrass | exact / random | done | mathematical-backup |
 
 ## Front matter and the update for the second printing (pages 458–468)

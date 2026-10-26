@@ -409,7 +409,7 @@ with w = b^(−H) = b^(D−2), and W₁(t) − W₁(0) = (1−w²)^(−1/2) Σ_{
 - **The whorls verse is quoted in full** (five lines, Richardson 1922, long out of copyright). The chapter stresses it parodies Swift, not De Morgan's little-fleas-have-greater-fleas variant, because Richardson believed only in a direct energy cascade; the page keeps that distinction.
 - **Bachelier's error** is paraphrased, not transcribed: the OCR of Lévy's letter garbles the exponent (v = cτ to some negative power as the step τ shrinks), so the page says only that the zigzag's speed was held constant where it must grow as the steps shorten.
 
-## Part XII, chapters 40–42
+## Part XII, chapter 41 (Historical sketches)
 
 **Chapter 41, historical sketches (pages 405–421).**
 - The chapter is running text with no plates (checked page by page on the scan). The page is a concept page: the chapter's entries retold briefly, with three figures that are the site's own illustrations, flagged as such on the page — nothing reproduces printed artwork.
