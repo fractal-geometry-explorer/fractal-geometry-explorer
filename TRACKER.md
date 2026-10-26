@@ -188,6 +188,7 @@ Each chapter session should add the chapter's main ideas here, alongside its pla
 - intermittency (chapter 10);
 - length–area–volume relations (chapter 12);
 - percolation (chapter 13);
+- surfaces with positive volume: Cantor dusts of positive measure, Osgood's curve of positive area, and the arteries-and-veins model of flesh (chapter 15, which prints no plates);
 - the diameter exponent of trees (chapter 17);
 - 1/f noise and scaling nets (chapter 27): the Joseph effect, Hurst's R/S and the spectrum are on the fractional-trails page;
 - Lévy flights and dusts (chapters 31–32);
