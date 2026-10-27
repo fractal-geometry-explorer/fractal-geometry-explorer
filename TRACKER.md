@@ -130,12 +130,12 @@ Update this file in the same pull request as the work it records.
 | Plate | Page | Title | Kind | Status | Site page |
 | :- | :- | :- | :- | :- | :- |
 | 255 | 255 | Fractional Brown trails (D ≈ 1.1111, 1.4285) | random | done | fractional-trails |
-| 264–265 | 264–265 | Brown lake landscapes, ordinary and fractional | render | todo | |
-| 266–267 | 266–267 | Brown coastlines, and island "strings" | random | todo | |
-| 268 | 268 | Contour lines in fractional Brown landscapes | random | todo | |
-| 269, C9 (top) | 269 | Brownian Pangaea (coastline D = 3/2) | render | todo | |
-| 270 | 270 | The first known examples of Brown coastlines | random | todo | |
-| 271 | 271 | (landscape slices; confirm caption) | render | todo | |
+| 264–265 | 264–265 | Brown lake landscapes, ordinary and fractional | render | done | brown-relief |
+| 266–267 | 266–267 | Brown coastlines, and island "strings" | random | done | brown-relief |
+| 268 | 268 | Contour lines in fractional Brown landscapes | random | done | brown-relief |
+| 269, C9 (top) | 269 | Brownian Pangaea (coastline D = 3/2) | render | done | brown-relief |
+| 270 | 270 | The first known examples of Brown coastlines | random | done | brown-relief |
+| 271 | 271 | The first known examples of fractional Brown islands (D = 2.3000) | render | done | brown-relief |
 
 ## A book within the book, in colour (C1–C16, before chapter 30)
 
@@ -201,6 +201,7 @@ Each chapter session should add the chapter's main ideas here, alongside its pla
 - canonical curdling, the Bienaymé birth-and-death criticality and D* = log ⟨N⟩/log b (chapter 23; on the random-curds page);
 - 1/f noise and scaling nets (chapter 27): the Joseph effect, Hurst's R/S and the spectrum are on the fractional-trails page;
 - island, lake and cup areas: Korčak's law Pr(A > a) = F·a⁻ᴮ with B = D/2, deadvalleys, cups and the Devil's terraces, the eroded Brown model (chapter 29, pages 272–276 — the chapter prints no figure);
+- global dependence in Brown relief, and the horizon (chapter 28);
 - Lévy flights and dusts (chapters 31–32);
 - lacunarity (chapter 34);
 - scaling in prices and in word frequencies (chapters 37–38).

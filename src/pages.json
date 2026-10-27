@@ -204,6 +204,18 @@
         "ui.js"
       ],
       "layout_comment": "/* Layout: Hoyle curdling (218–219), Novikov–Stewart percolation (220–223) and the canonical-curdling concept, each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "brown-relief",
+      "title": "Brown Relief and Coastlines",
+      "plates": "Plates 264–271",
+      "chapter": 28,
+      "scripts": [
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: six plate sections in book order (264–265 lake landscapes, 266–267 coastlines, 268 contour lines, 269 Pangaea, 270 the first coastlines, 271 the island from the sea), each a seeded simulation beside its caption, controls and numbers; a sticky plate index on top. One column under 900px. */"
     }
   ]
 }
