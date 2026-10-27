@@ -239,6 +239,18 @@
         "script.js"
       ],
       "layout_comment": "/* Layout: six entry sections in book order, three with a figure beside the entry's text and controls, three as prose; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "disc-tremas",
+      "title": "Disc and Sphere Tremas",
+      "plates": "Plates 306–309",
+      "chapter": 33,
+      "scripts": [
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: white tremas (306-307), black tremas (308-309) and the Moon-saturation concept, each a printed window beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
     }
   ]
 }

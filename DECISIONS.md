@@ -22,6 +22,7 @@ Conventions used below:
 - **Layout shift.** Give readouts whose text length changes a fixed height. A caption that changed size moved the graph around.
 
 - **Heavy random rasters: render once, blit while navigating.** Each of brown-relief's figures draws once per parameter change into an offscreen canvas covering a fixed world rectangle; the zoomable view only re-blits that canvas. Pan and zoom never recompute the field, and a random figure magnifies like the printed plate it stands for (its resolution is the simulation grid's).
+- **Sub-pixel survivors.** In a nearly saturated random field (disc tremas near D = 1.2), the surviving set's grains are thinner than a pixel and antialiasing blends them invisibly into the covering ink. To show them, build a pixel-center coverage mask while drawing (mark each pixel whose center falls in some disc) and paint the unmarked pixels in an accent colour; the mask costs about the total drawn area in pixel writes.
 
 ## Foundation (shared library and site shell)
 
@@ -235,6 +236,16 @@ All six plate groups are random (`random`/`render`), so they are matched statist
 - Checked against the scan page by page: all five pages are running text, with no figure, plate or caption box. The tracker's plate inventory for part IX (which ends at page 271) is correct.
 - The chapter's concepts went on the "Concepts without a plate" list: Korčak's law for island areas (Pr(A > a) = F·a⁻ᴮ, with 2B = D extended from Koch coastlines to Brown zerosets), the asymmetry between islands, deadvalleys and lakes, cups and the Devil's terraces (the filled relief B\*ₕ, whose vertical cut is a Lévy devil's staircase — the book points to Plates 286–287 in chapter 31), rivers and watersheds losing their symmetry once altitude exists, and the eroded Brown model B\*ₕ with dimension between 2 and 3 − H.
 - If a page is ever built for these ideas, the natural home is with chapter 31's Lévy staircases (Plates 286–287): the one-dimensional cup construction — fill every dip of a Brown line-to-line function to its brim — is exactly the staircase those plates draw.
+
+## Part X, chapter 33
+
+**Plates 306–309, disc tremas.**
+- **The construction is the caption's rank law.** Trema p is a disc of area K(2−D)/p with centers uniform. Tying K to the sampled area A by K = C·A/2, C = 2−D, this is the text's model Nr(area > a) = C/(2a) per unit area. The four plates are C = 0.01, 0.1 (tremas white, remainder black) and 0.25, 0.5 (tremas black, remainder white).
+- **Verified on the scan.** In Plate 306 at 300 dpi, white blob area × rank holds near one constant (~15,000 px²) from rank 2 past rank 250 (rank 1 is a margin strip; overlaps merge blobs). The measured black/white shares of all four plates sit in the band the model predicts at print resolution (about 96–98% black for 306, ~2/3 for 307; white ~30% in 308, ~1.4% in 309).
+- **Random plates.** Matched statistically, never dot for dot; the seed is exposed. Page seeds: 13 (Plates 306–307), 4 (308–309), 7 (the Moon sweep).
+- **Engine.** Centers come from a per-rank integer hash, so disc p is reproducible and independent of C — the page's sweep section keeps the seed invariant and varies C, as page 303 prescribes. Centers are sampled in the window plus a margin equal to the largest radius (capped at one frame height); discs under half a screen pixel are omitted and the rank walk is capped at 7×10⁶, so deep zooms stay sane. Like the book's own figures, the window is cut from the larger sampled region.
+- **Seed-to-seed swings.** The surviving share of one window is decided by the few window-sized tremas and ranges from zero to over 1% at C = 0.8 across seeds; only the seed-average follows exp(−(C/2)·H_P), H_P the harmonic sum over drawn ranks. First measured as an apparent bug (hash scatter passed every dispersion test; a Math.random control reproduced the swing).
+- **Caption typo.** The caption of Plates 308–309 reads "proceeds as in Plates 307 and 308"; it means 306 and 307, and the page says so.
 
 ## Part X, chapter 34
 
