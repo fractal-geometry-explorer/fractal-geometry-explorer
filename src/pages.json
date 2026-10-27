@@ -169,6 +169,17 @@
         "ui.js"
       ],
       "layout_comment": "/* Layout: four concept sections in the chapter's order (the gusty record and its probe, curdling in space, the section argument for D > 2, the spectrum inequality), each a computed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "biographical-sketches",
+      "title": "Biographical Sketches",
+      "plates": "Pages 391–404",
+      "chapter": 40,
+      "scripts": [
+        "shared/draw.js",
+        "script.js"
+      ],
+      "layout_comment": "/* Layout: one timeline of the six sketched lives beside the chapter's prelude, then one section per sketch, the biography beside its key dates. One column under 900px. */"
     }
   ]
 }

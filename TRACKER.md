@@ -175,6 +175,13 @@ Update this file in the same pull request as the work it records.
 | :- | :- | :- | :- | :- | :- |
 | 340 | 340 | Original evidence for scaling in economics (cotton prices) | data | todo | |
 
+## XII Of men and ideas (chapters 40–42)
+
+| Plate | Page | Title | Kind | Status | Site page |
+| :- | :- | :- | :- | :- | :- |
+| (sketches) | 391–404 | Chapter 40, six biographical sketches: Bachelier, Fournier d'Albe, Hurst, Lévy, Richardson, Zipf | data | done | biographical-sketches |
+| Drawing, p. 404 | 404 | Jean Effel's lecture drawing, "fournir vos questions à mes réponses" | art | done | biographical-sketches |
+
 ## Front matter and the update for the second printing (pages 458–468)
 
 | Plate | Title | Kind | Status | Site page |

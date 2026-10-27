@@ -169,6 +169,13 @@ Conventions used below:
 - The chapter's concepts went on the "Concepts without a plate" list: Korčak's law for island areas (Pr(A > a) = F·a⁻ᴮ, with 2B = D extended from Koch coastlines to Brown zerosets), the asymmetry between islands, deadvalleys and lakes, cups and the Devil's terraces (the filled relief B\*ₕ, whose vertical cut is a Lévy devil's staircase — the book points to Plates 286–287 in chapter 31), rivers and watersheds losing their symmetry once altitude exists, and the eroded Brown model B\*ₕ with dimension between 2 and 3 − H.
 - If a page is ever built for these ideas, the natural home is with chapter 31's Lévy staircases (Plates 286–287): the one-dimensional cup construction — fill every dip of a Brown line-to-line function to its brim — is exactly the staircase those plates draw.
 
+## Part XII, chapter 40 (Biographical sketches)
+
+- **A text chapter.** Pages 391–404 print no plates. The only artwork is Jean Effel's drawing on page 404 (dated January 30, 1964, reproduced in the book by his permission), kind `art`: described on the page, not reproduced.
+- **The page's one figure is a timeline of the six sketched lives,** computed only from dates and ages printed in the chapter, with a calendar/age-aligned toggle. Dates the chapter gives directly: Bachelier 1870–1946, thesis defended March 19, 1900, the flawed construction 1913, English translation "sixty years later"; Fournier d'Albe 1868–1933, *Two New Worlds* 1907; Hurst 1880–1978, to Egypt 1906; Lévy 1886–1971, Fournier-universe rediscovery 1904; Richardson 1881–1953, *Weather Prediction* 1922, the wind-velocity paper 1926, the coastline paper 1961 (posthumous); Zipf 1902–1950, *Human Behavior* 1949. Years computed from an age the chapter gives are marked ≈ on the page: Bachelier's Dijon candidacy (Lévy's letter says "1928, give or take a year"), Hurst's papers at 71 and 75, Lévy's turn to probability near 40, his books at 50 and 60, his Académie seat when nearly 80, Richardson's doctorate at 47.
+- **The whorls verse is quoted in full** (five lines, Richardson 1922, long out of copyright). The chapter stresses it parodies Swift, not De Morgan's little-fleas-have-greater-fleas variant, because Richardson believed only in a direct energy cascade; the page keeps that distinction.
+- **Bachelier's error** is paraphrased, not transcribed: the OCR of Lévy's letter garbles the exponent (v = cτ to some negative power as the step τ shrinks), so the page says only that the zigzag's speed was held constant where it must grow as the steps shorten.
+
 ## Open questions
 
 - **The 13-interval generator.** Why does Plate 69's large circle use a different rule from the caption's second stage? This may be worth a sentence once the rest of chapter 7 is reviewed.
