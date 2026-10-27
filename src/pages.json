@@ -301,6 +301,17 @@
         "ui.js"
       ],
       "layout_comment": "/* Layout: six sections in page order (Koch islands 117-118, islands and lakes 121, nonlumped curdling 124, cross-lumped 125, knotted Peano 126, Bernoulli percolation 126-130), each a computed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "cotton-prices",
+      "title": "Scaling in Cotton Prices",
+      "plates": "Plate 340",
+      "chapter": 37,
+      "scripts": [
+        "shared/draw.js",
+        "script.js"
+      ],
+      "layout_comment": "/* Layout: Plate 340's doubly logarithmic chart with a draggable stable curve, then the scaling-principle simulations, each a figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
     }
   ]
 }

@@ -176,7 +176,7 @@ Update this file in the same pull request as the work it records.
 | :- | :- | :- | :- | :- | :- |
 | Figure, p. 329 | 329 | A spin impurity's spread: Pascal's triangle mod 2, whose downsized limit is the Sierpiński gasket | exact | done | lattice-physics |
 | (concept) | 326–333 | Weak against strong convergence; the self-avoiding walk (D = 4/3); Leopold–Langbein rivers | random | done | lattice-physics |
-| 340 | 340 | Original evidence for scaling in economics (cotton prices) | data | todo | |
+| 340 | 340 | Original evidence for scaling in economics (cotton prices) | data | done | cotton-prices |
 
 ## XII Of men and ideas (chapters 40–42)
 
@@ -211,5 +211,5 @@ Each chapter session should add the chapter's main ideas here, alongside its pla
 - disc and ball tremas: saturation, critical dimensions, lunar craters and galactic voids (chapter 33; the Moon-saturation section of the disc-tremas page);
 - lacunarity (chapter 34; on the carpets-lacunarity page, with the mid-line dusts, the gap census's prefactor F and the mass-in-a-window measures);
 - weak against strong convergence, and the self-avoiding walk (chapter 36 — done, on the lattice-physics page);
-- scaling in prices and in word frequencies (chapters 37–38);
+- scaling in prices and in word frequencies (chapters 37–38); the price half (the scaling principle, discontinuity, infinite variance) is on the cotton-prices page;
 - the prehistory of dimension, scaling and the monsters (chapter 41): done, on the historical-sketches page.
