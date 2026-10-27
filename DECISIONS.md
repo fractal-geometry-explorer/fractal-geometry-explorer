@@ -236,6 +236,16 @@ All six plate groups are random (`random`/`render`), so they are matched statist
 - The chapter's concepts went on the "Concepts without a plate" list: Korčak's law for island areas (Pr(A > a) = F·a⁻ᴮ, with 2B = D extended from Koch coastlines to Brown zerosets), the asymmetry between islands, deadvalleys and lakes, cups and the Devil's terraces (the filled relief B\*ₕ, whose vertical cut is a Lévy devil's staircase — the book points to Plates 286–287 in chapter 31), rivers and watersheds losing their symmetry once altitude exists, and the eroded Brown model B\*ₕ with dimension between 2 and 3 − H.
 - If a page is ever built for these ideas, the natural home is with chapter 31's Lévy staircases (Plates 286–287): the one-dimensional cup construction — fill every dip of a Brown line-to-line function to its brim — is exactly the staircase those plates draw.
 
+## Part X, chapter 34
+
+**Plate 318, carpets' lacunarity.**
+- Both generators were read from the caption box at 600 dpi: a 7×7 grid with 9 cells removed — on the left the central 3×3 block, on the right the nine cells at rows and columns {1, 3, 5} (0-indexed from the top left). Both keep N = 40, so D = log 40/log 7 ≈ 1.8957.
+- The printed figures are stage 2 of each generator. Rendered and fitted over the scan, both agree with the book in all 2,401 (49×49) cells — an exact match, nothing reconstructed.
+- The page's carpets draw from cached exact-occupancy images (stages 1–3, one image pixel per cell), upscaled with smoothing off so zoomed cells stay crisp squares; detail finer than a pixel is dimmed by its area share, 40/49 per missing stage (the carpet analogue of the sub-pixel dust rule).
+- **Mid-line dusts.** The chapter's "horizontal mid section" examples (the text says "gasket" but means these carpets) are Cantor dusts with N = 4, r = 1/7: left keeps columns {0, 1, 5, 6} (clumped, one gap of 3/7), right {0, 2, 4, 6} (spread, three gaps of 1/7). The book draws them only inside the carpets; the bar-by-stages figure follows Plate 80's convention.
+- **Measures.** The gap-census and mass-in-window figures are this page's illustrations of the text (the book draws no charts). Census prefactors fitted through the stairs' corners: F ≈ 0.351 clumped against 0.546 spread — lacunarity up, prefactor down, as the chapter claims. Exact curiosity, verified numerically: with the book's window 2R = 2/7 the spread dust's window mass is identically 1/4 (zero variance; the {0,2,4,6} generator splits any half of a cell into equal mass), while the clumped dust's ranges 0 to 1/2, confirming the text's "from 0 to 1/2" (the OCR's "4%" is ½).
+- Succolarity is raised in the chapter but explicitly left unmeasured; the page says so rather than inventing a measure.
+
 ## Part XII, chapter 40 (Biographical sketches)
 
 - **A text chapter.** Pages 391–404 print no plates. The only artwork is Jean Effel's drawing on page 404 (dated January 30, 1964, reproduced in the book by his permission), kind `art`: described on the page, not reproduced.
