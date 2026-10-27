@@ -113,8 +113,8 @@ Update this file in the same pull request as the work it records.
 
 | Plate | Page | Title | Kind | Status | Site page |
 | :- | :- | :- | :- | :- | :- |
-| 218–219 | 218–219 | Implementation of Hoyle's model by random curdling in a grid | random | todo | |
-| 220–223 | 220–223 | Novikov–Stewart random curds; contact clusters | random | todo | |
+| 218–219 | 218–219 | Implementation of Hoyle's model by random curdling in a grid | random | done | random-curds |
+| 220–223 | 220–223 | Novikov–Stewart random curds; contact clusters | random | done | random-curds |
 | 228 | 228 | Random Koch coastline (D = 1.6131) | random | todo | |
 | 229 | 229 | Random Peano curve (D = 2) | random | todo | |
 | 230 | 230 | Triangle and squig curve | random | todo | |
@@ -198,6 +198,7 @@ Each chapter session should add the chapter's main ideas here, alongside its pla
 - percolation (chapter 13);
 - surfaces with positive volume: Cantor dusts of positive measure, Osgood's curve of positive area, and the arteries-and-veins model of flesh (chapter 15, which prints no plates);
 - the diameter exponent of trees (chapter 17);
+- canonical curdling, the Bienaymé birth-and-death criticality and D* = log ⟨N⟩/log b (chapter 23; on the random-curds page);
 - 1/f noise and scaling nets (chapter 27): the Joseph effect, Hurst's R/S and the spectrum are on the fractional-trails page;
 - island, lake and cup areas: Korčak's law Pr(A > a) = F·a⁻ᴮ with B = D/2, deadvalleys, cups and the Devil's terraces, the eroded Brown model (chapter 29, pages 272–276 — the chapter prints no figure);
 - Lévy flights and dusts (chapters 31–32);

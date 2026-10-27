@@ -192,6 +192,18 @@
         "ui.js"
       ],
       "layout_comment": "/* Layout: Plate 95 (the multiuniverse, flat and in space), Plate 96 (the flat D = 1 pattern) and the chapter's mass-and-dark-sky concept, each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "random-curds",
+      "title": "Random Curds",
+      "plates": "Plates 218–223",
+      "chapter": 23,
+      "scripts": [
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: Hoyle curdling (218–219), Novikov–Stewart percolation (220–223) and the canonical-curdling concept, each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
     }
   ]
 }
