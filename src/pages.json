@@ -289,6 +289,18 @@
         "ui.js"
       ],
       "layout_comment": "/* Layout: the page-329 spin figure, the two-kinds-of-convergence demo, the self-avoiding walk and the river network, each a figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "islands-clusters",
+      "title": "Islands, Clusters and Percolation",
+      "plates": "Chapter 13 figures",
+      "chapter": 13,
+      "scripts": [
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: six sections in page order (Koch islands 117-118, islands and lakes 121, nonlumped curdling 124, cross-lumped 125, knotted Peano 126, Bernoulli percolation 126-130), each a computed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
     }
   ]
 }

@@ -147,6 +147,38 @@ Conventions used below:
 - **The section argument.** Computed exactly, not simulated: randomize the curdling (each subcell kept with probability p = 3^(D−3)); a straight probe's trace is a branching process with Binomial(3, p) offspring, mean 3^(D−2), so it dies out surely for D ≤ 2 and survives with positive probability for D > 2 — extinction iterates q → (1 − p + pq)³. Chapter 23 is cited by the book as proving the theorem for a simple class; the galaxies' contrast (projections must vanish, D < 2, D ≈ 1.23) is drawn on the same chart.
 - The chapter's open topology question (dust vs vortex tubes vs sheets; kurtosis tests determine only D) is reported as open on the page.
 
+## Part IV, chapter 13 (pages 116–130, islands-clusters)
+
+Chapter 13 prints no numbered plates; its six figures sit in the running text. All were measured on the scan at 600 dpi.
+
+**Figures, pp. 117–118, Koch continent and islands (N = 16, r = 1/8, D = 4/3).**
+- p. 117: the coastline generator is 10 links on the 8-lattice, straight except one unit step up over [3/8, 4/8]; the island generator is a 1×2 rectangle loop over x ∈ [1/8, 2/8], floating one unit above the coast. D_c = log 10/log 8 ≈ 1.1073.
+- p. 118: straight 8-link coastline plus a 2×2 square loop over x ∈ [1/8, 3/8], one unit up. D_c = 1.
+- **Orientation rule.** Land stays on the right of travel everywhere: the coast runs 0 → 1 with land below, island loops run clockwise (sub-islands outside, on the sea side), lake loops counterclockwise. The book draws only each generator and one further stage, so placing every copy as drawn (no mirror, no reversal) is a choice — the simplest consistent with those drawings, and confirmed by the p. 121 teragon.
+
+**Figure, p. 121, islands and lakes (N = 18, r = 1/6, D = log 18/log 6 ≈ 1.6131).**
+- Straight 6-link coastline; a 2×1 island loop over [1/6, 3/6], one unit up; a 2×1 lake loop under [3/6, 5/6], one unit down.
+- The printed advanced teragon is **stage 3 on a square initiator** (clockwise, land inside). The reconstruction reproduces its pinwheel of four inner lakes, the four islands floating off the sides, the islands inside the lakes and all the satellite fringes. Nesting levels: sea 0, land 1, lake 2, …
+
+**Figure, p. 124, nonlumped curdling (b = 4).** Kept cells, rows top to bottom:
+- A `#### / #..# / #..# / ####` N = 12, connected at every stage (carpet relative).
+- B `#..# / #... / #.#. / #.#.` N = 7; largest cluster is the left column, exactly 4^k cells at stage k → intervals, D_c = 1 (maximum attained).
+- C `#.#. / #... / #### / #...` N = 8; largest component 7 cells, 7^k at stage k → trees with D_c = log 7/log 4 (maximum attained).
+- E `###. / #... / ###. / #...` N = 8, one connected F-shape, but its copies split: largest cluster is only 2·4^k cells → D_c → 1, the maximum log 8/log 4 is **not** attained, as the text says.
+- F `#..# / .... / .... / #..#` N = 4, dust from stage 2 on.
+- All five second stages printed under the generators follow with nothing left to choose.
+
+**Figure, p. 125, cross-lumped curdling (b = 3).**
+- Left: `#.# / #.. / #.#` N = 5, D ≈ 1.4650. The columns lump into one spine growing exactly 3× per stage, D_c = 1.
+- Right: `#.# / #.. / ###` N = 6, D ≈ 1.6309. The largest cluster's growth ratio climbs to ≈ 5.84 per stage (measured to stage 6), so D_c ≈ 1.60 — the book's fractional b^D_c. The exact value would need the lumping series Σ aₘxᵐ = 1; the page reports the measured value and says so.
+
+**Figure, p. 126, knotted Peano generator (N = 17, r = 1/√17, D = 2).**
+- 17 links from (0,0) to (4,−1) on the square lattice tilted by arctan(1/4). Lattice path: (0,0) (1,0) (2,0) (2,1) (1,1) (1,2) (1,3) (2,3) (2,2) (3,2) (3,3) (4,3) (4,2) (3,2) (3,1) (4,1) (4,0) (4,−1); the vertex (3,2) is visited twice — the generator's one self-contact.
+- Per-link codes [0,2,2,0,2,0,0,2,0,2,0,0,0,2,2,0,2] (reversals only, no mirrors), fitted to the printed second stage: mean distance 0.01 px at 600 dpi, an exact match.
+- Verified at stages 1–3: the teragon repeats no edge and visits no vertex more than twice (contacts 1, 18, 307 = 17·cₙ₋₁ + 1); crossings zero. The page's "knotted-off preclusters" view flood-fills the open components of the complement, which is what the text says the clusters are limits of.
+
+**Percolation (pp. 126–130).** The chapter prints no percolation figure in these pages (the critical-cluster plate is with chapter 14). The page's Bernoulli bond-percolation lattice is a **seeded simulation**, labelled as such, with p_crit = 1/2 and the D_c ≈ 1.89 formulas quoted from the text. The p. 129 sub/supercritical initiators (eight ½ξ squares around a hole; the even-coordinate grid lines) are described in the note rather than drawn.
+
 ## Part VIII, chapter 23
 
 **Plates 218–219, Hoyle curdling (page 218–219).**

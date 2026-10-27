@@ -1,0 +1,306 @@
+<title>Islands, Clusters and Percolation</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.mini svg.gen { height: 66px; }
+.minis { display: flex; flex-wrap: wrap; gap: 8px; }
+.minis .mini { flex: 1 1 120px; }
+.gengrid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; }
+.gengrid button { padding: 6px 0 2px; display: grid; justify-items: center; gap: 2px; background: var(--surface); border: 1px solid var(--rule); cursor: pointer; color: var(--text); font: 600 12px/1 var(--f-mono); }
+.gengrid button svg { width: 34px; height: 34px; display: block; }
+.gengrid button[aria-pressed="true"] { background: var(--text); color: var(--page); border-color: var(--text); }
+.gengrid button[aria-pressed="true"] svg rect.on { fill: var(--page); }
+.gengrid svg rect.on { fill: currentColor; }
+.gengrid svg rect.frame { fill: none; stroke: currentColor; stroke-opacity: 0.45; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 13, "Islands, clusters, and percolation; diameter–number relations" · pages 116–130</p>
+    <h1><span class="plate-no">Chapter 13</span><span class="lozenge" aria-hidden="true"></span><span>Islands, Clusters and Percolation</span></h1>
+    <p class="dek">How many islands surround Britain's coast? When a Koch generator is allowed to split into disconnected pieces, each stage seeds new islands, and their sizes follow the empirical law Korčak found in atlases: the number of islands larger than a is proportional to a<sup>−D/2</sup>. The same diameter–number relation governs clusters made by curdling and by Peano curves with controlled self-contacts, and it gives a geometric language for a central problem of physics: percolation. Every figure is computed from the rules in the chapter.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#korcak"><b>117–120</b> Koch islands</a>
+    <a href="#lakes"><b>121</b> Islands and lakes</a>
+    <a href="#curdling"><b>124</b> Curdling clusters</a>
+    <a href="#cross"><b>125</b> Cross-lumped</a>
+    <a href="#peano"><b>126</b> Knotted Peano</a>
+    <a href="#perc"><b>126–130</b> Percolation</a>
+  </nav>
+
+  <!-- ===================== KOCH ISLANDS ===================== -->
+  <section class="plate" id="korcak">
+    <div class="plate-head">
+      <p class="no">Figures, pages 117–118 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>A Koch continent and its islands</h2>
+      <p class="dim" id="dimA">N = 16, r = 1/8 · D = log 16/log 8 = 4/3 · each coastline D<sub>c</sub> = log 10/log 8 ≈ 1.1073</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wA">
+          <canvas id="cA" role="img" aria-label="Koch continent and islands"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cAt">Continent and islands</strong> · stage <span id="cAs">3</span> · <span id="cAn"></span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The generator splits into two parts. A connected broken line of N<sub>c</sub> links joins 0 to 1: the <i>coastline generator</i>. The remaining N − N<sub>c</sub> links form a closed loop that seeds a new island at every stage: the <i>island generator</i>. Sub-islands always stay on the sea side — left of the coastline going from 0 to 1, left of the island loop going clockwise. The limit has two dimensions: D = log N/log(1/r) for all coastlines lumped together, D<sub>c</sub> = log N<sub>c</sub>/log(1/r) for each one alone. In the second generator the coastline is straight: its islands are plain rectangles, and D measures fragmentation alone, not wiggliness.</p>
+        <div class="minis">
+          <div class="mini" aria-label="Generator of page 117">
+            <svg class="gen" viewBox="-0.06 -0.48 1.12 0.6" aria-hidden="true" id="miniA1"></svg>
+            <div class="fx">p. 117 · N<sub>c</sub> = 10, D<sub>c</sub> ≈ 1.107</div>
+          </div>
+          <div class="mini" aria-label="Generator of page 118">
+            <svg class="gen" viewBox="-0.06 -0.48 1.12 0.6" aria-hidden="true" id="miniA2"></svg>
+            <div class="fx">p. 118 · N<sub>c</sub> = 8, D<sub>c</sub> = 1</div>
+          </div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Generator</span></div>
+          <div class="steps words" id="gA" role="group" aria-label="Generator"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mA" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="sAv">stage 3</span></div>
+          <div class="steps" id="sA" role="group" aria-label="Stage"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="preA1">Show the p. 117 figure</button>
+          <button type="button" class="btn" id="preA2">p. 118</button>
+        </div>
+        <p class="readline" id="infoA" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Links</dt><dd id="rAa">—</dd></div>
+          <div><dt>Islands so far</dt><dd id="rAb">—</dd></div>
+          <div><dt>D</dt><dd>4/3</dd></div>
+          <div><dt>D<sub>c</sub></dt><dd id="rAc">—</dd></div>
+        </dl>
+        <p class="note">The generators are read off the two caption boxes; the step in the p. 117 coastline sits on [3/8, 4/8], and each island floats one lattice unit above the coast. The book draws only the generator and the island generator's next stage, so the placement of every copy as drawn (no mirror, no reversal) is the simplest choice consistent with those drawings; the p. 121 figure below, which the book does print at an advanced stage, confirms that choice. The Korčak staircase counts the islands of this construction by diameter λ = √a: as λ shrinks by r, the count multiplies by N, so the staircase descends with log–log slope −D.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ISLANDS AND LAKES ===================== -->
+  <section class="plate" id="lakes">
+    <div class="plate-head">
+      <p class="no">Figure, page 121 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Islands and lakes, nested without bound</h2>
+      <p class="dim">N = 18, r = 1/6 · D = log 18/log 6 ≈ 1.6131 · every coastline is rectifiable: D<sub>c</sub> = 1</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wB">
+          <canvas id="cB" role="img" aria-label="Islands and lakes teragon"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cBt">Advanced teragon</strong> · stage <span id="cBs">3</span> · <span id="cBn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Relieve the island generator from the requirement of staying to the left. Placed to the right of the coastline it digs lakes instead of raising islands, and one generator may carry both. This one adds, to a straight six-link coastline, one island loop above and one lake loop below. Initiated by a square, it nests islands within lakes within islands without bound: the final fractal is a σ-loop. The land never reaches a continent — extrapolated outward, the biggest island is almost surely found to lie off a bigger island's shore, and so on ad infinitum.</p>
+        <div class="mini" aria-label="Generator of page 121">
+          <svg class="gen" viewBox="-0.06 -0.44 1.12 0.84" aria-hidden="true" id="miniB"></svg>
+          <div class="fx">N = 18, r = 1/6, D ≈ 1.6131</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mB" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="sBv">stage 3</span></div>
+          <div class="steps" id="sB" role="group" aria-label="Stage"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="preB">Show the p. 121 teragon as printed</button>
+        </div>
+        <p class="readline" id="infoB" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Links</dt><dd id="rBa">—</dd></div>
+          <div><dt>Islands</dt><dd id="rBb">—</dd></div>
+          <div><dt>Lakes</dt><dd id="rBc">—</dd></div>
+          <div><dt>Deepest nesting</dt><dd id="rBd">—</dd></div>
+        </dl>
+        <p class="note">The island sits over [1/6, 3/6] and the lake under [3/6, 5/6], read off the caption box at 600 dpi. The printed teragon is the third stage on a square initiator; this reconstruction reproduces its pinwheel of four lakes, the four islands floating off the sides, and their satellites. The area of an island may be taken as total area or as land within its coastline — the choice moves the prefactor of Nr(A &gt; a), never the exponent D/2.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== NONLUMPED CURDLING ===================== -->
+  <section class="plate" id="curdling">
+    <div class="plate-head">
+      <p class="no">Figure, page 124 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Nonlumped curdling clusters</h2>
+      <p class="dim" id="dimC">Generator A: N = 12 of b² = 16 cells · D = log 12/log 4 ≈ 1.7925</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wC">
+          <canvas id="cC" role="img" aria-label="Curdling clusters"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cCt">Curdling</strong> · stage <span id="cCs">3</span> · <span id="cCn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Cantor curdling carried to the plane: keep N of the b × b cells, then curdle each kept cell in turn. The limit has zero area, and its topology is set entirely by which cells the generator keeps. A keeps a ring and stays connected — a Sierpiński carpet relative, met again in Chapter 14. F keeps four corners and crumbles to dust. B, C and E split into <i>preclusters</i> that thin and wiggle forever: B's largest piece is a straight interval, C's a fractal tree with D<sub>c</sub> = log 7/log 4, and E's F-shaped pieces keep splitting, so its clusters, too, end as intervals.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Generator</span></div>
+          <div class="gengrid" id="gC" role="group" aria-label="Generator"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Colour</span></div>
+          <div class="steps words" id="mC" role="group" aria-label="Colouring"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="sCv">stage 3</span></div>
+          <div class="steps" id="sC" role="group" aria-label="Stage"></div>
+        </div>
+        <p class="readline" id="infoC" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Cells</dt><dd id="rCa">—</dd></div>
+          <div><dt>Clusters</dt><dd id="rCb">—</dd></div>
+          <div><dt>Largest</dt><dd id="rCc">—</dd></div>
+          <div><dt>D<sub>c</sub> of largest</dt><dd id="rCd">—</dd></div>
+        </dl>
+        <p class="note">The five kept-cell patterns were read off the page at 600 dpi; the second stages printed under them follow from the patterns, with nothing left to choose. Because each newborn precluster lies inside a single cell of the previous lattice ("nonlumped"), the cluster dimension is log N<sub>c</sub>/log b with N<sub>c</sub> an integer — at most the largest component of the generator, a maximum B and C attain and E does not. The D<sub>c</sub> readout is measured from the largest cluster at the drawn stage.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CROSS-LUMPED ===================== -->
+  <section class="plate" id="cross">
+    <div class="plate-head">
+      <p class="no">Figure, page 125 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Cross-lumped curdling clusters</h2>
+      <p class="dim" id="dimD">Left generator: N = 5 of 9 cells · D = log 5/log 3 ≈ 1.4650</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wD">
+          <canvas id="cD" role="img" aria-label="Cross-lumped curdling clusters"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cDt">Cross-lumped curdling</strong> · stage <span id="cDs">4</span> · <span id="cDn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Now let kept cells in different cells of the coarser lattice touch: each newborn precluster "cross lumps" contributions from several of them. Every contact cluster then combines an integer number of copies of itself at scale 1/b with many lumped-in copies at smaller scales 1/b<sup>m</sup>, so the cluster dimension solves Σ a<sub>m</sub>x<sup>m</sup> = 1 with x = b<sup>−D<sub>c</sub></sup> — and b<sup>D<sub>c</sub></sup> need not be an integer. The diameter–number relation Nr(Λ &gt; λ) ∝ λ<sup>−D</sup> still holds for small λ.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Generator</span></div>
+          <div class="gengrid" id="gD" role="group" aria-label="Generator"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Colour</span></div>
+          <div class="steps words" id="mD" role="group" aria-label="Colouring"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="sDv">stage 4</span></div>
+          <div class="steps" id="sD" role="group" aria-label="Stage"></div>
+        </div>
+        <p class="readline" id="infoD" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Cells</dt><dd id="rDa">—</dd></div>
+          <div><dt>Clusters</dt><dd id="rDb">—</dd></div>
+          <div><dt>Largest</dt><dd id="rDc">—</dd></div>
+          <div><dt>D<sub>c</sub> measured</dt><dd id="rDd">—</dd></div>
+        </dl>
+        <p class="note">The two kept-cell patterns were read off the page at 600 dpi. For the left generator the vertical pieces lump into one straight spine: the largest cluster grows exactly 3× per stage, D<sub>c</sub> = 1. For the right one the measured growth ratio climbs toward ≈ 5.84 per stage, giving the fractional D<sub>c</sub> ≈ 1.60 &lt; D ≈ 1.63 — the book's point that b<sup>D<sub>c</sub></sup> "need not be an integer deducible from the generator by simple inspection". Estimating D from large diameters is biased low, as the chapter warns.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== KNOTTED PEANO ===================== -->
+  <section class="plate" id="peano">
+    <div class="plate-head">
+      <p class="no">Figure, page 126 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Knotted Peano monsters, tamed</h2>
+      <p class="dim">N = 17, r = 1/√17 · D = 2 · one self-contact per copy of the generator</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wE">
+          <canvas id="cE" role="img" aria-label="Knotted Peano curve"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cEt">Knotted Peano curve</strong> · stage <span id="cEs">2</span> · <span id="cEn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">A plane-filling collection of clusters (D = 2) cannot be made by curdling. Mandelbrot's alternative is a Peano curve whose teragons never cross themselves but touch themselves at carefully controlled points. Each point of self-contact "knots off" an open precluster; chunks of it are knotted away in turn, and what survives thins down to a highly ramified curve — a contact cluster whose diameter is fixed at birth, with the familiar distribution Nr(Λ &gt; λ) ∝ λ<sup>−2</sup>. These clusters are limits not of curves but of the open components of a curve's complement.</p>
+        <div class="mini" aria-label="Generator of page 126">
+          <svg class="gen" viewBox="-0.24 -1.02 1.32 1.12" aria-hidden="true" id="miniE"></svg>
+          <div class="fx">17 links on a lattice tilted by arctan ¼</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mE" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="sEv">stage 2</span></div>
+          <div class="steps" id="sE" role="group" aria-label="Stage"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="preE">Show the p. 126 figure as printed</button>
+        </div>
+        <p class="readline" id="infoE" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Links</dt><dd id="rEa">—</dd></div>
+          <div><dt>Self-contacts</dt><dd id="rEb">—</dd></div>
+          <div><dt>Crossings</dt><dd>0</dd></div>
+          <div><dt>D</dt><dd>2</dd></div>
+        </dl>
+        <p class="note">The generator's 17 vertices were measured from the scan: 17 links of length 1/√17 running from (0,0) to (4,−1) on the tilted lattice, with one vertex visited twice. Each link's placement (as drawn or reversed; no mirrors) was fitted to the printed second stage, which this reconstruction reproduces with a mean deviation of 0.01 px at 600 dpi. At every stage the teragon repeats no edge and visits no vertex more than twice — contacts, never crossings.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PERCOLATION ===================== -->
+  <section class="plate" id="perc">
+    <div class="plate-head">
+      <p class="no">Pages 126–130 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Bernoulli percolation</h2>
+      <p class="dim">Bond percolation on the square lattice · p<sub>crit</sub> = ½ · critical clusters D<sub>c</sub> ≈ 1.89 (for E = 2)</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wF">
+          <canvas id="cF" role="img" aria-label="Bond percolation lattice"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>Bernoulli lattice</strong> · <span id="cFn"></span> · copper in ink, the largest cluster in blue, a percolating cluster in red</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Build a lattice of sticks, each independently copper with probability p and insulating vinyl otherwise. Maximal connected sets of copper sticks are <i>copper clusters</i>; when one joins top to bottom, current flows and the lattice <i>percolates</i>. Hammersley's remarkable finding is a threshold: as the lattice grows, percolation becomes almost certain for p &gt; p<sub>crit</sub> and almost impossible for p &lt; p<sub>crit</sub> — and for bonds on the square lattice p<sub>crit</sub> = ½ exactly. At the threshold the clusters are "all skin and no flesh", ramified and stringy at every scale. Mandelbrot's conjecture, since accepted: critical clusters are fractal σ-curves with D = 2 and 1 &lt; D<sub>c</sub> &lt; D.</p>
+        <label class="slider" for="pF">
+          <div class="label-row"><span class="label">Probability of copper</span><span class="value" id="pFv">p = 0.50</span></div>
+          <input type="range" id="pF" min="0" max="100" value="50">
+        </label>
+        <div class="group">
+          <div class="label-row"><span class="label">Lattice</span><span class="value" id="nFv">48 × 48</span></div>
+          <div class="steps" id="nF" role="group" aria-label="Lattice size"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn" id="seedF">New throw of the die</button>
+          <button type="button" class="btn primary" id="preF">Back to p = ½, seed 1</button>
+        </div>
+        <p class="readline" id="infoF" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Percolates</dt><dd id="rFa">—</dd></div>
+          <div><dt>Copper sticks</dt><dd id="rFb">—</dd></div>
+          <div><dt>Largest cluster</dt><dd id="rFc">—</dd></div>
+          <div><dt>Seed</dt><dd id="rFd">1</dd></div>
+        </dl>
+        <p class="note">The lattice is a seeded simulation — press "New throw" for another. Matching percolation's exponents to the σ-cluster geometry gives D<sub>c</sub> = E/(τ−1) = E/(1+δ<sup>−1</sup>) and D<sub>c</sub> = 1 + (E−η)/2; for E = 2 these agree at D<sub>c</sub> ≈ 1.89. Early simulations gave the biased estimate ≈ 1.77 — close to the mass exponent Q = 2D<sub>c</sub> − D, which briefly misled several authors, Mandelbrot included, into calling Q a dimension. The chapter's p. 129 initiators for noncritical clusters (a ring of eight ½ξ squares for p &lt; p<sub>crit</sub>, the even-coordinate grid lines for p &gt; p<sub>crit</sub>) set the outer cutoff ξ; they are described, not drawn, here.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 13, pages 116–130. Every figure is computed from the rules in the chapter's text and caption boxes; the knotted Peano placements and the p. 121 teragon were fitted to the scans as noted under each figure. The percolation lattice is a simulation of the physics the chapter models, not a reproduction of a printed figure. Companion page: <a href="https://claude.ai/artifact/QxRja4otEyH8dMeU8Uy4UY" target="_blank" rel="noopener">Sweeps, Rivers and Trees</a> (Plates 68–73).</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>
