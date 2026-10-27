@@ -180,6 +180,18 @@
         "script.js"
       ],
       "layout_comment": "/* Layout: one timeline of the six sketched lives beside the chapter's prelude, then one section per sketch, the biography beside its key dates. One column under 900px. */"
+    },
+    {
+      "slug": "fournier-universe",
+      "title": "Fournier Universes",
+      "plates": "Plates 95–96",
+      "chapter": 9,
+      "scripts": [
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: Plate 95 (the multiuniverse, flat and in space), Plate 96 (the flat D = 1 pattern) and the chapter's mass-and-dark-sky concept, each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
     }
   ]
 }

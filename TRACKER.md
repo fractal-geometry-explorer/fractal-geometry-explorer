@@ -67,8 +67,8 @@ Update this file in the same pull request as the work it records.
 
 | Plate | Page | Title | Kind | Status | Site page |
 | :- | :- | :- | :- | :- | :- |
-| 95 | 95 | Projection of Fournier's multiuniverse (D ≈ 0.8270) | exact | todo | |
-| 96 | 96 | A flat Fournier universe with D = 1 | exact | todo | |
+| 95 | 95 | Projection of Fournier's multiuniverse (D ≈ 0.8270) | exact | done | fournier-universe |
+| 96 | 96 | A flat Fournier universe with D = 1 | exact | done | fournier-universe |
 | (concept) | 97–105 | Geometry of turbulence; intermittency (chapter 10, no plates) | random | done | turbulence-intermittency |
 
 ## IV Scaling fractals (chapters 12–14)
