@@ -183,6 +183,15 @@ Conventions used below:
 - Hull, gaps and boundary are classified on the raster by flood-filling the exterior from the border (4-connectivity): Plate 242 is the hull silhouette (trail plus gaps, solid black); Plate 243 is the loop as a net, trail black and gap tremas gray. The raster is sized to the walk's bounding box; the book drew 200,000 steps on (1,200)².
 - Checked numerically at 200,000 steps: the boundary's box dimension comes out 1.26–1.32 against the conjectured 4/3 (proved by Lawler, Schramm & Werner 2001 — noted on the page), and the caption's G-length vs G-area test gives slope ≈ 0.68 against D/2 = 2/3. Both run live per sample as readouts.
 
+## Part VIII, chapters 23–26
+
+**Chapter 26, random midpoint displacement (page `midpoint-displacement`).**
+- **The displacement formula** 2^(−2(k+1)/D) − 2^(−2(k/D+1)) is the Koch geometry d² = L′² − (L/2)² with nominal side L_k = 2^(−k/D). Checked: with sides alternating by stage and D = log 4/log 3 the deterministic rule reproduces the triadic Koch curve exactly (stage-2 points land on 0, 1/3, (1/2, √3/6), 2/3, 1; verified numerically to stage 8, zero crossings); with a constant side at D = 2 it gives Lévy's C curve.
+- **Normalization.** The randomized plane curve uses an isotropic 2D Gaussian whose *total* mean square equals the formula, so ⟨|ΔB*|²⟩ = Δt^(2H) summed over both coordinates; the Peano–Brown case D = 2 is then Brownian motion with E|ΔB|² = Δt (not Δt per coordinate).
+- **Line construction.** Midpoint offset variance 2^(−2Hk)(2^(−2H) − 1/4) gives ⟨ΔX²⟩ = Δt^(2H) on dyadic intervals exactly (Monte Carlo agrees to <1%). Over half-slid windows the measured mean square is smaller — at H = 0.85, Δt = 1/32 the ratio is ≈ 0.88 — sitting between the book's lower bound 2^(1−2H) ≈ 0.62 and 1, as the text claims. The page measures this live over 4,000 curves.
+- **Strata.** The book fixes the Poisson rates b^k but never the amplitude of a stratum's values; the page uses b^(−Hk), the choice that matches the midpoint scheme stage for stage. Flagged as a reconstruction on the page.
+- **Plate 246, the computer bug.** This plate cannot be recomputed: the program and its bug are not recorded anywhere, and the caption itself says "this order is hidden, and no other order is apparent". The caption does say the corrected program's output became Plates 306–309 (chapter 33's round tremas). The page therefore has no "Show Plate 246 as printed" preset — the only plate on the site without one — and shows instead the strict order the program was meant to draw (round tremas, Nr(> u) ∝ u⁻²) and a deliberately invented bug (a pen that lags along each ray from the centre), labelled as a stand-in, not a reconstruction. Tracker kind set to "random / art".
+
 ## Part IX, chapter 27
 
 **Plate 255, fractional Brown trails.**

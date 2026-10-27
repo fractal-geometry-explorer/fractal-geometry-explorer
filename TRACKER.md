@@ -121,7 +121,7 @@ Update this file in the same pull request as the work it records.
 | 231 | 231 | A hexa-squig coastline | random | todo | |
 | 241 | 240–241 | A random walk approximating a Brown line-to-line function, and its zeroset | random | done | brown-trails |
 | 242–243 | 242–243 | Brown hulls and islands; self-avoiding Brownian motion | random | done | brown-trails |
-| 246 | 246 | The computer "bug" (opus 1) | random | todo | |
+| 246 | 246 | The computer "bug" (opus 1) | random / art | done | midpoint-displacement |
 | (concept) | 232– | Brownian motion and the Wiener sausage | random | done | wiener-sausage |
 | (concept) | 232–239 | The Brown trail as a randomized Peano curve | random | done | brown-trails |
 
@@ -195,6 +195,7 @@ Update this file in the same pull request as the work it records.
 Each chapter session should add the chapter's main ideas here, alongside its plates. Candidates so far:
 - similarity dimension (chapters 3 and 6);
 - coastline length against ruler size (chapter 5; partly on the Minkowski page);
+- random midpoint displacement, its creases, and Poisson strata (chapter 26; on the Plate 246 page);
 - length–area–volume relations (chapter 12);
 - percolation (chapter 13);
 - surfaces with positive volume: Cantor dusts of positive measure, Osgood's curve of positive area, and the arteries-and-veins model of flesh (chapter 15, which prints no plates);

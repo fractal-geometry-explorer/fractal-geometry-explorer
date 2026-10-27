@@ -264,6 +264,18 @@
         "ui.js"
       ],
       "layout_comment": "/* Layout: the computer bug (293), nonrandom subordination (295), the Lévy flight (296–297), the subordination cascade (298), the zoom (299) and the circumnavigation (300), each a figure beside its caption, controls and numbers; a sticky plate index on top. One column under 900px. */"
+    },
+    {
+      "slug": "midpoint-displacement",
+      "title": "Random Midpoint Displacement",
+      "plates": "Plate 246",
+      "chapter": 26,
+      "scripts": [
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: the midpoint-displacement curve, the creases, the Poisson strata and Plate 246's bug story, each a figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
     }
   ]
 }
