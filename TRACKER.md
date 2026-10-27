@@ -157,12 +157,12 @@ Update this file in the same pull request as the work it records.
 | :- | :- | :- | :- | :- | :- |
 | 285 | 285 | Random pattern of streets | random | todo | |
 | 286–287 | 286–287 | Paul Lévy's devilish staircases | random | todo | |
-| 293 | 293 | The computer "bug" as artist, opus 2 | random | todo | |
-| 295 | 295 | Nonrandom subordination: clustered fractal dust | exact | todo | |
-| 296–297 | 294–297 | Mandelbrot's early model clusters; Lévy flight and its stopovers (D = 1.26) | random | todo | |
-| 298 | 298 | Decrease of D by subordination | random | todo | |
-| 299 | 299 | Zooming toward a Lévy dust with D = 1.26 | random | todo | |
-| 300 | 300 | Circumnavigation of Lévy dusts | random | todo | |
+| 293 | 293 | The computer "bug" as artist, opus 2 | art | done | levy-dusts |
+| 295 | 295 | Nonrandom subordination: clustered fractal dust | exact | done | levy-dusts |
+| 296–297 | 294–297 | Mandelbrot's early model clusters; Lévy flight and its stopovers (D = 1.26) | random | done | levy-dusts |
+| 298 | 298 | Decrease of D by subordination | random | done | levy-dusts |
+| 299 | 299 | Zooming toward a Lévy dust with D = 1.26 | random | done | levy-dusts |
+| 300 | 300 | Circumnavigation of Lévy dusts | random | done | levy-dusts |
 | 306–307 | 306–307 | Smallish round tremas, in white; random slices of "Swiss cheese" | random | done | disc-tremas |
 | 308–309 | 308–309 | Larger round tremas, in black | random | done | disc-tremas |
 | 318 | 318 | Carpets' lacunarity | exact | done | carpets-lacunarity |
