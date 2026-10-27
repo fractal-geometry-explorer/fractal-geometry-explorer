@@ -276,6 +276,19 @@
         "ui.js"
       ],
       "layout_comment": "/* Layout: the midpoint-displacement curve, the creases, the Poisson strata and Plate 246's bug story, each a figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "lattice-physics",
+      "title": "Fractals in Lattice Physics",
+      "plates": "Figure, p. 329",
+      "chapter": 36,
+      "scripts": [
+        "shared/geometry.js",
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: the page-329 spin figure, the two-kinds-of-convergence demo, the self-avoiding walk and the river network, each a figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
     }
   ]
 }

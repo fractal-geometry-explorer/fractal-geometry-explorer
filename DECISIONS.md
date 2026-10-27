@@ -291,6 +291,18 @@ All six plate groups are random (`random`/`render`), so they are matched statist
 - **Measures.** The gap-census and mass-in-window figures are this page's illustrations of the text (the book draws no charts). Census prefactors fitted through the stairs' corners: F ≈ 0.351 clumped against 0.546 spread — lacunarity up, prefactor down, as the chapter claims. Exact curiosity, verified numerically: with the book's window 2R = 2/7 the spread dust's window mass is identically 1/4 (zero variance; the {0,2,4,6} generator splits any half of a cell into equal mass), while the clumped dust's ranges 0 to 1/2, confirming the text's "from 0 to 1/2" (the OCR's "4%" is ½).
 - Succolarity is raised in the chapter but explicitly left unmeasured; the page says so rather than inventing a measure.
 
+## Part XI, chapter 36 (lattice-physics page)
+
+**Figure, p. 329, the spin automaton.**
+- The text's rule — S(t, n) = −1 iff S(t−1, n−1) = S(t−1, n+1), started from a single +1 at n = 0 — reproduces the printed figure exactly: rows t = 0 to 13 in a fixed window |n| ≤ 13 (13 signs on even rows, 14 on odd; 189 signs in all, every one matching). The +'s are the odd binomial coefficients (Pascal's triangle mod 2, elementary automaton rule 90).
+- Grid measured at 600 dpi, in units of the half-column spacing u: row pitch 1.664u; plus glyph 0.80u × 0.78u, minus 0.70u long, stroke 0.105u.
+- Counting check behind D = log 3/log 2: row t carries 2^popcount(t) +'s, so the first 2^k rows hold exactly 3^k. The downsized view overlays the exact gasket (apex at the impurity, base corners (±T, −T)) on T rows of cells.
+
+**The chapter's other sections have no figures in the book; those panels are reconstructions, each flagged on the page.**
+- **"Strays by"** (two-kinds-of-convergence demo) is the one-sided Hausdorff distance from the new refinement to the previous one, sampled at an odd vertex step — every 4th vertex of a Koch stage *is* a previous-stage vertex, and sampling only those hides the distance entirely.
+- **Self-avoiding walks** are sampled by the pivot algorithm (random joint, random lattice symmetry, keep when self-avoiding; the shorter arm is transformed). The ensemble fit over n = 48 … 768 (16 walks each) gives slope ≈ 0.77–0.79, D ≈ 1.25–1.30 — near, not on, the asymptotic 3/4 and 4/3; the page says so rather than forcing the number.
+- **Rivers.** Leopold & Langbein's streams are self-avoiding walks with "various rather arbitrary decisions" against loops and snags, which the book does not specify. The page's streams erase any loop they close (loop-erased walks, dimension exactly 5/4, Hack exponent 5/8 = 0.625); the fit on 32²–64² grids wanders with the seed around 0.62–0.68, against Leopold & Langbein's 0.64. Drainage area and longest upstream length are computed leaves-up over the resulting forest; the fit uses cells draining ≥ 8 squares.
+
 ## Part XII, chapter 40 (Biographical sketches)
 
 - **A text chapter.** Pages 391–404 print no plates. The only artwork is Jean Effel's drawing on page 404 (dated January 30, 1964, reproduced in the book by his permission), kind `art`: described on the page, not reproduced.
