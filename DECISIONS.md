@@ -253,6 +253,16 @@ All six plate groups are random (`random`/`render`), so they are matched statist
 - **The whorls verse is quoted in full** (five lines, Richardson 1922, long out of copyright). The chapter stresses it parodies Swift, not De Morgan's little-fleas-have-greater-fleas variant, because Richardson believed only in a direct energy cascade; the page keeps that distinction.
 - **Bachelier's error** is paraphrased, not transcribed: the OCR of Lévy's letter garbles the exponent (v = cτ to some negative power as the step τ shrinks), so the page says only that the zigzag's speed was held constant where it must grow as the steps shorten.
 
+## Part XII, chapter 41 (Historical sketches)
+
+**Chapter 41, historical sketches (pages 405–421).**
+- The chapter is running text with no plates (checked page by page on the scan). The page is a concept page: the chapter's entries retold briefly, with three figures that are the site's own illustrations, flagged as such on the page — nothing reproduces printed artwork.
+- **Lebesgue's bricks.** The chapter quotes the story from Hurewicz & Wallman 1941 but prints no figure; the running-bond paving is our choice of the standard one. Offset courses give at most 3 closed bricks at a point, aligned courses 4, and the probe counts closed bricks exactly by snapping taps to edges and corners.
+- **Hyperbolic decay.** An illustration, not a data plot: von Schweidler's numbers (100-second intervals, 1.6 × 10⁷ seconds) are from the chapter's text, and no 1907 data was digitised. The mixture demo uses k log-spaced relaxation times weighted τ⁻ᵞ (the log-discretised gamma integral of the "distributed relaxation times" entry), scaled to the hyperbola by mean log offset over the measured band.
+- **Weierstrass figure.** W(t) = Σ b⁻ⁿᴴ cos(2π bⁿt), normalised by Σ b⁻ⁿᴴ; box dimension of the graph 2 − H; nowhere differentiable for H ≤ 1 by Hardy 1916 (ab ≥ 1 with a = b⁻ᴴ). The H slider stops at 0.2 (D ≤ 1.8) because terms past frequency 10⁹ would lose cos() to floating-point error, and at smaller H the dropped tail would be visible. Riemann view draws the partial sum of Σ n⁻² sin(n²t) to n = min(9000, 2.5·px-per-unit); Gerver 1970: derivative −1/2 at t = πp/q with p, q odd (the marked point is t = π, R(π) = 0).
+- **Topic split with chapter 39.** Agreed with the chapter-39 thread: this page keeps the Weierstrass *story* and a small historical figure; the mathematics (spectra, modified forms, kin) goes on mathematical-backup#weierstrass. No forward hyperlink from this page (it would be dead until that page merges); the chapter-39 PR may add the links both ways once both pages exist.
+- Chapters 40 (biographical sketches) and 42 (epilog) are other threads' work; this page's tracker row covers only chapter 41.
+
 ## Open questions
 
 - **The 13-interval generator.** Why does Plate 69's large circle use a different rule from the caption's second stage? This may be worth a sentence once the rest of chapter 7 is reviewed.

@@ -181,6 +181,7 @@ Update this file in the same pull request as the work it records.
 | :- | :- | :- | :- | :- | :- |
 | (sketches) | 391–404 | Chapter 40, six biographical sketches: Bachelier, Fournier d'Albe, Hurst, Lévy, Richardson, Zipf | data | done | biographical-sketches |
 | Drawing, p. 404 | 404 | Jean Effel's lecture drawing, "fournir vos questions à mes réponses" | art | done | biographical-sketches |
+| (concept) | 405–421 | Historical sketches: chimeras, dimension, Poincaré, old scaling evidence, Weierstrass | — | done | historical-sketches |
 
 ## Front matter and the update for the second printing (pages 458–468)
 
@@ -204,4 +205,5 @@ Each chapter session should add the chapter's main ideas here, alongside its pla
 - global dependence in Brown relief, and the horizon (chapter 28);
 - Lévy flights and dusts (chapters 31–32);
 - lacunarity (chapter 34; on the carpets-lacunarity page, with the mid-line dusts, the gap census's prefactor F and the mass-in-a-window measures);
-- scaling in prices and in word frequencies (chapters 37–38).
+- scaling in prices and in word frequencies (chapters 37–38);
+- the prehistory of dimension, scaling and the monsters (chapter 41): done, on the historical-sketches page.

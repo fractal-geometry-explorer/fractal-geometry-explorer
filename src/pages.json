@@ -228,6 +228,17 @@
         "ui.js"
       ],
       "layout_comment": "/* Layout: Plate 318's two carpets, the Cantor dusts along their mid lines, and the chapter's lacunarity measures (gap census and mass-in-window), each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "historical-sketches",
+      "title": "Historical Sketches",
+      "plates": "Pages 405–421",
+      "chapter": 41,
+      "scripts": [
+        "shared/draw.js",
+        "script.js"
+      ],
+      "layout_comment": "/* Layout: six entry sections in book order, three with a figure beside the entry's text and controls, three as prose; a sticky index on top. One column under 900px. */"
     }
   ]
 }
