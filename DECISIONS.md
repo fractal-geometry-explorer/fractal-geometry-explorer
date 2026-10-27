@@ -346,6 +346,16 @@ All six plate groups are random (`random`/`render`), so they are matched statist
 - **Stable tail computation.** The page computes Pr(X > x) live by Nolan's integral for β = 0, α > 1, with panels split where λV(θ) crosses 120·0.6^k and 12-node Gauss–Legendre per panel; α = 2 uses erfc. Checked against scipy's levy_stable over α ∈ [1.05, 2]: worst relative error 2e-3 (at α = 1.999), ~1e-5 at α = 1.7. Dragging the curve is a pure horizontal translation in log–log, so the curve shape is cached per α and per-series fits are table lookups.
 - **The simulations** (second section) are the page's own illustration — the book prints no figure for the chapter's argument. Stable draws by Chambers–Mallows–Stuck; the Brownian comparison record reuses the same (U, W) draws so the records coincide at D = 2.
 
+## Part XI, chapter 38
+
+**Chapter 38, scaling and power laws without geometry (page power-laws).**
+- The chapter prints no plates — checked against the scan, pages 341–348 are text only — so this is a concept page: every figure is computed from the chapter's formulas, and the page says so in the dek, under each figure and in the source line. The tracker row is "(concept)".
+- **Zipf prefactor.** The book stops at "approximating ρ through the average of its bounds" plus the normalization F⁻¹ = Σ(ρ + V)^(−1/D). Carrying the average through gives the closed form F = P₀·(V(N + 1)/2)^(1/D), with P₀ = 1 − Nr; the page uses it for the smooth law and labels it our own algebra. ΣP = P₀·Σ(Nr)ᵏ = 1 checks exactly.
+- **Words as a dust.** The book's base-(N + 1) digit construction is the case r = 1/(N + 1). The tree figure generalizes to arbitrary r by giving the space a share 1 − Nr and each letter a share r of every live branch, which keeps D = log N/log(1/r) for every r. A reconstruction, flagged on the page.
+- **Mixed bag (Mandelbrot 1963e).** The filters are our design: six datasets, each pooled from three batches scaled log-uniformly over ±1 decade; truths are Pareto D = 1.7 against lognormal σ = 1; the apparent tail slope is fitted between quantiles 0.8 and 0.99 of n = 8000 (fitting nearer the extreme order statistics drowned the effect in noise). Measured: the scaling truth's slopes stay within about ±0.1 of −1.7 across datasets and seeds; the lognormal's scatter over ≈0.6.
+- **The parables check out.** Lake widths 1600·N^(−0.8) give D = 1/0.8 = 1.25, expected remaining width 5 miles and 5m after sailing m, as the text says; Lotka's D = 2 makes the expected future equal the past.
+- **The salary pyramid.** The text's "exact pyramid (base equal to the square of the height)" is rendered as inverse income running down with each level's floor area equal to its head count, so the silhouette half-width grows like depth^(D/2) — straight-sided exactly at D = 2. Both axes are normalized independently to fit; our rendering choice, flagged on the page. The rank view's smooth curve is ρ = −V + (V(N + 1)/2)·U^(−D), the Zipf form with P₀ = 1.
+
 ## Part XII, chapter 40 (Biographical sketches)
 
 - **A text chapter.** Pages 391–404 print no plates. The only artwork is Jean Effel's drawing on page 404 (dated January 30, 1964, reproduced in the book by his permission), kind `art`: described on the page, not reproduced.
