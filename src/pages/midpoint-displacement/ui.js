@@ -208,66 +208,64 @@
   $('seedC').addEventListener('click', () => { stC.seed = (stC.seed * 48271 + 3) % 100000; dirtyC(); setC(false); });
 
   // ====================== Plate 246: the computer bug ======================
-  const stD = { mode: 'order', seed: 2 };
-  let fieldD = null, srcD = null;                 // the trema field and its rastered picture
-  const SRC_N = 1024;                             // source raster covers [0, 1] x [0, 1]
-  function fieldOf() {
-    if (!fieldD) { fieldD = tremaField(stD.seed); srcD = null; }
-    return fieldD;
+  // The reconstruction's fitted values (DECISIONS.md, chapter 26): about 150 cells across the
+  // picture, round tremas by the rank law with C = 0.1, a plain at 0.08 of the eye's height with
+  // spikes up to 0.24, heights skewed by u^9, and a view half-angle of atan(0.31) = 17 degrees.
+  const BUG = { cells: 150, C: 0.1, plain: 0.08, top: 0.24, k: 9, G: 0.31, seed: 9 };
+  const stD = { mode: 'bug', top: BUG.top, seed: BUG.seed, draft: false };
+  let relD = { key: '' }, tabD = { key: '' }, imgD = { key: '' };
+  function reliefOf() {
+    const key = `${stD.seed}|${stD.top}`;
+    if (relD.key !== key) relD = { key, R: bugRelief(stD.seed, { ...BUG, top: stD.top }) };
+    return relD.R;
   }
-  function sourceOf() {
-    if (!srcD) {
-      const cv = document.createElement('canvas');
-      cv.width = SRC_N; cv.height = SRC_N;
-      const g = cv.getContext('2d', { willReadFrequently: true });
-      g.fillStyle = '#000'; g.fillRect(0, 0, SRC_N, SRC_N);
-      g.fillStyle = '#fff';
-      for (const [cx, cy, r] of fieldOf()) {
-        g.beginPath(); g.arc(cx * SRC_N, cy * SRC_N, r * SRC_N, 0, 2 * Math.PI); g.fill();
-      }
-      srcD = g.getImageData(0, 0, SRC_N, SRC_N).data;
-    }
-    return srcD;
+  function tableOf() {                            // a coarse table while a slider moves, the full one after
+    const R = reliefOf(), key = `${relD.key}|${stD.draft}`;
+    if (tabD.key !== key) tabD = { key, T: stD.draft ? bugTable(R, Math.SQRT2, 1024, 420, 560) : bugTable(R, Math.SQRT2, 3072, 1200, 1600) };
+    return tabD.T;
   }
-  const srcAt = (src, x, y) => {
-    if (x < 0 || x >= 1 || y < 0 || y >= 1) return 0;
-    return src[((y * SRC_N | 0) * SRC_N + (x * SRC_N | 0)) * 4] / 255;
-  };
-  let imgD = { key: '', img: null };
-  const zD = zoomable('wD', 'cD', (f) => fitBox(f, { x0: -0.02, x1: 1.02, y0: -0.02, y1: 1.02 }, 0.02), (f, v) => {
-    const c = f.ctx;
+  const zD = zoomable('wD', 'cD', (f) => fitBox(f, { x0: -1, x1: 1, y0: -1, y1: 1 }, 0.01), (f, v) => {
+    const c = f.ctx, R = reliefOf();
     if (stD.mode === 'order') {
       paper(f, PRINT.paper); toWorld(f, v);
       c.save();
-      c.beginPath(); c.rect(0, 0, 1, 1); c.clip();
-      c.fillStyle = PRINT.ink; c.fillRect(0, 0, 1, 1);
-      c.fillStyle = PRINT.paper;
-      for (const [cx, cy, r] of fieldOf()) { c.beginPath(); c.arc(cx, cy, r, 0, 2 * Math.PI); c.fill(); }
+      c.beginPath(); c.rect(-1, -1, 2, 2); c.clip();
+      c.fillStyle = PRINT.ink;
+      const rmin = 0.35 / v.s;                    // tremas under a third of a pixel would not print
+      for (const [x, y, r] of R.tremas) {
+        if (r < rmin) break;
+        if (x + r < -1 || x - r > 1 || y + r < -1 || y - r > 1) continue;
+        c.beginPath(); c.arc(x, y, r, 0, 2 * Math.PI); c.fill();
+      }
       c.restore();
       toScreen(f);
-      if ($('revealD').checked) drawReveal(c, v, false);
     } else {
-      const W = f.canvas.width, H = f.canvas.height, src = sourceOf();
-      const key = `${stD.seed}|${W}|${H}|${v.s}|${v.ox}|${v.oy}`;
+      const W = f.canvas.width, H = f.canvas.height, T = tableOf();
+      const key = `${tabD.key}|${W}|${H}|${v.s}|${v.ox}|${v.oy}`;
       if (imgD.key !== key) {
-        const img = c.createImageData(W, H), d = img.data;
-        const PP = [236, 235, 230], STEPS = 32;
+        const img = c.createImageData(W, H), d = img.data, PP = [236, 235, 230], IN = [21, 21, 21];
+        const G2 = BUG.G * BUG.G, near = 1 - stD.top, far = Math.sqrt(1 + 2 * G2), near01 = new Float32Array(W * H);
         for (let j = 0; j < H; j++) {
-          const wy = (v.oy - (j + 0.5) / f.dpr) / v.s, base = j * W * 4;
+          const wy = Math.max(-1, Math.min(1, (v.oy - (j + 0.5) / f.dpr) / v.s));
           for (let i = 0; i < W; i++) {
-            const wx = (((i + 0.5) / f.dpr) - v.ox) / v.s, o = base + 4 * i;
-            if (wx < 0 || wx > 1 || wy < 0 || wy > 1) { d[o] = PP[0]; d[o + 1] = PP[1]; d[o + 2] = PP[2]; d[o + 3] = 255; continue; }
-            // the lagging pen: what should print here is what the ray from the
-            // centre carried a few cells back, fading as the lag grows
-            const dx = wx - 0.5, dy = wy - 0.5, rr = Math.hypot(dx, dy) || 1e-9;
-            const ux = dx / rr, uy = dy / rr, step = 0.0045 * (0.35 + 1.8 * rr);
-            let val = 0;
-            for (let t = 0; t < STEPS; t++) {
-              const s = srcAt(src, wx - ux * step * t, wy - uy * step * t) * (1 - t / STEPS);
-              if (s > val) val = s;
-              if (val >= 1) break;
-            }
-            d[o] = 21 + (PP[0] - 21) * val; d[o + 1] = 21 + (PP[1] - 21) * val; d[o + 2] = 21 + (PP[2] - 21) * val; d[o + 3] = 255;
+            // nearness: the distance from the eye to the surface seen at (wx, wy), from the
+            // farthest floor (0) to the tallest spike under the eye (1); outside the frame the
+            // edge value is carried on so the softening below leaves no rim
+            const wx = Math.max(-1, Math.min(1, ((i + 0.5) / f.dpr - v.ox) / v.s));
+            const z = bugSeen(T, wx, wy), dist = (1 - z) * Math.sqrt(1 + G2 * (wx * wx + wy * wy));
+            near01[j * W + i] = (far - dist) / (far - near);
+          }
+        }
+        // soften like the print: about 0.006 half-widths (3 px of the scanned plate), never more
+        // than at the plate's own size, so zooming in shows the relief's detail; the tone curve
+        // was fitted on the softened nearness, so it comes after
+        soften(near01, W, H, 0.006 * Math.min(v.s, v.fit || v.s) * f.dpr);
+        for (let j = 0; j < H; j++) {
+          const wy = (v.oy - (j + 0.5) / f.dpr) / v.s, inY = wy >= -1 && wy <= 1;
+          for (let i = 0; i < W; i++) {
+            const wx = ((i + 0.5) / f.dpr - v.ox) / v.s, o = 4 * (j * W + i);
+            const g = inY && wx >= -1 && wx <= 1 ? bugGrey(near01[j * W + i]) : 1;
+            d[o] = IN[0] + (PP[0] - IN[0]) * g; d[o + 1] = IN[1] + (PP[1] - IN[1]) * g; d[o + 2] = IN[2] + (PP[2] - IN[2]) * g; d[o + 3] = 255;
           }
         }
         imgD = { key, img };
@@ -275,32 +273,74 @@
       c.setTransform(1, 0, 0, 1, 0, 0);
       c.putImageData(imgD.img, 0, 0);
       toScreen(f);
-      if ($('revealD').checked) drawReveal(c, v);
     }
-  });
-  function drawReveal(c, v) {
-    const F = fieldOf().slice().sort((a, b) => b[2] - a[2]).slice(0, 28);
-    c.strokeStyle = PRINT.red; c.lineWidth = 1.4;
-    for (const [cx, cy, rr] of F) {
-      c.beginPath(); c.arc(v.ox + cx * v.s, v.oy - cy * v.s, rr * v.s, 0, 2 * Math.PI); c.stroke();
+    if ($('revealD').checked) drawReveal(c, v, R);
+  }, { maxZoom: 12 });
+  // a Gaussian blur of standard deviation sigma pixels, as three box blurs whose radii add up to
+  // its variance (a pass of radius r adds r(r + 1)/3); edges held
+  function soften(a, W, H, sigma) {
+    const v = sigma * sigma, lo = Math.floor(Math.sqrt(v + 0.25) - 0.5), hi = lo + 1;
+    const nHi = Math.max(0, Math.min(3, Math.round((3 * v - 3 * lo * (lo + 1)) / (hi * (hi + 1) - lo * (lo + 1)))));
+    const b = new Float32Array(a.length);
+    const pass = (src, dst, n, m, step, line, r) => {
+      const k = 1 / (2 * r + 1);
+      for (let l = 0; l < m; l++) {
+        const o = l * line;
+        let sum = src[o] * (r + 1);
+        for (let i = 1; i <= r; i++) sum += src[o + Math.min(n - 1, i) * step];
+        for (let i = 0; i < n; i++) {
+          dst[o + i * step] = sum * k;
+          sum += src[o + Math.min(n - 1, i + r + 1) * step] - src[o + Math.max(0, i - r) * step];
+        }
+      }
+    };
+    for (let t = 0; t < 3; t++) {
+      const r = t < nHi ? hi : lo;
+      if (r > 0) { pass(a, b, W, H, 1, W, r); pass(b, a, H, W, W, 1, r); }
     }
   }
-  const MODES_D = { order: 'The strict order', bug: 'Our own bug' };
+  // the largest tremas' floors: in the view from above the floor (height 0) shows at its own place,
+  // so these circles are the flat picture's circles too
+  function drawReveal(c, v, R) {
+    c.save();
+    c.beginPath(); c.rect(v.ox - v.s, v.oy - v.s, 2 * v.s, 2 * v.s); c.clip();
+    c.strokeStyle = PRINT.red; c.lineWidth = 1.4;
+    let n = 0;
+    for (const [x, y, r] of R.tremas) {
+      if (x + r < -1 || x - r > 1 || y + r < -1 || y - r > 1) continue;
+      c.beginPath(); c.arc(v.ox + x * v.s, v.oy - y * v.s, r * v.s, 0, 2 * Math.PI); c.stroke();
+      if (++n >= 24) break;
+    }
+    c.restore();
+  }
+  const MODES_D = { order: 'The strict order', bug: 'The bug, reconstructed' };
   const INFO_D = {
-    order: 'What the program was meant to draw: a plane with random round tremas cut out, white on black — the design whose corrected output became Plates 306 to 309. Radii follow the scaling law Nr(> u) ∝ u⁻², so holes come at every size.',
-    bug: 'The same picture, with one deliberate mistake of ours: the picture is retraced ray by ray from the centre, and the pen lags a few cells behind — every white stretch bleeds outward and fades. Neat circles become a radial burst, the strict order is hidden. Turn on "reveal the hidden order" to see the circles that are still underneath.',
+    order: 'What the program was meant to draw: random round tremas, flat and in two tones — the design whose corrected output became Plates 306 to 309. Disc p has area proportional to 1/p, so holes come at every size; here they are black, as in Plates 308–309.',
+    bug: 'The same tremas as pits in a plain studded with random spikes, seen from close above. Perspective lays each spike over, away from the point under the eye, and nearer surfaces print lighter. The pits keep their place and shape: outline them to compare with the strict order.',
   };
+  const topLabel = () => (stD.top <= BUG.plain + 1e-9 ? 'none: a flat plain' : `${stD.top.toFixed(2)} of the eye's height`);
   function setD(refit) {
     markMD(stD.mode);
+    const R = reliefOf();
     $('cDt').textContent = MODES_D[stD.mode];
-    $('cDn').textContent = `${fmt(fieldOf().length)} tremas · seed ${stD.seed}`;
+    $('cDn').textContent = `${fmt(R.tremas.length)} tremas · seed ${stD.seed}`;
     $('infoD').innerHTML = INFO_D[stD.mode];
-    $('rDa').textContent = fmt(fieldOf().length);
+    $('topDv').textContent = topLabel();
+    $('topD').value = stD.top;
+    $('rDa').textContent = fmt(R.tremas.length);
+    $('rDb').textContent = `${Math.round(100 * R.pits)}%`;
+    $('rDc').textContent = stD.top <= BUG.plain + 1e-9 ? 'none' : `${stD.top.toFixed(2)} × eye`;
     if (refit) zD.refit(); else zD.schedule();
   }
-  const markMD = stepButtons($('mD'), Object.keys(MODES_D), (k) => MODES_D[k], (k) => `Show: ${MODES_D[k]}`, (k) => { stD.mode = k; imgD.key = ''; setD(true); });
+  const markMD = stepButtons($('mD'), Object.keys(MODES_D), (k) => MODES_D[k], (k) => `Show: ${MODES_D[k]}`, (k) => { stD.mode = k; setD(false); });
+  $('topD').addEventListener('input', (e) => { stD.top = +e.target.value; stD.draft = true; if (stD.mode !== 'bug') stD.mode = 'bug'; setD(false); });
+  $('topD').addEventListener('change', () => { stD.draft = false; setD(false); });
   $('revealD').addEventListener('change', () => zD.schedule());
-  $('seedD').addEventListener('click', () => { stD.seed = (stD.seed * 48271 + 5) % 100000; fieldD = null; imgD.key = ''; setD(false); });
+  $('seedD').addEventListener('click', () => { stD.seed = (stD.seed * 48271 + 5) % 100000; setD(false); });
+  $('presetD').addEventListener('click', () => {
+    Object.assign(stD, { mode: 'bug', top: BUG.top, seed: BUG.seed, draft: false });
+    $('revealD').checked = false; setD(true);
+  });
 
   setA(true); setB(true); setC(true); setD(true);
 })();

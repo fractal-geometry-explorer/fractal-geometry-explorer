@@ -1,5 +1,6 @@
 // Chapter 26 core: seeded randomness, midpoint-displacement curves in the plane and on the line,
-// Poisson strata, a segment-crossing counter and the trema field behind Plate 246's story.
+// Poisson strata, a segment-crossing counter, and Plate 246 reconstructed as a trema relief seen
+// from straight above.
 function mulberry32(a) {
   return () => {
     a |= 0; a = (a + 0x6d2b79f5) | 0;
@@ -152,11 +153,83 @@ function crossings(P) {
   return count;
 }
 
-// ---- the trema field: the "very strict order" behind Plate 246's story ----
-// Round tremas with Nr(radius > u) proportional to u^(-2), the design of Plates 306-309.
-function tremaField(seed, count = 300, rMin = 0.016, rMax = 0.34) {
-  const rnd = mulberry32(seed), out = [];
-  const q = 1 - (rMin / rMax) * (rMin / rMax);
-  for (let i = 0; i < count; i++) out.push([-0.4 + 1.8 * rnd(), -0.4 + 1.8 * rnd(), rMin / Math.sqrt(1 - q * rnd())]);
-  return out;
+// ---- Plate 246 reconstructed: a trema relief seen from straight above ----
+// Units: the eye stands 1 above the floor and looks straight down; ground lengths are measured so
+// that the picture's half-width reaches 1 on the floor. The relief is a grid of `cells` cells
+// across the picture, extended to 1.45 half-widths so the rays to the corners stay on it. Round
+// tremas follow the rank law of Plates 306-309 (disc p has area C*A/(2p), down to half a cell) and
+// are flat pits at height 0. Every other cell rises to plain + (top - plain) * u^k, u uniform: a low
+// plain with a few tall spikes. Trema centres come first from the seed, so changing the heights
+// never moves a hole.
+function bugRelief(seed, { cells, C, plain, top, k }) {
+  const N = Math.ceil(1.45 * cells), cell = 2 / cells, L = (N * cell) / 2, A = 4 * L * L, rmin = cell / 2;
+  const P = Math.floor((C * A) / (2 * Math.PI * rmin * rmin)), tremas = [];
+  const rt = mulberry32(seed);
+  for (let p = 1; p <= P; p++) tremas.push([L * (2 * rt() - 1), L * (2 * rt() - 1), Math.sqrt((C * A) / (2 * Math.PI * p))]);
+  const rh = mulberry32(seed ^ 0x5bd1e995), H = new Float32Array(N * N);
+  for (let i = 0; i < N * N; i++) H[i] = plain + (top - plain) * Math.pow(rh(), k);
+  let pits = 0;
+  for (const [x0, y0, r] of tremas) {
+    const i0 = Math.max(0, Math.ceil((x0 - r + L) / cell - 0.5)), i1 = Math.min(N - 1, Math.floor((x0 + r + L) / cell - 0.5));
+    const j0 = Math.max(0, Math.ceil((y0 - r + L) / cell - 0.5)), j1 = Math.min(N - 1, Math.floor((y0 + r + L) / cell - 0.5));
+    for (let j = j0; j <= j1; j++) {
+      const gy = (j + 0.5) * cell - L - y0;
+      for (let i = i0; i <= i1; i++) {
+        const gx = (i + 0.5) * cell - L - x0;
+        if (gx * gx + gy * gy <= r * r) H[j * N + i] = 0;
+      }
+    }
+  }
+  const h = (N - cells) >> 1;                     // share of the picture's own cells that are pits
+  for (let j = h; j < h + cells; j++) for (let i = h; i < h + cells; i++) if (H[j * N + i] === 0) pits++;
+  return { H, N, L, cell, top, tremas, pits: pits / (cells * cells) };
+}
+// height at ground point (x, y), bilinear between cell centres; the floor beyond the grid
+function bugHeight(R, x, y) {
+  const fx = (x + R.L) / R.cell - 0.5, fy = (y + R.L) / R.cell - 0.5, i = Math.floor(fx), j = Math.floor(fy), N = R.N;
+  if (i < 0 || j < 0 || i >= N - 1 || j >= N - 1) return 0;
+  const ax = fx - i, ay = fy - j, o = j * N + i, H = R.H;
+  return (H[o] * (1 - ax) + H[o + 1] * ax) * (1 - ay) + (H[o + N] * (1 - ax) + H[o + N + 1] * ax) * ay;
+}
+// The view from straight above as a polar table: the height seen at NQ picture radii (0..qmax) on
+// each of NT azimuths. A ground point at distance rho with height h shows at picture radius
+// rho / (1 - h), so along an azimuth the ray to radius q stops at the first point where that ratio
+// reaches q: a running maximum taken outward from the centre (nearer, taller things hide what is
+// behind them). Between samples the seen height is interpolated, which draws the spikes' sides.
+function bugTable(R, qmax, NT, NQ, KS) {
+  const Z = new Float32Array(NT * NQ), dr = qmax / (KS - 1), dq = qmax / (NQ - 1);
+  for (let t = 0; t < NT; t++) {
+    const th = ((t + 0.5) * 2 * Math.PI) / NT, c = Math.cos(th), s = Math.sin(th), row = t * NQ;
+    let qi = 0, hPrev = bugHeight(R, 0, 0), qPrev = 0, M = 0;
+    for (let k = 1; k < KS && qi < NQ; k++) {
+      const rho = k * dr, h = bugHeight(R, rho * c, rho * s), q = rho / (1 - h);
+      if (q > M) {
+        for (; qi < NQ && qi * dq <= q; qi++) {
+          const f = q > qPrev ? Math.min(1, Math.max(0, (qi * dq - qPrev) / (q - qPrev))) : 1;
+          Z[row + qi] = hPrev + f * (h - hPrev);
+        }
+        M = q;
+      }
+      hPrev = h; qPrev = q;
+    }
+    for (; qi < NQ; qi++) Z[row + qi] = hPrev;
+  }
+  return { Z, NT, NQ, qmax };
+}
+// the height seen at picture point (x, y), bilinear in the table
+function bugSeen(T, x, y) {
+  const q = Math.min(T.NQ - 1.001, (Math.hypot(x, y) / T.qmax) * (T.NQ - 1));
+  let a = Math.atan2(y, x); if (a < 0) a += 2 * Math.PI;
+  const ft = (a / (2 * Math.PI)) * T.NT - 0.5, t0 = Math.floor(ft), at = ft - t0;
+  const ta = ((t0 % T.NT) + T.NT) % T.NT, tb = (ta + 1) % T.NT, q0 = Math.floor(q), aq = q - q0, Z = T.Z;
+  const za = Z[ta * T.NQ + q0] * (1 - aq) + Z[ta * T.NQ + q0 + 1] * aq, zb = Z[tb * T.NQ + q0] * (1 - aq) + Z[tb * T.NQ + q0 + 1] * aq;
+  return za * (1 - at) + zb * at;
+}
+// Grey from nearness: t runs from the farthest floor in the picture (0) to the top of the tallest
+// spike under the eye (1). The curve maps t onto the printed plate's grey levels (0 = darkest ink,
+// 1 = paper); it was fitted on the scan's tone distribution, so it is the plate's, not a free choice.
+const BUG_TONE = [0, 0.065, 0.083, 0.111, 0.148, 0.394, 0.750, 0.847, 0.917, 1, 1];
+function bugGrey(t) {
+  const u = Math.min(1, Math.max(0, t)) * 10, i = Math.min(9, Math.floor(u));
+  return BUG_TONE[i] + (u - i) * (BUG_TONE[i + 1] - BUG_TONE[i]);
 }

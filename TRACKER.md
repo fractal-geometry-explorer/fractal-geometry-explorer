@@ -122,7 +122,7 @@ Update this file in the same pull request as the work it records.
 | 231 | 231 | A hexa-squig coastline | random | todo | |
 | 241 | 240–241 | A random walk approximating a Brown line-to-line function, and its zeroset | random | done | brown-trails |
 | 242–243 | 242–243 | Brown hulls and islands; self-avoiding Brownian motion | random | done | brown-trails |
-| 246 | 246 | The computer "bug" (opus 1) | random / art | done | midpoint-displacement |
+| 246 | 246 | The computer "bug" (opus 1) | random | done | midpoint-displacement |
 | (concept) | 232– | Brownian motion and the Wiener sausage | random | done | wiener-sausage |
 | (concept) | 232–239 | The Brown trail as a randomized Peano curve | random | done | brown-trails |
 
