@@ -35,6 +35,7 @@ Update this file in the same pull request as the work it records.
 | :- | :- | :- | :- | :- | :- |
 | 10–11 | 10–11 | Artificial fractal flakes (surface dimensions 7/3 and 5/2) | random / render | todo | |
 | 13 | 12–13 | Jean Perrin's classic drawings of physical Brownian motion | data | todo | |
+| (concept) | 14–19 | Chapter 3: the fractal defined (D > D_T); effective dimension and the ball of thread | exact / random | done | what-is-a-fractal |
 
 ## II Three classic fractals, tamed (chapters 5–8)
 
@@ -199,7 +200,7 @@ Update this file in the same pull request as the work it records.
 ## Concepts without a plate
 
 Each chapter session should add the chapter's main ideas here, alongside its plates. Candidates so far:
-- similarity dimension (chapters 3 and 6);
+- similarity dimension (chapters 3 and 6): chapter 3's half — the definition D > D_T, the four example sets, effective dimension and the ball of thread — is done, on the what-is-a-fractal page; chapter 6's similarity dimension proper remains;
 - coastline length against ruler size (chapter 5; partly on the Minkowski page);
 - random midpoint displacement, its creases, and Poisson strata (chapter 26; on the Plate 246 page);
 - length–area–volume relations (chapter 12): done, on the length-area page (divider-walk demo, Hack's rivers, area–volume cases);

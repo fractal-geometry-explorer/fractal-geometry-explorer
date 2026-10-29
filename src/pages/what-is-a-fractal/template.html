@@ -1,0 +1,114 @@
+<title>What Is a Fractal?</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.r-def { aspect-ratio: 10 / 8; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 3, "Dimension, Symmetry, Divergence" · pages 14–19</p>
+    <h1><span class="plate-no">Chapter 3</span><span class="lozenge" aria-hidden="true"></span><span>What Is a Fractal?</span></h1>
+    <p class="dek">The word the whole book rests on is defined in this chapter, and the definition is a comparison of two dimensions: a fractal is a set whose Hausdorff–Besicovitch dimension D strictly exceeds its topological dimension D_T. Alongside it the chapter sets a second, deliberately loose notion — the effective dimension an observer assigns at a given resolution — and previews the symmetries and divergences the rest of the book lives on. These six pages print no figures, so both figures here are this page's own illustrations of the text.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#definition"><b>1</b> The definition</a>
+    <a href="#thread"><b>2</b> A ball of thread</a>
+  </nav>
+
+  <!-- ===================== 1: THE DEFINITION ===================== -->
+  <section class="plate" id="definition">
+    <div class="plate-head">
+      <p class="no">Pages 14–15 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>The definition: D against D_T</h2>
+      <p class="dim" id="dimA">D = log 4 / log 3 ≈ 1.2618 · D_T = 1 · D &gt; D_T: a fractal</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-def zoomable" id="wA">
+          <canvas id="cA" role="img" aria-label="One of the chapter's example sets, with its topological and fractal dimensions marked on a common scale"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cAt">The Koch curve</strong> · <span id="cAn"></span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Mathematics offers many dimensions, and for Euclid's shapes they all agree. Two matter here. The topological dimension D_T of Brouwer, Lebesgue, Menger and Urysohn is always a whole number: 0 for a dust of disconnected points, 1 for a curve. The dimension D of Hausdorff and Besicovitch need not be whole, and the two satisfy only the Szpilrajn inequality D ≥ D_T. When they agree, the set is dimensionally concordant, and Euclid covers it. When they disagree there was no word at all, so Mandelbrot coined one: "A fractal is by definition a set for which the Hausdorff Besicovitch dimension strictly exceeds the topological dimension."</p>
+        <div class="group">
+          <div class="label-row"><span class="label">The chapter's examples</span></div>
+          <div class="steps words" id="shA" role="group" aria-label="Which set to show"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Detail (construction stage)</span></div>
+          <div class="steps" id="mA" role="group" aria-label="Detail"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn" id="newA" hidden>New trail</button>
+        </div>
+        <p class="readline" id="infoA" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Topological D_T</dt><dd id="rAa">—</dd></div>
+          <div><dt>Hausdorff D</dt><dd id="rAb">—</dd></div>
+          <div><dt>The gap D − D_T</dt><dd id="rAc">—</dd></div>
+          <div><dt>A fractal?</dt><dd id="rAd">—</dd></div>
+        </dl>
+        <p class="note">Each figure is the exact construction drawn to a finite stage; the D on the scale is the limit set's known value, not a measurement of the drawing. The blue marker is D_T, the red is D, and the shaded gap between them is what the definition asks for. "Fractal" deliberately does not mean "fractional": the Brownian trail's D = 2 is an integer and the trail is a fractal all the same (chapter 25 proves the values). What D_T is, brick by brick, is told on <a href="historical-sketches.html#dimension">Historical Sketches</a>; how D is defined by coverings is drawn on <a href="mathematical-backup.html#cover">Mathematical Backup</a>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 2: THE BALL OF THREAD ===================== -->
+  <section class="plate" id="thread">
+    <div class="plate-head">
+      <p class="no">Pages 17–18 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Effective dimension: a ball of thread</h2>
+      <p class="dim" id="dimB">a 10 cm ball of 1 mm thread · effective dimension 0 → 3 → 1 → 3 → 1 → 0 as the resolution refines</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wB">
+          <canvas id="cB" role="img" aria-label="A wound ball of thread as an observer sees it at the chosen resolution, or its effective dimension charted against resolution"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cBt">What the observer sees</strong> · <span id="cBn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Besides the two exact dimensions the chapter invokes a third, "a notion that should not be defined precisely": the dimension an object has in effect. Physicists already use it — a fine veil is treated as 2-dimensional, a thread as 1, a tiny ball as 0, each a model chosen because its corrections are smallest. The chapter's test case is a ball 10 cm across wound of thread 1 mm thick. Seen from far away it is a point. At 10 cm resolution it is a solid three-dimensional ball; at 10 mm, a mess of one-dimensional threads; at 0.1 mm each thread is a three-dimensional column; at 0.01 mm the column dissolves into one-dimensional fibers; and at atomic scales the ball is a finite crowd of pinpoints, dimension 0 again.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mB" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">The chapter's stations</span></div>
+          <div class="steps words" id="stB" role="group" aria-label="Stations"></div>
+          <div class="slider">
+            <div class="label-row"><span class="label">Resolution</span><span class="value" id="xBv">10 cm</span></div>
+            <input type="range" id="xB" min="-2.6" max="8" step="0.05" value="-1" aria-label="Resolution, coarse to fine">
+          </div>
+        </div>
+        <div class="group" id="coastWrap" hidden>
+          <label class="check" for="coastB"><input type="checkbox" id="coastB"> Compare: a fractal coastline, on its own scale</label>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn" id="windB">Rewind the ball</button>
+        </div>
+        <p class="readline" id="infoB" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Resolution</dt><dd id="rBa">—</dd></div>
+          <div><dt>The ball reads as</dt><dd id="rBb">—</dd></div>
+          <div><dt>Effective dimension</dt><dd id="rBc">—</dd></div>
+          <div><dt>At this resolution</dt><dd id="rBd">—</dd></div>
+        </dl>
+        <p class="note">An illustration throughout: the chapter states this thought experiment in words and prints nothing. The stations and their dimensions are the chapter's own numbers; the wound ball (a seeded winding, redone by "Rewind"), the field of view at each resolution, the coarseness of the drawing and the width of each crossover are this page's presentation choices — the chapter insists the transitions are ill defined, and effective dimension subjective, "a matter of approximation and therefore of degree of resolution". The closing move of the section is the bridge to everything that follows: in a fractal, an ill-defined transition between well-defined zones widens into a whole zone within which D &gt; D_T. The same crossovers return in earnest for a sheet of paper, and for every natural fractal's outer and inner cutoffs.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 3, pages 14–19. The chapter prints no figures; both figures above are computed illustrations of its text, and each note says what is a presentation choice. The chapter's other previews are built where the book takes them up: standard against fractal self-similarity on <a href="koch-plates.html">Triadic Koch Island</a> (Plate 44), the divergence of a coastline's length on <a href="minkowski-sausage.html">Minkowski Sausage</a> (chapter 5), statistical invariance under displacement on <a href="brown-trails.html">Brown Trails</a> (chapter 25), and the covering measures behind D on <a href="mathematical-backup.html">Mathematical Backup</a> (chapter 39).</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>
