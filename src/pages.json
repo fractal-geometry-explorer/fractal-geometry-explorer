@@ -446,6 +446,18 @@
         "ui.js"
       ],
       "layout_comment": "/* Layout: Plate 323 (diamond tremas and lacunarity, two panels) and Plate 325 (a spatial trema dust on one octant of the sky), each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "second-printing",
+      "title": "Update for the Second Printing",
+      "plates": "Plates II, VIII, X, 467",
+      "chapter": 43,
+      "scripts": [
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: five sections in the update's own order; interactive maps first, the quaternion render and data charts after, then the topic map. One column under 900px. */"
     }
   ]
 }
