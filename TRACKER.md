@@ -103,11 +103,11 @@ Update this file in the same pull request as the work it records.
 | 177 | 177 | A self-inverse fractal (Mandelbrot construction) | exact | todo | |
 | 178 | 178 | Self-homographic fractal, near the Peano limit | exact | todo | |
 | 179 | 179 | A celebrated self-inverse fractal, corrected | exact | todo | |
-| 185 | 185–186 | Self-squared fractal curves for real λ | exact | todo | |
-| 187 | 187 | (3D rendering; caption with Plates 185–188, confirm) | render | todo | |
-| 188–189 | 188–189 | The separators of z → λz(1 − z) and of z → z² − μ (the μ-map) | exact | todo | |
-| 190–191 | 190–192 | Self-squared dragons; approach to the "Peano" limit | exact | todo | |
-| 192 | 192 | Real self-squared Fatou dusts | exact | todo | |
+| 185 | 185–186 | Self-squared fractal curves for real λ | exact | done | self-squared-dragons |
+| 187 | 186–187 | Composite of self-squared curves for real λ (the drape; caption on p. 186, confirmed) | render | done | self-squared-dragons |
+| 188–189 | 188–189 | The separators of z → λz(1 − z) and of z → z² − μ (the μ-map) | exact | done | self-squared-dragons |
+| 190–191 | 190–192 | Self-squared dragons; approach to the "Peano" limit | exact | done | self-squared-dragons |
+| 192 | 192 | Real self-squared Fatou dusts | exact | done | self-squared-dragons |
 | 198–199 | 198–199 | Attraction to fractals (San Marco dragon; Pharaoh's breastplate) | exact | todo | |
 
 ## VIII Stratified random fractals (chapters 23–26)

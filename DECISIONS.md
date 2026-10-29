@@ -23,6 +23,9 @@ Conventions used below:
 
 - **Heavy random rasters: render once, blit while navigating.** Each of brown-relief's figures draws once per parameter change into an offscreen canvas covering a fixed world rectangle; the zoomable view only re-blits that canvas. Pan and zoom never recompute the field, and a random figure magnifies like the printed plate it stands for (its resolution is the simulation grid's).
 - **Sub-pixel survivors.** In a nearly saturated random field (disc tremas near D = 1.2), the surviving set's grains are thinner than a pixel and antialiasing blends them invisibly into the covering ink. To show them, build a pixel-center coverage mask while drawing (mark each pixel whose center falls in some disc) and paint the unmarked pixels in an accent colour; the mask costs about the total drawn area in pixel writes.
+- **Escape-time rasters recompute per view.** Key the ImageData on (mode, size, view) inside the zoomable's render and deep zooming comes free; the pan-and-zoom snapshot hides the recompute. Render at CSS resolution and scale up — retina-resolution iteration quadruples the cost for little gain.
+- **Distance-estimate thresholds live in the dynamical plane.** When the sampled plane is a transform of it (chapter 19's inverted λ-map), convert the pixel size through the transform's derivative, or the estimate paints whole regions as "boundary".
+- **Attracting cycles end iteration early.** Find the cycle once per λ (a long warmup — a multiplier of modulus 0.98 needs tens of thousands of steps to settle), then stop any pixel whose orbit comes near the stored cycle point: interior pixels stop in hundreds of steps instead of burning the full budget.
 
 ## Foundation (shared library and site shell)
 
@@ -202,6 +205,31 @@ Chapter 13 prints no numbered plates; its six figures sit in the running text. A
 - **Each stick carries a triangle on *each* side** (angles ½θ at the root, π−θ at the tip, the stick a side). The caption says "an isosceles triangle", but with one triangle per stick the corners around a fork sum to π and the figure cannot be solid; with one per side they sum to exactly 2π, the thickened stems tile with no gap and no overlap, and the rendered figures go solid and scalloped exactly like the plate. The bottom figure's white slits are the caption's "trimmed slightly on one side": one triangle of each pair pulled off its stick.
 - **The three figures fit θ = 29.9°, 60.3° and 89.8°** — surely 30°, 60° and 90° — with r = 0.501, 0.544 and 0.566 (pixel agreement 97–98.5% at 600 dpi). Planar D ≈ 1.00, 1.14, 1.22; the spatial originals are D+1.
 - **Self-avoidance bound.** Our own computation (bisection on segment crossings to stage 11) gives the largest self-avoiding r at those angles as 0.518, 0.554 and 0.595, so the printed figures sit 2–5% below the bound. The page's slider couples r to the computed bound; the presets use the fitted values, and the note on the page says so.
+
+## Part VI, chapter 19 (Plates 185–192)
+
+All on the page `self-squared-dragons`. Every figure is a per-pixel escape-time render of z → λz(1−z) or x → x²−μ (μ = λ²/4 − λ/2), with a distance estimate for boundaries and filaments. The scans were matched by eye at 300 dpi; the maps and Plates 185 and 192 follow from their definitions, while the dragons' λ are reconstructions, as noted below.
+
+**Pages 180–182, the inverted V.** The book prints no figure; the cobweb drawing and the survival rows are ours. The map is the tent map stretched to peak 1/(2r).
+
+**Plate 185.**
+- **Left.** The five domains (λ = 1, 1.5, 2, 2.5, 3) nest, so rendering a count of containing sets in stepped grays reproduces the print. λ = 2 is the exact circle |z−½| = ½.
+- **Right.** The caption's λ = 3.3260680 is a digit transposition. The nuclear λ of the period-2 atom (the caption's own definition: w = 2) solves λ² − 2λ − 4 = 0, i.e. λ = 1 + √5 = 3.2360680…, confirmed by Newton on f²(½) = ½. The page draws the true nucleus, turned 90° as printed, and says so.
+
+**Plate 187, the drape.** Reconstructed, not copied: the book's shaded 3D render is redrawn as a waterfall of exactly-computed horizontal sections (120 slices, silhouette half-heights by bisection), nearer slices occluding farther ones. The caption's wall, its island-molecule corrugations and the backbone tree are described in the page's note but not drawn.
+
+**Plates 188–189, the separators.** Five views, all computed from the definitions: the μ-map (the Mandelbrot set mirrored, cusp μ = −¼, tip μ = 2), the λ-map with its two empty discs, the inverse of the λ-map about λ = 1 (top of 188), the lemniscate detail at the 3-bond 2 − exp(−2πi/3), and the channel near the 100-bond. Checked: the circle |λ|=1 inverts to the line Re λ′ = ½ with the m = 1 sprout roots at cot(π/n)/2 — spacing → 1/(2π), which is why the plate's inverted sprouts look evenly strung. The 100-fold channel needs thousands of iterations before the slow escapers clear; the view warns it is slow.
+
+**Plates 190–191, the dragons.** The book names no λ for any dragon, so all four presets were fitted to the scans by eye (the strongest candidates from families the captions describe):
+- **190 top left, starved:** the period-doubling accumulation in the 1/10 sprout, λ ≈ 0.83309563 + 0.60035559i, from Newton nuclei of periods 10·2^k extrapolated by δ.
+- **190 top right, twist:** the root of the 1/7 subsprout of the 1/6 sprout, λ ≈ 0.52345446 + 0.86392232i, from a two-variable Newton prescribing the cycle's multiplier σ = e^{2πi/7}.
+- **190 bottom, σ-dragon:** the nucleus of a period-102 island in the channel near λ = 1 (where bottom-right Plate 189 looks), λ ≈ 0.99820131 + 0.06156126i, found by grid-searching the channel for bounded parameters outside both discs.
+- **191:** λ ≈ 0.96928400 + 0.24774506i, in the period-25 sprout with multiplier 0.98·e^{2πi/8}. The caption places it in an island offshore the bond at θ = 2π/n; the island candidate found there (period 70, λ ≈ 1.03583 + 0.26609i) matched the print worse than the sprout value, so the page uses the sprout value and notes the discrepancy.
+- The book printed its thin dragons as inverse-iteration dust, so the page draws the starved, twist and σ figures as the set's skin (distance-estimate line, threshold 0.45 px) rather than filled.
+
+**Plate 192, Fatou dusts.** Exact: a point is black when its first k iterates stay in [0, 1], the complement of the tremas of order ≤ k; the plate is k = 5. Three horizontal subsamples per pixel keep the thin high-λ fingers printing. The mid trema's ends solve λx(1−x) = 1.
+
+**The μ-atom arithmetic (p. 184)** — at most 2^{w−1} atoms of period w, fewer for w > 1 — was not verified numerically; the page quotes none of it.
 
 ## Part VIII, chapter 23
 
