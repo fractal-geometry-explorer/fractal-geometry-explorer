@@ -90,7 +90,7 @@ Update this file in the same pull request as the work it records.
 
 | Plate | Page | Title | Kind | Status | Site page |
 | :- | :- | :- | :- | :- | :- |
-| 155 | 154–155 | Fractal umbrella | exact | todo | |
+| 155 | 154–155 | Fractal umbrella trees and fractal canopies | exact | done | umbrella-trees |
 | 163 | 163 | Flattened fractal models of plant flowers | exact | done | diameter-exponent |
 | 164–165 | 164–165 | Plane-filling recursive bronchi | exact | done | diameter-exponent |
 

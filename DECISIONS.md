@@ -192,6 +192,16 @@ Chapter 13 prints no numbered plates; its six figures sit in the running text. A
 
 **Percolation (pp. 126–130).** The chapter prints no percolation figure in these pages (the critical-cluster plate is with chapter 14). The page's Bernoulli bond-percolation lattice is a **seeded simulation**, labelled as such, with p_crit = 1/2 and the D_c ≈ 1.89 formulas quoted from the text. The p. 129 sub/supercritical initiators (eight ½ξ squares around a hole; the even-coordinate grid lines) are described in the note rather than drawn.
 
+## Part V, chapters 15–17
+
+**Plate 155, fractal umbrella trees (chapter 16).**
+- All five trees are one construction: a bare V from an apex (no trunk is drawn), with two children per branch at the same inter-branch angle θ, lengths scaled by one ratio r. Codes are irrelevant: the tree is symmetric.
+- **The parameters are round angles at the self-contact threshold.** Free fits of (θ, r) to the 600 dpi scan land on θ = 20°, 36°, 60° (top row, upright), 150° and 200° (bottom row, printed with the axis horizontal), each within ~0.1°, with r at the critical value for that θ. The caption's rule "for each D, θ takes the smallest value compatible with self-avoidance" picks the same curve.
+- **The threshold criterion:** a tree first touches itself where an extremal branch tip reaches the axis of symmetry between two sibling subtrees (every ancestor stem lies on such an axis, so this covers branch-vs-stem contact too). The sup is computed by value iteration over the branch direction plus bisection on r; the page computes it live. Checks: θ = 180° gives r = 1/√2 (the caption's plane-filling D = 2 tree) and θ = 120° gives r = 1/φ. Critical r: 0.5076, 0.5232, 0.5534 (top row), 0.6539, 0.6429 (bottom row), so D ≈ 1.023, 1.070, 1.172, 1.632, 1.569. A brute-force segment-crossing test agrees to ~1e-3 (it is the blunter criterion, since tip contact is asymptotic).
+- **Fit quality.** With θ and r pinned to the exact values and only apex, scale and depth free, the upright trees match the scan to 0.0–0.3 px at 600 dpi; the 150° tree to ~0.4 px; the 200° tree matches everywhere with ~1.5 px of drift on its longest lines (plotter or print distortion). Printed depths, read off the scan: 10, 10, 9, 9, 11 levels.
+- The sub-degree tilts fitted on the scan (≤0.7°) are treated as scan skew; the page uses exactly vertical and horizontal axes.
+- Past θ = 180° the critical D falls again (the branches curl backward and touch sooner), which is why the 200° tree has smaller D than the 150° one — the shape of the whole critical curve is drawn on the page.
+
 ## Part V, chapter 17
 
 **Plates 164–165, plane-filling recursive bronchi.**

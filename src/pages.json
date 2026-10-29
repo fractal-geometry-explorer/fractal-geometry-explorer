@@ -422,6 +422,18 @@
         "ui.js"
       ],
       "layout_comment": "/* Layout: the inverted-V map (pages 180-182), real-lambda curves (185), the drape (187), the separators (188-189), the dragon lab (190-191) and the Fatou dusts (192), each a computed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "umbrella-trees",
+      "title": "Fractal Umbrella Trees",
+      "plates": "Plate 155",
+      "chapter": 16,
+      "scripts": [
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: Plate 155's five trees, the grow-your-own tree at the self-contact threshold with the critical curve, and the tips-against-branches figure, each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
     }
   ]
 }
