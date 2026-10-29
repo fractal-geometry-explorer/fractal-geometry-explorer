@@ -324,6 +324,19 @@
         "ui.js"
       ],
       "layout_comment": "/* Layout: the chapter's three concepts in book order (expectation paradoxes, Zipf's law with the temperature of discourse, Pareto salaries), each a computed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "length-area",
+      "title": "Length–Area Relations",
+      "plates": "Plate 115",
+      "chapter": 12,
+      "scripts": [
+        "shared/geometry.js",
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: the length-area relation demo (five similar islands and one yardstick, with its log-log chart), the digitised Plate 115 chart, and the area-volume section with the brain-folds cartoon, each a figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
     }
   ]
 }

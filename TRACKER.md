@@ -75,7 +75,7 @@ Update this file in the same pull request as the work it records.
 
 | Plate | Page | Title | Kind | Status | Site page |
 | :- | :- | :- | :- | :- | :- |
-| 115 | 115 | Log(perimeter) versus log(area) for clouds and rain areas | data | todo | |
+| 115 | 115 | Log(perimeter) versus log(area) for clouds and rain areas | data | done | length-area |
 | Figure, pp. 117–118 | 117–118 | Koch continent and islands (two generators, D = 4/3) | exact | done | islands-clusters |
 | Figure, p. 121 | 121 | Islands and lakes (generator and advanced teragon) | exact | done | islands-clusters |
 | Figure, p. 124 | 124 | Nonlumped curdling clusters (generators A, B, C, E, F) | exact | done | islands-clusters |
@@ -200,7 +200,7 @@ Each chapter session should add the chapter's main ideas here, alongside its pla
 - similarity dimension (chapters 3 and 6);
 - coastline length against ruler size (chapter 5; partly on the Minkowski page);
 - random midpoint displacement, its creases, and Poisson strata (chapter 26; on the Plate 246 page);
-- length–area–volume relations (chapter 12);
+- length–area–volume relations (chapter 12): done, on the length-area page (divider-walk demo, Hack's rivers, area–volume cases);
 - percolation (chapter 13) — done, on islands-clusters (seeded bond-percolation lattice);
 - surfaces with positive volume: Cantor dusts of positive measure, Osgood's curve of positive area, and the arteries-and-veins model of flesh (chapter 15, which prints no plates);
 - the diameter exponent of trees (chapter 17);

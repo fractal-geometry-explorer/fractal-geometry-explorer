@@ -147,6 +147,16 @@ Conventions used below:
 - **The section argument.** Computed exactly, not simulated: randomize the curdling (each subcell kept with probability p = 3^(D−3)); a straight probe's trace is a branching process with Binomial(3, p) offspring, mean 3^(D−2), so it dies out surely for D ≤ 2 and survives with positive probability for D > 2 — extinction iterates q → (1 − p + pq)³. Chapter 23 is cited by the book as proving the theorem for a simple class; the galaxies' contrast (projections must vanish, D < 2, D ≈ 1.23) is drawn on the same chart.
 - The chapter's open topology question (dust vs vortex tubes vs sheets; kurtosis tests determine only D) is reported as open on the page.
 
+## Part IV, chapter 12
+
+**Plate 115, log(perimeter) versus log(area) for clouds and rain areas (page length-area).**
+- A `data` plate: 71 points digitised from the 600 dpi scan (55 open-circle clouds, 16 filled rain areas), by ring/disc template matching plus a residual-ink audit, so every marker was accounted for. Centres are good to about 2 px ≈ 0.006 decade.
+- Axes calibrated from the decade ticks: 332.5 px/decade in x, 333.3 px/decade in y, consistent to 0.3%.
+- A least-squares refit of the digitised points gives slope 0.674, D = 1.349 — Lovejoy's published 1.35, which the caption rounds to 4/3. The line printed on the plate has slope 0.678 (D = 1.356), intercept logP = 0.555 at logA = 0. The page draws the printed line by default and offers the refit.
+- Cloud and rain points fit separately give D = 1.348 and 1.366; the page's note keeps only the joint statement.
+- **The length–area demo is our construction, not a book figure.** Five similar islands (Koch snowflake D = log 4/log 3, Plate 51's quadric D = 3/2, or circles), coasts walked with genuine dividers at a common G. Checked numerically: circles give slope 0.5000 and length within 0.01% of 2πr; the quadric family returns D = 1.50 ± 0.01 at any G; the Koch family oscillates D ≈ 1.24–1.30 with G (the known log-periodic wobble of divider walks), which the page says on the figure's note.
+- **The brain-folds figure is a cartoon** (sinusoidally folded pia in a disc section, wiggle count solved numerically so pia length tracks section area as A ∝ V or ∝ V^0.92). Flagged as such on the page; the book proposes no construction for the pia.
+
 ## Part IV, chapter 13 (pages 116–130, islands-clusters)
 
 Chapter 13 prints no numbered plates; its six figures sit in the running text. All were measured on the scan at 600 dpi.
