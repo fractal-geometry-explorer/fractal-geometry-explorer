@@ -126,7 +126,7 @@ Update this file in the same pull request as the work it records.
 | (concept) | 232– | Brownian motion and the Wiener sausage | random | done | wiener-sausage |
 | (concept) | 232–239 | The Brown trail as a randomized Peano curve | random | done | brown-trails |
 
-## IX Fractional Brown fractals (chapters 27–29)
+## IX Fractional Brown fractals (chapters 27–30)
 
 | Plate | Page | Title | Kind | Status | Site page |
 | :- | :- | :- | :- | :- | :- |
@@ -137,20 +137,21 @@ Update this file in the same pull request as the work it records.
 | 269, C9 (top) | 269 | Brownian Pangaea (coastline D = 3/2) | render | done | brown-relief |
 | 270 | 270 | The first known examples of Brown coastlines | random | done | brown-relief |
 | 271 | 271 | The first known examples of fractional Brown islands (D = 2.3000) | render | done | brown-relief |
+| (concept) | 277–279 | Isothermal surfaces of homogeneous turbulence (chapter 30) | random | done | isothermal-surfaces |
 
 ## A book within the book, in colour (C1–C16, before chapter 30)
 
 | Plate | Title | Kind | Status | Site page |
 | :- | :- | :- | :- | :- |
-| C1 | "Here God creates circles, waves and fractals" | art | todo | |
-| C3 | The Deluge, by Leonardo da Vinci | art | todo | |
-| C5 | Self-squared fractal dragon | exact | todo | |
-| C7 | Self-inverse fractal patchwork | exact | todo | |
-| C9 | Planetrise over Labelgraph Hill | render | todo | |
-| C11 | Gaussian hills that never were | render | todo | |
-| C13 | Non-Gaussian hills that never were | render | todo | |
-| C15 | Fractal islands that never were, seen from the zenith | render | todo | |
-| C16 | The Great Wave, by Hokusai | art | todo | |
+| C1 | "Here God creates circles, waves and fractals" | art | done | color-plates |
+| C3 | The Deluge, by Leonardo da Vinci | art | done | color-plates |
+| C5 | Self-squared fractal dragon | exact | done | color-plates |
+| C7 | Self-inverse fractal patchwork | exact | done | color-plates |
+| C9 | Planetrise over Labelgraph Hill | render | done | fractal-landscapes |
+| C11 | Gaussian hills that never were | render | done | fractal-landscapes |
+| C13 | Non-Gaussian hills that never were | render | done | fractal-landscapes |
+| C15 | Fractal islands that never were, seen from the zenith | render | done | fractal-landscapes |
+| C16 | The Great Wave, by Hokusai | art | done | color-plates |
 
 ## X Random tremas; texture (chapters 31–35)
 

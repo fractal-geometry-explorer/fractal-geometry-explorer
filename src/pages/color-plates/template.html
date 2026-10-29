@@ -1,0 +1,143 @@
+<title>A Book Within the Book</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.art-list { display: grid; gap: 14px; margin: 0; padding: 0; list-style: none; }
+.art-list li { display: grid; gap: 4px; padding: 14px 16px; background: var(--surface); border: 1px solid var(--rule); }
+.art-list b { font-size: 14.5px; }
+.art-list span { font-family: var(--f-body); font-size: 15.5px; line-height: 1.5; }
+.art-list small { font-size: 12px; color: var(--muted); }
+.art-list a { color: var(--accent); }
+.formula { margin: 0; padding: 12px 14px; background: var(--print-paper); border: 1px solid var(--print-rule); color: var(--print-ink); font-family: var(--f-mono); font-size: 13.5px; line-height: 1.7; overflow-x: auto; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · A book-within-the-book, in colour · plates C1–C16</p>
+    <h1><span class="plate-no">Plates C1–C16</span><span class="lozenge" aria-hidden="true"></span><span>A Book Within the Book</span></h1>
+    <p class="dek">Between chapters 29 and 30 the book pauses for a colour signature "dedicated to the proposition that if to see is to believe, then to see in color may lead to an even higher intensity of belief". Three old works of art stand at the threshold; the rest is computed. This page rebuilds V. Alan Norton's two dragons — the self-squared velvet of Plate C5 and the self-inverse patchwork of Plate C7 — from their formulas; Voss's landscapes, C9 to C15, have <a href="fractal-landscapes.html">a page of their own</a>.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#art"><b>C1 C3 C16</b> Three great artists</a>
+    <a href="#c5"><b>C5</b> Self-squared dragon</a>
+    <a href="#c7"><b>C7</b> Self-inverse patchwork</a>
+  </nav>
+
+  <!-- ===================== THE ART PLATES ===================== -->
+  <section class="plate" id="art">
+    <div class="plate-head">
+      <p class="no">Plates C1, C3 and C16 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Three great artists of the past illustrate nature</h2>
+      <p class="dim">circles, waves, and "wiggles" · works of art, discussed but not reproduced here</p>
+    </div>
+    <div class="plate-body">
+      <div class="side">
+        <p class="cap">The signature opens and closes with paintings, chosen because each one is "classically composed": it is easy to find a feature at nearly every scale between the whole picture and the finest visible detail. That property of scaling, Mandelbrot argues, characterises fractals — present in Nature and in some of Man's most carefully crafted creations. In the newly created world of the first plate he sees three kinds of form: circles and waves, which received "colossal investments of effort" and became the foundation of science, and wiggles, left almost untouched. Applying the Lord's dividers to the wiggles is the book's opening problem: the measured length of a coastline grows without limit as the dividers close, the subject of Chapter 5.</p>
+      </div>
+      <div class="side">
+        <ul class="art-list">
+          <li><b>Plate C1 · "Here God creates circles, waves, and fractals"</b>
+            <span>The frontispiece of a famous Bible Moralisée, written between 1220 and 1250 in the Eastern Champagne dialect: the Lord, holding a mason's dividers, measures a newly made world of circles, waves and wiggles. Its legend reads <i>Ici crie Dex ciel et terre, soleil et lune et toz elemenz</i> — here creates God sky and earth, sun and moon and all elements.</span>
+            <small>Austrian National Library, Vienna, codex 2554 · widely known as <a href="https://commons.wikimedia.org/wiki/File:God_the_Geometer.jpg" target="_blank" rel="noopener">God the Geometer</a></small></li>
+          <li><b>Plate C3 · The Deluge, by Leonardo da Vinci</b>
+            <span>One of many drawings in which Leonardo represents water as a superposition of eddies of many sizes. Science formalised that view only in the 1920s, through Lewis F. Richardson's scaling picture of turbulence — which then drifted into formulas and lost, for a time, all geometric flavour.</span>
+            <small>Windsor Castle, <a href="https://www.rct.uk/collection/912380" target="_blank" rel="noopener">the Royal Collection's deluge series</a></small></li>
+          <li><b>Plate C16 · The Great Wave, by Hokusai</b>
+            <span>Katsushika Hokusai (1760–1849), "fascinated by eddies and whorls of every kind". The wave carries feature upon feature down to the spray — the same scaling the closing caption asks the reader to find again in Plates C1 and C3.</span>
+            <small><a href="https://www.metmuseum.org/art/collection/search/45434" target="_blank" rel="noopener">Under the Wave off Kanagawa</a>, c. 1830–32</small></li>
+        </ul>
+        <p class="note">The paintings are in copyright-free collections but are photographs of artworks, not computed figures, so this site links out instead of reproducing them. The closing caption on C16 also defines the word <i>fractal</i>: shapes "very irregular and very fragmented", with distinctive features of every size between zero and a maximum.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== C5 ===================== -->
+  <section class="plate" id="c5">
+    <div class="plate-head">
+      <p class="no">Plate C5 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>A self-squared fractal dragon</h2>
+      <p class="dim" id="dim5">f(z) = λz(1 − z) · λ ≈ 1.6462 + 0.9637i · attracting cycle of period 25 = 5 × 5 · background: lim fₙ(z) = ∞</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wD5" style="background:#000">
+          <canvas id="cD5" role="img" aria-label="The self-squared dragon: coloured stones on black velvet"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cD5t">The dragon</strong> · <span id="cD5s">λ = 1.6462 + 0.9637i</span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">"Flamboyant this design may be, but its black background must be viewed as an example of extreme minimal art": the velvet is exactly the set of starting points z whose iterates f(z), f(f(z)), … escape to infinity. The design that stands out from it is made of 25 kinds of "stones". The map f has an attracting cycle of 25 points, and each stone collects the points whose orbit settles onto one particular point of the cycle under every 25th iteration. The 25 stones fall into 5 genera of 5 species — one colour per genus, one shade per species — and the species of gold are strung along the dragon's main body, meeting at its wasp's waists.</p>
+        <div class="formula">{z : lim<sub>n→∞</sub> |f<sub>n</sub>(z)| = ∞},&nbsp; f(z) = λz(1−z)<br>stone g: {z : lim<sub>n→∞</sub> f<sub>25n</sub>(z) = z<sub>g</sub>}</div>
+        <div class="group">
+          <div class="label-row"><span class="label">The parameter λ</span></div>
+          <div class="steps words" id="lam5" role="group" aria-label="Choice of lambda"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Colour</span></div>
+          <div class="steps words" id="mode5" role="group" aria-label="Colouring"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="p5">Show Plate C5 as printed</button>
+        </div>
+        <p class="readline" id="info5" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Cycle</dt><dd id="r5a">period 25</dd></div>
+          <div><dt>Genera</dt><dd id="r5b">5 × 5 species</dd></div>
+          <div><dt>Multiplier</dt><dd id="r5c">|f₂₅′| ≈ 0</dd></div>
+          <div><dt>Iterations</dt><dd id="r5d">—</dd></div>
+        </dl>
+        <p class="note">The caption prints λ only as "~1.64 + .96i", and at exactly that value the critical point escapes: there are no stones at all, only dust — the tilde is doing real work. This page uses the nearby λ whose 25-cycle is superattracting (the centre of the period-25 island that touches a period-5 island, which is what makes 25 = 5 × 5), found by Newton's method and matched to the plate by its spirals. The button "exactly as the caption prints it" shows the dust.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== C7 ===================== -->
+  <section class="plate" id="c7">
+    <div class="plate-head">
+      <p class="no">Plate C7 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>A self-inverse fractal patchwork</h2>
+      <p class="dim" id="dim7">generator: 4 lines and 4 circles, adjacent circles tangent · 6 Γ-discs, one colour of cloth each</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wP7" style="background:#fff">
+          <canvas id="cP7" role="img" aria-label="The self-inverse patchwork of coloured discs"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>The patchwork</strong> · <span id="cP7s">—</span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">"This hanging is patched of six different kinds of transparent cloth", discs cut from coloured cloth and sewn on a transparent scrim, singly or in superposition. The construction begins with a generator of 4 straight lines, forming a rectangle, and 4 circles, each centred on one of the lines. The shape of interest, L, is the smallest set left unchanged by reflection in any line and inversion in any circle. Mandelbrot's "workable solution": draw the 6 Γ-circles, each orthogonal to 3 of the 8 generating shapes — two overlapping in the central medallion, four at the corners. Give each Γ-disc its own cloth, and copy that cloth into every image of the disc under the group. L is then the set of points where patches touch along their bounding circles.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mode7" role="group" aria-label="Overlay"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Fineness</span><span class="value" id="v7fine">discs down to 1 px</span></div>
+          <div class="steps" id="fine7" role="group" aria-label="Smallest disc drawn"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="p7">Show Plate C7 as printed</button>
+          <button type="button" class="btn" id="p7g">The generator's frame</button>
+        </div>
+        <dl class="read">
+          <div><dt>Discs drawn</dt><dd id="r7a">—</dd></div>
+          <div><dt>Smallest</dt><dd id="r7b">—</dd></div>
+          <div><dt>Γ-discs</dt><dd>6</dd></div>
+          <div><dt>Period</dt><dd>a rectangle</dd></div>
+        </dl>
+        <p class="note">The generator was measured from the caption's diagram: lines x = ±1 and y = ±0.7 (in the rectangle's half-width), circles of radius 0.6 on the long lines. The diagram alone leaves the side circles' radius ambiguous, but the plate decides: around each white hub the discs accumulate in unending rings, the signature of tangency, so the side radius is √(1 + 0.7²) − 0.6 ≈ 0.6207, making each circle tangent to its neighbours. The Γ-circles then follow exactly from orthogonality, and the fitted picture agrees with the plate's disc centres and radii to about 1.5%. The plate is printed turned 90° from the diagram, and its six cloth colours are sampled from the print.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), colour plates C1–C7 and C16 and their captions. The dragons were computed for the book by V. Alan Norton; here every figure is recomputed from the stated formulas and generators, and the notes above say what was fitted. Chapter 19's self-squared plates and Chapter 18's self-inverse constructions will get pages of their own. Companion page: <a href="fractal-landscapes.html">Landscapes That Never Were</a> (Plates C9–C15).</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>

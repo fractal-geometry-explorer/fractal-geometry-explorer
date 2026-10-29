@@ -1,0 +1,96 @@
+<title>Isothermal Surfaces of Turbulence</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.r-band { aspect-ratio: 3 / 1; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 30, "Isothermal surfaces of homogeneous turbulence" · pages 277–279</p>
+    <h1><span class="plate-no">Chapter 30</span><span class="lozenge" aria-hidden="true"></span><span>Isothermal Surfaces of Turbulence</span></h1>
+    <p class="dek">Where in a turbulent fluid is the temperature exactly 45°F? Topologically the answer is a collection of spheres, but no sphere of Euclid is this rough. Chapter 30 argues that the isosurfaces of temperature are fractals of dimension D = 3 − H, where Kolmogorov's theory of turbulence fixes H = 1/3 on geometric grounds alone — and with that it finally explains the fractal flakes of Plates 10 and 11 at the front of the book.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#iso"><b>277–279</b> Isotherms in a plane</a>
+    <a href="#line"><b>278</b> A linear section</a>
+  </nav>
+
+  <!-- ===================== PLANAR ISOTHERMS ===================== -->
+  <section class="plate" id="iso">
+    <div class="plate-head">
+      <p class="no">Chapter 30, the concept <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Isotherms in a planar section</h2>
+      <p class="dim" id="dimI">T is a fractional Brown function of (x, y, z) · isosurface D = 3 − H · its planar isotherms D = 2 − H</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq" id="wI">
+          <canvas id="cI" role="img" aria-label="Isotherms of a fractional Brown temperature field in a plane"></canvas>
+        </div>
+        <figcaption><strong>The isotherm T = T₀</strong> · <span id="capI">H = 1/3 · isotherm D = 5/3</span> · seed <span id="seedI">2</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The chapter models temperature in a fluid as a fractional Brown function of the three space coordinates. Burgers' crude postulate — the mean square difference of temperature between two points grows like their distance — gives H = 1/2. Kolmogorov's dimensional argument, "a striking triumph of abstract a priori thought", corrects the growth to the 2/3 power, giving H = 1/3: antipersistent, while Earth's relief favours persistence. Cut the fluid by a plane and the isotherm T = T₀ is a curve "identical to the coastlines studied in Chapter 28, except for the value of D": here that dimension is 2 − H. The full isosurface in space has D = 3 − H, so Kolmogorov turbulence wraps its 45°F surface into a fractal of dimension 8/3.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">The exponent H</span></div>
+          <div class="steps words" id="hI" role="group" aria-label="Exponent H"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">The level T₀</span><span class="value" id="vI0">median</span></div>
+          <div class="slider"><input type="range" id="sI0" min="10" max="90" step="5" value="50" aria-label="Temperature level percentile"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Draw</span></div>
+          <div class="steps words" id="mI" role="group" aria-label="Drawing mode"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn" id="rollI">New fluid</button>
+        </div>
+        <dl class="read">
+          <div><dt>Isotherm (theory)</dt><dd id="rIa">D = 5/3</dd></div>
+          <div><dt>Isotherm (counted)</dt><dd id="rIb">—</dd></div>
+          <div><dt>Isosurface</dt><dd id="rIc">D = 8/3</dd></div>
+          <div><dt>Delta variance</dt><dd id="rId">|ΔP|^2/3</dd></div>
+        </dl>
+        <p class="note">The book prints no figure in this chapter — its pictures are Plates 10 and 11 in Chapter 2, 3D isosurfaces rendered at H = 1/3, 1/2 and 3/4, which this page's buttons mirror. The field here is a planar section, synthesised spectrally with the stated H and a visible seed; the counted dimension measures the drawn isotherm with coarser and coarser rulers, live, and should sit near 2 − H.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== LINEAR SECTION ===================== -->
+  <section class="plate" id="line">
+    <div class="plate-head">
+      <p class="no">Chapter 30, the sections <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>A linear section and its zero-set</h2>
+      <p class="dim">temperature along a line: a fractional Brown line-to-line function, D = 2 − H · the set where T = T₀: D = 1 − H</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-band" id="wL">
+          <canvas id="cL" role="img" aria-label="Temperature along a line, with the points where it crosses the level"></canvas>
+        </div>
+        <figcaption><strong>T along one axis</strong> · <span id="capL">H = 1/3</span> · the ticks mark T = T₀</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Each cut of the model by a line gives a one-dimensional record of temperature: a fractional Brown function whose graph has dimension 2 − H. The isotherm of the cut — the instants where the record crosses T₀ — is a dust of dimension 1 − H, the pattern Chapter 8 met as a Lévy dust on the line. Antipersistence (H &lt; 1/2) makes the record cross its level far more often than Brownian chance: the crossings in Kolmogorov turbulence (H = 1/3) form a dust of dimension 2/3, against 1/2 for Burgers.</p>
+        <dl class="read">
+          <div><dt>Graph</dt><dd id="rLa">D = 5/3</dd></div>
+          <div><dt>Zero-set</dt><dd id="rLb">D = 2/3</dd></div>
+          <div><dt>Crossings here</dt><dd id="rLc">—</dd></div>
+          <div><dt>Shares</dt><dd>the seed above</dd></div>
+        </dl>
+        <p class="note">The record is the first row of the planar field above, so the two figures always show the same fluid. Change H, the level or the seed up there and this section follows.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 30, pages 277–279. The chapter has no plates of its own; it explains Plates 10–11 (chapter 2), which await their own page. Figures here are statistical reconstructions of the chapter's model with visible seeds. Companion pages: <a href="fractal-landscapes.html">Landscapes That Never Were</a> (the same mathematics as relief, Plates C9–C15) and <a href="color-plates.html">A Book Within the Book</a>.</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>
