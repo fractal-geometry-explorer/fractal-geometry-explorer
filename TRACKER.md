@@ -33,8 +33,8 @@ Update this file in the same pull request as the work it records.
 
 | Plate | Page | Title | Kind | Status | Site page |
 | :- | :- | :- | :- | :- | :- |
-| 10–11 | 10–11 | Artificial fractal flakes (surface dimensions 7/3 and 5/2) | random / render | todo | |
-| 13 | 12–13 | Jean Perrin's classic drawings of physical Brownian motion | data | todo | |
+| 10–11 | 10–11 | Artificial fractal flakes (surface dimensions 7/3 and 5/2) | random / render | done | fractal-flakes |
+| 13 | 12–13 | Jean Perrin’s classic drawings of physical Brownian motion | data | done | fractal-flakes |
 
 ## II Three classic fractals, tamed (chapters 5–8)
 
