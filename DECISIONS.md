@@ -47,6 +47,15 @@ Conventions used below:
 **Wiener sausage (chapter 25 concept, page 32 method).**
 - Brownian paths are simulated. The page explains why time scales as ε² and why squared displacements add.
 
+**Plate 33, Richardson's empirical data (page coast-of-britain).**
+- A `data` plate: 39 markers digitised from the 600 dpi scan — 29 open rings and the circle's 10 filled dots — each centre taken as the centroid of the marker's interior holes (robust against the through-lines), good to about 0.005 of a decade.
+- **The grid is hand-drawn and uneven.** Each rule was fitted with its own tilt; the row pitch differs by 5% (4.0→3.5 spans 665 px, 3.5→3.0 spans 634 px), so values are interpolated rule to rule rather than by one scale. Of the two close horizontal lines at the top, the upper is the 4.0 rule — the "4.0" label centres on it and it ends at the 3.5 vertical — and the lower, gently sloping one is the circle's own fitted line.
+- **Printed lines against point refits** (slope, fitted to the drawn ink with 0.4–1.1 px residuals / least squares on the digitised points): Australia −0.1285 / −0.1061; South Africa −0.0059 / −0.0221; German frontier −0.1604 / −0.1411; West Britain −0.2612 / −0.2613 (the caption's "slope of −0.25"); Portugal −0.1257 / −0.1299. The slopes usually quoted from Richardson 1961 are −0.13, −0.02, −0.15, −0.25, −0.14. The page shows both fits.
+- **The German frontier prints three yardsticks twice** — two measurements each, 0.04–0.05 apart in log L, at log ε ≈ 2.26, 2.48 and 2.70. Digitised and drawn as printed; the caption does not explain the pairs.
+- **One open ring sits inside the circle's dot sequence** at (3.309, 3.957), between the dots at 3.271 and 3.350. It lies on no coastline's line, so the page reads it as a circle measurement and keeps it as the one open marker in that series.
+- **The circle.** Fitting the smooth equal-sided-polygon law L(ε) = ε·π/asin(ε/2r) to the ten dots gives circumference 10^3.98 km; the dots' flat part runs about 0.02 of a decade below the 4.0 rule. The page offers the law drawn for a round 10,000 km circle.
+- **Page extras.** The divider-walk demo (Plate 51's quadric generator on a straight initiator, D = 3/2 — the value the chapter announces as a first approximation for coastlines) with its live Richardson plot, and the Hausdorff approximate measure N(ε)·ε^d computed from those same walks, are this page's illustrations of the text; chapter 5 prints no figure but Plate 33 (Plates 31–32 have their own pages). Digitisation scripts in `research/ch05/`.
+
 **Plates 42–45, triadic Koch island.**
 - These are von Koch's construction (42) and Cesàro's (43), two kinds of self-similarity (44), and the lake (45).
 - Plate 45's background is a 7-interval snowflake sweep, all S, at about stage 4 (see Plates 68–69).

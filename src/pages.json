@@ -23,6 +23,19 @@
       "layout_comment": "/* Layout: the plate on the left as on the book's page 32; controls, readouts and the measuring chart down the right. One column under 900px. */"
     },
     {
+      "slug": "coast-of-britain",
+      "title": "How Long Is the Coast of Britain?",
+      "plates": "Plate 33",
+      "chapter": 5,
+      "scripts": [
+        "shared/geometry.js",
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: the digitised Plate 33 chart, the divider-walk demo (coast plus its own Richardson plot), and the Hausdorff-measure chart, each a figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
       "slug": "wiener-sausage",
       "title": "Wiener Sausage",
       "plates": "Brownian motion",
