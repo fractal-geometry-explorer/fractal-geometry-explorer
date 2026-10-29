@@ -199,7 +199,7 @@ Update this file in the same pull request as the work it records.
 ## Concepts without a plate
 
 Each chapter session should add the chapter's main ideas here, alongside its plates. Candidates so far:
-- similarity dimension (chapters 3 and 6);
+- similarity dimension (chapters 3 and 6) — done, on the koch-plates page (Plate 44's piece-cutting demo, D = log N / log (1/r));
 - coastline length against ruler size (chapter 5) — done, on the coast-of-britain page (the divider walk with its live Richardson plot, and the Hausdorff approximate measure; the ε-sausage was already on the Minkowski page);
 - random midpoint displacement, its creases, and Poisson strata (chapter 26; on the Plate 246 page);
 - length–area–volume relations (chapter 12): done, on the length-area page (divider-walk demo, Hack's rivers, area–volume cases);
