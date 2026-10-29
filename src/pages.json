@@ -412,6 +412,18 @@
       "layout_comment": "/* Layout: the diameter exponent (a concept diagram), Plates 164-165 recursive bronchi, Plate 163 flower models, each a figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
     },
     {
+      "slug": "self-inverse",
+      "title": "Self-Inverse Fractals and Apollonian Nets",
+      "plates": "Pages 166–179",
+      "chapter": 18,
+      "scripts": [
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: inversion (167), Apollonian packing (169–170), the net as clans (171), Poincaré chains (173), Plate 177's osculating discs, Plate 178's homographies (a reconstruction) and Plate 179's corrected Fricke figure, each a figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
       "slug": "self-squared-dragons",
       "title": "Self-Squared Dragons",
       "plates": "Plates 185–192",

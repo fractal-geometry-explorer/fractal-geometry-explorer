@@ -1,0 +1,274 @@
+<title>Self-Inverse Fractals</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.r-chain { aspect-ratio: 1 / 1; }
+.legend { display: flex; flex-wrap: wrap; gap: 10px 16px; font: 500 12.5px/1.4 var(--f-display); color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 14px; height: 14px; border-radius: 50%; display: inline-block; flex: none; }
+.legend i.ring { background: none; border: 2px solid currentColor; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 18, "Self-inverse fractals, Apollonian nets, and soap" · pages 166–179</p>
+    <h1><span class="plate-no">Pages 166–179</span><span class="lozenge" aria-hidden="true"></span><span>Self-Inverse Fractals and Apollonian Nets</span></h1>
+    <p class="dek">Nearly every fractal so far was left unchanged by similarities, which shrink and translate. This chapter asks instead for the smallest sets left unchanged by <i>inversions</i> in a set of generating circles — a question posed by Poincaré and Klein in the 1880s, whose answer's actual shape stayed unexplored until Mandelbrot's construction in this chapter. The simplest case is the Apollonian net, which also models the layering of a smectic liquid crystal — soap. Every figure here is computed from the book's rules; the generating circles are fitted from the scans.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#inversion"><b>167</b> Inversion</a>
+    <a href="#apollonian"><b>169–170</b> Apollonian packing</a>
+    <a href="#net"><b>171</b> Nets are self-inverse</a>
+    <a href="#chain"><b>173</b> Poincaré chains</a>
+    <a href="#p177"><b>177</b> Osculating discs</a>
+    <a href="#p178"><b>178</b> Homographies</a>
+    <a href="#p179"><b>179</b> Fricke, corrected</a>
+  </nav>
+
+  <!-- ===================== INVERSION ===================== -->
+  <section class="plate" id="inversion">
+    <div class="plate-head">
+      <p class="no">Pages 167–168 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Standard geometric inversion</h2>
+      <p class="dim">Inversion in a circle of centre O and radius R: P ↦ P′ on the same ray from O, with |OP| · |OP′| = R²</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wA">
+          <canvas id="cA" role="img" aria-label="A circle and its inverse in the reference circle"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>Inversion in the circle C</strong> · tap or click to place the black circle · its inverse is drawn in red</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">After the line, the next simplest shape in Euclid is the circle, and being a circle survives inversion. Inversion in a circle C of centre O swaps inside and outside: a point at distance d from O lands at distance R²/d on the same ray. The chapter restates the facts its figures illustrate: circles through O invert into straight lines, and conversely; circles elsewhere invert into circles; circles orthogonal to C, and lines through O, are left in place.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">The four cases of page 167</span></div>
+          <div class="steps words" id="mA" role="group" aria-label="Case"></div>
+        </div>
+        <p class="readline" id="infoA" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Circle's distance to O</dt><dd id="rAd">—</dd></div>
+          <div><dt>Its inverse</dt><dd id="rAk">a circle</dd></div>
+        </dl>
+        <p class="note">A set that inversions carry onto itself is called <i>self-inverse</i>. The rest of the chapter looks for the smallest closed self-inverse set of a family of generating circles — its <i>limit set</i> L, the region "where infinitesimal children concentrate".</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== APOLLONIAN PACKING ===================== -->
+  <section class="plate" id="apollonian">
+    <div class="plate-head">
+      <p class="no">Pages 169–170 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Apollonian packing, nets and gaskets</h2>
+      <p class="dim" id="dimB">D is not known in closed form: 1.300197 &lt; D &lt; 1.314534 (Boyd 1973), numerically D ≈ 1.3058</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wB">
+          <canvas id="cB" role="img" aria-label="Apollonian packing of three tangent circles"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cBt">Apollonian packing</strong> · <span id="cBn">—</span> · zoom to pack finer</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Apollonius of Perga gave the algorithm for the circles tangent to three given circles. When the three are mutually tangent — two inside the third, as in the book's figures — exactly two Apollonian circles answer, the largest circles inscribed in the two curvilinear triangles. Five circles now bound six triangles; inscribing the largest circle in each, and repeating without end, is <i>Apollonian packing</i>. The circles plus their limit points form the <i>Apollonian net</i>; the portion inside one triangle is a <i>gasket</i>.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mB" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Construction stage</span><span class="value" id="sBv">packing</span></div>
+          <div class="steps" id="sB" role="group" aria-label="Stage"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="preB170">Show the five circles of p. 170</button>
+          <button type="button" class="btn" id="preBgasket">The gasket, as photographed</button>
+        </div>
+        <dl class="read">
+          <div><dt>Circles drawn</dt><dd id="rBa">—</dd></div>
+          <div><dt>Smallest radius</dt><dd id="rBb">—</dd></div>
+          <div><dt>Net dimension</dt><dd>≈ 1.3058</dd></div>
+        </dl>
+        <p class="note">The three given circles are fitted from the construction figure on page 170 (they are the same three throughout pages 169–171) and adjusted to exact tangency. The packing is computed by Descartes' circle theorem, not Apollonius' ruler-and-compass steps. The photograph on page 170 shows the gasket in the triangle that lies below the two inner circles; the "as photographed" preset zooms to it. Since D is a fraction while the topological dimension is 1, the net and gasket are fractal curves: cutting off discs of radius below ε leaves interstices of perimeter ∝ ε<sup>1−D</sup> and area ∝ ε<sup>2−D</sup>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== NETS ARE SELF-INVERSE ===================== -->
+  <section class="plate" id="net">
+    <div class="plate-head">
+      <p class="no">Page 171 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Apollonian nets are self-inverse</h2>
+      <p class="dim">Four Γ circles → four generating circles C₁…C₄, each orthogonal to a triplet of Γ's · the net splits into 4 clans</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wC">
+          <canvas id="cC" role="img" aria-label="The Apollonian net built from its four generating circles"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cCt">The net as four clans</strong> · <span id="cCn">—</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Return to the three tangent circles, add either Apollonian circle, and call the four the Γ circles. Each triplet of Γ's has a circle orthogonal to all three — through their three tangency points — and these four new circles are taken as the generator, C₁, C₂, C₃, C₄. The payoff: the smallest closed set self-inverse with respect to the C circles <i>is</i> the Apollonian net built on the Γ circles. Every circle of the net is carried to one of the Γ circles by a unique sequence of inversions, so the net sorts into four clans.</p>
+        <div class="legend" id="legC"></div>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mC" role="group" aria-label="What to show"></div>
+        </div>
+        <dl class="read">
+          <div><dt>Circles drawn</dt><dd id="rCa">—</dd></div>
+          <div><dt>Built by</dt><dd id="rCb">inversions of the Γ circles</dd></div>
+        </dl>
+        <p class="note">Here the net is not computed by Descartes' theorem at all: every circle is an inverted image of a Γ circle under a reduced word in the four C inversions, and the colours name which Γ each descends from — the book's four clans, made visible. That the result coincides with the packing of the previous section is the self-inverse property. Like the Sierpiński gasket of Plate 141, the net can also be knitted with a single thread: a line can pass twice over certain points but never twice over any interval.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== POINCARÉ CHAINS ===================== -->
+  <section class="plate" id="chain">
+    <div class="plate-head">
+      <p class="no">Pages 172–173 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Poincaré chains, and Poincaré's construction of L</h2>
+      <p class="dim">M = 4 circles, each tangent to its two neighbours · stage s shows all 4·3ˢ links · the chain thins to its thread L</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wD">
+          <canvas id="cD" role="img" aria-label="Stages of Poincaré's construction of the limit set"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cDt">Poincaré's construction</strong> · stage <span id="cDs">1</span> · <span id="cDn">12 links</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">A <i>Poincaré chain</i> is a necklace of M circles, each tangent to its two cyclic neighbours and meeting no other. Its limit set L is then a loop — a Jordan curve. To draw L, Poincaré and Fricke &amp; Klein replace the chain, in stages, by chains of more and smaller links: the first stage replaces every link Cᵢ by the inverses in Cᵢ of the other links, creating M(M−1) = 12 smaller ones, and each later stage inverts the whole previous chain in each original circle. As in the book's figure, each stage is drawn in ink over the previous stage in white, on the gray panel.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="sDv">stage 1</span></div>
+          <div class="steps" id="sD" role="group" aria-label="Stage"></div>
+          <label class="check" for="ghostD"><input type="checkbox" id="ghostD" checked> Show the previous stage in white, as printed</label>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="preD">Show p. 173 as printed</button>
+        </div>
+        <dl class="read">
+          <div><dt>Links at this stage</dt><dd id="rDa">12</dd></div>
+          <div><dt>Largest link radius</dt><dd id="rDb">—</dd></div>
+        </dl>
+        <p class="note">The four chain circles are fitted from the figure on page 173 (rms 2.6 px at 600 dpi) and adjusted to exact tangency. The book's complaint is visible by stage 4: some links shrink very slowly near the tangency points, so even advanced chains give a poor idea of L — the failing that motivates the construction of Plate 177. The chain here is not Fuchsian: no single circle is orthogonal to all four links, so L is a genuinely fractal loop rather than a circle.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 177 ===================== -->
+  <section class="plate" id="p177">
+    <div class="plate-head">
+      <p class="no">Plate 177, with pages 174–175 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>A self-inverse fractal: Mandelbrot's osculating discs</h2>
+      <p class="dim">Γ<sub>ijk</sub> ⟂ Cᵢ, Cⱼ, Cₖ · the tangency-free disc Δ<sub>ijk</sub> osculates L · clans of the Δ's tile everything but L</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wE">
+          <canvas id="cE" role="img" aria-label="Mandelbrot's construction of the limit set by osculating discs"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cEt">Osculating-disc construction</strong> · <span id="cEn">—</span> · the white thread between black and gray is L</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">A standard curve is hugged, to second order, by its osculating circle. Curvature means nothing on L, but at every point where two packing circles touch they visibly "embrace" the rest of the set between them, and Mandelbrot extends this: a circle osculates L when it is critical between lying all on one side and not. For the same chain as above, the circles Γ<sub>ijk</sub> orthogonal to the triplets Cᵢ, Cⱼ, Cₖ osculate L, and each bounds a disc Δ<sub>ijk</sub> free of the chain's tangency points. The clans of the Δ's — their inverses and repeated inverses — cover the whole plane except L itself: gray outside, black inside. A few stages already outline L better than many stages of Poincaré's chains.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Approximation</span><span class="value" id="sEv">the limit</span></div>
+          <div class="steps words" id="sE" role="group" aria-label="Approximation"></div>
+          <label class="check" for="circE"><input type="checkbox" id="circE"> Show the chain circles and the four Γ circles</label>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="preE">Show Plate 177 as printed</button>
+        </div>
+        <dl class="read">
+          <div><dt>Osculating discs drawn</dt><dd id="rEa">—</dd></div>
+          <div><dt>Outside (gray) seeds</dt><dd>Δ₁₂₃ ∪ Δ₃₄₁, both unbounded</dd></div>
+          <div><dt>Inside (black) seeds</dt><dd>Δ₂₃₄ ∪ Δ₄₁₂, which intersect</dd></div>
+        </dl>
+        <p class="note">The plate's three figures are its stages: first the four Δ discs alone, then one round of inverses (Δ₁₂₃ and Δ₃₄₁ in C₄ and C₂; Δ₂₃₄ and Δ₄₁₂ in C₁ and C₃), then the full clans. The caption's analogy: the gray and black unions approximate the outside and inside of L the way the hexagon and star of Plate 43 approximate the Koch snowflake. Our render reproduces all three figures from the fitted chain; zooming refines the cover, and the uncovered thread is L.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 178 ===================== -->
+  <section class="plate" id="p178">
+    <div class="plate-head">
+      <p class="no">Plate 178 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Self-homographic fractals, near the Peano limit</h2>
+      <p class="dim">An homography z ↦ (az + b)/(cz + d), ad − bc = 1 · inversion ∘ reflection ∘ rotation · a reconstruction, not the plate</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wF">
+          <canvas id="cF" role="img" aria-label="Limit set of twisted inversions, a self-homographic fractal"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>Twisted inversions</strong> · twist <span id="cFt">0°</span> · <span id="cFn">—</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Groups of inversions matter to mathematicians through their relation with groups of <i>homographies</i> — Möbius maps, each a product of an inversion, a reflection and a rotation. Without rotation, homographies learn everything from inversions; allowing rotation "brings in new riches". Plate 178 is such a limit set, an almost plane-filling shape devised by David Mumford for this book. Its exact group is not stated in the book, so the plate cannot be reproduced stroke for stroke. This figure instead lets you add the rotation yourself: each generator is inversion in a chain circle followed by a rotation about that circle's centre, which makes every two-letter word an homography. At 0° the limit set is the thread of the sections above; as the twist grows it spirals and thickens toward the plane-filling "Peano limit".</p>
+        <div class="slider group">
+          <div class="label-row"><span class="label">Twist of each inversion</span><span class="value" id="twFv">0°</span></div>
+          <input type="range" id="twF" min="0" max="60" value="0" step="1" aria-label="Twist angle in degrees">
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Generating circles</span></div>
+          <div class="steps words" id="mF" role="group" aria-label="Configuration"></div>
+        </div>
+        <dl class="read">
+          <div><dt>Discs in the cover</dt><dd id="rFa">—</dd></div>
+          <div><dt>At 0°</dt><dd>the chain's Jordan curve L</dd></div>
+        </dl>
+        <p class="note">This section is a reconstruction in spirit, clearly not the printed plate: Mumford's group is unpublished, so the page shows the phenomenon — a one-parameter family of self-homographic sets leaving the self-inverse case — rather than a fit. The drawing covers the limit set by discs, exactly as for inversions, because each twisted generator still maps the outside of its circle into its disc.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 179 ===================== -->
+  <section class="plate" id="p179">
+    <div class="plate-head">
+      <p class="no">Plate 179, with page 173 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>A celebrated self-inverse fractal, corrected</h2>
+      <p class="dim">Fricke &amp; Klein's Figure 156 (1897): five generating circles · four form a Poincaré chain; C₅ touches C₂ and C₃</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wG">
+          <canvas id="cG" role="img" aria-label="The self-inverse fractal of Fricke and Klein's five circles, corrected"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cGt">The corrected limit set</strong> · <span id="cGn">—</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Fricke's Figure 156 claimed to show the self-inverse fractal of five generating circles, and was reproduced very widely. Fricke knew that L incorporates circles and had his draftsman include them — but otherwise he did not know what sort of very irregular shape to expect, and Mandelbrot's verdict on the discrepancy is "horrid". The osculating σ-disc construction gives the actual shape. The five circles here are fitted from the engraving as the book reproduces it; four of them form a Poincaré chain, whose own Jordan curve L* also belongs to the full set L, along with its transforms by the remaining inversions.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mG" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="preGtop">Plate 179, top right</button>
+          <button type="button" class="btn" id="preGbot">Bottom right</button>
+        </div>
+        <dl class="read">
+          <div><dt>Generator</dt><dd>5 circles, fitted rms 0.6 px</dd></div>
+          <div><dt>Discs drawn</dt><dd id="rGa">—</dd></div>
+        </dl>
+        <p class="note" id="noteG">The five circles were recovered from the scan by fitting the arcs that bound the engraving's blackened centre, then nudged to exact tangency (under a thousandth of the outer radius). Checked against the plate: our inside of L* matches the bottom-right shape with 98% overlap after a similarity fit, and the full five-circle shape matches the top-right black form feature for feature (the print sits rotated about 44°; overlap 74% at the rim's halftone precision). A pleasing confirmation: the two large circles Fricke's draftsman drew across the engraving check out as true circles of L — one passes through the three tangency points of C₂, C₃, C₅, orthogonal to all three, exactly like the Γ circles of the Apollonian net.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 18, pages 166–179 (Plates 177, 178 and 179). Every figure is computed from the stated rules; generating circles are fitted from the scans and idealized to exact tangency, as noted under each figure. Plate 178's section is a reconstruction of the idea, not of the plate. The smectic "soap" model of pages 176–177 is discussed in the Apollonian section's text. D bounds for the Apollonian net: Boyd 1973.</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>
