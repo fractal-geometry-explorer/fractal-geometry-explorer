@@ -199,6 +199,26 @@ Chapter 13 prints no numbered plates; its six figures sit in the running text. A
 
 **Percolation (pp. 126–130).** The chapter prints no percolation figure in these pages (the critical-cluster plate is with chapter 14). The page's Bernoulli bond-percolation lattice is a **seeded simulation**, labelled as such, with p_crit = 1/2 and the D_c ≈ 1.89 formulas quoted from the text. The p. 129 sub/supercritical initiators (eight ½ξ squares around a hole; the even-coordinate grid lines) are described in the note rather than drawn.
 
+## Part IV, chapter 14 (Plates 141–146, figures on pages 132 and 138–139)
+
+**Plate 141, Sierpiński arrowhead.**
+- Generator: half a hexagon, three legs of ½ at +60°, 0°, −60°; codes [1, 0, 1], read off the caption's second teragon (the outer legs carry mirrored copies). Finite stages were checked to be free of repeated vertices to stage 8.
+- **The plate is the "tropical fish":** the piece of the teragon between its two vertices nearest the midpoint of [0, 1] (in the limit, two successive returns to that point of self-contact), closed and filled as one polygon. The filled polygon reproduces the plate's pattern of black and white tremas exactly — which tremas print black falls out of the pinch parity, not from any painting rule. Stage 8 matches the plate's finest texture at print size (fitted by eye).
+- Fill rule: even-odd and nonzero agree (the finite polygon is simple).
+
+**Figure p. 132, critical percolation cluster.** Random; rebuilt statistically as bond percolation on a square lattice at p = ½ with a seed control. "Dangling bonds" are trimmed by repeatedly deleting cluster sites that hang by one bond (keeping the electrodes), which matches the caption's description; the true biconnected backbone was not computed.
+
+**Plate 143, fractal skewed web.** The Sierpiński tetrahedron: N = 4, r = ½ on a closed tetrahedron, D = 2 exactly. Drawn as a depth-shaded edge rendering; the preset's viewing angle was fitted by eye (the print's slight perspective is not reproduced). The square-shadow property was verified: the four corners of each tetrahedron project, along the axis joining the midpoints of opposite edges, onto the corners of a square (turned 45° in the natural basis of that plane), and the stage-n shadows pave the initial square.
+
+**Plate 145, carpet and sponge.**
+- Carpet: N = 8, r = 1/3 from a filled square; the caption's three printed steps match stages 1–3. The medallion families of the chapter text (large: thin ring of 4(b−1); small, odd b: thick ring of b²−1) are on the page with their D formulas.
+- Menger sponge: cell rule "at most one of the three triadic digits equals 1 at every level" (removes the 6 face centres and the centre, keeps 20). The book's photograph is reproduced from Blumenthal & Menger, so ours is a computed re-rendering: outer visible faces, painter-sorted, three print-like tones, rotatable. Level 3 as in the print.
+- The fused-islands generators at the bottom of page 144 are described in the carpet section's text only, not rebuilt interactively.
+
+**Figure pp. 138–139, ramification through branches.** N = 5, r = 1/3, the ⊓ generator (middle third lifted onto a square tab), initiator a square per the text. **Every copy is placed as drawn (codes all 0)**: all 1024 code assignments were enumerated against the printed mountain, and the all-as-drawn cascade reproduces it — the 45° staircase flanks and the little square rings emerge from teragons touching tab against tab (the same stick-generator overlap idea as the fused islands). The book prints the curve on one side at stage 4. On the full square, bumps outward (clockwise traversal), the four mountains meet flush along the corner diagonals: the limit silhouette is a plain diamond and all the structure is interior ramification.
+
+**Plate 146, split snowflake halls.** **The same generator and codes as Plate 31's monkeys tree** (eleven legs, six of 1/3 and five of 1/(3√3), codes [1, 3, 0, 3, 3, 1, 2, 2, 0, 2, 0]), cascaded from the plain initiator [0, 1] — the Wise Elders' line — and drawn with straight legs at stage 4, which matches the scan's maze, its empty Great Hall, the line reaching both margins, and the hooks of the finer legs. Plate 31 prints the same construction rounded; Plate 146 does not round. The curve stays inside the Koch snowflake on [0, 1] (sampled: 400 of 400 stage-4 vertices inside, up to boundary rounding) and hugs its boundary, hence the snowflake silhouette. Filling the closed curve shows the North/South division; the page offers it as a mode.
+
 ## Part V, chapters 15–17
 
 **Plate 155, fractal umbrella trees (chapter 16).**

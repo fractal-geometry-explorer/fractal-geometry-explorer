@@ -446,6 +446,19 @@
         "ui.js"
       ],
       "layout_comment": "/* Layout: Plate 323 (diamond tremas and lacunarity, two panels) and Plate 325 (a spatial trema dust on one octant of the sky), each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "ramified-lattices",
+      "title": "Gaskets, Webs and Sponges",
+      "plates": "Plates 141–146",
+      "chapter": 14,
+      "scripts": [
+        "shared/geometry.js",
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: the gasket and arrowhead (141), a percolation cluster (p. 132), the skewed web (143), the carpet and the Menger sponge (145), the branching curve of p. 139 and the split snowflake halls (146), each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
     }
   ]
 }

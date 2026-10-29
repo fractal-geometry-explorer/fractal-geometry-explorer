@@ -80,11 +80,12 @@ Update this file in the same pull request as the work it records.
 | Figure, p. 121 | 121 | Islands and lakes (generator and advanced teragon) | exact | done | islands-clusters |
 | Figure, p. 124 | 124 | Nonlumped curdling clusters (generators A, B, C, E, F) | exact | done | islands-clusters |
 | Figure, p. 125 | 125 | Cross-lumped curdling clusters; knotted Peano monsters (p. 126) | exact | done | islands-clusters |
-| Figure, p. 132 | 132 | Critical percolation cluster | random | todo | |
-| 141 | 141–142 | Sierpiński arrowhead (boundary D ≈ 1.5849) | exact | todo | |
-| 143 | 142–143 | A fractal skewed web | exact | todo | |
-| 145 | 144–145 | Sierpiński carpet and Menger sponge | exact / render | todo | |
-| 146 | 146 | Split snowflake halls (D ≈ 1.8687) | exact | todo | |
+| Figure, p. 132 | 132 | Critical percolation cluster | random | done | ramified-lattices |
+| Figure, p. 138–139 | 138–139 | Ramification through branches (N = 5, r = 1/3) | exact | done | ramified-lattices |
+| 141 | 141–142 | Sierpiński arrowhead (boundary D ≈ 1.5849) | exact | done | ramified-lattices |
+| 143 | 142–143 | A fractal skewed web | exact | done | ramified-lattices |
+| 145 | 144–145 | Sierpiński carpet and Menger sponge | exact / render | done | ramified-lattices |
+| 146 | 146 | Split snowflake halls (D ≈ 1.8687) | exact | done | ramified-lattices |
 
 ## V Nonscaling fractals (chapters 15–17)
 
@@ -204,6 +205,7 @@ Each chapter session should add the chapter's main ideas here, alongside its pla
 - random midpoint displacement, its creases, and Poisson strata (chapter 26; on the Plate 246 page);
 - length–area–volume relations (chapter 12): done, on the length-area page (divider-walk demo, Hack's rivers, area–volume cases);
 - percolation (chapter 13) — done, on islands-clusters (seeded bond-percolation lattice);
+- the order of ramification and fractal lattices (chapter 14) — done, discussed on the ramified-lattices page;
 - surfaces with positive volume: Cantor dusts of positive measure, Osgood's curve of positive area, and the arteries-and-veins model of flesh (chapter 15, which prints no plates);
 - the diameter exponent of trees (chapter 17) — done, on the diameter-exponent page;
 - canonical curdling, the Bienaymé birth-and-death criticality and D* = log ⟨N⟩/log b (chapter 23; on the random-curds page);
