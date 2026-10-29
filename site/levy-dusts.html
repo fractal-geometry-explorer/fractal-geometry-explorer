@@ -1039,9 +1039,9 @@ function buggyGen(G, legs, flipMirror, flipRev) {
   }
   function flTrail(f, v, dy, y0, y1) {
     const c = f.ctx, { pts } = flProj(), half = flData().fl.half;
-    c.save(); c.beginPath(); c.rect(0, y0, f.w, y1 - y0); c.clip();
+    c.save(); toScreen(f); c.beginPath(); c.rect(0, y0, f.w, y1 - y0); c.clip();
     c.setTransform(f.dpr * v.s, 0, 0, -f.dpr * v.s, f.dpr * v.ox, f.dpr * (v.oy + dy));
-    c.strokeStyle = PRINT.ink; c.lineWidth = 0.9 / v.s / f.dpr; c.lineJoin = 'round';
+    c.strokeStyle = PRINT.ink; c.lineWidth = 0.9 / v.s; c.lineJoin = 'round';
     for (const [a, b] of [[0, half], [half, stFl.n]]) {
       const paths = chunked(b - a - 1, (p, i) => { const j = a + i; p.moveTo(pts[2 * j], pts[2 * j + 1]); p.lineTo(pts[2 * j + 2], pts[2 * j + 3]); }, 4096);
       for (const p of paths) c.stroke(p);
