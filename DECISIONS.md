@@ -189,6 +189,20 @@ Chapter 13 prints no numbered plates; its six figures sit in the running text. A
 
 **Percolation (pp. 126–130).** The chapter prints no percolation figure in these pages (the critical-cluster plate is with chapter 14). The page's Bernoulli bond-percolation lattice is a **seeded simulation**, labelled as such, with p_crit = 1/2 and the D_c ≈ 1.89 formulas quoted from the text. The p. 129 sub/supercritical initiators (eight ½ξ squares around a hole; the even-coordinate grid lines) are described in the note rather than drawn.
 
+## Part V, chapter 17
+
+**Plates 164–165, plane-filling recursive bronchi.**
+- **The branching rule, decoded from the scans.** A branch is a rectangle of length ℓ and width c·ℓ. At its far end two daughters leave at right angles, one to each side, with ratios r₁ (long) and r₂. The daughters' centre lines sit back from the parent's end face: the short daughter by half its own width, the long daughter by its full width (its outer edge on the short one's axis), so the parent's tip shows past the crossing. The long daughter's subtree flips which side its own long daughter takes; the short daughter's keeps it. This reproduces Plate 165's top figure branch for branch at every level (600 dpi difference image; the residual is a uniform ink-width bias).
+- **Fitted parameters.** Plate 165 top: r₁ = 0.718, r₂ = 0.678, c = 0.148 (tips' D ≈ 1.93). Plate 165 bottom: r₁ = 0.726, r₂ = 0.582, c = 0.41 (D ≈ 1.66). Trunk at the top pointing down, long arm west, in both.
+- **Plate 164** is the same skeleton rooted at the bottom with widths shrinking per stage. Fitted as geometric decay: widths × 0.66 per stage in the left half, × 0.78 in the right, r₁ = 0.698, r₂ = 0.659, trunk c = 0.17. The large-scale structure matches the plate; the finest twigs only approximately, so the width schedule is a reconstruction and is flagged on the page.
+- **Δ against D.** The model's diameter exponent: with fixed c, Δ = D (both solve r₁^x + r₂^x = 1). With width decay q per stage, Δ solves (q·r₁)^Δ + (q·r₂)^Δ = 1 < D — the chapter's Δ < D case, shown in the page's readouts.
+
+**Plate 163, flattened fractal models of plant flowers (with Plate 155's trees).**
+- **The umbrella tree is a V, not a trunk-and-forks.** Two sticks of length 1 leave the root with the inter-branch angle θ between them; every stick then forks into two daughters at the same θ, r times shorter. Plate 155's heart tree fits this stroke for stroke (r = 0.562, θ = 60.7°). The first canopy level is drawn a few percent off strict scaling in the plates (fitted factors 0.94–1.06); the page's presets reproduce that.
+- **Each stick carries a triangle on *each* side** (angles ½θ at the root, π−θ at the tip, the stick a side). The caption says "an isosceles triangle", but with one triangle per stick the corners around a fork sum to π and the figure cannot be solid; with one per side they sum to exactly 2π, the thickened stems tile with no gap and no overlap, and the rendered figures go solid and scalloped exactly like the plate. The bottom figure's white slits are the caption's "trimmed slightly on one side": one triangle of each pair pulled off its stick.
+- **The three figures fit θ = 29.9°, 60.3° and 89.8°** — surely 30°, 60° and 90° — with r = 0.501, 0.544 and 0.566 (pixel agreement 97–98.5% at 600 dpi). Planar D ≈ 1.00, 1.14, 1.22; the spatial originals are D+1.
+- **Self-avoidance bound.** Our own computation (bisection on segment crossings to stage 11) gives the largest self-avoiding r at those angles as 0.518, 0.554 and 0.595, so the printed figures sit 2–5% below the bound. The page's slider couples r to the computed bound; the presets use the fitted values, and the note on the page says so.
+
 ## Part VIII, chapter 23
 
 **Plates 218–219, Hoyle curdling (page 218–219).**
@@ -478,3 +492,5 @@ with w = b^(−H) = b^(D−2), and W₁(t) − W₁(0) = (1−w²)^(−1/2) Σ_{
 ## Open questions
 
 - **The 13-interval generator.** Why does Plate 69's large circle use a different rule from the caption's second stage? This may be worth a sentence once the rest of chapter 7 is reviewed.
+- **Plate 164's width schedule.** The per-stage widths were fitted as geometric decay, which matches the plate's large-scale structure but places the finest twigs only approximately. The true schedule (and whether the book's r is exactly 1/√2 there) is undetermined.
+- **Plate 163 and criticality.** The printed trees sit 2–5% below our computed self-avoidance bound on r, furthest at θ = 90°. Either the 1982 computation of the critical value differed, or the figures were drawn deliberately on the safe side.

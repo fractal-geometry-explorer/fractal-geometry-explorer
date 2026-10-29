@@ -397,6 +397,19 @@
         "script.js"
       ],
       "layout_comment": "/* Layout: the planar isotherm laboratory beside its caption and controls, then the linear section below it; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "diameter-exponent",
+      "title": "Trees and the Diameter Exponent",
+      "plates": "Plates 163–165",
+      "chapter": 17,
+      "scripts": [
+        "shared/geometry.js",
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: the diameter exponent (a concept diagram), Plates 164-165 recursive bronchi, Plate 163 flower models, each a figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
     }
   ]
 }
