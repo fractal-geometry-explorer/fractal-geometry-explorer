@@ -178,6 +178,7 @@ Update this file in the same pull request as the work it records.
 | (concept) | 326–333 | Weak against strong convergence; the self-avoiding walk (D = 4/3); Leopold–Langbein rivers | random | done | lattice-physics |
 | 340 | 340 | Original evidence for scaling in economics (cotton prices) | data | done | cotton-prices |
 | (concept) | 341–348 | Scaling without geometry: expectation paradoxes, Zipf's law, Pareto salaries | exact | done | power-laws |
+| (concept) | 349–390 | Chapter 39, Mathematical backup: self-affinity, covering and dimension, Lévy stability, R/S, Weierstrass | exact / random | done | mathematical-backup |
 
 ## XII Of men and ideas (chapters 40–42)
 
@@ -213,4 +214,5 @@ Each chapter session should add the chapter's main ideas here, alongside its pla
 - lacunarity (chapter 34; on the carpets-lacunarity page, with the mid-line dusts, the gap census's prefactor F and the mass-in-a-window measures);
 - weak against strong convergence, and the self-avoiding walk (chapter 36 — done, on the lattice-physics page);
 - scaling in prices and in word frequencies (chapters 37–38): the price half (the scaling principle, discontinuity, infinite variance) is on the cotton-prices page, and chapter 38's word frequencies and salaries are on the power-laws page;
+- chapter 39's dictionary entries are on the mathematical-backup page: five interactive (self-affinity, covering/Hausdorff dimension, Lévy stability, R/S, Weierstrass) and the rest as one-paragraph summaries;
 - the prehistory of dimension, scaling and the monsters (chapter 41): done, on the historical-sketches page.

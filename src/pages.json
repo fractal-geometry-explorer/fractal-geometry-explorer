@@ -337,6 +337,18 @@
         "ui.js"
       ],
       "layout_comment": "/* Layout: the length-area relation demo (five similar islands and one yardstick, with its log-log chart), the digitised Plate 115 chart, and the area-volume section with the brain-folds cartoon, each a figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "mathematical-backup",
+      "title": "Mathematical Backup",
+      "plates": "Chapter 39",
+      "chapter": 39,
+      "scripts": [
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: five concept sections (self-affinity, covering and dimension, Lévy stability, R/S analysis, Weierstrass), each a computed figure beside its caption, then a guide to the chapter's remaining entries; a sticky index on top. One column under 900px. */"
     }
   ]
 }

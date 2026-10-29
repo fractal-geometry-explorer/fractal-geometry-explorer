@@ -1,0 +1,291 @@
+<title>Mathematical Backup</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.r-tall { aspect-ratio: 7 / 6; }
+.r-chart { aspect-ratio: 16 / 10; }
+.entries { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px 32px; }
+.entries p { margin: 0; font-family: var(--f-body); font-size: 15.5px; line-height: 1.5; }
+.entries p b { font-family: var(--f-display); font-size: 12.5px; letter-spacing: 0.05em; text-transform: uppercase; display: block; margin-bottom: 2px; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 39, "Mathematical Backup and Addenda" · pages 349–390</p>
+    <h1><span class="plate-no">Chapter 39</span><span class="lozenge" aria-hidden="true"></span><span>Mathematical Backup</span></h1>
+    <p class="dek">The book ends on a mathematical dictionary: "complicated formulas and mathematical definitions and references, avoided elsewhere, are brought together in this chapter." Its forty-two pages print no plates at all — only nineteen alphabetical entries, from self-affinity to the Weierstrass function. This page computes the entries that can be drawn: what self-affine means, how a covering by balls defines dimension, what Lévy stability does to sums, how R/S reads long-run dependence, and why the Weierstrass function had to be repaired twice.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#affine"><b>1</b> Self-affinity</a>
+    <a href="#cover"><b>2</b> Covering and dimension</a>
+    <a href="#stable"><b>3</b> Lévy stability</a>
+    <a href="#rs"><b>4</b> R/S analysis</a>
+    <a href="#weierstrass"><b>5</b> Weierstrass</a>
+    <a href="#entries"><b>6</b> The other entries</a>
+  </nav>
+
+  <!-- ===================== 1 · SELF-SIMILARITY AND SELF-AFFINITY ===================== -->
+  <section class="plate" id="affine">
+    <div class="plate-head">
+      <p class="no">Pages 349–356 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Self-similar and self-affine</h2>
+      <p class="dim" id="dimA">B&#8205;<sub>H</sub>: scale t by h, X by h<sup>H</sup> · graph D = 2 − H · zeroset D = 1 − H</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-tall zoomable" id="wA">
+          <canvas id="cA" role="img" aria-label="A fractional Brown function and a rescaled piece of it"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cAt">Rescaling a piece</strong> · <span id="cAn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">A similarity shrinks every coordinate by the same ratio r; an <i>affinity</i> gives each coordinate its own ratio. The chapter's first entry fixes both words, because the graph of a Brown function can never be self-similar: time and height are different quantities. It is <i>self-affine</i> — take the piece over [0,&#8202;h], stretch time by 1/h and height by 1/h<sup>H</sup>, and the result is statistically indistinguishable from the whole. That holds for exactly one exponent: the H the function was built with. The entry BROWN FRACTAL SETS catalogues these functions; H = 1/2 is ordinary Brownian motion, H ≠ 1/2 the fractional ones of chapter 27, persistent above 1/2 and antipersistent below.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mA" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">The function's exponent H</span><span class="value" id="hAv"></span></div>
+          <input type="range" id="hAs" min="0.1" max="0.9" step="0.05" value="0.5" aria-label="Exponent H">
+        </div>
+        <div class="group" id="aWrap">
+          <div class="label-row"><span class="label">Take the piece over [0, h]</span></div>
+          <div class="steps" id="wAs" role="group" aria-label="Window h"></div>
+          <div class="slider">
+            <div class="label-row"><span class="label">Height rescaling power α</span><span class="value" id="aAv"></span></div>
+            <input type="range" id="aAs" min="0.05" max="1" step="0.01" value="0.5" aria-label="Rescaling exponent alpha">
+          </div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="presetA">The Brown case: H = 1/2, α = H</button>
+          <button type="button" class="btn" id="seedA">New sample</button>
+        </div>
+        <p class="readline" id="infoA" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Graph dimension</dt><dd id="rAa">1.5</dd></div>
+          <div><dt>Zeroset dimension</dt><dd id="rAb">0.5</dd></div>
+          <div><dt>Past × future correlation</dt><dd id="rAc">0</dd></div>
+          <div><dt>Height ratio, piece / whole</dt><dd id="rAd">—</dd></div>
+        </dl>
+        <p class="note">The chapter prints no figure, so this one is the page's own illustration of the entry. The sample is drawn by circulant embedding (Davies &amp; Harte), which gives the increments their exact covariance — not the approximate midpoint trick of chapter 26. The correlation readout is the entry's formula 2<sup>2H−1</sup> − 1 for the correlation between past and future increments: zero only in the Brown case, and independent of t — which the entry notes "most students of randomness begin by being surprised" about.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 2 · DIMENSION FROM COVERINGS ===================== -->
+  <section class="plate" id="cover">
+    <div class="plate-head">
+      <p class="no">Pages 356–365 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Covering by balls, and the dimension in the jump</h2>
+      <p class="dim" id="dimB">N(ρ) balls of radius ρ · log N(ρ)/log(1/ρ) → D · the d-measure jumps from ∞ to 0 at d = D</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-chart zoomable" id="wB">
+          <canvas id="cB" role="img" aria-label="A fractal set covered by balls, and the Hausdorff measure jump"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cBt">Covering</strong> · <span id="cBn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Every acceptable fractal dimension is metric, not topological: it comes from covering the set with balls of radius ρ. Counting the most economical cover gives N(ρ), and log&#8202;N(ρ)/log(1/ρ) settles toward a limit as ρ shrinks. Hausdorff went further: weigh each ball by the test function h(ρ) = γ(d)ρ<sup>d</sup> — the volume a ball of radius ρ <i>would</i> have in dimension d — and add. Besicovitch proved the striking law: for every set there is one critical D such that the total is infinite for every d &lt; D and zero for every d &gt; D. That jump <em>is</em> the Hausdorff–Besicovitch dimension, and "to a physicist, this definition means that D is a critical dimension."</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mB" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">The set</span></div>
+          <div class="steps words" id="setB" role="group" aria-label="Which set"></div>
+        </div>
+        <div class="group" id="sBwrap">
+          <div class="label-row"><span class="label">Stage (smaller balls)</span><span class="value" id="sBv"></span></div>
+          <div class="steps" id="sB" role="group" aria-label="Stage"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="presetB">Cover the Koch curve</button>
+        </div>
+        <p class="readline" id="infoB" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Balls N(ρ)</dt><dd id="rBa">—</dd></div>
+          <div><dt>Radius ρ</dt><dd id="rBb">—</dd></div>
+          <div><dt>log N / log (1/ρ)</dt><dd id="rBc">—</dd></div>
+          <div><dt>Exact D</dt><dd id="rBd">—</dd></div>
+        </dl>
+        <p class="note">The covering drawn here is the natural one — one ball per stage-n piece of the construction, the smallest ball holding its piece — not provably the minimal N(ρ), which is why the counted exponent approaches D from a distance. The measure chart uses the chapter's own γ(d) = [Γ(1/2)]<sup>d</sup>/Γ(1 + d/2); the curves for shrinking ρ pivot about d = D because N·ρ<sup>D</sup> is constant for an exactly self-similar set. Both figures are this page's illustrations; the chapter prints none.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 3 · LÉVY STABILITY ===================== -->
+  <section class="plate" id="stable">
+    <div class="plate-head">
+      <p class="no">Pages 367–373 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Lévy stable random variables</h2>
+      <p class="dim" id="dimC">s₁X₁ + s₂X₂ = sX with s₁<sup>D</sup> + s₂<sup>D</sup> = s<sup>D</sup> · long tails ∝ x<sup>−D−1</sup> · closed forms only at Gauss, Cauchy and D = 1/2</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-chart zoomable" id="wC">
+          <canvas id="cC" role="img" aria-label="Lévy stable probability densities"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cCt">The density</strong> · <span id="cCn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The Gaussian is "scaling under addition": the sum of two independent copies is again Gaussian. Paul Lévy asked which other laws satisfy the same functional equation, s₁X₁ + s₂X₂ = sX, with the sizes balanced by s₁<sup>D</sup> + s₂<sup>D</sup> = s<sup>D</sup>, and found a family for every exponent 0 &lt; D ≤ 2 and skewness −1 ≤ β ≤ 1. "Until my work, the stable variables were deemed 'pathological' or even 'monstrous'" — yet for D &lt; 2 their long tails follow exactly the hyperbolic law of chapter 38, which is why they rule Lévy dusts and flights, cotton prices and the Holtsmark attraction of the stars. The second figure draws the entry's strangest consequence: given a large sum, the most likely split is not half-and-half but one addend taking nearly all of it.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mC" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Exponent D</span><span class="value" id="dCv"></span></div>
+          <input type="range" id="dCs" min="0.5" max="2" step="0.01" value="1" aria-label="Exponent D">
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Skewness β</span><span class="value" id="bCv"></span></div>
+          <input type="range" id="bCs" min="-1" max="1" step="0.05" value="0" aria-label="Skewness beta">
+        </div>
+        <div class="slider" id="uWrap" hidden>
+          <div class="label-row"><span class="label">The observed sum u</span><span class="value" id="uCv"></span></div>
+          <input type="range" id="uCs" min="0" max="8" step="0.1" value="3" aria-label="Observed sum u">
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="preC">Cauchy: D = 1</button>
+          <button type="button" class="btn" id="preG">Gauss: D = 2</button>
+          <button type="button" class="btn" id="preL">Brown recurrence: D = 1/2, β = 1</button>
+        </div>
+        <p class="readline" id="infoC" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Long tail</dt><dd id="rCa">—</dd></div>
+          <div><dt>Mean ⟨X⟩</dt><dd id="rCb">—</dd></div>
+          <div><dt>Variance ⟨X²⟩</dt><dd id="rCc">—</dd></div>
+          <div><dt>Closed form</dt><dd id="rCd">—</dd></div>
+        </dl>
+        <p class="note">Outside D = 2, (D = 1, β = 0) and (D = 1/2, β = 1) no closed form exists, so the curves are computed by inverting the characteristic function with a fast Fourier transform — the method the entry itself recommends as making "this task much lighter". Where a closed form exists, it is overlaid dashed as a check (the curves agree to within plotting accuracy). The extreme asymmetric case β = 1 with D &lt; 1 vanishes for x &lt; 0, as the entry states: it is the stable subordinator behind the Lévy staircase of Plate 286.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 4 · R/S ANALYSIS ===================== -->
+  <section class="plate" id="rs">
+    <div class="plate-head">
+      <p class="no">Pages 385–387 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Statistical analysis using R/S</h2>
+      <p class="dim" id="dimD">Q(d) = R(d)/S(d) ∝ d<sup>J</sup> · J = 1/2: no long-run dependence · J = H for fractional Gauss noise · robust when ⟨X²⟩ = ∞</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-chart zoomable" id="wD">
+          <canvas id="cD" role="img" aria-label="A sample record and its rescaled-range pox plot"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cDt">R/S pox plot</strong> · <span id="cDn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Two assumptions were "a matter of course" in practical statistics: finite variance, and short-run dependence. Mandelbrot's case studies broke both, so correlations and spectra — which assume ⟨X²⟩ &lt; ∞ — could not measure the long-run dependence he had injected to explain the Hurst phenomenon. His alternative is the <i>rescaled range</i>: over each span of length d, take the running sum, detrend it by its own bridge, and divide its range R by the span's standard deviation S. If R/S grows like d<sup>J</sup>, the exponent J — the Hurst coefficient — reads off long-run dependence while staying "robust with respect to the marginal distribution": even a wild infinite-variance noise gives J = 1/2 as long as it has no memory.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">The record X(t)</span></div>
+          <div class="steps words" id="pD" role="group" aria-label="Which process"></div>
+        </div>
+        <div class="slider" id="hDwrap">
+          <div class="label-row"><span class="label">Exponent H of the noise</span><span class="value" id="hDv"></span></div>
+          <input type="range" id="hDs" min="0.1" max="0.9" step="0.05" value="0.7" aria-label="Exponent H">
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="presetD">The Hurst case: fractional noise, H = 0.7</button>
+          <button type="button" class="btn" id="seedD">New sample</button>
+        </div>
+        <p class="readline" id="infoD" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Fitted J</dt><dd id="rDa">—</dd></div>
+          <div><dt>J in theory</dt><dd id="rDb">—</dd></div>
+          <div><dt>Variance of the law</dt><dd id="rDc">—</dd></div>
+          <div><dt>Sample length</dt><dd id="rDd">2,048</dd></div>
+        </dl>
+        <p class="note">Each dot is one span's R/S; the line is fitted through the mean at each lag. On samples this short the fit sits a few hundredths above the theoretical J (the small-lag transient that Mandelbrot 1975w handles by proof rather than by fitting) — rerun with new samples to see the spread. The Lévy record uses a symmetric stable noise with D = 1.5, whose variance is infinite: correlations would be meaningless on it, yet J stays near 1/2. The chapter prints no figure for this entry either.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 5 · WEIERSTRASS ===================== -->
+  <section class="plate" id="weierstrass">
+    <div class="plate-head">
+      <p class="no">Pages 388–390 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Weierstrass functions and kin</h2>
+      <p class="dim" id="dimE">W₀(t) = (1−w²)<sup>−1/2</sup> Σ₀<sup>∞</sup> wⁿ exp(2πibⁿt) · w = b<sup>−H</sup> · graph D = 2 − H, conjectured</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-chart zoomable" id="wE">
+          <canvas id="cE" role="img" aria-label="The Weierstrass function and its variants"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cEt">Weierstrass cosine</strong> · <span id="cEn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Weierstrass's function — a sum of cosines at frequencies b, b², b³, … with amplitudes wⁿ = b<sup>−Hn</sup> — is continuous but nowhere differentiable. The entry retells both facts as spectral catastrophes. Differentiating multiplies each amplitude by its frequency, and the resulting energy diverges at high frequencies: the same <i>ultraviolet catastrophe</i> that killed blackbody theory around 1900, "the same divergence killed the old physics and the old mathematics". And the original series starts at frequency 1, which clashes with scaling at the low end; letting n run to −∞ cures it but diverges — the <i>infrared catastrophe</i> — unless one first subtracts W(0). The repaired W₁ is exactly self-affine about t = 0: squeeze time by b, shrink height by w, and the curve maps onto itself.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mE" role="group" aria-label="Which variant"></div>
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Dimension D (H = 2 − D)</span><span class="value" id="dEv"></span></div>
+          <input type="range" id="dEs" min="1.05" max="1.95" step="0.05" value="1.5" aria-label="Dimension D">
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Base b</span><span class="value" id="bEv"></span></div>
+          <input type="range" id="bEs" min="1.2" max="4" step="0.1" value="1.5" aria-label="Base b">
+        </div>
+        <div class="group" id="zWrap">
+          <div class="label-row"><span class="label">Rescale: t → bᵐt, X → wᵐX</span><span class="value" id="zEv"></span></div>
+          <div class="steps" id="zE" role="group" aria-label="Rescaling power m"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="presetE">b = 1.5, D = 1.5</button>
+          <button type="button" class="btn" id="seedE" hidden>New randomization</button>
+        </div>
+        <p class="readline" id="infoE" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>H</dt><dd id="rEa">—</dd></div>
+          <div><dt>w = b⁻ᴴ</dt><dd id="rEb">—</dd></div>
+          <div><dt>Graph D (conjectured)</dt><dd id="rEc">—</dd></div>
+          <div><dt>Zeroset D (conjectured)</dt><dd id="rEd">—</dd></div>
+        </dl>
+        <p class="note">The curves are partial sums cut only where a term's wavelength falls below a pixel, so zooming the rescale buttons is exact, not cosmetic. "Graph D = 2 − H" is stated in the entry as Mandelbrot's conjecture from the Lipschitz–Hölder bound 1 ≤ D ≤ 2 − H (for integer b it was proved only in 2018, by W. Shen). The Gauss-randomized variant multiplies each Fourier coefficient by an independent complex Gaussian — the entry's "next step toward realism", an approximate fractional Brown function with a discrete spectrum. The function's history — Bolzano to Riemann to Weierstrass 1872 — is told in chapter 41's <a href="historical-sketches.html#weierstrass">Historical Sketches</a> entry.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 6 · THE OTHER ENTRIES ===================== -->
+  <section class="plate" id="entries">
+    <div class="plate-head">
+      <p class="no">Pages 349–390 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>The other entries, briefly</h2>
+      <p class="dim">a reader's map of the rest of the dictionary</p>
+    </div>
+    <div class="entries">
+      <p><b>Detrending and the Brown bridge</b> Brown motion over [0, 2π] splits into a straight trend with random slope plus a <i>Brown bridge</i> pinned to equal endpoints — and only for Brown motion are the two independent. The entry warns that applied statisticians detrend samples of unknown origin as if this always worked: "this last implicit assumption is quite unwarranted."</p>
+      <p><b>Fractional integro-differentiation</b> B&#8205;<sub>H</sub> is the Riemann–Liouville fractional integral of order H − 1/2 of white noise: multiplying the Fourier transform by (1/f)<sup>H+1/2</sup> deserves the name integration of fractional order. Integration smooths (persistence), differentiation roughens.</p>
+      <p><b>Fourier dimension and Salem sets</b> How fast can the Fourier transform of a measure on a set decay? The best exponent defines a second dimension D&#8205;<sub>F</sub> ≤ D, which also feels arithmetic: the triadic Cantor dust has D&#8205;<sub>F</sub> = 0, while random dusts are typically <i>Salem sets</i> with D&#8205;<sub>F</sub> = D. Since D&#8205;<sub>F</sub> is easy to estimate from data, it can stand in for D.</p>
+      <p><b>On the definition of "fractal"</b> Mandelbrot would rather have no definition — his 1975 essay had none. The 1977 one, D &gt; D&#8205;<sub>T</sub>, excludes sets he would prefer to include: the devil's staircase of Plate 83 "is intuitively a fractal", yet D = 1 = D&#8205;<sub>T</sub>. "Lacking other criteria, I set the border in such a way as to achieve a short definition."</p>
+      <p><b>Similarity dimension: its pitfalls</b> The set of trema endpoints of the Cantor dust is self-similar with the same N and r as the dust itself — but it is countable, so its Hausdorff–Besicovitch dimension is 0. Similarity dimension can overstate; adding the limit points restores agreement.</p>
+      <p><b>Scaling under truncation</b> The hyperbolic distribution Pr(U &gt; u) = u<sup>−D</sup> is the only one for which the rescaled tail "U/u₀, knowing U &gt; u₀" does not depend on the cutoff u₀ — a two-line proof in the entry, and the reason truncated data keep looking the same.</p>
+      <p><b>Nonlacunar fractals</b> Can a fractal meet every ball of space? Yes, but it must be a measure, not a closed set. De Wijs's ore model and Besicovitch's weighted curdling share mass unevenly among thirds forever: the limit is everywhere dense, with a concentrate of dimension D = −Σ π&#8205;ᵢ log₃ π&#8205;ᵢ — an entropy. This is the seed of what became multifractals.</p>
+      <p><b>Potentials, capacities, Frostman dimension</b> The mass within radius R growing like R<sup>D</sup> ties D to the convergence of potential integrals: Frostman proved the Hausdorff–Besicovitch D is exactly the capacity dimension of potential theory. The entry uses it to restate why D = 1 pairs with Newton's 1/R kernel in the cosmological chapters.</p>
+      <p><b>Stationarity (degrees of)</b> Mathematicians define it on the generating rules; practitioners "hold narrower views" and call any sample with a 1/f<sup>B</sup> spectrum, B &gt; 0, nonstationary. The entry defends the gray zone — sporadic processes, conditional stationarity, weak against strong mixing — because the book's models live there.</p>
+      <p><b>Music: two properties of scaling</b> Tempered scales place fundamentals at frequencies bⁿ — the spectrum of a Weierstrass function. And Voss &amp; Clarke found the power and the instantaneous frequency of music from Bach to the Beatles are 1/f noises; random music triggered by a 1/f source sounds the most music-like.</p>
+      <p><b>Indicator and coindicator functions</b> For a dust, the indicator function (1 on the set) is useless almost everywhere; Mandelbrot's coindicator is constant on each gap with independent random values — a function that carries the set's structure where analysis can reach it.</p>
+      <p><b>Dimensions that add and multiply</b> Rules of thumb with precise hypotheses: products of independent sets add dimensions; intersections add codimensions E − D, so two Brown trails (D = 2) intersect in space E &lt; 4 and miss for E ≥ 4; projections give min(E₀, D); subordination multiplies.</p>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 39, pages 349–390. The chapter is the book's mathematical reference and prints no plates; every figure on this page is computed from the entry's own formulas and marked as this page's illustration. The Weierstrass sums were checked against the printed formulas on pages 388–389. Companion pages: <a href="https://claude.ai/artifact/RvpGQi3Td4y7gZnjM1pukG" target="_blank" rel="noopener">Wiener Sausage</a> (Brownian motion) and <a href="cantor-dust.html">Cantor Dust</a> (Plates 80–83).</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>
