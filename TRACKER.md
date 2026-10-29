@@ -70,6 +70,7 @@ Update this file in the same pull request as the work it records.
 | 95 | 95 | Projection of Fournier's multiuniverse (D ≈ 0.8270) | exact | done | fournier-universe |
 | 96 | 96 | A flat Fournier universe with D = 1 | exact | done | fournier-universe |
 | (concept) | 97–105 | Geometry of turbulence; intermittency (chapter 10, no plates) | random | done | turbulence-intermittency |
+| (concept) | 106–108 | Fractal singularities of differential equations (chapter 11, no plates) | exact | done | fractal-singularities |
 
 ## IV Scaling fractals (chapters 12–14)
 
