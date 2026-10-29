@@ -116,10 +116,10 @@ Update this file in the same pull request as the work it records.
 | :- | :- | :- | :- | :- | :- |
 | 218–219 | 218–219 | Implementation of Hoyle's model by random curdling in a grid | random | done | random-curds |
 | 220–223 | 220–223 | Novikov–Stewart random curds; contact clusters | random | done | random-curds |
-| 228 | 228 | Random Koch coastline (D = 1.6131) | random | todo | |
-| 229 | 229 | Random Peano curve (D = 2) | random | todo | |
-| 230 | 230 | Triangle and squig curve | random | todo | |
-| 231 | 231 | A hexa-squig coastline | random | todo | |
+| 228 | 228 | Random Koch coastline (D = 1.6131) | random | done | chains-and-squigs |
+| 229 | 229 | Random Peano curve (D = 2) | random | done | chains-and-squigs |
+| 230 | 230 | Triangle and squig curve | random | done | chains-and-squigs |
+| 231 | 231 | A hexa-squig coastline | random | done | chains-and-squigs |
 | 241 | 240–241 | A random walk approximating a Brown line-to-line function, and its zeroset | random | done | brown-trails |
 | 242–243 | 242–243 | Brown hulls and islands; self-avoiding Brownian motion | random | done | brown-trails |
 | 246 | 246 | The computer "bug" (opus 1) | random / art | done | midpoint-displacement |

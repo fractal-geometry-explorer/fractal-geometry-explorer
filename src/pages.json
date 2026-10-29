@@ -349,6 +349,17 @@
         "ui.js"
       ],
       "layout_comment": "/* Layout: five concept sections (self-affinity, covering and dimension, Lévy stability, R/S analysis, Weierstrass), each a computed figure beside its caption, then a guide to the chapter's remaining entries; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "chains-and-squigs",
+      "title": "Random Chains and Squigs",
+      "plates": "Plates 228–231",
+      "chapter": 24,
+      "scripts": [
+        "shared/draw.js",
+        "script.js"
+      ],
+      "layout_comment": "/* Layout: the random Koch coastline (228), the random Peano curve (229), the squig and its valleys (230) and the hexa-squig loop (231), each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
     }
   ]
 }
