@@ -1,6 +1,20 @@
 {
   "pages": [
     {
+      "slug": "fractal-flakes",
+      "title": "Fractal Flakes and Perrin's Tracings",
+      "plates": "Plates 10–13",
+      "chapter": 2,
+      "scripts": [
+        "shared/draw.js",
+        "pages/fractal-landscapes/fbm.js",
+        "data.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: the flake laboratory (Plates 10-11) and Perrin's digitised tracings with their Brownian-bridge refinement (Plate 13), each a figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
       "slug": "monkeys-tree",
       "title": "Mandelbrot's Monkeys Tree",
       "plates": "Plate 31",
