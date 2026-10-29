@@ -168,8 +168,8 @@ Update this file in the same pull request as the work it records.
 | 306–307 | 306–307 | Smallish round tremas, in white; random slices of "Swiss cheese" | random | done | disc-tremas |
 | 308–309 | 308–309 | Larger round tremas, in black | random | done | disc-tremas |
 | 318 | 318 | Carpets' lacunarity | exact | done | carpets-lacunarity |
-| 323 | 323 | Effect of the trema generator upon lacunarity | random | todo | |
-| 325 | 324–325 | Fractal dust from nonspherical tremas (one octant on a spherical net) | random | todo | |
+| 323 | 323 | Effect of the trema generator upon lacunarity | random | done | general-tremas |
+| 325 | 324–325 | Fractal dust from nonspherical tremas (one octant on a spherical net) | random | done | general-tremas |
 
 ## XI Miscellany (chapters 36–39)
 

@@ -1,0 +1,131 @@
+<title>General Tremas</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.r-two { aspect-ratio: 2.07 / 1; }
+.mini svg.sky { height: 72px; }
+.mini svg.gen { height: 56px; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 35, "General tremas, and the control of texture" · pages 319–325</p>
+    <h1><span class="plate-no">Plates 323 and 325</span><span class="lozenge" aria-hidden="true"></span><span>General Tremas</span></h1>
+    <p class="dek">A trema fractal is what is left of space after random holes — tremas — are cut out of it. A theorem of El Hélou says the dimension D cares only about how the tremas' areas or volumes are distributed, so their <i>shape</i> is a free knob: it tunes the texture of the remainder — its lacunarity and its succolarity — while D stands still. This was the last chapter of the book to be written, "a mere sketch" against a deadline, and its two plates show the knob at work in the plane and in space.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#lac"><b>323</b> The trema generator and lacunarity</a>
+    <a href="#sky"><b>325</b> A dust on the spherical sky</a>
+  </nav>
+
+  <!-- ===================== PLATE 323 ===================== -->
+  <section class="plate" id="lac">
+    <div class="plate-head">
+      <p class="no">Plate 323 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Effect of the trema generator upon lacunarity</h2>
+      <p class="dim">Diamond tremas, centers and sizes Poisson · tremas with area above a: (2 − D)/2a per unit area · D fixed by the area law alone (El Hélou 1978)</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-two" id="wrapA">
+          <div id="wA" class="zoomable" style="position:absolute;inset:0">
+            <canvas id="cA" role="img" aria-label="Random diamond tremas cut from a square"></canvas>
+            <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+          </div>
+        </div>
+        <figcaption><strong id="cAt">Both panels</strong> · <span id="cAn">tremas</span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Both panels cut diamonds out of a square: the left panel's diamonds are nearly squares, the right panel's are sharp needles, isotropically rotated. Both use the very same dimension D and the same areas for the largest and smallest trema, so the white remainders have identical expected areas — the theorem again. Yet one remainder huddles into clumps and the other spreads nearly everywhere: the needle panel has far lower lacunarity. The needles also slice the remainder into many small polygons, which is the chapter's other claim: flattening the tremas drives the critical percolation dimension D<sub>crit</sub> as close to 2 as one pleases.</p>
+        <div class="mini" aria-label="The two trema generators">
+          <svg class="gen" viewBox="-0.2 -0.35 2.4 0.7" aria-hidden="true" id="miniGen"></svg>
+          <div class="fx">two diamonds,<br>equal areas</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Panel</span></div>
+          <div class="steps words" id="mA" role="group" aria-label="Which panel to show"></div>
+        </div>
+        <div class="slider" id="wA323w">
+          <div class="label-row"><span class="label">Diamond shape</span><span class="value" id="wAv">aspect</span></div>
+          <input type="range" id="wA323" min="0" max="1" step="0.005" value="1" aria-label="Diamond aspect, needle to square">
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Dimension</span><span class="value" id="dAv">D = 1.50</span></div>
+          <input type="range" id="dA323" min="1.25" max="1.75" step="0.01" value="1.5" aria-label="Dimension D">
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate323">Show Plate 323 as printed</button>
+          <button type="button" class="btn" id="seedA">New seed</button>
+          <span class="value" id="seedAv">seed 2</span>
+        </div>
+        <dl class="read">
+          <div><dt>White area, measured</dt><dd id="rAa">—</dd></div>
+          <div><dt>White area, expected</dt><dd id="rAb">—</dd></div>
+          <div><dt>Lacunarity Λ (boxes 1/8)</dt><dd id="rAc">—</dd></div>
+          <div><dt>White pieces</dt><dd id="rAd">—</dd></div>
+        </dl>
+        <p class="note">A random plate, matched statistically, not stroke for stroke. The book states no numbers for these panels: the aspects (0.75 and 0.02), D = 1.5 and the area cutoffs (largest 1/20 of the square, smallest 3·10⁻⁵) were fitted to the printed ink coverage, and the isotropic rotation follows the chapter's text. In both panels the readout pairs run left panel · right panel. The white area is measured by sampling 20,000 random points against the diamonds themselves; Λ is the mean of M² over the squared mean of M, the white mass in boxes of side 1/8 of the square: identical areas, very different Λ.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 325 ===================== -->
+  <section class="plate" id="sky">
+    <div class="plate-head">
+      <p class="no">Plate 325 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Fractal dust from nonspherical tremas, on a spherical sky</h2>
+      <p class="dim">A 600³ torus · ellipsoid tremas, volume pinned to scale³, scales 2.3 to 300 · tremas with volume above u: (3 − D)/3u per unit volume · plate: D ≈ 1.23, shells 400 &lt; R ≤ 600</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wB">
+          <canvas id="cB" role="img" aria-label="Trema dust projected on one octant of the sky"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cBt">One octant of the sky</strong> · <span id="cBn">flattened tremas · D = 1.23</span> · the Hammer projection's "gothic ogive window"</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The caption opens with a confession: this is not the intended illustration, and its precise specification "escapes me at the moment" — the files of the 1979 runs were lost. What it does describe is the pipeline, reproduced here: cut ellipsoid tremas out of a 600³ lattice whose opposite faces are glued (a torus), move the origin to a point no trema removed, keep the lattice points of the shell 400 &lt; R ≤ 600 sorted into shells of decreasing brightness, push each point off the lattice by a random [0,1] vector, and map the octant x, y, z &gt; 0 — northern latitudes, longitudes −45° to 45° — through the Hammer projection. The surviving dust clusters on the sky like galaxy counts, which is chapter 9's seed for this whole family of models.</p>
+        <div class="mini" aria-label="The whole sky under the Hammer projection, the plotted octant shaded">
+          <svg class="sky" viewBox="-2.95 -1.5 5.9 3" aria-hidden="true" id="miniSky"></svg>
+          <div class="fx">the whole sky;<br>the octant plotted</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Octant</span></div>
+          <div class="steps words" id="vB" role="group" aria-label="Which octant to plot"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Trema shape</span></div>
+          <div class="steps words" id="sB" role="group" aria-label="Trema shape"></div>
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Dimension</span><span class="value" id="dBv">D = 1.23</span></div>
+          <input type="range" id="dB325" min="1.0" max="1.6" step="0.01" value="1.23" aria-label="Dimension D">
+        </div>
+        <label class="check" for="jitB"><input type="checkbox" id="jitB" checked> Push each point off the lattice by a random [0,1] vector, the caption's final processing step</label>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate325">Show Plate 325 as printed</button>
+          <button type="button" class="btn" id="seedB">New seed</button>
+          <span class="value" id="seedBv">seed 7</span>
+        </div>
+        <p class="readline" id="infoB" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Points plotted</dt><dd id="rBa">—</dd></div>
+          <div><dt>Share of lattice kept</dt><dd id="rBb">—</dd></div>
+          <div><dt>Share predicted</dt><dd id="rBc">—</dd></div>
+          <div><dt>Origin points tried</dt><dd id="rBd">—</dd></div>
+        </dl>
+        <p class="note">A reconstruction of the described pipeline, not of the lost picture: since the book never says what the nonspherical tremas were, this page uses ellipsoids with volume pinned to scale³ — flattened 10 : 3 by default, needle-like 1 : 0.4 or spheres for comparison — and the trema scales are truncated to 2.3 … 300, which fixes the predicted share (2.3/300)^(3 − D). The brightness steps, the octant window and the caption's warning that the lattice-smoothing jitter "misrepresents the underlying fractal" are all kept; turn the jitter off to see the bare lattice points. The antipodal octant re-uses the very same tremas, as the caption suggests.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 35, pages 319–325 (Plates 323 and 325). Both plates are random constructions: the figures are computed from the processes the captions describe and matched statistically, with the fitted choices flagged in each note. The trema model's dimension theorem is due to Y. El Hélou (1978); lacunarity and succolarity are chapter 34's measures of texture, and the "same D, different look" demonstration on the <a href="cantor-dust.html">Cantor Dust</a> page is the linear ancestor of Plate 323.</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>

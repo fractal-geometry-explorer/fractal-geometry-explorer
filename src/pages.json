@@ -434,6 +434,18 @@
         "ui.js"
       ],
       "layout_comment": "/* Layout: Plate 155's five trees, the grow-your-own tree at the self-contact threshold with the critical curve, and the tips-against-branches figure, each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "general-tremas",
+      "title": "General Tremas",
+      "plates": "Plates 323–325",
+      "chapter": 35,
+      "scripts": [
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: Plate 323 (diamond tremas and lacunarity, two panels) and Plate 325 (a spatial trema dust on one octant of the sky), each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
     }
   ]
 }
