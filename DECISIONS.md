@@ -38,6 +38,14 @@ Conventions used below:
 - **The site build wraps the artifact fragments.** Sources have no doctype, charset or viewport (the artifact service added them when the pages were published); `tools/build.py` adds the skeleton, the site bar (previous/next in book order) and the index with the plate finder, which parses the tables in TRACKER.md. `tools/check_build.py` now checks the committed `site/` by default; the pre-foundation artifacts rebuild byte for byte only from the import commit (`c05f120`).
 - **The wrapper must also carry `[hidden] { display: none !important; }`.** The artifact service's stylesheet provided it; without it, any element whose class sets `display` (`.slider`, `.check`, `.key`, …) ignores its `hidden` attribute, which quietly broke show-and-hide controls on nine pages (first seen on peano-sweeps' "angle at the start" slider). The shell stylesheet in `tools/build.py` now provides it for every page; check the computed style, not the attribute, when testing visibility.
 
+## Part I, chapter 4
+
+**Variations and disclaimers (pages 20–24, no plates).**
+- Every page of the scan was checked: the chapter prints no figures at all. It is the book's chapter on its own method — exposition, erudition, graphics ("in the theory of fractals, to see is to believe"), fractal art, and logistics.
+- Its one geometric claim — an illustration of a fractal is faithful only between an outer and an inner cutoff, so "the typical fractal curve can be evoked satisfactorily by elementary strokes in large but finite number" (p. 22) — had no explicit visualization on the site, so the page `two-cutoffs` draws it: the triadic Koch curve truncated at ε = 3⁻ᵏ with a pen of positive width, under a scale ledger comparing the drawing's range [ε, Ω] with the screen's range [pixel, frame]; and a per-view pixel-difference test of stage k against stage k + 3 (blue where only stage k inks a pixel, red where only the deeper stage does), which collapses once ε falls below a pixel. The chapter names no curve and draws nothing, so the Koch example and the ledger are this page's own devices, and the page says so.
+- The chapter's other threads are cross-links, not new figures: the endpapers born of "faulty computer programming" are the story of Plate 246 (midpoint-displacement page), the Feller random-walk anecdote that seeded chapters 28 and 31 is drawn on brown-trails, and Escher's debt to the Fricke & Klein tilings belongs with chapter 18's self-inverse plates.
+- Notation (p. 24): theoretical D is printed as integers, ratios, ratios of logarithms, or to at least four decimals; empirical D to one or two. The site's pages already follow the book's practice; no figure needed.
+
 ## Part II, chapters 5–8
 
 **Plate 31, monkeys tree, and Plate 32, Minkowski sausage.**
