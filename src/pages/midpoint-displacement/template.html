@@ -172,31 +172,51 @@
     <div class="plate-body">
       <figure class="fig">
         <div class="canvas-wrap r-sq zoomable" id="wD">
-          <canvas id="cD" role="img" aria-label="A field of round tremas, drawn correctly or through a deliberate bug"></canvas>
+          <canvas id="cD" role="img" aria-label="Round tremas drawn flat, or as pits in a field of random spikes seen from straight above"></canvas>
           <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
         </div>
-        <figcaption><strong id="cDt">The strict order</strong> · <span id="cDn"></span></figcaption>
+        <figcaption><strong id="cDt">The bug, reconstructed</strong> · <span id="cDn"></span></figcaption>
       </figure>
       <div class="side">
-        <p class="cap">The plate "can be credited in part to faulty computer programming": a program meant to draw random round cut-outs — the design that, once "the bug was promptly identified and corrected", became Plates 306 to 309 — misdrew them, and the result went "well beyond anything we had expected". Mandelbrot kept the accident, numbered it like any plate, and noted that it "could pass for High Art". The printed picture is a dense starburst of streaks shot through with round dark holes.</p>
+        <p class="cap">The plate "can be credited in part to faulty computer programming": a program meant to draw random round cut-outs — the design that, once "the bug was promptly identified and corrected", became Plates 306 to 309 — misdrew them, and the result went "well beyond anything we had expected". Mandelbrot kept the accident; it "could pass for High Art". Measured on the scan, the picture is a close view looking straight down onto a relief: the same round tremas, now flat-bottomed pits, in a plain studded with random spikes, with nearer surfaces printed lighter.</p>
+        <div class="minis">
+          <div class="mini" aria-label="Side view: how a spike seen from straight above becomes a streak">
+            <svg class="gen" viewBox="-0.08 -0.1 2.36 1.16" aria-hidden="true">
+              <line x1="0" y1="1" x2="2.2" y2="1" stroke="currentColor" stroke-width="0.014"/>
+              <g stroke="#8a8a84" stroke-width="0.008" stroke-dasharray="0.03 0.022"><line x1="0" y1="0" x2="0.643" y2="1"/><line x1="0" y1="0" x2="1.282" y2="1"/><line x1="0" y1="0" x2="2.153" y2="1"/></g>
+              <g stroke="#c2452d" stroke-width="0.05"><line x1="0.45" y1="1" x2="0.643" y2="1"/><line x1="1" y1="1" x2="1.282" y2="1"/><line x1="1.55" y1="1" x2="2.153" y2="1"/></g>
+              <g stroke="currentColor" stroke-width="0.04"><line x1="0.45" y1="1" x2="0.45" y2="0.7"/><line x1="1" y1="1" x2="1" y2="0.78"/><line x1="1.55" y1="1" x2="1.55" y2="0.72"/></g>
+              <circle cx="0" cy="0" r="0.045" fill="currentColor"/>
+            </svg>
+            <div class="fx">side view: from the eye, each spike<br>covers the floor from its foot out to<br>where the ray past its top lands (red)</div>
+          </div>
+        </div>
         <div class="group">
           <div class="label-row"><span class="label">Show</span></div>
           <div class="steps words" id="mD" role="group" aria-label="What to show"></div>
         </div>
         <div class="group">
-          <label class="check" for="revealD"><input type="checkbox" id="revealD"> Reveal the hidden order</label>
+          <div class="slider">
+            <div class="label-row"><span class="label">Tallest spike</span><span class="value" id="topDv">0.24 of the eye's height</span></div>
+            <input type="range" id="topD" min="0.08" max="0.4" step="0.01" value="0.24" aria-label="Tallest spike, as a share of the eye's height">
+          </div>
+        </div>
+        <div class="group">
+          <label class="check" for="revealD"><input type="checkbox" id="revealD"> Outline the largest tremas</label>
         </div>
         <div class="btn-row">
+          <button type="button" class="btn primary" id="presetD">Show Plate 246 as reconstructed</button>
           <button type="button" class="btn" id="seedD">New seed</button>
         </div>
         <p class="readline" id="infoD" aria-live="polite"></p>
         <dl class="read">
-          <div><dt>Tremas</dt><dd id="rDa">300</dd></div>
-          <div><dt>Radius law</dt><dd>Nr(&gt;u) ∝ u⁻²</dd></div>
-          <div><dt>The book's bug</dt><dd>not recorded</dd></div>
+          <div><dt>Tremas</dt><dd id="rDa">3,000</dd></div>
+          <div><dt>Pits cover</dt><dd id="rDb">34%</dd></div>
+          <div><dt>Tallest spike</dt><dd id="rDc">0.24 × eye</dd></div>
+          <div><dt>View half-angle</dt><dd>17°</dd></div>
           <div><dt>Corrected outcome</dt><dd>Plates 306–309</dd></div>
         </dl>
-        <p class="note">This plate cannot be recomputed: the program and its bug are not recorded anywhere, and the caption itself says the order is hidden. So there is no "as printed" preset here — the only one on the site. What the figure shows instead: the strict order the program was meant to draw (a field of round tremas, the design of Plates 306–309, which belong to chapter 33), and a bug of our own invention — a pen that lags behind its ray while the picture is retraced from the centre — chosen because it, too, turns neat circles into a radial burst. It is a stand-in in the caption's spirit, not a reconstruction of the plate.</p>
+        <p class="note">Measured on the scan: every spine points at the picture's centre (to within 1% of the frame), spines get longer with distance from the centre but not wider, each brightens outward and stops sharply, and the holes stay round. That is perspective looking straight down on raised things; a flat picture smeared outward gives even, much longer streaks and drags the holes into comets. Fitted, not read off: about 150 cells across, a plain at 0.08 of the eye's height with spikes up to 0.24, holes at C = 0.1, a 17° half-angle and the plate's grey levels. The match is statistical, and the printed spines are a little longer and thinner. The scan cannot show whether each spike was drawn solid or as a stack of small overlapping discs. The program and its bug are not recorded. Our guess at the bug: heights meant to be flat came out random and large. At "none", only the pits remain: a nearly flat picture of the holes.</p>
       </div>
     </div>
   </section>
