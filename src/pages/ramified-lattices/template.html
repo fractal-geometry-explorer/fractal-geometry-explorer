@@ -1,0 +1,326 @@
+<title>Gaskets, Webs and Sponges</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.mini svg.gen { height: 66px; }
+.minis { display: flex; flex-wrap: wrap; gap: 8px; }
+.minis .mini { flex: 1 1 140px; }
+.canvas-wrap.dark { background: #121212; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 14, "Ramification and Fractal Lattices" · pages 131–146</p>
+    <h1><span class="plate-no">Plates 141–146</span><span class="lozenge" aria-hidden="true"></span><span>Gaskets, Webs and Sponges</span></h1>
+    <p class="dek">The Koch curves of Chapter 6 avoid touching themselves, and the Peano curves of Chapter 7 cannot help it. This chapter takes the step between: shapes that are deliberately ramified, curves and surfaces made of nothing but branch points. Sierpiński's gasket, its spatial kin the skewed web, the carpet and the Menger sponge are fractal lattices, invariant by scaling where the standard lattices are invariant by translation. Every figure is computed from the rules in the captions.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#gasket"><b>141</b> Gasket and arrowhead</a>
+    <a href="#percolation"><b>p. 132</b> Percolation</a>
+    <a href="#web"><b>143</b> Skewed web</a>
+    <a href="#carpet"><b>145</b> Carpet</a>
+    <a href="#sponge"><b>145</b> Menger sponge</a>
+    <a href="#branches"><b>p. 139</b> Branches</a>
+    <a href="#halls"><b>146</b> Snowflake halls</a>
+  </nav>
+
+  <!-- ===================== PLATE 141 ===================== -->
+  <section class="plate" id="gasket">
+    <div class="plate-head">
+      <p class="no">Plate 141 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Sierpiński arrowhead</h2>
+      <p class="dim">N = 3, r = 1/2 · D = log 3/log 2 ≈ 1.5849 · order of ramification R = 3 or 4</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wA">
+          <canvas id="cA" role="img" aria-label="Sierpiński arrowhead"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cAt">Sierpiński arrowhead</strong> · stage <span id="cAs">8</span> · <span id="cAn">6,561 intervals</span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">In Sierpiński 1915, the initiator is [0, 1] and the generator is half a hexagon: three legs of length ½ rising at 60°, running level, and falling back. Hahn listed this curve among the monsters, because every one of its points is a branch point. Mandelbrot answers with the Eiffel Tower, trusses whose members are themselves subtrusses: "the key to strength lies in branch points."</p>
+        <div class="minis">
+          <div class="mini" aria-label="Generator">
+            <svg class="gen" viewBox="-0.06 -0.52 1.12 0.64" aria-hidden="true" id="miniArrow"></svg>
+            <div class="fx">N = 3, r = ½</div>
+          </div>
+          <div class="mini" aria-label="Second teragon">
+            <svg class="gen" viewBox="-0.06 -0.72 1.12 0.84" aria-hidden="true" id="miniArrow2"></svg>
+            <div class="fx">second teragon</div>
+          </div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mA" role="group" aria-label="What to show"></div>
+        </div>
+        <p class="cap" id="capA"></p>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="sAv">stage 8</span></div>
+          <div class="steps" id="sA" role="group" aria-label="Stage"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate141">Show Plate 141 as printed</button>
+        </div>
+        <dl class="read">
+          <div><dt>Pieces</dt><dd id="rAa">6,561</dd></div>
+          <div><dt>Dimension</dt><dd>1.5849</dd></div>
+          <div><dt>Ramification</dt><dd>R = 3 or 4</dd></div>
+          <div><dt>Self-contact</dt><dd>limit only</dd></div>
+        </dl>
+        <p class="note">The generator's codes were read off the caption's second teragon: the outer legs carry mirrored copies. The plate is the piece of the curve between two successive returns to the midpoint of [0, 1] — turned sideways, a tropical fish. Its stage here was fitted to the plate by eye (stage 8); the black-and-white pattern of the tremas is not painted in but falls out of filling that one closed polygon. Removing 3 or 4 well-chosen points disconnects any neighbourhood in any finite approximation, which is why the gasket, alone among known shapes, is both quasi-homogeneous and self-similar.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PAGE 132 ===================== -->
+  <section class="plate" id="percolation">
+    <div class="plate-head">
+      <p class="no">Diagram on page 132 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Critical percolation clusters</h2>
+      <p class="dim">bond percolation on the square lattice · p_c = 1/2 · backbone D ≈ 1.6, close to the gasket's 1.5849</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq dark" id="wB">
+          <canvas id="cB" role="img" aria-label="A critical percolation cluster"></canvas>
+        </div>
+        <figcaption><strong>Critical percolation</strong> · open bonds in white on black, as in the book's diagram</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Mandelbrot's claim: the Sierpiński gasket's branching structure is a promising model of the backbone of a critical percolation cluster. Each bond of a square lattice is open with probability p = ½, the critical value. The cluster of interest spans the frame; eliminating its dangling bonds, and the clusters contained entirely inside it, leaves the backbone, with its conspicuous tremas. Kirkpatrick estimated D ≈ 1.6 for the backbone in the plane — "astonishingly close" to the gasket's log 3/log 2, and in space D ≈ 2.00 matches the skewed web below.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mB" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Bond probability</span><span class="value" id="pBv">p = 0.50</span></div>
+          <div class="slider"><input type="range" id="pB" min="30" max="70" value="50" aria-label="Bond probability, percent"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn" id="rollB">New random lattice</button>
+        </div>
+        <dl class="read">
+          <div><dt>Cluster sites</dt><dd id="rBa">—</dd></div>
+          <div><dt>After trimming</dt><dd id="rBb">—</dd></div>
+          <div><dt>Spans the frame</dt><dd id="rBc">—</dd></div>
+          <div><dt>p</dt><dd id="rBd">0.50</dd></div>
+        </dl>
+        <p class="note">A random reconstruction, not the book's figure: the diagram on page 132 is a computer sample credited to the physics of S. Kirkpatrick, and only its statistics can be matched. Trimming here removes sites hanging by a single bond, repeatedly, which is the caption's "elimination of dangling bonds"; move p off ½ to see the cluster die (p &lt; ½) or thicken into the whole lattice (p &gt; ½).</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 143 ===================== -->
+  <section class="plate" id="web">
+    <div class="plate-head">
+      <p class="no">Plate 143 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>A fractal skewed web</h2>
+      <p class="dim">N = 4, r = 1/2 · D = log 4/log 2 = 2 exactly · its shadow is a full square</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq" id="wC">
+          <canvas id="cC" role="img" aria-label="Fractal skewed web: a Sierpiński tetrahedron"></canvas>
+        </div>
+        <figcaption><strong>Fractal skewed web</strong> · stage <span id="cCs">4</span> · <span id="cCn">256 tetrahedra</span> · drag to turn</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap" id="capC"></p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mC" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span></div>
+          <div class="steps" id="sC" role="group" aria-label="Stage"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate143">Show Plate 143 as printed</button>
+        </div>
+        <dl class="read">
+          <div><dt>Tetrahedra</dt><dd id="rCa">256</dd></div>
+          <div><dt>Dimension</dt><dd>2 exactly</dd></div>
+          <div><dt>4 · (1/2)²</dt><dd>= 1</dd></div>
+          <div><dt>Shadow</dt><dd>a full square</dd></div>
+        </dl>
+        <p class="note">The spatial extension of the gasket: the initiator is a closed tetrahedron and the generator the four half-scale tetrahedra on its corners. The print is reproduced here as a depth-shaded line drawing of all the edges; the viewing angle of the preset was fitted to the plate by eye. Though D = 2, this "surface-sized" set is a curve full of branch points — in the plane of its square shadow, no point hides behind another.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 145, CARPET ===================== -->
+  <section class="plate" id="carpet">
+    <div class="plate-head">
+      <p class="no">Plate 145, top <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>The Sierpiński carpet</h2>
+      <p class="dim" id="dimD">N = 8, r = 1/3 · D = log 8/log 3 ≈ 1.8928</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wD">
+          <canvas id="cD" role="img" aria-label="Sierpiński carpet"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>Carpet</strong> · stage <span id="cDs">3</span> · <span id="cDn">512 squares</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap" id="capD"></p>
+        <div class="group">
+          <div class="label-row"><span class="label">Family</span></div>
+          <div class="steps words" id="kD" role="group" aria-label="Carpet family"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Base</span><span class="value" id="bDv">b = 3</span></div>
+          <div class="slider"><input type="range" id="bD" min="4" max="9" value="5" aria-label="Base b"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="sDv">stage 3</span></div>
+          <div class="steps" id="sD" role="group" aria-label="Stage"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate145c">Show Plate 145's carpet</button>
+        </div>
+        <dl class="read">
+          <div><dt>Kept per cell</dt><dd id="rDa">8 of 9</dd></div>
+          <div><dt>Dimension</dt><dd id="rDb">1.8928</dd></div>
+          <div><dt>Area</dt><dd>vanishes</dd></div>
+          <div><dt>Holes' perimeter</dt><dd>infinite</dd></div>
+        </dl>
+        <p class="note">Gasket and carpet look alike but differ at the root. To disconnect a neighbourhood in a finite gasket, remove 3 or 4 points; in a carpet, the boundaries of any two holes never overlap, so whole intervals must be cut, and more of them the finer the approximation. Whyburn 1958: all such curves are topologically identical. In this finite-against-infinite dichotomy the gasket sides with the standard curves, the carpets with the whole plane — which is why a percolation backbone, cut by removing a few bonds, is modelled by a gasket and not a carpet. The distribution of the holes' sizes follows Nr(Λ &gt; λ) ∝ F·λ<sup>−D</sup>, the rule known from the Cantor dust's gaps and Chapter 13's islands.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 145, SPONGE ===================== -->
+  <section class="plate" id="sponge">
+    <div class="plate-head">
+      <p class="no">Plate 145, bottom <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>The Menger sponge</h2>
+      <p class="dim">N = 20, r = 1/3 · D = log 20/log 3 ≈ 2.7268 · the triadic foam keeps 26 and has D ≈ 2.9656</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq" id="wE">
+          <canvas id="cE" role="img" aria-label="Menger sponge"></canvas>
+        </div>
+        <figcaption><strong>Menger sponge</strong> · stage <span id="cEs">3</span> · <span id="cEn">8,000 cubes</span> · drag to turn</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Karl Menger's trema is a cross with spikes front and back: 7 of the 27 subcubes, leaving N = 20 — twelve "ropes" along the edges and eight "knots" on the corners. Both the curd and the whey are connected: water could flow between any two points of the holes, which is why Mandelbrot calls it a sponge. Removing only the centre subcube instead leaves a shell of 26 and gives the triadic fractal foam, where every trema is sealed off by infinitely many, infinitely thin layers — a reminder of the "space-time foam" of Wheeler and Hawking.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span></div>
+          <div class="steps" id="sE" role="group" aria-label="Stage"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate145s">Show Plate 145's sponge</button>
+        </div>
+        <dl class="read">
+          <div><dt>Cubes</dt><dd id="rEa">8,000</dd></div>
+          <div><dt>Dimension</dt><dd>2.7268</dd></div>
+          <div><dt>Volume</dt><dd>vanishes</dd></div>
+          <div><dt>Sections</dt><dd><small>medians &amp; diagonals cut Cantor dusts</small></dd></div>
+        </dl>
+        <p class="note">The book's photograph is reproduced from Blumenthal &amp; Menger's <i>Studies in Geometry</i>; this figure is computed from the rule, drawn as the outer visible faces in three print-like tones, so it can be turned. Generalised sponges take a bigger base b: "light" sponges keep 12b − 16 cubes, "heavy" ones (odd b) keep b³ − 3b + 2; thick-wall foams give D = log(b³ − 1)/log b. Topologically the carpet is the universal plane curve, and the sponge the universal curve outright: the most complicated curve in any space.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PAGES 138–139 ===================== -->
+  <section class="plate" id="branches">
+    <div class="plate-head">
+      <p class="no">Figure on pages 138–139 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Ramification without loops</h2>
+      <p class="dim">N = 5, r = 1/3 · D = log 5/log 3 ≈ 1.4649</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wF">
+          <canvas id="cF" role="img" aria-label="A branching Koch curve"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>Branching teragon</strong> · stage <span id="cFs">4</span> · <span id="cFn">625 intervals</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">A variant of the Koch snowflake that achieves ramification through branches: the initiator is a square and the generator lifts the middle third onto a square tab. Every copy is placed as drawn. The teragons touch themselves — tab against tab — and the touching pieces merge, so the limit is a tree-like curve bristling with branch points: "totally different from the snowflake," as the mountain overleaf shows.</p>
+        <div class="mini" aria-label="Generator">
+          <svg class="gen" viewBox="-0.06 -0.4 1.12 0.52" aria-hidden="true" id="miniBranch"></svg>
+          <div class="fx">N = 5, r = ⅓<br>D ≈ 1.4649</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mF" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span></div>
+          <div class="steps" id="sF" role="group" aria-label="Stage"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="fig139">Show the figure as printed</button>
+        </div>
+        <dl class="read">
+          <div><dt>Intervals</dt><dd id="rFa">625</dd></div>
+          <div><dt>Dimension</dt><dd>1.4649</dd></div>
+          <div><dt>Self-contact</dt><dd>from stage 2</dd></div>
+          <div><dt>Second variant</dt><dd><small>the 3D Koch pyramid, D = log 6/log 2</small></dd></div>
+        </dl>
+        <p class="note">The book prints the curve grown on one side; the figure spans the page's width and its stage matches stage 4 here. The 45° staircases and the little square rings are not drawn in: they emerge where neighbouring tabs meet. The chapter's second loop-free variant is spatial — a tetrahedron sprouting quarter-scale tetrahedra, whose "Koch pyramid" hides chambers upon chambers and rests on Sierpiński-gasket walls; it needs shaded 3D and is left to the page's sources.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 146 ===================== -->
+  <section class="plate" id="halls">
+    <div class="plate-head">
+      <p class="no">Plate 146 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Split snowflake halls</h2>
+      <p class="dim">eleven legs: six of 1/3, five of 1/(3√3) · 6·(1/3)^D + 5·(1/(3√3))^D = 1 · D ≈ 1.8687</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wG">
+          <canvas id="cG" role="img" aria-label="Split snowflake halls"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>Split snowflake halls</strong> · stage <span id="cGs">4</span> · <span id="cGn">14,641 legs</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Long ago and far away, the Great Ruler and his retinue had sat their power in the splendid Snowflake Halls. A schism occurs, a war follows, ending in stalemate, and finally Wise Elders draw a line to divide the Halls between the contenders from the North and the South. The line is the initiator [0, 1]; the division is this curve, grown from the same eleven-legged generator as the Monkeys Tree of Plate 31, and it splits the Koch snowflake of Plate 45 into two labyrinths.</p>
+        <div class="mini" aria-label="Generator">
+          <svg class="gen" viewBox="-0.06 -0.64 1.12 0.78" aria-hidden="true" id="miniHalls"></svg>
+          <div class="fx">11 legs · D ≈ 1.8687</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mG" role="group" aria-label="What to show"></div>
+        </div>
+        <p class="cap" id="capG"></p>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span></div>
+          <div class="steps" id="sG" role="group" aria-label="Stage"></div>
+          <label class="check" for="flakeG"><input type="checkbox" id="flakeG"> Show the snowflake the curve splits (dashed)</label>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate146">Show Plate 146 as printed</button>
+        </div>
+        <dl class="read">
+          <div><dt>Legs</dt><dd id="rGa">14,641</dd></div>
+          <div><dt>Dimension</dt><dd>1.8687</dd></div>
+          <div><dt>Same rule as</dt><dd><small>Plate 31's Monkeys Tree</small></dd></div>
+          <div><dt>Self-contact</dt><dd>limit only</dd></div>
+        </dl>
+        <p class="note">The generator and its placements are exactly those decoded from Plate 31's caption box for the <a href="https://claude.ai/artifact/7gvGnFScNh6SAy2x99eudc" target="_blank" rel="noopener">Monkeys Tree</a> page; the plate is their cascade at stage 4, drawn with straight legs where Plate 31 is printed with rounded ones. Checked against the scan: the maze, the empty Great Hall, the straight line reaching both margins, and the hooks of the finer legs all match. The curve stays inside the Koch snowflake on [0, 1] and hugs its boundary — hence the Halls' snowflake silhouette.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 14, pages 131–146 (Plates 141, 143, 145 and 146, and the figures on pages 132 and 138–139). Every figure is computed from the rules in the captions; stages and viewing angles were fitted to the scans where the book shows them, as noted under each figure. Companion pages: <a href="https://claude.ai/artifact/7gvGnFScNh6SAy2x99eudc" target="_blank" rel="noopener">Mandelbrot's Monkeys Tree</a> (Plate 31), <a href="https://claude.ai/artifact/QxRja4otEyH8dMeU8Uy4UY" target="_blank" rel="noopener">Sweeps, Rivers and Trees</a> (Plates 68–73) and <a href="https://claude.ai/artifact/1diKiTcEwLkJpZaVA2gQ11" target="_blank" rel="noopener">Triadic Koch Island</a> (Plates 42–45).</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>

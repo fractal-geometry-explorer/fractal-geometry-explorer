@@ -1,0 +1,1279 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Self-Inverse Fractals</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>
+/* Layout: inversion (167), Apollonian packing (169–170), the net as clans (171), Poincaré chains (173), Plate 177's osculating discs, Plate 178's homographies (a reconstruction) and Plate 179's corrected Fricke figure, each a figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */
+:root {
+  --page: #e4e5e1;
+  --text: #1b1d1f;
+  --muted: #595e64;
+  --rule: #c4c7c1;
+  --surface: #f6f6f3;
+  --accent: #285895;
+  --f-display: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Newsreader", Georgia, "Times New Roman", serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* the figures are reproductions of printed plates, so their paper and inks stay the same in both themes */
+  --print-paper: #ecebe6;
+  --print-ink: #151515;
+  --print-rule: #c9c8c2;
+  --gain: rgba(47, 95, 158, 0.42);
+  --loss: rgba(186, 88, 44, 0.42);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --page: #111214; --text: #e5e5e1; --muted: #9a9fa6; --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --page: #111214; --text: #e5e5e1; --muted: #9a9fa6; --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--page); color: var(--text); font-family: var(--f-display); font-size: 14px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
+.wrap {
+  max-width: 1180px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 36px 64px;
+  display: grid; gap: 40px;
+}
+header.top { display: grid; gap: 10px; max-width: 820px; }
+.eyebrow { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+h1 {
+  margin: 0; display: flex; align-items: center; flex-wrap: wrap; gap: 0.18em 0.42em;
+  font-weight: 800; font-size: clamp(30px, 5.4vw, 54px); line-height: 1.02; letter-spacing: 0.01em; text-transform: uppercase; text-wrap: balance;
+}
+h1 .plate-no { font-weight: 600; text-transform: none; letter-spacing: 0; }
+.lozenge { display: inline-block; width: 0.42em; height: 0.42em; border: 0.075em solid currentColor; position: relative; top: -0.02em; }
+.lozenge::after { content: ""; position: absolute; inset: 0.1em; border: 0.05em solid currentColor; }
+.dek { margin: 0; font-family: var(--f-body); font-size: 19px; line-height: 1.45; max-width: 64ch; }
+
+nav.index {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+  padding: 10px max(16px, env(safe-area-inset-right, 0px)) 10px max(16px, env(safe-area-inset-left, 0px));
+  background: var(--page); border-bottom: 1px solid var(--rule);
+  display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none;
+}
+nav.index a {
+  flex: none; display: inline-flex; gap: 8px; align-items: baseline; padding: 6px 10px;
+  border: 1px solid var(--rule); background: var(--surface); color: var(--text); text-decoration: none; font-size: 13px; font-weight: 600;
+}
+nav.index a b { font-family: var(--f-mono); font-weight: 500; color: var(--accent); }
+nav.index a:hover { border-color: var(--text); }
+
+section.plate { display: grid; gap: 18px; scroll-margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--rule); }
+.plate-head { display: grid; gap: 4px; }
+.plate-head .no { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.plate-head h2 { margin: 0; font-size: clamp(22px, 3vw, 30px); font-weight: 800; line-height: 1.1; text-transform: uppercase; letter-spacing: 0.01em; text-wrap: balance; }
+.plate-head .dim { margin: 0; font-family: var(--f-mono); font-size: 13px; color: var(--muted); }
+.plate-body { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(280px, 1fr); gap: 32px; align-items: start; }
+@media (max-width: 899px) { .plate-body { grid-template-columns: minmax(0, 1fr); gap: 20px; } }
+figure.fig { margin: 0; display: grid; gap: 8px; min-width: 0; }
+.canvas-wrap { position: relative; width: 100%; max-width: 100%; background: var(--print-paper); outline: 1px solid var(--rule); overflow: hidden; }
+.canvas-wrap canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.r-sq { aspect-ratio: 1 / 1; }
+.r-lox { aspect-ratio: 5 / 4; }
+.zoomable { cursor: grab; touch-action: pan-y; }
+.zoomable.dragging { cursor: grabbing; }
+.view-tools { position: absolute; top: 10px; right: 10px; display: flex; gap: 6px; z-index: 2; }
+.view-tools button { min-width: 34px; height: 34px; padding: 0 10px; font: 600 15px/1 var(--f-display); color: var(--print-ink); background: #f7f7f3; border: 1px solid var(--print-rule); cursor: pointer; }
+figcaption { font-size: 13px; color: var(--muted); }
+figcaption strong { color: var(--text); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+
+.side { display: grid; gap: 18px; min-width: 0; align-content: start; }
+.side p.cap { margin: 0; font-family: var(--f-body); font-size: 17px; line-height: 1.55; max-width: 62ch; }
+.group { display: grid; gap: 8px; min-width: 0; }
+.label-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.label { font-size: 11.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.value { font-family: var(--f-mono); font-size: 12.5px; font-variant-numeric: tabular-nums; text-align: right; }
+.steps { display: flex; flex-wrap: wrap; gap: 6px; }
+.steps button {
+  min-width: 38px; height: 34px; padding: 0 10px; font: 600 13px/1 var(--f-mono); color: var(--text);
+  background: var(--surface); border: 1px solid var(--rule); cursor: pointer;
+}
+.steps.words button { font: 600 13px/1 var(--f-display); }
+.steps button[aria-pressed="true"] { background: var(--text); color: var(--page); border-color: var(--text); }
+.steps button:hover { border-color: var(--text); }
+.steps button:disabled { opacity: 0.35; cursor: default; border-color: var(--rule); }
+.btn-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.btn { padding: 8px 12px; font: 600 13px/1.2 var(--f-display); color: var(--text); background: var(--surface); border: 1px solid var(--rule); cursor: pointer; }
+.btn:hover { border-color: var(--text); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--page); }
+.check { display: flex; align-items: flex-start; gap: 8px; font-size: 13.5px; cursor: pointer; }
+.check input { accent-color: var(--accent); width: 16px; height: 16px; margin: 1px 0 0; flex: none; }
+.check:has(input:disabled) { opacity: 0.45; cursor: default; }
+.slider { display: grid; gap: 4px; }
+.slider input { width: 100%; accent-color: var(--accent); margin: 0; }
+.slider input:disabled { opacity: 0.4; }
+dl.read { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; padding-top: 14px; border-top: 1px solid var(--rule); }
+dl.read div { display: grid; gap: 2px; min-width: 0; }
+dl.read dt { font-size: 10.5px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); }
+dl.read dd { margin: 0; font-family: var(--f-mono); font-size: 16px; overflow-wrap: anywhere; }
+dl.read dd small { font-size: 11.5px; color: var(--muted); }
+.note { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.mini { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; padding: 10px 12px; background: var(--print-paper); border: 1px solid var(--print-rule); color: var(--print-ink); }
+.mini svg { height: 64px; width: auto; max-width: 100%; }
+.mini .fx { font-family: var(--f-mono); font-size: 12px; line-height: 1.6; color: var(--print-ink); }
+.key { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--muted); }
+.key span { display: inline-flex; align-items: center; gap: 6px; }
+.key i { width: 14px; height: 10px; display: inline-block; border: 1px solid var(--print-rule); }
+.readline { min-height: 2.9em; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.readline b { color: var(--text); font-weight: 700; }
+
+.sub { display: grid; gap: 14px; padding-top: 22px; border-top: 1px dashed var(--rule); scroll-margin-top: 64px; }
+.sub h3 { margin: 0; font-size: 15px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
+.source { font-family: var(--f-body); font-size: 15px; color: var(--muted); margin: 0; max-width: 84ch; }
+.source i { color: var(--text); }
+.source a { color: var(--accent); }
+button:focus-visible, input:focus-visible, a:focus-visible, canvas:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.r-chain { aspect-ratio: 1 / 1; }
+.legend { display: flex; flex-wrap: wrap; gap: 10px 16px; font: 500 12.5px/1.4 var(--f-display); color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 14px; height: 14px; border-radius: 50%; display: inline-block; flex: none; }
+.legend i.ring { background: none; border: 2px solid currentColor; }
+</style>
+<style>
+body { margin: 0; }
+/* The hidden attribute must beat the pages' own display rules (.slider, .check, ...). The artifact
+   wrapper's stylesheet used to provide this; self-hosted pages carry it themselves. */
+[hidden] { display: none !important; }
+nav.shell { font-family: var(--f-display); font-size: 12.5px; font-weight: 600; background: var(--page);
+  border-bottom: 1px solid var(--rule); display: flex; align-items: center; gap: 6px 18px;
+  padding: 9px max(16px, env(safe-area-inset-right, 0px)) 9px max(16px, env(safe-area-inset-left, 0px)); }
+nav.shell a { color: var(--text); text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+nav.shell a:hover { color: var(--accent); }
+nav.shell .home { letter-spacing: 0.07em; text-transform: uppercase; flex: none; }
+nav.shell .gap { flex: 1; }
+nav.shell .pn { color: var(--muted); font-weight: 500; }
+nav.shell .pn b { color: var(--text); font-weight: 600; }
+nav.shell a:hover .pn, nav.shell a:hover .pn b { color: var(--accent); }
+</style>
+</head>
+<body>
+<nav class="shell" aria-label="Site"><a class="home" href="index.html">Fractal Geometry Explorer</a><span class="gap"></span><a rel="prev" href="diameter-exponent.html"><span class="pn">&#8592; <b>Plates 163–165</b></span></a><a rel="next" href="self-squared-dragons.html"><span class="pn"><b>Plates 185–192</b> &#8594;</span></a></nav>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 18, "Self-inverse fractals, Apollonian nets, and soap" · pages 166–179</p>
+    <h1><span class="plate-no">Pages 166–179</span><span class="lozenge" aria-hidden="true"></span><span>Self-Inverse Fractals and Apollonian Nets</span></h1>
+    <p class="dek">Nearly every fractal so far was left unchanged by similarities, which shrink and translate. This chapter asks instead for the smallest sets left unchanged by <i>inversions</i> in a set of generating circles — a question posed by Poincaré and Klein in the 1880s, whose answer's actual shape stayed unexplored until Mandelbrot's construction in this chapter. The simplest case is the Apollonian net, which also models the layering of a smectic liquid crystal — soap. Every figure here is computed from the book's rules; the generating circles are fitted from the scans.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#inversion"><b>167</b> Inversion</a>
+    <a href="#apollonian"><b>169–170</b> Apollonian packing</a>
+    <a href="#net"><b>171</b> Nets are self-inverse</a>
+    <a href="#chain"><b>173</b> Poincaré chains</a>
+    <a href="#p177"><b>177</b> Osculating discs</a>
+    <a href="#p178"><b>178</b> Homographies</a>
+    <a href="#p179"><b>179</b> Fricke, corrected</a>
+  </nav>
+
+  <!-- ===================== INVERSION ===================== -->
+  <section class="plate" id="inversion">
+    <div class="plate-head">
+      <p class="no">Pages 167–168 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Standard geometric inversion</h2>
+      <p class="dim">Inversion in a circle of centre O and radius R: P ↦ P′ on the same ray from O, with |OP| · |OP′| = R²</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wA">
+          <canvas id="cA" role="img" aria-label="A circle and its inverse in the reference circle"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>Inversion in the circle C</strong> · tap or click to place the black circle · its inverse is drawn in red</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">After the line, the next simplest shape in Euclid is the circle, and being a circle survives inversion. Inversion in a circle C of centre O swaps inside and outside: a point at distance d from O lands at distance R²/d on the same ray. The chapter restates the facts its figures illustrate: circles through O invert into straight lines, and conversely; circles elsewhere invert into circles; circles orthogonal to C, and lines through O, are left in place.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">The four cases of page 167</span></div>
+          <div class="steps words" id="mA" role="group" aria-label="Case"></div>
+        </div>
+        <p class="readline" id="infoA" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Circle's distance to O</dt><dd id="rAd">—</dd></div>
+          <div><dt>Its inverse</dt><dd id="rAk">a circle</dd></div>
+        </dl>
+        <p class="note">A set that inversions carry onto itself is called <i>self-inverse</i>. The rest of the chapter looks for the smallest closed self-inverse set of a family of generating circles — its <i>limit set</i> L, the region "where infinitesimal children concentrate".</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== APOLLONIAN PACKING ===================== -->
+  <section class="plate" id="apollonian">
+    <div class="plate-head">
+      <p class="no">Pages 169–170 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Apollonian packing, nets and gaskets</h2>
+      <p class="dim" id="dimB">D is not known in closed form: 1.300197 &lt; D &lt; 1.314534 (Boyd 1973), numerically D ≈ 1.3058</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wB">
+          <canvas id="cB" role="img" aria-label="Apollonian packing of three tangent circles"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cBt">Apollonian packing</strong> · <span id="cBn">—</span> · zoom to pack finer</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Apollonius of Perga gave the algorithm for the circles tangent to three given circles. When the three are mutually tangent — two inside the third, as in the book's figures — exactly two Apollonian circles answer, the largest circles inscribed in the two curvilinear triangles. Five circles now bound six triangles; inscribing the largest circle in each, and repeating without end, is <i>Apollonian packing</i>. The circles plus their limit points form the <i>Apollonian net</i>; the portion inside one triangle is a <i>gasket</i>.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mB" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Construction stage</span><span class="value" id="sBv">packing</span></div>
+          <div class="steps" id="sB" role="group" aria-label="Stage"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="preB170">Show the five circles of p. 170</button>
+          <button type="button" class="btn" id="preBgasket">The gasket, as photographed</button>
+        </div>
+        <dl class="read">
+          <div><dt>Circles drawn</dt><dd id="rBa">—</dd></div>
+          <div><dt>Smallest radius</dt><dd id="rBb">—</dd></div>
+          <div><dt>Net dimension</dt><dd>≈ 1.3058</dd></div>
+        </dl>
+        <p class="note">The three given circles are fitted from the construction figure on page 170 (they are the same three throughout pages 169–171) and adjusted to exact tangency. The packing is computed by Descartes' circle theorem, not Apollonius' ruler-and-compass steps. The photograph on page 170 shows the gasket in the triangle that lies below the two inner circles; the "as photographed" preset zooms to it. Since D is a fraction while the topological dimension is 1, the net and gasket are fractal curves: cutting off discs of radius below ε leaves interstices of perimeter ∝ ε<sup>1−D</sup> and area ∝ ε<sup>2−D</sup>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== NETS ARE SELF-INVERSE ===================== -->
+  <section class="plate" id="net">
+    <div class="plate-head">
+      <p class="no">Page 171 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Apollonian nets are self-inverse</h2>
+      <p class="dim">Four Γ circles → four generating circles C₁…C₄, each orthogonal to a triplet of Γ's · the net splits into 4 clans</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wC">
+          <canvas id="cC" role="img" aria-label="The Apollonian net built from its four generating circles"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cCt">The net as four clans</strong> · <span id="cCn">—</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Return to the three tangent circles, add either Apollonian circle, and call the four the Γ circles. Each triplet of Γ's has a circle orthogonal to all three — through their three tangency points — and these four new circles are taken as the generator, C₁, C₂, C₃, C₄. The payoff: the smallest closed set self-inverse with respect to the C circles <i>is</i> the Apollonian net built on the Γ circles. Every circle of the net is carried to one of the Γ circles by a unique sequence of inversions, so the net sorts into four clans.</p>
+        <div class="legend" id="legC"></div>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mC" role="group" aria-label="What to show"></div>
+        </div>
+        <dl class="read">
+          <div><dt>Circles drawn</dt><dd id="rCa">—</dd></div>
+          <div><dt>Built by</dt><dd id="rCb">inversions of the Γ circles</dd></div>
+        </dl>
+        <p class="note">Here the net is not computed by Descartes' theorem at all: every circle is an inverted image of a Γ circle under a reduced word in the four C inversions, and the colours name which Γ each descends from — the book's four clans, made visible. That the result coincides with the packing of the previous section is the self-inverse property. Like the Sierpiński gasket of Plate 141, the net can also be knitted with a single thread: a line can pass twice over certain points but never twice over any interval.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== POINCARÉ CHAINS ===================== -->
+  <section class="plate" id="chain">
+    <div class="plate-head">
+      <p class="no">Pages 172–173 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Poincaré chains, and Poincaré's construction of L</h2>
+      <p class="dim">M = 4 circles, each tangent to its two neighbours · stage s shows all 4·3ˢ links · the chain thins to its thread L</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wD">
+          <canvas id="cD" role="img" aria-label="Stages of Poincaré's construction of the limit set"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cDt">Poincaré's construction</strong> · stage <span id="cDs">1</span> · <span id="cDn">12 links</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">A <i>Poincaré chain</i> is a necklace of M circles, each tangent to its two cyclic neighbours and meeting no other. Its limit set L is then a loop — a Jordan curve. To draw L, Poincaré and Fricke &amp; Klein replace the chain, in stages, by chains of more and smaller links: the first stage replaces every link Cᵢ by the inverses in Cᵢ of the other links, creating M(M−1) = 12 smaller ones, and each later stage inverts the whole previous chain in each original circle. As in the book's figure, each stage is drawn in ink over the previous stage in white, on the gray panel.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage</span><span class="value" id="sDv">stage 1</span></div>
+          <div class="steps" id="sD" role="group" aria-label="Stage"></div>
+          <label class="check" for="ghostD"><input type="checkbox" id="ghostD" checked> Show the previous stage in white, as printed</label>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="preD">Show p. 173 as printed</button>
+        </div>
+        <dl class="read">
+          <div><dt>Links at this stage</dt><dd id="rDa">12</dd></div>
+          <div><dt>Largest link radius</dt><dd id="rDb">—</dd></div>
+        </dl>
+        <p class="note">The four chain circles are fitted from the figure on page 173 (rms 2.6 px at 600 dpi) and adjusted to exact tangency. The book's complaint is visible by stage 4: some links shrink very slowly near the tangency points, so even advanced chains give a poor idea of L — the failing that motivates the construction of Plate 177. The chain here is not Fuchsian: no single circle is orthogonal to all four links, so L is a genuinely fractal loop rather than a circle.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 177 ===================== -->
+  <section class="plate" id="p177">
+    <div class="plate-head">
+      <p class="no">Plate 177, with pages 174–175 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>A self-inverse fractal: Mandelbrot's osculating discs</h2>
+      <p class="dim">Γ<sub>ijk</sub> ⟂ Cᵢ, Cⱼ, Cₖ · the tangency-free disc Δ<sub>ijk</sub> osculates L · clans of the Δ's tile everything but L</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wE">
+          <canvas id="cE" role="img" aria-label="Mandelbrot's construction of the limit set by osculating discs"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cEt">Osculating-disc construction</strong> · <span id="cEn">—</span> · the white thread between black and gray is L</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">A standard curve is hugged, to second order, by its osculating circle. Curvature means nothing on L, but at every point where two packing circles touch they visibly "embrace" the rest of the set between them, and Mandelbrot extends this: a circle osculates L when it is critical between lying all on one side and not. For the same chain as above, the circles Γ<sub>ijk</sub> orthogonal to the triplets Cᵢ, Cⱼ, Cₖ osculate L, and each bounds a disc Δ<sub>ijk</sub> free of the chain's tangency points. The clans of the Δ's — their inverses and repeated inverses — cover the whole plane except L itself: gray outside, black inside. A few stages already outline L better than many stages of Poincaré's chains.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Approximation</span><span class="value" id="sEv">the limit</span></div>
+          <div class="steps words" id="sE" role="group" aria-label="Approximation"></div>
+          <label class="check" for="circE"><input type="checkbox" id="circE"> Show the chain circles and the four Γ circles</label>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="preE">Show Plate 177 as printed</button>
+        </div>
+        <dl class="read">
+          <div><dt>Osculating discs drawn</dt><dd id="rEa">—</dd></div>
+          <div><dt>Outside (gray) seeds</dt><dd>Δ₁₂₃ ∪ Δ₃₄₁, both unbounded</dd></div>
+          <div><dt>Inside (black) seeds</dt><dd>Δ₂₃₄ ∪ Δ₄₁₂, which intersect</dd></div>
+        </dl>
+        <p class="note">The plate's three figures are its stages: first the four Δ discs alone, then one round of inverses (Δ₁₂₃ and Δ₃₄₁ in C₄ and C₂; Δ₂₃₄ and Δ₄₁₂ in C₁ and C₃), then the full clans. The caption's analogy: the gray and black unions approximate the outside and inside of L the way the hexagon and star of Plate 43 approximate the Koch snowflake. Our render reproduces all three figures from the fitted chain; zooming refines the cover, and the uncovered thread is L.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 178 ===================== -->
+  <section class="plate" id="p178">
+    <div class="plate-head">
+      <p class="no">Plate 178 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Self-homographic fractals, near the Peano limit</h2>
+      <p class="dim">An homography z ↦ (az + b)/(cz + d), ad − bc = 1 · inversion ∘ reflection ∘ rotation · a reconstruction, not the plate</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wF">
+          <canvas id="cF" role="img" aria-label="Limit set of twisted inversions, a self-homographic fractal"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>Twisted inversions</strong> · twist <span id="cFt">0°</span> · <span id="cFn">—</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Groups of inversions matter to mathematicians through their relation with groups of <i>homographies</i> — Möbius maps, each a product of an inversion, a reflection and a rotation. Without rotation, homographies learn everything from inversions; allowing rotation "brings in new riches". Plate 178 is such a limit set, an almost plane-filling shape devised by David Mumford for this book. Its exact group is not stated in the book, so the plate cannot be reproduced stroke for stroke. This figure instead lets you add the rotation yourself: each generator is inversion in a chain circle followed by a rotation about that circle's centre, which makes every two-letter word an homography. At 0° the limit set is the thread of the sections above; as the twist grows it spirals and thickens toward the plane-filling "Peano limit".</p>
+        <div class="slider group">
+          <div class="label-row"><span class="label">Twist of each inversion</span><span class="value" id="twFv">0°</span></div>
+          <input type="range" id="twF" min="0" max="60" value="0" step="1" aria-label="Twist angle in degrees">
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Generating circles</span></div>
+          <div class="steps words" id="mF" role="group" aria-label="Configuration"></div>
+        </div>
+        <dl class="read">
+          <div><dt>Discs in the cover</dt><dd id="rFa">—</dd></div>
+          <div><dt>At 0°</dt><dd>the chain's Jordan curve L</dd></div>
+        </dl>
+        <p class="note">This section is a reconstruction in spirit, clearly not the printed plate: Mumford's group is unpublished, so the page shows the phenomenon — a one-parameter family of self-homographic sets leaving the self-inverse case — rather than a fit. The drawing covers the limit set by discs, exactly as for inversions, because each twisted generator still maps the outside of its circle into its disc.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 179 ===================== -->
+  <section class="plate" id="p179">
+    <div class="plate-head">
+      <p class="no">Plate 179, with page 173 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>A celebrated self-inverse fractal, corrected</h2>
+      <p class="dim">Fricke &amp; Klein's Figure 156 (1897): five generating circles · four form a Poincaré chain; C₅ touches C₂ and C₃</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wG">
+          <canvas id="cG" role="img" aria-label="The self-inverse fractal of Fricke and Klein's five circles, corrected"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cGt">The corrected limit set</strong> · <span id="cGn">—</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Fricke's Figure 156 claimed to show the self-inverse fractal of five generating circles, and was reproduced very widely. Fricke knew that L incorporates circles and had his draftsman include them — but otherwise he did not know what sort of very irregular shape to expect, and Mandelbrot's verdict on the discrepancy is "horrid". The osculating σ-disc construction gives the actual shape. The five circles here are fitted from the engraving as the book reproduces it; four of them form a Poincaré chain, whose own Jordan curve L* also belongs to the full set L, along with its transforms by the remaining inversions.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mG" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="preGtop">Plate 179, top right</button>
+          <button type="button" class="btn" id="preGbot">Bottom right</button>
+        </div>
+        <dl class="read">
+          <div><dt>Generator</dt><dd>5 circles, fitted rms 0.6 px</dd></div>
+          <div><dt>Discs drawn</dt><dd id="rGa">—</dd></div>
+        </dl>
+        <p class="note" id="noteG">The five circles were recovered from the scan by fitting the arcs that bound the engraving's blackened centre, then nudged to exact tangency (under a thousandth of the outer radius). Checked against the plate: our inside of L* matches the bottom-right shape with 98% overlap after a similarity fit, and the full five-circle shape matches the top-right black form feature for feature (the print sits rotated about 44°; overlap 74% at the rim's halftone precision). A pleasing confirmation: the two large circles Fricke's draftsman drew across the engraving check out as true circles of L — one passes through the three tangency points of C₂, C₃, C₅, orthogonal to all three, exactly like the Γ circles of the Apollonian net.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 18, pages 166–179 (Plates 177, 178 and 179). Every figure is computed from the stated rules; generating circles are fitted from the scans and idealized to exact tangency, as noted under each figure. Plate 178's section is a reconstruction of the idea, not of the plate. The smectic "soap" model of pages 176–177 is discussed in the Apollonian section's text. D bounds for the Apollonian net: Boyd 1973.</p>
+</div>
+
+<script>
+// Shared drawing library: style constants, the zoomable canvas (snapshot while panning), chunked
+// paths, controls and small SVG figures. Loaded before each page's own scripts; pages may extend
+// PRINT with their own inks (PRINT.red = ..., PRINT.light = ...).
+const $ = (id) => document.getElementById(id);
+const fmt = (n) => n.toLocaleString('en-US');
+const PRINT = { paper: '#ecebe6', ink: '#151515', rule: '#c9c8c2', muted: '#66665f', accent: '#2f5f9e', red: '#c2452d', faint: '#bdbbb3', gray: '#8f8e88' };
+const RAMP = [[233, 185, 73], [217, 113, 59], [184, 66, 79], [125, 58, 120], [63, 79, 151], [43, 122, 138]];
+const ramp = (t, a = 1) => {
+  const x = Math.max(0, Math.min(1, t)) * (RAMP.length - 1), i = Math.min(RAMP.length - 2, Math.floor(x)), f = x - i;
+  const c = RAMP[i].map((v, k) => Math.round(v + (RAMP[i + 1][k] - v) * f));
+  return `rgba(${c[0]},${c[1]},${c[2]},${a})`;
+};
+const CAT = ['#151515', '#9a988f', '#2f5f9e', '#c2452d', '#3f8f6c', '#b58a2a', '#6b4e9b', '#5f8fae'];
+
+// ---------- shared plumbing ----------
+function figure(canvas, draw) {
+  const wrap = canvas.parentElement;
+  const f = { canvas, ctx: canvas.getContext('2d'), w: 1, h: 1, dpr: 1, draw };
+  const resize = () => {
+    f.dpr = Math.min(2, window.devicePixelRatio || 1);
+    f.w = wrap.clientWidth || 1; f.h = wrap.clientHeight || 1;
+    canvas.width = Math.round(f.w * f.dpr); canvas.height = Math.round(f.h * f.dpr);
+    f.draw();
+  };
+  new ResizeObserver(resize).observe(wrap);
+  return f;
+}
+function fitBox(f, bb, pad = 0.04) {
+  const w = Math.max(1e-9, bb.x1 - bb.x0), h = Math.max(1e-9, bb.y1 - bb.y0), s = Math.min(f.w / (w * (1 + 2 * pad)), f.h / (h * (1 + 2 * pad)));
+  return { s, ox: f.w / 2 - ((bb.x0 + bb.x1) / 2) * s, oy: f.h / 2 + ((bb.y0 + bb.y1) / 2) * s };
+}
+const toWorld = (f, v) => f.ctx.setTransform(f.dpr * v.s, 0, 0, -f.dpr * v.s, f.dpr * v.ox, f.dpr * v.oy);
+const toScreen = (f) => f.ctx.setTransform(f.dpr, 0, 0, f.dpr, 0, 0);
+function paper(f, color) { f.ctx.setTransform(1, 0, 0, 1, 0, 0); f.ctx.fillStyle = color; f.ctx.fillRect(0, 0, f.canvas.width, f.canvas.height); }
+function polyPath(P, closed = true, upto) {
+  const p = new Path2D(), m = upto === undefined ? P.length / 2 : upto;
+  p.moveTo(P[0], P[1]);
+  for (let i = 1; i < m; i++) p.lineTo(P[2 * i], P[2 * i + 1]);
+  if (closed) p.closePath();
+  return p;
+}
+function bbox(P, bb = { x0: Infinity, x1: -Infinity, y0: Infinity, y1: -Infinity }) {
+  for (let i = 0; i < P.length; i += 2) { bb.x0 = Math.min(bb.x0, P[i]); bb.x1 = Math.max(bb.x1, P[i]); bb.y0 = Math.min(bb.y0, P[i + 1]); bb.y1 = Math.max(bb.y1, P[i + 1]); }
+  return bb;
+}
+function stepButtons(el, values, text, aria, onPick) {
+  const bs = values.map((v) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.textContent = text(v); b.setAttribute('aria-label', aria(v));
+    b.addEventListener('click', () => onPick(v));
+    el.append(b);
+    return b;
+  });
+  const mark = (cur) => bs.forEach((b, i) => b.setAttribute('aria-pressed', String(values[i] === cur)));
+  mark.buttons = bs;
+  return mark;
+}
+// pan and zoom: a quick rescaled snapshot while moving, a full redraw once it settles
+function zoomable(wrapId, canvasId, fitOf, render, opts = {}) {
+  const maxZoom = opts.maxZoom || 400;
+  const wrap = $(wrapId), z = { view: null, user: false, snapView: null, raf: 0, full: 0 };
+  const snap = document.createElement('canvas');
+  const f = figure($(canvasId), () => draw());
+  function touch() { wrap.style.touchAction = z.view && z.view.s > z.view.fit * 1.02 ? 'none' : 'pan-y'; }
+  function draw() {
+    if (!z.view || !z.user) { z.view = fitOf(f); z.view.fit = z.view.s; z.user = false; touch(); }
+    render(f, z.view);
+    snap.width = f.canvas.width; snap.height = f.canvas.height; snap.getContext('2d').drawImage(f.canvas, 0, 0);
+    z.snapView = { s: z.view.s, ox: z.view.ox, oy: z.view.oy };
+  }
+  function quick() {
+    const v = z.view, k = v.s / z.snapView.s, c = f.ctx;
+    c.setTransform(1, 0, 0, 1, 0, 0); c.fillStyle = z.ground || PRINT.paper; c.fillRect(0, 0, f.canvas.width, f.canvas.height);
+    c.drawImage(snap, (v.ox - z.snapView.ox * k) * f.dpr, (v.oy - z.snapView.oy * k) * f.dpr, snap.width * k, snap.height * k);
+  }
+  function schedule() { if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; draw(); }); }
+  function moved() {
+    if (!z.snapView) { schedule(); return; }
+    if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; quick(); });
+    clearTimeout(z.full); z.full = setTimeout(schedule, 160);
+  }
+  function zoomAt(px, py, k) {
+    const v = z.view, ns = Math.min(v.fit * maxZoom, Math.max(v.fit * 0.8, v.s * k)), wx = (px - v.ox) / v.s, wy = (v.oy - py) / v.s;
+    v.s = ns; v.ox = px - wx * ns; v.oy = py + wy * ns; z.user = true; touch(); moved();
+  }
+  function pan(dx, dy) { z.view.ox += dx; z.view.oy += dy; z.user = true; moved(); }
+  wrap.querySelector('[data-z="in"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1.6));
+  wrap.querySelector('[data-z="out"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1 / 1.6));
+  wrap.querySelector('[data-z="fit"]').addEventListener('click', () => { z.user = false; schedule(); });
+  const pts = new Map();
+  let pinch = null, down = null;
+  const local = (e) => { const r = wrap.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+  wrap.addEventListener('pointerdown', (e) => {
+    if (e.target.closest('.view-tools')) return;
+    pts.set(e.pointerId, local(e));
+    down = pts.size === 1 ? { p: local(e), t: performance.now(), moved: 0 } : null;
+    try { wrap.setPointerCapture(e.pointerId); } catch (_) {}
+    if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), m: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2] }; }
+    wrap.classList.add('dragging');
+  });
+  wrap.addEventListener('pointermove', (e) => {
+    if (!pts.has(e.pointerId)) return;
+    const prev = pts.get(e.pointerId), cur = local(e);
+    pts.set(e.pointerId, cur);
+    if (down) down.moved = Math.max(down.moved, Math.hypot(cur[0] - down.p[0], cur[1] - down.p[1]));
+    if (pts.size === 2 && pinch) {
+      const [a, b] = [...pts.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]), m = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+      pan(m[0] - pinch.m[0], m[1] - pinch.m[1]);
+      if (pinch.d > 0) zoomAt(m[0], m[1], d / pinch.d);
+      pinch = { d, m };
+    } else if (pts.size === 1 && (e.pointerType !== 'touch' || z.view.s > z.view.fit * 1.02)) pan(cur[0] - prev[0], cur[1] - prev[1]);
+  });
+  const end = (e) => {
+    if (down && pts.size === 1 && down.moved < 5 && opts.onTap) { const [x, y] = local(e), v = z.view; opts.onTap((x - v.ox) / v.s, (v.oy - y) / v.s); }
+    down = null;
+    pts.delete(e.pointerId); if (pts.size < 2) pinch = null; if (!pts.size) wrap.classList.remove('dragging');
+  };
+  wrap.addEventListener('pointerup', end); wrap.addEventListener('pointercancel', (e) => { down = null; end(e); });
+  wrap.addEventListener('wheel', (e) => { if (!(e.ctrlKey || e.metaKey)) return; e.preventDefault(); const [x, y] = local(e); zoomAt(x, y, Math.exp(-e.deltaY * 0.0045)); }, { passive: false });
+  wrap.addEventListener('dblclick', (e) => { if (e.target.closest('.view-tools')) return; const [x, y] = local(e); zoomAt(x, y, e.shiftKey ? 0.5 : 2); });
+  return { f, z, schedule, refit: () => { z.user = false; schedule(); } };
+}
+// chunked paths: many small paths fill far faster than one path with a hundred thousand pieces
+function chunked(count, add, size = 512) {
+  const out = [];
+  let p = null;
+  for (let i = 0; i < count; i++) { if (i % size === 0) { p = new Path2D(); out.push(p); } add(p, i); }
+  return out;
+}
+// fill and outline in the same colour, so that tiles which only meet along an edge show no hairline seams
+function solid(c, paths, color, lw) {
+  c.fillStyle = color; c.strokeStyle = color; c.lineWidth = lw; c.lineJoin = 'miter';
+  for (const p of paths) { c.fill(p); c.stroke(p); }
+}
+const dot = (c, v, x, y, r = 4, color = PRINT.red) => { c.beginPath(); c.arc(v.ox + x * v.s, v.oy - y * v.s, r, 0, Math.PI * 2); c.fillStyle = color; c.fill(); c.strokeStyle = PRINT.paper; c.lineWidth = 1.5; c.stroke(); };
+
+// a polyline (Float64Array or [[x,y],...]) as SVG points with y flipped
+const svgPts = (P) => (P instanceof Float64Array ? Array.from({ length: P.length / 2 }, (_, i) => [P[2 * i], P[2 * i + 1]]) : P).map(([x, y]) => `${x.toFixed(4)},${(-y).toFixed(4)}`).join(' ');
+function miniCurve(id, P, dots = true) {
+  const pts = P instanceof Float64Array ? Array.from({ length: P.length / 2 }, (_, i) => [P[2 * i], P[2 * i + 1]]) : P;
+  $(id).innerHTML = `<line x1="0" y1="0" x2="1" y2="0" stroke="#8a8a84" stroke-width="0.008" stroke-dasharray="0.025 0.02"/>` +
+    `<polyline points="${svgPts(pts)}" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linejoin="round"/>` +
+    (dots ? `<g fill="currentColor">${pts.map(([x, y], i) => `<circle cx="${x.toFixed(4)}" cy="${(-y).toFixed(4)}" r="${i === 0 || i === pts.length - 1 ? 0.03 : 0.018}"/>`).join('')}</g>` : '');
+}
+function miniTree(id, links, dx = 0) {
+  const ends = new Set(), mid = new Set(), k = (x, y) => `${x.toFixed(4)},${y.toFixed(4)}`;
+  let s = '';
+  for (const [px, py, qx, qy] of links) {
+    s += `<line x1="${(px + dx).toFixed(4)}" y1="${(-py).toFixed(4)}" x2="${(qx + dx).toFixed(4)}" y2="${(-qy).toFixed(4)}" stroke="currentColor" stroke-width="0.02" stroke-linecap="round"/>`;
+    mid.add(k(px + dx, py)); mid.add(k(qx + dx, qy));
+  }
+  s += `<g fill="currentColor">${[...mid].map((p) => { const [x, y] = p.split(',').map(Number); const big = (Math.abs(x - dx) < 1e-6 || Math.abs(x - dx - 1) < 1e-6) && Math.abs(y) < 1e-6; return `<circle cx="${x}" cy="${-y}" r="${big ? 0.03 : 0.018}"/>`; }).join('')}</g>`;
+  return s;
+}
+// canvas transform for a similarity map f = [ar, ai, br, bi, m] composed with the view
+function setMap(f, c, v, fig) {
+  const [ar, ai, br, bi, m] = f, k = fig.dpr * v.s;
+  if (m) c.setTransform(k * ar, -k * ai, k * ai, k * ar, fig.dpr * (v.ox + v.s * br), fig.dpr * (v.oy - v.s * bi));
+  else c.setTransform(k * ar, -k * ai, -k * ai, -k * ar, fig.dpr * (v.ox + v.s * br), fig.dpr * (v.oy - v.s * bi));
+}
+const segPath = (segs, pick) => { const p = new Path2D(); for (const s of segs) if (!pick || pick(s)) { p.moveTo(s[0], s[1]); p.lineTo(s[2], s[3]); } return p; };
+// Plate 64's chevrons, measured from the plate: each interval a→b becomes a thin quadrilateral
+// pointing toward F, the corner the next stage would add (see DECISIONS.md)
+const CHEV_OUT = 0.43, CHEV_IN = 0.235;
+function chevronPaths(P, F, m) {
+  return chunked(m, (p, i) => {
+    const ax = P[2 * i], ay = P[2 * i + 1], bx = P[2 * i + 2], by = P[2 * i + 3], mx = (ax + bx) / 2, my = (ay + by) / 2;
+    const vx = F[2 * i] - mx, vy = F[2 * i + 1] - my;
+    p.moveTo(ax, ay); p.lineTo(mx + CHEV_OUT * vx, my + CHEV_OUT * vy); p.lineTo(bx, by); p.lineTo(mx + CHEV_IN * vx, my + CHEV_IN * vy); p.closePath();
+  });
+}
+
+// Chapter 18 geometry: circle inversion, Descartes' theorem and Apollonian packing, orthogonal
+// circles, clans of an inversion group, Poincaré chain stages, and Mandelbrot's osculating-disc
+// construction of the limit set. Circles are {x, y, r}; regions add inside: true (the disc) or
+// false (its complement).
+
+// ---------- measured configurations (600 dpi fits, idealized to exact tangency) ----------
+// The M = 4 Poincaré chain of page 173 and Plate 177. Fitted from the scan (rms 2.6 px at
+// 600 dpi), then adjusted to exact tangency. y points up; the book's figure is y-down.
+const CHAIN = [
+  { x: -0.60637, y: 0.06853, r: 0.39348 },   // C1, left
+  { x: 0.0, y: -0.45406, r: 0.40701 },       // C2, bottom
+  { x: 0.60637, y: 0.06853, r: 0.39348 },    // C3, right
+  { x: 0.0, y: 0.31700, r: 0.26182 },        // C4, top
+];
+// The five generating circles of Fricke & Klein's Figure 156 (Plate 179), fitted from the
+// engraving reproduced at the top left of the plate (rms 0.6 px), idealized to exact tangency.
+// C1 C2 C3 C4 form the Poincaré chain; C5 is tangent to C2 and C3 only.
+const FRICKE = [
+  { x: -0.82858, y: 0.70454, r: 0.9142 },    // C1, upper left
+  { x: 0.61285, y: 0.37372, r: 0.5647 },     // C2, upper right
+  { x: 0.0745, y: -0.09939, r: 0.152 },      // C3, small centre
+  { x: -0.28587, y: -0.40322, r: 0.31935 },  // C4, lower left
+  { x: 0.34431, y: -0.38855, r: 0.24349 },   // C5, lower right
+];
+// The three given circles of the packing construction on pages 169–170 (outer first).
+const GIVEN = [
+  { x: 0, y: 0, r: 1 },
+  { x: -0.303551, y: -0.062967, r: 0.689987 },
+  { x: 0.661882, y: -0.248305, r: 0.293075 },
+];
+
+// ---------- inversion ----------
+// Inversion of a point in circle K.
+function invPoint(K, x, y) {
+  const dx = x - K.x, dy = y - K.y, s = (K.r * K.r) / (dx * dx + dy * dy);
+  return [K.x + s * dx, K.y + s * dy];
+}
+// Inversion of a circle that does not pass through K's centre. d2 > 0 keeps the circle's
+// orientation (centre outside K's disc... sign only matters for regions, handled by caller).
+function invCircle(K, c) {
+  const dx = c.x - K.x, dy = c.y - K.y, d2 = dx * dx + dy * dy - c.r * c.r;
+  const s = (K.r * K.r) / d2;
+  return { x: K.x + s * dx, y: K.y + s * dy, r: Math.abs(s) * c.r };
+}
+// Inversion of a region (disc or complement). The image is a disc unless the region covers
+// K's centre, which the constructions here avoid after the first step.
+function invRegion(K, g) {
+  const c = invCircle(K, g);
+  const dx = g.x - K.x, dy = g.y - K.y, centreInG = dx * dx + dy * dy < g.r * g.r;
+  // inside disc not covering centre -> disc; complement covering everything but centre -> disc
+  return { x: c.x, y: c.y, r: c.r, inside: g.inside ? !centreInG : centreInG };
+}
+
+// ---------- tangencies and orthogonal circles ----------
+const tangentPoint = (a, b) => {
+  const d = Math.hypot(b.x - a.x, b.y - a.y), t = a.r / d;
+  return [a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t];
+};
+// The circle orthogonal to three circles (the radical-centre construction). Returns null when
+// the radical centre lies inside the circles, where no real orthogonal circle exists.
+function orthoCircle(a, b, c) {
+  const row = (k) => [2 * k.x, 2 * k.y, k.x * k.x + k.y * k.y - k.r * k.r];
+  const [r1, r2, r3] = [row(a), row(b), row(c)];
+  const det = (m) => m[0][0] * (m[1][1] * m[2][2] - m[1][2] * m[2][1]) - m[0][1] * (m[1][0] * m[2][2] - m[1][2] * m[2][0]) + m[0][2] * (m[1][0] * m[2][1] - m[1][1] * m[2][0]);
+  const M = [[r1[0], r1[1], -1], [r2[0], r2[1], -1], [r3[0], r3[1], -1]];
+  const D = det(M);
+  const Mx = [[r1[2], r1[1], -1], [r2[2], r2[1], -1], [r3[2], r3[1], -1]];
+  const My = [[r1[0], r1[2], -1], [r2[0], r2[2], -1], [r3[0], r3[2], -1]];
+  const Mc = [[r1[0], r1[1], r1[2]], [r2[0], r2[1], r2[2]], [r3[0], r3[1], r3[2]]];
+  const x = det(Mx) / D, y = det(My) / D, c0 = det(Mc) / D;
+  const r2v = x * x + y * y - c0;
+  return r2v > 0 ? { x, y, r: Math.sqrt(r2v) } : null;
+}
+
+// ---------- Descartes' theorem and Apollonian packing ----------
+// Given three mutually tangent circles (signed curvature: negative when the others sit inside),
+// the inner Apollonius circle. Complex Descartes formula; the "+" root is the new inscribed circle.
+function descartes(a, ka, b, kb, c, kc) {
+  const k = ka + kb + kc + 2 * Math.sqrt(Math.max(0, ka * kb + kb * kc + kc * ka));
+  // complex: z k = za ka + zb kb + zc kc ± 2 sqrt(ka kb za zb + ...)
+  const re = ka * kb * (a.x * b.x - a.y * b.y) + kb * kc * (b.x * c.x - b.y * c.y) + kc * ka * (c.x * a.x - c.y * a.y);
+  const im = ka * kb * (a.x * b.y + a.y * b.x) + kb * kc * (b.x * c.y + b.y * c.x) + kc * ka * (c.x * a.y + c.y * a.x);
+  const m = Math.sqrt(Math.hypot(re, im)), th = Math.atan2(im, re) / 2;
+  const sx = m * Math.cos(th), sy = m * Math.sin(th);
+  const zx = a.x * ka + b.x * kb + c.x * kc, zy = a.y * ka + b.y * kb + c.y * kc;
+  for (const sgn of [1, -1]) {
+    const x = (zx + sgn * 2 * sx) / k, y = (zy + sgn * 2 * sy) / k, r = 1 / k;
+    // the right root is tangent to all three; check against a
+    const want = ka < 0 || k < 0 ? Math.abs(Math.abs(1 / ka) - r) : 1 / ka + r;
+    if (Math.abs(Math.hypot(x - a.x, y - a.y) - Math.abs(want)) < 1e-6 * (1 + Math.abs(want))) return { x, y, r, k };
+  }
+  // fall back to the smaller-error root
+  const x = (zx + 2 * sx) / k, y = (zy + 2 * sy) / k;
+  return { x, y, r: 1 / k, k };
+}
+// Apollonian packing of the curvilinear triangles of three mutually tangent circles, down to
+// radius rmin (world units); view pruning via bb = {x0,x1,y0,y1} or null. Returns the circles
+// added (not the three given). Each stack entry is [[circle, curvature] × 3, depth]. Every
+// circle inscribed in a curvilinear triangle lies inside the bounding box of its three corners
+// (the pairwise tangency points), so a triangle whose corner box misses the view is pruned.
+function apollonianFill(triples, rmin, bb, cap = 60000) {
+  const out = [];
+  const stack = triples.slice().map((t) => (t.length === 3 ? [...t, 0] : t));
+  const corners = (a, b, c) => [tangentPoint(a, b), tangentPoint(b, c), tangentPoint(a, c)];
+  while (stack.length && out.length < cap) {
+    const [A, B, C, depth] = stack.pop();
+    if (bb) {
+      const ps = corners(A[0], B[0], C[0]);
+      const x0 = Math.min(ps[0][0], ps[1][0], ps[2][0]), x1 = Math.max(ps[0][0], ps[1][0], ps[2][0]);
+      const y0 = Math.min(ps[0][1], ps[1][1], ps[2][1]), y1 = Math.max(ps[0][1], ps[1][1], ps[2][1]);
+      if (x1 < bb.x0 || x0 > bb.x1 || y1 < bb.y0 || y0 > bb.y1) continue;
+    }
+    const n = descartes(A[0], A[1], B[0], B[1], C[0], C[1]);
+    if (!n || !(n.r > 0)) continue;
+    out.push({ x: n.x, y: n.y, r: n.r, g: depth });
+    if (n.r < rmin) continue;
+    const N = [{ x: n.x, y: n.y, r: n.r }, n.k];
+    stack.push([A, B, N, depth + 1], [A, C, N, depth + 1], [B, C, N, depth + 1]);
+  }
+  return out;
+}
+
+// ---------- clans: the net sorted by which circle it descends from ----------
+// BFS over reduced words of the inversions in gens, applied to each seed circle. Each image is
+// kept as {x, y, r, clan, depth}. rminOf(circle) returning false stops the recursion.
+function clanCircles(gens, seeds, rmin, bb, cap = 80000) {
+  const out = [];
+  const queue = [];
+  seeds.forEach((s, i) => { out.push({ x: s.x, y: s.y, r: s.r, clan: i, depth: 0 }); queue.push([s, -1, i, 0]); });
+  let qi = 0;
+  while (qi < queue.length && out.length < cap) {
+    const [c, last, clan, depth] = queue[qi++];
+    for (let m = 0; m < gens.length; m++) {
+      if (m === last) continue;
+      const K = gens[m];
+      // skip when the inversion fixes the seed (orthogonal circle): image equals preimage
+      const dx = c.x - K.x, dy = c.y - K.y, d2 = dx * dx + dy * dy - c.r * c.r;
+      if (Math.abs(d2 - K.r * K.r) < 1e-12) continue;
+      const im = invCircle(K, c);
+      out.push({ x: im.x, y: im.y, r: im.r, clan, depth: depth + 1 });
+      if (im.r > rmin && (!bb || !(im.x + im.r < bb.x0 || im.x - im.r > bb.x1 || im.y + im.r < bb.y0 || im.y - im.r > bb.y1)))
+        queue.push([im, m, clan, depth + 1]);
+    }
+  }
+  return out;
+}
+
+// ---------- Poincaré chain stages ----------
+// Stage s of Poincaré's construction: every reduced word of length s in the inversions,
+// applied to the generating circles. Stage 1 is the 12 links σi(Cj), i ≠ j.
+function chainStage(gens, s) {
+  let links = gens.map((c, j) => ({ x: c.x, y: c.y, r: c.r, last: j }));
+  for (let k = 0; k < s; k++) {
+    const next = [];
+    for (const L of links) for (let m = 0; m < gens.length; m++) {
+      if (m === L.last) continue;
+      const im = invCircle(gens[m], L);
+      next.push({ x: im.x, y: im.y, r: im.r, last: m });
+    }
+    links = next;
+  }
+  return links;
+}
+
+// ---------- Mandelbrot's osculating-disc construction ----------
+// For generating circles gens (mutually tangent in a known pattern), compute the Γ circles of
+// every triplet, keep those with a tangency-point-free side (they osculate L), and sort the
+// discs into the interior and exterior of L. Returns { in: [regions], out: [regions] }.
+function osculatingSeeds(gens, tangPairs) {
+  const gammas = tangPairs.map(([i, j]) => ({ p: tangentPoint(gens[i], gens[j]), i, j }));
+  const seedsIn = [], seedsOut = [];
+  const n = gens.length;
+  for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) for (let k = j + 1; k < n; k++) {
+    const G = orthoCircle(gens[i], gens[j], gens[k]);
+    if (!G) continue;
+    const tri = [i, j, k];
+    let strictlyIn = 0, strictlyOut = 0;
+    for (const g of gammas) {
+      if (tri.includes(g.i) && tri.includes(g.j)) continue; // lies on Γ
+      const d = Math.hypot(g.p[0] - G.x, g.p[1] - G.y);
+      if (d < G.r * (1 - 1e-9)) strictlyIn++; else if (d > G.r * (1 + 1e-9)) strictlyOut++;
+    }
+    if (strictlyIn && strictlyOut) continue;            // Γ intersects L: not needed
+    if (strictlyIn) seedsOut.push({ x: G.x, y: G.y, r: G.r, inside: false, omit: tri });
+    else seedsIn.push({ x: G.x, y: G.y, r: G.r, inside: true, omit: tri });
+  }
+  return { seedsIn, seedsOut };
+}
+// The clan of an osculating seed: its images under all reduced words. A seed's Γ is orthogonal
+// to its triplet, so the only words that move it start with an inversion outside the triplet.
+function osculatingClan(gens, seed, rmin, bb, cap = 60000) {
+  const out = [seed];
+  const queue = [];
+  for (let m = 0; m < gens.length; m++) if (!seed.omit.includes(m)) queue.push([seed, m]);
+  let qi = 0;
+  while (qi < queue.length && out.length < cap) {
+    const [g, m] = queue[qi++];
+    const im = invRegion(gens[m], g);
+    out.push(im);
+    if (im.r > rmin && (!bb || !(im.x + im.r < bb.x0 || im.x - im.r > bb.x1 || im.y + im.r < bb.y0 || im.y - im.r > bb.y1)))
+      for (let k = 0; k < gens.length; k++) if (k !== m) queue.push([im, k]);
+  }
+  return out;
+}
+
+// ---------- twisted inversions (Plate 178's theme, a reconstruction) ----------
+// σθ,m = (rotation by θ about Cm's centre) ∘ (inversion in Cm). Composing two of these is a
+// homography (a Möbius map), so the group they generate is a group of homographies when θ ≠ 0.
+// The image of a circle is the inverted circle rotated about the centre; the covering-by-discs
+// drawing works exactly as for plain inversions because rotation keeps each disc in place.
+function twistCircle(K, th, c) {
+  const im = invCircle(K, c);
+  const co = Math.cos(th), si = Math.sin(th), dx = im.x - K.x, dy = im.y - K.y;
+  return { x: K.x + co * dx - si * dy, y: K.y + si * dx + co * dy, r: im.r };
+}
+// Every disc smaller than rmax is drawn (so the thread stays contiguous), and the recursion
+// refines until rmin, so terminal discs add the fine detail.
+function twistedLimit(gens, th, rmin, rmax, bb, cap = 150000) {
+  const out = [];
+  const queue = gens.map((c, j) => [c, j]);
+  let qi = 0;
+  while (qi < queue.length && out.length < cap) {
+    const [c, last] = queue[qi++];
+    for (let m = 0; m < gens.length; m++) {
+      if (m === last) continue;
+      const im = twistCircle(gens[m], th, c);
+      if (im.r <= rmax) out.push(im);
+      if (im.r <= rmin) continue;
+      if (bb && (im.x + im.r < bb.x0 || im.x - im.r > bb.x1 || im.y + im.r < bb.y0 || im.y - im.r > bb.y1)) continue;
+      queue.push([im, m]);
+    }
+  }
+  return out;
+}
+
+// ---------- self-checks (console only) ----------
+(function check() {
+  const gap = (a, b) => Math.hypot(a.x - b.x, a.y - b.y) - (a.r + b.r);
+  [[0, 1], [1, 2], [2, 3], [3, 0]].forEach(([i, j]) => console.assert(Math.abs(gap(CHAIN[i], CHAIN[j])) < 1e-4, 'chain tangency', i, j));
+  [[0, 1], [1, 2], [2, 3], [3, 0], [1, 4], [2, 4]].forEach(([i, j]) => console.assert(Math.abs(gap(FRICKE[i], FRICKE[j])) < 1e-4, 'fricke tangency', i, j));
+  const o = orthoCircle(CHAIN[0], CHAIN[1], CHAIN[2]);
+  const orth = (G, K) => Math.abs((G.x - K.x) ** 2 + (G.y - K.y) ** 2 - G.r * G.r - K.r * K.r);
+  console.assert(o && orth(o, CHAIN[0]) < 1e-9, 'orthocircle');
+})();
+
+// Chapter 18 page wiring. Each section recomputes its figure from the fitted circles at the
+// current view, so zooming refines every cover; heavy redraws do a coarse pass first and the
+// full pass once the control settles (see DECISIONS.md, "Heavy sliders").
+
+// ---------- small drawing helpers ----------
+function strokeCircles(c, v, f, circles, color, lw = 1.1) {
+  c.strokeStyle = color; c.lineWidth = lw;
+  c.beginPath();
+  for (const k of circles) {
+    const r = k.r * v.s;
+    if (r < 0.35) continue;
+    c.moveTo(v.ox + k.x * v.s + r, v.oy - k.y * v.s);
+    c.arc(v.ox + k.x * v.s, v.oy - k.y * v.s, r, 0, Math.PI * 2);
+  }
+  c.stroke();
+}
+function fillCircles(c, v, f, circles, color, rMinPx = 0.22) {
+  c.fillStyle = color;
+  c.beginPath();
+  for (const k of circles) {
+    const r = Math.max(k.r * v.s, rMinPx);
+    c.moveTo(v.ox + k.x * v.s + r, v.oy - k.y * v.s);
+    c.arc(v.ox + k.x * v.s, v.oy - k.y * v.s, r, 0, Math.PI * 2);
+  }
+  c.fill();
+}
+// regions may be complements (inside: false): those are drawn as canvas-rect minus disc
+function fillRegions(c, v, f, regions, color) {
+  c.fillStyle = color;
+  const simple = [];
+  for (const g of regions) {
+    if (g.inside === false) {
+      const p = new Path2D();
+      p.rect(-4, -4, f.w + 8, f.h + 8);
+      p.arc(v.ox + g.x * v.s, v.oy - g.y * v.s, g.r * v.s, 0, Math.PI * 2);
+      c.fill(p, 'evenodd');
+    } else simple.push(g);
+  }
+  fillCircles(c, v, f, simple, color);
+}
+const viewBox = (f, v, pad = 0.05) => ({
+  x0: (0 - v.ox) / v.s - pad * f.w / v.s, x1: (f.w - v.ox) / v.s + pad * f.w / v.s,
+  y0: (v.oy - f.h) / v.s - pad * f.h / v.s, y1: v.oy / v.s + pad * f.h / v.s,
+});
+const px = (v, n = 1) => n / v.s;   // n screen pixels in world units
+const GRAYPANEL = '#b3b1aa';
+
+// ---------- the two Apollonian circles and the packing (Soddy reflection) ----------
+function apollonianBoth(a, ka, b, kb, c, kc) {
+  const s = 2 * Math.sqrt(Math.max(0, ka * kb + kb * kc + kc * ka));
+  const zx = a.x * ka + b.x * kb + c.x * kc, zy = a.y * ka + b.y * kb + c.y * kc;
+  const re = ka * kb * (a.x * b.x - a.y * b.y) + kb * kc * (b.x * c.x - b.y * c.y) + kc * ka * (c.x * a.x - c.y * a.y);
+  const im = ka * kb * (a.x * b.y + a.y * b.x) + kb * kc * (b.x * c.y + b.y * c.x) + kc * ka * (c.x * a.y + c.y * a.x);
+  const m = Math.sqrt(Math.hypot(re, im)), th = Math.atan2(im, re) / 2;
+  const sx = m * Math.cos(th), sy = m * Math.sin(th);
+  // each curvature root pairs with one sign of the complex square root; keep the tangent ones
+  const ok = [];
+  for (const k4 of [ka + kb + kc + s, ka + kb + kc - s]) for (const sg of [1, -1]) {
+    const x = (zx + sg * 2 * sx) / k4, y = (zy + sg * 2 * sy) / k4, r = 1 / k4;
+    if (r <= 0) continue;
+    const want = ka < 0 ? Math.abs(a.r - r) : a.r + r;
+    const want2 = b.r + r;
+    if (Math.abs(Math.hypot(x - a.x, y - a.y) - want) < 1e-6 && Math.abs(Math.hypot(x - b.x, y - b.y) - want2) < 1e-6) ok.push({ x, y, r, k: k4 });
+  }
+  return ok;
+}
+// packing by reflection: in triangle (a,b,c), the inscribed circle is the Soddy reflection of
+// d, the OTHER circle tangent to all three of a, b, c. Nodes: [a,b,c,d, depth, low].
+function packTriangles(roots, rmin, bb, cap = 50000) {
+  const out = [];
+  const stack = roots.slice();
+  while (stack.length && out.length < cap) {
+    const [a, b, c, d, depth, low] = stack.pop();
+    if (bb) {
+      const p1 = tangentPoint(a.c, b.c), p2 = tangentPoint(b.c, c.c), p3 = tangentPoint(a.c, c.c);
+      const x0 = Math.min(p1[0], p2[0], p3[0]), x1 = Math.max(p1[0], p2[0], p3[0]);
+      const y0 = Math.min(p1[1], p2[1], p3[1]), y1 = Math.max(p1[1], p2[1], p3[1]);
+      if (x1 < bb.x0 || x0 > bb.x1 || y1 < bb.y0 || y0 > bb.y1) continue;
+    }
+    const k = 2 * (a.k + b.k + c.k) - d.k;
+    const x = (2 * (a.c.x * a.k + b.c.x * b.k + c.c.x * c.k) - d.c.x * d.k) / k;
+    const y = (2 * (a.c.y * a.k + b.c.y * b.k + c.c.y * c.k) - d.c.y * d.k) / k;
+    const n = { c: { x, y, r: 1 / k }, k };
+    out.push({ x, y, r: 1 / k, g: depth, low });
+    if (1 / k > rmin) stack.push([a, b, n, c, depth + 1, low], [a, c, n, b, depth + 1, low], [b, c, n, a, depth + 1, low]);
+  }
+  return out;
+}
+const asNode = (c, inner = true) => ({ c, k: (inner ? 1 : -1) / c.r });
+// the full packing of GIVEN at cutoff rmin: the two Apollonian circles, then every triangle.
+// In a root triangle such as (O, A, up), the other circle tangent to all three is the third
+// given circle B, so it is the one the Soddy reflection flips.
+function fullPacking(rmin, bb) {
+  const [O, A, B] = GIVEN;
+  const nO = asNode(O, false), nA = asNode(A), nB = asNode(B);
+  let [up, dn] = apollonianBoth(O, nO.k, A, nA.k, B, nB.k).map((c) => ({ c: { x: c.x, y: c.y, r: c.r }, k: c.k }));
+  if (up.c.y < dn.c.y) [up, dn] = [dn, up];
+  const roots = [];
+  for (const ap of [up, dn]) {
+    const low = ap === dn;
+    roots.push([nO, nA, ap, nB, 1, low], [nO, nB, ap, nA, 1, low], [nA, nB, ap, nO, 1, low]);
+  }
+  return { apo: [up.c, dn.c], dn: dn.c, rest: packTriangles(roots, rmin, bb) };
+}
+
+// ---------- section A: inversion ----------
+(function sectionA() {
+  const K = { x: 0, y: 0, r: 1 };
+  const st = { mode: 'elsewhere', cx: 1.45, cy: 0.62 };
+  const modes = ['through O', 'elsewhere', 'orthogonal', 'line'];
+  const geomOf = () => {
+    const d = Math.hypot(st.cx, st.cy);
+    if (st.mode === 'line') return { line: true, nx: st.cx / d, ny: st.cy / d, d };
+    const r = st.mode === 'through O' ? d : st.mode === 'orthogonal' ? Math.sqrt(Math.max(0.05, d * d - 1)) : 0.42 * d;
+    return { x: st.cx, y: st.cy, r };
+  };
+  const zoom = zoomable('wA', 'cA', (f) => fitBox(f, { x0: -2.3, x1: 2.3, y0: -2.3, y1: 2.3 }), (f, v) => {
+    const c = f.ctx;
+    paper(f, PRINT.paper); toScreen(f);
+    const g = geomOf();
+    // the reference circle C and its centre O
+    strokeCircles(c, v, f, [K], PRINT.ink, 2);
+    dot(c, v, 0, 0, 3.4, PRINT.ink);
+    c.fillStyle = PRINT.muted; c.font = '13px "IBM Plex Mono"'; c.fillText('O', v.ox + 7, v.oy - 7);
+    c.fillText('C', v.ox + (K.r * 0.72) * v.s, v.oy - (K.r * 0.72) * v.s);
+    if (g.line) {
+      // a line at distance d from O along (nx, ny), and its inverse: a circle through O
+      c.strokeStyle = PRINT.ink; c.lineWidth = 2; c.beginPath();
+      const px0 = v.ox + g.nx * g.d * v.s, py0 = v.oy - g.ny * g.d * v.s, tx = -g.ny, ty = g.nx, L = 4 * v.s;
+      c.moveTo(px0 - tx * L, py0 + ty * L); c.lineTo(px0 + tx * L, py0 - ty * L); c.stroke();
+      const r = K.r * K.r / (2 * g.d);
+      strokeCircles(c, v, f, [{ x: g.nx * r, y: g.ny * r, r }], PRINT.red, 2);
+    } else {
+      strokeCircles(c, v, f, [g], PRINT.ink, 2);
+      const d2 = g.x * g.x + g.y * g.y - g.r * g.r;
+      if (Math.abs(d2) < 1e-4) {        // through O: the inverse is a straight line, drawn through two inverted points
+        const nn = Math.hypot(g.x, g.y), nx = g.x / nn, ny = g.y / nn;
+        const p1 = invPoint(K, g.x + g.r * ny, g.y - g.r * nx), p2 = invPoint(K, g.x - g.r * ny, g.y + g.r * nx);
+        c.strokeStyle = PRINT.red; c.lineWidth = 2; c.beginPath();
+        const ex = p2[0] - p1[0], ey = p2[1] - p1[1];
+        c.moveTo(v.ox + (p1[0] - 5 * ex) * v.s, v.oy - (p1[1] - 5 * ey) * v.s);
+        c.lineTo(v.ox + (p2[0] + 5 * ex) * v.s, v.oy - (p2[1] + 5 * ey) * v.s); c.stroke();
+      } else {
+        const im = invCircle(K, g);
+        strokeCircles(c, v, f, [im], PRINT.red, 2);
+      }
+    }
+    dot(c, v, st.cx, st.cy, 5, PRINT.accent);
+  }, { maxZoom: 8, onTap: (x, y) => { st.cx = x; st.cy = y === 0 ? 1e-4 : y; clamp(); zoom.schedule(); update(); } });
+  function clamp() {
+    const d = Math.hypot(st.cx, st.cy);
+    const lo = st.mode === 'orthogonal' ? 1.12 : 0.3;
+    if (d < lo) { st.cx *= lo / d; st.cy *= lo / d; }
+  }
+  const markA = stepButtons($('mA'), modes, (m) => ({ 'through O': 'through O', elsewhere: 'not through O', orthogonal: 'orthogonal to C', line: 'a line' }[m]), (m) => `Show ${m === 'line' ? 'a line' : `a circle ${m}`}`, (m) => {
+    st.mode = m; clamp(); markA(m); zoom.schedule(); update();
+  });
+  function update() {
+    const d = Math.hypot(st.cx, st.cy);
+    $('rAd').textContent = d.toFixed(3) + ' R';
+    $('rAk').textContent = st.mode === 'line' ? 'a circle through O' : st.mode === 'through O' ? 'a straight line' : st.mode === 'orthogonal' ? 'itself, unchanged' : 'a circle';
+    $('infoA').textContent = st.mode === 'orthogonal' ? 'An orthogonal circle crosses C at right angles; inversion slides it along itself.' :
+      st.mode === 'through O' ? 'The circle passes through O, so its inverse runs off to infinity: a straight line.' :
+      st.mode === 'line' ? 'A line is a circle through infinity; its inverse is a circle through O.' :
+      'Tap anywhere on the figure to move the black circle.';
+  }
+  markA(st.mode); update();
+})();
+
+// ---------- section B: Apollonian packing ----------
+(function sectionB() {
+  const st = { mode: 'packing', stage: Infinity };
+  const stages = [0, 1, 2, 3, Infinity];
+  let lastCount = 0, lastMin = 0;
+  const FIT = { x0: -1.05, x1: 1.05, y0: -1.05, y1: 1.05 };
+  const zoom = zoomable('wB', 'cB', (f) => fitBox(f, FIT), (f, v) => {
+    const c = f.ctx;
+    const gasket = st.mode === 'gasket';
+    paper(f, gasket ? GRAYPANEL : PRINT.paper); toScreen(f);
+    const bb = viewBox(f, v);
+    const rmin = Math.max(px(v, 1.4), 1e-5);
+    const { apo, dn, rest } = fullPacking(rmin, bb);
+    if (gasket) {
+      // the photographed gasket: the triangle below the inner pair, white, its discs black
+      const tri = triPath(GIVEN, dn, v);
+      c.fillStyle = '#f0efe9'; c.fill(tri);
+      const inTri = rest.filter((k) => k.low);
+      fillCircles(c, v, f, [dn, ...inTri], PRINT.ink);
+      lastCount = inTri.length + 1;
+      lastMin = rmin;
+    } else {
+      const upTo = st.stage;
+      strokeCircles(c, v, f, GIVEN, PRINT.ink, 2);
+      if (upTo >= 1) strokeCircles(c, v, f, apo, PRINT.ink, upTo === 1 ? 2.4 : 1.4);
+      let shown = [];
+      if (upTo > 1) shown = rest.filter((k) => (upTo === Infinity ? true : k.g < upTo));
+      strokeCircles(c, v, f, shown, PRINT.ink, 1.1);
+      lastCount = 3 + (upTo >= 1 ? 2 : 0) + shown.length;
+      lastMin = shown.length ? Math.min(...shown.map((k) => k.r)) : apo[0].r;
+    }
+    readout();
+  }, { maxZoom: 3000 });
+  // the curvilinear triangle of three mutually tangent circles that contains circle dn
+  function triPath(cs, dn, v) {
+    const p = new Path2D();
+    // the outer circle goes first into tangentPoint: for an internal tangency the point lies
+    // away from the inner circle's centre, which "outer + r·unit(toward inner)" gets right
+    const corners = [tangentPoint(cs[0], cs[1]), tangentPoint(cs[1], cs[2]), tangentPoint(cs[0], cs[2])];
+    const arcs = [[cs[1], corners[0], corners[1]], [cs[2], corners[1], corners[2]], [cs[0], corners[2], corners[0]]];
+    let first = true;
+    for (const [K, pA, pB] of arcs) {
+      let a1 = Math.atan2(pA[1] - K.y, pA[0] - K.x), a2 = Math.atan2(pB[1] - K.y, pB[0] - K.x);
+      // walk the arc that stays nearest dn's centre
+      const mid = (t) => [K.x + K.r * Math.cos(a1 + t * dAng), K.y + K.r * Math.sin(a1 + t * dAng)];
+      let dAng = a2 - a1;
+      while (dAng > Math.PI) dAng -= 2 * Math.PI;
+      while (dAng < -Math.PI) dAng += 2 * Math.PI;
+      let m = mid(0.5);
+      const other = (() => { let d = dAng > 0 ? dAng - 2 * Math.PI : dAng + 2 * Math.PI; return d; })();
+      const mAlt = [K.x + K.r * Math.cos(a1 + 0.5 * other), K.y + K.r * Math.sin(a1 + 0.5 * other)];
+      if (Math.hypot(mAlt[0] - dn.x, mAlt[1] - dn.y) < Math.hypot(m[0] - dn.x, m[1] - dn.y)) dAng = other;
+      const steps = 48;
+      for (let i = first ? 0 : 1; i <= steps; i++) {
+        const a = a1 + (dAng * i) / steps, X = v.ox + (K.x + K.r * Math.cos(a)) * v.s, Y = v.oy - (K.y + K.r * Math.sin(a)) * v.s;
+        if (first && i === 0) p.moveTo(X, Y); else p.lineTo(X, Y);
+      }
+      first = false;
+    }
+    p.closePath();
+    return p;
+  }
+  function readout() {
+    $('rBa').textContent = fmt(lastCount);
+    $('rBb').textContent = lastMin < 1 ? lastMin.toExponential(1) : '—';
+    $('cBn').textContent = `${fmt(lastCount)} circles`;
+    $('cBt').textContent = st.mode === 'gasket' ? 'Apollonian gasket' : 'Apollonian packing';
+  }
+  const markMode = stepButtons($('mB'), ['packing', 'gasket'], (m) => (m === 'packing' ? 'the packing' : 'one gasket'), (m) => m, (m) => { st.mode = m; markMode(m); zoom.refit(); });
+  const markStage = stepButtons($('sB'), stages, (s) => (s === Infinity ? '∞' : String(s)), (s) => `stage ${s}`, (s) => {
+    st.stage = s; markStage(s); $('sBv').textContent = s === 0 ? 'the three given circles' : s === 1 ? '+ two Apollonian circles' : s === Infinity ? 'packing' : `stage ${s}`;
+    zoom.schedule();
+  });
+  $('preB170').addEventListener('click', () => { st.mode = 'packing'; markMode('packing'); st.stage = 1; markStage(1); $('sBv').textContent = '+ two Apollonian circles'; zoom.refit(); });
+  $('preBgasket').addEventListener('click', () => { st.mode = 'gasket'; markMode('gasket'); zoom.refit(); });
+  markMode('packing'); markStage(Infinity);
+})();
+
+// ---------- section C: the net as four clans ----------
+(function sectionC() {
+  const [O, A, B] = GIVEN;
+  const { apo } = fullPacking(1, null);
+  const dn = apo[0].y < apo[1].y ? apo[0] : apo[1];
+  const GAMMA = [O, A, B, dn];
+  const CGEN = [];
+  for (let i = 0; i < 4; i++) {
+    const tri = GAMMA.filter((_, j) => j !== i);
+    const oc = orthoCircle(tri[0], tri[1], tri[2]);
+    if (oc) CGEN.push(oc);
+  }
+  const st = { mode: 'clans' };
+  let lastCount = 0;
+  const zoom = zoomable('wC', 'cC', (f) => fitBox(f, { x0: -1.05, x1: 1.05, y0: -1.05, y1: 1.05 }), (f, v) => {
+    const c = f.ctx;
+    paper(f, PRINT.paper); toScreen(f);
+    const bb = viewBox(f, v), rmin = Math.max(px(v, 1.6), 1e-5);
+    if (st.mode === 'generator') {
+      strokeCircles(c, v, f, GAMMA, PRINT.ink, 2.6);
+      strokeCircles(c, v, f, CGEN, PRINT.accent, 1.3);
+      lastCount = 8;
+    } else {
+      const all = clanCircles(CGEN, GAMMA, rmin, bb);
+      if (st.mode === 'clans') {
+        for (let cl = 0; cl < 4; cl++) strokeCircles(c, v, f, all.filter((k) => k.clan === cl), CAT[[0, 2, 3, 4][cl]], 1.2);
+      } else strokeCircles(c, v, f, all, PRINT.ink, 1.1);
+      lastCount = all.length;
+    }
+    $('rCa').textContent = fmt(lastCount);
+    $('cCn').textContent = `${fmt(lastCount)} circles`;
+    $('cCt').textContent = st.mode === 'generator' ? 'Γ circles (bold) and the generator C (blue)' : st.mode === 'clans' ? 'The net as four clans' : 'The net, plain';
+  }, { maxZoom: 3000 });
+  const names = ['Γ and C circles', 'four clans', 'plain net'];
+  const vals = ['generator', 'clans', 'plain'];
+  const mark = stepButtons($('mC'), vals, (m) => names[vals.indexOf(m)], (m) => m, (m) => { st.mode = m; mark(m); zoom.schedule(); });
+  mark('clans');
+  $('legC').innerHTML = ['Γ₂₃₄ clan', 'Γ₁₃₄ clan', 'Γ₁₂₄ clan', 'Γ₁₂₃ clan'].map((t, i) => `<span><i style="background:${CAT[[0, 2, 3, 4][i]]}"></i>${t}</span>`).join('');
+  console.assert(CGEN.length === 4, 'four generator circles exist');
+})();
+
+// ---------- section D: Poincaré chain stages ----------
+(function sectionD() {
+  const st = { stage: 1, ghost: true };
+  const FIT = { x0: -1.12, x1: 1.12, y0: -1.0, y1: 0.72 };
+  const zoom = zoomable('wD', 'cD', (f) => fitBox(f, FIT), (f, v) => {
+    const c = f.ctx;
+    paper(f, GRAYPANEL); toScreen(f);
+    const prev = st.stage === 0 ? [] : chainStage(CHAIN, st.stage - 1);
+    const cur = chainStage(CHAIN, st.stage);
+    if (st.ghost) fillCircles(c, v, f, prev.length ? prev : [], '#f0efe9');
+    fillCircles(c, v, f, cur, PRINT.ink);
+    $('rDa').textContent = fmt(cur.length);
+    $('rDb').textContent = Math.max(...cur.map((k) => k.r)).toFixed(4);
+    $('cDs').textContent = String(st.stage);
+    $('cDn').textContent = `${fmt(cur.length)} links`;
+  }, { maxZoom: 400 });
+  const mark = stepButtons($('sD'), [0, 1, 2, 3, 4, 5, 6], String, (s) => `stage ${s}`, (s) => {
+    st.stage = s; mark(s); $('sDv').textContent = s === 0 ? 'the chain itself' : `stage ${s}`;
+    zoom.schedule();
+  });
+  $('ghostD').addEventListener('change', (e) => { st.ghost = e.target.checked; zoom.schedule(); });
+  $('preD').addEventListener('click', () => { st.stage = 1; st.ghost = true; $('ghostD').checked = true; mark(1); $('sDv').textContent = 'stage 1'; zoom.refit(); });
+  mark(1);
+})();
+
+// ---------- section E: Plate 177, osculating discs ----------
+(function sectionE() {
+  const PAIRS4 = [[0, 1], [1, 2], [2, 3], [3, 0]];
+  const { seedsIn, seedsOut } = osculatingSeeds(CHAIN, PAIRS4);
+  const st = { mode: 'limit', circles: false };
+  let lastCount = 0;
+  const FIT = { x0: -1.35, x1: 1.35, y0: -1.42, y1: 1.28 };
+  const zoom = zoomable('wE', 'cE', (f) => fitBox(f, FIT), (f, v) => {
+    const c = f.ctx;
+    paper(f, PRINT.paper); toScreen(f);
+    const bb = viewBox(f, v), rmin = Math.max(px(v, 2.6), 2e-5);
+    lastCount = 0;
+    for (const [seeds, color] of [[seedsOut, '#a5a39c'], [seedsIn, PRINT.ink]]) {
+      for (const s of seeds) {
+        let regions;
+        if (st.mode === 1) regions = [s];
+        else if (st.mode === 2) {
+          regions = [s];
+          for (let m = 0; m < 4; m++) if (!s.omit.includes(m)) regions.push(invRegion(CHAIN[m], s));
+        } else regions = osculatingClan(CHAIN, s, rmin, bb);
+        fillRegions(c, v, f, regions, color);
+        lastCount += regions.length;
+      }
+    }
+    if (st.circles) {
+      strokeCircles(c, v, f, CHAIN, PRINT.accent, 1.4);
+      strokeCircles(c, v, f, [...seedsIn, ...seedsOut], PRINT.red, 1.1);
+    }
+    $('rEa').textContent = fmt(lastCount);
+    $('cEn').textContent = `${fmt(lastCount)} discs`;
+  }, { maxZoom: 2000 });
+  const names = { 1: 'first approximation', 2: 'second', limit: 'the limit' };
+  const mark = stepButtons($('sE'), [1, 2, 'limit'], (m) => names[m], (m) => `Show the ${names[m]}`, (m) => {
+    st.mode = m; mark(m); $('sEv').textContent = names[m];
+    zoom.schedule();
+  });
+  $('circE').addEventListener('change', (e) => { st.circles = e.target.checked; zoom.schedule(); });
+  $('preE').addEventListener('click', () => { st.mode = 'limit'; mark('limit'); $('sEv').textContent = names.limit; zoom.refit(); });
+  mark('limit');
+  console.assert(seedsIn.length === 2 && seedsOut.length === 2, 'M=4: two inside and two outside seeds', seedsIn.length, seedsOut.length);
+})();
+
+// ---------- section F: twisted inversions (Plate 178's theme) ----------
+(function sectionF() {
+  const st = { th: 0, gens: CHAIN, coarse: false };
+  let timer = 0, lastCount = 0;
+  const fitOf = (f) => (st.gens === CHAIN ? fitBox(f, { x0: -1.3, x1: 1.3, y0: -1.35, y1: 1.2 }) : fitBox(f, { x0: -1.95, x1: 1.75, y0: -1.1, y1: 1.85 }));
+  const zoom = zoomable('wF', 'cF', fitOf, (f, v) => {
+    const c = f.ctx;
+    paper(f, PRINT.paper); toScreen(f);
+    const bb = viewBox(f, v);
+    const rmin = Math.max(px(v, st.coarse ? 4 : 0.6), 1e-5);
+    const dots = twistedLimit(st.gens, (st.th * Math.PI) / 180, rmin, px(v, 3.2), bb, 400000);
+    fillCircles(c, v, f, dots, PRINT.ink, 1.25);
+    lastCount = dots.length;
+    $('rFa').textContent = fmt(lastCount);
+    $('cFn').textContent = `${fmt(lastCount)} discs`;
+    $('cFt').textContent = `${st.th}°`;
+  }, { maxZoom: 2000 });
+  $('twF').addEventListener('input', (e) => {
+    st.th = +e.target.value; $('twFv').textContent = `${st.th}°`;
+    st.coarse = true; zoom.schedule();
+    clearTimeout(timer); timer = setTimeout(() => { st.coarse = false; zoom.schedule(); }, 160);
+  });
+  const mark = stepButtons($('mF'), ['chain', 'fricke'], (m) => (m === 'chain' ? 'the chain of p. 173' : 'the five circles of Plate 179'), (m) => m, (m) => {
+    st.gens = m === 'chain' ? CHAIN : FRICKE; mark(m); zoom.refit();
+  });
+  mark('chain');
+})();
+
+// ---------- section G: Plate 179, Fricke corrected ----------
+(function sectionG() {
+  const PAIRS5 = [[0, 1], [1, 2], [2, 3], [3, 0], [1, 4], [2, 4]];
+  const PAIRS4 = [[0, 1], [1, 2], [2, 3], [3, 0]];
+  const five = osculatingSeeds(FRICKE, PAIRS5);
+  const chain4 = FRICKE.slice(0, 4);
+  const four = osculatingSeeds(chain4, PAIRS4);
+  const st = { mode: 'net' };
+  let lastCount = 0;
+  const zoom = zoomable('wG', 'cG', (f) => fitBox(f, { x0: -1.95, x1: 1.75, y0: -1.1, y1: 1.85 }), (f, v) => {
+    const c = f.ctx;
+    paper(f, PRINT.paper); toScreen(f);
+    const bb = viewBox(f, v);
+    const rmin = Math.max(px(v, 1.3), 2e-5);
+    lastCount = 0;
+    if (st.mode === 'net') {
+      strokeCircles(c, v, f, FRICKE, PRINT.ink, 2.2);
+      const dots = twistedLimit(FRICKE, 0, Math.max(px(v, 0.6), 2e-5), px(v, 3.2), bb, 400000);
+      fillCircles(c, v, f, dots, PRINT.ink, 1.25);
+      // the two circles Fricke's draftsman drew, as members of L
+      const g1 = orthoCircle(FRICKE[1], FRICKE[2], FRICKE[4]);
+      if (g1) strokeCircles(c, v, f, [g1], PRINT.red, 1.4);
+      lastCount = dots.length;
+    } else if (st.mode === 'corrected') {
+      for (const s of five.seedsIn) {
+        const regions = osculatingClan(FRICKE, s, rmin, bb);
+        fillRegions(c, v, f, regions, PRINT.ink);
+        lastCount += regions.length;
+      }
+    } else {
+      for (const [seeds, color] of [[four.seedsOut, '#a5a39c'], [four.seedsIn, PRINT.ink]]) {
+        for (const s of seeds) {
+          const regions = osculatingClan(chain4, s, rmin, bb);
+          fillRegions(c, v, f, regions, color);
+          lastCount += regions.length;
+        }
+      }
+      strokeCircles(c, v, f, [FRICKE[4]], PRINT.red, 1.4);
+    }
+    $('rGa').textContent = fmt(lastCount);
+    $('cGn').textContent = `${fmt(lastCount)} ${st.mode === 'net' ? 'covering discs' : 'osculating discs'}`;
+    $('cGt').textContent = st.mode === 'net' ? 'The five circles, their net, and a circle of L' : st.mode === 'corrected' ? 'The corrected limit set, filled' : 'L* of the four-circle chain (C₅ in red)';
+  }, { maxZoom: 2000 });
+  const names = { net: 'five circles + L', corrected: 'the corrected shape', chain: 'L* of the chain' };
+  const mark = stepButtons($('mG'), ['net', 'corrected', 'chain'], (m) => names[m], (m) => names[m], (m) => { st.mode = m; mark(m); zoom.schedule(); });
+  $('preGtop').addEventListener('click', () => { st.mode = 'corrected'; mark('corrected'); zoom.refit(); });
+  $('preGbot').addEventListener('click', () => { st.mode = 'chain'; mark('chain'); zoom.refit(); });
+  mark('net');
+  console.assert(five.seedsIn.length === 4 && five.seedsOut.length === 2, 'five-circle seeds: 4 in, 2 out', five.seedsIn.length, five.seedsOut.length);
+})();
+
+</script>
+
+</body>
+</html>

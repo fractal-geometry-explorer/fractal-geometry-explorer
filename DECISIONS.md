@@ -38,6 +38,27 @@ Conventions used below:
 - **The site build wraps the artifact fragments.** Sources have no doctype, charset or viewport (the artifact service added them when the pages were published); `tools/build.py` adds the skeleton, the site bar (previous/next in book order) and the index with the plate finder, which parses the tables in TRACKER.md. `tools/check_build.py` now checks the committed `site/` by default; the pre-foundation artifacts rebuild byte for byte only from the import commit (`c05f120`).
 - **The wrapper must also carry `[hidden] { display: none !important; }`.** The artifact service's stylesheet provided it; without it, any element whose class sets `display` (`.slider`, `.check`, `.key`, …) ignores its `hidden` attribute, which quietly broke show-and-hide controls on nine pages (first seen on peano-sweeps' "angle at the start" slider). The shell stylesheet in `tools/build.py` now provides it for every page; check the computed style, not the attribute, when testing visibility.
 
+## Part I, chapter 1
+
+**Theme (pages 1–5, no plates).**
+- The chapter prints no figures at all: every page of the scan was checked, and the PDF's only images are the page scans themselves. It is the book's manifesto — clouds, mountains and coastlines against Euclid; the casebook-and-manifesto framing; Dyson's "gallery of monsters" passage; the coining of *fractal* from the Latin *fractus*; and a restatement of goals.
+- Every concept the chapter names is visualized on a later chapter's page: coastlines and mountains (brown-relief, fractal-landscapes), Brownian motion as the "exceptionally simple" case (brown-trails, wiener-sausage), the classical monsters of Cantor, Peano and Weierstrass (cantor-dust, peano-sweeps, mathematical-backup), fractal dimension (chapter 3's concepts and the dimension readouts throughout), scaling (cotton-prices, power-laws), and the history of the ideas (historical-sketches). Following the project rule for chapters without plates, no page was built; the tracker records the chapter as covered across the site.
+
+## Part I, chapter 3
+
+**Dimension, symmetry, divergence (pages 14–19, no figures; page `what-is-a-fractal`).**
+- The chapter is running text with not one figure — every page of the scan was checked — so both figures are the page's own illustrations, said so on the page. What it owns: the definition of fractal (D > D_T) and effective dimension (the ball of thread), neither visualized anywhere else on the site. The chapter's other previews are left to the pages that build them (self-similarity → koch-plates, coastline divergence → minkowski-sausage, statistical invariance → brown-trails, covering measure → mathematical-backup, D_T itself → historical-sketches#dimension), per the project's no-duplication rule.
+- **The definition section** draws the chapter's own examples exactly (straight segment; triadic Cantor dust; triadic Koch curve; a seeded Brownian trail) with D and D_T on a common 0–3 scale. The D values are the limits' known values (log 2/log 3, log 4/log 3, 2 from chapter 25), never measured from the drawing; the page quotes the chapter's printed four-digit roundings 0.6309 and 1.2618.
+- **The ball of thread** (10 cm ball, 1 mm thread) is drawn as a seeded yarn winding: great-circle wraps on two outer layers with a drifting axis, front hemisphere only, depth-sorted into banded Path2D chunks (a render is a few hundred strokes). The stations and their dimensions 0 → 3 → 1 → 3 → 1 → 0 are the chapter's own numbers; the field of view per resolution, the pixelation, the fiber rendering (1 mm thread ≈ 55 fibers of 12 µm) and the logistic crossover widths on the chart are presentation choices, all flagged — the chapter itself insists effective dimension "should not be defined precisely". Deep close-ups recentre on the front-most stitch so the view never lands in a winding gap; past ~100 Å the strands render as dotted "atomlike pinpoints", purely schematic.
+- The chart's coastline overlay (a plateau at D ≈ 1.25 across the middle decades, on its own scale) illustrates the chapter's closing bridge — an ill-defined transition widened into a whole fractal zone — and is labelled schematic.
+
+## Part I, chapter 4
+
+**Variations and disclaimers (pages 20–24, no plates).**
+- Every page of the scan was checked: the chapter prints no figures at all. It is the book's chapter on its own method — exposition, erudition, graphics ("in the theory of fractals, to see is to believe"), fractal art, and logistics.
+- Its one geometric claim — an illustration of a fractal is faithful only between an outer and an inner cutoff, so "the typical fractal curve can be evoked satisfactorily by elementary strokes in large but finite number" (p. 22) — had no explicit visualization on the site, so the page `two-cutoffs` draws it: the triadic Koch curve truncated at ε = 3⁻ᵏ with a pen of positive width, under a scale ledger comparing the drawing's range [ε, Ω] with the screen's range [pixel, frame]; and a per-view pixel-difference test of stage k against stage k + 3 (blue where only stage k inks a pixel, red where only the deeper stage does), which collapses once ε falls below a pixel. The chapter names no curve and draws nothing, so the Koch example and the ledger are this page's own devices, and the page says so.
+- The chapter's other threads are cross-links, not new figures: the endpapers born of "faulty computer programming" are the story of Plate 246 (midpoint-displacement page), the Feller random-walk anecdote that seeded chapters 28 and 31 is drawn on brown-trails, and Escher's debt to the Fricke & Klein tilings belongs with chapter 18's self-inverse plates.
+- Notation (p. 24): theoretical D is printed as integers, ratios, ratios of logarithms, or to at least four decimals; empirical D to one or two. The site's pages already follow the book's practice; no figure needed.
 ## Part II, chapters 5–8
 
 **Plate 31, monkeys tree, and Plate 32, Minkowski sausage.**
@@ -46,6 +67,15 @@ Conventions used below:
 
 **Wiener sausage (chapter 25 concept, page 32 method).**
 - Brownian paths are simulated. The page explains why time scales as ε² and why squared displacements add.
+
+**Plate 33, Richardson's empirical data (page coast-of-britain).**
+- A `data` plate: 39 markers digitised from the 600 dpi scan — 29 open rings and the circle's 10 filled dots — each centre taken as the centroid of the marker's interior holes (robust against the through-lines), good to about 0.005 of a decade.
+- **The grid is hand-drawn and uneven.** Each rule was fitted with its own tilt; the row pitch differs by 5% (4.0→3.5 spans 665 px, 3.5→3.0 spans 634 px), so values are interpolated rule to rule rather than by one scale. Of the two close horizontal lines at the top, the upper is the 4.0 rule — the "4.0" label centres on it and it ends at the 3.5 vertical — and the lower, gently sloping one is the circle's own fitted line.
+- **Printed lines against point refits** (slope, fitted to the drawn ink with 0.4–1.1 px residuals / least squares on the digitised points): Australia −0.1285 / −0.1061; South Africa −0.0059 / −0.0221; German frontier −0.1604 / −0.1411; West Britain −0.2612 / −0.2613 (the caption's "slope of −0.25"); Portugal −0.1257 / −0.1299. The slopes usually quoted from Richardson 1961 are −0.13, −0.02, −0.15, −0.25, −0.14. The page shows both fits.
+- **The German frontier prints three yardsticks twice** — two measurements each, 0.04–0.05 apart in log L, at log ε ≈ 2.26, 2.48 and 2.70. Digitised and drawn as printed; the caption does not explain the pairs.
+- **One open ring sits inside the circle's dot sequence** at (3.309, 3.957), between the dots at 3.271 and 3.350. It lies on no coastline's line, so the page reads it as a circle measurement and keeps it as the one open marker in that series.
+- **The circle.** Fitting the smooth equal-sided-polygon law L(ε) = ε·π/asin(ε/2r) to the ten dots gives circumference 10^3.98 km; the dots' flat part runs about 0.02 of a decade below the 4.0 rule. The page offers the law drawn for a round 10,000 km circle.
+- **Page extras.** The divider-walk demo (Plate 51's quadric generator on a straight initiator, D = 3/2 — the value the chapter announces as a first approximation for coastlines) with its live Richardson plot, and the Hausdorff approximate measure N(ε)·ε^d computed from those same walks, are this page's illustrations of the text; chapter 5 prints no figure but Plate 33 (Plates 31–32 have their own pages). Digitisation scripts in `research/ch05/`.
 
 **Plates 42–45, triadic Koch island.**
 - These are von Koch's construction (42) and Cesàro's (43), two kinds of self-similarity (44), and the lake (45).
@@ -133,6 +163,11 @@ Conventions used below:
 - **Plate 83, the devil's staircase.** The unit square with the region under the Cantor function in solid ink. The scan's top profile matches the Cantor function to rms 0.005 of the height (max deviation 0.018 at the near-vertical risers, which is ink spread); treads are resolved down to about 3⁻⁷. The page computes M(R) per pixel column, so zooming keeps producing steps. Graph length checked in closed form: 1 − (2/3)ⁿ + √(1 + (4/9)ⁿ) → 2.
 - **Generalized dusts (pages 77–78).** The book gives N and r for its example dusts (N = 3, r = 1/5; N = 2, r = 1/4; N = 3, r = 1/9) but never draws them, so the page's evenly spaced arrangement — first piece at 0, last ending at 1, equal tremas — is a reconstruction, flagged on the page. The gap-count law Nr(U > u) stepping across F·u⁻ᴰ was verified and is drawn as a log–log chart.
 
+**Chapter 6 completeness check (pages 34–57).**
+- The chapter's scan was re-checked page by page against the tracker: pages 34–41 print no figures, and every figure from page 42 on is one of the tracked plates (42–45, 46–47, 49, 51, 53, 54–55, 56–57), all built on koch-plates, gosper-island, quadric-islands and unequal-parts.
+- The one figure not in the tracker sits inside Plate 54–55's caption on page 54: a three-stage ink-dispersion diagram the book reproduces from Corrsin 1959b. It is another publication's artwork, in copyright, so the site does not reproduce it.
+- The chapter's concept, similarity dimension, is covered interactively on koch-plates (Plate 44: interval, square and Koch curve cut into N parts of ratio r, with D = log N / log (1/r) live). The remaining prose asides (cutoff scales Ω and ε, Koch arcs and half lines, Koch motion, the Kolmogorov-complexity aside "a Koch curve is simpler than a circle") are narrative, drawn nowhere in the book, and are left to the review pass.
+
 ## Part III, chapters 9–11
 
 **Plates 95 and 96, Fournier universes (chapter 9).**
@@ -151,6 +186,13 @@ Conventions used below:
 - **The cube.** Base-3 curdling with a seeded generator of N of 27 cells reused at every scale (the chapter's model). Drawn isometrically with painter's order by x + y + z; 4096 cubes redraw in ~45 ms. The partial Fisher–Yates pick makes the generator nest as N grows, so the N slider adds curds without rearranging the rest.
 - **The section argument.** Computed exactly, not simulated: randomize the curdling (each subcell kept with probability p = 3^(D−3)); a straight probe's trace is a branching process with Binomial(3, p) offspring, mean 3^(D−2), so it dies out surely for D ≤ 2 and survives with positive probability for D > 2 — extinction iterates q → (1 − p + pq)³. Chapter 23 is cited by the book as proving the theorem for a simple class; the galaxies' contrast (projections must vanish, D < 2, D ≈ 1.23) is drawn on the same chart.
 - The chapter's open topology question (dust vs vortex tubes vs sheets; kurtosis tests determine only D) is reported as open on the page.
+
+## Part III, chapter 11
+
+**Fractal singularities of differential equations (pages 106–108, no plates).**
+- The chapter prints no figures at all — all three scanned pages were checked — so the whole page (`fractal-singularities`) is labelled as this page's own illustrations of the text. It is pure argument: the conjecture (Mandelbrot 1976c) that the singularities of the Euler and Navier–Stokes solutions are locally scaling fractal sets, with Chorin's and Scheffer's results as support.
+- **Numbers verified against the text.** Chorin 1981: D ~ 2.5 and B = 0.17 ± 0.03, unpublished 2.5 < D < 2.6; chapter 10's B = (3 − D)/3 gives exactly 1/6 ≈ 0.167 at D = 2.5, which the exponent-check chart draws. Scheffer's bounds for a finite-energy Navier–Stokes fluid: singular times of dimension at most 1/2, the singular set in space of dimension at most 1 (the first a restatement of an inequality in Leray 1934, as the chapter stresses).
+- **Inventions, flagged on the page.** The singular functions (a rational function with three poles; f = 1/dist to a two-piece Cantor dust, distance computed exactly with no stage cutoff), the zoom-test stand-ins (a parabola for the smooth curve; the plane dust C(1/3) × C(1/3), D = log 4/log 3, with the zoom anchored at (1/4, 1/4), a dust point where the base-3 construction repeats with a factor-9 period), the ε-thickened volume chart (ε^(3−D)), and the dissipation record 1/√(dist² + ν²) on singular times of chosen dimension. The book specifies no profiles; only the sets and the exponents are its claims.
 
 ## Part IV, chapter 12
 
@@ -194,6 +236,26 @@ Chapter 13 prints no numbered plates; its six figures sit in the running text. A
 
 **Percolation (pp. 126–130).** The chapter prints no percolation figure in these pages (the critical-cluster plate is with chapter 14). The page's Bernoulli bond-percolation lattice is a **seeded simulation**, labelled as such, with p_crit = 1/2 and the D_c ≈ 1.89 formulas quoted from the text. The p. 129 sub/supercritical initiators (eight ½ξ squares around a hole; the even-coordinate grid lines) are described in the note rather than drawn.
 
+## Part IV, chapter 14 (Plates 141–146, figures on pages 132 and 138–139)
+
+**Plate 141, Sierpiński arrowhead.**
+- Generator: half a hexagon, three legs of ½ at +60°, 0°, −60°; codes [1, 0, 1], read off the caption's second teragon (the outer legs carry mirrored copies). Finite stages were checked to be free of repeated vertices to stage 8.
+- **The plate is the "tropical fish":** the piece of the teragon between its two vertices nearest the midpoint of [0, 1] (in the limit, two successive returns to that point of self-contact), closed and filled as one polygon. The filled polygon reproduces the plate's pattern of black and white tremas exactly — which tremas print black falls out of the pinch parity, not from any painting rule. Stage 8 matches the plate's finest texture at print size (fitted by eye).
+- Fill rule: even-odd and nonzero agree (the finite polygon is simple).
+
+**Figure p. 132, critical percolation cluster.** Random; rebuilt statistically as bond percolation on a square lattice at p = ½ with a seed control. "Dangling bonds" are trimmed by repeatedly deleting cluster sites that hang by one bond (keeping the electrodes), which matches the caption's description; the true biconnected backbone was not computed.
+
+**Plate 143, fractal skewed web.** The Sierpiński tetrahedron: N = 4, r = ½ on a closed tetrahedron, D = 2 exactly. Drawn as a depth-shaded edge rendering; the preset's viewing angle was fitted by eye (the print's slight perspective is not reproduced). The square-shadow property was verified: the four corners of each tetrahedron project, along the axis joining the midpoints of opposite edges, onto the corners of a square (turned 45° in the natural basis of that plane), and the stage-n shadows pave the initial square.
+
+**Plate 145, carpet and sponge.**
+- Carpet: N = 8, r = 1/3 from a filled square; the caption's three printed steps match stages 1–3. The medallion families of the chapter text (large: thin ring of 4(b−1); small, odd b: thick ring of b²−1) are on the page with their D formulas.
+- Menger sponge: cell rule "at most one of the three triadic digits equals 1 at every level" (removes the 6 face centres and the centre, keeps 20). The book's photograph is reproduced from Blumenthal & Menger, so ours is a computed re-rendering: outer visible faces, painter-sorted, three print-like tones, rotatable. Level 3 as in the print.
+- The fused-islands generators at the bottom of page 144 are described in the carpet section's text only, not rebuilt interactively.
+
+**Figure pp. 138–139, ramification through branches.** N = 5, r = 1/3, the ⊓ generator (middle third lifted onto a square tab), initiator a square per the text. **Every copy is placed as drawn (codes all 0)**: all 1024 code assignments were enumerated against the printed mountain, and the all-as-drawn cascade reproduces it — the 45° staircase flanks and the little square rings emerge from teragons touching tab against tab (the same stick-generator overlap idea as the fused islands). The book prints the curve on one side at stage 4. On the full square, bumps outward (clockwise traversal), the four mountains meet flush along the corner diagonals: the limit silhouette is a plain diamond and all the structure is interior ramification.
+
+**Plate 146, split snowflake halls.** **The same generator and codes as Plate 31's monkeys tree** (eleven legs, six of 1/3 and five of 1/(3√3), codes [1, 3, 0, 3, 3, 1, 2, 2, 0, 2, 0]), cascaded from the plain initiator [0, 1] — the Wise Elders' line — and drawn with straight legs at stage 4, which matches the scan's maze, its empty Great Hall, the line reaching both margins, and the hooks of the finer legs. Plate 31 prints the same construction rounded; Plate 146 does not round. The curve stays inside the Koch snowflake on [0, 1] (sampled: 400 of 400 stage-4 vertices inside, up to boundary rounding) and hugs its boundary, hence the snowflake silhouette. Filling the closed curve shows the North/South division; the page offers it as a mode.
+
 ## Part V, chapters 15–17
 
 **Plate 155, fractal umbrella trees (chapter 16).**
@@ -217,6 +279,79 @@ Chapter 13 prints no numbered plates; its six figures sit in the running text. A
 - **Each stick carries a triangle on *each* side** (angles ½θ at the root, π−θ at the tip, the stick a side). The caption says "an isosceles triangle", but with one triangle per stick the corners around a fork sum to π and the figure cannot be solid; with one per side they sum to exactly 2π, the thickened stems tile with no gap and no overlap, and the rendered figures go solid and scalloped exactly like the plate. The bottom figure's white slits are the caption's "trimmed slightly on one side": one triangle of each pair pulled off its stick.
 - **The three figures fit θ = 29.9°, 60.3° and 89.8°** — surely 30°, 60° and 90° — with r = 0.501, 0.544 and 0.566 (pixel agreement 97–98.5% at 600 dpi). Planar D ≈ 1.00, 1.14, 1.22; the spatial originals are D+1.
 - **Self-avoidance bound.** Our own computation (bisection on segment crossings to stage 11) gives the largest self-avoiding r at those angles as 0.518, 0.554 and 0.595, so the printed figures sit 2–5% below the bound. The page's slider couples r to the computed bound; the presets use the fitted values, and the note on the page says so.
+
+## Part VI, chapter 18 (pages 166–179, page self-inverse)
+
+All on the page `self-inverse`. Every construction is computed at runtime from a handful of
+fitted circles; nothing is traced. Circles were fitted from the 600 dpi scans (RANSAC on ink or
+region boundaries, then a least-squares refit), then idealized to exact tangency.
+
+**Figures pp. 169–171, Apollonian packing and the net.**
+- **The three given circles** are the same throughout pages 169–171. Fitted from p. 170's
+  construction figure and idealized: outer (0, 0, 1), inner (−0.30355, −0.06297, 0.69000) and
+  (0.66188, −0.24830, 0.29307) in units of the outer radius (y up). Tangency residuals before
+  idealizing were under 1.5 px.
+- **The two Apollonian circles are the two Descartes roots k± = k₁+k₂+k₃ ± 2√(k₁k₂+k₂k₃+k₃k₁),
+  which differ** (4.440 and 3.283 here) — not one curvature with two centres. In the complex
+  centre formula each root pairs with one sign of the square root; the page validates by
+  tangency. Deeper triangles use the Soddy reflection k′ = 2(kₐ+k_b+k_c) − k_d, where d must be
+  the *other* circle tangent to the triangle's three (for a root triangle, the third given
+  circle, not the other Apollonian circle — getting this wrong scatters the packing).
+- **The gasket photograph on p. 170** is the packing's lower triangle (below the two inner
+  circles): of the two triangles, only it has the photo's three-horned proportions. The preset
+  fills its discs black on white inside a gray panel, like the photo.
+- **The net really sorts into 4 clans** (p. 171): the page builds the net a second way, as the
+  clans of the four Γ circles under reduced words in the four orthogonal C circles, and the two
+  constructions coincide visually at every zoom. The C circles are computed as radical-centre
+  orthogonal circles of each Γ triplet.
+
+**Figure p. 173, the Poincaré chain, and Plate 177.**
+- **The chain** (M = 4) was fitted from p. 173 by distance-transform peaks plus boundary refit
+  (rms 2.6 px at 600 dpi), then idealized: C1/C3 (±0.60637, 0.06853, r 0.39348), C2 (0,
+  −0.45406, 0.40701), C4 (0, 0.31700, 0.26182), y up. Plate 177 uses the same chain, as its
+  caption says.
+- **Stages.** Stage s of Poincaré's construction is all reduced words of length s applied to
+  the chain circles, 4·3ˢ links; the page draws each stage in ink over the previous stage in
+  white on gray, as printed. Stages 1 and 3 match the figure's top and bottom panels.
+- **Plate 177's Δ discs behave exactly as captioned**: Δ₁₂₃ and Δ₃₄₁ come out unbounded
+  (exteriors of their Γ circles), Δ₂₃₄ and Δ₄₁₂ intersect, and the second approximation adds
+  the inverses in C₄/C₂ and C₁/C₃. Γ_ijk passes through the triplet's own tangency points, so
+  "γ-free" means free of the *other* chain tangencies, strictly inside or outside.
+- The limit render keeps a ~2.6 px disc cutoff so the white thread of L stays visible between
+  the black and gray clans, as in the printed plate; mathematically the clans cover everything
+  but L.
+
+**Plate 179, Fricke & Klein's Figure 156 corrected.**
+- **The five generating circles were recovered from the engraving** (the plate's top-left
+  reproduction): RANSAC on the boundary of the blackened central region, idealized to exact
+  tangency (rms 0.6 px). In units of ~1/1000 of the reproduction: C1 (−0.829, 0.705, 0.914),
+  C2 (0.613, 0.374, 0.565), C3 (0.074, −0.099, 0.152), C4 (−0.286, −0.403, 0.319), C5 (0.344,
+  −0.389, 0.243), y up. C1–C2–C3–C4 form the Poincaré chain of the caption; C5 touches C2 and
+  C3 only, which is why the fundamental region runs off the engraving at the bottom (the
+  "trunk" between C4 and C5).
+- **Checked against the plate.** The inside of L* (the 4-chain, bottom right) matches the scan
+  at IoU 0.98 after a similarity fit; the full five-circle black shape (top right) matches
+  feature for feature at IoU 0.74 — the print sits rotated about 44° from the engraving (the
+  bottom figure only about 8°), and the residue is a rim fringe at the print's halftone scale.
+- **Fricke's draftsman drew genuine circles of L.** The two large circles across the engraving
+  fit as: the circle through the tangency points of C2, C3, C5 (orthogonal to all three — the
+  Γ circle of that tangent triplet, residual ~3‰), and a circle orthogonal to C1 and C2 through
+  their tangency point. This confirms the caption's "Fricke knew that L incorporates circles".
+- **The M ≥ 5 osculating construction** (p. 175) works as described: of the ten Γ triplets,
+  four osculate from inside, two from outside (each inside disc internally tangent to an
+  outside one), and four intersect L and are discarded.
+
+**Plate 178 is a reconstruction of the idea, not of the plate.** Mumford's group of
+homographies is not stated in the book, so the plate cannot be reproduced stroke for stroke.
+The page's section composes each chain inversion with a rotation about its circle's centre
+(every two-letter word is then a Möbius map) and lets the twist grow from 0°, which leaves the
+self-inverse thread and spreads toward plane-filling forms. TRACKER reclassifies 178 as `art`.
+
+**Limit sets as disc coverings.** A reduced-word image of a generator disc always nests inside
+the previous disc, so L is drawn by emitting every image disc smaller than a few pixels while
+recursing to a sub-pixel cutoff; the emitted discs keep the thread contiguous and the terminal
+ones add detail. Rotating an inversion doesn't change image radii, only positions, so the same
+covering works for the twisted maps.
 
 ## Part VI, chapter 19 (Plates 185–192)
 
@@ -242,6 +377,22 @@ All on the page `self-squared-dragons`. Every figure is a per-pixel escape-time 
 **Plate 192, Fatou dusts.** Exact: a point is black when its first k iterates stay in [0, 1], the complement of the tremas of order ≤ k; the plate is k = 5. Three horizontal subsamples per pixel keep the thin high-λ fingers printing. The mid trema's ends solve λx(1−x) = 1.
 
 **The μ-atom arithmetic (p. 184)** — at most 2^{w−1} atoms of period w, fewer for w > 1 — was not verified numerically; the page quotes none of it.
+
+## Part VI, chapter 20 (Plates 198–199)
+
+Both plates on the page `fractal-attractors`, drawn by the chapter's own algorithm: a long orbit of a "decomposable dynamical system", the determining index chosen pseudo-randomly among the maps' inverses, 64,000 steps with the first few skipped. The book's random sequence is unknowable, so dot-for-dot both plates are this page's own runs with the seed exposed.
+
+**Plate 198, the San Marco dragon.** Random inverse iteration of x → 3x(1−x): z = ½ ± √(¼ − z/3), the sign chosen per step. Verified at 600 dpi: the generated points land a median 0.0 px (mean 0.4) from the plate's ink, and the figure's height/width is 0.5774 against the print's 0.5779. The dragon spans [0, 1] on the real axis; the cusp where the big bulbs meet is the fixed point ⅔, multiplier exactly −1, which is why its neighbourhood fills so slowly (the caption says so, and it shows).
+
+**Plate 199, the Pharaoh's Breastplate.** The book nowhere states the four inversions ("selected to insure that the limit set is a collection of circles"), so they are a reconstruction decoded from the scan:
+- The two bounding circles, fitted at 600 dpi (outer rms 0.9 px, inner 1.9 px), are internally tangent at the top; the radius ratio is q = 0.6474 (fitted — the book states no proportions, and no obviously exact value is nearby).
+- Sent through the Möbius map that takes the tangency point to ∞, the crescent becomes a strip and the white discs (measured by distance transform) take exact positions: circles of radius ¼ seated on each edge at u = kP, radius-⅛ circles at v = ⅜ between them, and so on, with period P = 1/√2. The tangency of the ¼- and ⅛-families forces P² = ½ exactly.
+- The group that produces this: inversions in circles of radius 1/√2 centred at (0, 0) and (0, 1) on the strip's edges, plus two mirrors half a period apart. Chaos-game points from this group land a median 4.2 px from the plate's ink (uniform points in the crescent: 35 px), and the plate's ink lands a median 3.6 px from the model at 400k points — the support matches.
+- The page's dots use the symmetric generating set (edge circles + mirrors at u = ±P/2, which in the crescent are four genuine circles): it reaches the horns far better (ink→model median 7.6 px at 64k points against 12.1 for mirrors at 0 and P/2), and both sets draw the same limit set to sub-pixel agreement (median 0–1 px both directions at 400k).
+- The dots' texture still differs from the print in detail — Mandelbrot's actual generators and random sequence are unknown — so the dots are a statistical match; the "circles" mode (breadth-first orbit of the two boundary circles under the inversions, down to pixel radius) is exact.
+- Open: whether the printed crescent ratio is an exact value, and what Mandelbrot's own four inversions were. His 1983 Intelligencer paper on sigma-discs likely states them; it was not accessible this session (IBM page is paywalled, and the Yale/Scranton pages describe no construction for this figure).
+
+**Pages 194–195, the dust attractor (no plate).** The bifurcation tree is ours — the book prints no figure for these pages. Quoted, not recomputed: D ≈ 0.538 (Grassberger, cited by the book from a preprint) and Feigenbaum's 1/α ≈ 0.3995. Computed: the window magnifier re-centres on (λ∞, ½) and shrinks by (δ, α) per step, mirror-flipping odd steps because α acts with a sign; cycle periods and Lyapunov exponents for tapped λ come from the orbit of ½.
 
 ## Part VIII, chapter 23
 
@@ -397,6 +548,20 @@ All six plate groups are random (`random`/`render`), so they are matched statist
 **Chapter 30 (`isothermal-surfaces` page).** No plates of its own (it explains Plates 10–11, which stay with Part I in the tracker). The page builds the chapter's ladder of dimensions — isosurface 3 − H, planar isotherm 2 − H, graph of a linear section 2 − H, zero-set 1 − H — on a planar section with H = 1/3 (Kolmogorov), 1/2 (Burgers), 3/4 (the persistent contrast of Plate 10), with a live ruler-count of the drawn isotherm. The linear section is the first row of the same field.
 
 **Tracker bookkeeping.** Part IX's heading now reads "chapters 27–30": the running heads on pages 278–279 put chapter 30 in Part IX ("FRACTIONAL BROWN FRACTALS ⁂ IX"), and the old "27–29" left chapter 30 shelfless. `tools/build.py` learned to shelve colour-plate pages (plates matching C + digit) under the colour-signature section of the index instead of a numbered chapter range.
+
+## Part X, chapter 31 (linear Lévy dusts, Plates 285–287, page linear-levy-dusts)
+
+**The chapter's trema law, and the page's engine.**
+- The construction follows the text: tremas are Poisson, the number centered per unit length with length above u is (1 − Dt)/u, and the survivors form a Lévy dust of D = max(Dt, 0). Implemented rank-wise as on the disc-tremas page: trema p has length κ/p with κ = (1 − Dt)·(sampled length), centers from a per-rank hash, so the sample holds still while Dt and the cutoff vary. The falling-threshold cascade (ε dividing by 3 per row, drawn like Plate 80's bar) and the Lévy-against-Cantor comparison (N = 2, r = 2^(−1/D)) are the page's own illustrations — the chapter prints no figure for the construction itself.
+
+**Plate 285, random streets.**
+- Random; matched statistically, seed exposed (page seed 8). The caption gives no numbers, so the street law is the chapter's trema law carried to the plane: street p is an infinite strip of width κ/p, κ = (2 − D)·(range of line offsets) — the strip analogue of Plates 306–309's disc areas, since the offset measure that lets a strip cover a point is its width. A point then survives the widths in (w_min, w_max) with probability (w_min/w_max)^(2−D), so the blocks have dimension D, and a transect holds a Lévy dust of D − 1, as the caption claims.
+- Fitted to the scan: the printed figure's frame is 1.366 : 1 with ink share 0.268 at 600 dpi; D = 1.94 with streets cut at the print grain reproduces it (widest street κ ≈ 0.1 of frame height — the plate's one dominant band — and ≈ 250 streets at print resolution).
+- The line-cut view (survivors of a horizontal transect, drawn as a dust bar) is the page's own illustration of the caption's "intersection by an arbitrary line".
+
+**Plates 286–287, Lévy staircases.**
+- Random; the caption's recipe verbatim: Δy = .002 (500 risers), each abscissa jump with Pr(ΔX > u) = u^(−D) for u ≥ 1, rescaled to end at (1, 1) — the same pareto() as chapter 32's subordinators. Presets D = .9, .3, .6309 with seeds 2, 21 and 56, chosen so the silhouette statistics (largest tread's share, count of visible treads, first riser's abscissa) sit near the printed ones; the samples themselves cannot be recovered.
+- Treads sum to the full width and risers to the full height, so the graph's length is exactly 2 at every Δy and its dimension is 1 — the caption's "dimension 1", checked in closed form. The risers'-abscissas tick bar, and the Δy = 1/100 and 1/2500 settings, are the page's additions.
 
 ## Part X, chapter 32 (spatial Lévy dusts, Plates 293–300)
 
