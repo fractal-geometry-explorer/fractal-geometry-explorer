@@ -159,8 +159,8 @@ Update this file in the same pull request as the work it records.
 
 | Plate | Page | Title | Kind | Status | Site page |
 | :- | :- | :- | :- | :- | :- |
-| 285 | 285 | Random pattern of streets | random | todo | |
-| 286–287 | 286–287 | Paul Lévy's devilish staircases | random | todo | |
+| 285 | 285 | Random pattern of streets | random | done | linear-levy-dusts |
+| 286–287 | 286–287 | Paul Lévy's devilish staircases | random | done | linear-levy-dusts |
 | 293 | 293 | The computer "bug" as artist, opus 2 | art | done | levy-dusts |
 | 295 | 295 | Nonrandom subordination: clustered fractal dust | exact | done | levy-dusts |
 | 296–297 | 294–297 | Mandelbrot's early model clusters; Lévy flight and its stopovers (D = 1.26) | random | done | levy-dusts |
@@ -214,7 +214,7 @@ Each chapter session should add the chapter's main ideas here, alongside its pla
 - 1/f noise and scaling nets (chapter 27): the Joseph effect, Hurst's R/S and the spectrum are on the fractional-trails page;
 - island, lake and cup areas: Korčak's law Pr(A > a) = F·a⁻ᴮ with B = D/2, deadvalleys, cups and the Devil's terraces, the eroded Brown model (chapter 29, pages 272–276 — the chapter prints no figure);
 - global dependence in Brown relief, and the horizon (chapter 28);
-- Lévy flights and dusts (chapters 31–32);
+- Lévy flights and dusts (chapters 31–32): the interval tremas, unforced clustering and the birth-and-death argument are on the linear-levy-dusts page; the flights, subordination and spatial dusts on the levy-dusts page;
 - disc and ball tremas: saturation, critical dimensions, lunar craters and galactic voids (chapter 33; the Moon-saturation section of the disc-tremas page);
 - lacunarity (chapter 34; on the carpets-lacunarity page, with the mid-line dusts, the gap census's prefactor F and the mass-in-a-window measures);
 - weak against strong convergence, and the self-avoiding walk (chapter 36 — done, on the lattice-physics page);

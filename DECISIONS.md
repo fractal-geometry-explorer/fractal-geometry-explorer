@@ -417,6 +417,20 @@ All six plate groups are random (`random`/`render`), so they are matched statist
 
 **Tracker bookkeeping.** Part IX's heading now reads "chapters 27–30": the running heads on pages 278–279 put chapter 30 in Part IX ("FRACTIONAL BROWN FRACTALS ⁂ IX"), and the old "27–29" left chapter 30 shelfless. `tools/build.py` learned to shelve colour-plate pages (plates matching C + digit) under the colour-signature section of the index instead of a numbered chapter range.
 
+## Part X, chapter 31 (linear Lévy dusts, Plates 285–287, page linear-levy-dusts)
+
+**The chapter's trema law, and the page's engine.**
+- The construction follows the text: tremas are Poisson, the number centered per unit length with length above u is (1 − Dt)/u, and the survivors form a Lévy dust of D = max(Dt, 0). Implemented rank-wise as on the disc-tremas page: trema p has length κ/p with κ = (1 − Dt)·(sampled length), centers from a per-rank hash, so the sample holds still while Dt and the cutoff vary. The falling-threshold cascade (ε dividing by 3 per row, drawn like Plate 80's bar) and the Lévy-against-Cantor comparison (N = 2, r = 2^(−1/D)) are the page's own illustrations — the chapter prints no figure for the construction itself.
+
+**Plate 285, random streets.**
+- Random; matched statistically, seed exposed (page seed 8). The caption gives no numbers, so the street law is the chapter's trema law carried to the plane: street p is an infinite strip of width κ/p, κ = (2 − D)·(range of line offsets) — the strip analogue of Plates 306–309's disc areas, since the offset measure that lets a strip cover a point is its width. A point then survives the widths in (w_min, w_max) with probability (w_min/w_max)^(2−D), so the blocks have dimension D, and a transect holds a Lévy dust of D − 1, as the caption claims.
+- Fitted to the scan: the printed figure's frame is 1.366 : 1 with ink share 0.268 at 600 dpi; D = 1.94 with streets cut at the print grain reproduces it (widest street κ ≈ 0.1 of frame height — the plate's one dominant band — and ≈ 250 streets at print resolution).
+- The line-cut view (survivors of a horizontal transect, drawn as a dust bar) is the page's own illustration of the caption's "intersection by an arbitrary line".
+
+**Plates 286–287, Lévy staircases.**
+- Random; the caption's recipe verbatim: Δy = .002 (500 risers), each abscissa jump with Pr(ΔX > u) = u^(−D) for u ≥ 1, rescaled to end at (1, 1) — the same pareto() as chapter 32's subordinators. Presets D = .9, .3, .6309 with seeds 2, 21 and 56, chosen so the silhouette statistics (largest tread's share, count of visible treads, first riser's abscissa) sit near the printed ones; the samples themselves cannot be recovered.
+- Treads sum to the full width and risers to the full height, so the graph's length is exactly 2 at every Δy and its dimension is 1 — the caption's "dimension 1", checked in closed form. The risers'-abscissas tick bar, and the Δy = 1/100 and 1/2500 settings, are the page's additions.
+
 ## Part X, chapter 32 (spatial Lévy dusts, Plates 293–300)
 
 **Plate 293, the computer "bug" as artist, opus 2.**
