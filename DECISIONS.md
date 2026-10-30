@@ -38,6 +38,12 @@ Conventions used below:
 - **The site build wraps the artifact fragments.** Sources have no doctype, charset or viewport (the artifact service added them when the pages were published); `tools/build.py` adds the skeleton, the site bar (previous/next in book order) and the index with the plate finder, which parses the tables in TRACKER.md. `tools/check_build.py` now checks the committed `site/` by default; the pre-foundation artifacts rebuild byte for byte only from the import commit (`c05f120`).
 - **The wrapper must also carry `[hidden] { display: none !important; }`.** The artifact service's stylesheet provided it; without it, any element whose class sets `display` (`.slider`, `.check`, `.key`, …) ignores its `hidden` attribute, which quietly broke show-and-hide controls on nine pages (first seen on peano-sweeps' "angle at the start" slider). The shell stylesheet in `tools/build.py` now provides it for every page; check the computed style, not the attribute, when testing visibility.
 
+## Part I, chapter 1
+
+**Theme (pages 1–5, no plates).**
+- The chapter prints no figures at all: every page of the scan was checked, and the PDF's only images are the page scans themselves. It is the book's manifesto — clouds, mountains and coastlines against Euclid; the casebook-and-manifesto framing; Dyson's "gallery of monsters" passage; the coining of *fractal* from the Latin *fractus*; and a restatement of goals.
+- Every concept the chapter names is visualized on a later chapter's page: coastlines and mountains (brown-relief, fractal-landscapes), Brownian motion as the "exceptionally simple" case (brown-trails, wiener-sausage), the classical monsters of Cantor, Peano and Weierstrass (cantor-dust, peano-sweeps, mathematical-backup), fractal dimension (chapter 3's concepts and the dimension readouts throughout), scaling (cotton-prices, power-laws), and the history of the ideas (historical-sketches). Following the project rule for chapters without plates, no page was built; the tracker records the chapter as covered across the site.
+
 ## Part I, chapter 4
 
 **Variations and disclaimers (pages 20–24, no plates).**
@@ -140,6 +146,11 @@ Conventions used below:
 - **Plate 81, the curtains.** Both figures are dusts with N = 2 and r varying with height, square frames, topped by [0, 1]. Told apart by fitting the central gap over ~180 rows each: the top figure is linear in D (from 1 to 0; residual rms 0.02), the bottom linear in r (from 1/2 to 0; rms 0.0008). The printed margin arrows sit a little high of the stated values — about r = 0.347 and D = 0.68 instead of r = 1/3, D = 0.6309 — so the page's arrows mark the exact values, and the note says so.
 - **Plate 83, the devil's staircase.** The unit square with the region under the Cantor function in solid ink. The scan's top profile matches the Cantor function to rms 0.005 of the height (max deviation 0.018 at the near-vertical risers, which is ink spread); treads are resolved down to about 3⁻⁷. The page computes M(R) per pixel column, so zooming keeps producing steps. Graph length checked in closed form: 1 − (2/3)ⁿ + √(1 + (4/9)ⁿ) → 2.
 - **Generalized dusts (pages 77–78).** The book gives N and r for its example dusts (N = 3, r = 1/5; N = 2, r = 1/4; N = 3, r = 1/9) but never draws them, so the page's evenly spaced arrangement — first piece at 0, last ending at 1, equal tremas — is a reconstruction, flagged on the page. The gap-count law Nr(U > u) stepping across F·u⁻ᴰ was verified and is drawn as a log–log chart.
+
+**Chapter 6 completeness check (pages 34–57).**
+- The chapter's scan was re-checked page by page against the tracker: pages 34–41 print no figures, and every figure from page 42 on is one of the tracked plates (42–45, 46–47, 49, 51, 53, 54–55, 56–57), all built on koch-plates, gosper-island, quadric-islands and unequal-parts.
+- The one figure not in the tracker sits inside Plate 54–55's caption on page 54: a three-stage ink-dispersion diagram the book reproduces from Corrsin 1959b. It is another publication's artwork, in copyright, so the site does not reproduce it.
+- The chapter's concept, similarity dimension, is covered interactively on koch-plates (Plate 44: interval, square and Koch curve cut into N parts of ratio r, with D = log N / log (1/r) live). The remaining prose asides (cutoff scales Ω and ε, Koch arcs and half lines, Koch motion, the Kolmogorov-complexity aside "a Koch curve is simpler than a circle") are narrative, drawn nowhere in the book, and are left to the review pass.
 
 ## Part III, chapters 9–11
 
