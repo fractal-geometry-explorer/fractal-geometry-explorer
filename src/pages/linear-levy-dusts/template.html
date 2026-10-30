@@ -1,0 +1,171 @@
+<title>Linear Lévy Dusts</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.r-streets { aspect-ratio: 1.366 / 1.12; }
+.r-rows { aspect-ratio: 10 / 7; }
+.seed-row { display: flex; align-items: center; gap: 10px; }
+.seed-row .value { min-width: 64px; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 31, "Interval Tremas; Linear Lévy Dusts" · pages 280–287</p>
+    <h1><span class="plate-no">Plates 285–287</span><span class="lozenge" aria-hidden="true"></span><span>Linear Lévy Dusts</span></h1>
+    <p class="dek">The Cantor dust of chapter 8 was a first model of noise bursts on a line, but it is far too regular: its origin is a privileged point, and its ratios are powers of 1/3. Chapter 31 randomizes it. Cut random intervals — <i>tremas</i> — out of the line, the number longer than u growing as 1/u, and what survives is Paul Lévy's dust: the one self-similar dust whose past and future are independent, seen from any of its points. The plates picture it sideways — streets cut at random through a city block, and devil's staircases piling the dust's mass. Every figure is computed from the rules in the captions; change the seed for another sample from the same law.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#tremas"><b>§</b> Interval tremas</a>
+    <a href="#streets"><b>285</b> Random streets</a>
+    <a href="#staircases"><b>286–7</b> Lévy staircases</a>
+  </nav>
+
+  <!-- ===================== CONCEPT: INTERVAL TREMAS ===================== -->
+  <section class="plate" id="tremas">
+    <div class="plate-head">
+      <p class="no">Chapter 31, pages 280–284 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Interval tremas and the Lévy dust</h2>
+      <p class="dim" id="dimA">tremas longer than u, per unit length: (1 − D<sub>t</sub>)/u · survivors: a Lévy dust of D = max(D<sub>t</sub>, 0)</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-rows zoomable" id="wA">
+          <canvas id="cA" role="img" aria-label="Random interval tremas cut from a line, at falling thresholds"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cAt">Falling threshold</strong> · <span id="cAn"></span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Throw open intervals at the line, independently, centers everywhere equally likely; the p-th longest trema in view has length proportional to 1/p. Tremas overlap "with gusto", so the <i>gaps</i> they merge into are longer than the tremas themselves. Each row keeps only the tremas above a threshold ε, and ε falls by 3 from row to row: the surviving stretches shorten, split and sometimes vanish — bursts within bursts, with no grid and no privileged origin. When D<sub>t</sub> &gt; 0 the survivors have a positive chance of never dying out, and the limit dust has dimension D = D<sub>t</sub>. When D<sub>t</sub> ≤ 0 the line is almost surely covered whole.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mA" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group">
+          <div class="slider">
+            <div class="label-row"><span class="label">Trema exponent D<sub>t</sub></span><span class="value" id="DAv"></span></div>
+            <input type="range" id="DAs" min="-0.4" max="0.95" step="0.005" value="0.6309" aria-label="Trema exponent">
+          </div>
+          <div class="seed-row">
+            <button type="button" class="btn" id="seedA">New seed</button><span class="value" id="seedAv"></span>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="presetA">The triadic D, randomized</button>
+          <button type="button" class="btn" id="presetA2">Brown zeroset, D = 1/2</button>
+        </div>
+        <p class="readline" id="infoA" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Dimension D</dt><dd id="rAa">0.6309</dd></div>
+          <div><dt>Tremas in the last row</dt><dd id="rAb">—</dd></div>
+          <div><dt>Length surviving it</dt><dd id="rAc">—</dd></div>
+          <div><dt>Longest survivor</dt><dd id="rAd">—</dd></div>
+        </dl>
+        <p class="note">The book prints no figure for this construction — these rows are this page's own illustration of the text, drawn the way Plate 80 draws the Cantor cascade. The trema law is the text's: the number of tremas centered in a stretch Δt with length above u has expectation (1 − D<sub>t</sub>)Δt/u and a Poisson distribution; here the p-th longest has length exactly κ/p with the stated expectation, and only the centers are random. Tremas centered outside the window still reach into it, so the window is cut from a longer sampled line. The side-by-side view puts a Cantor dust and a Lévy dust of the same dimension together: equal D, but the Lévy dust's gaps fall where chance puts them.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 285: RANDOM STREETS ===================== -->
+  <section class="plate" id="streets">
+    <div class="plate-head">
+      <p class="no">Plate 285 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Random pattern of streets</h2>
+      <p class="dim" id="dimB">straight strips, isotropic, widths with Nr(W &gt; w) ∝ 1/w · blocks of houses: D &lt; 2 · any line cuts them in a Lévy dust of D − 1</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-streets zoomable" id="wB">
+          <canvas id="cB" role="img" aria-label="Black street-like strips cut at random through a white plane"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cBt">The streets</strong> · <span id="cBn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">A dust is "thin and spare to the point of being invisible", so the plate shows one indirectly, the way the triadic Koch curve makes the Cantor dust visible on its base line. Black street-like strips fall across the plane at random — directions isotropic, widths hyperbolic, soon too thin to draw. The white remainder, the "blocks of houses", has zero area and dimension D below 2. As long as D &gt; 1, an arbitrary straight line meets the blocks in a linear Lévy dust of dimension D − 1; for D &lt; 1 the cut is almost surely empty.</p>
+        <div class="group">
+          <div class="slider">
+            <div class="label-row"><span class="label">Blocks' dimension D</span><span class="value" id="DBv"></span></div>
+            <input type="range" id="DBs" min="1.5" max="1.99" step="0.005" value="1.94" aria-label="Dimension of the remainder"></div>
+          <div class="seed-row">
+            <button type="button" class="btn" id="seedB">New seed</button><span class="value" id="seedBv"></span>
+          </div>
+          <label class="check" for="cutB"><input type="checkbox" id="cutB"> Cut the blocks with a line (drag the slider)</label>
+          <div class="slider" id="cutBwrap" hidden>
+            <div class="label-row"><span class="label">Line height</span><span class="value" id="cutBv"></span></div>
+            <input type="range" id="cutBs" min="0.05" max="0.95" step="0.005" value="0.5" aria-label="Height of the cutting line">
+          </div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate285">Show Plate 285 as printed</button>
+        </div>
+        <p class="readline" id="infoB" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Streets drawn</dt><dd id="rBa">—</dd></div>
+          <div><dt>Widest street</dt><dd id="rBb">—</dd></div>
+          <div><dt>White left, expected</dt><dd id="rBc">—</dd></div>
+          <div><dt>Dust on the line: D − 1</dt><dd id="rBd">—</dd></div>
+        </dl>
+        <p class="note">A random plate: the figure matches the book statistically, never stroke for stroke, and the seed is exposed. The caption gives no numbers, so the street law is the chapter's trema law carried to the plane — the p-th widest street has width κ/p, the strip analogue of the disc areas of Plates 306–309 — and D ≈ 1.94 with the thinnest streets at the scan's own print grain reproduces the printed plate's ink share (about 27% black; measured on the scan at 600 dpi). Streets thinner than half a screen pixel are left out; zoom in and more appear, down to a depth cap. The caption notes the construction "could not be carried far enough" for the blocks' clustering to show — true here as well, and the line-cut view shows why: the cut dust's dimension D − 1 ≈ 0.94 is close to a full line's.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATES 286–287: LÉVY STAIRCASES ===================== -->
+  <section class="plate" id="staircases">
+    <div class="plate-head">
+      <p class="no">Plates 286 and 287 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Paul Lévy's devilish staircases</h2>
+      <p class="dim">graph dimension 1 · the risers' abscissas form Lévy dusts of D = 9/10, 3/10 and 0.6309</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wC">
+          <canvas id="cC" role="img" aria-label="A Lévy staircase, the randomized devil's staircase"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cCt">Lévy staircase</strong> · <span id="cCn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">These are randomized cousins of Plate 83's devil's staircase: the largest one has the Cantor original's dimension, and the two small ones sit far above and far below it. The recipe is the caption's. Climb the ordinate in equal steps Δy; at each step the abscissa jumps ahead by a random amount U with Pr(U &gt; u) = u<sup>−D</sup>; then rescale so the staircase ends at (1, 1). The treads are the gaps of a Lévy dust, and the risers' abscissas are the dust itself — the staircase is the dust's mass M(R), just as the Cantor function is the Cantor bar's. For D = .3 the jumps are so wildly unequal that a few giants swallow nearly the whole width.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mC" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group">
+          <div class="slider">
+            <div class="label-row"><span class="label">Risers' dimension D</span><span class="value" id="DCv"></span></div>
+            <input type="range" id="DCs" min="0.1" max="0.98" step="0.005" value="0.6309" aria-label="Dimension of the risers' abscissas">
+          </div>
+          <div class="label-row"><span class="label">Ordinate step Δy</span></div>
+          <div class="steps" id="dyC" role="group" aria-label="Ordinate step"></div>
+          <div class="seed-row">
+            <button type="button" class="btn" id="seedC">New seed</button><span class="value" id="seedCv"></span>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate287">Show Plate 287 as printed</button>
+          <button type="button" class="btn" id="plate286t">Plate 286, D = .9</button>
+          <button type="button" class="btn" id="plate286b">Plate 286, D = .3</button>
+        </div>
+        <p class="readline" id="infoC" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Risers</dt><dd id="rCa">500</dd></div>
+          <div><dt>Widest tread</dt><dd id="rCb">—</dd></div>
+          <div><dt>Graph length</dt><dd>exactly 2</dd></div>
+          <div><dt>Risers' dimension</dt><dd id="rCd">0.6309</dd></div>
+        </dl>
+        <p class="note">Random plates, matched statistically with the caption's own parameters: Δy = .002 as printed, so 500 risers, with the seed exposed. Like the Cantor staircase, each one climbs its whole height on a set of measure zero — treads sum to the full width, risers to the full height, so the graph's length is exactly 2 and its dimension 1, however wild the treads. The staircase with D = 1/2 is a familiar object in disguise: the zeroset of Brownian motion (chapter 25) is precisely the Lévy dust with D = 1/2. Chapter 29 returns here from the other side: fill every dip of a Brown line-to-line function to its brim, and the record of the fill levels is such a staircase.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 31, pages 280–287 (Plates 285, 286 and 287). Every figure is computed from the rules in the captions; the plates are random, so they are matched statistically, with seeds exposed, never traced. Companion pages: <a href="cantor-dust.html">Cantor Dust</a> (Plates 80–83, the dust being randomized), <a href="levy-dusts.html">Spatial Lévy Dusts</a> (Plates 293–300, the same dust taken to the plane and to space) and <a href="disc-tremas.html">Disc and Sphere Tremas</a> (Plates 306–309, the round tremas the caption points to).</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>
