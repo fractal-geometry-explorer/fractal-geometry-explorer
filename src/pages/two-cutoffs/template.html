@@ -1,0 +1,113 @@
+<title>Between Two Cutoffs</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.r-koch { aspect-ratio: 16 / 10; }
+.mini svg.gen { height: 52px; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 4, "Variations and Disclaimers" · pages 20–24</p>
+    <h1><span class="plate-no">Chapter 4</span><span class="lozenge" aria-hidden="true"></span><span>Between Two Cutoffs</span></h1>
+    <p class="dek">Chapter 4 is the book's chapter about itself — its style, its erudition, and above all its pictures: "in the theory of fractals, <i>to see is to believe</i>." It prints no figures, but it makes one geometric claim worth drawing: every illustration of a fractal is finite, so it can only be faithful between a large <i>outer cutoff</i> and a small <i>inner cutoff</i> — and that is no defect, because Nature's own fractals come with the same two cutoffs. The figures below put the claim to the test on the triadic Koch curve of chapter 6.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#strokes"><b>1</b> Strokes in finite number</a>
+    <a href="#pixel"><b>2</b> Down to a pixel</a>
+  </nav>
+
+  <!-- ===================== 1: STROKES BETWEEN THE CUTOFFS ===================== -->
+  <section class="plate" id="strokes">
+    <div class="plate-head">
+      <p class="no">Pages 21–22 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Elementary strokes in large but finite number</h2>
+      <p class="dim" id="dimA">outer cutoff Ω = 1 (the initiator) · inner cutoff ε = 3⁻ᵏ · D = log 4 / log 3 ≈ 1.2618 between them</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-koch zoomable" id="wA">
+          <canvas id="cA" role="img" aria-label="The triadic Koch curve drawn with strokes no shorter than the inner cutoff, over a ledger of the scales the drawing and the screen each carry"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cAt">The drawing</strong> · <span id="cAn"></span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom · the ledger at the bottom: top bar, the scales the drawing carries (ε to Ω); bottom bar, the scales the screen shows (one pixel to the frame); blue, their overlap</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Illustrating geometry "involves a basic fallacy": a line is unbounded and infinitely thin, while any drawing is of finite extent, positive thickness and rough edge. A self-similar curve adds a worse infinity — detail at every scale. Mandelbrot's answer is to cut it off at both ends: draw only the strokes longer than an inner cutoff ε, with a pen of real width, inside a frame that is the outer cutoff, and "the typical fractal curve can be evoked satisfactorily by elementary strokes in large but finite number." The ledger under the figure keeps the books: the fractal exists for you only where the drawing's range and the screen's range overlap. Zoom far enough in and the overlap empties — beneath ε there is only Euclid.</p>
+        <div class="mini" aria-label="The generator of the triadic Koch curve: four strokes of one third">
+          <svg class="gen" viewBox="-0.04 -0.35 1.08 0.42" aria-hidden="true" id="miniA"></svg>
+          <div class="fx">N = 4, r = 1/3<br>D = log 4 / log 3 ≈ 1.2618</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Inner cutoff ε = 3⁻ᵏ (stage k)</span><span class="value" id="sAv">stage 4</span></div>
+          <div class="steps" id="sA" role="group" aria-label="Stage"></div>
+        </div>
+        <div class="group">
+          <div class="slider">
+            <div class="label-row"><span class="label">Thickness of the pen</span><span class="value" id="penAv">1.5 px</span></div>
+            <input type="range" id="penA" min="0.5" max="6" step="0.25" value="1.5" aria-label="Pen width in pixels">
+          </div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="pA1">Satisfy the eye (ε under a pixel)</button>
+          <button type="button" class="btn" id="pA2">A sketch (stage 3)</button>
+          <button type="button" class="btn" id="pA3">Euclid (stage 0)</button>
+        </div>
+        <p class="readline" id="infoA" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Strokes, 4ᵏ</dt><dd id="rAa">—</dd></div>
+          <div><dt>Shortest stroke, 3⁻ᵏ</dt><dd id="rAb">—</dd></div>
+          <div><dt>Drawn length, (4/3)ᵏ</dt><dd id="rAc">—</dd></div>
+          <div><dt>Scales spanned</dt><dd id="rAd">—</dd></div>
+        </dl>
+        <p class="note">Chapter 4 names no particular curve, so using chapter 6's triadic Koch curve here is this page's choice, and the scale ledger is this page's own bookkeeping device — the book states the two cutoffs in words and draws nothing. The chapter adds that cutting off "is not only quite acceptable but even eminently appropriate, because both cutoffs are either present or suspected in Nature": a real coastline stops being self-similar somewhere below the pebble and somewhere above the continent.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 2: TO SEE IS TO BELIEVE, DOWN TO A PIXEL ===================== -->
+  <section class="plate" id="pixel">
+    <div class="plate-head">
+      <p class="no">Pages 21–22 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>"To see is to believe" — down to a pixel</h2>
+      <p class="dim" id="dimB">stage k against stage k + 3 · ε shrinks 27-fold · difference counted pixel by pixel in the current view</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-koch zoomable" id="wB">
+          <canvas id="cB" role="img" aria-label="The Koch curve at stage k, at stage k plus three, and the pixel-by-pixel difference of the two"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cBt">Stage k</strong> · <span id="cBn"></span> · in the difference view: blue where only stage k inks the pixel, red where only stage k + 3 does, gray where both do</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">What exactly does the eye certify when it believes a picture? Only the scales it can resolve. Here the same curve is drawn twice — carried to stage k, then three stages deeper, by which point every stroke has split into 64 — and the difference view paints every pixel where the two pictures disagree. While the inner cutoff stays above a pixel the disagreement is everywhere. Once it falls below, the count collapses, and no deeper stage will ever change the picture again: the eye is satisfied, and that is precisely why a finite drawing is enough. Zoom in and the lost detail comes back into range.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mB" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage k</span><span class="value" id="sBv">stage 3</span></div>
+          <div class="steps" id="sB" role="group" aria-label="Stage"></div>
+        </div>
+        <p class="readline" id="infoB" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>ε at stage k</dt><dd id="rBa">—</dd></div>
+          <div><dt>ε at stage k + 3</dt><dd id="rBb">—</dd></div>
+          <div><dt>Pixels that differ</dt><dd id="rBc">—</dd></div>
+          <div><dt>One pixel equals</dt><dd id="rBd">—</dd></div>
+        </dl>
+        <p class="note">This is the same red-and-blue difference test this site uses to check its reconstructions against the book's scans, turned on the book's own argument. Pixels are compared at screen resolution in the current view, so the counts change as you pan and zoom; the thin disagreement that lingers even when ε is tiny is antialiasing along edges the two stages share. The chapter draws the practical conclusion for the whole book: since what the eye checks is a range of scales, graphics can arbitrate between model and reality — "when a chance mechanism agrees with the data from some analytic viewpoint but simulations of the model do not look at all 'real,' the analytic agreement should be suspect."</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 4, pages 20–24. The chapter prints no plates; both figures above are this page's own illustrations of its argument, built from chapter 6's Koch rules. Elsewhere on this site: the chapter's "endpapers and diverse patterns" born of faulty programming are the story of <a href="midpoint-displacement.html">Plate 246</a>; the Feller random walk that "looked like a mountain's profile" and seeded chapters 28 and 31 is drawn on <a href="brown-trails.html">Brown Trails</a>; the Koch curve itself has its own pages at <a href="koch-plates.html">Triadic Koch Island</a>.</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>
