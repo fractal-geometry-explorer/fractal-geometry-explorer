@@ -1,0 +1,839 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Linear Lévy Dusts</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>
+/* Layout: the interval-trema cascade, Plate 285's random streets and Plates 286–287's Lévy staircases, each a figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */
+:root {
+  --page: #e4e5e1;
+  --text: #1b1d1f;
+  --muted: #595e64;
+  --rule: #c4c7c1;
+  --surface: #f6f6f3;
+  --accent: #285895;
+  --f-display: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Newsreader", Georgia, "Times New Roman", serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* the figures are reproductions of printed plates, so their paper and inks stay the same in both themes */
+  --print-paper: #ecebe6;
+  --print-ink: #151515;
+  --print-rule: #c9c8c2;
+  --gain: rgba(47, 95, 158, 0.42);
+  --loss: rgba(186, 88, 44, 0.42);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --page: #111214; --text: #e5e5e1; --muted: #9a9fa6; --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --page: #111214; --text: #e5e5e1; --muted: #9a9fa6; --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--page); color: var(--text); font-family: var(--f-display); font-size: 14px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
+.wrap {
+  max-width: 1180px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 36px 64px;
+  display: grid; gap: 40px;
+}
+header.top { display: grid; gap: 10px; max-width: 820px; }
+.eyebrow { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+h1 {
+  margin: 0; display: flex; align-items: center; flex-wrap: wrap; gap: 0.18em 0.42em;
+  font-weight: 800; font-size: clamp(30px, 5.4vw, 54px); line-height: 1.02; letter-spacing: 0.01em; text-transform: uppercase; text-wrap: balance;
+}
+h1 .plate-no { font-weight: 600; text-transform: none; letter-spacing: 0; }
+.lozenge { display: inline-block; width: 0.42em; height: 0.42em; border: 0.075em solid currentColor; position: relative; top: -0.02em; }
+.lozenge::after { content: ""; position: absolute; inset: 0.1em; border: 0.05em solid currentColor; }
+.dek { margin: 0; font-family: var(--f-body); font-size: 19px; line-height: 1.45; max-width: 64ch; }
+
+nav.index {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+  padding: 10px max(16px, env(safe-area-inset-right, 0px)) 10px max(16px, env(safe-area-inset-left, 0px));
+  background: var(--page); border-bottom: 1px solid var(--rule);
+  display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none;
+}
+nav.index a {
+  flex: none; display: inline-flex; gap: 8px; align-items: baseline; padding: 6px 10px;
+  border: 1px solid var(--rule); background: var(--surface); color: var(--text); text-decoration: none; font-size: 13px; font-weight: 600;
+}
+nav.index a b { font-family: var(--f-mono); font-weight: 500; color: var(--accent); }
+nav.index a:hover { border-color: var(--text); }
+
+section.plate { display: grid; gap: 18px; scroll-margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--rule); }
+.plate-head { display: grid; gap: 4px; }
+.plate-head .no { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.plate-head h2 { margin: 0; font-size: clamp(22px, 3vw, 30px); font-weight: 800; line-height: 1.1; text-transform: uppercase; letter-spacing: 0.01em; text-wrap: balance; }
+.plate-head .dim { margin: 0; font-family: var(--f-mono); font-size: 13px; color: var(--muted); }
+.plate-body { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(280px, 1fr); gap: 32px; align-items: start; }
+@media (max-width: 899px) { .plate-body { grid-template-columns: minmax(0, 1fr); gap: 20px; } }
+figure.fig { margin: 0; display: grid; gap: 8px; min-width: 0; }
+.canvas-wrap { position: relative; width: 100%; max-width: 100%; background: var(--print-paper); outline: 1px solid var(--rule); overflow: hidden; }
+.canvas-wrap canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.r-sq { aspect-ratio: 1 / 1; }
+.r-lox { aspect-ratio: 5 / 4; }
+.zoomable { cursor: grab; touch-action: pan-y; }
+.zoomable.dragging { cursor: grabbing; }
+.view-tools { position: absolute; top: 10px; right: 10px; display: flex; gap: 6px; z-index: 2; }
+.view-tools button { min-width: 34px; height: 34px; padding: 0 10px; font: 600 15px/1 var(--f-display); color: var(--print-ink); background: #f7f7f3; border: 1px solid var(--print-rule); cursor: pointer; }
+figcaption { font-size: 13px; color: var(--muted); }
+figcaption strong { color: var(--text); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+
+.side { display: grid; gap: 18px; min-width: 0; align-content: start; }
+.side p.cap { margin: 0; font-family: var(--f-body); font-size: 17px; line-height: 1.55; max-width: 62ch; }
+.group { display: grid; gap: 8px; min-width: 0; }
+.label-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.label { font-size: 11.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.value { font-family: var(--f-mono); font-size: 12.5px; font-variant-numeric: tabular-nums; text-align: right; }
+.steps { display: flex; flex-wrap: wrap; gap: 6px; }
+.steps button {
+  min-width: 38px; height: 34px; padding: 0 10px; font: 600 13px/1 var(--f-mono); color: var(--text);
+  background: var(--surface); border: 1px solid var(--rule); cursor: pointer;
+}
+.steps.words button { font: 600 13px/1 var(--f-display); }
+.steps button[aria-pressed="true"] { background: var(--text); color: var(--page); border-color: var(--text); }
+.steps button:hover { border-color: var(--text); }
+.steps button:disabled { opacity: 0.35; cursor: default; border-color: var(--rule); }
+.btn-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.btn { padding: 8px 12px; font: 600 13px/1.2 var(--f-display); color: var(--text); background: var(--surface); border: 1px solid var(--rule); cursor: pointer; }
+.btn:hover { border-color: var(--text); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--page); }
+.check { display: flex; align-items: flex-start; gap: 8px; font-size: 13.5px; cursor: pointer; }
+.check input { accent-color: var(--accent); width: 16px; height: 16px; margin: 1px 0 0; flex: none; }
+.check:has(input:disabled) { opacity: 0.45; cursor: default; }
+.slider { display: grid; gap: 4px; }
+.slider input { width: 100%; accent-color: var(--accent); margin: 0; }
+.slider input:disabled { opacity: 0.4; }
+dl.read { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; padding-top: 14px; border-top: 1px solid var(--rule); }
+dl.read div { display: grid; gap: 2px; min-width: 0; }
+dl.read dt { font-size: 10.5px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); }
+dl.read dd { margin: 0; font-family: var(--f-mono); font-size: 16px; overflow-wrap: anywhere; }
+dl.read dd small { font-size: 11.5px; color: var(--muted); }
+.note { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.mini { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; padding: 10px 12px; background: var(--print-paper); border: 1px solid var(--print-rule); color: var(--print-ink); }
+.mini svg { height: 64px; width: auto; max-width: 100%; }
+.mini .fx { font-family: var(--f-mono); font-size: 12px; line-height: 1.6; color: var(--print-ink); }
+.key { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--muted); }
+.key span { display: inline-flex; align-items: center; gap: 6px; }
+.key i { width: 14px; height: 10px; display: inline-block; border: 1px solid var(--print-rule); }
+.readline { min-height: 2.9em; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.readline b { color: var(--text); font-weight: 700; }
+
+.sub { display: grid; gap: 14px; padding-top: 22px; border-top: 1px dashed var(--rule); scroll-margin-top: 64px; }
+.sub h3 { margin: 0; font-size: 15px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
+.source { font-family: var(--f-body); font-size: 15px; color: var(--muted); margin: 0; max-width: 84ch; }
+.source i { color: var(--text); }
+.source a { color: var(--accent); }
+button:focus-visible, input:focus-visible, a:focus-visible, canvas:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.r-streets { aspect-ratio: 1.366 / 1.12; }
+.r-rows { aspect-ratio: 10 / 7; }
+.seed-row { display: flex; align-items: center; gap: 10px; }
+.seed-row .value { min-width: 64px; }
+</style>
+<style>
+body { margin: 0; }
+/* The hidden attribute must beat the pages' own display rules (.slider, .check, ...). The artifact
+   wrapper's stylesheet used to provide this; self-hosted pages carry it themselves. */
+[hidden] { display: none !important; }
+nav.shell { font-family: var(--f-display); font-size: 12.5px; font-weight: 600; background: var(--page);
+  border-bottom: 1px solid var(--rule); display: flex; align-items: center; gap: 6px 18px;
+  padding: 9px max(16px, env(safe-area-inset-right, 0px)) 9px max(16px, env(safe-area-inset-left, 0px)); }
+nav.shell a { color: var(--text); text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+nav.shell a:hover { color: var(--accent); }
+nav.shell .home { letter-spacing: 0.07em; text-transform: uppercase; flex: none; }
+nav.shell .gap { flex: 1; }
+nav.shell .pn { color: var(--muted); font-weight: 500; }
+nav.shell .pn b { color: var(--text); font-weight: 600; }
+nav.shell a:hover .pn, nav.shell a:hover .pn b { color: var(--accent); }
+</style>
+</head>
+<body>
+<nav class="shell" aria-label="Site"><a class="home" href="index.html">Fractal Geometry Explorer</a><span class="gap"></span><a rel="prev" href="isothermal-surfaces.html"><span class="pn">&#8592; <b>Chapter 30</b></span></a><a rel="next" href="levy-dusts.html"><span class="pn"><b>Plates 293–300</b> &#8594;</span></a></nav>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 31, "Interval Tremas; Linear Lévy Dusts" · pages 280–287</p>
+    <h1><span class="plate-no">Plates 285–287</span><span class="lozenge" aria-hidden="true"></span><span>Linear Lévy Dusts</span></h1>
+    <p class="dek">The Cantor dust of chapter 8 was a first model of noise bursts on a line, but it is far too regular: its origin is a privileged point, and its ratios are powers of 1/3. Chapter 31 randomizes it. Cut random intervals — <i>tremas</i> — out of the line, the number longer than u growing as 1/u, and what survives is Paul Lévy's dust: the one self-similar dust whose past and future are independent, seen from any of its points. The plates picture it sideways — streets cut at random through a city block, and devil's staircases piling the dust's mass. Every figure is computed from the rules in the captions; change the seed for another sample from the same law.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#tremas"><b>§</b> Interval tremas</a>
+    <a href="#streets"><b>285</b> Random streets</a>
+    <a href="#staircases"><b>286–7</b> Lévy staircases</a>
+  </nav>
+
+  <!-- ===================== CONCEPT: INTERVAL TREMAS ===================== -->
+  <section class="plate" id="tremas">
+    <div class="plate-head">
+      <p class="no">Chapter 31, pages 280–284 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Interval tremas and the Lévy dust</h2>
+      <p class="dim" id="dimA">tremas longer than u, per unit length: (1 − D<sub>t</sub>)/u · survivors: a Lévy dust of D = max(D<sub>t</sub>, 0)</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-rows zoomable" id="wA">
+          <canvas id="cA" role="img" aria-label="Random interval tremas cut from a line, at falling thresholds"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cAt">Falling threshold</strong> · <span id="cAn"></span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Throw open intervals at the line, independently, centers everywhere equally likely; the p-th longest trema in view has length proportional to 1/p. Tremas overlap "with gusto", so the <i>gaps</i> they merge into are longer than the tremas themselves. Each row keeps only the tremas above a threshold ε, and ε falls by 3 from row to row: the surviving stretches shorten, split and sometimes vanish — bursts within bursts, with no grid and no privileged origin. When D<sub>t</sub> &gt; 0 the survivors have a positive chance of never dying out, and the limit dust has dimension D = D<sub>t</sub>. When D<sub>t</sub> ≤ 0 the line is almost surely covered whole.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mA" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group">
+          <div class="slider">
+            <div class="label-row"><span class="label">Trema exponent D<sub>t</sub></span><span class="value" id="DAv"></span></div>
+            <input type="range" id="DAs" min="-0.4" max="0.95" step="0.005" value="0.6309" aria-label="Trema exponent">
+          </div>
+          <div class="seed-row">
+            <button type="button" class="btn" id="seedA">New seed</button><span class="value" id="seedAv"></span>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="presetA">The triadic D, randomized</button>
+          <button type="button" class="btn" id="presetA2">Brown zeroset, D = 1/2</button>
+        </div>
+        <p class="readline" id="infoA" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Dimension D</dt><dd id="rAa">0.6309</dd></div>
+          <div><dt>Tremas in the last row</dt><dd id="rAb">—</dd></div>
+          <div><dt>Length surviving it</dt><dd id="rAc">—</dd></div>
+          <div><dt>Longest survivor</dt><dd id="rAd">—</dd></div>
+        </dl>
+        <p class="note">The book prints no figure for this construction — these rows are this page's own illustration of the text, drawn the way Plate 80 draws the Cantor cascade. The trema law is the text's: the number of tremas centered in a stretch Δt with length above u has expectation (1 − D<sub>t</sub>)Δt/u and a Poisson distribution; here the p-th longest has length exactly κ/p with the stated expectation, and only the centers are random. Tremas centered outside the window still reach into it, so the window is cut from a longer sampled line. The side-by-side view puts a Cantor dust and a Lévy dust of the same dimension together: equal D, but the Lévy dust's gaps fall where chance puts them.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 285: RANDOM STREETS ===================== -->
+  <section class="plate" id="streets">
+    <div class="plate-head">
+      <p class="no">Plate 285 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Random pattern of streets</h2>
+      <p class="dim" id="dimB">straight strips, isotropic, widths with Nr(W &gt; w) ∝ 1/w · blocks of houses: D &lt; 2 · any line cuts them in a Lévy dust of D − 1</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-streets zoomable" id="wB">
+          <canvas id="cB" role="img" aria-label="Black street-like strips cut at random through a white plane"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cBt">The streets</strong> · <span id="cBn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">A dust is "thin and spare to the point of being invisible", so the plate shows one indirectly, the way the triadic Koch curve makes the Cantor dust visible on its base line. Black street-like strips fall across the plane at random — directions isotropic, widths hyperbolic, soon too thin to draw. The white remainder, the "blocks of houses", has zero area and dimension D below 2. As long as D &gt; 1, an arbitrary straight line meets the blocks in a linear Lévy dust of dimension D − 1; for D &lt; 1 the cut is almost surely empty.</p>
+        <div class="group">
+          <div class="slider">
+            <div class="label-row"><span class="label">Blocks' dimension D</span><span class="value" id="DBv"></span></div>
+            <input type="range" id="DBs" min="1.5" max="1.99" step="0.005" value="1.94" aria-label="Dimension of the remainder"></div>
+          <div class="seed-row">
+            <button type="button" class="btn" id="seedB">New seed</button><span class="value" id="seedBv"></span>
+          </div>
+          <label class="check" for="cutB"><input type="checkbox" id="cutB"> Cut the blocks with a line (drag the slider)</label>
+          <div class="slider" id="cutBwrap" hidden>
+            <div class="label-row"><span class="label">Line height</span><span class="value" id="cutBv"></span></div>
+            <input type="range" id="cutBs" min="0.05" max="0.95" step="0.005" value="0.5" aria-label="Height of the cutting line">
+          </div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate285">Show Plate 285 as printed</button>
+        </div>
+        <p class="readline" id="infoB" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Streets drawn</dt><dd id="rBa">—</dd></div>
+          <div><dt>Widest street</dt><dd id="rBb">—</dd></div>
+          <div><dt>White left, expected</dt><dd id="rBc">—</dd></div>
+          <div><dt>Dust on the line: D − 1</dt><dd id="rBd">—</dd></div>
+        </dl>
+        <p class="note">A random plate: the figure matches the book statistically, never stroke for stroke, and the seed is exposed. The caption gives no numbers, so the street law is the chapter's trema law carried to the plane — the p-th widest street has width κ/p, the strip analogue of the disc areas of Plates 306–309 — and D ≈ 1.94 with the thinnest streets at the scan's own print grain reproduces the printed plate's ink share (about 27% black; measured on the scan at 600 dpi). Streets thinner than half a screen pixel are left out; zoom in and more appear, down to a depth cap. The caption notes the construction "could not be carried far enough" for the blocks' clustering to show — true here as well, and the line-cut view shows why: the cut dust's dimension D − 1 ≈ 0.94 is close to a full line's.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATES 286–287: LÉVY STAIRCASES ===================== -->
+  <section class="plate" id="staircases">
+    <div class="plate-head">
+      <p class="no">Plates 286 and 287 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Paul Lévy's devilish staircases</h2>
+      <p class="dim">graph dimension 1 · the risers' abscissas form Lévy dusts of D = 9/10, 3/10 and 0.6309</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wC">
+          <canvas id="cC" role="img" aria-label="A Lévy staircase, the randomized devil's staircase"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cCt">Lévy staircase</strong> · <span id="cCn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">These are randomized cousins of Plate 83's devil's staircase: the largest one has the Cantor original's dimension, and the two small ones sit far above and far below it. The recipe is the caption's. Climb the ordinate in equal steps Δy; at each step the abscissa jumps ahead by a random amount U with Pr(U &gt; u) = u<sup>−D</sup>; then rescale so the staircase ends at (1, 1). The treads are the gaps of a Lévy dust, and the risers' abscissas are the dust itself — the staircase is the dust's mass M(R), just as the Cantor function is the Cantor bar's. For D = .3 the jumps are so wildly unequal that a few giants swallow nearly the whole width.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mC" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group">
+          <div class="slider">
+            <div class="label-row"><span class="label">Risers' dimension D</span><span class="value" id="DCv"></span></div>
+            <input type="range" id="DCs" min="0.1" max="0.98" step="0.005" value="0.6309" aria-label="Dimension of the risers' abscissas">
+          </div>
+          <div class="label-row"><span class="label">Ordinate step Δy</span></div>
+          <div class="steps" id="dyC" role="group" aria-label="Ordinate step"></div>
+          <div class="seed-row">
+            <button type="button" class="btn" id="seedC">New seed</button><span class="value" id="seedCv"></span>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate287">Show Plate 287 as printed</button>
+          <button type="button" class="btn" id="plate286t">Plate 286, D = .9</button>
+          <button type="button" class="btn" id="plate286b">Plate 286, D = .3</button>
+        </div>
+        <p class="readline" id="infoC" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Risers</dt><dd id="rCa">500</dd></div>
+          <div><dt>Widest tread</dt><dd id="rCb">—</dd></div>
+          <div><dt>Graph length</dt><dd>exactly 2</dd></div>
+          <div><dt>Risers' dimension</dt><dd id="rCd">0.6309</dd></div>
+        </dl>
+        <p class="note">Random plates, matched statistically with the caption's own parameters: Δy = .002 as printed, so 500 risers, with the seed exposed. Like the Cantor staircase, each one climbs its whole height on a set of measure zero — treads sum to the full width, risers to the full height, so the graph's length is exactly 2 and its dimension 1, however wild the treads. The staircase with D = 1/2 is a familiar object in disguise: the zeroset of Brownian motion (chapter 25) is precisely the Lévy dust with D = 1/2. Chapter 29 returns here from the other side: fill every dip of a Brown line-to-line function to its brim, and the record of the fill levels is such a staircase.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 31, pages 280–287 (Plates 285, 286 and 287). Every figure is computed from the rules in the captions; the plates are random, so they are matched statistically, with seeds exposed, never traced. Companion pages: <a href="cantor-dust.html">Cantor Dust</a> (Plates 80–83, the dust being randomized), <a href="levy-dusts.html">Spatial Lévy Dusts</a> (Plates 293–300, the same dust taken to the plane and to space) and <a href="disc-tremas.html">Disc and Sphere Tremas</a> (Plates 306–309, the round tremas the caption points to).</p>
+</div>
+
+<script>
+// Shared drawing library: style constants, the zoomable canvas (snapshot while panning), chunked
+// paths, controls and small SVG figures. Loaded before each page's own scripts; pages may extend
+// PRINT with their own inks (PRINT.red = ..., PRINT.light = ...).
+const $ = (id) => document.getElementById(id);
+const fmt = (n) => n.toLocaleString('en-US');
+const PRINT = { paper: '#ecebe6', ink: '#151515', rule: '#c9c8c2', muted: '#66665f', accent: '#2f5f9e', red: '#c2452d', faint: '#bdbbb3', gray: '#8f8e88' };
+const RAMP = [[233, 185, 73], [217, 113, 59], [184, 66, 79], [125, 58, 120], [63, 79, 151], [43, 122, 138]];
+const ramp = (t, a = 1) => {
+  const x = Math.max(0, Math.min(1, t)) * (RAMP.length - 1), i = Math.min(RAMP.length - 2, Math.floor(x)), f = x - i;
+  const c = RAMP[i].map((v, k) => Math.round(v + (RAMP[i + 1][k] - v) * f));
+  return `rgba(${c[0]},${c[1]},${c[2]},${a})`;
+};
+const CAT = ['#151515', '#9a988f', '#2f5f9e', '#c2452d', '#3f8f6c', '#b58a2a', '#6b4e9b', '#5f8fae'];
+
+// ---------- shared plumbing ----------
+function figure(canvas, draw) {
+  const wrap = canvas.parentElement;
+  const f = { canvas, ctx: canvas.getContext('2d'), w: 1, h: 1, dpr: 1, draw };
+  const resize = () => {
+    f.dpr = Math.min(2, window.devicePixelRatio || 1);
+    f.w = wrap.clientWidth || 1; f.h = wrap.clientHeight || 1;
+    canvas.width = Math.round(f.w * f.dpr); canvas.height = Math.round(f.h * f.dpr);
+    f.draw();
+  };
+  new ResizeObserver(resize).observe(wrap);
+  return f;
+}
+function fitBox(f, bb, pad = 0.04) {
+  const w = Math.max(1e-9, bb.x1 - bb.x0), h = Math.max(1e-9, bb.y1 - bb.y0), s = Math.min(f.w / (w * (1 + 2 * pad)), f.h / (h * (1 + 2 * pad)));
+  return { s, ox: f.w / 2 - ((bb.x0 + bb.x1) / 2) * s, oy: f.h / 2 + ((bb.y0 + bb.y1) / 2) * s };
+}
+const toWorld = (f, v) => f.ctx.setTransform(f.dpr * v.s, 0, 0, -f.dpr * v.s, f.dpr * v.ox, f.dpr * v.oy);
+const toScreen = (f) => f.ctx.setTransform(f.dpr, 0, 0, f.dpr, 0, 0);
+function paper(f, color) { f.ctx.setTransform(1, 0, 0, 1, 0, 0); f.ctx.fillStyle = color; f.ctx.fillRect(0, 0, f.canvas.width, f.canvas.height); }
+function polyPath(P, closed = true, upto) {
+  const p = new Path2D(), m = upto === undefined ? P.length / 2 : upto;
+  p.moveTo(P[0], P[1]);
+  for (let i = 1; i < m; i++) p.lineTo(P[2 * i], P[2 * i + 1]);
+  if (closed) p.closePath();
+  return p;
+}
+function bbox(P, bb = { x0: Infinity, x1: -Infinity, y0: Infinity, y1: -Infinity }) {
+  for (let i = 0; i < P.length; i += 2) { bb.x0 = Math.min(bb.x0, P[i]); bb.x1 = Math.max(bb.x1, P[i]); bb.y0 = Math.min(bb.y0, P[i + 1]); bb.y1 = Math.max(bb.y1, P[i + 1]); }
+  return bb;
+}
+function stepButtons(el, values, text, aria, onPick) {
+  const bs = values.map((v) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.textContent = text(v); b.setAttribute('aria-label', aria(v));
+    b.addEventListener('click', () => onPick(v));
+    el.append(b);
+    return b;
+  });
+  const mark = (cur) => bs.forEach((b, i) => b.setAttribute('aria-pressed', String(values[i] === cur)));
+  mark.buttons = bs;
+  return mark;
+}
+// pan and zoom: a quick rescaled snapshot while moving, a full redraw once it settles
+function zoomable(wrapId, canvasId, fitOf, render, opts = {}) {
+  const maxZoom = opts.maxZoom || 400;
+  const wrap = $(wrapId), z = { view: null, user: false, snapView: null, raf: 0, full: 0 };
+  const snap = document.createElement('canvas');
+  const f = figure($(canvasId), () => draw());
+  function touch() { wrap.style.touchAction = z.view && z.view.s > z.view.fit * 1.02 ? 'none' : 'pan-y'; }
+  function draw() {
+    if (!z.view || !z.user) { z.view = fitOf(f); z.view.fit = z.view.s; z.user = false; touch(); }
+    render(f, z.view);
+    snap.width = f.canvas.width; snap.height = f.canvas.height; snap.getContext('2d').drawImage(f.canvas, 0, 0);
+    z.snapView = { s: z.view.s, ox: z.view.ox, oy: z.view.oy };
+  }
+  function quick() {
+    const v = z.view, k = v.s / z.snapView.s, c = f.ctx;
+    c.setTransform(1, 0, 0, 1, 0, 0); c.fillStyle = z.ground || PRINT.paper; c.fillRect(0, 0, f.canvas.width, f.canvas.height);
+    c.drawImage(snap, (v.ox - z.snapView.ox * k) * f.dpr, (v.oy - z.snapView.oy * k) * f.dpr, snap.width * k, snap.height * k);
+  }
+  function schedule() { if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; draw(); }); }
+  function moved() {
+    if (!z.snapView) { schedule(); return; }
+    if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; quick(); });
+    clearTimeout(z.full); z.full = setTimeout(schedule, 160);
+  }
+  function zoomAt(px, py, k) {
+    const v = z.view, ns = Math.min(v.fit * maxZoom, Math.max(v.fit * 0.8, v.s * k)), wx = (px - v.ox) / v.s, wy = (v.oy - py) / v.s;
+    v.s = ns; v.ox = px - wx * ns; v.oy = py + wy * ns; z.user = true; touch(); moved();
+  }
+  function pan(dx, dy) { z.view.ox += dx; z.view.oy += dy; z.user = true; moved(); }
+  wrap.querySelector('[data-z="in"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1.6));
+  wrap.querySelector('[data-z="out"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1 / 1.6));
+  wrap.querySelector('[data-z="fit"]').addEventListener('click', () => { z.user = false; schedule(); });
+  const pts = new Map();
+  let pinch = null, down = null;
+  const local = (e) => { const r = wrap.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+  wrap.addEventListener('pointerdown', (e) => {
+    if (e.target.closest('.view-tools')) return;
+    pts.set(e.pointerId, local(e));
+    down = pts.size === 1 ? { p: local(e), t: performance.now(), moved: 0 } : null;
+    try { wrap.setPointerCapture(e.pointerId); } catch (_) {}
+    if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), m: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2] }; }
+    wrap.classList.add('dragging');
+  });
+  wrap.addEventListener('pointermove', (e) => {
+    if (!pts.has(e.pointerId)) return;
+    const prev = pts.get(e.pointerId), cur = local(e);
+    pts.set(e.pointerId, cur);
+    if (down) down.moved = Math.max(down.moved, Math.hypot(cur[0] - down.p[0], cur[1] - down.p[1]));
+    if (pts.size === 2 && pinch) {
+      const [a, b] = [...pts.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]), m = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+      pan(m[0] - pinch.m[0], m[1] - pinch.m[1]);
+      if (pinch.d > 0) zoomAt(m[0], m[1], d / pinch.d);
+      pinch = { d, m };
+    } else if (pts.size === 1 && (e.pointerType !== 'touch' || z.view.s > z.view.fit * 1.02)) pan(cur[0] - prev[0], cur[1] - prev[1]);
+  });
+  const end = (e) => {
+    if (down && pts.size === 1 && down.moved < 5 && opts.onTap) { const [x, y] = local(e), v = z.view; opts.onTap((x - v.ox) / v.s, (v.oy - y) / v.s); }
+    down = null;
+    pts.delete(e.pointerId); if (pts.size < 2) pinch = null; if (!pts.size) wrap.classList.remove('dragging');
+  };
+  wrap.addEventListener('pointerup', end); wrap.addEventListener('pointercancel', (e) => { down = null; end(e); });
+  wrap.addEventListener('wheel', (e) => { if (!(e.ctrlKey || e.metaKey)) return; e.preventDefault(); const [x, y] = local(e); zoomAt(x, y, Math.exp(-e.deltaY * 0.0045)); }, { passive: false });
+  wrap.addEventListener('dblclick', (e) => { if (e.target.closest('.view-tools')) return; const [x, y] = local(e); zoomAt(x, y, e.shiftKey ? 0.5 : 2); });
+  return { f, z, schedule, refit: () => { z.user = false; schedule(); } };
+}
+// chunked paths: many small paths fill far faster than one path with a hundred thousand pieces
+function chunked(count, add, size = 512) {
+  const out = [];
+  let p = null;
+  for (let i = 0; i < count; i++) { if (i % size === 0) { p = new Path2D(); out.push(p); } add(p, i); }
+  return out;
+}
+// fill and outline in the same colour, so that tiles which only meet along an edge show no hairline seams
+function solid(c, paths, color, lw) {
+  c.fillStyle = color; c.strokeStyle = color; c.lineWidth = lw; c.lineJoin = 'miter';
+  for (const p of paths) { c.fill(p); c.stroke(p); }
+}
+const dot = (c, v, x, y, r = 4, color = PRINT.red) => { c.beginPath(); c.arc(v.ox + x * v.s, v.oy - y * v.s, r, 0, Math.PI * 2); c.fillStyle = color; c.fill(); c.strokeStyle = PRINT.paper; c.lineWidth = 1.5; c.stroke(); };
+
+// a polyline (Float64Array or [[x,y],...]) as SVG points with y flipped
+const svgPts = (P) => (P instanceof Float64Array ? Array.from({ length: P.length / 2 }, (_, i) => [P[2 * i], P[2 * i + 1]]) : P).map(([x, y]) => `${x.toFixed(4)},${(-y).toFixed(4)}`).join(' ');
+function miniCurve(id, P, dots = true) {
+  const pts = P instanceof Float64Array ? Array.from({ length: P.length / 2 }, (_, i) => [P[2 * i], P[2 * i + 1]]) : P;
+  $(id).innerHTML = `<line x1="0" y1="0" x2="1" y2="0" stroke="#8a8a84" stroke-width="0.008" stroke-dasharray="0.025 0.02"/>` +
+    `<polyline points="${svgPts(pts)}" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linejoin="round"/>` +
+    (dots ? `<g fill="currentColor">${pts.map(([x, y], i) => `<circle cx="${x.toFixed(4)}" cy="${(-y).toFixed(4)}" r="${i === 0 || i === pts.length - 1 ? 0.03 : 0.018}"/>`).join('')}</g>` : '');
+}
+function miniTree(id, links, dx = 0) {
+  const ends = new Set(), mid = new Set(), k = (x, y) => `${x.toFixed(4)},${y.toFixed(4)}`;
+  let s = '';
+  for (const [px, py, qx, qy] of links) {
+    s += `<line x1="${(px + dx).toFixed(4)}" y1="${(-py).toFixed(4)}" x2="${(qx + dx).toFixed(4)}" y2="${(-qy).toFixed(4)}" stroke="currentColor" stroke-width="0.02" stroke-linecap="round"/>`;
+    mid.add(k(px + dx, py)); mid.add(k(qx + dx, qy));
+  }
+  s += `<g fill="currentColor">${[...mid].map((p) => { const [x, y] = p.split(',').map(Number); const big = (Math.abs(x - dx) < 1e-6 || Math.abs(x - dx - 1) < 1e-6) && Math.abs(y) < 1e-6; return `<circle cx="${x}" cy="${-y}" r="${big ? 0.03 : 0.018}"/>`; }).join('')}</g>`;
+  return s;
+}
+// canvas transform for a similarity map f = [ar, ai, br, bi, m] composed with the view
+function setMap(f, c, v, fig) {
+  const [ar, ai, br, bi, m] = f, k = fig.dpr * v.s;
+  if (m) c.setTransform(k * ar, -k * ai, k * ai, k * ar, fig.dpr * (v.ox + v.s * br), fig.dpr * (v.oy - v.s * bi));
+  else c.setTransform(k * ar, -k * ai, -k * ai, -k * ar, fig.dpr * (v.ox + v.s * br), fig.dpr * (v.oy - v.s * bi));
+}
+const segPath = (segs, pick) => { const p = new Path2D(); for (const s of segs) if (!pick || pick(s)) { p.moveTo(s[0], s[1]); p.lineTo(s[2], s[3]); } return p; };
+// Plate 64's chevrons, measured from the plate: each interval a→b becomes a thin quadrilateral
+// pointing toward F, the corner the next stage would add (see DECISIONS.md)
+const CHEV_OUT = 0.43, CHEV_IN = 0.235;
+function chevronPaths(P, F, m) {
+  return chunked(m, (p, i) => {
+    const ax = P[2 * i], ay = P[2 * i + 1], bx = P[2 * i + 2], by = P[2 * i + 3], mx = (ax + bx) / 2, my = (ay + by) / 2;
+    const vx = F[2 * i] - mx, vy = F[2 * i + 1] - my;
+    p.moveTo(ax, ay); p.lineTo(mx + CHEV_OUT * vx, my + CHEV_OUT * vy); p.lineTo(bx, by); p.lineTo(mx + CHEV_IN * vx, my + CHEV_IN * vy); p.closePath();
+  });
+}
+
+// Chapter 31 geometry: interval tremas on the line, the street-strip tremas of Plate 285, and
+// the Lévy staircases of Plates 286–287. All three follow one rule, the chapter's Poisson trema
+// law: the trema of rank p (the p-th largest) has covering size κ/p, κ = (E − D)·(measure of
+// the sampled region) — length of an interval on the line (E = 1), width of a strip in the
+// plane (E = 2; a strip covers a point when the line's offset falls within its width). Every
+// random figure is seeded so it can be reproduced; same rng and pareto as the chapter 32 page.
+
+// ---- seeded randomness ----
+function rng(seed) {
+  let a = seed >>> 0;
+  const u = () => { a |= 0; a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  return u;
+}
+// a hyperbolic (Pareto) jump: Pr(U > u) = u^(−D) for u ≥ 1, the caption's law for Plates 286–287
+const pareto = (u, D) => Math.pow(1 - u(), -1 / D);
+// one uniform [0,1) per (stream, rank), as on the disc-tremas page: trema p's position never
+// depends on D or on the cutoff, so varying D keeps the same sample
+function hash01(stream, p) {
+  let h = (stream ^ Math.imul(p, 0x9e3779b9)) >>> 0;
+  h ^= h >>> 16; h = Math.imul(h, 0x21f0aaad);
+  h ^= h >>> 15; h = Math.imul(h, 0x735a2d97);
+  h ^= h >>> 15;
+  return (h >>> 0) / 4294967296;
+}
+const EULER = 0.5772156649015329;
+
+// ---- interval tremas (pages 282–284) ----
+// Tremas centered in a stretch of length Δt, with length above u, number (1 − Dt)·Δt/u in
+// expectation: trema p is an interval of length κ/p with κ = (1 − Dt)·T, centers uniform over
+// the window [0, 1] grown by a margin m on both sides (tremas centered off the window still
+// bite into it). The margin should be half the largest trema, which itself grows with T;
+// iterate, capping at 1.5 so Dt near 0 stays finite.
+function lineLayout(Dt) {
+  let m = 0.1;
+  for (let i = 0; i < 60; i++) m = Math.min(1.5, ((1 - Dt) * (1 + 2 * m)) / 2);
+  const T = 1 + 2 * m;
+  return { m, T, kap: (1 - Dt) * T };
+}
+// survivors of [0, 1] under all tremas of rank 1…P: merged trema intervals, complemented.
+// Returns a flat array [a0, b0, a1, b1, …] of the surviving intervals, clipped to [0, 1].
+function lineSurvivors(Dt, P, seed, L = lineLayout(Dt)) {
+  const s = 2 * seed + 1, cuts = [];
+  for (let p = 1; p <= P; p++) {
+    const len = L.kap / p, c = hash01(s, p) * L.T - L.m;
+    const a = c - len / 2, b = c + len / 2;
+    if (b > 0 && a < 1) cuts.push([Math.max(0, a), Math.min(1, b)]);
+  }
+  cuts.sort((u, v) => u[0] - v[0]);
+  const out = [];
+  let at = 0;
+  for (const [a, b] of cuts) {
+    if (a > at) out.push(at, a);
+    at = Math.max(at, b);
+  }
+  if (at < 1) out.push(at, 1);
+  return out;
+}
+// ink coverage of a set of intervals on a row of pixels, with the sub-pixel deposit rule from
+// DECISIONS.md: a surviving piece shorter than a pixel deposits total mass (ℓ/px)^D, the one
+// weight that keeps the deposit steady as the threshold falls
+function coverIntervals(buf, ints, wx0, px, D) {
+  for (let i = 0; i < ints.length; i += 2) {
+    const a = ints[i], b = ints[i + 1], len = b - a;
+    if (b <= wx0 || a >= wx0 + buf.length * px) continue;
+    const w = len < px && D > 0 ? Math.pow(len / px, D) : 1;
+    const i0 = Math.max(0, Math.floor((a - wx0) / px)), i1 = Math.min(buf.length - 1, Math.floor((b - wx0) / px));
+    for (let j = i0; j <= i1; j++) {
+      const lo = Math.max(a, wx0 + j * px), hi = Math.min(b, wx0 + (j + 1) * px);
+      if (hi > lo) buf[j] += ((hi - lo) / px) * w;
+    }
+  }
+}
+// a Cantor dust with the same dimension, for the side-by-side: N = 2 pieces of r = 2^(−1/D),
+// evenly spaced as on the cantor-dust page; returns surviving intervals at stage n
+function cantorIntervals(D, n) {
+  const r = Math.pow(2, -1 / D);
+  let starts = [0], len = 1;
+  for (let k = 0; k < n; k++) {
+    const out = new Float64Array(2 * starts.length);
+    let j = 0;
+    for (const a of starts) { out[j++] = a; out[j++] = a + (1 - r) * len; }
+    starts = out; len *= r;
+  }
+  const ints = new Float64Array(2 * starts.length);
+  for (let i = 0; i < starts.length; i++) { ints[2 * i] = starts[i]; ints[2 * i + 1] = starts[i] + len; }
+  return ints;
+}
+
+// ---- Plate 285: street-strip tremas ----
+// The window is the printed plate's shape, measured from the scan. Street p is an infinite
+// strip of width κ/p, κ = (2 − D)·(range of line offsets); its direction is isotropic and its
+// offset uniform, so every point of the window sees the same law. The offset range must cover
+// every line that meets the window, i.e. half the diagonal plus half the widest street; iterate.
+const W285 = 1.366;
+function streetLayout(D) {
+  const diag = Math.hypot(W285, 1);
+  let kap = 0.1;
+  for (let i = 0; i < 60; i++) kap = Math.min(1.5, (2 - D) * (diag + kap));
+  return { kap, range: diag + kap };
+}
+// the streets of rank 1…P: [cos θ, sin θ, offset t, width w] per street, offsets measured from
+// the window's center along the strip's normal
+function streets(D, P, seed, L = streetLayout(D)) {
+  const s1 = 2 * seed + 1, s2 = 2 * seed + 2, out = new Float64Array(4 * P);
+  for (let p = 1; p <= P; p++) {
+    const th = Math.PI * hash01(s1, p), o = 4 * (p - 1);
+    out[o] = Math.cos(th); out[o + 1] = Math.sin(th);
+    out[o + 2] = (hash01(s2, p) - 0.5) * L.range;
+    out[o + 3] = L.kap / p;
+  }
+  return out;
+}
+// the streets' cuts through the horizontal line y = y0 (offsets re-centered on the window
+// center): surviving intervals of [0, W285] — the "blocks of houses" seen along one line
+function streetSection(S, y0) {
+  const cx = W285 / 2, cy = 0.5, cuts = [];
+  for (let o = 0; o < S.length; o += 4) {
+    const nx = S[o], ny = S[o + 1], t = S[o + 2], w = S[o + 3];
+    const c = t + cx * nx + cy * ny;                  // line offset in absolute coordinates
+    if (Math.abs(nx) < 1e-9) {
+      if (Math.abs(y0 * ny - c) <= w / 2) return [];  // a horizontal street swallows the line
+      continue;
+    }
+    const xa = (c - w / 2 - y0 * ny) / nx, xb = (c + w / 2 - y0 * ny) / nx;
+    const a = Math.min(xa, xb), b = Math.max(xa, xb);
+    if (b > 0 && a < W285) cuts.push([Math.max(0, a), Math.min(W285, b)]);
+  }
+  cuts.sort((u, v) => u[0] - v[0]);
+  const out = [];
+  let at = 0;
+  for (const [a, b] of cuts) {
+    if (a > at) out.push(at, a);
+    at = Math.max(at, b);
+  }
+  if (at < W285) out.push(at, W285);
+  return out;
+}
+// the share of the window the streets are expected to leave white after P ranks:
+// exp(−Σ w_p/range) = exp(−(2 − D)·H_P)
+const whiteShare = (D, P) => Math.exp(-(2 - D) * (Math.log(P) + EULER));
+
+// ---- Plates 286–287: Lévy staircases ----
+// The caption's recipe: each time the ordinate climbs by Δy, the abscissa jumps by U with
+// Pr(U > u) = u^(−D), u ≥ 1; then rescale so the staircase ends at (1, 1). Returns the jump
+// abscissas X[0…steps] with X[steps] = 1, plus the largest tread and its position.
+function levyStair(D, steps, seed) {
+  const u = rng(seed), X = new Float64Array(steps + 1);
+  for (let i = 1; i <= steps; i++) X[i] = X[i - 1] + pareto(u, D);
+  const T = X[steps];
+  let big = 0, bigAt = 0;
+  for (let i = 0; i <= steps; i++) X[i] /= T;
+  for (let i = 1; i <= steps; i++) {
+    const tread = X[i] - X[i - 1];
+    if (tread > big) { big = tread; bigAt = i; }
+  }
+  return { X, big, bigAt };
+}
+
+(() => {
+  const pow = Math.pow;
+  const pct = (x) => `${(100 * x).toFixed(1)}%`;
+
+  // ====================== Interval tremas: the concept ======================
+  const stA = { mode: 'cascade', Dt: Math.log(2) / Math.log(3), seed: 11 };
+  const ROWS_A = 8, PITCH = 0.08, BAR_T = 0.035;
+  function drawIntervals(c, ints, y, t) {
+    for (let i = 0; i < ints.length; i += 2) c.fillRect(ints[i], y - t, ints[i + 1] - ints[i], t);
+  }
+  const zA = zoomable('wA', 'cA', (f) => {
+    const h = stA.mode === 'cascade' ? PITCH * ROWS_A + BAR_T : 1.3 * PITCH * 11.6 + BAR_T;
+    return fitBox(f, { x0: -0.02, x1: 1.02, y0: -(h + 0.03), y1: stA.mode === 'cascade' ? 0.03 : 0.1 }, 0.03);
+  }, (f, v) => {
+    const c = f.ctx;
+    paper(f, PRINT.paper); toWorld(f, v);
+    c.fillStyle = PRINT.ink;
+    const L = lineLayout(stA.Dt);
+    if (stA.mode === 'cascade') {
+      for (let n = 0; n <= ROWS_A; n++) drawIntervals(c, lineSurvivors(stA.Dt, n ? pow(3, n - 1) : 0, stA.seed, L), -PITCH * n, BAR_T);
+    } else {
+      const D = Math.max(stA.Dt, 0.01), r = pow(2, -1 / D);
+      const stages = Math.max(0, Math.min(5, Math.floor(Math.log(2e5 / L.kap) / Math.log(1 / r))));
+      for (let n = 0; n <= stages; n++) {
+        const P = Math.min(2e5, Math.max(1, Math.round(L.kap / pow(r, n))));
+        drawIntervals(c, lineSurvivors(stA.Dt, P, stA.seed, L), -1.3 * PITCH * n, BAR_T);
+        drawIntervals(c, cantorIntervals(D, n), -1.3 * PITCH * (n + 6.6), BAR_T);
+      }
+      toScreen(f);
+      c.fillStyle = PRINT.muted; c.font = '600 12px "IBM Plex Mono", monospace'; c.textAlign = 'left'; c.textBaseline = 'bottom';
+      c.fillText('Lévy: random tremas', v.ox, v.oy - (BAR_T + 0.025) * v.s);
+      c.fillText('Cantor: the same D, on a grid', v.ox, v.oy + (1.3 * PITCH * 6.6 - BAR_T - 0.025) * v.s);
+      toWorld(f, v);
+    }
+    toScreen(f);
+  });
+  const MODES_A = { cascade: 'Falling threshold', compare: 'Lévy against Cantor' };
+  const INFO_A = {
+    cascade: 'The top row is the untouched interval. Each row below keeps the tremas longer than its threshold ε, and ε falls by 3 per row — the second row holds only the sample\'s single longest trema. Watch a surviving stretch: its bounding gaps widen, new gaps open inside it, and sometimes it is erased whole. That is the birth-and-death process of the text, and the reason Lévy errors come in unforced clusters.',
+    compare: 'The same dimension twice. Above, the random trema cascade; below, the Cantor dust with N = 2 and r = 2^(−1/D), stage by stage. The Cantor dust repeats on a grid with a privileged origin; the Lévy dust is statistically the same from every one of its points — the property the chapter is after.',
+  };
+  function setA(refit) {
+    markMA(stA.mode);
+    const Dt = stA.Dt, L = lineLayout(Dt), P = pow(3, ROWS_A - 1);
+    const sv = lineSurvivors(Dt, P, stA.seed, L);
+    let len = 0, longest = 0;
+    for (let i = 0; i < sv.length; i += 2) { const l = sv[i + 1] - sv[i]; len += l; if (l > longest) longest = l; }
+    $('DAv').textContent = `Dt = ${Dt.toFixed(3)}`;
+    $('seedAv').textContent = `seed ${stA.seed}`;
+    $('cAt').textContent = MODES_A[stA.mode];
+    $('cAn').textContent = stA.mode === 'cascade' ? `the bare interval, then ε falling by 3 per row` : `D = ${Math.max(Dt, 0).toFixed(3)}`;
+    $('infoA').innerHTML = INFO_A[stA.mode] + (Dt <= 0 ? ' With Dt ≤ 0 every family line dies: as ε falls the tremas almost surely cover every point, and the rows empty out.' : '');
+    $('dimA').innerHTML = `tremas longer than u, per unit length: (1 − D<sub>t</sub>)/u = ${(1 - Dt).toFixed(3)}/u · survivors: a Lévy dust of D = max(D<sub>t</sub>, 0) = ${Math.max(Dt, 0).toFixed(3)}`;
+    $('rAa').textContent = Math.max(Dt, 0).toFixed(4);
+    $('rAb').textContent = fmt(P);
+    $('rAc').textContent = `${pct(len)} → 0`;
+    $('rAd').textContent = sv.length ? longest.toFixed(4) : 'none — all covered';
+    if (refit) zA.refit(); else zA.schedule();
+  }
+  const markMA = stepButtons($('mA'), Object.keys(MODES_A), (k) => MODES_A[k], (k) => `Show: ${MODES_A[k]}`, (k) => { stA.mode = k; setA(true); });
+  $('DAs').addEventListener('input', (e) => { stA.Dt = +e.target.value; setA(false); });
+  $('seedA').addEventListener('click', () => { stA.seed = 1 + ((Math.random() * 9999) | 0); setA(false); });
+  $('presetA').addEventListener('click', () => { Object.assign(stA, { Dt: Math.log(2) / Math.log(3), mode: 'cascade' }); $('DAs').value = stA.Dt; setA(true); });
+  $('presetA2').addEventListener('click', () => { Object.assign(stA, { Dt: 0.5, mode: 'cascade' }); $('DAs').value = 0.5; setA(true); });
+
+  // ====================== Plate 285: random streets ======================
+  const stB = { D: 1.94, seed: 8, cut: false, y0: 0.5, coarse: false };
+  const zB = zoomable('wB', 'cB', (f) => fitBox(f, { x0: -0.01, x1: W285 + 0.01, y0: stB.cut ? -0.13 : -0.01, y1: 1.01 }, 0.02), (f, v) => {
+    const c = f.ctx, L = streetLayout(stB.D);
+    const wmin = (stB.coarse ? 1.7 : 0.55) / v.s, P = Math.min(stB.coarse ? 2e4 : 2e5, Math.max(1, Math.floor(L.kap / wmin)));
+    const S = streets(stB.D, P, stB.seed, L);
+    paper(f, PRINT.paper); toWorld(f, v);
+    c.save();
+    c.beginPath(); c.rect(0, 0, W285, 1); c.clip();
+    c.fillStyle = '#f4f3ee'; c.fillRect(0, 0, W285, 1);
+    c.fillStyle = PRINT.ink;
+    const cx = W285 / 2, cy = 0.5, R = L.range;
+    let path = new Path2D(), n = 0;
+    for (let o = 0; o < S.length; o += 4) {
+      const nx = S[o], ny = S[o + 1], t = S[o + 2], h = S[o + 3] / 2;
+      const px = cx + nx * t, py = cy + ny * t, dx = -ny, dy = nx;
+      path.moveTo(px + dx * R + nx * h, py + dy * R + ny * h);
+      path.lineTo(px - dx * R + nx * h, py - dy * R + ny * h);
+      path.lineTo(px - dx * R - nx * h, py - dy * R - ny * h);
+      path.lineTo(px + dx * R - nx * h, py + dy * R - ny * h);
+      if (++n === 2048) { c.fill(path); path = new Path2D(); n = 0; }
+    }
+    if (n) c.fill(path);
+    c.restore();
+    if (stB.cut) {
+      c.strokeStyle = PRINT.red; c.lineWidth = 1.6 / v.s; c.setLineDash([6 / v.s, 4 / v.s]);
+      c.beginPath(); c.moveTo(-0.01, stB.y0); c.lineTo(W285 + 0.01, stB.y0); c.stroke(); c.setLineDash([]);
+      c.fillStyle = PRINT.ink;
+      drawIntervals(c, streetSection(S, stB.y0), -0.06, BAR_T);
+    }
+    toScreen(f);
+    $('rBa').textContent = fmt(P);
+    $('rBc').textContent = `${pct(whiteShare(stB.D, P))} → 0`;
+  });
+  function setB(refit) {
+    const D = stB.D, L = streetLayout(D);
+    $('DBv').textContent = `D = ${D.toFixed(3)}`;
+    $('seedBv').textContent = `seed ${stB.seed}`;
+    $('cutBwrap').hidden = !stB.cut;
+    $('cutBv').textContent = `y = ${stB.y0.toFixed(3)}`;
+    $('cBt').textContent = 'The streets';
+    $('cBn').textContent = `D = ${D.toFixed(3)} · seed ${stB.seed}`;
+    $('dimB').innerHTML = `straight strips, isotropic, widths with Nr(W &gt; w) ∝ 1/w · blocks of houses: D = ${D.toFixed(3)} · any line cuts them in a Lévy dust of D − 1 = ${(D - 1).toFixed(3)}`;
+    $('infoB').innerHTML = stB.cut
+      ? 'The red line plays the base of the Koch curve: the bar below it keeps the stretches of the line no street covers. Those stretches are exactly an interval-trema construction — each street cuts the line in an interval, and the widths\' 1/w law becomes the lengths\' 1/u law — so the surviving dust is a linear Lévy dust of dimension D − 1.'
+      : 'The streets are infinite strips: direction uniform, offset uniform, the p-th widest of width κ/p. Each one you see continues beyond the frame — the window is cut from a larger plane. Zoom in: thinner streets keep appearing, and any white block keeps being subdivided forever.';
+    $('rBb').textContent = L.kap.toFixed(3);
+    $('rBd').textContent = (D - 1).toFixed(3);
+    if (refit) zB.refit(); else zB.schedule();
+  }
+  // a coarse pass while the control moves, the full pass once it settles (DECISIONS: heavy sliders)
+  let settleB = 0;
+  function nudgeB() {
+    stB.coarse = true; setB(false);
+    clearTimeout(settleB); settleB = setTimeout(() => { stB.coarse = false; setB(false); }, 180);
+  }
+  $('DBs').addEventListener('input', (e) => { stB.D = +e.target.value; nudgeB(); });
+  $('seedB').addEventListener('click', () => { stB.seed = 1 + ((Math.random() * 9999) | 0); nudgeB(); });
+  $('cutB').addEventListener('change', (e) => { stB.cut = e.target.checked; setB(true); });
+  $('cutBs').addEventListener('input', (e) => { stB.y0 = +e.target.value; setB(false); });
+  $('plate285').addEventListener('click', () => { Object.assign(stB, { D: 1.94, seed: 8, cut: false }); $('DBs').value = 1.94; $('cutB').checked = false; setB(true); });
+
+  // ====================== Plates 286–287: Lévy staircases ======================
+  const stC = { mode: 'printed', D: Math.log(2) / Math.log(3), seed: 56, dy: 1 / 500 };
+  let cacheC = { key: '' };
+  function stairC() {
+    const key = `${stC.D}|${stC.seed}|${stC.dy}`;
+    if (cacheC.key !== key) cacheC = { key, val: levyStair(stC.D, Math.round(1 / stC.dy), stC.seed) };
+    return cacheC.val;
+  }
+  const zC = zoomable('wC', 'cC', (f) => fitBox(f, { x0: -0.03, x1: 1.03, y0: stC.mode === 'dust' ? -0.14 : -0.03, y1: 1.03 }, 0.03), (f, v) => {
+    const c = f.ctx, { X } = stairC(), steps = X.length - 1, dy = 1 / steps;
+    paper(f, PRINT.paper); toWorld(f, v);
+    const p = new Path2D();
+    p.moveTo(0, 0);
+    for (let i = 1; i <= steps; i++) { p.lineTo(X[i], (i - 1) * dy); p.lineTo(X[i], i * dy); }
+    if (stC.mode === 'printed') {
+      p.lineTo(1, 0);
+      c.fillStyle = PRINT.ink; c.fill(p);
+    } else {
+      c.strokeStyle = PRINT.ink; c.lineWidth = 1.6 / v.s; c.lineJoin = 'round'; c.stroke(p);
+      c.fillStyle = PRINT.ink;
+      const tick = Math.max(0.0008, 0.75 / v.s);
+      for (let i = 1; i <= steps; i++) c.fillRect(X[i] - tick / 2, -0.095, tick, BAR_T);
+    }
+    toScreen(f);
+    if (stC.mode === 'dust') { dot(c, v, 0, 0); dot(c, v, 1, 1); }
+  });
+  const MODES_C = { printed: 'As printed', dust: 'The staircase and its dust' };
+  function setC(refit) {
+    markMC(stC.mode); markDY(stC.dy);
+    const { X, big } = stairC(), steps = X.length - 1;
+    $('DCv').textContent = `D = ${stC.D.toFixed(4)}`;
+    $('seedCv').textContent = `seed ${stC.seed}`;
+    $('cCt').textContent = MODES_C[stC.mode];
+    $('cCn').textContent = `D = ${stC.D.toFixed(4)} · Δy = 1/${steps} · seed ${stC.seed}`;
+    $('infoC').innerHTML = (stC.mode === 'dust'
+      ? 'The bar below collects the risers\' abscissas — where the staircase actually climbs. They pile into clusters with gaps at every scale: a linear Lévy dust of dimension D, of which the staircase is the mass distribution M(R). '
+      : 'The region under the staircase, filled with ink as the book prints it. ')
+      + (stC.D < 0.45 ? 'At small D a handful of giant jumps carry nearly all the width — the "overwhelming clustering" the caption describes.'
+        : stC.D > 0.8 ? 'At D near 1 the jumps even out and the staircase hugs the diagonal, yet it still climbs only on a set of measure zero.'
+        : 'Lower D for fewer, wilder treads; raise it toward 1 and the staircase hugs the diagonal.');
+    $('rCa').textContent = fmt(steps);
+    $('rCb').textContent = pct(big);
+    $('rCd').textContent = stC.D.toFixed(4);
+    if (refit) zC.refit(); else zC.schedule();
+  }
+  const markMC = stepButtons($('mC'), Object.keys(MODES_C), (k) => MODES_C[k], (k) => `Show: ${MODES_C[k]}`, (k) => { stC.mode = k; setC(true); });
+  const markDY = stepButtons($('dyC'), [1 / 100, 1 / 500, 1 / 2500], (d) => `1/${Math.round(1 / d)}`, (d) => `Ordinate step 1/${Math.round(1 / d)}`, (d) => { stC.dy = d; setC(false); });
+  $('DCs').addEventListener('input', (e) => { stC.D = +e.target.value; setC(false); });
+  $('seedC').addEventListener('click', () => { stC.seed = 1 + ((Math.random() * 9999) | 0); setC(false); });
+  const presetC = (D, seed) => { Object.assign(stC, { D, seed, dy: 1 / 500, mode: 'printed' }); $('DCs').value = D; setC(true); };
+  $('plate287').addEventListener('click', () => presetC(0.6309, 56));
+  $('plate286t').addEventListener('click', () => presetC(0.9, 2));
+  $('plate286b').addEventListener('click', () => presetC(0.3, 21));
+
+  setA(true); setB(true); setC(true);
+})();
+
+</script>
+
+</body>
+</html>
