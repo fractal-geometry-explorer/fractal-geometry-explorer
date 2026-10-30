@@ -1,0 +1,150 @@
+<title>How Long Is the Coast of Britain?</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.r-21 { aspect-ratio: 2 / 1; }
+.r-43 { aspect-ratio: 4 / 3; }
+.mini .fx b { font-family: var(--f-display); letter-spacing: 0.02em; }
+.side p.cap b { font-family: var(--f-display); font-size: 14px; letter-spacing: 0.04em; }
+.checks-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 0 10px; }
+@media (max-width: 560px) { .checks-2col { grid-template-columns: 1fr; } }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 5, "How Long Is the Coast of Britain?" · pages 25–33</p>
+    <h1><span class="plate-no">Plate 33</span><span class="lozenge" aria-hidden="true"></span><span>How Long Is the Coast of Britain?</span></h1>
+    <p class="dek">Set dividers to an opening ε and walk them along a coastline: the number of steps times ε is an approximate length L(ε). Shrink ε and, instead of settling toward a true length, L(ε) grows without limit — every bay hides subbays, every peninsula subpeninsulas. Richardson's measurements put a law on the growth, L(ε) ∝ ε<sup>1−D</sup>, and Mandelbrot's reading of the exponent founded this book: D is a dimension, and it exceeds 1.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#plate33"><b>33</b> Richardson's data</a>
+    <a href="#dividers"><b>§</b> Walking the dividers</a>
+    <a href="#measure"><b>§</b> The measure in dimension d</a>
+  </nav>
+
+  <!-- ===================== PLATE 33 ===================== -->
+  <section class="plate" id="plate33">
+    <div class="plate-head">
+      <p class="no">Plate 33 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Richardson's empirical data on the rate of increase of coastlines' lengths</h2>
+      <p class="dim">L(ε) ≈ F·ε<sup>1−D</sup> · each line's slope estimates 1 − D · from Richardson 1961</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-43">
+          <canvas id="cA" role="img" aria-label="Log-log chart of measured length against yardstick for five coastlines and frontiers and a circle"></canvas>
+        </div>
+        <figcaption><strong>Plate 33, redrawn from the digitised points</strong> · open circles as printed; the circle's measurements are the filled dots</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Lewis Fry Richardson — meteorologist, pioneer of turbulence theory, student of armed conflict — measured map after map with equal-sided polygons of ever shorter side ε. The diagrams, found among his papers after he died, were published in a near-confidential yearbook. On doubly logarithmic paper every coastline and land frontier falls on a straight line of negative slope: there are two constants F and D with L(ε) ≈ F·ε<sup>1−D</sup>. The circle alone behaves the way school geometry promises, stabilising rapidly near its circumference. To Richardson the slopes had no theoretical interpretation; Mandelbrot (1967) read each as 1 − D, with D a fractal dimension.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="checks-2col">
+            <label class="check" for="k_australia"><input type="checkbox" id="k_australia" checked> Australian coast</label>
+            <label class="check" for="k_circle"><input type="checkbox" id="k_circle" checked> Circle (●)</label>
+            <label class="check" for="k_safrica"><input type="checkbox" id="k_safrica" checked> South African coast</label>
+            <label class="check" for="k_german"><input type="checkbox" id="k_german" checked> German land-frontier, 1900</label>
+            <label class="check" for="k_britain"><input type="checkbox" id="k_britain" checked> West coast of Britain</label>
+            <label class="check" for="k_portugal"><input type="checkbox" id="k_portugal" checked> Land-frontier of Portugal</label>
+          </div>
+          <label class="check" for="kPrinted"><input type="checkbox" id="kPrinted" checked> The lines as printed</label>
+          <label class="check" for="kRefit"><input type="checkbox" id="kRefit"> Least-squares refit of each series</label>
+          <label class="check" for="kLaw"><input type="checkbox" id="kLaw"> Exact polygon law for a 10,000 km circle</label>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate33btn">Show Plate 33 as printed</button>
+        </div>
+        <p class="readline" id="infoA" aria-live="polite"></p>
+        <div class="mini" aria-label="Slopes and dimensions per series">
+          <div class="fx" id="tblA"></div>
+        </div>
+        <p class="note">The 39 markers were digitised from the scan at 600 dpi, each centre good to about 0.005 of a decade; the grid itself is hand-drawn, with a row pitch uneven by 5%, so values are interpolated rule to rule. West Britain's printed line has slope −0.261 (D ≈ 1.26, the caption's −0.25); Australia −0.129 and South Africa −0.006, against the −0.13 and −0.02 usually quoted from Richardson. The German frontier prints three of its yardsticks twice, two measurements each (plotted as printed), and the one open ring among the circle's dots is read here as a circle measurement. Spain claims 987 km for its frontier with Portugal, Portugal 1214 km; the Netherlands 380 km against Belgium's 449. With slope −0.25, a factor of 2 in ε accounts for the 20% — and the small country, mapping more finely, measures more.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== THE DIVIDER WALK ===================== -->
+  <section class="plate" id="dividers">
+    <div class="plate-head">
+      <p class="no">Pages 25–27 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Walking the dividers along a coastline</h2>
+      <p class="dim" id="dimB">L(ε) ≈ F·ε<sup>1−D</sup> · Quadric coast D = log 8/log 4 = 3/2</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-21 zoomable" id="wB">
+          <canvas id="cB" role="img" aria-label="A fractal coastline with a divider walk drawn along it"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>Method A: the divider walk</strong> · the walked polygon in red over the coast · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+        <div class="canvas-wrap r-21">
+          <canvas id="cB2" role="img" aria-label="Log-log chart of measured length against yardstick for this coastline"></canvas>
+        </div>
+        <figcaption><strong>This coastline's own Richardson plot</strong> · walks at 14 yardsticks · the red dot is the walk shown above</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The chapter's Method A, run honestly: set the dividers to ε, walk them along the curve planting a vertex every ε, and multiply steps by ε. A model coastline stands in for Britain — a quadric Koch curve of dimension 3/2, the value the chapter announces as a first approximation for coastlines (too large for real coasts, but enough to show D &gt; 1 is natural). The book's other methods smooth instead of stepping: Method B walks a man a distance ε from the water, Method C covers the coast with Cantor's out-of-focus blotches — the ε-sausage of <a href="https://claude.ai/artifact/LXgM42xuGAp9wWuX2x18D6" target="_blank" rel="noopener">Plate 32</a> — and Method D covers it with the fewest blotches possible. All misbehave identically, and each later became a definition of dimension (Cantor–Minkowski–Bouligand, Pontrjagin–Schnirelman).</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Coastline</span></div>
+          <div class="steps words" id="shB" role="group" aria-label="Coastline"></div>
+        </div>
+        <div class="group slider">
+          <div class="label-row"><span class="label">Divider opening ε</span><span class="value" id="eBv">ε = 0.05</span></div>
+          <input type="range" id="eB" min="0" max="100" value="45" aria-label="Divider opening">
+        </div>
+        <p class="readline" id="infoB" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Steps taken</dt><dd id="rBsteps">—</dd></div>
+          <div><dt>L(ε) = steps × ε</dt><dd id="rBlen">—</dd></div>
+          <div><dt>Slope of the fit</dt><dd id="rBslope">—</dd></div>
+          <div><dt>D = 1 − slope</dt><dd id="rBd">—</dd></div>
+          <div><dt>True D</dt><dd id="rBtrue">—</dd></div>
+        </dl>
+        <p class="note">The teragon is carried to a stage whose edges are far shorter than ε, so the red polygon is a genuine divider walk, and the last partial chord counts as a fraction of a step. The fitted slope wobbles around 1 − D rather than equalling it — the measured length of a Koch curve oscillates log-periodically with the yardstick, a real effect of divider walks, not an error. Steinhaus saw the phenomenon in 1954 on the left bank of the Vistula ("lengths ten, hundred or even thousand times as great as the length read off the school map"); Kasner used it to tease small tots about the east coast of the United States. On a tamed coast — Chelsea's, say — L(ε) flattens between about 20 m and 20 cm, and a Coast Guard could legislate an ε inside the flat zone; Nature, existing apart from Man, accepts no such decree.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== THE APPROXIMATE MEASURE ===================== -->
+  <section class="plate" id="measure">
+    <div class="plate-head">
+      <p class="no">Pages 30–31 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Hausdorff's measure, and why D is a dimension</h2>
+      <p class="dim">Approximate measure = N(ε)·ε<sup>d</sup> ≈ F·ε<sup>d−D</sup> · finite and nonzero only at d = D</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-21">
+          <canvas id="cC" role="img" aria-label="Log-log chart of the approximate measure in dimension d against the yardstick"></canvas>
+        </div>
+        <figcaption><strong>N(ε)·ε<sup>d</sup> as ε shrinks</strong> · the quadric coast's walks · d = 1 and d = 2 dashed for reference</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Why call D a dimension? Hausdorff's idea: the linear measure of a polygon adds its sides' lengths — each raised, one may say, to the power d = 1; the surface measure of its interior paves it with squares and adds the sides raised to d = 2. Use the "wrong" power and the answer says nothing: every polygon's area is zero, its interior's length infinite. Now take the coastline's approximating polygon of N(ε) sides of length ε and raise them to the power d. Since N(ε) ≈ F·ε<sup>−D</sup>, the sum N(ε)·ε<sup>d</sup> behaves reasonably if and only if d = D: below D it blows up, above D it dies to zero. An infinite coastline is four times longer than each of its fourths — useless; but its measure in dimension D is finite, and four times that of each fourth.</p>
+        <div class="group slider">
+          <div class="label-row"><span class="label">Trial dimension d</span><span class="value" id="dCv">d = 1.50</span></div>
+          <input type="range" id="dC" min="0" max="100" value="50" aria-label="Trial dimension d">
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn" id="dCbtn">Set d = D = 3/2</button>
+        </div>
+        <p class="readline" id="infoC" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Slope (should be d − D)</dt><dd id="rCslope">—</dd></div>
+          <div><dt>Change over the chart</dt><dd id="rCratio">—</dd></div>
+        </dl>
+        <p class="note">The curve plots the actual divider walks of the section above, so its slope is measured, not assumed. D is a fraction — that is the odd part — and it exceeds 1, which is rigorously the topological dimension of a curve. Mandelbrot's proposal: call a curve fractal when its fractal dimension exceeds its topological dimension. The chapter's summary sentence is its manifesto: "Coastlines are fractal patterns." The step of explaining coastlines — deducing D from how relief forms — waits for chapter 28's Brown surfaces, and the simpler similarity dimension for the next chapter.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 5, pages 25–33 (Plate 33, after Richardson 1961). The Plate 33 series are digitised from the scan; the divider walks and measures are computed from the constructions named on the page. Companion pages: <a href="https://claude.ai/artifact/7gvGnFScNh6SAy2x99eudc" target="_blank" rel="noopener">Monkeys Tree</a> (Plate 31) and <a href="https://claude.ai/artifact/LXgM42xuGAp9wWuX2x18D6" target="_blank" rel="noopener">Minkowski Sausage</a> (Plate 32), this chapter's other plates; the quadric coast is Plate 51's generator, from <a href="https://claude.ai/artifact/91wGC9EtnwxZp8MZJ4MF6N" target="_blank" rel="noopener">Quadric Koch Islands</a>.</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>

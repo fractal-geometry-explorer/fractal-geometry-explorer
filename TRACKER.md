@@ -45,7 +45,7 @@ Update this file in the same pull request as the work it records.
 | :- | :- | :- | :- | :- | :- |
 | 31 | 31 | Monkeys tree | exact | done | monkeys-tree |
 | 32 | 32 | An example of Minkowski sausage | exact | done | minkowski-sausage |
-| 33 | 33 | Richardson's empirical data on coastline lengths | data | todo | |
+| 33 | 33 | Richardson's empirical data on coastline lengths | data | done | coast-of-britain |
 | 42 | 42 | Triadic Koch island or snowflake: original construction (von Koch) | exact | done | koch-plates |
 | 43 | 43 | Triadic Koch island: alternative construction (Cesàro) | exact | done | koch-plates |
 | 44 | 44 | Two kinds of self-similarity: standard and fractal | exact | done | koch-plates |
@@ -205,7 +205,7 @@ Each chapter session should add the chapter's main ideas here, alongside its pla
 - the theme (chapter 1): a programmatic manifesto with no construction of its own — irregularity against Euclid, scaling, fractal dimension, the "gallery of monsters", Brownian motion as the simplest case, and the coining of "fractal"; every one of these is treated on a later chapter's page, so chapter 1 keeps no page (see DECISIONS.md, Part I);
 - similarity dimension (chapters 3 and 6) — done: chapter 3's half (the definition D > D_T, the four example sets, effective dimension and the ball of thread) on the what-is-a-fractal page, chapter 6's similarity dimension proper on the koch-plates page (Plate 44's piece-cutting demo, D = log N / log (1/r));
 - the outer and inner cutoff of any fractal illustration, and the pixel test behind "to see is to believe" (chapter 4, which prints no figures) — done, on the two-cutoffs page;
-- coastline length against ruler size (chapter 5; partly on the Minkowski page);
+- coastline length against ruler size (chapter 5) — done, on the coast-of-britain page (the divider walk with its live Richardson plot, and the Hausdorff approximate measure; the ε-sausage was already on the Minkowski page);
 - random midpoint displacement, its creases, and Poisson strata (chapter 26; on the Plate 246 page);
 - length–area–volume relations (chapter 12): done, on the length-area page (divider-walk demo, Hack's rivers, area–volume cases);
 - percolation (chapter 13) — done, on islands-clusters (seeded bond-percolation lattice);
