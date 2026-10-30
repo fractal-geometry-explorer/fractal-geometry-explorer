@@ -33,8 +33,11 @@ Update this file in the same pull request as the work it records.
 
 | Plate | Page | Title | Kind | Status | Site page |
 | :- | :- | :- | :- | :- | :- |
+| (concept) | 1–5 | Theme: the manifesto chapter (chapter 1, no figures; its concepts are covered across the site) | — | done | |
 | 10–11 | 10–11 | Artificial fractal flakes (surface dimensions 7/3 and 5/2) | random / render | todo | |
 | 13 | 12–13 | Jean Perrin's classic drawings of physical Brownian motion | data | todo | |
+| (concept) | 14–19 | Chapter 3: the fractal defined (D > D_T); effective dimension and the ball of thread | exact / random | done | what-is-a-fractal |
+| (concept) | 20–24 | Chapter 4, variations and disclaimers: a drawing holds between two cutoffs (no plates) | exact | done | two-cutoffs |
 
 ## II Three classic fractals, tamed (chapters 5–8)
 
@@ -42,7 +45,7 @@ Update this file in the same pull request as the work it records.
 | :- | :- | :- | :- | :- | :- |
 | 31 | 31 | Monkeys tree | exact | done | monkeys-tree |
 | 32 | 32 | An example of Minkowski sausage | exact | done | minkowski-sausage |
-| 33 | 33 | Richardson's empirical data on coastline lengths | data | todo | |
+| 33 | 33 | Richardson's empirical data on coastline lengths | data | done | coast-of-britain |
 | 42 | 42 | Triadic Koch island or snowflake: original construction (von Koch) | exact | done | koch-plates |
 | 43 | 43 | Triadic Koch island: alternative construction (Cesàro) | exact | done | koch-plates |
 | 44 | 44 | Two kinds of self-similarity: standard and fractal | exact | done | koch-plates |
@@ -70,6 +73,7 @@ Update this file in the same pull request as the work it records.
 | 95 | 95 | Projection of Fournier's multiuniverse (D ≈ 0.8270) | exact | done | fournier-universe |
 | 96 | 96 | A flat Fournier universe with D = 1 | exact | done | fournier-universe |
 | (concept) | 97–105 | Geometry of turbulence; intermittency (chapter 10, no plates) | random | done | turbulence-intermittency |
+| (concept) | 106–108 | Fractal singularities of differential equations (chapter 11, no plates) | exact | done | fractal-singularities |
 
 ## IV Scaling fractals (chapters 12–14)
 
@@ -109,7 +113,7 @@ Update this file in the same pull request as the work it records.
 | 188–189 | 188–189 | The separators of z → λz(1 − z) and of z → z² − μ (the μ-map) | exact | done | self-squared-dragons |
 | 190–191 | 190–192 | Self-squared dragons; approach to the "Peano" limit | exact | done | self-squared-dragons |
 | 192 | 192 | Real self-squared Fatou dusts | exact | done | self-squared-dragons |
-| 198–199 | 198–199 | Attraction to fractals (San Marco dragon; Pharaoh's breastplate) | exact | todo | |
+| 198–199 | 198–199 | Attraction to fractals (San Marco dragon; Pharaoh's breastplate) | exact | done | fractal-attractors |
 
 ## VIII Stratified random fractals (chapters 23–26)
 
@@ -158,8 +162,8 @@ Update this file in the same pull request as the work it records.
 
 | Plate | Page | Title | Kind | Status | Site page |
 | :- | :- | :- | :- | :- | :- |
-| 285 | 285 | Random pattern of streets | random | todo | |
-| 286–287 | 286–287 | Paul Lévy's devilish staircases | random | todo | |
+| 285 | 285 | Random pattern of streets | random | done | linear-levy-dusts |
+| 286–287 | 286–287 | Paul Lévy's devilish staircases | random | done | linear-levy-dusts |
 | 293 | 293 | The computer "bug" as artist, opus 2 | art | done | levy-dusts |
 | 295 | 295 | Nonrandom subordination: clustered fractal dust | exact | done | levy-dusts |
 | 296–297 | 294–297 | Mandelbrot's early model clusters; Lévy flight and its stopovers (D = 1.26) | random | done | levy-dusts |
@@ -200,19 +204,22 @@ Update this file in the same pull request as the work it records.
 ## Concepts without a plate
 
 Each chapter session should add the chapter's main ideas here, alongside its plates. Candidates so far:
-- similarity dimension (chapters 3 and 6) — done, on the koch-plates page (Plate 44's piece-cutting demo, D = log N / log (1/r));
-- coastline length against ruler size (chapter 5; partly on the Minkowski page);
+- the theme (chapter 1): a programmatic manifesto with no construction of its own — irregularity against Euclid, scaling, fractal dimension, the "gallery of monsters", Brownian motion as the simplest case, and the coining of "fractal"; every one of these is treated on a later chapter's page, so chapter 1 keeps no page (see DECISIONS.md, Part I);
+- similarity dimension (chapters 3 and 6) — done: chapter 3's half (the definition D > D_T, the four example sets, effective dimension and the ball of thread) on the what-is-a-fractal page, chapter 6's similarity dimension proper on the koch-plates page (Plate 44's piece-cutting demo, D = log N / log (1/r));
+- the outer and inner cutoff of any fractal illustration, and the pixel test behind "to see is to believe" (chapter 4, which prints no figures) — done, on the two-cutoffs page;
+- coastline length against ruler size (chapter 5) — done, on the coast-of-britain page (the divider walk with its live Richardson plot, and the Hausdorff approximate measure; the ε-sausage was already on the Minkowski page);
 - random midpoint displacement, its creases, and Poisson strata (chapter 26; on the Plate 246 page);
 - length–area–volume relations (chapter 12): done, on the length-area page (divider-walk demo, Hack's rivers, area–volume cases);
 - percolation (chapter 13) — done, on islands-clusters (seeded bond-percolation lattice);
 - the order of ramification and fractal lattices (chapter 14) — done, discussed on the ramified-lattices page;
 - surfaces with positive volume: Cantor dusts of positive measure, Osgood's curve of positive area, and the arteries-and-veins model of flesh (chapter 15, which prints no plates);
 - the diameter exponent of trees (chapter 17) — done, on the diameter-exponent page;
+- fractal attractors, "chaotic" evolution, decomposable dynamical systems and the Feigenbaum dust attractor (chapter 20) — done, on the fractal-attractors page;
 - canonical curdling, the Bienaymé birth-and-death criticality and D* = log ⟨N⟩/log b (chapter 23; on the random-curds page);
 - 1/f noise and scaling nets (chapter 27): the Joseph effect, Hurst's R/S and the spectrum are on the fractional-trails page;
 - island, lake and cup areas: Korčak's law Pr(A > a) = F·a⁻ᴮ with B = D/2, deadvalleys, cups and the Devil's terraces, the eroded Brown model (chapter 29, pages 272–276 — the chapter prints no figure);
 - global dependence in Brown relief, and the horizon (chapter 28);
-- Lévy flights and dusts (chapters 31–32);
+- Lévy flights and dusts (chapters 31–32): the interval tremas, unforced clustering and the birth-and-death argument are on the linear-levy-dusts page; the flights, subordination and spatial dusts on the levy-dusts page;
 - disc and ball tremas: saturation, critical dimensions, lunar craters and galactic voids (chapter 33; the Moon-saturation section of the disc-tremas page);
 - lacunarity (chapter 34; on the carpets-lacunarity page, with the mid-line dusts, the gap census's prefactor F and the mass-in-a-window measures);
 - weak against strong convergence, and the self-avoiding walk (chapter 36 — done, on the lattice-physics page);
