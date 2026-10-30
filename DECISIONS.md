@@ -280,6 +280,79 @@ Chapter 13 prints no numbered plates; its six figures sit in the running text. A
 - **The three figures fit θ = 29.9°, 60.3° and 89.8°** — surely 30°, 60° and 90° — with r = 0.501, 0.544 and 0.566 (pixel agreement 97–98.5% at 600 dpi). Planar D ≈ 1.00, 1.14, 1.22; the spatial originals are D+1.
 - **Self-avoidance bound.** Our own computation (bisection on segment crossings to stage 11) gives the largest self-avoiding r at those angles as 0.518, 0.554 and 0.595, so the printed figures sit 2–5% below the bound. The page's slider couples r to the computed bound; the presets use the fitted values, and the note on the page says so.
 
+## Part VI, chapter 18 (pages 166–179, page self-inverse)
+
+All on the page `self-inverse`. Every construction is computed at runtime from a handful of
+fitted circles; nothing is traced. Circles were fitted from the 600 dpi scans (RANSAC on ink or
+region boundaries, then a least-squares refit), then idealized to exact tangency.
+
+**Figures pp. 169–171, Apollonian packing and the net.**
+- **The three given circles** are the same throughout pages 169–171. Fitted from p. 170's
+  construction figure and idealized: outer (0, 0, 1), inner (−0.30355, −0.06297, 0.69000) and
+  (0.66188, −0.24830, 0.29307) in units of the outer radius (y up). Tangency residuals before
+  idealizing were under 1.5 px.
+- **The two Apollonian circles are the two Descartes roots k± = k₁+k₂+k₃ ± 2√(k₁k₂+k₂k₃+k₃k₁),
+  which differ** (4.440 and 3.283 here) — not one curvature with two centres. In the complex
+  centre formula each root pairs with one sign of the square root; the page validates by
+  tangency. Deeper triangles use the Soddy reflection k′ = 2(kₐ+k_b+k_c) − k_d, where d must be
+  the *other* circle tangent to the triangle's three (for a root triangle, the third given
+  circle, not the other Apollonian circle — getting this wrong scatters the packing).
+- **The gasket photograph on p. 170** is the packing's lower triangle (below the two inner
+  circles): of the two triangles, only it has the photo's three-horned proportions. The preset
+  fills its discs black on white inside a gray panel, like the photo.
+- **The net really sorts into 4 clans** (p. 171): the page builds the net a second way, as the
+  clans of the four Γ circles under reduced words in the four orthogonal C circles, and the two
+  constructions coincide visually at every zoom. The C circles are computed as radical-centre
+  orthogonal circles of each Γ triplet.
+
+**Figure p. 173, the Poincaré chain, and Plate 177.**
+- **The chain** (M = 4) was fitted from p. 173 by distance-transform peaks plus boundary refit
+  (rms 2.6 px at 600 dpi), then idealized: C1/C3 (±0.60637, 0.06853, r 0.39348), C2 (0,
+  −0.45406, 0.40701), C4 (0, 0.31700, 0.26182), y up. Plate 177 uses the same chain, as its
+  caption says.
+- **Stages.** Stage s of Poincaré's construction is all reduced words of length s applied to
+  the chain circles, 4·3ˢ links; the page draws each stage in ink over the previous stage in
+  white on gray, as printed. Stages 1 and 3 match the figure's top and bottom panels.
+- **Plate 177's Δ discs behave exactly as captioned**: Δ₁₂₃ and Δ₃₄₁ come out unbounded
+  (exteriors of their Γ circles), Δ₂₃₄ and Δ₄₁₂ intersect, and the second approximation adds
+  the inverses in C₄/C₂ and C₁/C₃. Γ_ijk passes through the triplet's own tangency points, so
+  "γ-free" means free of the *other* chain tangencies, strictly inside or outside.
+- The limit render keeps a ~2.6 px disc cutoff so the white thread of L stays visible between
+  the black and gray clans, as in the printed plate; mathematically the clans cover everything
+  but L.
+
+**Plate 179, Fricke & Klein's Figure 156 corrected.**
+- **The five generating circles were recovered from the engraving** (the plate's top-left
+  reproduction): RANSAC on the boundary of the blackened central region, idealized to exact
+  tangency (rms 0.6 px). In units of ~1/1000 of the reproduction: C1 (−0.829, 0.705, 0.914),
+  C2 (0.613, 0.374, 0.565), C3 (0.074, −0.099, 0.152), C4 (−0.286, −0.403, 0.319), C5 (0.344,
+  −0.389, 0.243), y up. C1–C2–C3–C4 form the Poincaré chain of the caption; C5 touches C2 and
+  C3 only, which is why the fundamental region runs off the engraving at the bottom (the
+  "trunk" between C4 and C5).
+- **Checked against the plate.** The inside of L* (the 4-chain, bottom right) matches the scan
+  at IoU 0.98 after a similarity fit; the full five-circle black shape (top right) matches
+  feature for feature at IoU 0.74 — the print sits rotated about 44° from the engraving (the
+  bottom figure only about 8°), and the residue is a rim fringe at the print's halftone scale.
+- **Fricke's draftsman drew genuine circles of L.** The two large circles across the engraving
+  fit as: the circle through the tangency points of C2, C3, C5 (orthogonal to all three — the
+  Γ circle of that tangent triplet, residual ~3‰), and a circle orthogonal to C1 and C2 through
+  their tangency point. This confirms the caption's "Fricke knew that L incorporates circles".
+- **The M ≥ 5 osculating construction** (p. 175) works as described: of the ten Γ triplets,
+  four osculate from inside, two from outside (each inside disc internally tangent to an
+  outside one), and four intersect L and are discarded.
+
+**Plate 178 is a reconstruction of the idea, not of the plate.** Mumford's group of
+homographies is not stated in the book, so the plate cannot be reproduced stroke for stroke.
+The page's section composes each chain inversion with a rotation about its circle's centre
+(every two-letter word is then a Möbius map) and lets the twist grow from 0°, which leaves the
+self-inverse thread and spreads toward plane-filling forms. TRACKER reclassifies 178 as `art`.
+
+**Limit sets as disc coverings.** A reduced-word image of a generator disc always nests inside
+the previous disc, so L is drawn by emitting every image disc smaller than a few pixels while
+recursing to a sub-pixel cutoff; the emitted discs keep the thread contiguous and the terminal
+ones add detail. Rotating an inversion doesn't change image radii, only positions, so the same
+covering works for the twisted maps.
+
 ## Part VI, chapter 19 (Plates 185–192)
 
 All on the page `self-squared-dragons`. Every figure is a per-pixel escape-time render of z → λz(1−z) or x → x²−μ (μ = λ²/4 − λ/2), with a distance estimate for boundaries and filaments. The scans were matched by eye at 300 dpi; the maps and Plates 185 and 192 follow from their definitions, while the dragons' λ are reconstructions, as noted below.

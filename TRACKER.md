@@ -103,11 +103,11 @@ Update this file in the same pull request as the work it records.
 
 | Plate | Page | Title | Kind | Status | Site page |
 | :- | :- | :- | :- | :- | :- |
-| Figure, p. 170 | 170 | Apollonian packing | exact | todo | |
-| Figure, p. 173 | 173 | Self-inverse construction, stages | exact | todo | |
-| 177 | 177 | A self-inverse fractal (Mandelbrot construction) | exact | todo | |
-| 178 | 178 | Self-homographic fractal, near the Peano limit | exact | todo | |
-| 179 | 179 | A celebrated self-inverse fractal, corrected | exact | todo | |
+| Figure, p. 170 | 169–170 | Apollonian packing, nets and gaskets | exact | done | self-inverse |
+| Figure, p. 173 | 172–173 | Poincaré chain and the stages of Poincaré's construction | exact | done | self-inverse |
+| 177 | 177 | A self-inverse fractal (Mandelbrot construction) | exact | done | self-inverse |
+| 178 | 178 | Self-homographic fractal, near the Peano limit (group unpublished; reconstruction of the idea) | art | done | self-inverse |
+| 179 | 179 | A celebrated self-inverse fractal, corrected (Fricke's five circles, fitted) | exact | done | self-inverse |
 | 185 | 185–186 | Self-squared fractal curves for real λ | exact | done | self-squared-dragons |
 | 187 | 186–187 | Composite of self-squared curves for real λ (the drape; caption on p. 186, confirmed) | render | done | self-squared-dragons |
 | 188–189 | 188–189 | The separators of z → λz(1 − z) and of z → z² − μ (the μ-map) | exact | done | self-squared-dragons |
@@ -219,6 +219,7 @@ Each chapter session should add the chapter's main ideas here, alongside its pla
 - 1/f noise and scaling nets (chapter 27): the Joseph effect, Hurst's R/S and the spectrum are on the fractional-trails page;
 - island, lake and cup areas: Korčak's law Pr(A > a) = F·a⁻ᴮ with B = D/2, deadvalleys, cups and the Devil's terraces, the eroded Brown model (chapter 29, pages 272–276 — the chapter prints no figure);
 - global dependence in Brown relief, and the horizon (chapter 28);
+- geometric inversion, self-inverse sets, limit sets, fractal osculation and the Apollonian model of smectics (chapter 18) — done, on the self-inverse page;
 - Lévy flights and dusts (chapters 31–32): the interval tremas, unforced clustering and the birth-and-death argument are on the linear-levy-dusts page; the flights, subordination and spatial dusts on the levy-dusts page;
 - disc and ball tremas: saturation, critical dimensions, lunar craters and galactic voids (chapter 33; the Moon-saturation section of the disc-tremas page);
 - lacunarity (chapter 34; on the carpets-lacunarity page, with the mid-line dusts, the gap census's prefactor F and the mass-in-a-window measures);
