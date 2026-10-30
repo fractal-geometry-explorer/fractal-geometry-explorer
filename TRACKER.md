@@ -201,7 +201,7 @@ Update this file in the same pull request as the work it records.
 
 Each chapter session should add the chapter's main ideas here, alongside its plates. Candidates so far:
 - the theme (chapter 1): a programmatic manifesto with no construction of its own — irregularity against Euclid, scaling, fractal dimension, the "gallery of monsters", Brownian motion as the simplest case, and the coining of "fractal"; every one of these is treated on a later chapter's page, so chapter 1 keeps no page (see DECISIONS.md, Part I);
-- similarity dimension (chapters 3 and 6);
+- similarity dimension (chapters 3 and 6) — done, on the koch-plates page (Plate 44's piece-cutting demo, D = log N / log (1/r));
 - coastline length against ruler size (chapter 5; partly on the Minkowski page);
 - random midpoint displacement, its creases, and Poisson strata (chapter 26; on the Plate 246 page);
 - length–area–volume relations (chapter 12): done, on the length-area page (divider-walk demo, Hack's rivers, area–volume cases);
