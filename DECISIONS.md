@@ -38,6 +38,12 @@ Conventions used below:
 - **The site build wraps the artifact fragments.** Sources have no doctype, charset or viewport (the artifact service added them when the pages were published); `tools/build.py` adds the skeleton, the site bar (previous/next in book order) and the index with the plate finder, which parses the tables in TRACKER.md. `tools/check_build.py` now checks the committed `site/` by default; the pre-foundation artifacts rebuild byte for byte only from the import commit (`c05f120`).
 - **The wrapper must also carry `[hidden] { display: none !important; }`.** The artifact service's stylesheet provided it; without it, any element whose class sets `display` (`.slider`, `.check`, `.key`, …) ignores its `hidden` attribute, which quietly broke show-and-hide controls on nine pages (first seen on peano-sweeps' "angle at the start" slider). The shell stylesheet in `tools/build.py` now provides it for every page; check the computed style, not the attribute, when testing visibility.
 
+## Part I, chapter 1
+
+**Theme (pages 1–5, no plates).**
+- The chapter prints no figures at all: every page of the scan was checked, and the PDF's only images are the page scans themselves. It is the book's manifesto — clouds, mountains and coastlines against Euclid; the casebook-and-manifesto framing; Dyson's "gallery of monsters" passage; the coining of *fractal* from the Latin *fractus*; and a restatement of goals.
+- Every concept the chapter names is visualized on a later chapter's page: coastlines and mountains (brown-relief, fractal-landscapes), Brownian motion as the "exceptionally simple" case (brown-trails, wiener-sausage), the classical monsters of Cantor, Peano and Weierstrass (cantor-dust, peano-sweeps, mathematical-backup), fractal dimension (chapter 3's concepts and the dimension readouts throughout), scaling (cotton-prices, power-laws), and the history of the ideas (historical-sketches). Following the project rule for chapters without plates, no page was built; the tracker records the chapter as covered across the site.
+
 ## Part I, chapter 3
 
 **Dimension, symmetry, divergence (pages 14–19, no figures; page `what-is-a-fractal`).**
@@ -46,6 +52,13 @@ Conventions used below:
 - **The ball of thread** (10 cm ball, 1 mm thread) is drawn as a seeded yarn winding: great-circle wraps on two outer layers with a drifting axis, front hemisphere only, depth-sorted into banded Path2D chunks (a render is a few hundred strokes). The stations and their dimensions 0 → 3 → 1 → 3 → 1 → 0 are the chapter's own numbers; the field of view per resolution, the pixelation, the fiber rendering (1 mm thread ≈ 55 fibers of 12 µm) and the logistic crossover widths on the chart are presentation choices, all flagged — the chapter itself insists effective dimension "should not be defined precisely". Deep close-ups recentre on the front-most stitch so the view never lands in a winding gap; past ~100 Å the strands render as dotted "atomlike pinpoints", purely schematic.
 - The chart's coastline overlay (a plateau at D ≈ 1.25 across the middle decades, on its own scale) illustrates the chapter's closing bridge — an ill-defined transition widened into a whole fractal zone — and is labelled schematic.
 
+## Part I, chapter 4
+
+**Variations and disclaimers (pages 20–24, no plates).**
+- Every page of the scan was checked: the chapter prints no figures at all. It is the book's chapter on its own method — exposition, erudition, graphics ("in the theory of fractals, to see is to believe"), fractal art, and logistics.
+- Its one geometric claim — an illustration of a fractal is faithful only between an outer and an inner cutoff, so "the typical fractal curve can be evoked satisfactorily by elementary strokes in large but finite number" (p. 22) — had no explicit visualization on the site, so the page `two-cutoffs` draws it: the triadic Koch curve truncated at ε = 3⁻ᵏ with a pen of positive width, under a scale ledger comparing the drawing's range [ε, Ω] with the screen's range [pixel, frame]; and a per-view pixel-difference test of stage k against stage k + 3 (blue where only stage k inks a pixel, red where only the deeper stage does), which collapses once ε falls below a pixel. The chapter names no curve and draws nothing, so the Koch example and the ledger are this page's own devices, and the page says so.
+- The chapter's other threads are cross-links, not new figures: the endpapers born of "faulty computer programming" are the story of Plate 246 (midpoint-displacement page), the Feller random-walk anecdote that seeded chapters 28 and 31 is drawn on brown-trails, and Escher's debt to the Fricke & Klein tilings belongs with chapter 18's self-inverse plates.
+- Notation (p. 24): theoretical D is printed as integers, ratios, ratios of logarithms, or to at least four decimals; empirical D to one or two. The site's pages already follow the book's practice; no figure needed.
 ## Part II, chapters 5–8
 
 **Plate 31, monkeys tree, and Plate 32, Minkowski sausage.**
@@ -140,6 +153,11 @@ Conventions used below:
 - **Plate 81, the curtains.** Both figures are dusts with N = 2 and r varying with height, square frames, topped by [0, 1]. Told apart by fitting the central gap over ~180 rows each: the top figure is linear in D (from 1 to 0; residual rms 0.02), the bottom linear in r (from 1/2 to 0; rms 0.0008). The printed margin arrows sit a little high of the stated values — about r = 0.347 and D = 0.68 instead of r = 1/3, D = 0.6309 — so the page's arrows mark the exact values, and the note says so.
 - **Plate 83, the devil's staircase.** The unit square with the region under the Cantor function in solid ink. The scan's top profile matches the Cantor function to rms 0.005 of the height (max deviation 0.018 at the near-vertical risers, which is ink spread); treads are resolved down to about 3⁻⁷. The page computes M(R) per pixel column, so zooming keeps producing steps. Graph length checked in closed form: 1 − (2/3)ⁿ + √(1 + (4/9)ⁿ) → 2.
 - **Generalized dusts (pages 77–78).** The book gives N and r for its example dusts (N = 3, r = 1/5; N = 2, r = 1/4; N = 3, r = 1/9) but never draws them, so the page's evenly spaced arrangement — first piece at 0, last ending at 1, equal tremas — is a reconstruction, flagged on the page. The gap-count law Nr(U > u) stepping across F·u⁻ᴰ was verified and is drawn as a log–log chart.
+
+**Chapter 6 completeness check (pages 34–57).**
+- The chapter's scan was re-checked page by page against the tracker: pages 34–41 print no figures, and every figure from page 42 on is one of the tracked plates (42–45, 46–47, 49, 51, 53, 54–55, 56–57), all built on koch-plates, gosper-island, quadric-islands and unequal-parts.
+- The one figure not in the tracker sits inside Plate 54–55's caption on page 54: a three-stage ink-dispersion diagram the book reproduces from Corrsin 1959b. It is another publication's artwork, in copyright, so the site does not reproduce it.
+- The chapter's concept, similarity dimension, is covered interactively on koch-plates (Plate 44: interval, square and Koch curve cut into N parts of ratio r, with D = log N / log (1/r) live). The remaining prose asides (cutoff scales Ω and ε, Koch arcs and half lines, Koch motion, the Kolmogorov-complexity aside "a Koch curve is simpler than a circle") are narrative, drawn nowhere in the book, and are left to the review pass.
 
 ## Part III, chapters 9–11
 
@@ -405,6 +423,20 @@ All six plate groups are random (`random`/`render`), so they are matched statist
 **Chapter 30 (`isothermal-surfaces` page).** No plates of its own (it explains Plates 10–11, which stay with Part I in the tracker). The page builds the chapter's ladder of dimensions — isosurface 3 − H, planar isotherm 2 − H, graph of a linear section 2 − H, zero-set 1 − H — on a planar section with H = 1/3 (Kolmogorov), 1/2 (Burgers), 3/4 (the persistent contrast of Plate 10), with a live ruler-count of the drawn isotherm. The linear section is the first row of the same field.
 
 **Tracker bookkeeping.** Part IX's heading now reads "chapters 27–30": the running heads on pages 278–279 put chapter 30 in Part IX ("FRACTIONAL BROWN FRACTALS ⁂ IX"), and the old "27–29" left chapter 30 shelfless. `tools/build.py` learned to shelve colour-plate pages (plates matching C + digit) under the colour-signature section of the index instead of a numbered chapter range.
+
+## Part X, chapter 31 (linear Lévy dusts, Plates 285–287, page linear-levy-dusts)
+
+**The chapter's trema law, and the page's engine.**
+- The construction follows the text: tremas are Poisson, the number centered per unit length with length above u is (1 − Dt)/u, and the survivors form a Lévy dust of D = max(Dt, 0). Implemented rank-wise as on the disc-tremas page: trema p has length κ/p with κ = (1 − Dt)·(sampled length), centers from a per-rank hash, so the sample holds still while Dt and the cutoff vary. The falling-threshold cascade (ε dividing by 3 per row, drawn like Plate 80's bar) and the Lévy-against-Cantor comparison (N = 2, r = 2^(−1/D)) are the page's own illustrations — the chapter prints no figure for the construction itself.
+
+**Plate 285, random streets.**
+- Random; matched statistically, seed exposed (page seed 8). The caption gives no numbers, so the street law is the chapter's trema law carried to the plane: street p is an infinite strip of width κ/p, κ = (2 − D)·(range of line offsets) — the strip analogue of Plates 306–309's disc areas, since the offset measure that lets a strip cover a point is its width. A point then survives the widths in (w_min, w_max) with probability (w_min/w_max)^(2−D), so the blocks have dimension D, and a transect holds a Lévy dust of D − 1, as the caption claims.
+- Fitted to the scan: the printed figure's frame is 1.366 : 1 with ink share 0.268 at 600 dpi; D = 1.94 with streets cut at the print grain reproduces it (widest street κ ≈ 0.1 of frame height — the plate's one dominant band — and ≈ 250 streets at print resolution).
+- The line-cut view (survivors of a horizontal transect, drawn as a dust bar) is the page's own illustration of the caption's "intersection by an arbitrary line".
+
+**Plates 286–287, Lévy staircases.**
+- Random; the caption's recipe verbatim: Δy = .002 (500 risers), each abscissa jump with Pr(ΔX > u) = u^(−D) for u ≥ 1, rescaled to end at (1, 1) — the same pareto() as chapter 32's subordinators. Presets D = .9, .3, .6309 with seeds 2, 21 and 56, chosen so the silhouette statistics (largest tread's share, count of visible treads, first riser's abscissa) sit near the printed ones; the samples themselves cannot be recovered.
+- Treads sum to the full width and risers to the full height, so the graph's length is exactly 2 at every Δy and its dimension is 1 — the caption's "dimension 1", checked in closed form. The risers'-abscissas tick bar, and the Δy = 1/100 and 1/2500 settings, are the page's additions.
 
 ## Part X, chapter 32 (spatial Lévy dusts, Plates 293–300)
 
