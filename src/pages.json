@@ -23,6 +23,19 @@
       "layout_comment": "/* Layout: the plate on the left as on the book's page 32; controls, readouts and the measuring chart down the right. One column under 900px. */"
     },
     {
+      "slug": "coast-of-britain",
+      "title": "How Long Is the Coast of Britain?",
+      "plates": "Plate 33",
+      "chapter": 5,
+      "scripts": [
+        "shared/geometry.js",
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: the digitised Plate 33 chart, the divider-walk demo (coast plus its own Richardson plot), and the Hausdorff-measure chart, each a figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
       "slug": "wiener-sausage",
       "title": "Wiener Sausage",
       "plates": "Brownian motion",
@@ -171,6 +184,18 @@
       "layout_comment": "/* Layout: four concept sections in the chapter's order (the gusty record and its probe, curdling in space, the section argument for D > 2, the spectrum inequality), each a computed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
     },
     {
+      "slug": "fractal-singularities",
+      "title": "Fractal Singularities",
+      "plates": "Chapter 11",
+      "chapter": 11,
+      "scripts": [
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: four concept sections (singularities standard and fractal, the zoom test, Chorin's D ≈ 2.5, Scheffer's bounds), each a computed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
       "slug": "biographical-sketches",
       "title": "Biographical Sketches",
       "plates": "Pages 391–404",
@@ -251,6 +276,18 @@
         "ui.js"
       ],
       "layout_comment": "/* Layout: white tremas (306-307), black tremas (308-309) and the Moon-saturation concept, each a printed window beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "linear-levy-dusts",
+      "title": "Linear Lévy Dusts",
+      "plates": "Plates 285–287",
+      "chapter": 31,
+      "scripts": [
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: the interval-trema cascade, Plate 285's random streets and Plates 286–287's Lévy staircases, each a figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
     },
     {
       "slug": "levy-dusts",
@@ -436,6 +473,18 @@
       "layout_comment": "/* Layout: the inverted-V map (pages 180-182), real-lambda curves (185), the drape (187), the separators (188-189), the dragon lab (190-191) and the Fatou dusts (192), each a computed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
     },
     {
+      "slug": "fractal-attractors",
+      "title": "Attraction to Fractals",
+      "plates": "Plates 198–199",
+      "chapter": 20,
+      "scripts": [
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: the bifurcation tree (pages 194-195), the San Marco dragon by inverse iteration (198) and the Pharaoh's Breastplate (199), each a computed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
       "slug": "umbrella-trees",
       "title": "Fractal Umbrella Trees",
       "plates": "Plate 155",
@@ -458,6 +507,45 @@
         "ui.js"
       ],
       "layout_comment": "/* Layout: Plate 323 (diamond tremas and lacunarity, two panels) and Plate 325 (a spatial trema dust on one octant of the sky), each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "what-is-a-fractal",
+      "title": "What Is a Fractal?",
+      "plates": "Dimension",
+      "chapter": 3,
+      "layout_comment": "/* Layout: two concept sections (the definition D > D_T with the chapter's four example sets, the ball of thread and its effective dimension against resolution), each a computed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */",
+      "scripts": [
+        "shared/geometry.js",
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ]
+    },
+    {
+      "slug": "two-cutoffs",
+      "title": "Between Two Cutoffs",
+      "plates": "Cutoffs",
+      "chapter": 4,
+      "scripts": [
+        "shared/geometry.js",
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: two concept sections (the Koch curve drawn between its two cutoffs with a scale ledger, then the pixel-by-pixel difference test of carrying the construction deeper), each a computed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "ramified-lattices",
+      "title": "Gaskets, Webs and Sponges",
+      "plates": "Plates 141–146",
+      "chapter": 14,
+      "scripts": [
+        "shared/geometry.js",
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: the gasket and arrowhead (141), a percolation cluster (p. 132), the skewed web (143), the carpet and the Menger sponge (145), the branching curve of p. 139 and the split snowflake halls (146), each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
     }
   ]
 }
