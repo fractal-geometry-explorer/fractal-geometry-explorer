@@ -458,6 +458,19 @@
         "ui.js"
       ],
       "layout_comment": "/* Layout: Plate 323 (diamond tremas and lacunarity, two panels) and Plate 325 (a spatial trema dust on one octant of the sky), each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "two-cutoffs",
+      "title": "Between Two Cutoffs",
+      "plates": "Cutoffs",
+      "chapter": 4,
+      "scripts": [
+        "shared/geometry.js",
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: two concept sections (the Koch curve drawn between its two cutoffs with a scale ledger, then the pixel-by-pixel difference test of carrying the construction deeper), each a computed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
     }
   ]
 }
