@@ -285,6 +285,22 @@ All on the page `self-squared-dragons`. Every figure is a per-pixel escape-time 
 
 **The μ-atom arithmetic (p. 184)** — at most 2^{w−1} atoms of period w, fewer for w > 1 — was not verified numerically; the page quotes none of it.
 
+## Part VI, chapter 20 (Plates 198–199)
+
+Both plates on the page `fractal-attractors`, drawn by the chapter's own algorithm: a long orbit of a "decomposable dynamical system", the determining index chosen pseudo-randomly among the maps' inverses, 64,000 steps with the first few skipped. The book's random sequence is unknowable, so dot-for-dot both plates are this page's own runs with the seed exposed.
+
+**Plate 198, the San Marco dragon.** Random inverse iteration of x → 3x(1−x): z = ½ ± √(¼ − z/3), the sign chosen per step. Verified at 600 dpi: the generated points land a median 0.0 px (mean 0.4) from the plate's ink, and the figure's height/width is 0.5774 against the print's 0.5779. The dragon spans [0, 1] on the real axis; the cusp where the big bulbs meet is the fixed point ⅔, multiplier exactly −1, which is why its neighbourhood fills so slowly (the caption says so, and it shows).
+
+**Plate 199, the Pharaoh's Breastplate.** The book nowhere states the four inversions ("selected to insure that the limit set is a collection of circles"), so they are a reconstruction decoded from the scan:
+- The two bounding circles, fitted at 600 dpi (outer rms 0.9 px, inner 1.9 px), are internally tangent at the top; the radius ratio is q = 0.6474 (fitted — the book states no proportions, and no obviously exact value is nearby).
+- Sent through the Möbius map that takes the tangency point to ∞, the crescent becomes a strip and the white discs (measured by distance transform) take exact positions: circles of radius ¼ seated on each edge at u = kP, radius-⅛ circles at v = ⅜ between them, and so on, with period P = 1/√2. The tangency of the ¼- and ⅛-families forces P² = ½ exactly.
+- The group that produces this: inversions in circles of radius 1/√2 centred at (0, 0) and (0, 1) on the strip's edges, plus two mirrors half a period apart. Chaos-game points from this group land a median 4.2 px from the plate's ink (uniform points in the crescent: 35 px), and the plate's ink lands a median 3.6 px from the model at 400k points — the support matches.
+- The page's dots use the symmetric generating set (edge circles + mirrors at u = ±P/2, which in the crescent are four genuine circles): it reaches the horns far better (ink→model median 7.6 px at 64k points against 12.1 for mirrors at 0 and P/2), and both sets draw the same limit set to sub-pixel agreement (median 0–1 px both directions at 400k).
+- The dots' texture still differs from the print in detail — Mandelbrot's actual generators and random sequence are unknown — so the dots are a statistical match; the "circles" mode (breadth-first orbit of the two boundary circles under the inversions, down to pixel radius) is exact.
+- Open: whether the printed crescent ratio is an exact value, and what Mandelbrot's own four inversions were. His 1983 Intelligencer paper on sigma-discs likely states them; it was not accessible this session (IBM page is paywalled, and the Yale/Scranton pages describe no construction for this figure).
+
+**Pages 194–195, the dust attractor (no plate).** The bifurcation tree is ours — the book prints no figure for these pages. Quoted, not recomputed: D ≈ 0.538 (Grassberger, cited by the book from a preprint) and Feigenbaum's 1/α ≈ 0.3995. Computed: the window magnifier re-centres on (λ∞, ½) and shrinks by (δ, α) per step, mirror-flipping odd steps because α acts with a sign; cycle periods and Lyapunov exponents for tapped λ come from the orbit of ½.
+
 ## Part VIII, chapter 23
 
 **Plates 218–219, Hoyle curdling (page 218–219).**

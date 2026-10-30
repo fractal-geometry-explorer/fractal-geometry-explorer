@@ -1,0 +1,154 @@
+<title>Attraction to Fractals</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.r-wide { aspect-ratio: 10 / 7; }
+.r-marco { aspect-ratio: 7 / 4; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 20, "Fractal Attractors and Fractal ('Chaotic') Evolutions" · pages 193–199</p>
+    <h1><span class="plate-no">Plates 198–199</span><span class="lozenge" aria-hidden="true"></span><span>Attraction to Fractals</span></h1>
+    <p class="dek">A ball dropped in a funnel wiggles, settles, and stops at the tip: the tip is an attractor. Henri Poincaré observed long ago that the orbits of nonlinear dynamical systems may be "attracted" to far odder sets — sets Mandelbrot identifies as nonlinear fractals. This chapter turns that observation around: it contrives dynamical systems whose attractors are fractals already tamed in Chapters 18 and 19, so that a plotted orbit <i>draws</i> the fractal. Both plates were made this way, 64,000 dots at a time.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#tree"><b>ƒ</b> A dust attractor</a>
+    <a href="#p198"><b>198</b> San Marco dragon</a>
+    <a href="#p199"><b>199</b> Pharaoh's Breastplate</a>
+  </nav>
+
+  <!-- ===================== PAGES 194-195: AN ATTRACTOR THAT IS A DUST ===================== -->
+  <section class="plate" id="tree">
+    <div class="plate-head">
+      <p class="no">Pages 194–195 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>An attractor that is a dust</h2>
+      <p class="dim">x → λx(1−x) · attractors over λ · at λ<sub>∞</sub> = 3.5699… the attractor is a fractal dust, D ≈ 0.538</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-wide zoomable" id="wB">
+          <canvas id="cB" role="img" aria-label="Bifurcation diagram of the quadratic map: the attractor for each lambda"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>The attractors of λx(1−x)</strong> · λ runs left to right, the attractor's points stack vertically · tap to read one λ · dashed line: λ<sub>∞</sub></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">For each λ, iterate x → λx(1−x) and throw away the early steps; what the orbit keeps visiting is the attractor. First a single point, then — each point "bifurcates into 2" — a cycle of 2, 4, 8… The cascade accumulates at λ<sub>∞</sub> ≈ 3.5699, and there, after "an infinity of bifurcations, this attractor is a fractal dust" with D ≈ 0.538: a kin of the Cantor dust, but with two unequal similarity ratios, one of them Feigenbaum's 1/α ≈ 0.3995. Beyond it the evolution on the attractor looks "chaotic": no point is visited twice in finite time.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Window</span><span class="value" id="kBv">off</span></div>
+          <div class="btn-row">
+            <button type="button" class="btn primary" id="wholeB">The whole tree</button>
+            <button type="button" class="btn" id="kBm" aria-label="Shrink the Feigenbaum window">window −</button>
+            <button type="button" class="btn" id="kBp" aria-label="Magnify by delta and alpha">magnify by δ, α</button>
+          </div>
+        </div>
+        <p class="readline" id="infoB" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Tapped λ</dt><dd id="rBa">—</dd></div>
+          <div><dt>Attractor there</dt><dd id="rBb">—</dd></div>
+          <div><dt>Lyapunov exponent</dt><dd id="rBc">—</dd></div>
+          <div><dt>Magnification k</dt><dd id="rBk">—</dd></div>
+        </dl>
+        <p class="note">The book prints no figure for these pages; this diagram is ours. The "magnify" button re-centres the window on (λ<sub>∞</sub>, ½) and shrinks it by δ ≈ 4.669 horizontally and α ≈ 2.503 vertically — Mandelbrot's point that the tree, juxtaposing the attractors in the (x, λ) plane, is <i>asymptotically self-affine</i>: successive windows nearly repeat (each is also mirrored, since α acts with a sign — the drawing flips odd steps back). Since δ ≠ α the tree is self-affine, not self-similar, and only "with a residue": the windows agree better and better but never exactly. D ≈ 0.538 is Grassberger's value, which the book cites from a preprint.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 198: THE SAN MARCO DRAGON ===================== -->
+  <section class="plate" id="p198">
+    <div class="plate-head">
+      <p class="no">Plate 198 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>The San Marco dragon, drawn by attraction</h2>
+      <p class="dim">the two inverses of x → 3x(1−x) · z = ½ ± √(¼ − z/3) · a pseudo-random index picks one per step</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-marco zoomable" id="wM">
+          <canvas id="cM" role="img" aria-label="San Marco dragon drawn as 64,000 dots by randomly iterated inverse maps"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>Plate 198</strong> · a long orbit of a decomposable dynamical system · tap anywhere to run time <i>forward</i> instead</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Chapter 19's San Marco dragon — the self-squared curve of λ = 3 — reappears here as an attractor. Run forward, x → 3x(1−x) <i>repels</i> from the dragon's skin; so "making time run backward", the system iterates the map's two inverses, and under wide conditions the orbit is attracted onto the curve. Which inverse to take at each step is the "determining index", chosen among 2 possibilities by a pseudo-random algorithm repeated 64,000 times; the first few positions are not plotted. The dots do not land uniformly: in the book's words, "regions in the neighborhoods of cusps and self-intersections are very slow to fill" — watch the pinch points stay sparse while the bulbs blacken.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Points plotted</span></div>
+          <div class="steps" id="nM" role="group" aria-label="How many points"></div>
+        </div>
+        <div class="group">
+          <label class="check" for="shadeM"><input type="checkbox" id="shadeM"> Shade the self-squared set the dots wrap</label>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate198">Show Plate 198 as printed</button>
+          <button type="button" class="btn" id="fillM">Watch it fill</button>
+          <button type="button" class="btn" id="seedM">New random run</button>
+        </div>
+        <p class="readline" id="infoM" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Points</dt><dd id="rMa">64,000</dd></div>
+          <div><dt>Seed</dt><dd id="rMb">1982</dd></div>
+          <div><dt>Map</dt><dd>x → 3x(1−x)</dd></div>
+          <div><dt>Attractor spans</dt><dd>[0, 1] on the real line</dd></div>
+        </dl>
+        <p class="note">The figure is computed by the caption's own algorithm — random inverse iteration — not traced; checked against the scan, the dots sit a median 0 px from the plate's ink at 600 dpi, and the shape's height-to-width ratio matches to three decimals. The book's pseudo-random sequence is unknowable, so the dot-for-dot pattern is this page's own run; the seed is shown and can be rerolled. The cusp where the two big bulbs meet is the map's fixed point ⅔, with multiplier exactly −1: tap near the skin and the forward orbit creeps there glacially, which is also why that neighbourhood fills so slowly backward.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 199: THE PHARAOH'S BREASTPLATE ===================== -->
+  <section class="plate" id="p199">
+    <div class="plate-head">
+      <p class="no">Plate 199 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>The Pharaoh's Breastplate</h2>
+      <p class="dim">four inversions, "selected to insure that the limit set 𝓛 is a collection of circles" · determining index among 4</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wP">
+          <canvas id="cP" role="img" aria-label="Pharaoh's Breastplate: the limit set of four inversions, drawn as 64,000 dots"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>Plate 199</strong> · the same decomposable system, now with 4 inversions · zoom keeps resolving circles in the circles mode</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The other shape drawn by attraction is self-inverse (Chapter 18): the limit set of a group of four circle inversions, chosen so that the limit set degenerates from a wild curve into "a collection of circles" — infinitely many, nested in a crescent between two tangent circles, every one of them kissing its neighbours. The plate again plots a long orbit: at each of 64,000 steps a pseudo-random index picks one of the 4 inversions, and the moving point is attracted onto the necklace. Mandelbrot later named the figure the <i>Pharaoh's Breastplate</i> for its likeness to Tutankhamun's jewellery.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Draw it as</span></div>
+          <div class="steps words" id="mP" role="group" aria-label="Rendering mode"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Points plotted</span></div>
+          <div class="steps" id="nP" role="group" aria-label="How many points"></div>
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Crescent proportions (inner/outer radius)</span><span class="value" id="qPv">0.647 (the plate)</span></div>
+          <input type="range" id="qPs" min="0.42" max="0.82" step="0.0005" value="0.6474" aria-label="Ratio of the inner circle to the outer">
+        </div>
+        <div class="group">
+          <label class="check" for="gensP"><input type="checkbox" id="gensP"> Show the four inversion circles (dashed)</label>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate199">Show Plate 199 as printed</button>
+          <button type="button" class="btn" id="seedP">New random run</button>
+        </div>
+        <dl class="read">
+          <div><dt>Points</dt><dd id="rPa">64,000</dd></div>
+          <div><dt>Seed</dt><dd id="rPb">1982</dd></div>
+          <div><dt>Circles drawn</dt><dd id="rPc">—</dd></div>
+          <div><dt>N(radius &gt; ρ) ∝ ρ<sup>−e</sup>, e</dt><dd id="rPd">—</dd></div>
+        </dl>
+        <p class="note">The book nowhere states the four inversions, so they are this page's reconstruction, decoded from the scan (the derivation is logged in the repository). The two bounding circles are tangent at the top; seen from that tangency point the crescent straightens into a strip, and every tangency in the print forces the inversions' positions exactly — two circles of radius 1/√2 seated on the strip's edges, and two mirrors, one half-period either side of them (the necklace repeats with period 1/√2; in the crescent all four become the dashed circles above). One number is left free, the crescent's radius ratio: 0.647 is fitted to the plate (drag the slider for the rest of the family — the same limit set seen through different Möbius frames). Checked at 600 dpi, points generated this way sit a median 4 px from the plate's ink, against 35 px for random points in the crescent. The dots' <i>texture</i> still depends on the book's unknowable random sequence and exact generators, so it is matched only statistically — like the print, this run fills the horns and the pinch points last; the circles mode is exact. The circle-count exponent e is this page's own measurement, the same census Chapter 18 runs on Apollonian nets.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 20, pages 193–199 (Plates 198 and 199). Both plates are recomputed by the chapter's own algorithm — a long orbit of a "decomposable dynamical system", the determining index chosen pseudo-randomly among the maps' inverses — and the bifurcation tree illustrates pages 194–195, which print no figure. The breastplate's four inversions are a reconstruction fitted to the scan, as noted. Companion pages: <a href="self-squared-dragons.html">Self-Squared Dragons</a> (chapter 19, where λ = 3 is the San Marco dragon) and <a href="cantor-dust.html">Cantor Dust</a> (the dust the Feigenbaum attractor is kin to).</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>

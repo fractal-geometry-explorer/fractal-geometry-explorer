@@ -461,6 +461,18 @@
       "layout_comment": "/* Layout: the inverted-V map (pages 180-182), real-lambda curves (185), the drape (187), the separators (188-189), the dragon lab (190-191) and the Fatou dusts (192), each a computed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
     },
     {
+      "slug": "fractal-attractors",
+      "title": "Attraction to Fractals",
+      "plates": "Plates 198–199",
+      "chapter": 20,
+      "scripts": [
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: the bifurcation tree (pages 194-195), the San Marco dragon by inverse iteration (198) and the Pharaoh's Breastplate (199), each a computed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
       "slug": "umbrella-trees",
       "title": "Fractal Umbrella Trees",
       "plates": "Plate 155",

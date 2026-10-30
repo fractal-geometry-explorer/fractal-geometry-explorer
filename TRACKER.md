@@ -112,7 +112,7 @@ Update this file in the same pull request as the work it records.
 | 188–189 | 188–189 | The separators of z → λz(1 − z) and of z → z² − μ (the μ-map) | exact | done | self-squared-dragons |
 | 190–191 | 190–192 | Self-squared dragons; approach to the "Peano" limit | exact | done | self-squared-dragons |
 | 192 | 192 | Real self-squared Fatou dusts | exact | done | self-squared-dragons |
-| 198–199 | 198–199 | Attraction to fractals (San Marco dragon; Pharaoh's breastplate) | exact | todo | |
+| 198–199 | 198–199 | Attraction to fractals (San Marco dragon; Pharaoh's breastplate) | exact | done | fractal-attractors |
 
 ## VIII Stratified random fractals (chapters 23–26)
 
@@ -212,6 +212,7 @@ Each chapter session should add the chapter's main ideas here, alongside its pla
 - percolation (chapter 13) — done, on islands-clusters (seeded bond-percolation lattice);
 - surfaces with positive volume: Cantor dusts of positive measure, Osgood's curve of positive area, and the arteries-and-veins model of flesh (chapter 15, which prints no plates);
 - the diameter exponent of trees (chapter 17) — done, on the diameter-exponent page;
+- fractal attractors, "chaotic" evolution, decomposable dynamical systems and the Feigenbaum dust attractor (chapter 20) — done, on the fractal-attractors page;
 - canonical curdling, the Bienaymé birth-and-death criticality and D* = log ⟨N⟩/log b (chapter 23; on the random-curds page);
 - 1/f noise and scaling nets (chapter 27): the Joseph effect, Hurst's R/S and the spectrum are on the fractional-trails page;
 - island, lake and cup areas: Korčak's law Pr(A > a) = F·a⁻ᴮ with B = D/2, deadvalleys, cups and the Devil's terraces, the eroded Brown model (chapter 29, pages 272–276 — the chapter prints no figure);
