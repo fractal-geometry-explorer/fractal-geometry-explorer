@@ -36,6 +36,7 @@ Update this file in the same pull request as the work it records.
 | (concept) | 1–5 | Theme: the manifesto chapter (chapter 1, no figures; its concepts are covered across the site) | — | done | |
 | 10–11 | 10–11 | Artificial fractal flakes (surface dimensions 7/3 and 5/2) | random / render | todo | |
 | 13 | 12–13 | Jean Perrin's classic drawings of physical Brownian motion | data | todo | |
+| (concept) | 20–24 | Chapter 4, variations and disclaimers: a drawing holds between two cutoffs (no plates) | exact | done | two-cutoffs |
 
 ## II Three classic fractals, tamed (chapters 5–8)
 
@@ -202,6 +203,7 @@ Update this file in the same pull request as the work it records.
 Each chapter session should add the chapter's main ideas here, alongside its plates. Candidates so far:
 - the theme (chapter 1): a programmatic manifesto with no construction of its own — irregularity against Euclid, scaling, fractal dimension, the "gallery of monsters", Brownian motion as the simplest case, and the coining of "fractal"; every one of these is treated on a later chapter's page, so chapter 1 keeps no page (see DECISIONS.md, Part I);
 - similarity dimension (chapters 3 and 6) — done, on the koch-plates page (Plate 44's piece-cutting demo, D = log N / log (1/r));
+- the outer and inner cutoff of any fractal illustration, and the pixel test behind "to see is to believe" (chapter 4, which prints no figures) — done, on the two-cutoffs page;
 - coastline length against ruler size (chapter 5; partly on the Minkowski page);
 - random midpoint displacement, its creases, and Poisson strata (chapter 26; on the Plate 246 page);
 - length–area–volume relations (chapter 12): done, on the length-area page (divider-walk demo, Hack's rivers, area–volume cases);
