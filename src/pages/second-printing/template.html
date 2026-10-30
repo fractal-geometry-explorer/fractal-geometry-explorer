@@ -1,0 +1,212 @@
+<title>Update for the Second Printing</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.r-wide { aspect-ratio: 10 / 7; }
+#wQ { cursor: grab; touch-action: pan-y; }
+#wQ:active { cursor: grabbing; }
+.topics { margin: 0; padding: 0; list-style: none; display: grid; gap: 14px; }
+.topics li { font-family: var(--f-body); font-size: 16px; line-height: 1.5; max-width: 76ch; }
+.topics b { font-family: var(--f-display); font-size: 13.5px; font-weight: 700; letter-spacing: 0.02em; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · "Update Added in the Second Printing" (XII 1982) · pages 458–468 and front matter</p>
+    <h1><span class="plate-no">Plates II, VIII, X, 467</span><span class="lozenge" aria-hidden="true"></span><span>Update for the Second Printing</span></h1>
+    <p class="dek">Between delivery and the second printing, "fractal geometry did not stand still: it moved on at increasing speed." The update Mandelbrot bound into the 1982 reprint reports a year of news — metal fractures measured by fractal dimension, a new map z → λ(z−1/z) iterated beside the old dragons, and the squaring map carried into Hamilton's quaternions. Its four plates hide in the front matter and after the index; every figure here is computed from the text's rules.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#p8"><b>VIII</b> Julia basins</a>
+    <a href="#pX"><b>X</b> The λ-map</a>
+    <a href="#pQ467"><b>II·467</b> Quaternions</a>
+    <a href="#p461"><b>p. 461</b> Metal fractures</a>
+    <a href="#topics"><b>+</b> The rest of the update</a>
+  </nav>
+
+  <!-- ===================== PLATE VIII: JULIA BASINS ===================== -->
+  <section class="plate" id="p8">
+    <div class="plate-head">
+      <p class="no">Plate VIII, facing the foreword <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>A Julia set of z → λ(z−1/z)</h2>
+      <p class="dim" id="dimJ">basins of an attracting cycle, shaded by phase · the Julia set is the boundary between them</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wJ">
+          <canvas id="cJ" role="img" aria-label="Julia set of lambda times z minus one over z, basins shaded by cycle phase"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>Basins of attraction</strong> · <span>ink is the Julia set; each gray is one phase of the cycle</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The update's chaos section iterates a map built from a pole instead of a critical polynomial: z → λ(z−1/z). "An example of Julia set defined as the boundary of the basins of attraction" is its Plate VIII. When the critical orbit settles on an attracting cycle, every point of the plane falls toward one of the cycle's points; shading each basin by the phase at which it arrives tiles the plane with rounded domains, and the Julia set — chains of starred clusters around the pole's preimages — is the fence between them.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">λ</span></div>
+          <div class="steps words" id="mJ" role="group" aria-label="Lambda presets"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate8">Show the Plate VIII reconstruction</button>
+        </div>
+        <p class="readline" id="infoJ" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>λ</dt><dd id="rJa">—</dd></div>
+          <div><dt>Limit points</dt><dd id="rJb">—</dd></div>
+          <div><dt>One cycle point</dt><dd id="rJc">—</dd></div>
+          <div><dt>|λ|</dt><dd id="rJd">—</dd></div>
+        </dl>
+        <p class="note">A reconstruction in kind, not stroke for stroke: the book names no λ for this plate and no window, and no fit recovered them. The print shows three gray shades, which is the signature of a 3-point cycle; the default λ = 0.2213 + 0.4834i is the centre of a period-3 region of the map below, and reproduces the plate's round three-shade domains and star-chain boundaries. Tap a λ on Plate X below to send it here.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE X: THE LAMBDA MAP ===================== -->
+  <section class="plate" id="pX">
+    <div class="plate-head">
+      <p class="no">Plate X, before the foreword <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>The λ-map of z → λ(z−1/z)</h2>
+      <p class="dim">unit circle: beyond it ∞ attracts · white discs |λ∓½| ≤ ½: one and two limit points · between: atoms and dust</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wX">
+          <canvas id="cX" role="img" aria-label="Parameter map of lambda times z minus one over z"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>The λ-map</strong> · <span>printed orientation, +1 up</span> · tap to read a λ</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">"To study other λ's, a map analogous to Plates 188 and 189 was drawn, and part of it is shown on Plate X. We observe a very interesting form of universality: the island molecules in Plate X take precisely the same form as for the quadratic mapping — Plates X and 188–189 are built using the same building blocks." The whole map lives inside the unit circle (outside it the iteration "converges to infinity except for points z₀ forming a dust"). Two big discs hang inside it, one with a single limit point and one — the caption's white disc — with two; between the discs and the circle runs the black corona: sprouted atoms of every larger cycle, strung on a dust of chaotic λ.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Colour</span></div>
+          <div class="steps words" id="mX" role="group" aria-label="Colour rule"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plateX">Show Plate X as printed</button>
+          <button type="button" class="btn" id="wholeX">The whole map</button>
+          <button type="button" class="btn" id="toJ" disabled>Send this λ to Plate VIII ↑</button>
+        </div>
+        <p class="readline" id="infoX" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Tapped λ</dt><dd id="rXa">—</dd></div>
+          <div><dt>Critical orbit</dt><dd id="rXb">—</dd></div>
+          <div><dt>|λ|</dt><dd id="rXc">—</dd></div>
+          <div><dt>|λ + ½|</dt><dd id="rXd">—</dd></div>
+        </dl>
+        <p class="note">Decoded from the scan: the two clean arcs of the plate fit the unit circle and a disc of exactly half its radius, internally tangent (to about 1 px at 300 dpi) — and the tangency points straight down, so the plate is printed turned 90°, with +1 up. The caption locates the white disc at |λ+i/2| &lt; ½, but the two-limit-point disc of this map is |λ+½| &lt; ½; the caption read its position off the turned print. The print's colour rule, taken from the plate itself: paper where the orbit escapes or keeps exactly 2 limit points, ink for a limit cycle of any other size (the one-limit-point disc prints black), and sampled dust where no cycle is found. The "as printed" view is the fitted window.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATES II AND 467: QUATERNIONS ===================== -->
+  <section class="plate" id="pQ467">
+    <div class="plate-head">
+      <p class="no">Plate II (page ii) and Plate 467 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>The squaring map in quaternions</h2>
+      <p class="dim">q → q² − μ, μ complex · the complex-plane section is a dragon of Chapter 19 · drag to turn</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq" id="wQ">
+          <canvas id="cQ" role="img" aria-label="Three-dimensional section of a quaternion Julia set, raymarched and shaded"></canvas>
+        </div>
+        <figcaption><strong>3-D section of a 4-D set</strong> · <span>drag to turn it; the fine pass follows</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">A. Norton suggested that after complex z "a next most natural environment is Hamilton's quaternions", and drew the first pictures (Norton 1982). The set of quaternions that fail to iterate to infinity lives in four dimensions; what prints is a three-dimensional section, shaded. "Each major segment of the dragon obtained by complex plane section is imbedded in a major segment of the spatial shape… surrounded by multiple loosely fitting belts" — Plate 467, a cycle of size 4. Plate II, facing the half-title, "shows a different spatial fractal obtained in roughly the same fashion." Even noncommutativity turned into an asset: each variant way of writing the map induces different links between the domains, so the topology needs extra information to pin down.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">The plates</span></div>
+          <div class="steps words" id="pQ" role="group" aria-label="Plate presets"></div>
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Re μ</span><span class="value" id="mQrv">0.157</span></div>
+          <input type="range" id="mQr" min="-1.2" max="1.2" step="0.001" value="0.15652" aria-label="Real part of mu">
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Im μ</span><span class="value" id="mQiv">−1.032</span></div>
+          <input type="range" id="mQi" min="-1.2" max="1.2" step="0.001" value="-1.03225" aria-label="Imaginary part of mu">
+        </div>
+        <p class="readline" id="infoQ" aria-live="polite">The surface is the distance-estimate skin of the set, raymarched; a coarse pass draws while you move, the full pass follows.</p>
+        <dl class="read">
+          <div><dt>μ</dt><dd id="rQa">—</dd></div>
+          <div><dt>Complex section</dt><dd id="rQb">—</dd></div>
+          <div><dt>View yaw / pitch</dt><dd id="rQc">—</dd></div>
+          <div><dt>Iterations</dt><dd id="rQd">16</dd></div>
+        </dl>
+        <p class="note">Both presets are stand-ins, not reconstructions: the book records no μ and no viewpoint for either plate (the caption only says Plate 467 "illustrates a simple case with a cycle of size 4"). The Plate 467 preset uses μ = 0.1565 − 1.0322i, whose complex section is a dragon with an attracting 4-cycle, and shows the same swirled segments and belt rings; the Plate II preset is a μ with a smooth, heavier section chosen for its resemblance. The section drawn is the quaternion slice through (1, i, j), with the j-axis vertical.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PAGE 461: METAL FRACTURES ===================== -->
+  <section class="plate" id="p461">
+    <div class="plate-head">
+      <p class="no">Page 461 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Metal fractures and fractals</h2>
+      <p class="dim">Mandelbrot, Passoja &amp; Paullay · spectra and slit islands give nearly the same D · impact energy falls as D grows</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-wide" id="wC">
+          <canvas id="cC" role="img" aria-label="Digitised diagrams from page 461: fracture spectrum, slit-island plot, and impact energy against fractal dimension"></canvas>
+        </div>
+        <figcaption><strong>The three diagrams</strong> · <span>digitised from the printed page at 600 dpi</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The update's one data figure brings fractals to the materials lab. A fracture surface of steel is "plated with electroless nickel" and polished down, so islands of metal appear in a sea of nickel — artificial "slit islands" whose area–perimeter plot (Chapter 12's trick) is "very nearly straight". A spectrum taken along the surface gives a second, independent D, and |D(spectral) − D(islands)| comes out "of the order of a few hundredths". Heat-treat the same Maraging steel at different temperatures and the Charpy impact energy falls as D rises: the first engineering use of fractal dimension as a material parameter.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Diagram</span></div>
+          <div class="steps words" id="mC" role="group" aria-label="Which diagram"></div>
+        </div>
+        <div class="group" id="refitWrap">
+          <label class="check" for="refitC"><input type="checkbox" id="refitC"> Refit the recovered markers</label>
+        </div>
+        <p class="readline" id="infoC" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Data</dt><dd id="rCa">—</dd></div>
+          <div><dt>Printed line slope</dt><dd id="rCb">—</dd></div>
+          <div><dt>D from the line</dt><dd id="rCc">—</dd></div>
+          <div><dt>Printed D</dt><dd id="rCd">—</dd></div>
+        </dl>
+        <p class="note">A data plate: every curve, marker and line is digitised from the 600 dpi scan (the spectrum as 81 samples of the curve, the slit-island plot as 32 recovered "+" marks, the Charpy chart as all 6 squares with their temperatures). The printed fitted lines carry D = 1.116 and 1.160 by their measured slopes, against the printed labels 1.118 and 1.164. One oddity of the print: the joule and foot-pound axes of the Charpy chart disagree by about 25 J — energies here are read from the joules axis.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== THE REST OF THE UPDATE ===================== -->
+  <section class="plate" id="topics">
+    <div class="plate-head">
+      <p class="no">Pages 458–466 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>The rest of the update, mapped to its chapters</h2>
+      <p class="dim">every other topic reports news on a chapter this site already rebuilds</p>
+    </div>
+    <div class="plate-body">
+      <div>
+        <ul class="topics">
+          <li><b>The definition of "fractal".</b> Mandelbrot regrets the 1977 pedantic definition and returns to the 1975 stance: leave "fractal" without one, use "fractal dimension" generically for all the variants of <a href="mathematical-backup.html">Chapter 39</a>, and pick whichever fits each case.</li>
+          <li><b>Homogeneous fractal turbulence.</b> Numerical support for D ≈ 2.5–2.6 continues (Chorin), and Hentschel &amp; Procaccia connect the stretching vortices of <a href="turbulence-intermittency.html">Chapter 10</a> to the polymers of <a href="lattice-physics.html">Chapter 36</a>.</li>
+          <li><b>Cloud and rain areas.</b> Lovejoy &amp; Mandelbrot build fractal rain maps on the finding that rainfall discontinuities follow the same hyperbolic law as the price jumps of <a href="cotton-prices.html">Chapter 37</a>; the area–perimeter data is <a href="length-area.html">Plate 115</a>.</li>
+          <li><b>Earthquakes.</b> Kagan &amp; Knopoff's statistics make quake patterns scaling and fractal, as the relief model of <a href="brown-relief.html">Chapter 28</a> prepares one to expect; Omori saw scaling in aftershocks nearly a century earlier.</li>
+          <li><b>Fractal electrodes.</b> Le Méhauté: a battery stores by volume and discharges by surface, so electrode design "poses a fractal problem" — the length–area–volume tension of <a href="length-area.html">Chapter 12</a> turned into engineering.</li>
+          <li><b>Percolation confirmed.</b> Kapitulnik, Aharony, Deutscher &amp; Stauffer recover D ≈ 1.9 for the contact clusters predicted in <a href="islands-clusters.html">Chapter 13</a>, and thin gold and lead films percolate "on the dot".</li>
+          <li><b>Low-lacunarity lattices.</b> Gefen, Meir, Mandelbrot &amp; Aharony build the physicists' postulated fractional-dimension spaces as Sierpiński carpets whose lacunarity (<a href="carpets-lacunarity.html">Chapter 34</a>) tends to zero. The gasket, meanwhile, becomes the "physicists' toy" of exact renormalization — and Mandelbrot grumbles that a French dictionary turned his <i>gasket</i> into ship's rope; he prefers <i>tamis</i>, sieve.</li>
+          <li><b>Cellular automata.</b> The neighbor-rule example on p. 328 (<a href="lattice-physics.html">Chapter 36</a>) is a cellular automaton, and Willson, Wolfram and Vichniac observe that automaton output "can, in fact, be fractal".</li>
+          <li><b>z → z²−μ, proved.</b> Douady &amp; Hubbard prove the μ-map of <a href="self-squared-dragons.html">Chapter 19</a> — the set now carrying Mandelbrot's name — is connected, by mapping its exterior onto that of a circle; Ruelle proves the dimension of a Julia dragon analytic in the parameter.</li>
+        </ul>
+      </div>
+      <div class="side">
+        <p class="cap">The update opens with the Courchevel workshop of July 1982 and closes with eleven columns of fresh references. Only the topics above left no figure of their own; the tracker's review pass can decide whether any deserves more than this map.</p>
+        <p class="note">The front matter of the updated printing holds no other plates: page i is the half-title, and the plates face pages ii, viii and x — there is no "Plate I". The red endpaper fractal inside the covers is printed without caption or credit.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (W. H. Freeman, second printing, 1982), "Update Added in the Second Printing", pages 458–468, with Plates II, VIII and X in the front matter and Plate 467 after the references; Norton 1982 for the quaternion method; Mandelbrot, Passoja &amp; Paullay for the fracture data. The λ-map and Julia figures are computed from z → λ(z−1/z); the quaternion figures are raymarched from q → q²−μ; the page-461 diagrams are digitised from the scan.</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>

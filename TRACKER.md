@@ -196,10 +196,14 @@ Update this file in the same pull request as the work it records.
 
 ## Front matter and the update for the second printing (pages 458–468)
 
+Confirmed against the scan: the front matter holds Plates II, VIII and X (facing pages ii, viii, x) and nothing else — page i is the half-title, so there is no Plate I; the red endpaper fractal is uncaptioned. Plate 467 sits after the references.
+
 | Plate | Title | Kind | Status | Site page |
 | :- | :- | :- | :- | :- |
-| I, II, VIII, X | Front-matter plates illustrating pages 464–465 | confirm | todo | |
-| 467 | Illustrates page 464 | confirm | todo | |
+| VIII | Julia set of z → λ(z−1/z), basins in three grays (illustrates p. 465) | exact | done | second-printing |
+| X | The λ-map of z → λ(z−1/z), printed turned 90° (illustrates p. 465) | exact | done | second-printing |
+| II, 467 | Quaternion Julia sets of q → q²−μ, 3-D sections (Norton; illustrate p. 464) | render | done | second-printing |
+| Figure, p. 461 | Metal fractures: spectrum, slit islands, impact energy against D | data | done | second-printing |
 
 ## Concepts without a plate
 

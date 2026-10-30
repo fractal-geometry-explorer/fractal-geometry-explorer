@@ -546,6 +546,18 @@
         "ui.js"
       ],
       "layout_comment": "/* Layout: the gasket and arrowhead (141), a percolation cluster (p. 132), the skewed web (143), the carpet and the Menger sponge (145), the branching curve of p. 139 and the split snowflake halls (146), each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "second-printing",
+      "title": "Update for the Second Printing",
+      "plates": "Plates II, VIII, X, 467",
+      "chapter": 43,
+      "scripts": [
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: five sections in the update's own order; interactive maps first, the quaternion render and data charts after, then the topic map. One column under 900px. */"
     }
   ]
 }

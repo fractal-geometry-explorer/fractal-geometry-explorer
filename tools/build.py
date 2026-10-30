@@ -140,13 +140,15 @@ def index_page(pages):
             bypart[part] = [p for p in order if lo <= p['chapter'] <= hi and not is_colour(p)]
         elif 'C1' in part:                 # the colour signature, shelved by its plate letters
             bypart[part] = [p for p in order if is_colour(p)]
+        elif 'second printing' in part.lower():  # the update, shelved after chapter 42
+            bypart[part] = [p for p in order if p['chapter'] > 42 and not is_colour(p)]
         else:
             bypart[part] = []
     sections = []
     for part in parts:
         todo = sum(1 for e in plates if e['part'] == part and e['status'] != 'done')
         def card(p):
-            shelf = 'Colour plates' if is_colour(p) else 'Chapter {}'.format(p['chapter'])
+            shelf = 'Colour plates' if is_colour(p) else ('Second printing' if p['chapter'] > 42 else 'Chapter {}'.format(p['chapter']))
             return (f'<a href="{p["slug"]}.html"><b>{html.escape(p["plates"])}</b><span>{html.escape(p["title"])}</span>'
                     f'<small>{shelf}</small></a>')
         cards = ''.join(card(p) for p in bypart[part])

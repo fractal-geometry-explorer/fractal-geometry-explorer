@@ -703,6 +703,30 @@ with w = b^(−H) = b^(D−2), and W₁(t) − W₁(0) = (1−w²)^(−1/2) Σ_{
 - **Topic split with chapter 39.** Agreed with the chapter-39 thread: this page keeps the Weierstrass *story* and a small historical figure; the mathematics (spectra, modified forms, kin) goes on mathematical-backup#weierstrass. No forward hyperlink from this page (it would be dead until that page merges); the chapter-39 PR may add the links both ways once both pages exist.
 - Chapters 40 (biographical sketches) and 42 (epilog) are other threads' work; this page's tracker row covers only chapter 41.
 
+## Update for the second printing (pages 458–468 and front matter, page second-printing)
+
+**The plates, located.** The front matter holds three plates, one facing each of pages ii, viii and x (front-matter page = scan page − 4 in FGN-00): Plate II (quaternion render, "illustrates page 464"), Plate VIII (Julia set, "illustrates page 465") and Plate X (λ-map, "illustrates page 465"). Page i is the half-title, so no Plate I exists; the tracker's provisional "I" row was wrong. The red endpaper fractal inside the covers is uncaptioned and uncredited. Plate 467 sits between the references and the order form.
+
+**Plate X, the λ-map of z → λ(z−1/z) — decoded.**
+- The two clean arcs fit circles with r/R = 0.492 and internal tangency (both fits ≈ 0.9 px mean residual at 300 dpi): the unit circle and a disc of half its radius, tangent at a point that lies straight down in the print. So the plate is the λ-map turned 90°, +1 up; the page draws screen x = Im λ, screen y = Re λ, and the "as printed" preset is the fitted window Re λ ∈ [−1.085, 0.119], Im λ ∈ [−0.127, 1.053].
+- Computed structure (critical orbit from z = i; the map is odd, so ±i give mirror orbits): everything escapes outside the unit circle; inside it, a disc |λ−½| < ½ where the orbit keeps 1 limit point, a disc |λ+½| < ½ with a 2-point limit cycle, period-4 discs centred near ±0.86i, and between them the corona of sprouted higher-period atoms on a dust of chaotic λ.
+- The caption's "white disc |λ+i/2| < 1/2" is wrong as dynamics: λ = −0.4i has an 8-cycle and λ = 0.05−0.55i is chaotic, while λ = −½ has exactly the caption's 2 limit points. The caption read the disc's position off the turned print. Verified on the scan that the text really prints "i/2" (not a 1/2 OCR error).
+- The print's colour rule, read off the plate (the fitted big discs identify which is which): paper = escape or exactly 2 limit points; ink = a limit cycle of any other size, the 1-limit-point disc included (its bottom bulge is the plate's top-left scalloped mass, fitted centre 0.466+0.000i); dust = no cycle found. The page reproduces that rule and offers a colour-by-cycle-size alternative.
+- The period-4 disc fitted from the plate's big sprouted atom: centre 0.850i (fitted −0.008 ± 0.850i), radius ≈ 0.152.
+
+**Plate VIII, the Julia set — a reconstruction in kind.** The plate shows basins in exactly three grays with star-chain boundaries, the signature of an attracting 3-cycle (no white: |λ| < 1, nothing escapes). The superstable period-3 values of this map (Newton on f³(i) = i) are 0.2213 ± 0.4834i and −0.4713 ± 0.8139i; the first family reproduces the plate's round three-shade domains and star chains, the second does not. The exact printed λ and window were searched for (coarse grid over window, rotation, mirror and shade permutation against a 72×72 shade classification of the scan) and not recovered — agreement peaked at 68% for every candidate, so the page uses λ = 0.2213+0.4834i and says the plate is matched in kind, not stroke for stroke. Basins are shaded by capture phase, (index − step) mod p, which is constant on each component.
+
+**Plates II and 467, quaternions — stand-ins.** The book records no μ and no viewpoint; the caption says only that Plate 467 is "adapted from Norton 1982" with "a cycle of size 4". The page raymarches the distance estimate |q|·log|q| / (2|q′|) of q → q²−μ on the slice through (1, i, j). Preset 467: μ = 0.15652 − 1.03225i (complex section a dragon with an attracting 4-cycle; same swirled segments and belts as the print). Preset II: μ = 0.35 + 0.55i, chosen by eye for the plate's smooth heavy shape. Both are labelled stand-ins on the page.
+
+**Page 461, the fracture diagrams — digitised at 600 dpi.**
+- Axes calibrated from the inward ticks (210.7–215 px/decade on the spectrum, 190.5/190.8 on the slit-island plot, both consistent across axes).
+- The spectrum's straight fit is a chain of dots with slope −1.768, i.e. D = (4 + slope)/2 = 1.116 against the printed label 1.118; the wiggly curve was traced as 81 column samples with the label region, the dotted verticals and the fitted line masked.
+- The slit-island line runs (logP, logA) = (0.57, 0.01) → (3.99, 5.92), slope 1.724, D = 2/slope = 1.160 against the printed 1.164. 32 of the "+" markers were recovered (bar-filter cross detection); a refit of those gives D ≈ 1.13, but markers sitting on the line resist recovery, so the page draws the printed line and offers the refit as an option.
+- All six Charpy squares recovered with their temperatures: (D, E) = (1.097, 164 J, 300°C), (1.161, 165, 315°C), (1.153, 139, 360°C), (1.163, 131, 340°C), (1.224, 85, 370°C), (1.280, 32, 430°C).
+- **The chart's two energy axes disagree.** The joules ticks (50/100/150) and the ft-lb ticks (20…140) imply the same px-per-joule slope but zero points offset by ≈ 25 J. The page reads energies from the joules axis and notes the discrepancy.
+
+**The rest of the update** prints no figures; its topics are mapped to the site's chapter pages in a closing section (turbulence → ch. 10/36, Lovejoy rain → ch. 12/37, earthquakes → ch. 28, batteries → ch. 12, percolation tests → ch. 13, low lacunarity → ch. 34, cellular automata → ch. 36, Douady–Hubbard and Ruelle → ch. 19).
+
 ## Open questions
 
 - **The 13-interval generator.** Why does Plate 69's large circle use a different rule from the caption's second stage? This may be worth a sentence once the rest of chapter 7 is reviewed.
