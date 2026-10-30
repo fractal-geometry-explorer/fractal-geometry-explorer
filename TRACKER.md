@@ -34,8 +34,8 @@ Update this file in the same pull request as the work it records.
 | Plate | Page | Title | Kind | Status | Site page |
 | :- | :- | :- | :- | :- | :- |
 | (concept) | 1–5 | Theme: the manifesto chapter (chapter 1, no figures; its concepts are covered across the site) | — | done | |
-| 10–11 | 10–11 | Artificial fractal flakes (surface dimensions 7/3 and 5/2) | random / render | todo | |
-| 13 | 12–13 | Jean Perrin's classic drawings of physical Brownian motion | data | todo | |
+| 10–11 | 10–11 | Artificial fractal flakes (surface dimensions 7/3 and 5/2) | random / render | done | fractal-flakes |
+| 13 | 12–13 | Jean Perrin’s classic drawings of physical Brownian motion | data | done | fractal-flakes |
 | (concept) | 14–19 | Chapter 3: the fractal defined (D > D_T); effective dimension and the ball of thread | exact / random | done | what-is-a-fractal |
 | (concept) | 20–24 | Chapter 4, variations and disclaimers: a drawing holds between two cutoffs (no plates) | exact | done | two-cutoffs |
 
