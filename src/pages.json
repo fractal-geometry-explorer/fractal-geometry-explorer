@@ -460,6 +460,19 @@
       "layout_comment": "/* Layout: Plate 323 (diamond tremas and lacunarity, two panels) and Plate 325 (a spatial trema dust on one octant of the sky), each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
     },
     {
+      "slug": "what-is-a-fractal",
+      "title": "What Is a Fractal?",
+      "plates": "Dimension",
+      "chapter": 3,
+      "layout_comment": "/* Layout: two concept sections (the definition D > D_T with the chapter's four example sets, the ball of thread and its effective dimension against resolution), each a computed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */",
+      "scripts": [
+        "shared/geometry.js",
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ]
+    },
+    {
       "slug": "two-cutoffs",
       "title": "Between Two Cutoffs",
       "plates": "Cutoffs",
