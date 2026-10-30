@@ -184,6 +184,18 @@
       "layout_comment": "/* Layout: four concept sections in the chapter's order (the gusty record and its probe, curdling in space, the section argument for D > 2, the spectrum inequality), each a computed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
     },
     {
+      "slug": "fractal-singularities",
+      "title": "Fractal Singularities",
+      "plates": "Chapter 11",
+      "chapter": 11,
+      "scripts": [
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: four concept sections (singularities standard and fractal, the zoom test, Chorin's D ≈ 2.5, Scheffer's bounds), each a computed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
       "slug": "biographical-sketches",
       "title": "Biographical Sketches",
       "plates": "Pages 391–404",

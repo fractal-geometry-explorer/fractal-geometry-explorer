@@ -187,6 +187,13 @@ Conventions used below:
 - **The section argument.** Computed exactly, not simulated: randomize the curdling (each subcell kept with probability p = 3^(D−3)); a straight probe's trace is a branching process with Binomial(3, p) offspring, mean 3^(D−2), so it dies out surely for D ≤ 2 and survives with positive probability for D > 2 — extinction iterates q → (1 − p + pq)³. Chapter 23 is cited by the book as proving the theorem for a simple class; the galaxies' contrast (projections must vanish, D < 2, D ≈ 1.23) is drawn on the same chart.
 - The chapter's open topology question (dust vs vortex tubes vs sheets; kurtosis tests determine only D) is reported as open on the page.
 
+## Part III, chapter 11
+
+**Fractal singularities of differential equations (pages 106–108, no plates).**
+- The chapter prints no figures at all — all three scanned pages were checked — so the whole page (`fractal-singularities`) is labelled as this page's own illustrations of the text. It is pure argument: the conjecture (Mandelbrot 1976c) that the singularities of the Euler and Navier–Stokes solutions are locally scaling fractal sets, with Chorin's and Scheffer's results as support.
+- **Numbers verified against the text.** Chorin 1981: D ~ 2.5 and B = 0.17 ± 0.03, unpublished 2.5 < D < 2.6; chapter 10's B = (3 − D)/3 gives exactly 1/6 ≈ 0.167 at D = 2.5, which the exponent-check chart draws. Scheffer's bounds for a finite-energy Navier–Stokes fluid: singular times of dimension at most 1/2, the singular set in space of dimension at most 1 (the first a restatement of an inequality in Leray 1934, as the chapter stresses).
+- **Inventions, flagged on the page.** The singular functions (a rational function with three poles; f = 1/dist to a two-piece Cantor dust, distance computed exactly with no stage cutoff), the zoom-test stand-ins (a parabola for the smooth curve; the plane dust C(1/3) × C(1/3), D = log 4/log 3, with the zoom anchored at (1/4, 1/4), a dust point where the base-3 construction repeats with a factor-9 period), the ε-thickened volume chart (ε^(3−D)), and the dissipation record 1/√(dist² + ν²) on singular times of chosen dimension. The book specifies no profiles; only the sets and the exponents are its claims.
+
 ## Part IV, chapter 12
 
 **Plate 115, log(perimeter) versus log(area) for clouds and rain areas (page length-area).**
