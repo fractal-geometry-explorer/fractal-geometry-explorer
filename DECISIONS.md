@@ -38,6 +38,12 @@ Conventions used below:
 - **The site build wraps the artifact fragments.** Sources have no doctype, charset or viewport (the artifact service added them when the pages were published); `tools/build.py` adds the skeleton, the site bar (previous/next in book order) and the index with the plate finder, which parses the tables in TRACKER.md. `tools/check_build.py` now checks the committed `site/` by default; the pre-foundation artifacts rebuild byte for byte only from the import commit (`c05f120`).
 - **The wrapper must also carry `[hidden] { display: none !important; }`.** The artifact service's stylesheet provided it; without it, any element whose class sets `display` (`.slider`, `.check`, `.key`, …) ignores its `hidden` attribute, which quietly broke show-and-hide controls on nine pages (first seen on peano-sweeps' "angle at the start" slider). The shell stylesheet in `tools/build.py` now provides it for every page; check the computed style, not the attribute, when testing visibility.
 
+## Part I, chapter 1
+
+**Theme (pages 1–5, no plates).**
+- The chapter prints no figures at all: every page of the scan was checked, and the PDF's only images are the page scans themselves. It is the book's manifesto — clouds, mountains and coastlines against Euclid; the casebook-and-manifesto framing; Dyson's "gallery of monsters" passage; the coining of *fractal* from the Latin *fractus*; and a restatement of goals.
+- Every concept the chapter names is visualized on a later chapter's page: coastlines and mountains (brown-relief, fractal-landscapes), Brownian motion as the "exceptionally simple" case (brown-trails, wiener-sausage), the classical monsters of Cantor, Peano and Weierstrass (cantor-dust, peano-sweeps, mathematical-backup), fractal dimension (chapter 3's concepts and the dimension readouts throughout), scaling (cotton-prices, power-laws), and the history of the ideas (historical-sketches). Following the project rule for chapters without plates, no page was built; the tracker records the chapter as covered across the site.
+
 ## Part II, chapters 5–8
 
 **Plate 31, monkeys tree, and Plate 32, Minkowski sausage.**
