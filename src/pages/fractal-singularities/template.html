@@ -1,0 +1,196 @@
+<title>Fractal Singularities</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.r-bar { aspect-ratio: 10 / 7; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 11, "Fractal Singularities of Differential Equations" · pages 106–108</p>
+    <h1><span class="plate-no">Chapter 11</span><span class="lozenge" aria-hidden="true"></span><span>Fractal Singularities</span></h1>
+    <p class="dek">Turbulence theory is split in two: Kolmogorov's phenomenology works but does not follow from the equations of fluid motion, and the Euler and Navier–Stokes equations resist every attempt to extract turbulence from them. Mandelbrot's conjecture (1976c) bridges the gap at its sharpest point — the solutions' singularities, he contends, are not the standard points, curves and surfaces but locally scaling fractal sets. This chapter prints no plates, so every figure here is this page's own illustration of its argument.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#singular"><b>1</b> Singularities</a>
+    <a href="#scalefree"><b>2</b> The zoom test</a>
+    <a href="#chorin"><b>3</b> Chorin's D ≈ 2.5</a>
+    <a href="#scheffer"><b>4</b> Scheffer's bounds</a>
+  </nav>
+
+  <!-- ===================== 1: STRINGING SINGULARITIES TOGETHER ===================== -->
+  <section class="plate" id="singular">
+    <div class="plate-head">
+      <p class="no">Pages 106–107 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Stringing singularities together</h2>
+      <p class="dim" id="dimA">standard singularities: points, curves and surfaces · the conjecture: locally scaling fractal sets</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-bar zoomable" id="wA">
+          <canvas id="cA" role="img" aria-label="A function singular at three points, or on a Cantor dust"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cAt">A rational function</strong> · <span id="cAn"></span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">How is an equation of mathematical physics solved in practice? One draws up a list of elementary "singularities" characteristic of the problem, then handles complex instances "by identifying the appropriate singularities and stringing them together" — the way a calculus student graphs a rational function from its poles. The standard singularities are points, curves and surfaces, and Mandelbrot reads the failure to derive turbulence from the Euler and Navier–Stokes equations as proof that no standard singularity fits. His conjecture: the turbulent solutions involve singularities of a new kind — locally scaling fractal sets — and <i>near-singularities</i>, their smoothed approximations.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Singular on</span></div>
+          <div class="steps words" id="mA" role="group" aria-label="Where the function is singular"></div>
+        </div>
+        <div class="group" id="dWrapA" hidden>
+          <div class="slider">
+            <div class="label-row"><span class="label">Dimension D of the dust</span><span class="value" id="DAv"></span></div>
+            <input type="range" id="DAs" min="0.2" max="0.95" step="0.005" value="0.5" aria-label="Dimension of the singular dust">
+          </div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="pA1">The calculus example</button>
+          <button type="button" class="btn" id="pA2">Fractal singularities (D = 1/2)</button>
+        </div>
+        <p class="readline" id="infoA" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Singular set</dt><dd id="rAa">—</dd></div>
+          <div><dt>Its dimension</dt><dd id="rAb">—</dd></div>
+          <div><dt>Blow-up law</dt><dd id="rAc">—</dd></div>
+          <div><dt>Under zoom</dt><dd id="rAd">—</dd></div>
+        </dl>
+        <p class="note">A reconstruction: the chapter draws nothing, so both functions are this page's inventions. The rational function has poles at −0.62, 0.08 and 0.66; the other blows up like 1/distance to a two-piece Cantor dust of chapter 8, computed exactly (no stage cutoff), so zooming keeps splitting the spikes forever. What the conjecture asserts is the <i>set</i> where the blow-up happens, not any particular profile on it.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 2: THE ZOOM TEST ===================== -->
+  <section class="plate" id="scalefree">
+    <div class="plate-head">
+      <p class="no">Page 107 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Scale-free equations, scaleless singularities</h2>
+      <p class="dim" id="dimB">the Euler equations have no built-in length · their singularities should survive a zoom unchanged</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wB">
+          <canvas id="cB" role="img" aria-label="Zooming into a point, a smooth curve, or a fractal dust"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cBt">A fractal dust</strong> · <span id="cBn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The motivation is "the very old notion that the symmetries and other invariances present in an equation 'ought' to be reflected in the equation's solution." The Euler equations are scale-free — no term singles out a length — so their typical solutions, and any singularities those solutions possess, should be scale-free too; away from walls a "principle of not feeling the boundary" should make them locally scaleless. The test: zoom in, centred on the set. A point, a line or a plane passes — those are the standard scale-free sets, and they have been tried and found wanting. A smooth curved set fails: its curvature is a built-in scale, and magnification irons it flat. What remains that still passes the test is a fractal.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">The candidate set</span></div>
+          <div class="steps words" id="mB" role="group" aria-label="Which set"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="zBin">Zoom in ×9</button>
+          <button type="button" class="btn" id="zBout">Back out ×9</button>
+        </div>
+        <p class="readline" id="infoB" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Dimension</dt><dd id="rBa">—</dd></div>
+          <div><dt>Magnification</dt><dd id="rBb">1×</dd></div>
+          <div><dt>Zooming leaves</dt><dd id="rBc">—</dd></div>
+          <div><dt>Built-in scale</dt><dd id="rBd">—</dd></div>
+        </dl>
+        <p class="note">The sets are stand-ins, not solutions of anything: the smooth curve is a parabola, and the dust is the plane product of two triadic Cantor sets, D = log 4/log 3 ≈ 1.26, drawn by subdividing to pixel size. The zoom stays centred on a point of each set (for the dust, (1/4, 1/4), which lies in it), so the ×9 button repeats the dust exactly — its base-3 construction has a factor-9 period there. The chapter is careful to hedge the argument: symmetry preservation is no general principle of Nature, and "broken symmetry" cannot be excluded; the proposal is to try the consequences of preservation.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 3: CHORIN'S D ≈ 2.5 ===================== -->
+  <section class="plate" id="chorin">
+    <div class="plate-head">
+      <p class="no">Page 107 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Chorin's vortex calculation: D ≈ 2.5</h2>
+      <p class="dim" id="dimC">stretched vorticity collects on a body of dimension D ≈ 2.5 · its correction B = 0.17 ± 0.03 · (3 − D)/3 at D = 2.5 is exactly 1/6</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-lox zoomable" id="wC">
+          <canvas id="cC" role="img" aria-label="Chorin's measured correction against the curdling prediction, and the shrinking volume of the vortex body"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cCt">Exponent check</strong> · <span id="cCn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">By 1981 the conjecture had numbers on its side. Alexandre Chorin applied a vortex method to the inertial range of fully developed turbulence and found the highly stretched vorticity collecting itself "into a body of decreasing volume, and of dimension D ∼ 2.5" — squarely in chapter 10's measured range. His correction to the Kolmogorov exponents, B = 0.17 ± 0.03, is compatible with experiment, and sits almost exactly on the curdling line B = (3 − D)/3, which gives 1/6 ≈ 0.167 at D = 2.5. The same calculations suggest that solutions of Euler's equations in three dimensions blow up in a finite time — singularities for real, not only in the limit.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mC" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group">
+          <div class="slider">
+            <div class="label-row"><span class="label">Dimension D of the vortex body</span><span class="value" id="DCv"></span></div>
+            <input type="range" id="DCs" min="2" max="3" step="0.01" value="2.5" aria-label="Dimension D">
+          </div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="pC1">Chorin (D = 2.5)</button>
+          <button type="button" class="btn" id="pC2">Kolmogorov (D = 3)</button>
+        </div>
+        <p class="readline" id="infoC" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>B = (3 − D)/3</dt><dd id="rCa">—</dd></div>
+          <div><dt>Chorin measured</dt><dd>0.17 ± 0.03</dd></div>
+          <div><dt>Volume at ε = 10⁻³</dt><dd id="rCc">—</dd></div>
+          <div><dt>Spectrum E(k)</dt><dd id="rCd">—</dd></div>
+        </dl>
+        <p class="note">The charts are this page's way of drawing the chapter's numbers; B = (3 − D)/3 is chapter 10's relation for fractally homogeneous turbulence. "Volume" is the volume of the vortex body thickened to thickness ε, which scales as ε<sup>3−D</sup> for a set of dimension D — how a "body of decreasing volume" can still carry all the dissipation. The red band marks Chorin's unpublished refinement, 2.5 &lt; D &lt; 2.6, which the chapter reports as coming "even closer to experiment".</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 4: VISCOSITY AND SCHEFFER'S BOUNDS ===================== -->
+  <section class="plate" id="scheffer">
+    <div class="plate-head">
+      <p class="no">Pages 107–108 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Viscosity, near-singularities, and Scheffer's bounds</h2>
+      <p class="dim" id="dimD">Navier–Stokes singular times: dimension at most 1/2 · their set in space: dimension at most 1 · viscosity smooths Euler's singularities into peaks</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-bar zoomable" id="wD">
+          <canvas id="cD" role="img" aria-label="A dissipation record with near-singular peaks at a dust of singular times"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cDt">The record of peaks</strong> · <span id="cDn"></span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">For viscous fluids the contention sharpens: the singularities of the Navier–Stokes solutions "can only be fractals", smoother than Euler's — so of lower dimension — and the peaks of dissipation seen as intermittency are "Euler singularities smoothed out by viscosity". V. Scheffer, examining a fluid started with finite kinetic energy, proved that if singularities exist at all, their projection on the time axis has fractal dimension at most 1/2, and their set in space dimension at most 1. The time bound restates an inequality in Leray's famous 1934 paper — nearly useless for forty years, Mandelbrot argues, until the fractal reading "placed it in proper perspective".</p>
+        <div class="group">
+          <div class="slider">
+            <div class="label-row"><span class="label">Dimension of the singular times</span><span class="value" id="DDv"></span></div>
+            <input type="range" id="DDs" min="0.1" max="1" step="0.005" value="0.5" aria-label="Dimension of the singular times">
+          </div>
+          <div class="slider">
+            <div class="label-row"><span class="label">Viscosity ν</span><span class="value" id="nDv"></span></div>
+            <input type="range" id="nDs" min="1" max="5" step="0.01" value="2" aria-label="Viscosity exponent">
+          </div>
+          <label class="check" for="markD"><input type="checkbox" id="markD" checked> Mark the singular times on the axis</label>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="pD1">At Scheffer's bound (D = 1/2)</button>
+          <button type="button" class="btn" id="pD2">Toward Euler (ν → 0)</button>
+        </div>
+        <p class="readline" id="infoD" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Singular times, D</dt><dd id="rDa">—</dd></div>
+          <div><dt>Scheffer's bound</dt><dd id="rDb">—</dd></div>
+          <div><dt>Peak dissipation</dt><dd id="rDc">—</dd></div>
+          <div><dt>In space</dt><dd id="rDd">dimension ≤ 1</dd></div>
+        </dl>
+        <p class="note">A reconstruction: the chapter states the theorems and draws nothing. The singular times here are a two-piece Cantor dust of chosen dimension, and the record is 1/√(dist² + ν²) on a log scale — the simplest profile that turns into a genuine singularity on the dust as ν → 0; the book specifies no profile. Push the dimension slider past 1/2 and the record shows what Scheffer's theorem forbids: a finite-energy Navier–Stokes solution cannot be that singular in time. The chapter closes by turning outward — galaxies obey the scale-free equations of gravitation, and the symmetry argument "applies to all scaling equations" — pointing back to chapter 9 and ahead to chapter 20.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 11, pages 106–108. The chapter prints no plates; every figure above is computed from the rules stated in the text or invented as noted. Companion pages: <a href="turbulence-intermittency.html">Turbulence and Intermittency</a> (chapter 10, whose D ≈ 2.5 this chapter ties to the equations) and <a href="cantor-dust.html">Cantor Dust</a> (chapter 8, the dusts used here).</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>

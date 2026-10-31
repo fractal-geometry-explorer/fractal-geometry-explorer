@@ -6,7 +6,7 @@ const N_I = 512;
 const HS = [
   { key: 'k', H: 1 / 3, btn: 'H = 1/3 Kolmogorov', name: 'Kolmogorov turbulence' },
   { key: 'b', H: 1 / 2, btn: 'H = 1/2 Burgers', name: 'Burgers turbulence' },
-  { key: 'p', H: 3 / 4, btn: 'H = 3/4 persistent', name: 'the persistent contrast of Plate 10' },
+  { key: 'p', H: 2 / 3, btn: 'H = 2/3 persistent', name: 'the persistent flake of Plate 10 (surface D = 7/3)' },
 ];
 const stI = { h: HS[0], level: 50, seed: 2, mode: 'coast' };
 let fieldI = null, fieldKey = '';

@@ -1,0 +1,106 @@
+<title>Fractal Flakes and Perrin's Tracings</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.r-p13 { aspect-ratio: 13 / 21; max-width: 560px; margin: 0 auto; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 2, "The irregular and fragmented in Nature" · pages 6–13</p>
+    <h1><span class="plate-no">Plates 10, 11 and 13</span><span class="lozenge" aria-hidden="true"></span><span>Fractal Flakes and Perrin's Tracings</span></h1>
+    <p class="dek">Chapter 2 is Jean Perrin's chapter. In a 1906 manifesto Perrin argued that a white soap flake and a jiggling colloidal grain are better described by continuous functions without derivatives than by the smooth curves of the classroom. Mandelbrot answers with the book's first pictures: three computer-rendered flakes whose surfaces have fractal dimensions 7/3, 5/2 and 8/3 — and the one plate in the whole book that shows a natural phenomenon, Perrin's own tracings of Brownian motion.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#flakes"><b>10–11</b> Artificial fractal flakes</a>
+    <a href="#perrin"><b>13</b> Perrin's tracings</a>
+  </nav>
+
+  <!-- ===================== PLATES 10-11 ===================== -->
+  <section class="plate" id="flakes">
+    <div class="plate-head">
+      <p class="no">Plates 10 and 11 <span class="lozenge" aria-hidden="true"></span> pages 10–11</p>
+      <h2>Artificial fractal flakes</h2>
+      <p class="dim" id="dimF">a fractional Brown field of (x, y, z) · the flake is the region above a level · surface D = 3 − H</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wF">
+          <canvas id="cF" role="img" aria-label="A rendered fractal flake"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="capFt">Surface D = 7/3</strong> · <span id="capF">H = 2/3 · one seeded draw shared by all three plates</span> · seed <span id="seedF">1906</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">"These flakes exist only in a computer's memory. They were never made into hard models, and the shading too was implemented by computation." They are meant to accompany Perrin's remark that the closer one looks at a flake, the more irregularities appear, so that no tangent plane can ever be fixed. The construction waits for Chapter 30: model a quantity — there, temperature — as a fractional Brown function of the three space coordinates, and take the region where it exceeds a level. The boundary is a surface of fractal dimension D = 3 − H, printed next to each flake: 7/3, 5/2 and 8/3. The flakes look alike plate to plate because all three were grown from one random draw, only filtered differently — a bias of the Fourier shortcut that the caption of Plates 266 and 267 owns up to.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Surface dimension</span></div>
+          <div class="steps words" id="dF" role="group" aria-label="Surface dimension"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Flake share of the volume</span><span class="value" id="vFq">14%</span></div>
+          <div class="slider"><input type="range" id="sFq" min="6" max="44" step="2" value="14" aria-label="Share of the volume inside the flake"></div>
+        </div>
+        <label class="check"><input type="checkbox" id="kFs" checked> One draw for every D, as in the book</label>
+        <div class="btn-row">
+          <button type="button" class="btn" id="rollF">New flake</button>
+          <button type="button" class="btn" id="pF10">Show Plate 10 as printed</button>
+          <button type="button" class="btn" id="pF11a">Plate 11, top</button>
+          <button type="button" class="btn" id="pF11b">Plate 11, bottom</button>
+        </div>
+        <dl class="read">
+          <div><dt>Exponent</dt><dd id="rFa">H = 2/3</dd></div>
+          <div><dt>Surface (theory)</dt><dd id="rFb">D = 7/3</dd></div>
+          <div><dt>Surface (counted)</dt><dd id="rFc">—</dd></div>
+          <div><dt>Inside the flake</dt><dd id="rFd">14% of the box</dd></div>
+        </dl>
+        <p class="note">A random plate: the book's flakes came from an unrecorded 1970s program and seed, so these are statistical reconstructions — same construction, same three dimensions, fresh randomness with the seed on display. The level is set by the share of volume inside the flake (the captions state none; 22% is fitted by eye), the lighting is this page's own, and the counted dimension boxes the drawn surface with coarser and coarser rulers, so it should sit near 3 − H. Our light comes from the upper left, like the plates' shading.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE 13 ===================== -->
+  <section class="plate" id="perrin">
+    <div class="plate-head">
+      <p class="no">Plate 13 <span class="lozenge" aria-hidden="true"></span> pages 12–13</p>
+      <h2>Jean Perrin's classic drawings of physical Brownian motion</h2>
+      <p class="dim">four tracings of a colloidal grain, radius 0.53 µm · a dot every 30 s, joined by straight intervals · grid cell 3.2 µm · trail D = 2</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-p13 zoomable" id="wP">
+          <canvas id="cP" role="img" aria-label="Perrin's four tracings of Brownian motion, digitised from the plate"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>Plate 13</strong> · <span id="capP">as printed: 700 positions, 848 intervals</span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">"The present plate, the only one in this book to picture a natural phenomenon, is reproduced from Perrin's <i>Atoms</i>." Every dot is where the grain stood, once each 30 seconds; the straight intervals between them have "no physical reality whatsoever". Perrin's warning is the chapter's point: "if this particle's positions were marked down 100 times more frequently, each interval would be replaced by a polygon smaller than the whole drawing but just as complicated, and so on." The buttons below do exactly that — each interval is refilled by a Brownian bridge whose scatter matches the plate's own statistics — and the measured length of the trail grows without bound, doubling for every fourfold refinement, which is how a curve of fractal dimension 2 behaves.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Mark positions</span></div>
+          <div class="steps words" id="mP" role="group" aria-label="Refinement"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn" id="rollP">New detail</button>
+          <button type="button" class="btn" id="pP13">Show Plate 13 as printed</button>
+        </div>
+        <dl class="read">
+          <div><dt>Trail length</dt><dd id="rPa">1.00×</dd></div>
+          <div><dt>Mean square step</dt><dd id="rPb">—</dd></div>
+          <div><dt>Diffusion D</dt><dd id="rPc">—</dd></div>
+          <div><dt>Avogadro from the ink</dt><dd id="rPd">—</dd></div>
+        </dl>
+        <p class="note" id="noteP">Every dot and interval is digitised from the 600 dpi scan: 374 positions and 441 intervals in the free tracing, 326 and 407 on the grid. In the densest knots the ink is a solid blot and the pairing of a few strokes is our best reading; five faint strokes, nearly lost by the press, are drawn pale here too. The refinement detail is seeded and has the statistics, not the identity, of the true path. One honest discrepancy: Einstein's formula with the caption's numbers (a = 0.53 µm, 30 s, 3.2 µm cells, water at ~17 °C) predicts a mean square step near 40 µm², but the intervals as printed measure about 10 µm² — Avogadro's number read off this reproduction comes out near 26 × 10²³, four times too high, where Perrin's own tables famously landed within 20% of the truth. Either these tracings were chosen among quiet stretches, or the grid constant quoted does not quite belong to this reduction of the drawing.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 2, pages 6–13, Plates 10, 11 and 13; the Perrin quotations follow the book's free translation of Perrin 1906 and 1909. The flakes' construction is Chapter 30's: see <a href="isothermal-surfaces.html">Isothermal Surfaces of Turbulence</a> for the same mathematics cut by planes and lines, and <a href="brown-relief.html">Brown Relief and Coastlines</a> for its two-dimensional cousin. Brownian motion itself is taken up in Chapter 25: <a href="brown-trails.html">Brown Trails and Hulls</a> and <a href="wiener-sausage.html">Wiener Sausage</a>.</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>

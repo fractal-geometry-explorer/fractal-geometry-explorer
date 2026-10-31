@@ -1,0 +1,998 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>What Is a Fractal?</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>
+/* Layout: two concept sections (the definition D > D_T with the chapter's four example sets, the ball of thread and its effective dimension against resolution), each a computed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */
+:root {
+  --page: #e4e5e1;
+  --text: #1b1d1f;
+  --muted: #595e64;
+  --rule: #c4c7c1;
+  --surface: #f6f6f3;
+  --accent: #285895;
+  --f-display: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Newsreader", Georgia, "Times New Roman", serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* the figures are reproductions of printed plates, so their paper and inks stay the same in both themes */
+  --print-paper: #ecebe6;
+  --print-ink: #151515;
+  --print-rule: #c9c8c2;
+  --gain: rgba(47, 95, 158, 0.42);
+  --loss: rgba(186, 88, 44, 0.42);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --page: #111214; --text: #e5e5e1; --muted: #9a9fa6; --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --page: #111214; --text: #e5e5e1; --muted: #9a9fa6; --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--page); color: var(--text); font-family: var(--f-display); font-size: 14px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
+.wrap {
+  max-width: 1180px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 36px 64px;
+  display: grid; gap: 40px;
+}
+header.top { display: grid; gap: 10px; max-width: 820px; }
+.eyebrow { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+h1 {
+  margin: 0; display: flex; align-items: center; flex-wrap: wrap; gap: 0.18em 0.42em;
+  font-weight: 800; font-size: clamp(30px, 5.4vw, 54px); line-height: 1.02; letter-spacing: 0.01em; text-transform: uppercase; text-wrap: balance;
+}
+h1 .plate-no { font-weight: 600; text-transform: none; letter-spacing: 0; }
+.lozenge { display: inline-block; width: 0.42em; height: 0.42em; border: 0.075em solid currentColor; position: relative; top: -0.02em; }
+.lozenge::after { content: ""; position: absolute; inset: 0.1em; border: 0.05em solid currentColor; }
+.dek { margin: 0; font-family: var(--f-body); font-size: 19px; line-height: 1.45; max-width: 64ch; }
+
+nav.index {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+  padding: 10px max(16px, env(safe-area-inset-right, 0px)) 10px max(16px, env(safe-area-inset-left, 0px));
+  background: var(--page); border-bottom: 1px solid var(--rule);
+  display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none;
+}
+nav.index a {
+  flex: none; display: inline-flex; gap: 8px; align-items: baseline; padding: 6px 10px;
+  border: 1px solid var(--rule); background: var(--surface); color: var(--text); text-decoration: none; font-size: 13px; font-weight: 600;
+}
+nav.index a b { font-family: var(--f-mono); font-weight: 500; color: var(--accent); }
+nav.index a:hover { border-color: var(--text); }
+
+section.plate { display: grid; gap: 18px; scroll-margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--rule); }
+.plate-head { display: grid; gap: 4px; }
+.plate-head .no { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.plate-head h2 { margin: 0; font-size: clamp(22px, 3vw, 30px); font-weight: 800; line-height: 1.1; text-transform: uppercase; letter-spacing: 0.01em; text-wrap: balance; }
+.plate-head .dim { margin: 0; font-family: var(--f-mono); font-size: 13px; color: var(--muted); }
+.plate-body { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(280px, 1fr); gap: 32px; align-items: start; }
+@media (max-width: 899px) { .plate-body { grid-template-columns: minmax(0, 1fr); gap: 20px; } }
+figure.fig { margin: 0; display: grid; gap: 8px; min-width: 0; }
+.canvas-wrap { position: relative; width: 100%; max-width: 100%; background: var(--print-paper); outline: 1px solid var(--rule); overflow: hidden; }
+.canvas-wrap canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.r-sq { aspect-ratio: 1 / 1; }
+.r-lox { aspect-ratio: 5 / 4; }
+.zoomable { cursor: grab; touch-action: pan-y; }
+.zoomable.dragging { cursor: grabbing; }
+.view-tools { position: absolute; top: 10px; right: 10px; display: flex; gap: 6px; z-index: 2; }
+.view-tools button { min-width: 34px; height: 34px; padding: 0 10px; font: 600 15px/1 var(--f-display); color: var(--print-ink); background: #f7f7f3; border: 1px solid var(--print-rule); cursor: pointer; }
+figcaption { font-size: 13px; color: var(--muted); }
+figcaption strong { color: var(--text); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+
+.side { display: grid; gap: 18px; min-width: 0; align-content: start; }
+.side p.cap { margin: 0; font-family: var(--f-body); font-size: 17px; line-height: 1.55; max-width: 62ch; }
+.group { display: grid; gap: 8px; min-width: 0; }
+.label-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.label { font-size: 11.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.value { font-family: var(--f-mono); font-size: 12.5px; font-variant-numeric: tabular-nums; text-align: right; }
+.steps { display: flex; flex-wrap: wrap; gap: 6px; }
+.steps button {
+  min-width: 38px; height: 34px; padding: 0 10px; font: 600 13px/1 var(--f-mono); color: var(--text);
+  background: var(--surface); border: 1px solid var(--rule); cursor: pointer;
+}
+.steps.words button { font: 600 13px/1 var(--f-display); }
+.steps button[aria-pressed="true"] { background: var(--text); color: var(--page); border-color: var(--text); }
+.steps button:hover { border-color: var(--text); }
+.steps button:disabled { opacity: 0.35; cursor: default; border-color: var(--rule); }
+.btn-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.btn { padding: 8px 12px; font: 600 13px/1.2 var(--f-display); color: var(--text); background: var(--surface); border: 1px solid var(--rule); cursor: pointer; }
+.btn:hover { border-color: var(--text); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--page); }
+.check { display: flex; align-items: flex-start; gap: 8px; font-size: 13.5px; cursor: pointer; }
+.check input { accent-color: var(--accent); width: 16px; height: 16px; margin: 1px 0 0; flex: none; }
+.check:has(input:disabled) { opacity: 0.45; cursor: default; }
+.slider { display: grid; gap: 4px; }
+.slider input { width: 100%; accent-color: var(--accent); margin: 0; }
+.slider input:disabled { opacity: 0.4; }
+dl.read { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; padding-top: 14px; border-top: 1px solid var(--rule); }
+dl.read div { display: grid; gap: 2px; min-width: 0; }
+dl.read dt { font-size: 10.5px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); }
+dl.read dd { margin: 0; font-family: var(--f-mono); font-size: 16px; overflow-wrap: anywhere; }
+dl.read dd small { font-size: 11.5px; color: var(--muted); }
+.note { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.mini { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; padding: 10px 12px; background: var(--print-paper); border: 1px solid var(--print-rule); color: var(--print-ink); }
+.mini svg { height: 64px; width: auto; max-width: 100%; }
+.mini .fx { font-family: var(--f-mono); font-size: 12px; line-height: 1.6; color: var(--print-ink); }
+.key { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--muted); }
+.key span { display: inline-flex; align-items: center; gap: 6px; }
+.key i { width: 14px; height: 10px; display: inline-block; border: 1px solid var(--print-rule); }
+.readline { min-height: 2.9em; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.readline b { color: var(--text); font-weight: 700; }
+
+.sub { display: grid; gap: 14px; padding-top: 22px; border-top: 1px dashed var(--rule); scroll-margin-top: 64px; }
+.sub h3 { margin: 0; font-size: 15px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
+.source { font-family: var(--f-body); font-size: 15px; color: var(--muted); margin: 0; max-width: 84ch; }
+.source i { color: var(--text); }
+.source a { color: var(--accent); }
+button:focus-visible, input:focus-visible, a:focus-visible, canvas:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.r-def { aspect-ratio: 10 / 8; }
+</style>
+<style>
+body { margin: 0; }
+/* The hidden attribute must beat the pages' own display rules (.slider, .check, ...). The artifact
+   wrapper's stylesheet used to provide this; self-hosted pages carry it themselves. */
+[hidden] { display: none !important; }
+nav.shell { font-family: var(--f-display); font-size: 12.5px; font-weight: 600; background: var(--page);
+  border-bottom: 1px solid var(--rule); display: flex; align-items: center; gap: 6px 18px;
+  padding: 9px max(16px, env(safe-area-inset-right, 0px)) 9px max(16px, env(safe-area-inset-left, 0px)); }
+nav.shell a { color: var(--text); text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+nav.shell a:hover { color: var(--accent); }
+nav.shell .home { letter-spacing: 0.07em; text-transform: uppercase; flex: none; }
+nav.shell .gap { flex: 1; }
+nav.shell .pn { color: var(--muted); font-weight: 500; }
+nav.shell .pn b { color: var(--text); font-weight: 600; }
+nav.shell a:hover .pn, nav.shell a:hover .pn b { color: var(--accent); }
+</style>
+</head>
+<body>
+<nav class="shell" aria-label="Site"><a class="home" href="index.html">Fractal Geometry Explorer</a><span class="gap"></span><a rel="prev" href="fractal-flakes.html"><span class="pn">&#8592; <b>Plates 10–13</b></span></a><a rel="next" href="two-cutoffs.html"><span class="pn"><b>Cutoffs</b> &#8594;</span></a></nav>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 3, "Dimension, Symmetry, Divergence" · pages 14–19</p>
+    <h1><span class="plate-no">Chapter 3</span><span class="lozenge" aria-hidden="true"></span><span>What Is a Fractal?</span></h1>
+    <p class="dek">The word the whole book rests on is defined in this chapter, and the definition is a comparison of two dimensions: a fractal is a set whose Hausdorff–Besicovitch dimension D strictly exceeds its topological dimension D_T. Alongside it the chapter sets a second, deliberately loose notion — the effective dimension an observer assigns at a given resolution — and previews the symmetries and divergences the rest of the book lives on. These six pages print no figures, so both figures here are this page's own illustrations of the text.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#definition"><b>1</b> The definition</a>
+    <a href="#thread"><b>2</b> A ball of thread</a>
+  </nav>
+
+  <!-- ===================== 1: THE DEFINITION ===================== -->
+  <section class="plate" id="definition">
+    <div class="plate-head">
+      <p class="no">Pages 14–15 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>The definition: D against D_T</h2>
+      <p class="dim" id="dimA">D = log 4 / log 3 ≈ 1.2618 · D_T = 1 · D &gt; D_T: a fractal</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-def zoomable" id="wA">
+          <canvas id="cA" role="img" aria-label="One of the chapter's example sets, with its topological and fractal dimensions marked on a common scale"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cAt">The Koch curve</strong> · <span id="cAn"></span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Mathematics offers many dimensions, and for Euclid's shapes they all agree. Two matter here. The topological dimension D_T of Brouwer, Lebesgue, Menger and Urysohn is always a whole number: 0 for a dust of disconnected points, 1 for a curve. The dimension D of Hausdorff and Besicovitch need not be whole, and the two satisfy only the Szpilrajn inequality D ≥ D_T. When they agree, the set is dimensionally concordant, and Euclid covers it. When they disagree there was no word at all, so Mandelbrot coined one: "A fractal is by definition a set for which the Hausdorff Besicovitch dimension strictly exceeds the topological dimension."</p>
+        <div class="group">
+          <div class="label-row"><span class="label">The chapter's examples</span></div>
+          <div class="steps words" id="shA" role="group" aria-label="Which set to show"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Detail (construction stage)</span></div>
+          <div class="steps" id="mA" role="group" aria-label="Detail"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn" id="newA" hidden>New trail</button>
+        </div>
+        <p class="readline" id="infoA" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Topological D_T</dt><dd id="rAa">—</dd></div>
+          <div><dt>Hausdorff D</dt><dd id="rAb">—</dd></div>
+          <div><dt>The gap D − D_T</dt><dd id="rAc">—</dd></div>
+          <div><dt>A fractal?</dt><dd id="rAd">—</dd></div>
+        </dl>
+        <p class="note">Each figure is the exact construction drawn to a finite stage; the D on the scale is the limit set's known value, not a measurement of the drawing. The blue marker is D_T, the red is D, and the shaded gap between them is what the definition asks for. "Fractal" deliberately does not mean "fractional": the Brownian trail's D = 2 is an integer and the trail is a fractal all the same (chapter 25 proves the values). What D_T is, brick by brick, is told on <a href="historical-sketches.html#dimension">Historical Sketches</a>; how D is defined by coverings is drawn on <a href="mathematical-backup.html#cover">Mathematical Backup</a>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 2: THE BALL OF THREAD ===================== -->
+  <section class="plate" id="thread">
+    <div class="plate-head">
+      <p class="no">Pages 17–18 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Effective dimension: a ball of thread</h2>
+      <p class="dim" id="dimB">a 10 cm ball of 1 mm thread · effective dimension 0 → 3 → 1 → 3 → 1 → 0 as the resolution refines</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wB">
+          <canvas id="cB" role="img" aria-label="A wound ball of thread as an observer sees it at the chosen resolution, or its effective dimension charted against resolution"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cBt">What the observer sees</strong> · <span id="cBn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Besides the two exact dimensions the chapter invokes a third, "a notion that should not be defined precisely": the dimension an object has in effect. Physicists already use it — a fine veil is treated as 2-dimensional, a thread as 1, a tiny ball as 0, each a model chosen because its corrections are smallest. The chapter's test case is a ball 10 cm across wound of thread 1 mm thick. Seen from far away it is a point. At 10 cm resolution it is a solid three-dimensional ball; at 10 mm, a mess of one-dimensional threads; at 0.1 mm each thread is a three-dimensional column; at 0.01 mm the column dissolves into one-dimensional fibers; and at atomic scales the ball is a finite crowd of pinpoints, dimension 0 again.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mB" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">The chapter's stations</span></div>
+          <div class="steps words" id="stB" role="group" aria-label="Stations"></div>
+          <div class="slider">
+            <div class="label-row"><span class="label">Resolution</span><span class="value" id="xBv">10 cm</span></div>
+            <input type="range" id="xB" min="-2.6" max="8" step="0.05" value="-1" aria-label="Resolution, coarse to fine">
+          </div>
+        </div>
+        <div class="group" id="coastWrap" hidden>
+          <label class="check" for="coastB"><input type="checkbox" id="coastB"> Compare: a fractal coastline, on its own scale</label>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn" id="windB">Rewind the ball</button>
+        </div>
+        <p class="readline" id="infoB" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Resolution</dt><dd id="rBa">—</dd></div>
+          <div><dt>The ball reads as</dt><dd id="rBb">—</dd></div>
+          <div><dt>Effective dimension</dt><dd id="rBc">—</dd></div>
+          <div><dt>At this resolution</dt><dd id="rBd">—</dd></div>
+        </dl>
+        <p class="note">An illustration throughout: the chapter states this thought experiment in words and prints nothing. The stations and their dimensions are the chapter's own numbers; the wound ball (a seeded winding, redone by "Rewind"), the field of view at each resolution, the coarseness of the drawing and the width of each crossover are this page's presentation choices — the chapter insists the transitions are ill defined, and effective dimension subjective, "a matter of approximation and therefore of degree of resolution". The closing move of the section is the bridge to everything that follows: in a fractal, an ill-defined transition between well-defined zones widens into a whole zone within which D &gt; D_T. The same crossovers return in earnest for a sheet of paper, and for every natural fractal's outer and inner cutoffs.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 3, pages 14–19. The chapter prints no figures; both figures above are computed illustrations of its text, and each note says what is a presentation choice. The chapter's other previews are built where the book takes them up: standard against fractal self-similarity on <a href="koch-plates.html">Triadic Koch Island</a> (Plate 44), the divergence of a coastline's length on <a href="minkowski-sausage.html">Minkowski Sausage</a> (chapter 5), statistical invariance under displacement on <a href="brown-trails.html">Brown Trails</a> (chapter 25), and the covering measures behind D on <a href="mathematical-backup.html">Mathematical Backup</a> (chapter 39).</p>
+</div>
+
+<script>
+// Shared geometry library: similarity maps, decorated generators and their cascades, tree
+// cascades, rounding arcs and the similarity-dimension solver. Conventions are in DECISIONS.md:
+// a generator is a list of points on [0, 1] plus a code per interval (bit 0: mirror the copy,
+// bit 1: place it from the interval's far end, which also reverses its traversal).
+const R3 = Math.sqrt(3);
+// ---- similarity maps z -> A·z + B or A·conj(z) + B, as [ar, ai, br, bi, m] ----
+const C = {
+  mul: (ar, ai, br, bi) => [ar * br - ai * bi, ar * bi + ai * br],
+  comp(f, g) {                       // f∘g
+    const [a1r, a1i, b1r, b1i, m1] = f, [a2r, a2i0, b2r, b2i0, m2] = g;
+    const a2i = m1 ? -a2i0 : a2i0, b2i = m1 ? -b2i0 : b2i0;
+    const [ar, ai] = C.mul(a1r, a1i, a2r, a2i), [tr, ti] = C.mul(a1r, a1i, b2r, b2i);
+    return [ar, ai, tr + b1r, ti + b1i, m1 ^ m2];
+  },
+  app(f, x, y) { const [ar, ai, br, bi, m] = f, yy = m ? -y : y; return [ar * x - ai * yy + br, ar * yy + ai * x + bi]; },
+};
+const ID = [1, 0, 0, 0, 0];
+// A decorated generator is a list of children [map, rev]: the curve on [0,1] is the concatenation of the curves
+// map(curve), each run backwards when rev = 1. Built from the generator's points and per-interval codes
+// (bit 0: mirror; bit 1: run the interval backwards, i.e. place the generator on it from its far end).
+function genFromCodes(P, codes) {
+  return codes.map((c, k) => {
+    const rv = c >> 1, m = c & 1;
+    const [ax, ay] = rv ? P[k + 1] : P[k], [bx, by] = rv ? P[k] : P[k + 1];
+    return [[bx - ax, by - ay, ax, ay, m], rv];
+  });
+}
+const MX = [-1, 0, 1, 0, 1];                    // z -> 1 − conj z: mirror in the line x = 1/2
+const mirrorGen = (G) => G.slice().reverse().map(([f, r]) => [C.comp(MX, f), r ^ 1]);
+function substituteLeg(G, leg, H) {
+  const [f, r] = G[leg], sub = (r ? H.slice().reverse() : H).map(([g, s]) => [C.comp(f, g), r ^ s]);
+  return G.slice(0, leg).concat(sub, G.slice(leg + 1));
+}
+const normaliseGen = (G) => G.map(([f, r]) => (r ? [C.comp(f, MX), 0] : [f, 0]));
+// leaves of the cascade, in the order the curve runs through them: [map, rev]
+function leaves(gens) {
+  const out = [];
+  const rec = (f, rev, d) => {
+    if (d === gens.length) { out.push([f, rev]); return; }
+    const kids = gens[d];
+    if (rev) for (let k = kids.length - 1; k >= 0; k--) rec(C.comp(f, kids[k][0]), rev ^ kids[k][1], d + 1);
+    else for (let k = 0; k < kids.length; k++) rec(C.comp(f, kids[k][0]), rev ^ kids[k][1], d + 1);
+  };
+  rec(ID, 0, 0);
+  return out;
+}
+function curveOf(gens) {
+  const L = leaves(gens), P = new Float64Array(2 * L.length + 2);
+  P[0] = 0; P[1] = 0;
+  L.forEach(([f, rev], i) => { const [x, y] = C.app(f, rev ? 0 : 1, 0); P[2 * i + 2] = x; P[2 * i + 3] = y; });
+  return P;
+}
+
+// a 60° arc from a to b bulging to `side` (+1: left of a→b), sampled at n+1 points (a included, b excluded)
+function arcPts(ax, ay, bx, by, side, n, out) {
+  const dx = bx - ax, dy = by - ay, L = Math.hypot(dx, dy), mx = (ax + bx) / 2, my = (ay + by) / 2;
+  const cx = mx + dy * side * (R3 / 2), cy = my - dx * side * (R3 / 2);       // centre on the other side
+  const a0 = Math.atan2(ay - cy, ax - cx);
+  let da = Math.atan2(by - cy, bx - cx) - a0;
+  while (da > Math.PI) da -= 2 * Math.PI;
+  while (da < -Math.PI) da += 2 * Math.PI;
+  for (let t = 0; t < n; t++) { const a = a0 + (da * t) / n; out.push(cx + L * Math.cos(a), cy + L * Math.sin(a)); }
+}
+
+// ---- tree cascades: every link is replaced by the tree generator placed on it ----
+// links: [[px,py,qx,qy],...] in the generator's frame; codes as above (bit 0 mirror, bit 1 placed from the far
+// end). `level` counts how many times a link's ancestry left the generator's main channel (`main` marks it).
+function treeCascade(links, codes, main, n) {
+  const G = links.map(([px, py, qx, qy], k) => {
+    const c = codes[k], [ax, ay, bx, by] = c & 2 ? [qx, qy, px, py] : [px, py, qx, qy];
+    return [bx - ax, by - ay, ax, ay, c & 1];
+  });
+  let maps = [[ID, 0]];
+  for (let s = 0; s < n; s++) {
+    const out = [];
+    for (const [f, lv] of maps) for (let k = 0; k < G.length; k++) out.push([C.comp(f, G[k]), lv + (main[k] ? 0 : 1)]);
+    maps = out;
+  }
+  return maps.map(([f, lv]) => [f[2], f[3], f[0] + f[2], f[1] + f[3], lv]);
+}
+// erase the streams near the sources: links on a chain from a source (an end point other than 0 and 1) up to the
+// first junction
+function clipSources(segs, rounds = 1) {
+  let cur = segs;
+  const q = (v) => Math.round(v * 1e7);
+  for (let r = 0; r < rounds; r++) {
+    const deg = new Map(), K = (x, y) => q(x) + ',' + q(y);
+    for (const s of cur) for (const k of [K(s[0], s[1]), K(s[2], s[3])]) deg.set(k, (deg.get(k) || 0) + 1);
+    const keep = (x, y) => (Math.abs(x) < 1e-9 && Math.abs(y) < 1e-9) || (Math.abs(x - 1) < 1e-9 && Math.abs(y) < 1e-9);
+    // walk each chain inward from a source
+    const adj = new Map();
+    cur.forEach((s, i) => { for (const k of [K(s[0], s[1]), K(s[2], s[3])]) { if (!adj.has(k)) adj.set(k, []); adj.get(k).push(i); } });
+    const dead = new Set();
+    for (const [k, d] of deg) {
+      if (d !== 1) continue;
+      const [x, y] = k.split(',').map((v) => Number(v) / 1e7);
+      if (keep(x, y)) continue;
+      let at = k, prev = -1;
+      for (let guard = 0; guard < 1e6; guard++) {
+        const nxt = adj.get(at).filter((i) => i !== prev && !dead.has(i));
+        if (nxt.length !== 1) break;
+        const i = nxt[0]; dead.add(i); prev = i;
+        const s = cur[i], k1 = K(s[0], s[1]), k2 = K(s[2], s[3]); at = k1 === at ? k2 : k1;
+        const [x2, y2] = at.split(',').map((v) => Number(v) / 1e7);
+        if (deg.get(at) !== 2 || keep(x2, y2)) break;
+      }
+    }
+    cur = cur.filter((_, i) => !dead.has(i));
+  }
+  return cur;
+}
+
+// the dimension D: the unique real root of G(D) = Σ r_m^D = 1 (G is strictly decreasing)
+function dimension(rs) {
+  let lo = 0.01, hi = 8;
+  for (let i = 0; i < 90; i++) { const mid = (lo + hi) / 2, g = rs.reduce((s, r) => s + Math.pow(r, mid), 0); if (g > 1) lo = mid; else hi = mid; }
+  return (lo + hi) / 2;
+}
+
+// Shared drawing library: style constants, the zoomable canvas (snapshot while panning), chunked
+// paths, controls and small SVG figures. Loaded before each page's own scripts; pages may extend
+// PRINT with their own inks (PRINT.red = ..., PRINT.light = ...).
+const $ = (id) => document.getElementById(id);
+const fmt = (n) => n.toLocaleString('en-US');
+const PRINT = { paper: '#ecebe6', ink: '#151515', rule: '#c9c8c2', muted: '#66665f', accent: '#2f5f9e', red: '#c2452d', faint: '#bdbbb3', gray: '#8f8e88' };
+const RAMP = [[233, 185, 73], [217, 113, 59], [184, 66, 79], [125, 58, 120], [63, 79, 151], [43, 122, 138]];
+const ramp = (t, a = 1) => {
+  const x = Math.max(0, Math.min(1, t)) * (RAMP.length - 1), i = Math.min(RAMP.length - 2, Math.floor(x)), f = x - i;
+  const c = RAMP[i].map((v, k) => Math.round(v + (RAMP[i + 1][k] - v) * f));
+  return `rgba(${c[0]},${c[1]},${c[2]},${a})`;
+};
+const CAT = ['#151515', '#9a988f', '#2f5f9e', '#c2452d', '#3f8f6c', '#b58a2a', '#6b4e9b', '#5f8fae'];
+
+// ---------- shared plumbing ----------
+function figure(canvas, draw) {
+  const wrap = canvas.parentElement;
+  const f = { canvas, ctx: canvas.getContext('2d'), w: 1, h: 1, dpr: 1, draw };
+  const resize = () => {
+    f.dpr = Math.min(2, window.devicePixelRatio || 1);
+    f.w = wrap.clientWidth || 1; f.h = wrap.clientHeight || 1;
+    canvas.width = Math.round(f.w * f.dpr); canvas.height = Math.round(f.h * f.dpr);
+    f.draw();
+  };
+  new ResizeObserver(resize).observe(wrap);
+  return f;
+}
+function fitBox(f, bb, pad = 0.04) {
+  const w = Math.max(1e-9, bb.x1 - bb.x0), h = Math.max(1e-9, bb.y1 - bb.y0), s = Math.min(f.w / (w * (1 + 2 * pad)), f.h / (h * (1 + 2 * pad)));
+  return { s, ox: f.w / 2 - ((bb.x0 + bb.x1) / 2) * s, oy: f.h / 2 + ((bb.y0 + bb.y1) / 2) * s };
+}
+const toWorld = (f, v) => f.ctx.setTransform(f.dpr * v.s, 0, 0, -f.dpr * v.s, f.dpr * v.ox, f.dpr * v.oy);
+const toScreen = (f) => f.ctx.setTransform(f.dpr, 0, 0, f.dpr, 0, 0);
+function paper(f, color) { f.ctx.setTransform(1, 0, 0, 1, 0, 0); f.ctx.fillStyle = color; f.ctx.fillRect(0, 0, f.canvas.width, f.canvas.height); }
+function polyPath(P, closed = true, upto) {
+  const p = new Path2D(), m = upto === undefined ? P.length / 2 : upto;
+  p.moveTo(P[0], P[1]);
+  for (let i = 1; i < m; i++) p.lineTo(P[2 * i], P[2 * i + 1]);
+  if (closed) p.closePath();
+  return p;
+}
+function bbox(P, bb = { x0: Infinity, x1: -Infinity, y0: Infinity, y1: -Infinity }) {
+  for (let i = 0; i < P.length; i += 2) { bb.x0 = Math.min(bb.x0, P[i]); bb.x1 = Math.max(bb.x1, P[i]); bb.y0 = Math.min(bb.y0, P[i + 1]); bb.y1 = Math.max(bb.y1, P[i + 1]); }
+  return bb;
+}
+function stepButtons(el, values, text, aria, onPick) {
+  const bs = values.map((v) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.textContent = text(v); b.setAttribute('aria-label', aria(v));
+    b.addEventListener('click', () => onPick(v));
+    el.append(b);
+    return b;
+  });
+  const mark = (cur) => bs.forEach((b, i) => b.setAttribute('aria-pressed', String(values[i] === cur)));
+  mark.buttons = bs;
+  return mark;
+}
+// pan and zoom: a quick rescaled snapshot while moving, a full redraw once it settles
+function zoomable(wrapId, canvasId, fitOf, render, opts = {}) {
+  const maxZoom = opts.maxZoom || 400;
+  const wrap = $(wrapId), z = { view: null, user: false, snapView: null, raf: 0, full: 0 };
+  const snap = document.createElement('canvas');
+  const f = figure($(canvasId), () => draw());
+  function touch() { wrap.style.touchAction = z.view && z.view.s > z.view.fit * 1.02 ? 'none' : 'pan-y'; }
+  function draw() {
+    if (!z.view || !z.user) { z.view = fitOf(f); z.view.fit = z.view.s; z.user = false; touch(); }
+    render(f, z.view);
+    snap.width = f.canvas.width; snap.height = f.canvas.height; snap.getContext('2d').drawImage(f.canvas, 0, 0);
+    z.snapView = { s: z.view.s, ox: z.view.ox, oy: z.view.oy };
+  }
+  function quick() {
+    const v = z.view, k = v.s / z.snapView.s, c = f.ctx;
+    c.setTransform(1, 0, 0, 1, 0, 0); c.fillStyle = z.ground || PRINT.paper; c.fillRect(0, 0, f.canvas.width, f.canvas.height);
+    c.drawImage(snap, (v.ox - z.snapView.ox * k) * f.dpr, (v.oy - z.snapView.oy * k) * f.dpr, snap.width * k, snap.height * k);
+  }
+  function schedule() { if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; draw(); }); }
+  function moved() {
+    if (!z.snapView) { schedule(); return; }
+    if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; quick(); });
+    clearTimeout(z.full); z.full = setTimeout(schedule, 160);
+  }
+  function zoomAt(px, py, k) {
+    const v = z.view, ns = Math.min(v.fit * maxZoom, Math.max(v.fit * 0.8, v.s * k)), wx = (px - v.ox) / v.s, wy = (v.oy - py) / v.s;
+    v.s = ns; v.ox = px - wx * ns; v.oy = py + wy * ns; z.user = true; touch(); moved();
+  }
+  function pan(dx, dy) { z.view.ox += dx; z.view.oy += dy; z.user = true; moved(); }
+  wrap.querySelector('[data-z="in"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1.6));
+  wrap.querySelector('[data-z="out"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1 / 1.6));
+  wrap.querySelector('[data-z="fit"]').addEventListener('click', () => { z.user = false; schedule(); });
+  const pts = new Map();
+  let pinch = null, down = null;
+  const local = (e) => { const r = wrap.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+  wrap.addEventListener('pointerdown', (e) => {
+    if (e.target.closest('.view-tools')) return;
+    pts.set(e.pointerId, local(e));
+    down = pts.size === 1 ? { p: local(e), t: performance.now(), moved: 0 } : null;
+    try { wrap.setPointerCapture(e.pointerId); } catch (_) {}
+    if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), m: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2] }; }
+    wrap.classList.add('dragging');
+  });
+  wrap.addEventListener('pointermove', (e) => {
+    if (!pts.has(e.pointerId)) return;
+    const prev = pts.get(e.pointerId), cur = local(e);
+    pts.set(e.pointerId, cur);
+    if (down) down.moved = Math.max(down.moved, Math.hypot(cur[0] - down.p[0], cur[1] - down.p[1]));
+    if (pts.size === 2 && pinch) {
+      const [a, b] = [...pts.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]), m = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+      pan(m[0] - pinch.m[0], m[1] - pinch.m[1]);
+      if (pinch.d > 0) zoomAt(m[0], m[1], d / pinch.d);
+      pinch = { d, m };
+    } else if (pts.size === 1 && (e.pointerType !== 'touch' || z.view.s > z.view.fit * 1.02)) pan(cur[0] - prev[0], cur[1] - prev[1]);
+  });
+  const end = (e) => {
+    if (down && pts.size === 1 && down.moved < 5 && opts.onTap) { const [x, y] = local(e), v = z.view; opts.onTap((x - v.ox) / v.s, (v.oy - y) / v.s); }
+    down = null;
+    pts.delete(e.pointerId); if (pts.size < 2) pinch = null; if (!pts.size) wrap.classList.remove('dragging');
+  };
+  wrap.addEventListener('pointerup', end); wrap.addEventListener('pointercancel', (e) => { down = null; end(e); });
+  wrap.addEventListener('wheel', (e) => { if (!(e.ctrlKey || e.metaKey)) return; e.preventDefault(); const [x, y] = local(e); zoomAt(x, y, Math.exp(-e.deltaY * 0.0045)); }, { passive: false });
+  wrap.addEventListener('dblclick', (e) => { if (e.target.closest('.view-tools')) return; const [x, y] = local(e); zoomAt(x, y, e.shiftKey ? 0.5 : 2); });
+  return { f, z, schedule, refit: () => { z.user = false; schedule(); } };
+}
+// chunked paths: many small paths fill far faster than one path with a hundred thousand pieces
+function chunked(count, add, size = 512) {
+  const out = [];
+  let p = null;
+  for (let i = 0; i < count; i++) { if (i % size === 0) { p = new Path2D(); out.push(p); } add(p, i); }
+  return out;
+}
+// fill and outline in the same colour, so that tiles which only meet along an edge show no hairline seams
+function solid(c, paths, color, lw) {
+  c.fillStyle = color; c.strokeStyle = color; c.lineWidth = lw; c.lineJoin = 'miter';
+  for (const p of paths) { c.fill(p); c.stroke(p); }
+}
+const dot = (c, v, x, y, r = 4, color = PRINT.red) => { c.beginPath(); c.arc(v.ox + x * v.s, v.oy - y * v.s, r, 0, Math.PI * 2); c.fillStyle = color; c.fill(); c.strokeStyle = PRINT.paper; c.lineWidth = 1.5; c.stroke(); };
+
+// a polyline (Float64Array or [[x,y],...]) as SVG points with y flipped
+const svgPts = (P) => (P instanceof Float64Array ? Array.from({ length: P.length / 2 }, (_, i) => [P[2 * i], P[2 * i + 1]]) : P).map(([x, y]) => `${x.toFixed(4)},${(-y).toFixed(4)}`).join(' ');
+function miniCurve(id, P, dots = true) {
+  const pts = P instanceof Float64Array ? Array.from({ length: P.length / 2 }, (_, i) => [P[2 * i], P[2 * i + 1]]) : P;
+  $(id).innerHTML = `<line x1="0" y1="0" x2="1" y2="0" stroke="#8a8a84" stroke-width="0.008" stroke-dasharray="0.025 0.02"/>` +
+    `<polyline points="${svgPts(pts)}" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linejoin="round"/>` +
+    (dots ? `<g fill="currentColor">${pts.map(([x, y], i) => `<circle cx="${x.toFixed(4)}" cy="${(-y).toFixed(4)}" r="${i === 0 || i === pts.length - 1 ? 0.03 : 0.018}"/>`).join('')}</g>` : '');
+}
+function miniTree(id, links, dx = 0) {
+  const ends = new Set(), mid = new Set(), k = (x, y) => `${x.toFixed(4)},${y.toFixed(4)}`;
+  let s = '';
+  for (const [px, py, qx, qy] of links) {
+    s += `<line x1="${(px + dx).toFixed(4)}" y1="${(-py).toFixed(4)}" x2="${(qx + dx).toFixed(4)}" y2="${(-qy).toFixed(4)}" stroke="currentColor" stroke-width="0.02" stroke-linecap="round"/>`;
+    mid.add(k(px + dx, py)); mid.add(k(qx + dx, qy));
+  }
+  s += `<g fill="currentColor">${[...mid].map((p) => { const [x, y] = p.split(',').map(Number); const big = (Math.abs(x - dx) < 1e-6 || Math.abs(x - dx - 1) < 1e-6) && Math.abs(y) < 1e-6; return `<circle cx="${x}" cy="${-y}" r="${big ? 0.03 : 0.018}"/>`; }).join('')}</g>`;
+  return s;
+}
+// canvas transform for a similarity map f = [ar, ai, br, bi, m] composed with the view
+function setMap(f, c, v, fig) {
+  const [ar, ai, br, bi, m] = f, k = fig.dpr * v.s;
+  if (m) c.setTransform(k * ar, -k * ai, k * ai, k * ar, fig.dpr * (v.ox + v.s * br), fig.dpr * (v.oy - v.s * bi));
+  else c.setTransform(k * ar, -k * ai, -k * ai, -k * ar, fig.dpr * (v.ox + v.s * br), fig.dpr * (v.oy - v.s * bi));
+}
+const segPath = (segs, pick) => { const p = new Path2D(); for (const s of segs) if (!pick || pick(s)) { p.moveTo(s[0], s[1]); p.lineTo(s[2], s[3]); } return p; };
+// Plate 64's chevrons, measured from the plate: each interval a→b becomes a thin quadrilateral
+// pointing toward F, the corner the next stage would add (see DECISIONS.md)
+const CHEV_OUT = 0.43, CHEV_IN = 0.235;
+function chevronPaths(P, F, m) {
+  return chunked(m, (p, i) => {
+    const ax = P[2 * i], ay = P[2 * i + 1], bx = P[2 * i + 2], by = P[2 * i + 3], mx = (ax + bx) / 2, my = (ay + by) / 2;
+    const vx = F[2 * i] - mx, vy = F[2 * i + 1] - my;
+    p.moveTo(ax, ay); p.lineTo(mx + CHEV_OUT * vx, my + CHEV_OUT * vy); p.lineTo(bx, by); p.lineTo(mx + CHEV_IN * vx, my + CHEV_IN * vy); p.closePath();
+  });
+}
+
+// Chapter 3 prints no plates, so every figure on this page is the page's own illustration of
+// the chapter's text. The models: the chapter's four worked examples of D against D_T (a
+// straight segment, the Cantor dust, the Koch curve, the trail of Brownian motion), and the
+// ball of thread whose effective dimension crosses over as the resolution refines.
+
+// seeded PRNG (mulberry32)
+function rng(seed) {
+  let a = seed >>> 0;
+  return () => {
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+// ---------- the four example sets ----------
+const LOG = Math.log;
+// triadic Koch generator (chapter 6): four pieces of 1/3, none mirrored or reversed
+const KOCH_GEN = genFromCodes([[0, 0], [1 / 3, 0], [1 / 2, Math.sqrt(3) / 6], [2 / 3, 0], [1, 0]], [0, 0, 0, 0]);
+const kochCurve = (m) => curveOf(Array.from({ length: m }, () => KOCH_GEN));
+// starts of the 2^m intervals of the stage-m triadic Cantor dust, each of length 3^−m
+function cantorStarts(m) {
+  let starts = new Float64Array(1), len = 1;
+  for (let s = 0; s < m; s++) {
+    const out = new Float64Array(starts.length * 2);
+    for (let i = 0; i < starts.length; i++) { out[2 * i] = starts[i]; out[2 * i + 1] = starts[i] + (2 * len) / 3; }
+    starts = out; len /= 3;
+  }
+  return starts;
+}
+// a Brownian trail: n Gaussian steps, scaled into a box 1 wide (y range kept in proportion)
+function brownTrail(n, seed) {
+  const rand = rng(seed), P = new Float64Array(2 * n + 2);
+  let x = 0, y = 0;
+  for (let i = 1; i <= n; i++) {
+    const r = Math.sqrt(-2 * LOG(1 - rand())), a = 2 * Math.PI * rand();
+    x += r * Math.cos(a); y += r * Math.sin(a);
+    P[2 * i] = x; P[2 * i + 1] = y;
+  }
+  const bb = bbox(P), s = 1 / Math.max(1e-9, bb.x1 - bb.x0);
+  for (let i = 0; i < P.length; i += 2) { P[i] = (P[i] - bb.x0) * s; P[i + 1] = (P[i + 1] - bb.y0) * s; }
+  return P;
+}
+
+// ---------- effective dimension of the ball of thread ----------
+// The chapter's stations, in log10 of the resolution in cm: seen far away the ball is a point
+// (dimension 0); at 10 cm resolution a solid (3); at 10 mm a mess of threads (1); at 0.1 mm
+// each thread is a column (3); at 0.01 mm columns dissolve into fibers (1); finer still, the
+// ball is a finite crowd of atomlike pinpoints (0). The crossover midpoints and widths are this
+// page's choice — the chapter insists the transitions are ill defined.
+const BALL_ZONES = [
+  { d: 0, at: 2.0, label: 'a point' },
+  { d: 3, at: 1.0, label: 'a solid ball' },
+  { d: 1, at: 0.0, label: 'threads' },
+  { d: 3, at: -2.0, label: 'columns' },
+  { d: 1, at: -3.0, label: 'fibers' },
+  { d: 0, at: -7.0, label: 'pinpoints' },
+];
+const BALL_CROSS = [
+  { at: 1.5, w: 0.12 },   // point -> ball, near the ball's 10 cm diameter
+  { at: 0.5, w: 0.12 },   // ball -> threads
+  { at: -1.0, w: 0.12 },  // threads -> columns, at the thread's 1 mm diameter
+  { at: -2.5, w: 0.12 },  // columns -> fibers, at the fibers' 0.01 mm scale
+  { at: -5.5, w: 0.4 },   // fibers -> pinpoints, somewhere past the molecules
+];
+const logistic = (t) => 1 / (1 + Math.exp(-t));
+function effDim(x) {                             // x = log10(resolution in cm)
+  let d = BALL_ZONES[0].d;
+  for (let i = 0; i < BALL_CROSS.length; i++) d += (BALL_ZONES[i + 1].d - BALL_ZONES[i].d) * logistic((BALL_CROSS[i].at - x) / BALL_CROSS[i].w);
+  return d;
+}
+function ballZone(x) {                           // the zone, or the crossing it sits in
+  for (let i = 0; i < BALL_CROSS.length; i++) {
+    const c = BALL_CROSS[i];
+    if (Math.abs(x - c.at) < 2.2 * c.w) return { crossing: true, from: BALL_ZONES[i], to: BALL_ZONES[i + 1] };
+    if (x > c.at) return { crossing: false, zone: BALL_ZONES[i] };
+  }
+  return { crossing: false, zone: BALL_ZONES[BALL_ZONES.length - 1] };
+}
+// a fractal coastline for contrast, on its own scale: between its outer and inner cutoffs the
+// "transition" never ends — a whole zone with D ≈ 1.25 > D_T = 1
+function coastDim(x) {
+  return 0 + 1.25 * logistic((1.5 - x) / 0.25) - 0.25 * logistic((-4.5 - x) / 0.25);
+}
+
+// ---------- the wound ball ----------
+// A ball of 10 cm diameter (R = 5) wound from a 1 mm thread: great-circle wraps on two outer
+// layers, the winding axis drifting wrap to wrap, which is how a yarn ball covers its sphere.
+// Only the front hemisphere is kept (the ball is opaque); segments are depth-sorted into a few
+// z bands per tone, each a Path2D, so one render is a few hundred strokes, not tens of thousands.
+const BALL_R = 5, THREAD_W = 0.1, SEG_N = 160, TONE_N = 5, BAND_N = 14;
+function windBall(seed) {
+  const rand = rng(seed), layers = [{ r: BALL_R - 0.05, n: 150 }, { r: BALL_R - 0.16, n: 110 }];
+  const segs = [];                               // [x1, y1, x2, y2, z, tone]
+  for (const { r, n } of layers) {
+    // axis drifts on the sphere: a slow seeded walk, so neighbouring wraps lie side by side
+    let th = rand() * Math.PI, ph = rand() * 2 * Math.PI;
+    for (let wgt = 0; wgt < n; wgt++) {
+      th += (rand() - 0.5) * 0.5; ph += 0.9 + (rand() - 0.5) * 0.8;
+      const ax = Math.sin(th) * Math.cos(ph), ay = Math.sin(th) * Math.sin(ph), az = Math.cos(th);
+      // u, v span the wrap's plane
+      let ux = -ay, uy = ax;
+      const uz = 0, ul = Math.hypot(ux, uy);
+      if (ul < 1e-6) { ux = 1; uy = 0; } else { ux /= ul; uy /= ul; }
+      const vx = ay * uz - az * uy, vy = az * ux - ax * uz, vz = ax * uy - ay * ux;
+      const tone = Math.floor(rand() * TONE_N), a0 = rand() * 2 * Math.PI;
+      let px = 0, py = 0, pz = 0;
+      for (let j = 0; j <= SEG_N; j++) {
+        const a = a0 + (2 * Math.PI * j) / SEG_N, ca = Math.cos(a) * r, sa = Math.sin(a) * r;
+        const x = ca * ux + sa * vx, y = ca * uy + sa * vy, z = ca * uz + sa * vz;
+        if (j && (z > 0 || pz > 0)) segs.push([px, py, x, y, (z + pz) / 2, tone]);
+        px = x; py = y; pz = z;
+      }
+    }
+  }
+  segs.sort((a, b) => a[4] - b[4]);
+  const top = segs[segs.length - 1];             // the front-most stitch: deep close-ups centre here
+  const anchor = [(top[0] + top[2]) / 2, (top[1] + top[3]) / 2];
+  // z bands, far to near, one chunked path per (band, tone)
+  const bands = [];
+  for (let b = 0; b < BAND_N; b++) {
+    const lo = Math.floor((segs.length * b) / BAND_N), hi = Math.floor((segs.length * (b + 1)) / BAND_N);
+    const paths = Array.from({ length: TONE_N }, () => new Path2D());
+    let zSum = 0;
+    for (let i = lo; i < hi; i++) { const s = segs[i]; paths[s[5]].moveTo(s[0], s[1]); paths[s[5]].lineTo(s[2], s[3]); zSum += s[4]; }
+    bands.push({ paths, z: hi > lo ? zSum / (hi - lo) : 0 });
+  }
+  return { segs, bands, anchor };
+}
+
+(() => {
+  const pow = Math.pow;
+  const MONO = '500 10.5px "IBM Plex Mono", monospace';
+
+  // a screen-space chart frame with margins; returns the plot rectangle
+  function frame(c, f, ml = 52, mr = 14, mt = 14, mb = 36) {
+    const iw = f.w - ml - mr, ih = f.h - mt - mb;
+    c.strokeStyle = PRINT.rule; c.lineWidth = 1; c.strokeRect(ml, mt, iw, ih);
+    c.font = MONO;
+    return { ml, mt, iw, ih };
+  }
+  const xlabel = (c, f, r, s) => { c.fillStyle = PRINT.muted; c.textAlign = 'center'; c.textBaseline = 'top'; c.fillText(s, r.ml + r.iw / 2, f.h - 16); };
+  const ylabel = (c, r, s) => { c.save(); c.translate(14, r.mt + r.ih / 2); c.rotate(-Math.PI / 2); c.fillStyle = PRINT.muted; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(s, 0, 0); c.restore(); };
+
+  // ====================== 1: the definition — D against D_T ======================
+  const D_CANTOR = Math.log(2) / Math.log(3), D_KOCH = Math.log(4) / Math.log(3);
+  const SHAPES = {
+    line: {
+      name: 'A straight segment', Dt: 1, D: 1,
+      dim: 'D = 1 · D_T = 1 · dimensionally concordant — not a fractal',
+      why: 'a curve', dval: '1 exactly',
+      info: 'Euclid&rsquo;s shapes are <i>dimensionally concordant</i>: every useful dimension agrees. A segment is a curve (D_T&nbsp;=&nbsp;1) and its Hausdorff dimension is also 1, so the detail buttons have nothing to add — magnified, it is only itself.',
+    },
+    cantor: {
+      name: 'The Cantor dust', Dt: 0, D: D_CANTOR,
+      dim: `D = log 2 / log 3 ≈ 0.6309 · D_T = 0 · D > D_T: a fractal`,
+      why: 'totally disconnected: a dust', dval: `log 2/log 3 ≈ 0.6309`,
+      info: 'Keep the outer thirds of every interval, without end. What remains is totally disconnected — every piece falls apart into smaller pieces — so its topological dimension is 0. Yet it is far more than a finite set of points: D ≈ 0.63 measures that. Built in full on the <a href="cantor-dust.html">Cantor dust</a> page (chapter 8).',
+    },
+    koch: {
+      name: 'The Koch curve', Dt: 1, D: D_KOCH,
+      dim: `D = log 4 / log 3 ≈ 1.2618 · D_T = 1 · D > D_T: a fractal`,
+      why: 'a curve', dval: `log 4/log 3 ≈ 1.2618`,
+      info: 'A curve — an unbroken line one can trace end to end, so D_T = 1 — whose crinkles carry more than length: D ≈ 1.26. The chapter&rsquo;s example of a noninteger D. Built in full on the <a href="koch-plates.html">Triadic Koch Island</a> page (chapter 6).',
+    },
+    brown: {
+      name: 'A Brownian trail', Dt: 1, D: 2,
+      dim: 'D = 2 · D_T = 1 · D > D_T: a fractal with an integer D',
+      why: 'a curve', dval: '2 exactly',
+      info: 'The chapter&rsquo;s warning that <i>fractal</i> does not mean <i>fractional</i>: the trail of Brownian motion is a curve (D_T = 1) whose D equals 2 exactly — it very nearly fills the plane. A fresh seeded trail each time; chapter 25 takes it up on the <a href="brown-trails.html">Brown Trails</a> page.',
+    },
+  };
+  const stA = { shape: 'koch', m: 4, seed: 7 };
+  const cacheA = {};
+  const dataA = () => {
+    const key = `${stA.shape}|${stA.m}|${stA.seed}`;
+    if (cacheA[key]) return cacheA[key];
+    let d = null;
+    if (stA.shape === 'cantor') d = cantorStarts(stA.m);
+    if (stA.shape === 'koch') d = kochCurve(stA.m);
+    if (stA.shape === 'brown') d = brownTrail(256 << (stA.m - 1), stA.seed);
+    return (cacheA[key] = d);
+  };
+  const AXIS_H = 56;                             // screen band kept for the dimension axis
+  const zA = zoomable('wA', 'cA', (f) => {
+    let bb;
+    if (stA.shape === 'line') bb = { x0: -0.02, x1: 1.02, y0: -0.30, y1: 0.30 };
+    else if (stA.shape === 'cantor') bb = { x0: -0.02, x1: 1.02, y0: -0.34, y1: 0.26 };
+    else if (stA.shape === 'koch') bb = { x0: -0.02, x1: 1.02, y0: -0.22, y1: 0.42 };
+    else { const P = dataA(), b = bbox(P); bb = { x0: b.x0 - 0.03, x1: b.x1 + 0.03, y0: b.y0 - 0.03, y1: b.y1 + 0.03 }; }
+    const v = fitBox({ w: f.w, h: f.h - AXIS_H, dpr: f.dpr }, bb, 0.03);
+    return v;
+  }, (f, v) => {
+    const c = f.ctx;
+    paper(f, PRINT.paper); toWorld(f, v);
+    c.strokeStyle = PRINT.ink; c.fillStyle = PRINT.ink; c.lineJoin = 'round'; c.lineCap = 'round';
+    if (stA.shape === 'line') {
+      c.lineWidth = 2.5 / v.s;
+      c.beginPath(); c.moveTo(0, 0); c.lineTo(1, 0); c.stroke();
+    } else if (stA.shape === 'cantor') {
+      const starts = dataA(), len = pow(3, -stA.m), w = Math.max(len, 0.75 / v.s), p = new Path2D();
+      for (const a of starts) p.rect(a, -0.015, w, 0.03);
+      c.fill(p);
+    } else {
+      const P = dataA();
+      c.lineWidth = (stA.shape === 'koch' ? 1.6 : 1.2) / v.s;
+      c.stroke(polyPath(P, false));
+    }
+    toScreen(f);
+    drawAxisA(c, f);
+  });
+  // the dimension axis: D_T in blue, D in red, the gap between them shaded — the gap is what
+  // makes the set a fractal
+  function drawAxisA(c, f) {
+    const s = SHAPES[stA.shape], ml = 64, mr = 24, y = f.h - 26, t = (d) => ml + ((f.w - ml - mr) * d) / 3;
+    c.font = MONO; c.lineWidth = 1;
+    c.strokeStyle = PRINT.rule; c.beginPath(); c.moveTo(ml, y); c.lineTo(f.w - mr, y); c.stroke();
+    c.fillStyle = PRINT.muted; c.textAlign = 'center'; c.textBaseline = 'top';
+    for (let d = 0; d <= 3; d++) {
+      c.strokeStyle = PRINT.rule; c.beginPath(); c.moveTo(t(d), y - 4); c.lineTo(t(d), y + 4); c.stroke();
+      c.fillText(String(d), t(d), y + 7);
+    }
+    c.textAlign = 'left'; c.fillText('dimension', f.w - mr - 68, y - 28);
+    if (s.D > s.Dt) { c.fillStyle = 'rgba(194,69,45,0.18)'; c.fillRect(t(s.Dt), y - 10, t(s.D) - t(s.Dt), 10); }
+    c.fillStyle = PRINT.accent; c.beginPath(); c.moveTo(t(s.Dt), y - 1); c.lineTo(t(s.Dt) - 5, y - 11); c.lineTo(t(s.Dt) + 5, y - 11); c.closePath(); c.fill();
+    c.fillStyle = PRINT.red; c.beginPath(); c.arc(t(s.D), y - 5, 4.5, 0, 2 * Math.PI); c.fill();
+    c.textBaseline = 'alphabetic';
+    if (s.D === s.Dt) { c.fillStyle = PRINT.muted; c.textAlign = 'center'; c.fillText('D = D_T = 1', t(1), y - 16); }
+    else {
+      c.fillStyle = PRINT.accent; c.textAlign = 'right'; c.fillText(`D_T = ${s.Dt}`, t(s.Dt) - 8, y - 14);
+      c.fillStyle = PRINT.red; c.textAlign = 'left'; c.fillText(`D ≈ ${s.D.toFixed(s.D === 2 ? 0 : 2)}`, t(s.D) + 8, y - 14);
+    }
+  }
+  function setA(refit) {
+    const s = SHAPES[stA.shape];
+    markShA(stA.shape); markMA(stA.m);
+    markMA.buttons.forEach((b) => { b.disabled = stA.shape === 'line'; });
+    $('newA').hidden = stA.shape !== 'brown';
+    $('dimA').textContent = s.dim;
+    $('cAt').textContent = s.name;
+    $('cAn').textContent = stA.shape === 'line' ? 'no detail to add'
+      : stA.shape === 'cantor' ? `stage ${stA.m} · ${fmt(1 << stA.m)} pieces of length 3${sup(-stA.m)}`
+      : stA.shape === 'koch' ? `stage ${stA.m} · ${fmt(pow(4, stA.m))} edges`
+      : `${fmt(256 << (stA.m - 1))} steps · seed ${stA.seed}`;
+    $('infoA').innerHTML = s.info;
+    $('rAa').innerHTML = `${s.Dt} — ${s.why}`;
+    $('rAb').textContent = s.dval;
+    $('rAc').textContent = s.D === s.Dt ? '0 — concordant' : `${(Math.floor((s.D - s.Dt) * 1e4) / 1e4).toFixed(4)} — discordant`;
+    $('rAd').textContent = s.D > s.Dt ? (s.D === Math.round(s.D) ? 'yes — even with D an integer' : 'yes — D exceeds D_T') : 'no — D = D_T';
+    if (refit) zA.refit(); else zA.schedule();
+  }
+  const sup = (n) => String(n).replace(/-/, '⁻').replace(/\d/g, (d) => '⁰¹²³⁴⁵⁶⁷⁸⁹'[d]);
+  const markShA = stepButtons($('shA'), Object.keys(SHAPES), (k) => SHAPES[k].name, (k) => SHAPES[k].name, (k) => { stA.shape = k; setA(true); });
+  const markMA = stepButtons($('mA'), [1, 2, 3, 4, 5, 6, 7], String, (n) => `Detail ${n}`, (n) => { stA.m = n; setA(stA.shape === 'brown'); });
+  $('newA').addEventListener('click', () => { stA.seed = (stA.seed * 1664525 + 1013904223) >>> 0; setA(true); });
+
+  // ====================== 2: effective dimension — the ball of thread ======================
+  const stB = { mode: 'see', x: 1, coast: false, seed: 11 };
+  let ballData = null;
+  const ball = () => ballData || (ballData = windBall(stB.seed));
+  // how wide a field the observer takes in at resolution 10^x cm, and how coarse the picture is
+  // drawn: presentation choices, interpolated between the chapter's stations for legibility
+  const lerpAt = (pts, x) => {
+    if (x >= pts[0][0]) return pts[0][1];
+    for (let i = 1; i < pts.length; i++) if (x >= pts[i][0]) { const [x1, g1] = pts[i - 1], [x0, g0] = pts[i]; return g0 * pow(g1 / g0, (x - x0) / (x1 - x0)); }
+    return pts[pts.length - 1][1];
+  };
+  const fovOf = (x) => Math.min(320, Math.max(0.015, pow(10, x) * lerpAt([[3, 3.2], [0.2, 3.2], [-2, 50], [-3, 200], [-9, 200]], x)));
+  const cellOf = (x) => lerpAt([[1.5, 12], [1, 8], [0, 4.5], [-1, 2.5], [-2, 1], [-9, 1]], x);
+  const seeCache = { key: '', cv: null, rect: null };
+
+  function drawScene(c2, W2, H2, fov, x) {
+    c2.setTransform(1, 0, 0, 1, 0, 0);
+    c2.fillStyle = PRINT.paper; c2.fillRect(0, 0, W2, H2);
+    const s2 = W2 / fov;
+    c2.setTransform(s2, 0, 0, -s2, W2 / 2, H2 / 2);
+    const B = ball();
+    // deep close-ups slide toward the front-most stitch, so the view never lands in a gap
+    const t0 = Math.max(0, Math.min(1, (0.8 - fov) / 0.65));
+    c2.translate(-B.anchor[0] * t0, -B.anchor[1] * t0);
+    c2.lineCap = 'round'; c2.lineJoin = 'round';
+    const shade = (z, lift) => {
+      const g = Math.max(30, Math.min(225, 46 + 120 * (z / BALL_R) + lift));
+      return `rgb(${g},${g - 2},${g - 6})`;
+    };
+    const dotted = x < -4.6;                      // past the fibers, only atomlike pinpoints
+    if (!dotted) {
+      // the ball's dark inside, behind the winding, where the thread leaves gaps
+      c2.fillStyle = '#504e47'; c2.beginPath(); c2.arc(0, 0, BALL_R * 0.985, 0, 2 * Math.PI); c2.fill();
+      for (const band of B.bands) {
+        for (let t = 0; t < TONE_N; t++) {
+          c2.lineWidth = THREAD_W; c2.strokeStyle = shade(band.z, (t - 2) * 9); c2.stroke(band.paths[t]);
+          if (fov < 3.5) { c2.lineWidth = THREAD_W * 0.38; c2.strokeStyle = shade(band.z, 38 + (t - 2) * 9); c2.stroke(band.paths[t]); }
+        }
+      }
+    }
+    // close enough to see the fibers inside each thread (and, deeper still, only pinpoints)
+    if (fov < 0.45) {
+      const lim = fov * 0.9, FIB_P = 0.0018, nF = Math.floor(THREAD_W / FIB_P), FIB_W = 0.0012;
+      if (dotted) { const d = fov / 55; c2.setLineDash([d * 0.4, d * 1.8]); }
+      for (const s of B.segs) {
+        if (s[4] < BALL_R - 0.35) continue;
+        const mx = (s[0] + s[2]) / 2 - B.anchor[0] * t0, my = (s[1] + s[3]) / 2 - B.anchor[1] * t0;
+        if (Math.abs(mx) > lim + 0.15 || Math.abs(my) > lim + 0.15) continue;
+        let nx = -(s[3] - s[1]), ny = s[2] - s[0];
+        const nl = Math.hypot(nx, ny) || 1; nx /= nl; ny /= nl;
+        for (let k = 0; k < nF; k++) {
+          const o = (k - (nF - 1) / 2) * FIB_P;
+          const g = 48 + 112 * (s[4] / BALL_R) + (k % 2 ? 26 : -22) + (((s[5] * 7 + k * 13) % 7) - 3) * 7;
+          c2.strokeStyle = `rgb(${g},${g - 2},${g - 6})`; c2.lineWidth = dotted ? FIB_W * 0.5 : FIB_W;
+          c2.beginPath(); c2.moveTo(s[0] + nx * o, s[1] + ny * o); c2.lineTo(s[2] + nx * o, s[3] + ny * o); c2.stroke();
+        }
+      }
+      c2.setLineDash([]);
+    }
+  }
+  const zB = zoomable('wB', 'cB', (f) => {
+    if (stB.mode === 'chart') return { s: 1, ox: 0, oy: 0 };
+    const fov = fovOf(stB.x), h = fov * (f.h / Math.max(1, f.w));
+    return fitBox(f, { x0: -fov / 2, x1: fov / 2, y0: -h / 2, y1: h / 2 }, 0);
+  }, (f, v) => {
+    const c = f.ctx;
+    if (stB.mode === 'chart') { paper(f, PRINT.paper); toScreen(f); drawChartB(c, f); return; }
+    paper(f, '#dddbd2');
+    const fov = fovOf(stB.x), cell = cellOf(stB.x);
+    const rect = { x0: -fov / 2, x1: fov / 2, y0: -fov / 2, y1: fov / 2 };
+    const key = `${stB.x.toFixed(2)}|${stB.seed}|${f.w}`;
+    if (seeCache.key !== key) {
+      const W2 = Math.max(8, Math.round(f.w / cell)), H2 = W2;
+      const cv = seeCache.cv || (seeCache.cv = document.createElement('canvas'));
+      cv.width = W2; cv.height = H2;
+      drawScene(cv.getContext('2d'), W2, H2, fov, stB.x);
+      seeCache.key = key;
+    }
+    const px = v.ox + rect.x0 * v.s, py = v.oy - rect.y1 * v.s, pw = (rect.x1 - rect.x0) * v.s, ph = (rect.y1 - rect.y0) * v.s;
+    c.setTransform(f.dpr, 0, 0, f.dpr, 0, 0);
+    c.imageSmoothingEnabled = cell < 1.5;
+    c.drawImage(seeCache.cv, px, py, pw, ph);
+    c.imageSmoothingEnabled = true;
+    // a scale bar, a round length near a fifth of the field
+    const nice = pow(10, Math.floor(Math.log10(fov / 3))), bar = nice * v.s;
+    c.font = MONO; c.fillStyle = '#3a3a35'; c.strokeStyle = '#3a3a35'; c.lineWidth = 2;
+    c.beginPath(); c.moveTo(14, f.h - 14); c.lineTo(14 + bar, f.h - 14); c.stroke();
+    c.textAlign = 'left'; c.textBaseline = 'bottom'; c.fillText(fmtLen(nice), 14, f.h - 19);
+  });
+  function fmtLen(e) {                            // e in cm
+    const nice = (v, u) => `${+v.toPrecision(2)} ${u}`;
+    if (e >= 100) return nice(e / 100, 'm');
+    if (e >= 1) return nice(e, 'cm');
+    if (e >= 0.01) return nice(e * 10, 'mm');
+    if (e >= 1e-4) return nice(e * 1e4, 'µm');
+    return nice(e * 1e8, 'Å');
+  }
+  function drawChartB(c, f) {
+    const r = frame(c, f, 46, 14, 18, 40), X0 = 3, X1 = -8;
+    const tx = (x) => r.ml + ((X0 - x) / (X0 - X1)) * r.iw, ty = (d) => r.mt + r.ih - (d / 3.3) * r.ih;
+    // the ill-defined crossings, shaded
+    for (const cr of BALL_CROSS) {
+      const a = tx(cr.at + 2.2 * cr.w), b = tx(cr.at - 2.2 * cr.w);
+      c.fillStyle = 'rgba(21,21,21,0.06)'; c.fillRect(a, r.mt, b - a, r.ih);
+    }
+    // zone labels
+    c.fillStyle = PRINT.muted; c.textAlign = 'center'; c.textBaseline = 'top';
+    const edges = [X0, ...BALL_CROSS.map((cr) => cr.at), X1];
+    BALL_ZONES.forEach((z, i) => {
+      const mid = (edges[i] + edges[i + 1]) / 2;
+      if (f.w > 560 || i % 2 === 0) c.fillText(z.label, tx(mid), ty(z.d) - 16);
+    });
+    // axes
+    c.textBaseline = 'top'; c.fillStyle = PRINT.muted;
+    for (const [x, lab] of [[2, '1 m'], [1, '10 cm'], [0, '1 cm'], [-1, '1 mm'], [-2, '0.1 mm'], [-3, '0.01 mm'], [-4, '1 µm'], [-6, '100 Å'], [-8, '1 Å']]) {
+      c.strokeStyle = PRINT.rule; c.beginPath(); c.moveTo(tx(x), r.mt + r.ih); c.lineTo(tx(x), r.mt + r.ih + 4); c.stroke();
+      if (f.w > 560 || [2, 0, -2, -4, -6, -8].includes(x)) c.fillText(lab, tx(x), r.mt + r.ih + 7);
+    }
+    c.textAlign = 'right'; c.textBaseline = 'middle';
+    for (let d = 0; d <= 3; d++) { c.fillText(String(d), r.ml - 6, ty(d)); c.strokeStyle = PRINT.rule; c.beginPath(); c.moveTo(r.ml, ty(d)); c.lineTo(r.ml + 4, ty(d)); c.stroke(); }
+    xlabel(c, f, r, 'resolution, coarse → fine'); ylabel(c, r, 'effective dimension');
+    // the coastline, for contrast: its "transition" is the whole middle of the range
+    if (stB.coast) {
+      c.strokeStyle = PRINT.red; c.lineWidth = 1.6; c.beginPath();
+      for (let x = X0; x >= X1; x -= 0.03) { const X = tx(x), Y = ty(coastDim(x)); x === X0 ? c.moveTo(X, Y) : c.lineTo(X, Y); }
+      c.stroke();
+      c.fillStyle = PRINT.red; c.textAlign = 'left'; c.textBaseline = 'bottom';
+      c.fillText('a coastline, on its own scale: D ≈ 1.25 the whole way', tx(1.1), ty(1.25) - 6);
+    }
+    // the ball of thread
+    c.strokeStyle = PRINT.ink; c.lineWidth = 2; c.beginPath();
+    for (let x = X0; x >= X1; x -= 0.03) { const X = tx(x), Y = ty(effDim(x)); x === X0 ? c.moveTo(X, Y) : c.lineTo(X, Y); }
+    c.stroke();
+    // the slider's position
+    c.strokeStyle = 'rgba(194,69,45,0.5)'; c.lineWidth = 1; c.beginPath(); c.moveTo(tx(stB.x), r.mt); c.lineTo(tx(stB.x), r.mt + r.ih); c.stroke();
+    c.fillStyle = PRINT.red; c.beginPath(); c.arc(tx(stB.x), ty(effDim(stB.x)), 4.5, 0, 2 * Math.PI); c.fill();
+    c.strokeStyle = PRINT.paper; c.lineWidth = 1.5; c.stroke();
+  }
+  const MODES_B = { see: 'What the observer sees', chart: 'Dimension against resolution' };
+  const INFO_B = {
+    see: 'One picture of the same ball, redrawn as the resolution refines: a dot, then a solid ball, then winding threads, then a thread seen as a thick column, then its fibers — and, far past what can be drawn, atomlike pinpoints. The scale bar bottom left gives the size. Drag the slider slowly, or jump between the chapter&rsquo;s stations.',
+    chart: 'The effective dimension of the ball, zone by zone. Flat stretches are honest integer dimensions; the shaded crossings are the ill-defined transitions between them. The chapter&rsquo;s closing move: in a fractal those transitions are not thin — they widen into a whole zone where D exceeds D_T. Turn on the coastline to see it.',
+  };
+  const STATIONS = [['Far away', 2.2], ['10 cm', 1], ['10 mm', 0], ['0.1 mm', -2], ['0.01 mm', -3], ['Atoms', -8]];
+  function setB(refit) {
+    markMB(stB.mode); markStB(STATIONS.findIndex(([, x]) => Math.abs(x - stB.x) < 0.026));
+    $('xB').value = String(-stB.x);
+    $('xBv').textContent = fmtLen(pow(10, stB.x));
+    $('coastWrap').hidden = stB.mode !== 'chart';
+    $('cBt').textContent = MODES_B[stB.mode];
+    $('cBn').textContent = stB.mode === 'see' ? `resolution ${fmtLen(pow(10, stB.x))} · field shown ${fmtLen(fovOf(stB.x))}` : 'the ball of thread across eleven decades';
+    $('infoB').innerHTML = INFO_B[stB.mode];
+    const z = ballZone(stB.x), d = effDim(stB.x);
+    $('rBa').textContent = fmtLen(pow(10, stB.x));
+    $('rBb').textContent = z.crossing ? `${z.from.label} → ${z.to.label}` : z.zone.label;
+    $('rBc').textContent = z.crossing ? `crossing over (≈ ${d.toFixed(2)})` : String(z.zone.d);
+    $('rBd').textContent = z.crossing ? 'ill defined — in transition' : `${z.zone.d} — well defined here`;
+    if (refit) zB.refit(); else zB.schedule();
+  }
+  const markMB = stepButtons($('mB'), Object.keys(MODES_B), (k) => MODES_B[k], (k) => `Show: ${MODES_B[k]}`, (k) => { stB.mode = k; setB(true); });
+  const markStB = stepButtons($('stB'), [0, 1, 2, 3, 4, 5], (i) => STATIONS[i][0], (i) => `Resolution ${STATIONS[i][0]}`, (i) => { stB.x = STATIONS[i][1]; setB(true); });
+  let nudgeB = 0;
+  $('xB').addEventListener('input', (e) => {
+    stB.x = -(+e.target.value);
+    // the full redraw re-renders the scene; while the slider moves, settle it like a pan
+    clearTimeout(nudgeB); nudgeB = setTimeout(() => setB(true), 90);
+    setBText();
+  });
+  function setBText() {
+    $('xBv').textContent = fmtLen(pow(10, stB.x));
+    const z = ballZone(stB.x);
+    $('rBa').textContent = fmtLen(pow(10, stB.x));
+    $('rBb').textContent = z.crossing ? `${z.from.label} → ${z.to.label}` : z.zone.label;
+  }
+  $('coastB').addEventListener('change', (e) => { stB.coast = e.target.checked; setB(false); });
+  $('windB').addEventListener('click', () => { stB.seed = (stB.seed * 1664525 + 1013904223) >>> 0; ballData = null; seeCache.key = ''; setB(false); });
+
+  // ---- first paint ----
+  setA(true);
+  setB(true);
+})();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1036 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Update for the Second Printing</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>
+/* Layout: five sections in the update's own order; interactive maps first, the quaternion render and data charts after, then the topic map. One column under 900px. */
+:root {
+  --page: #e4e5e1;
+  --text: #1b1d1f;
+  --muted: #595e64;
+  --rule: #c4c7c1;
+  --surface: #f6f6f3;
+  --accent: #285895;
+  --f-display: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Newsreader", Georgia, "Times New Roman", serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* the figures are reproductions of printed plates, so their paper and inks stay the same in both themes */
+  --print-paper: #ecebe6;
+  --print-ink: #151515;
+  --print-rule: #c9c8c2;
+  --gain: rgba(47, 95, 158, 0.42);
+  --loss: rgba(186, 88, 44, 0.42);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --page: #111214; --text: #e5e5e1; --muted: #9a9fa6; --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --page: #111214; --text: #e5e5e1; --muted: #9a9fa6; --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--page); color: var(--text); font-family: var(--f-display); font-size: 14px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
+.wrap {
+  max-width: 1180px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 36px 64px;
+  display: grid; gap: 40px;
+}
+header.top { display: grid; gap: 10px; max-width: 820px; }
+.eyebrow { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+h1 {
+  margin: 0; display: flex; align-items: center; flex-wrap: wrap; gap: 0.18em 0.42em;
+  font-weight: 800; font-size: clamp(30px, 5.4vw, 54px); line-height: 1.02; letter-spacing: 0.01em; text-transform: uppercase; text-wrap: balance;
+}
+h1 .plate-no { font-weight: 600; text-transform: none; letter-spacing: 0; }
+.lozenge { display: inline-block; width: 0.42em; height: 0.42em; border: 0.075em solid currentColor; position: relative; top: -0.02em; }
+.lozenge::after { content: ""; position: absolute; inset: 0.1em; border: 0.05em solid currentColor; }
+.dek { margin: 0; font-family: var(--f-body); font-size: 19px; line-height: 1.45; max-width: 64ch; }
+
+nav.index {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+  padding: 10px max(16px, env(safe-area-inset-right, 0px)) 10px max(16px, env(safe-area-inset-left, 0px));
+  background: var(--page); border-bottom: 1px solid var(--rule);
+  display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none;
+}
+nav.index a {
+  flex: none; display: inline-flex; gap: 8px; align-items: baseline; padding: 6px 10px;
+  border: 1px solid var(--rule); background: var(--surface); color: var(--text); text-decoration: none; font-size: 13px; font-weight: 600;
+}
+nav.index a b { font-family: var(--f-mono); font-weight: 500; color: var(--accent); }
+nav.index a:hover { border-color: var(--text); }
+
+section.plate { display: grid; gap: 18px; scroll-margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--rule); }
+.plate-head { display: grid; gap: 4px; }
+.plate-head .no { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.plate-head h2 { margin: 0; font-size: clamp(22px, 3vw, 30px); font-weight: 800; line-height: 1.1; text-transform: uppercase; letter-spacing: 0.01em; text-wrap: balance; }
+.plate-head .dim { margin: 0; font-family: var(--f-mono); font-size: 13px; color: var(--muted); }
+.plate-body { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(280px, 1fr); gap: 32px; align-items: start; }
+@media (max-width: 899px) { .plate-body { grid-template-columns: minmax(0, 1fr); gap: 20px; } }
+figure.fig { margin: 0; display: grid; gap: 8px; min-width: 0; }
+.canvas-wrap { position: relative; width: 100%; max-width: 100%; background: var(--print-paper); outline: 1px solid var(--rule); overflow: hidden; }
+.canvas-wrap canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.r-sq { aspect-ratio: 1 / 1; }
+.r-lox { aspect-ratio: 5 / 4; }
+.zoomable { cursor: grab; touch-action: pan-y; }
+.zoomable.dragging { cursor: grabbing; }
+.view-tools { position: absolute; top: 10px; right: 10px; display: flex; gap: 6px; z-index: 2; }
+.view-tools button { min-width: 34px; height: 34px; padding: 0 10px; font: 600 15px/1 var(--f-display); color: var(--print-ink); background: #f7f7f3; border: 1px solid var(--print-rule); cursor: pointer; }
+figcaption { font-size: 13px; color: var(--muted); }
+figcaption strong { color: var(--text); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+
+.side { display: grid; gap: 18px; min-width: 0; align-content: start; }
+.side p.cap { margin: 0; font-family: var(--f-body); font-size: 17px; line-height: 1.55; max-width: 62ch; }
+.group { display: grid; gap: 8px; min-width: 0; }
+.label-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.label { font-size: 11.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.value { font-family: var(--f-mono); font-size: 12.5px; font-variant-numeric: tabular-nums; text-align: right; }
+.steps { display: flex; flex-wrap: wrap; gap: 6px; }
+.steps button {
+  min-width: 38px; height: 34px; padding: 0 10px; font: 600 13px/1 var(--f-mono); color: var(--text);
+  background: var(--surface); border: 1px solid var(--rule); cursor: pointer;
+}
+.steps.words button { font: 600 13px/1 var(--f-display); }
+.steps button[aria-pressed="true"] { background: var(--text); color: var(--page); border-color: var(--text); }
+.steps button:hover { border-color: var(--text); }
+.steps button:disabled { opacity: 0.35; cursor: default; border-color: var(--rule); }
+.btn-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.btn { padding: 8px 12px; font: 600 13px/1.2 var(--f-display); color: var(--text); background: var(--surface); border: 1px solid var(--rule); cursor: pointer; }
+.btn:hover { border-color: var(--text); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--page); }
+.check { display: flex; align-items: flex-start; gap: 8px; font-size: 13.5px; cursor: pointer; }
+.check input { accent-color: var(--accent); width: 16px; height: 16px; margin: 1px 0 0; flex: none; }
+.check:has(input:disabled) { opacity: 0.45; cursor: default; }
+.slider { display: grid; gap: 4px; }
+.slider input { width: 100%; accent-color: var(--accent); margin: 0; }
+.slider input:disabled { opacity: 0.4; }
+dl.read { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; padding-top: 14px; border-top: 1px solid var(--rule); }
+dl.read div { display: grid; gap: 2px; min-width: 0; }
+dl.read dt { font-size: 10.5px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); }
+dl.read dd { margin: 0; font-family: var(--f-mono); font-size: 16px; overflow-wrap: anywhere; }
+dl.read dd small { font-size: 11.5px; color: var(--muted); }
+.note { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.mini { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; padding: 10px 12px; background: var(--print-paper); border: 1px solid var(--print-rule); color: var(--print-ink); }
+.mini svg { height: 64px; width: auto; max-width: 100%; }
+.mini .fx { font-family: var(--f-mono); font-size: 12px; line-height: 1.6; color: var(--print-ink); }
+.key { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--muted); }
+.key span { display: inline-flex; align-items: center; gap: 6px; }
+.key i { width: 14px; height: 10px; display: inline-block; border: 1px solid var(--print-rule); }
+.readline { min-height: 2.9em; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.readline b { color: var(--text); font-weight: 700; }
+
+.sub { display: grid; gap: 14px; padding-top: 22px; border-top: 1px dashed var(--rule); scroll-margin-top: 64px; }
+.sub h3 { margin: 0; font-size: 15px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
+.source { font-family: var(--f-body); font-size: 15px; color: var(--muted); margin: 0; max-width: 84ch; }
+.source i { color: var(--text); }
+.source a { color: var(--accent); }
+button:focus-visible, input:focus-visible, a:focus-visible, canvas:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.r-wide { aspect-ratio: 10 / 7; }
+#wQ { cursor: grab; touch-action: pan-y; }
+#wQ:active { cursor: grabbing; }
+.topics { margin: 0; padding: 0; list-style: none; display: grid; gap: 14px; }
+.topics li { font-family: var(--f-body); font-size: 16px; line-height: 1.5; max-width: 76ch; }
+.topics b { font-family: var(--f-display); font-size: 13.5px; font-weight: 700; letter-spacing: 0.02em; }
+</style>
+<style>
+body { margin: 0; }
+/* The hidden attribute must beat the pages' own display rules (.slider, .check, ...). The artifact
+   wrapper's stylesheet used to provide this; self-hosted pages carry it themselves. */
+[hidden] { display: none !important; }
+nav.shell { font-family: var(--f-display); font-size: 12.5px; font-weight: 600; background: var(--page);
+  border-bottom: 1px solid var(--rule); display: flex; align-items: center; gap: 6px 18px;
+  padding: 9px max(16px, env(safe-area-inset-right, 0px)) 9px max(16px, env(safe-area-inset-left, 0px)); }
+nav.shell a { color: var(--text); text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+nav.shell a:hover { color: var(--accent); }
+nav.shell .home { letter-spacing: 0.07em; text-transform: uppercase; flex: none; }
+nav.shell .gap { flex: 1; }
+nav.shell .pn { color: var(--muted); font-weight: 500; }
+nav.shell .pn b { color: var(--text); font-weight: 600; }
+nav.shell a:hover .pn, nav.shell a:hover .pn b { color: var(--accent); }
+</style>
+</head>
+<body>
+<nav class="shell" aria-label="Site"><a class="home" href="index.html">Fractal Geometry Explorer</a><span class="gap"></span><a rel="prev" href="historical-sketches.html"><span class="pn">&#8592; <b>Pages 405–421</b></span></a></nav>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · "Update Added in the Second Printing" (XII 1982) · pages 458–468 and front matter</p>
+    <h1><span class="plate-no">Plates II, VIII, X, 467</span><span class="lozenge" aria-hidden="true"></span><span>Update for the Second Printing</span></h1>
+    <p class="dek">Between delivery and the second printing, "fractal geometry did not stand still: it moved on at increasing speed." The update Mandelbrot bound into the 1982 reprint reports a year of news — metal fractures measured by fractal dimension, a new map z → λ(z−1/z) iterated beside the old dragons, and the squaring map carried into Hamilton's quaternions. Its four plates hide in the front matter and after the index; every figure here is computed from the text's rules.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#p8"><b>VIII</b> Julia basins</a>
+    <a href="#pX"><b>X</b> The λ-map</a>
+    <a href="#pQ467"><b>II·467</b> Quaternions</a>
+    <a href="#p461"><b>p. 461</b> Metal fractures</a>
+    <a href="#topics"><b>+</b> The rest of the update</a>
+  </nav>
+
+  <!-- ===================== PLATE VIII: JULIA BASINS ===================== -->
+  <section class="plate" id="p8">
+    <div class="plate-head">
+      <p class="no">Plate VIII, facing the foreword <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>A Julia set of z → λ(z−1/z)</h2>
+      <p class="dim" id="dimJ">basins of an attracting cycle, shaded by phase · the Julia set is the boundary between them</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wJ">
+          <canvas id="cJ" role="img" aria-label="Julia set of lambda times z minus one over z, basins shaded by cycle phase"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>Basins of attraction</strong> · <span>ink is the Julia set; each gray is one phase of the cycle</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The update's chaos section iterates a map built from a pole instead of a critical polynomial: z → λ(z−1/z). "An example of Julia set defined as the boundary of the basins of attraction" is its Plate VIII. When the critical orbit settles on an attracting cycle, every point of the plane falls toward one of the cycle's points; shading each basin by the phase at which it arrives tiles the plane with rounded domains, and the Julia set — chains of starred clusters around the pole's preimages — is the fence between them.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">λ</span></div>
+          <div class="steps words" id="mJ" role="group" aria-label="Lambda presets"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plate8">Show the Plate VIII reconstruction</button>
+        </div>
+        <p class="readline" id="infoJ" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>λ</dt><dd id="rJa">—</dd></div>
+          <div><dt>Limit points</dt><dd id="rJb">—</dd></div>
+          <div><dt>One cycle point</dt><dd id="rJc">—</dd></div>
+          <div><dt>|λ|</dt><dd id="rJd">—</dd></div>
+        </dl>
+        <p class="note">A reconstruction in kind, not stroke for stroke: the book names no λ for this plate and no window, and no fit recovered them. The print shows three gray shades, which is the signature of a 3-point cycle; the default λ = 0.2213 + 0.4834i is the centre of a period-3 region of the map below, and reproduces the plate's round three-shade domains and star-chain boundaries. Tap a λ on Plate X below to send it here.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATE X: THE LAMBDA MAP ===================== -->
+  <section class="plate" id="pX">
+    <div class="plate-head">
+      <p class="no">Plate X, before the foreword <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>The λ-map of z → λ(z−1/z)</h2>
+      <p class="dim">unit circle: beyond it ∞ attracts · white discs |λ∓½| ≤ ½: one and two limit points · between: atoms and dust</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wX">
+          <canvas id="cX" role="img" aria-label="Parameter map of lambda times z minus one over z"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>The λ-map</strong> · <span>printed orientation, +1 up</span> · tap to read a λ</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">"To study other λ's, a map analogous to Plates 188 and 189 was drawn, and part of it is shown on Plate X. We observe a very interesting form of universality: the island molecules in Plate X take precisely the same form as for the quadratic mapping — Plates X and 188–189 are built using the same building blocks." The whole map lives inside the unit circle (outside it the iteration "converges to infinity except for points z₀ forming a dust"). Two big discs hang inside it, one with a single limit point and one — the caption's white disc — with two; between the discs and the circle runs the black corona: sprouted atoms of every larger cycle, strung on a dust of chaotic λ.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Colour</span></div>
+          <div class="steps words" id="mX" role="group" aria-label="Colour rule"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="plateX">Show Plate X as printed</button>
+          <button type="button" class="btn" id="wholeX">The whole map</button>
+          <button type="button" class="btn" id="toJ" disabled>Send this λ to Plate VIII ↑</button>
+        </div>
+        <p class="readline" id="infoX" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Tapped λ</dt><dd id="rXa">—</dd></div>
+          <div><dt>Critical orbit</dt><dd id="rXb">—</dd></div>
+          <div><dt>|λ|</dt><dd id="rXc">—</dd></div>
+          <div><dt>|λ + ½|</dt><dd id="rXd">—</dd></div>
+        </dl>
+        <p class="note">Decoded from the scan: the two clean arcs of the plate fit the unit circle and a disc of exactly half its radius, internally tangent (to about 1 px at 300 dpi) — and the tangency points straight down, so the plate is printed turned 90°, with +1 up. The caption locates the white disc at |λ+i/2| &lt; ½, but the two-limit-point disc of this map is |λ+½| &lt; ½; the caption read its position off the turned print. The print's colour rule, taken from the plate itself: paper where the orbit escapes or keeps exactly 2 limit points, ink for a limit cycle of any other size (the one-limit-point disc prints black), and sampled dust where no cycle is found. The "as printed" view is the fitted window.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLATES II AND 467: QUATERNIONS ===================== -->
+  <section class="plate" id="pQ467">
+    <div class="plate-head">
+      <p class="no">Plate II (page ii) and Plate 467 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>The squaring map in quaternions</h2>
+      <p class="dim">q → q² − μ, μ complex · the complex-plane section is a dragon of Chapter 19 · drag to turn</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq" id="wQ">
+          <canvas id="cQ" role="img" aria-label="Three-dimensional section of a quaternion Julia set, raymarched and shaded"></canvas>
+        </div>
+        <figcaption><strong>3-D section of a 4-D set</strong> · <span>drag to turn it; the fine pass follows</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">A. Norton suggested that after complex z "a next most natural environment is Hamilton's quaternions", and drew the first pictures (Norton 1982). The set of quaternions that fail to iterate to infinity lives in four dimensions; what prints is a three-dimensional section, shaded. "Each major segment of the dragon obtained by complex plane section is imbedded in a major segment of the spatial shape… surrounded by multiple loosely fitting belts" — Plate 467, a cycle of size 4. Plate II, facing the half-title, "shows a different spatial fractal obtained in roughly the same fashion." Even noncommutativity turned into an asset: each variant way of writing the map induces different links between the domains, so the topology needs extra information to pin down.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">The plates</span></div>
+          <div class="steps words" id="pQ" role="group" aria-label="Plate presets"></div>
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Re μ</span><span class="value" id="mQrv">0.157</span></div>
+          <input type="range" id="mQr" min="-1.2" max="1.2" step="0.001" value="0.15652" aria-label="Real part of mu">
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Im μ</span><span class="value" id="mQiv">−1.032</span></div>
+          <input type="range" id="mQi" min="-1.2" max="1.2" step="0.001" value="-1.03225" aria-label="Imaginary part of mu">
+        </div>
+        <p class="readline" id="infoQ" aria-live="polite">The surface is the distance-estimate skin of the set, raymarched; a coarse pass draws while you move, the full pass follows.</p>
+        <dl class="read">
+          <div><dt>μ</dt><dd id="rQa">—</dd></div>
+          <div><dt>Complex section</dt><dd id="rQb">—</dd></div>
+          <div><dt>View yaw / pitch</dt><dd id="rQc">—</dd></div>
+          <div><dt>Iterations</dt><dd id="rQd">16</dd></div>
+        </dl>
+        <p class="note">Both presets are stand-ins, not reconstructions: the book records no μ and no viewpoint for either plate (the caption only says Plate 467 "illustrates a simple case with a cycle of size 4"). The Plate 467 preset uses μ = 0.1565 − 1.0322i, whose complex section is a dragon with an attracting 4-cycle, and shows the same swirled segments and belt rings; the Plate II preset is a μ with a smooth, heavier section chosen for its resemblance. The section drawn is the quaternion slice through (1, i, j), with the j-axis vertical.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PAGE 461: METAL FRACTURES ===================== -->
+  <section class="plate" id="p461">
+    <div class="plate-head">
+      <p class="no">Page 461 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Metal fractures and fractals</h2>
+      <p class="dim">Mandelbrot, Passoja &amp; Paullay · spectra and slit islands give nearly the same D · impact energy falls as D grows</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-wide" id="wC">
+          <canvas id="cC" role="img" aria-label="Digitised diagrams from page 461: fracture spectrum, slit-island plot, and impact energy against fractal dimension"></canvas>
+        </div>
+        <figcaption><strong>The three diagrams</strong> · <span>digitised from the printed page at 600 dpi</span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The update's one data figure brings fractals to the materials lab. A fracture surface of steel is "plated with electroless nickel" and polished down, so islands of metal appear in a sea of nickel — artificial "slit islands" whose area–perimeter plot (Chapter 12's trick) is "very nearly straight". A spectrum taken along the surface gives a second, independent D, and |D(spectral) − D(islands)| comes out "of the order of a few hundredths". Heat-treat the same Maraging steel at different temperatures and the Charpy impact energy falls as D rises: the first engineering use of fractal dimension as a material parameter.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Diagram</span></div>
+          <div class="steps words" id="mC" role="group" aria-label="Which diagram"></div>
+        </div>
+        <div class="group" id="refitWrap">
+          <label class="check" for="refitC"><input type="checkbox" id="refitC"> Refit the recovered markers</label>
+        </div>
+        <p class="readline" id="infoC" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Data</dt><dd id="rCa">—</dd></div>
+          <div><dt>Printed line slope</dt><dd id="rCb">—</dd></div>
+          <div><dt>D from the line</dt><dd id="rCc">—</dd></div>
+          <div><dt>Printed D</dt><dd id="rCd">—</dd></div>
+        </dl>
+        <p class="note">A data plate: every curve, marker and line is digitised from the 600 dpi scan (the spectrum as 81 samples of the curve, the slit-island plot as 32 recovered "+" marks, the Charpy chart as all 6 squares with their temperatures). The printed fitted lines carry D = 1.116 and 1.160 by their measured slopes, against the printed labels 1.118 and 1.164. One oddity of the print: the joule and foot-pound axes of the Charpy chart disagree by about 25 J — energies here are read from the joules axis.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== THE REST OF THE UPDATE ===================== -->
+  <section class="plate" id="topics">
+    <div class="plate-head">
+      <p class="no">Pages 458–466 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>The rest of the update, mapped to its chapters</h2>
+      <p class="dim">every other topic reports news on a chapter this site already rebuilds</p>
+    </div>
+    <div class="plate-body">
+      <div>
+        <ul class="topics">
+          <li><b>The definition of "fractal".</b> Mandelbrot regrets the 1977 pedantic definition and returns to the 1975 stance: leave "fractal" without one, use "fractal dimension" generically for all the variants of <a href="mathematical-backup.html">Chapter 39</a>, and pick whichever fits each case.</li>
+          <li><b>Homogeneous fractal turbulence.</b> Numerical support for D ≈ 2.5–2.6 continues (Chorin), and Hentschel &amp; Procaccia connect the stretching vortices of <a href="turbulence-intermittency.html">Chapter 10</a> to the polymers of <a href="lattice-physics.html">Chapter 36</a>.</li>
+          <li><b>Cloud and rain areas.</b> Lovejoy &amp; Mandelbrot build fractal rain maps on the finding that rainfall discontinuities follow the same hyperbolic law as the price jumps of <a href="cotton-prices.html">Chapter 37</a>; the area–perimeter data is <a href="length-area.html">Plate 115</a>.</li>
+          <li><b>Earthquakes.</b> Kagan &amp; Knopoff's statistics make quake patterns scaling and fractal, as the relief model of <a href="brown-relief.html">Chapter 28</a> prepares one to expect; Omori saw scaling in aftershocks nearly a century earlier.</li>
+          <li><b>Fractal electrodes.</b> Le Méhauté: a battery stores by volume and discharges by surface, so electrode design "poses a fractal problem" — the length–area–volume tension of <a href="length-area.html">Chapter 12</a> turned into engineering.</li>
+          <li><b>Percolation confirmed.</b> Kapitulnik, Aharony, Deutscher &amp; Stauffer recover D ≈ 1.9 for the contact clusters predicted in <a href="islands-clusters.html">Chapter 13</a>, and thin gold and lead films percolate "on the dot".</li>
+          <li><b>Low-lacunarity lattices.</b> Gefen, Meir, Mandelbrot &amp; Aharony build the physicists' postulated fractional-dimension spaces as Sierpiński carpets whose lacunarity (<a href="carpets-lacunarity.html">Chapter 34</a>) tends to zero. The gasket, meanwhile, becomes the "physicists' toy" of exact renormalization — and Mandelbrot grumbles that a French dictionary turned his <i>gasket</i> into ship's rope; he prefers <i>tamis</i>, sieve.</li>
+          <li><b>Cellular automata.</b> The neighbor-rule example on p. 328 (<a href="lattice-physics.html">Chapter 36</a>) is a cellular automaton, and Willson, Wolfram and Vichniac observe that automaton output "can, in fact, be fractal".</li>
+          <li><b>z → z²−μ, proved.</b> Douady &amp; Hubbard prove the μ-map of <a href="self-squared-dragons.html">Chapter 19</a> — the set now carrying Mandelbrot's name — is connected, by mapping its exterior onto that of a circle; Ruelle proves the dimension of a Julia dragon analytic in the parameter.</li>
+        </ul>
+      </div>
+      <div class="side">
+        <p class="cap">The update opens with the Courchevel workshop of July 1982 and closes with eleven columns of fresh references. Only the topics above left no figure of their own; the tracker's review pass can decide whether any deserves more than this map.</p>
+        <p class="note">The front matter of the updated printing holds no other plates: page i is the half-title, and the plates face pages ii, viii and x — there is no "Plate I". The red endpaper fractal inside the covers is printed without caption or credit.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (W. H. Freeman, second printing, 1982), "Update Added in the Second Printing", pages 458–468, with Plates II, VIII and X in the front matter and Plate 467 after the references; Norton 1982 for the quaternion method; Mandelbrot, Passoja &amp; Paullay for the fracture data. The λ-map and Julia figures are computed from z → λ(z−1/z); the quaternion figures are raymarched from q → q²−μ; the page-461 diagrams are digitised from the scan.</p>
+</div>
+
+<script>
+// Shared drawing library: style constants, the zoomable canvas (snapshot while panning), chunked
+// paths, controls and small SVG figures. Loaded before each page's own scripts; pages may extend
+// PRINT with their own inks (PRINT.red = ..., PRINT.light = ...).
+const $ = (id) => document.getElementById(id);
+const fmt = (n) => n.toLocaleString('en-US');
+const PRINT = { paper: '#ecebe6', ink: '#151515', rule: '#c9c8c2', muted: '#66665f', accent: '#2f5f9e', red: '#c2452d', faint: '#bdbbb3', gray: '#8f8e88' };
+const RAMP = [[233, 185, 73], [217, 113, 59], [184, 66, 79], [125, 58, 120], [63, 79, 151], [43, 122, 138]];
+const ramp = (t, a = 1) => {
+  const x = Math.max(0, Math.min(1, t)) * (RAMP.length - 1), i = Math.min(RAMP.length - 2, Math.floor(x)), f = x - i;
+  const c = RAMP[i].map((v, k) => Math.round(v + (RAMP[i + 1][k] - v) * f));
+  return `rgba(${c[0]},${c[1]},${c[2]},${a})`;
+};
+const CAT = ['#151515', '#9a988f', '#2f5f9e', '#c2452d', '#3f8f6c', '#b58a2a', '#6b4e9b', '#5f8fae'];
+
+// ---------- shared plumbing ----------
+function figure(canvas, draw) {
+  const wrap = canvas.parentElement;
+  const f = { canvas, ctx: canvas.getContext('2d'), w: 1, h: 1, dpr: 1, draw };
+  const resize = () => {
+    f.dpr = Math.min(2, window.devicePixelRatio || 1);
+    f.w = wrap.clientWidth || 1; f.h = wrap.clientHeight || 1;
+    canvas.width = Math.round(f.w * f.dpr); canvas.height = Math.round(f.h * f.dpr);
+    f.draw();
+  };
+  new ResizeObserver(resize).observe(wrap);
+  return f;
+}
+function fitBox(f, bb, pad = 0.04) {
+  const w = Math.max(1e-9, bb.x1 - bb.x0), h = Math.max(1e-9, bb.y1 - bb.y0), s = Math.min(f.w / (w * (1 + 2 * pad)), f.h / (h * (1 + 2 * pad)));
+  return { s, ox: f.w / 2 - ((bb.x0 + bb.x1) / 2) * s, oy: f.h / 2 + ((bb.y0 + bb.y1) / 2) * s };
+}
+const toWorld = (f, v) => f.ctx.setTransform(f.dpr * v.s, 0, 0, -f.dpr * v.s, f.dpr * v.ox, f.dpr * v.oy);
+const toScreen = (f) => f.ctx.setTransform(f.dpr, 0, 0, f.dpr, 0, 0);
+function paper(f, color) { f.ctx.setTransform(1, 0, 0, 1, 0, 0); f.ctx.fillStyle = color; f.ctx.fillRect(0, 0, f.canvas.width, f.canvas.height); }
+function polyPath(P, closed = true, upto) {
+  const p = new Path2D(), m = upto === undefined ? P.length / 2 : upto;
+  p.moveTo(P[0], P[1]);
+  for (let i = 1; i < m; i++) p.lineTo(P[2 * i], P[2 * i + 1]);
+  if (closed) p.closePath();
+  return p;
+}
+function bbox(P, bb = { x0: Infinity, x1: -Infinity, y0: Infinity, y1: -Infinity }) {
+  for (let i = 0; i < P.length; i += 2) { bb.x0 = Math.min(bb.x0, P[i]); bb.x1 = Math.max(bb.x1, P[i]); bb.y0 = Math.min(bb.y0, P[i + 1]); bb.y1 = Math.max(bb.y1, P[i + 1]); }
+  return bb;
+}
+function stepButtons(el, values, text, aria, onPick) {
+  const bs = values.map((v) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.textContent = text(v); b.setAttribute('aria-label', aria(v));
+    b.addEventListener('click', () => onPick(v));
+    el.append(b);
+    return b;
+  });
+  const mark = (cur) => bs.forEach((b, i) => b.setAttribute('aria-pressed', String(values[i] === cur)));
+  mark.buttons = bs;
+  return mark;
+}
+// pan and zoom: a quick rescaled snapshot while moving, a full redraw once it settles
+function zoomable(wrapId, canvasId, fitOf, render, opts = {}) {
+  const maxZoom = opts.maxZoom || 400;
+  const wrap = $(wrapId), z = { view: null, user: false, snapView: null, raf: 0, full: 0 };
+  const snap = document.createElement('canvas');
+  const f = figure($(canvasId), () => draw());
+  function touch() { wrap.style.touchAction = z.view && z.view.s > z.view.fit * 1.02 ? 'none' : 'pan-y'; }
+  function draw() {
+    if (!z.view || !z.user) { z.view = fitOf(f); z.view.fit = z.view.s; z.user = false; touch(); }
+    render(f, z.view);
+    snap.width = f.canvas.width; snap.height = f.canvas.height; snap.getContext('2d').drawImage(f.canvas, 0, 0);
+    z.snapView = { s: z.view.s, ox: z.view.ox, oy: z.view.oy };
+  }
+  function quick() {
+    const v = z.view, k = v.s / z.snapView.s, c = f.ctx;
+    c.setTransform(1, 0, 0, 1, 0, 0); c.fillStyle = z.ground || PRINT.paper; c.fillRect(0, 0, f.canvas.width, f.canvas.height);
+    c.drawImage(snap, (v.ox - z.snapView.ox * k) * f.dpr, (v.oy - z.snapView.oy * k) * f.dpr, snap.width * k, snap.height * k);
+  }
+  function schedule() { if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; draw(); }); }
+  function moved() {
+    if (!z.snapView) { schedule(); return; }
+    if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; quick(); });
+    clearTimeout(z.full); z.full = setTimeout(schedule, 160);
+  }
+  function zoomAt(px, py, k) {
+    const v = z.view, ns = Math.min(v.fit * maxZoom, Math.max(v.fit * 0.8, v.s * k)), wx = (px - v.ox) / v.s, wy = (v.oy - py) / v.s;
+    v.s = ns; v.ox = px - wx * ns; v.oy = py + wy * ns; z.user = true; touch(); moved();
+  }
+  function pan(dx, dy) { z.view.ox += dx; z.view.oy += dy; z.user = true; moved(); }
+  wrap.querySelector('[data-z="in"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1.6));
+  wrap.querySelector('[data-z="out"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1 / 1.6));
+  wrap.querySelector('[data-z="fit"]').addEventListener('click', () => { z.user = false; schedule(); });
+  const pts = new Map();
+  let pinch = null, down = null;
+  const local = (e) => { const r = wrap.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+  wrap.addEventListener('pointerdown', (e) => {
+    if (e.target.closest('.view-tools')) return;
+    pts.set(e.pointerId, local(e));
+    down = pts.size === 1 ? { p: local(e), t: performance.now(), moved: 0 } : null;
+    try { wrap.setPointerCapture(e.pointerId); } catch (_) {}
+    if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), m: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2] }; }
+    wrap.classList.add('dragging');
+  });
+  wrap.addEventListener('pointermove', (e) => {
+    if (!pts.has(e.pointerId)) return;
+    const prev = pts.get(e.pointerId), cur = local(e);
+    pts.set(e.pointerId, cur);
+    if (down) down.moved = Math.max(down.moved, Math.hypot(cur[0] - down.p[0], cur[1] - down.p[1]));
+    if (pts.size === 2 && pinch) {
+      const [a, b] = [...pts.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]), m = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+      pan(m[0] - pinch.m[0], m[1] - pinch.m[1]);
+      if (pinch.d > 0) zoomAt(m[0], m[1], d / pinch.d);
+      pinch = { d, m };
+    } else if (pts.size === 1 && (e.pointerType !== 'touch' || z.view.s > z.view.fit * 1.02)) pan(cur[0] - prev[0], cur[1] - prev[1]);
+  });
+  const end = (e) => {
+    if (down && pts.size === 1 && down.moved < 5 && opts.onTap) { const [x, y] = local(e), v = z.view; opts.onTap((x - v.ox) / v.s, (v.oy - y) / v.s); }
+    down = null;
+    pts.delete(e.pointerId); if (pts.size < 2) pinch = null; if (!pts.size) wrap.classList.remove('dragging');
+  };
+  wrap.addEventListener('pointerup', end); wrap.addEventListener('pointercancel', (e) => { down = null; end(e); });
+  wrap.addEventListener('wheel', (e) => { if (!(e.ctrlKey || e.metaKey)) return; e.preventDefault(); const [x, y] = local(e); zoomAt(x, y, Math.exp(-e.deltaY * 0.0045)); }, { passive: false });
+  wrap.addEventListener('dblclick', (e) => { if (e.target.closest('.view-tools')) return; const [x, y] = local(e); zoomAt(x, y, e.shiftKey ? 0.5 : 2); });
+  return { f, z, schedule, refit: () => { z.user = false; schedule(); } };
+}
+// chunked paths: many small paths fill far faster than one path with a hundred thousand pieces
+function chunked(count, add, size = 512) {
+  const out = [];
+  let p = null;
+  for (let i = 0; i < count; i++) { if (i % size === 0) { p = new Path2D(); out.push(p); } add(p, i); }
+  return out;
+}
+// fill and outline in the same colour, so that tiles which only meet along an edge show no hairline seams
+function solid(c, paths, color, lw) {
+  c.fillStyle = color; c.strokeStyle = color; c.lineWidth = lw; c.lineJoin = 'miter';
+  for (const p of paths) { c.fill(p); c.stroke(p); }
+}
+const dot = (c, v, x, y, r = 4, color = PRINT.red) => { c.beginPath(); c.arc(v.ox + x * v.s, v.oy - y * v.s, r, 0, Math.PI * 2); c.fillStyle = color; c.fill(); c.strokeStyle = PRINT.paper; c.lineWidth = 1.5; c.stroke(); };
+
+// a polyline (Float64Array or [[x,y],...]) as SVG points with y flipped
+const svgPts = (P) => (P instanceof Float64Array ? Array.from({ length: P.length / 2 }, (_, i) => [P[2 * i], P[2 * i + 1]]) : P).map(([x, y]) => `${x.toFixed(4)},${(-y).toFixed(4)}`).join(' ');
+function miniCurve(id, P, dots = true) {
+  const pts = P instanceof Float64Array ? Array.from({ length: P.length / 2 }, (_, i) => [P[2 * i], P[2 * i + 1]]) : P;
+  $(id).innerHTML = `<line x1="0" y1="0" x2="1" y2="0" stroke="#8a8a84" stroke-width="0.008" stroke-dasharray="0.025 0.02"/>` +
+    `<polyline points="${svgPts(pts)}" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linejoin="round"/>` +
+    (dots ? `<g fill="currentColor">${pts.map(([x, y], i) => `<circle cx="${x.toFixed(4)}" cy="${(-y).toFixed(4)}" r="${i === 0 || i === pts.length - 1 ? 0.03 : 0.018}"/>`).join('')}</g>` : '');
+}
+function miniTree(id, links, dx = 0) {
+  const ends = new Set(), mid = new Set(), k = (x, y) => `${x.toFixed(4)},${y.toFixed(4)}`;
+  let s = '';
+  for (const [px, py, qx, qy] of links) {
+    s += `<line x1="${(px + dx).toFixed(4)}" y1="${(-py).toFixed(4)}" x2="${(qx + dx).toFixed(4)}" y2="${(-qy).toFixed(4)}" stroke="currentColor" stroke-width="0.02" stroke-linecap="round"/>`;
+    mid.add(k(px + dx, py)); mid.add(k(qx + dx, qy));
+  }
+  s += `<g fill="currentColor">${[...mid].map((p) => { const [x, y] = p.split(',').map(Number); const big = (Math.abs(x - dx) < 1e-6 || Math.abs(x - dx - 1) < 1e-6) && Math.abs(y) < 1e-6; return `<circle cx="${x}" cy="${-y}" r="${big ? 0.03 : 0.018}"/>`; }).join('')}</g>`;
+  return s;
+}
+// canvas transform for a similarity map f = [ar, ai, br, bi, m] composed with the view
+function setMap(f, c, v, fig) {
+  const [ar, ai, br, bi, m] = f, k = fig.dpr * v.s;
+  if (m) c.setTransform(k * ar, -k * ai, k * ai, k * ar, fig.dpr * (v.ox + v.s * br), fig.dpr * (v.oy - v.s * bi));
+  else c.setTransform(k * ar, -k * ai, -k * ai, -k * ar, fig.dpr * (v.ox + v.s * br), fig.dpr * (v.oy - v.s * bi));
+}
+const segPath = (segs, pick) => { const p = new Path2D(); for (const s of segs) if (!pick || pick(s)) { p.moveTo(s[0], s[1]); p.lineTo(s[2], s[3]); } return p; };
+// Plate 64's chevrons, measured from the plate: each interval a→b becomes a thin quadrilateral
+// pointing toward F, the corner the next stage would add (see DECISIONS.md)
+const CHEV_OUT = 0.43, CHEV_IN = 0.235;
+function chevronPaths(P, F, m) {
+  return chunked(m, (p, i) => {
+    const ax = P[2 * i], ay = P[2 * i + 1], bx = P[2 * i + 2], by = P[2 * i + 3], mx = (ax + bx) / 2, my = (ay + by) / 2;
+    const vx = F[2 * i] - mx, vy = F[2 * i + 1] - my;
+    p.moveTo(ax, ay); p.lineTo(mx + CHEV_OUT * vx, my + CHEV_OUT * vy); p.lineTo(bx, by); p.lineTo(mx + CHEV_IN * vx, my + CHEV_IN * vy); p.closePath();
+  });
+}
+
+// Update-for-the-second-printing core: the map z -> lam(z - 1/z) (Julia basins and its lambda-map,
+// Plates VIII and X), the squaring map in quaternions (Plates II and 467, raymarched), and the
+// digitised metal-fracture diagrams of page 461.
+
+// ---------- z -> lam(z - 1/z) ----------
+// One step; q = |z|^2 is reused by callers that watch for escape and the pole.
+function lzStep(lr, li, zr, zi) {
+  const q = zr * zr + zi * zi;
+  const ar = zr - zr / q, ai = zi + zi / q; // z - 1/z
+  return [lr * ar - li * ai, lr * ai + li * ar];
+}
+
+// The attracting cycle reached from the critical point i, if any: { p, pts } with pts the cycle in
+// orbit order, or null (escape, pole, or no cycle of period <= 64 found).
+function lzCycle(lr, li, warm = 8000) {
+  let zr = 0, zi = 1;
+  for (let k = 0; k < warm; k++) {
+    const q = zr * zr + zi * zi;
+    if (q > 1e16 || q < 1e-16) return null;
+    [zr, zi] = lzStep(lr, li, zr, zi);
+  }
+  const pts = [[zr, zi]];
+  for (let p = 1; p <= 64; p++) {
+    const q = zr * zr + zi * zi;
+    if (q > 1e16 || q < 1e-16) return null;
+    [zr, zi] = lzStep(lr, li, zr, zi);
+    const dr = zr - pts[0][0], di = zi - pts[0][1];
+    if (dr * dr + di * di < 1e-16) return { p, pts };
+    pts.push([zr, zi]);
+  }
+  return null;
+}
+
+const PAPER_RGB = [236, 235, 230], INK_RGB = [21, 21, 21];
+function putGray(d, o, g) { d[o] = g[0]; d[o + 1] = g[1]; d[o + 2] = g[2]; d[o + 3] = 255; }
+const mix = (t) => [0, 1, 2].map((k) => Math.round(PAPER_RGB[k] + (INK_RGB[k] - PAPER_RGB[k]) * t));
+
+// Julia basins (Plate VIII). cyc from lzCycle; shade = phase of capture, ink where no basin claims
+// the pixel (the Julia filigree of "stars"), paper where the orbit escapes to infinity.
+function rasterBasins(img, v, lam, cyc, itmax = 600, step = 1) {
+  const W = img.width, H = img.height, d = img.data, lr = lam[0], li = lam[1];
+  const p = cyc ? cyc.p : 0;
+  // one gray per phase, spread over the plate's range (three phases land on the print's grays)
+  const shades = Array.from({ length: Math.max(1, p) }, (_, m) => mix(p > 1 ? 0.16 + 0.56 * m / (p - 1) : 0.42));
+  const ink = mix(1), pap = mix(0);
+  const A = [];
+  if (cyc) for (let m = 0; m < p; m++) { A.push([cyc.pts[m][0], cyc.pts[m][1], m]); A.push([-cyc.pts[m][0], -cyc.pts[m][1], m]); }
+  for (let j = 0; j < H; j += step) {
+    const wy = (v.oy - (j + 0.5)) / v.s;
+    for (let i = 0; i < W; i += step) {
+      const wx = ((i + 0.5) - v.ox) / v.s;
+      let zr = wx, zi = wy, col = ink;
+      for (let k = 0; k < itmax; k++) {
+        const q = zr * zr + zi * zi;
+        if (q > 1e16) { col = pap; break; }
+        if (q < 1e-18) break; // the pole: on the Julia set's backward orbit
+        const ar = zr - zr / q, ai = zi + zi / q;
+        const nzr = lr * ar - li * ai, nzi = lr * ai + li * ar;
+        zr = nzr; zi = nzi;
+        if (p && k >= 8) {
+          for (let m = 0; m < A.length; m++) {
+            const dr = zr - A[m][0], di = zi - A[m][1];
+            if (dr * dr + di * di < 1e-10) {
+              // all points of one basin component reach the same cycle point in step, so the
+              // phase (index - step) mod p is constant on the component: a stable shade
+              col = shades[(((A[m][2] - k) % p) + p) % p];
+              k = itmax; break;
+            }
+          }
+        }
+      }
+      for (let bj = j; bj < Math.min(H, j + step); bj++) for (let bi = i; bi < Math.min(W, i + step); bi++) putGray(d, (bj * W + bi) * 4, col);
+    }
+  }
+}
+
+// The lambda-map (Plate X), in the print's own orientation: screen x = Im lam, screen y = Re lam,
+// so that +1 points up and the white disc |lam + 1/2| < 1/2 hangs at the bottom.
+// The print's empirical rule (see the page note): paper where the critical orbit escapes or settles
+// on a 2-point limit cycle, solid ink for a limit cycle of any other size, and a dust of sampling
+// dots where no cycle is found -- the chaotic lambdas.
+function classifyLam(lr, li, warm) {
+  let zr = 0, zi = 1;
+  for (let k = 0; k < warm; k++) {
+    const q = zr * zr + zi * zi;
+    if (q > 1e16) return 0;              // escapes: infinity attracts, |lam| > 1
+    if (q < 1e-16) return -2;            // hit the pole: counted with the chaotic dust
+    [zr, zi] = lzStep(lr, li, zr, zi);
+  }
+  const sr = zr, si = zi;
+  for (let p = 1; p <= 64; p++) {
+    const q = zr * zr + zi * zi;
+    if (q > 1e16) return 0;
+    if (q < 1e-16) return -2;
+    [zr, zi] = lzStep(lr, li, zr, zi);
+    const dr = zr - sr, di = zi - si;
+    if (dr * dr + di * di < 1e-14) return p;
+  }
+  return -1; // no cycle yet: slow convergence or chaos
+}
+function rasterLamMap(img, v, opts = {}) {
+  const { byPeriod = false, step = 1 } = opts;
+  const W = img.width, H = img.height, d = img.data;
+  const ink = mix(1), pap = mix(0);
+  for (let j = 0; j < H; j += step) {
+    const wy = (v.oy - (j + 0.5)) / v.s; // Re lam
+    for (let i = 0; i < W; i += step) {
+      const wx = ((i + 0.5) - v.ox) / v.s; // Im lam
+      let p = classifyLam(wy, wx, 700);
+      if (p === -1) p = classifyLam(wy, wx, 2600); // near a disc's edge convergence is slow
+      let col = null;
+      if (p === 0) col = pap;
+      else if (p >= 1) col = byPeriod ? mix(Math.min(0.95, 0.22 + p * 0.09)) : (p === 2 ? pap : ink);
+      if (col === null) {
+        // chaotic: the book's sparse sampling dust, hashed on the pixel grid so panning is stable
+        let h = (i * 374761393 + j * 668265263) ^ (i * j);
+        h = (h ^ (h >> 13)) * 1274126177; h = (h ^ (h >> 16)) >>> 0;
+        col = (h % 1000) < 170 ? ink : pap;
+      }
+      for (let bj = j; bj < Math.min(H, j + step); bj++) for (let bi = i; bi < Math.min(W, i + step); bi++) putGray(d, (bj * W + bi) * 4, col);
+    }
+  }
+}
+
+// ---------- the squaring map in quaternions (Plates II and 467) ----------
+// q -> q^2 - mu with mu complex, the slice through (1, i, j): the distance-estimate raymarcher of
+// Norton's method's descendants, d = |q| log|q| / (2 |dq|).
+function quatDE(mr, mi, x, y, z, iter = 16) {
+  let qr = x, qi = y, qj = z, qk = 0, dr = 1, di = 0, dj = 0, dk = 0, m2 = 0;
+  for (let n = 0; n < iter; n++) {
+    const ndr = 2 * (qr * dr - qi * di - qj * dj - qk * dk);
+    const ndi = 2 * (qr * di + qi * dr + qj * dk - qk * dj);
+    const ndj = 2 * (qr * dj - qi * dk + qj * dr + qk * di);
+    const ndk = 2 * (qr * dk + qi * dj - qj * di + qk * dr);
+    const nqr = qr * qr - qi * qi - qj * qj - qk * qk - mr;
+    const nqi = 2 * qr * qi - mi;
+    const nqj = 2 * qr * qj, nqk = 2 * qr * qk;
+    dr = ndr; di = ndi; dj = ndj; dk = ndk;
+    qr = nqr; qi = nqi; qj = nqj; qk = nqk;
+    m2 = qr * qr + qi * qi + qj * qj + qk * qk;
+    if (m2 > 256) break;
+  }
+  const m = Math.sqrt(m2), dm = Math.sqrt(dr * dr + di * di + dj * dj + dk * dk);
+  return dm < 1e-30 ? 0 : Math.max(0, 0.5 * m * Math.log(Math.max(m, 1e-9)) / dm);
+}
+
+// March one row of the image; the caller chunks rows to keep the page responsive.
+function quatRow(row, W, H, j, cam, mr, mi, step = 1) {
+  const { px, py, pz, fx, fy, fz, rx, ry, rz, ux, uy, uz, fov, R } = cam;
+  for (let i = 0; i < W; i += step) {
+    const su = (i + 0.5 - W / 2) / (W / 2) * fov, sv = -(j + 0.5 - H / 2) / (H / 2) * fov;
+    let dx = fx + su * rx + sv * ux, dy = fy + su * ry + sv * uy, dz = fz + su * rz + sv * uz;
+    const dl = Math.hypot(dx, dy, dz); dx /= dl; dy /= dl; dz /= dl;
+    let t = R - 2.3, v = -1;
+    for (let s = 0; s < 160; s++) {
+      const d = quatDE(mr, mi, px + t * dx, py + t * dy, pz + t * dz);
+      if (d < 0.0016) { v = t; break; }
+      t += d;
+      if (t > R + 2.3) break;
+    }
+    let g = 255;
+    if (v > 0) {
+      const hx = px + v * dx, hy = py + v * dy, hz = pz + v * dz, e = 0.004;
+      const nx = quatDE(mr, mi, hx + e, hy, hz) - quatDE(mr, mi, hx - e, hy, hz);
+      const ny = quatDE(mr, mi, hx, hy + e, hz) - quatDE(mr, mi, hx, hy - e, hz);
+      const nz = quatDE(mr, mi, hx, hy, hz + e) - quatDE(mr, mi, hx, hy, hz - e);
+      const nl = Math.hypot(nx, ny, nz) || 1;
+      const lam = Math.max(0, (nx * cam.lx + ny * cam.ly + nz * cam.lz) / nl);
+      g = 38 + 46 * ((nx / nl) * 0.3 + 0.5) + 150 * lam; // ambient wash plus one key light
+    }
+    row[i] = g;
+    if (step > 1) for (let k = 1; k < step && i + k < W; k++) row[i + k] = g;
+  }
+}
+function quatCamera(yawDeg, pitchDeg) {
+  const yaw = yawDeg * Math.PI / 180, pitch = pitchDeg * Math.PI / 180, R = 3.2;
+  const cy = Math.cos(yaw), sy = Math.sin(yaw), cp = Math.cos(pitch), sp = Math.sin(pitch);
+  const px = R * cp * sy, py = R * sp, pz = R * cp * cy;
+  const fx = -px / R, fy = -py / R, fz = -pz / R;
+  let rx = fz, rz = -fx; const rl = Math.hypot(rx, rz) || 1; rx /= rl; rz /= rl;
+  const ux = -rz * fy, uy = rz * fx - rx * fz, uz = rx * fy;
+  let lx = -0.5, ly = 0.75, lz = 0.45; const ll = Math.hypot(lx, ly, lz); lx /= ll; ly /= ll; lz /= ll;
+  return { px, py, pz, fx, fy, fz, rx, ry: 0, rz, ux, uy, uz, lx, ly, lz, fov: 0.62, R };
+}
+
+// ---------- page 461, digitised at 600 dpi ----------
+// Spectral diagram: log10(sum of power above f) against log10(wave number); the printed fitted
+// line is the chain of dots, slope -1.768 (D = (4 + slope)/2 = 1.116; the caption prints 1.118).
+const SPEC_CURVE = [[1.047,6.742],[1.084,6.678],[1.122,6.611],[1.159,6.531],[1.197,6.491],[1.234,6.486],[1.271,6.467],[1.309,6.336],[1.346,6.23],[1.459,6.021],[1.496,5.955],[1.533,5.9],[1.571,5.856],[1.608,5.853],[1.646,5.81],[1.683,5.761],[1.721,5.628],[1.758,5.493],[1.796,5.474],[1.833,5.45],[1.87,5.398],[1.908,5.261],[1.945,5.194],[1.983,5.197],[2.02,5.069],[2.058,5],[2.095,4.924],[2.132,4.803],[2.17,4.718],[2.207,4.742],[2.245,4.616],[2.282,4.557],[2.32,4.5],[2.357,4.419],[2.394,4.344],[2.432,4.261],[2.469,4.206],[2.507,4.149],[2.544,4.102],[2.582,4.019],[2.619,3.976],[2.657,3.874],[2.694,3.81],[2.731,3.744],[2.769,3.687],[2.806,3.628],[2.844,3.566],[2.881,3.505],[2.919,3.45],[2.956,3.408],[3.068,3.23],[3.106,3.159],[3.143,3.149],[3.181,3.107],[3.218,3.052],[3.255,3.017],[3.293,2.993],[3.33,2.936],[3.368,2.877],[3.405,2.825],[3.443,2.763],[3.48,2.701],[3.518,2.652],[3.555,2.562],[3.592,2.493],[3.63,2.427],[3.667,2.346],[3.705,2.244],[3.761,1.957],[3.798,1.867],[3.836,1.865],[3.873,1.749],[3.911,1.687],[3.948,1.626],[3.985,1.562],[4.023,1.491],[4.06,1.427],[4.098,1.36],[4.135,1.296],[4.191,1.145],[4.229,1.14],[4.266,1.055]];
+const SPEC_LINE = { m: -1.7677, b: 8.597 };
+const SPEC_DOTS = { cols: [[1.405, [6.07, 5.07, 4.23, 3.40, 2.57, 1.73]], [3.005, [3.31, 2.58, 1.74, 1.03]]],
+  chain: [[1.368,6.183],[1.771,5.472],[2.175,4.740],[2.595,4.016],[2.718,3.765],[3.004,3.312],[3.809,1.864],[4.217,1.141]] };
+// Slit-island diagram: log10(area) against log10(perimeter). The printed line has slope 1.724,
+// D = 2/slope = 1.160 (caption: 1.164); a refit of the recovered markers gives 1.13, but markers
+// sitting right on the line resist recovery, so the printed line is the honest reference.
+const SLIT_PTS = [[0.945,0.705],[1.043,0.890],[1.204,1.199],[1.226,1.040],[1.232,1.156],[1.233,1.087],[1.444,1.448],[1.555,1.899],[1.556,1.648],[1.624,1.885],[1.669,2.013],[1.742,1.992],[1.819,2.280],[1.863,2.243],[1.865,2.170],[1.869,2.097],[1.917,2.175],[1.921,2.248],[2.029,2.573],[2.063,2.500],[2.076,2.607],[2.117,2.725],[2.124,2.606],[2.197,2.779],[2.360,3.181],[2.463,3.363],[2.581,3.678],[2.587,3.638],[2.642,3.634],[2.686,3.665],[3.087,4.426],[3.315,4.866]];
+const SLIT_LINE = { x0: 0.567, y0: 0.014, x1: 3.990, y1: 5.916 }; // slope 1.724 -> D = 1.160
+// Charpy impact energy against fractal dimension, 300 Grade Maraging steel heat-treated at six
+// temperatures; energies read on the joules axis (the ft-lb axis is offset, see the page note).
+const CHARPY = [[1.097, 164, '300°C'], [1.161, 165, '315°C'], [1.153, 139, '360°C'],
+  [1.163, 131, '340°C'], [1.224, 85, '370°C'], [1.280, 32, '430°C']];
+const CHARPY_LINE = { x0: 1.104, y0: 174, x1: 1.306, y1: 11 };
+
+// Update-for-the-second-printing UI: Plate VIII (Julia basins), Plate X (the lambda-map),
+// Plates II and 467 (quaternions), and the page-461 diagrams.
+
+const cplx = (re, im, digits = 4) => `${re.toFixed(digits)} ${im < 0 ? '−' : '+'} ${Math.abs(im).toFixed(digits)}i`;
+
+// ---------- Plate VIII: Julia basins of lam(z - 1/z) ----------
+const J = { lam: [0.22127359, 0.48341992], cyc: null, c: null, t: 0 };
+const J_PRESETS = [
+  ['Plate VIII', 0.22127359, 0.48341992],
+  ['Period 4', -0.05, -0.95],
+  ['Period 2', -0.5, 0],
+  ['Period 1', 0.65, 0],
+];
+function setLamJ(lr, li) {
+  J.lam = [lr, li];
+  J.cyc = lzCycle(lr, li);
+  J.c = null;
+  markJ(J_PRESETS.findIndex((p) => Math.abs(p[1] - lr) + Math.abs(p[2] - li) < 1e-9));
+  const c = J.cyc;
+  $('rJa').textContent = cplx(lr, li);
+  $('rJb').textContent = c ? String(c.p) : 'none found';
+  $('rJc').textContent = c ? cplx(c.pts[0][0], c.pts[0][1], 3) : '—';
+  $('rJd').textContent = Math.hypot(lr, li).toFixed(4);
+  $('infoJ').innerHTML = c
+    ? `The critical orbit settles on a <b>${c.p}-point</b> limit cycle; each basin phase gets its own gray, and the Julia set between the basins prints as ink.`
+    : 'No small limit cycle: the critical orbit escapes or wanders, and the picture is boundary alone.';
+  zj.refit();
+}
+// coarse pass right away, the full pass once the view settles: the heavy-slider rhythm
+function cachedRaster(store, key, W, H, compute, onFine) {
+  if (store.c && store.c.key === key) return store.c;
+  clearTimeout(store.t);
+  const off = document.createElement('canvas'); off.width = W; off.height = H;
+  const img = off.getContext('2d').createImageData(W, H);
+  compute(img, 2);
+  off.getContext('2d').putImageData(img, 0, 0);
+  store.c = { key, off, fine: false };
+  store.t = setTimeout(() => {
+    if (!store.c || store.c.key !== key) return;
+    compute(img, 1);
+    off.getContext('2d').putImageData(img, 0, 0);
+    store.c.fine = true;
+    onFine();
+  }, 170);
+  return store.c;
+}
+const zj = zoomable('wJ', 'cJ', (f) => fitBox(f, { x0: -2.2, x1: 2.2, y0: -2.2, y1: 2.2 }), (f, v) => {
+  const W = Math.round(f.w), H = Math.round(f.h);
+  const key = [J.lam[0], J.lam[1], W, H, v.s, v.ox, v.oy].join('|');
+  const cache = cachedRaster(J, key, W, H,
+    (img, step) => rasterBasins(img, { s: v.s, ox: v.ox, oy: v.oy }, J.lam, J.cyc, 600, step),
+    () => zj.schedule());
+  paper(f, PRINT.paper); toScreen(f);
+  f.ctx.imageSmoothingEnabled = false;
+  f.ctx.drawImage(cache.off, 0, 0, W, H);
+}, { maxZoom: 2000 });
+const markJ = stepButtons($('mJ'), [0, 1, 2, 3], (i) => J_PRESETS[i][0], (i) => `Set lambda to the ${J_PRESETS[i][0]} value`, (i) => setLamJ(J_PRESETS[i][1], J_PRESETS[i][2]));
+$('plate8').addEventListener('click', () => { setLamJ(J_PRESETS[0][1], J_PRESETS[0][2]); });
+
+// ---------- Plate X: the lambda-map ----------
+// Drawn in the print's orientation: world x = Im lam, world y = Re lam.
+const X = { byPeriod: false, c: null, t: 0, pick: null };
+const XVIEW_PRINT = { x0: -0.127, x1: 1.053, y0: -1.085, y1: 0.119 }; // fitted to the plate
+const XVIEW_ALL = { x0: -1.3, x1: 1.3, y0: -1.3, y1: 1.3 };
+let xview = XVIEW_PRINT;
+const zx = zoomable('wX', 'cX', (f) => fitBox(f, xview, 0.01), (f, v) => {
+  const W = Math.round(f.w), H = Math.round(f.h);
+  const key = [X.byPeriod ? 1 : 0, W, H, v.s, v.ox, v.oy].join('|');
+  const cache = cachedRaster(X, key, W, H,
+    (img, step) => rasterLamMap(img, { s: v.s, ox: v.ox, oy: v.oy }, { byPeriod: X.byPeriod, step }),
+    () => zx.schedule());
+  paper(f, PRINT.paper); toScreen(f);
+  f.ctx.imageSmoothingEnabled = false;
+  f.ctx.drawImage(cache.off, 0, 0, W, H);
+  if (X.pick) dot(f.ctx, v, X.pick[1], X.pick[0], 5);
+}, {
+  maxZoom: 3000,
+  onTap: (wx, wy) => {
+    const lr = wy, li = wx;
+    X.pick = [lr, li]; X.c = null;
+    let p = classifyLam(lr, li, 2600);
+    $('rXa').textContent = cplx(lr, li);
+    $('rXb').textContent = p === 0 ? 'escapes to ∞' : p === -2 ? 'hits the pole' : p === -1 ? 'none found (chaotic?)' : `limit cycle of ${p}`;
+    $('rXc').textContent = Math.hypot(lr, li).toFixed(4);
+    $('rXd').textContent = Math.hypot(lr + 0.5, li).toFixed(4);
+    $('toJ').disabled = false;
+    $('infoX').innerHTML = `Tapped λ = <b>${cplx(lr, li, 3)}</b> · ${p >= 1 ? `the critical orbit settles on <b>${p}</b> limit point${p > 1 ? 's' : ''} — in the print that paints ${p === 2 ? 'paper' : 'ink'}.` : p === 0 ? 'the orbit runs to infinity: paper.' : 'no small cycle: part of the dust.'}`;
+    zx.schedule();
+  },
+});
+const markX = stepButtons($('mX'), [0, 1], (i) => ['As printed', 'By cycle size'][i], (i) => ['Print rule', 'Colour cycles by size'][i], (i) => {
+  X.byPeriod = i === 1; X.c = null; markX(i); zx.schedule();
+});
+markX(0);
+$('plateX').addEventListener('click', () => { xview = XVIEW_PRINT; zx.refit(); });
+$('wholeX').addEventListener('click', () => { xview = XVIEW_ALL; zx.refit(); });
+$('toJ').addEventListener('click', () => {
+  if (!X.pick) return;
+  setLamJ(X.pick[0], X.pick[1]);
+  document.getElementById('p8').scrollIntoView({ behavior: 'smooth' });
+});
+
+// ---------- Plates II and 467: quaternions ----------
+const Q = { mu: [0.15652, -1.03225], yaw: 25, pitch: 20, job: 0 };
+const Q_PRESETS = [['Plate 467', 0.15652, -1.03225, 25, 20], ['Plate II', 0.35, 0.55, 35, 15]];
+const QRES = 460;
+const qoff = document.createElement('canvas'); qoff.width = qoff.height = QRES;
+const qctx = qoff.getContext('2d');
+const qimg = qctx.createImageData(QRES, QRES);
+const figQ = figure($('cQ'), () => blitQ());
+function blitQ() {
+  paper(figQ, PRINT.paper);
+  const c = figQ.ctx; toScreen(figQ);
+  const s = Math.min(figQ.w, figQ.h);
+  c.imageSmoothingEnabled = true;
+  c.drawImage(qoff, (figQ.w - s) / 2, (figQ.h - s) / 2, s, s);
+}
+function renderQ(fine) {
+  const job = ++Q.job;
+  const cam = quatCamera(Q.yaw, Q.pitch);
+  const row = new Float64Array(QRES);
+  const put = (j) => {
+    for (let i = 0; i < QRES; i++) {
+      const g = row[i], o = (j * QRES + i) * 4;
+      // tinted toward the printed paper so the figure sits on the page like a plate
+      qimg.data[o] = Math.min(236, g); qimg.data[o + 1] = Math.min(235, g * 0.996); qimg.data[o + 2] = Math.min(230, g * 0.976);
+      qimg.data[o + 3] = 255;
+    }
+  };
+  if (!fine) {
+    for (let j = 0; j < QRES; j += 3) {
+      quatRow(row, QRES, QRES, j, cam, Q.mu[0], Q.mu[1], 3);
+      put(j); if (j + 1 < QRES) put(j + 1); if (j + 2 < QRES) put(j + 2);
+    }
+    qctx.putImageData(qimg, 0, 0); blitQ();
+    return;
+  }
+  let j = 0;
+  const chunk = () => {
+    if (job !== Q.job) return;
+    const t0 = performance.now();
+    while (j < QRES && performance.now() - t0 < 28) {
+      quatRow(row, QRES, QRES, j, cam, Q.mu[0], Q.mu[1], 1);
+      put(j); j++;
+    }
+    qctx.putImageData(qimg, 0, 0); blitQ();
+    if (j < QRES) setTimeout(chunk, 0);
+  };
+  chunk();
+}
+let qFineTimer = 0;
+function paramQ() {
+  renderQ(false);
+  clearTimeout(qFineTimer);
+  qFineTimer = setTimeout(() => renderQ(true), 180);
+  // the complex-plane section's cycle, from the critical point of x^2 - mu
+  let zr = 0, zi = 0, per = 0;
+  for (let k = 0; k < 6000; k++) { const nr = zr * zr - zi * zi - Q.mu[0], ni = 2 * zr * zi - Q.mu[1]; zr = nr; zi = ni; if (zr * zr + zi * zi > 1e8) { per = -1; break; } }
+  if (per === 0) {
+    const sr = zr, si = zi;
+    for (let p = 1; p <= 64; p++) { const nr = zr * zr - zi * zi - Q.mu[0], ni = 2 * zr * zi - Q.mu[1]; zr = nr; zi = ni; const dr = zr - sr, di = zi - si; if (dr * dr + di * di < 1e-16) { per = p; break; } }
+  }
+  $('rQa').textContent = cplx(Q.mu[0], Q.mu[1]);
+  $('rQb').textContent = per > 0 ? `attracting ${per}-cycle` : per === -1 ? 'escapes (dust section)' : 'none found';
+  $('rQc').textContent = `${Q.yaw.toFixed(0)}° / ${Q.pitch.toFixed(0)}°`;
+  $('rQd').textContent = '16';
+  markQ(Q_PRESETS.findIndex((p) => Math.abs(p[1] - Q.mu[0]) + Math.abs(p[2] - Q.mu[1]) < 1e-9));
+}
+const markQ = stepButtons($('pQ'), [0, 1], (i) => Q_PRESETS[i][0], (i) => `Show ${Q_PRESETS[i][0]}`, (i) => {
+  const [, mr, mi, yaw, pitch] = Q_PRESETS[i];
+  Q.mu = [mr, mi]; Q.yaw = yaw; Q.pitch = pitch;
+  $('mQr').value = mr; $('mQi').value = mi; $('mQrv').textContent = mr.toFixed(3); $('mQiv').textContent = mi.toFixed(3);
+  paramQ();
+});
+for (const [id, vid, k] of [['mQr', 'mQrv', 0], ['mQi', 'mQiv', 1]]) {
+  $(id).addEventListener('input', () => { Q.mu[k] = +$(id).value; $(vid).textContent = (+$(id).value).toFixed(3); paramQ(); });
+}
+// drag to turn the shape
+{
+  const wrap = $('wQ');
+  let drag = null;
+  wrap.addEventListener('pointerdown', (e) => { drag = [e.clientX, e.clientY, Q.yaw, Q.pitch]; try { wrap.setPointerCapture(e.pointerId); } catch (_) {} });
+  wrap.addEventListener('pointermove', (e) => {
+    if (!drag) return;
+    Q.yaw = drag[2] + (e.clientX - drag[0]) * 0.4;
+    Q.pitch = Math.max(-80, Math.min(80, drag[3] + (e.clientY - drag[1]) * 0.4));
+    paramQ();
+  });
+  const up = () => { drag = null; };
+  wrap.addEventListener('pointerup', up); wrap.addEventListener('pointercancel', up);
+}
+
+// ---------- page 461: the three diagrams ----------
+const C = { mode: 0, refit: false };
+const figC = figure($('cC'), () => drawC());
+function axesC(f, x0, x1, y0, y1, logx, logy, xlab, ylab) {
+  const narrow = f.w < 480;
+  const L = narrow ? 46 : 58, R = narrow ? 10 : 14, T = 14, Bm = narrow ? 36 : 42;
+  const Xf = (v) => L + ((v - x0) / (x1 - x0)) * (f.w - L - R);
+  const Yf = (v) => T + ((y1 - v) / (y1 - y0)) * (f.h - T - Bm);
+  const c = f.ctx, fs = narrow ? 9 : 11;
+  c.strokeStyle = PRINT.ink; c.fillStyle = PRINT.ink; c.lineWidth = 1.2;
+  c.strokeRect(L, T, f.w - L - R, f.h - T - Bm);
+  c.font = `500 ${fs}px "IBM Plex Mono", monospace`;
+  c.textAlign = 'center'; c.textBaseline = 'top';
+  const SUP = '\u2070\u00b9\u00b2\u00b3\u2074\u2075\u2076\u2077\u2078\u2079';
+  const lab = (d) => '10' + String(d).split('').map((ch) => (ch === '-' ? '\u207b' : SUP[+ch])).join('');
+  if (logx) for (let dd = Math.ceil(x0); dd <= Math.floor(x1); dd++) { c.beginPath(); c.moveTo(Xf(dd), f.h - Bm); c.lineTo(Xf(dd), f.h - Bm - 7); c.stroke(); c.fillText(lab(dd), Xf(dd), f.h - Bm + 5); }
+  else for (let vv = Math.ceil(x0 * 10) / 10; vv <= x1 + 1e-9; vv = Math.round((vv + 0.1) * 10) / 10) { c.beginPath(); c.moveTo(Xf(vv), f.h - Bm); c.lineTo(Xf(vv), f.h - Bm - 7); c.stroke(); c.fillText(vv.toFixed(2), Xf(vv), f.h - Bm + 5); }
+  c.textAlign = 'right'; c.textBaseline = 'middle';
+  if (logy) for (let dd = Math.ceil(y0); dd <= Math.floor(y1); dd++) { c.beginPath(); c.moveTo(L, Yf(dd)); c.lineTo(L + 7, Yf(dd)); c.stroke(); c.fillText(lab(dd), L - 6, Yf(dd)); }
+  else for (let vv = Math.ceil(y0 / 50) * 50; vv <= y1; vv += 50) { c.beginPath(); c.moveTo(L, Yf(vv)); c.lineTo(L + 7, Yf(vv)); c.stroke(); c.fillText(String(vv), L - 6, Yf(vv)); }
+  c.font = `600 ${fs + 0.5}px "Schibsted Grotesk", sans-serif`;
+  c.textAlign = 'center'; c.textBaseline = 'bottom';
+  c.fillText(xlab, (L + f.w - R) / 2, f.h - (narrow ? 4 : 6));
+  c.save(); c.translate(narrow ? 10 : 13, (T + f.h - Bm) / 2); c.rotate(-Math.PI / 2); c.textBaseline = 'middle'; c.fillText(ylab, 0, 0); c.restore();
+  return { Xf, Yf, fs, L, T };
+}
+function drawC() {
+  const f = figC, c = f.ctx;
+  paper(f, PRINT.paper); toScreen(f);
+  if (C.mode === 0) {
+    const g = axesC(f, 0.9, 4.5, 0.8, 7.2, true, true, 'wave number · 1/μm × 1E−4', 'sum of power · sq μm');
+    c.strokeStyle = PRINT.ink; c.lineWidth = 1.6; c.beginPath();
+    SPEC_CURVE.forEach(([x, y], i) => (i ? c.lineTo(g.Xf(x), g.Yf(y)) : c.moveTo(g.Xf(x), g.Yf(y))));
+    c.stroke();
+    c.strokeStyle = PRINT.accent; c.lineWidth = 1.4; c.setLineDash([7, 5]); c.beginPath();
+    c.moveTo(g.Xf(1.0), g.Yf(SPEC_LINE.m * 1.0 + SPEC_LINE.b)); c.lineTo(g.Xf(4.35), g.Yf(SPEC_LINE.m * 4.35 + SPEC_LINE.b)); c.stroke(); c.setLineDash([]);
+    c.fillStyle = PRINT.accent;
+    for (const [x, y] of SPEC_DOTS.chain) { c.beginPath(); c.arc(g.Xf(x), g.Yf(y), 3.4, 0, 7); c.fill(); }
+    c.strokeStyle = PRINT.gray; c.lineWidth = 1; c.setLineDash([2, 5]);
+    c.fillStyle = PRINT.ink;
+    for (const [cx, ys] of SPEC_DOTS.cols) {
+      c.beginPath(); c.moveTo(g.Xf(cx), g.Yf(ys[ys.length - 1])); c.lineTo(g.Xf(cx), g.Yf(ys[0])); c.stroke();
+      for (const y of ys) { c.beginPath(); c.arc(g.Xf(cx), g.Yf(y), 3.4, 0, 7); c.fill(); }
+    }
+    c.setLineDash([]);
+    c.font = `700 ${g.fs + 5}px "Schibsted Grotesk", sans-serif`; c.textAlign = 'left'; c.fillText('D = 1.118', g.Xf(1.7), g.Yf(6.6));
+    $('rCa').textContent = 'spectral, one specimen';
+    $('rCb').textContent = '−1.768';
+    $('rCc').textContent = '1.116';
+    $('rCd').textContent = '1.118';
+  } else if (C.mode === 1) {
+    const g = axesC(f, -0.1, 4.2, -0.2, 6.2, true, true, 'perimeter in μm', 'area in sq μm');
+    c.strokeStyle = PRINT.ink; c.lineWidth = 1.4; c.beginPath();
+    c.moveTo(g.Xf(SLIT_LINE.x0), g.Yf(SLIT_LINE.y0)); c.lineTo(g.Xf(SLIT_LINE.x1), g.Yf(SLIT_LINE.y1)); c.stroke();
+    if (C.refit) {
+      // least squares through the recovered markers
+      let sx = 0, sy = 0, sxx = 0, sxy = 0; const n = SLIT_PTS.length;
+      for (const [x, y] of SLIT_PTS) { sx += x; sy += y; sxx += x * x; sxy += x * y; }
+      const m = (n * sxy - sx * sy) / (n * sxx - sx * sx), b = (sy - m * sx) / n;
+      c.strokeStyle = PRINT.red; c.setLineDash([7, 5]); c.beginPath();
+      c.moveTo(g.Xf(0.5), g.Yf(m * 0.5 + b)); c.lineTo(g.Xf(4.0), g.Yf(m * 4.0 + b)); c.stroke(); c.setLineDash([]);
+      c.fillStyle = PRINT.red; c.font = `600 ${g.fs + 1}px "Schibsted Grotesk", sans-serif`; c.textAlign = 'left';
+      c.fillText(`refit: D = ${(2 / m).toFixed(3)}`, g.Xf(2.2), g.Yf(1.1));
+    }
+    c.strokeStyle = PRINT.ink; c.lineWidth = 1.6;
+    for (const [x, y] of SLIT_PTS) {
+      c.beginPath(); c.moveTo(g.Xf(x) - 5, g.Yf(y)); c.lineTo(g.Xf(x) + 5, g.Yf(y));
+      c.moveTo(g.Xf(x), g.Yf(y) - 5); c.lineTo(g.Xf(x), g.Yf(y) + 5); c.stroke();
+    }
+    c.fillStyle = PRINT.ink; c.font = `700 ${g.fs + 5}px "Schibsted Grotesk", sans-serif`; c.textAlign = 'left'; c.fillText('D = 1.164', g.Xf(0.35), g.Yf(5.5));
+    $('rCa').textContent = `slit islands, ${SLIT_PTS.length} recovered`;
+    $('rCb').textContent = '1.724';
+    $('rCc').textContent = '1.160';
+    $('rCd').textContent = '1.164';
+  } else {
+    const g = axesC(f, 1.0, 1.4, 0, 190, false, false, 'fractal dimension D', 'impact energy · joules');
+    c.strokeStyle = PRINT.ink; c.lineWidth = 1.4; c.beginPath();
+    c.moveTo(g.Xf(CHARPY_LINE.x0), g.Yf(CHARPY_LINE.y0)); c.lineTo(g.Xf(CHARPY_LINE.x1), g.Yf(CHARPY_LINE.y1)); c.stroke();
+    c.fillStyle = PRINT.ink; c.font = `600 ${g.fs + 1}px "Schibsted Grotesk", sans-serif`;
+    for (const [D, E, t] of CHARPY) {
+      c.fillRect(g.Xf(D) - 5, g.Yf(E) - 5, 10, 10);
+      c.textAlign = D > 1.15 ? 'left' : 'right';
+      c.fillText(t, g.Xf(D) + (D > 1.15 ? 10 : -10), g.Yf(E) - 2);
+    }
+    $('rCa').textContent = 'Charpy, 6 heat treatments';
+    $('rCb').textContent = '—';
+    $('rCc').textContent = '1.10 → 1.28';
+    $('rCd').textContent = '165 → 32 J';
+  }
+}
+const markC = stepButtons($('mC'), [0, 1, 2], (i) => ['Spectrum', 'Slit islands', 'Impact energy'][i], (i) => ['Spectral diagram', 'Slit-island diagram', 'Impact energy against D'][i], (i) => {
+  C.mode = i; markC(i);
+  $('refitWrap').hidden = i !== 1;
+  drawC();
+});
+markC(0);
+$('refitWrap').hidden = true;
+$('refitC').addEventListener('change', () => { C.refit = $('refitC').checked; drawC(); });
+
+// ---------- start ----------
+setLamJ(J.lam[0], J.lam[1]);
+paramQ();
+
+</script>
+
+</body>
+</html>
