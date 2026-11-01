@@ -270,7 +270,7 @@
   function animateInversion(which) {
     if (stP.anim) return;
     const F = breastFrame(stP.q), C = F[which];
-    const dur = 1100, t0 = performance.now();
+    const dur = 1500, t0 = performance.now();
     stP.anim = { C, t: 0, col: K_COLS[which] };
     $('infoP').textContent = `Inverting in ${K_WORDS[which][0]} — ${K_WORDS[which][1]}. The set as a whole lands exactly on itself: that is what self-inverse means.`;
     const step = (now) => {
