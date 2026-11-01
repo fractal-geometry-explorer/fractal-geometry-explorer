@@ -157,6 +157,34 @@
     }
   }
   attachOrbit($('wC'), stC, drawC);
+  // fly the view onto the projection axis, so the web flattens into its square before your eyes:
+  // the viewing direction (sin yaw·cos pitch, cos yaw·cos pitch, −sin pitch) equals minus the axis
+  // joining the midpoints of edges V0V2 and V1V3 at yaw = −60°, pitch = arccos √(2/3)
+  const SQUARE_VIEW = { yaw: -Math.PI / 3, pitch: Math.acos(Math.sqrt(2 / 3)) };
+  const animC = { raf: 0, back: null };
+  function squareBtnC() { $('squareC').textContent = animC.back ? 'Rotate back out' : 'Rotate into the square'; }
+  function flyC(target) {
+    cancelAnimationFrame(animC.raf);
+    const from = { yaw: stC.yaw, pitch: stC.pitch };
+    let dy = target.yaw - from.yaw;
+    dy -= 2 * Math.PI * Math.round(dy / (2 * Math.PI));
+    const t0 = performance.now(), T = 1600;
+    const step = (now) => {
+      const t = Math.min(1, (now - t0) / T), e = t * t * (3 - 2 * t);
+      stC.yaw = from.yaw + dy * e;
+      stC.pitch = from.pitch + (target.pitch - from.pitch) * e;
+      drawC();
+      if (t < 1) animC.raf = requestAnimationFrame(step);
+    };
+    animC.raf = requestAnimationFrame(step);
+  }
+  $('squareC').addEventListener('click', () => {
+    if (stC.mode !== 'web') { stC.mode = 'web'; setC(); }
+    if (animC.back) { const b = animC.back; animC.back = null; squareBtnC(); flyC(b); }
+    else { animC.back = { yaw: stC.yaw, pitch: stC.pitch }; squareBtnC(); flyC(SQUARE_VIEW); }
+  });
+  // a drag takes over from the animation and counts as leaving the square view
+  $('wC').addEventListener('pointerdown', () => { cancelAnimationFrame(animC.raf); if (animC.back) { animC.back = null; squareBtnC(); } }, true);
   function setC() {
     const D = dataC();
     markMC(stC.mode); markSC(stC.n);

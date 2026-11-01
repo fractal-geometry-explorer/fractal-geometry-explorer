@@ -293,6 +293,7 @@ nav.shell a:hover .pn, nav.shell a:hover .pn b { color: var(--accent); }
         </div>
         <div class="btn-row">
           <button type="button" class="btn primary" id="plate143">Show Plate 143 as printed</button>
+          <button type="button" class="btn" id="squareC">Rotate into the square</button>
         </div>
         <dl class="read">
           <div><dt>Tetrahedra</dt><dd id="rCa">256</dd></div>
@@ -300,7 +301,7 @@ nav.shell a:hover .pn, nav.shell a:hover .pn b { color: var(--accent); }
           <div><dt>4 · (1/2)²</dt><dd>= 1</dd></div>
           <div><dt>Shadow</dt><dd>a full square</dd></div>
         </dl>
-        <p class="note">The spatial extension of the gasket: the initiator is a closed tetrahedron and the generator the four half-scale tetrahedra on its corners. The print is reproduced here as a depth-shaded line drawing of all the edges; the viewing angle of the preset was fitted to the plate by eye. Though D = 2, this "surface-sized" set is a curve full of branch points — in the plane of its square shadow, no point hides behind another.</p>
+        <p class="note">The spatial extension of the gasket: the initiator is a closed tetrahedron and the generator the four half-scale tetrahedra on its corners. The print is reproduced here as a depth-shaded line drawing of all the edges; the viewing angle of the preset was fitted to the plate by eye. The "rotate into the square" button flies the view onto the projection axis, so the web flattens into its square shadow before your eyes, and back out again. Though D = 2, this "surface-sized" set is a curve full of branch points — in the plane of its square shadow, no point hides behind another.</p>
       </div>
     </div>
   </section>
@@ -1134,6 +1135,34 @@ function attachOrbit(wrap, state, redraw) {
     }
   }
   attachOrbit($('wC'), stC, drawC);
+  // fly the view onto the projection axis, so the web flattens into its square before your eyes:
+  // the viewing direction (sin yaw·cos pitch, cos yaw·cos pitch, −sin pitch) equals minus the axis
+  // joining the midpoints of edges V0V2 and V1V3 at yaw = −60°, pitch = arccos √(2/3)
+  const SQUARE_VIEW = { yaw: -Math.PI / 3, pitch: Math.acos(Math.sqrt(2 / 3)) };
+  const animC = { raf: 0, back: null };
+  function squareBtnC() { $('squareC').textContent = animC.back ? 'Rotate back out' : 'Rotate into the square'; }
+  function flyC(target) {
+    cancelAnimationFrame(animC.raf);
+    const from = { yaw: stC.yaw, pitch: stC.pitch };
+    let dy = target.yaw - from.yaw;
+    dy -= 2 * Math.PI * Math.round(dy / (2 * Math.PI));
+    const t0 = performance.now(), T = 1600;
+    const step = (now) => {
+      const t = Math.min(1, (now - t0) / T), e = t * t * (3 - 2 * t);
+      stC.yaw = from.yaw + dy * e;
+      stC.pitch = from.pitch + (target.pitch - from.pitch) * e;
+      drawC();
+      if (t < 1) animC.raf = requestAnimationFrame(step);
+    };
+    animC.raf = requestAnimationFrame(step);
+  }
+  $('squareC').addEventListener('click', () => {
+    if (stC.mode !== 'web') { stC.mode = 'web'; setC(); }
+    if (animC.back) { const b = animC.back; animC.back = null; squareBtnC(); flyC(b); }
+    else { animC.back = { yaw: stC.yaw, pitch: stC.pitch }; squareBtnC(); flyC(SQUARE_VIEW); }
+  });
+  // a drag takes over from the animation and counts as leaving the square view
+  $('wC').addEventListener('pointerdown', () => { cancelAnimationFrame(animC.raf); if (animC.back) { animC.back = null; squareBtnC(); } }, true);
   function setC() {
     const D = dataC();
     markMC(stC.mode); markSC(stC.n);
