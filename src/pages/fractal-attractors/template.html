@@ -115,7 +115,7 @@
         <figcaption><strong>Plate 199</strong> · the same decomposable system, now with 4 inversions · zoom keeps resolving circles in the circles mode</figcaption>
       </figure>
       <div class="side">
-        <p class="cap">The other shape drawn by attraction is self-inverse (Chapter 18): the limit set of a group of four circle inversions, chosen so that the limit set degenerates from a wild curve into "a collection of circles" — infinitely many, nested in a crescent between two tangent circles, every one of them kissing its neighbours. The plate again plots a long orbit: at each of 64,000 steps a pseudo-random index picks one of the 4 inversions, and the moving point is attracted onto the necklace. Mandelbrot later named the figure the <i>Pharaoh's Breastplate</i> for its likeness to Tutankhamun's jewellery.</p>
+        <p class="cap">The other shape drawn by attraction is self-inverse (Chapter 18): the limit set of a group of four circle inversions, chosen so that the limit set degenerates from a wild curve into "a collection of circles" — infinitely many, nested in a crescent between two tangent circles, every one of them kissing its neighbours. The plate again plots a long orbit: at each of 64,000 steps a pseudo-random index picks one of the 4 inversions, and the moving point is attracted onto the necklace. The K buttons below play one such step on the whole figure at once: everything streams through the chosen circle, and the necklace lands exactly on itself — which is what <i>self-inverse</i> means. Mandelbrot later named the figure the <i>Pharaoh's Breastplate</i> for its likeness to Tutankhamun's jewellery.</p>
         <div class="group">
           <div class="label-row"><span class="label">Draw it as</span></div>
           <div class="steps words" id="mP" role="group" aria-label="Rendering mode"></div>
@@ -131,17 +131,27 @@
         <div class="group">
           <label class="check" for="gensP"><input type="checkbox" id="gensP"> Show the four inversion circles (dashed)</label>
         </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Watch one inversion act</span></div>
+          <div class="btn-row">
+            <button type="button" class="btn" id="invKA">K₁, outer seat</button>
+            <button type="button" class="btn" id="invKB">K₂, inner seat</button>
+            <button type="button" class="btn" id="invKC">K₃, left</button>
+            <button type="button" class="btn" id="invKD">K₄, right</button>
+          </div>
+        </div>
         <div class="btn-row">
           <button type="button" class="btn primary" id="plate199">Show Plate 199 as printed</button>
           <button type="button" class="btn" id="seedP">New random run</button>
         </div>
+        <p class="readline" id="infoP" aria-live="polite"></p>
         <dl class="read">
           <div><dt>Points</dt><dd id="rPa">64,000</dd></div>
           <div><dt>Seed</dt><dd id="rPb">1982</dd></div>
           <div><dt>Circles drawn</dt><dd id="rPc">—</dd></div>
           <div><dt>N(radius &gt; ρ) ∝ ρ<sup>−e</sup>, e</dt><dd id="rPd">—</dd></div>
         </dl>
-        <p class="note">The book nowhere states the four inversions, so they are this page's reconstruction, decoded from the scan (the derivation is logged in the repository). The two bounding circles are tangent at the top; seen from that tangency point the crescent straightens into a strip, and every tangency in the print forces the inversions' positions exactly — two circles of radius 1/√2 seated on the strip's edges, and two mirrors, one half-period either side of them (the necklace repeats with period 1/√2; in the crescent all four become the dashed circles above). One number is left free, the crescent's radius ratio: 0.647 is fitted to the plate (drag the slider for the rest of the family — the same limit set seen through different Möbius frames). Checked at 600 dpi, points generated this way sit a median 4 px from the plate's ink, against 35 px for random points in the crescent. The dots' <i>texture</i> still depends on the book's unknowable random sequence and exact generators, so it is matched only statistically — like the print, this run fills the horns and the pinch points last; the circles mode is exact. The circle-count exponent e is this page's own measurement, the same census Chapter 18 runs on Apollonian nets.</p>
+        <p class="note">The book nowhere states the four inversions, so they are this page's reconstruction, decoded from the scan (the derivation is logged in the repository). The two bounding circles are tangent at the top; seen from that tangency point the crescent straightens into a strip, and every tangency in the print forces the inversions' positions exactly — two circles of radius 1/√2 seated on the strip's edges, and two mirrors, one half-period either side of them (the necklace repeats with period 1/√2; in the crescent all four become the dashed circles above). The K buttons' motion is a rotation of the Riemann sphere seen in the plane; the halftime pinch, when the whole figure passes through the acting circle at once, is genuine — that circle is the only thing the inversion holds fixed. One number is left free, the crescent's radius ratio: 0.647 is fitted to the plate (drag the slider for the rest of the family — the same limit set seen through different Möbius frames). Checked at 600 dpi, points generated this way sit a median 4 px from the plate's ink, against 35 px for random points in the crescent. The dots' <i>texture</i> still depends on the book's unknowable random sequence and exact generators, so it is matched only statistically — like the print, this run fills the horns and the pinch points last; the circles mode is exact. The circle-count exponent e is this page's own measurement, the same census Chapter 18 runs on Apollonian nets.</p>
       </div>
     </div>
   </section>

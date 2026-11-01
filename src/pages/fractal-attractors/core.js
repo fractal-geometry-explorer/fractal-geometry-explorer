@@ -170,6 +170,20 @@ function breastFrame(q) {
   };
 }
 
+// radial flow that carries a point to its inversion in C as t runs 0 -> 1: the point stays on
+// its ray from C's centre while the angle a = atan(d/r) runs linearly to its mirror pi/2 - a.
+// This is a rotation of the Riemann sphere seen in the plane: t = 0 is the identity, t = 1 the
+// exact inversion (tan(pi/2 - a) = r/d). Being symmetric under the inversion, the path puts
+// every point on C's circle at t = 1/2 at once - the halftime pinch is genuine, and chosen
+// (the asymmetric paths, linear in d or in 1/d, avoid it; see DECISIONS.md).
+function flowPoint(x, y, C, t) {
+  const dx = x - C.x, dy = y - C.y;
+  const d = Math.hypot(dx, dy);
+  const a = Math.atan(d / C.r);
+  const k = C.r * Math.tan(a + t * (Math.PI / 2 - 2 * a)) / d;
+  return [C.x + k * dx, C.y + k * dy];
+}
+
 const invertPt = (p, C) => {
   const dx = p[0] - C.x, dy = p[1] - C.y, k = C.r * C.r / (dx * dx + dy * dy);
   p[0] = C.x + k * dx; p[1] = C.y + k * dy;

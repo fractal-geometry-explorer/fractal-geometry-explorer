@@ -160,19 +160,33 @@
 
   // ====================== Plate 199: the Pharaoh's Breastplate ======================
   const Q_FIT = 0.6474;
-  const stP = { mode: 'dots', count: 64000, seed: 1982, q: Q_FIT, gens: false };
+  const stP = { mode: 'dots', count: 64000, seed: 1982, q: Q_FIT, gens: false, anim: null, perm: 0 };
   let pDots = { key: '', P: null }, pCirc = { key: '', C: null };
+  const dotsOf = () => {
+    const k = `${stP.count}|${stP.seed}|${stP.q}`;
+    if (pDots.key !== k) { pDots = { key: k, P: breastPoints(stP.count, stP.seed, stP.q) }; stP.perm = 0; }
+    return pDots.P;
+  };
   const breastBox = { x0: -1.03, x1: 1.03, y0: -1.03, y1: 1.06 };
   const zP = rasterFig('wP', 'cP',
     (f) => fitBox(f, breastBox, 0.012),
-    () => `breast|${stP.mode}|${stP.count}|${stP.seed}|${stP.q}|${stP.gens}`,
+    () => `breast|${stP.mode}|${stP.count}|${stP.seed}|${stP.q}|${stP.gens}|${stP.perm}|${stP.anim ? stP.anim.t.toFixed(3) : ''}`,
     (img, v) => {
       const d = img.data;
       for (let o = 0; o < d.length; o += 4) { d[o] = 236; d[o + 1] = 235; d[o + 2] = 230; d[o + 3] = 255; }
       if (stP.mode === 'dots') {
-        const k = `${stP.count}|${stP.seed}|${stP.q}`;
-        if (pDots.key !== k) pDots = { key: k, P: breastPoints(stP.count, stP.seed, stP.q) };
-        stampDots(img, v, pDots.P, stP.count);
+        const P = dotsOf();
+        if (stP.anim) {
+          // the set itself stays as a ghost, so the moving cloud is seen to land back on it;
+          // every dot slides along its ray through the acting circle's centre
+          stampDots(img, v, P, stP.count, 0.1);
+          const C = stP.anim.C, t = stP.anim.t, n = stP.count, F = new Float64Array(2 * n);
+          for (let i = 0; i < n; i++) {
+            const [x, y] = flowPoint(P[2 * i], P[2 * i + 1], C, t);
+            F[2 * i] = x; F[2 * i + 1] = y;
+          }
+          stampDots(img, v, F, n);
+        } else stampDots(img, v, P, stP.count);
       }
     },
     (f, v) => {
@@ -187,13 +201,39 @@
           $('rPd').textContent = isFinite(pCirc.e) ? `≈ ${f2(pCirc.e, 2)}` : '—';
         }
         c.strokeStyle = PRINT.ink; c.lineWidth = Math.max(0.5, Math.min(1.1, v.s / 700));
-        c.beginPath();
-        for (const ci of pCirc.C) {
-          const px = v.ox + ci.x * v.s, py = v.oy - ci.y * v.s, pr = ci.r * v.s;
-          if (px + pr < 0 || px - pr > f.w || py + pr < 0 || py - pr > f.h) continue;
-          c.moveTo(px + pr, py); c.arc(px, py, pr, 0, Math.PI * 2);
+        if (stP.anim) {
+          // mid-flow the circles are no longer circles, so draw them as flowed polylines
+          const K = stP.anim.C, t = stP.anim.t;
+          c.beginPath();
+          let drawn = 0;
+          for (const ci of pCirc.C) {
+            const pr = ci.r * v.s;
+            if (pr < 1.4 || drawn > 4000) continue;
+            drawn++;
+            const m = Math.max(10, Math.min(48, Math.round(pr / 2)));
+            for (let s = 0; s <= m; s++) {
+              const a = 2 * Math.PI * s / m;
+              const [x, y] = flowPoint(ci.x + ci.r * Math.cos(a), ci.y + ci.r * Math.sin(a), K, t);
+              const px = v.ox + x * v.s, py = v.oy - y * v.s;
+              if (s === 0) c.moveTo(px, py); else c.lineTo(px, py);
+            }
+          }
+          c.stroke();
+        } else {
+          c.beginPath();
+          for (const ci of pCirc.C) {
+            const px = v.ox + ci.x * v.s, py = v.oy - ci.y * v.s, pr = ci.r * v.s;
+            if (px + pr < 0 || px - pr > f.w || py + pr < 0 || py - pr > f.h) continue;
+            c.moveTo(px + pr, py); c.arc(px, py, pr, 0, Math.PI * 2);
+          }
+          c.stroke();
         }
-        c.stroke();
+      }
+      if (stP.anim) {
+        // the acting circle holds still while everything else streams through it
+        const K = stP.anim.C;
+        c.strokeStyle = stP.anim.col; c.lineWidth = 2.2;
+        c.beginPath(); c.arc(v.ox + K.x * v.s, v.oy - K.y * v.s, K.r * v.s, 0, Math.PI * 2); c.stroke();
       }
       if (stP.gens) {
         const F = breastFrame(stP.q);
@@ -220,6 +260,42 @@
     zP.schedule();
   });
   $('gensP').addEventListener('change', (e) => { stP.gens = e.target.checked; zP.schedule(); });
+  const K_WORDS = {
+    KA: ['K₁', 'the big circle seated on the outer rim: the outer boundary and the bottom necklace circle trade places'],
+    KB: ['K₂', 'the circle seated on the inner rim: the inner boundary and the circle below it trade places'],
+    KC: ['K₃', 'the left circle through the tangency point: the left horn turns inside out'],
+    KD: ['K₄', 'the right circle through the tangency point: the right horn turns inside out'],
+  };
+  const K_COLS = { KA: PRINT.accent, KB: PRINT.red, KC: '#3f8f6c', KD: '#3f8f6c' };
+  function animateInversion(which) {
+    if (stP.anim) return;
+    const F = breastFrame(stP.q), C = F[which];
+    const dur = 1500, t0 = performance.now();
+    stP.anim = { C, t: 0, col: K_COLS[which] };
+    $('infoP').textContent = `Inverting in ${K_WORDS[which][0]} — ${K_WORDS[which][1]}. The set as a whole lands exactly on itself: that is what self-inverse means.`;
+    const step = (now) => {
+      const p = Math.min(1, (now - t0) / dur);
+      stP.anim.t = 0.5 - 0.5 * Math.cos(Math.PI * p); // ease in and out
+      zP.schedule();
+      if (p < 1) requestAnimationFrame(step);
+      else {
+        // dots: keep the exact image points, so inversions compose run after run
+        if (stP.mode === 'dots') {
+          const P = dotsOf(), pt = [0, 0];
+          for (let i = 0; i < stP.count; i++) {
+            pt[0] = P[2 * i]; pt[1] = P[2 * i + 1];
+            invertPt(pt, C);
+            P[2 * i] = pt[0]; P[2 * i + 1] = pt[1];
+          }
+          stP.perm++;
+        }
+        stP.anim = null;
+        zP.schedule();
+      }
+    };
+    requestAnimationFrame(step);
+  }
+  for (const w of ['KA', 'KB', 'KC', 'KD']) $('inv' + w).addEventListener('click', () => animateInversion(w));
   $('qPs').addEventListener('input', (e) => {
     stP.q = Number(e.target.value);
     $('qPv').textContent = f2(stP.q, 3) + (Math.abs(stP.q - Q_FIT) < 5e-4 ? ' (the plate)' : '');
@@ -227,6 +303,7 @@
   });
   $('plate199').addEventListener('click', () => {
     stP.mode = 'dots'; stP.count = 64000; stP.seed = 1982; stP.q = Q_FIT; stP.gens = false;
+    pDots = { key: '', P: null }; stP.perm = 0; $('infoP').textContent = '';
     modeP('dots'); marksP(64000);
     $('qPs').value = Q_FIT; $('qPv').textContent = f2(Q_FIT, 3) + ' (the plate)';
     $('gensP').checked = false;
