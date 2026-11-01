@@ -239,19 +239,17 @@
 
   // ====================== 4: viscosity and Scheffer's bounds ======================
   const stD = { Dt: 0.5, k: 2, mark: true };
-  // log-dissipation drawn at a scale that keeps the record as wide as the frame however high ν lets it climb
-  const ysD = () => 0.65 / (stD.k + 2.6);
-  const zD = zoomable('wD', 'cD', (f) => {
-    const k = ysD();
-    return fitBox(f, { x0: -0.06, x1: 1.06, y0: -2 * k, y1: (stD.k + 0.6) * k }, 0.03);
-  }, (f, v) => {
+  // log-dissipation at a fixed scale with headroom up to 10^5.6, so shrinking ν visibly
+  // sharpens the peaks toward the top of the frame instead of relabelling the axis
+  const YSD = 0.65 / 7.6;
+  const zD = zoomable('wD', 'cD', (f) => fitBox(f, { x0: -0.06, x1: 1.06, y0: -2 * YSD, y1: 5.6 * YSD }, 0.03), (f, v) => {
     const c = f.ctx, r = ratioOf(stD.Dt), nu = pow(10, -stD.k);
     paper(f, PRINT.paper); toScreen(f);
-    const X = (x) => v.ox + x * v.s, Y = (y) => v.oy - y * ysD() * v.s;
+    const X = (x) => v.ox + x * v.s, Y = (y) => v.oy - y * YSD * v.s;
     const vx0 = -v.ox / v.s, vx1 = (f.w - v.ox) / v.s, px = 1 / v.s;
     // gridlines where the record reads 1, 10, 100, ...
     c.font = MONO; c.textAlign = 'left'; c.textBaseline = 'middle';
-    for (let e = 0; e <= Math.ceil(stD.k); e++) {
+    for (let e = 0; e <= 5; e++) {
       const y = Y(e);
       if (y < -20 || y > f.h + 20) continue;
       c.strokeStyle = '#dddbd2'; c.lineWidth = 1; c.beginPath(); c.moveTo(0, y); c.lineTo(f.w, y); c.stroke();
@@ -260,7 +258,7 @@
     // the singular times, a dust on the time axis
     if (stD.mark) {
       const band = new Path2D(), pieces = dustPieces(r, px, vx0, vx1);
-      for (let i = 0; i < pieces.length; i += 2) band.rect(X(pieces[i]), Y(-1.1), Math.max(1, pieces[i + 1] * v.s), 0.35 * ysD() * v.s);
+      for (let i = 0; i < pieces.length; i += 2) band.rect(X(pieces[i]), Y(-1.1), Math.max(1, pieces[i + 1] * v.s), 0.35 * YSD * v.s);
       c.fillStyle = PRINT.red; c.fill(band);
     }
     c.strokeStyle = PRINT.rule; c.lineWidth = 1; c.beginPath(); c.moveTo(0, Y(-0.55)); c.lineTo(f.w, Y(-0.55)); c.stroke();
@@ -290,10 +288,10 @@
     if (refit) zD.refit(); else zD.schedule();
   }
   $('DDs').addEventListener('input', (e) => { stD.Dt = +e.target.value; setD(false); });
-  $('nDs').addEventListener('input', (e) => { stD.k = +e.target.value; setD(true); });
+  $('nDs').addEventListener('input', (e) => { stD.k = +e.target.value; setD(false); });
   $('markD').addEventListener('change', (e) => { stD.mark = e.target.checked; setD(false); });
   $('pD1').addEventListener('click', () => { stD.Dt = 0.5; $('DDs').value = 0.5; setD(false); });
-  $('pD2').addEventListener('click', () => { stD.k = 5; $('nDs').value = 5; setD(true); });
+  $('pD2').addEventListener('click', () => { stD.k = 5; $('nDs').value = 5; setD(false); });
 
   setA(true); setB(true); setC(true); setD(true);
 })();
