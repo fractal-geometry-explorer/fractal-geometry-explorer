@@ -48,9 +48,10 @@ function dustSquares(px, vx0, vx1, vy0, vy1, cb) {
   rec(0, 0, 1);
 }
 
-// the calculus student's rational function (p. 106): three poles and a zero, smooth elsewhere
+// the calculus student's rational function (p. 106): three poles and a zero, smooth elsewhere.
+// The 0.6 keeps the middle branch's crest (≈ −2.95) inside the fitted frame.
 const POLES = [-0.62, 0.08, 0.66], ZERO = 0.3;
-const fRational = (x) => (x - ZERO) / ((x - POLES[0]) * (x - POLES[1]) * (x - POLES[2]));
+const fRational = (x) => 0.6 * (x - ZERO) / ((x - POLES[0]) * (x - POLES[1]) * (x - POLES[2]));
 
 // chapter 10's spectrum correction, which Chorin's B = 0.17 ± 0.03 is checked against:
 // fractally homogeneous turbulence has B = (3 − D)/3, so D = 2.5 gives exactly 1/6
