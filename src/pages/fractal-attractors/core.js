@@ -170,6 +170,17 @@ function breastFrame(q) {
   };
 }
 
+// radial flow that carries a point to its inversion in C as t runs 0 -> 1: the point stays on
+// its ray from C's centre while its distance runs linearly from d to r^2/d, so t = 0 is the
+// identity, t = 1 the exact inversion, and K's own circle never moves. (The geometric
+// interpolation (r^2/d^2)^t looks tidier but sends every point through distance r at t = 1/2
+// at once, collapsing the whole picture onto K for a frame.)
+function flowPoint(x, y, C, t) {
+  const dx = x - C.x, dy = y - C.y;
+  const k = (1 - t) + t * C.r * C.r / (dx * dx + dy * dy);
+  return [C.x + k * dx, C.y + k * dy];
+}
+
 const invertPt = (p, C) => {
   const dx = p[0] - C.x, dy = p[1] - C.y, k = C.r * C.r / (dx * dx + dy * dy);
   p[0] = C.x + k * dx; p[1] = C.y + k * dy;
