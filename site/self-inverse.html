@@ -201,12 +201,15 @@ nav.shell a:hover .pn, nav.shell a:hover .pn b { color: var(--accent); }
           <div class="label-row"><span class="label">The four cases of page 167</span></div>
           <div class="steps words" id="mA" role="group" aria-label="Case"></div>
         </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="playA">Play the inversion</button>
+        </div>
         <p class="readline" id="infoA" aria-live="polite"></p>
         <dl class="read">
           <div><dt>Circle's distance to O</dt><dd id="rAd">—</dd></div>
           <div><dt>Its inverse</dt><dd id="rAk">a circle</dd></div>
         </dl>
-        <p class="note">A set that inversions carry onto itself is called <i>self-inverse</i>. The rest of the chapter looks for the smallest closed self-inverse set of a family of generating circles — its <i>limit set</i> L, the region "where infinitesimal children concentrate".</p>
+        <p class="note">A set that inversions carry onto itself is called <i>self-inverse</i>. The rest of the chapter looks for the smallest closed self-inverse set of a family of generating circles — its <i>limit set</i> L, the region "where infinitesimal children concentrate". The Play button slides every point of the shape along its ray through O — a rotation of the Riemann sphere seen in the plane. The halftime pinch, when the whole shape crosses C at once, is genuine: that circle is the only thing the inversion holds fixed.</p>
       </div>
     </div>
   </section>
@@ -272,11 +275,21 @@ nav.shell a:hover .pn, nav.shell a:hover .pn b { color: var(--accent); }
           <div class="label-row"><span class="label">Show</span></div>
           <div class="steps words" id="mC" role="group" aria-label="What to show"></div>
         </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Watch one inversion act</span></div>
+          <div class="btn-row">
+            <button type="button" class="btn" id="invC1">C₁</button>
+            <button type="button" class="btn" id="invC2">C₂</button>
+            <button type="button" class="btn" id="invC3">C₃</button>
+            <button type="button" class="btn" id="invC4">C₄</button>
+          </div>
+        </div>
+        <p class="readline" id="infoC" aria-live="polite"></p>
         <dl class="read">
           <div><dt>Circles drawn</dt><dd id="rCa">—</dd></div>
           <div><dt>Built by</dt><dd id="rCb">inversions of the Γ circles</dd></div>
         </dl>
-        <p class="note">Here the net is not computed by Descartes' theorem at all: every circle is an inverted image of a Γ circle under a reduced word in the four C inversions, and the colours name which Γ each descends from — the book's four clans, made visible. That the result coincides with the packing of the previous section is the self-inverse property. Like the Sierpiński gasket of Plate 141, the net can also be knitted with a single thread: a line can pass twice over certain points but never twice over any interval.</p>
+        <p class="note">Here the net is not computed by Descartes' theorem at all: every circle is an inverted image of a Γ circle under a reduced word in the four C inversions, and the colours name which Γ each descends from — the book's four clans, made visible. That the result coincides with the packing of the previous section is the self-inverse property — and the C buttons play it: one inversion streams every circle of the net through the chosen C circle, and the net lands exactly on itself, though each circle has moved (the clans trade members, which the colours show when the motion ends). Like the Sierpiński gasket of Plate 141, the net can also be knitted with a single thread: a line can pass twice over certain points but never twice over any interval.</p>
       </div>
     </div>
   </section>
@@ -340,12 +353,22 @@ nav.shell a:hover .pn, nav.shell a:hover .pn b { color: var(--accent); }
         <div class="btn-row">
           <button type="button" class="btn primary" id="preE">Show Plate 177 as printed</button>
         </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Watch one inversion act</span></div>
+          <div class="btn-row">
+            <button type="button" class="btn" id="invE1">C₁, left</button>
+            <button type="button" class="btn" id="invE2">C₂, bottom</button>
+            <button type="button" class="btn" id="invE3">C₃, right</button>
+            <button type="button" class="btn" id="invE4">C₄, top</button>
+          </div>
+        </div>
+        <p class="readline" id="infoE" aria-live="polite"></p>
         <dl class="read">
           <div><dt>Osculating discs drawn</dt><dd id="rEa">—</dd></div>
           <div><dt>Outside (gray) seeds</dt><dd>Δ₁₂₃ ∪ Δ₃₄₁, both unbounded</dd></div>
           <div><dt>Inside (black) seeds</dt><dd>Δ₂₃₄ ∪ Δ₄₁₂, which intersect</dd></div>
         </dl>
-        <p class="note">The plate's three figures are its stages: first the four Δ discs alone, then one round of inverses (Δ₁₂₃ and Δ₃₄₁ in C₄ and C₂; Δ₂₃₄ and Δ₄₁₂ in C₁ and C₃), then the full clans. The caption's analogy: the gray and black unions approximate the outside and inside of L the way the hexagon and star of Plate 43 approximate the Koch snowflake. Our render reproduces all three figures from the fitted chain; zooming refines the cover, and the uncovered thread is L.</p>
+        <p class="note">The plate's three figures are its stages: first the four Δ discs alone, then one round of inverses (Δ₁₂₃ and Δ₃₄₁ in C₄ and C₂; Δ₂₃₄ and Δ₄₁₂ in C₁ and C₃), then the full clans. The caption's analogy: the gray and black unions approximate the outside and inside of L the way the hexagon and star of Plate 43 approximate the Koch snowflake. Our render reproduces all three figures from the fitted chain; zooming refines the cover, and the uncovered thread is L. The C buttons play one inversion on the whole cover — the untouched cover stays as a ghost underneath, so the eye can check that the figure lands exactly back on itself.</p>
       </div>
     </div>
   </section>
@@ -409,11 +432,22 @@ nav.shell a:hover .pn, nav.shell a:hover .pn b { color: var(--accent); }
           <button type="button" class="btn primary" id="preGtop">Plate 179, top right</button>
           <button type="button" class="btn" id="preGbot">Bottom right</button>
         </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Watch one inversion act</span></div>
+          <div class="btn-row">
+            <button type="button" class="btn" id="invG1">C₁, upper left</button>
+            <button type="button" class="btn" id="invG2">C₂, upper right</button>
+            <button type="button" class="btn" id="invG3">C₃, centre</button>
+            <button type="button" class="btn" id="invG4">C₄, lower left</button>
+            <button type="button" class="btn" id="invG5">C₅, lower right</button>
+          </div>
+        </div>
+        <p class="readline" id="infoG" aria-live="polite"></p>
         <dl class="read">
           <div><dt>Generator</dt><dd>5 circles, fitted rms 0.6 px</dd></div>
           <div><dt>Discs drawn</dt><dd id="rGa">—</dd></div>
         </dl>
-        <p class="note" id="noteG">The five circles were recovered from the scan by fitting the arcs that bound the engraving's blackened centre, then nudged to exact tangency (under a thousandth of the outer radius). Checked against the plate: our inside of L* matches the bottom-right shape with 98% overlap after a similarity fit, and the full five-circle shape matches the top-right black form feature for feature (the print sits rotated about 44°; overlap 74% at the rim's halftone precision). A pleasing confirmation: the two large circles Fricke's draftsman drew across the engraving check out as true circles of L — one passes through the three tangency points of C₂, C₃, C₅, orthogonal to all three, exactly like the Γ circles of the Apollonian net.</p>
+        <p class="note" id="noteG">The five circles were recovered from the scan by fitting the arcs that bound the engraving's blackened centre, then nudged to exact tangency (under a thousandth of the outer radius). Checked against the plate: our inside of L* matches the bottom-right shape with 98% overlap after a similarity fit, and the full five-circle shape matches the top-right black form feature for feature (the print sits rotated about 44°; overlap 74% at the rim's halftone precision). A pleasing confirmation: the two large circles Fricke's draftsman drew across the engraving check out as true circles of L — one passes through the three tangency points of C₂, C₃, C₅, orthogonal to all three, exactly like the Γ circles of the Apollonian net. The C buttons play one inversion on the covering of L (shown on the net view): the whole figure streams through the chosen circle and lands back on itself, the property Fricke's engraving was meant to illustrate.</p>
       </div>
     </div>
   </section>
@@ -629,6 +663,21 @@ const GIVEN = [
 // Inversion of a point in circle K.
 function invPoint(K, x, y) {
   const dx = x - K.x, dy = y - K.y, s = (K.r * K.r) / (dx * dx + dy * dy);
+  return [K.x + s * dx, K.y + s * dy];
+}
+// Radial flow carrying a point to its inversion in K as t runs 0 → 1: the point stays on its
+// ray from K's centre while the angle a = atan(d/r) runs linearly to its mirror π/2 − a. This
+// is a rotation of the Riemann sphere seen in the plane: t = 0 the identity, t = 1 the exact
+// inversion. The path is symmetric under the inversion, so at t = ½ every point sits on K at
+// once — the halftime pinch is genuine and chosen (see DECISIONS.md, "Animating a circle
+// inversion"; the fractal-attractors page's Plate 199 buttons use the same path).
+function flowPoint(K, x, y, t) {
+  const dx = x - K.x, dy = y - K.y;
+  const d = Math.hypot(dx, dy) || 1e-12;
+  const a = Math.atan(d / K.r);
+  let s = (K.r * Math.tan(a + t * (Math.PI / 2 - 2 * a))) / d;
+  // a point near the centre flies toward infinity as t → 1; keep its coordinates finite
+  if (!isFinite(s) || s * d > 1e4) s = 1e4 / d;
   return [K.x + s * dx, K.y + s * dy];
 }
 // Inversion of a circle that does not pass through K's centre. d2 > 0 keeps the circle's
@@ -886,6 +935,74 @@ const viewBox = (f, v, pad = 0.05) => ({
 const px = (v, n = 1) => n / v.s;   // n screen pixels in world units
 const GRAYPANEL = '#b3b1aa';
 
+// ---------- inversion animation ----------
+// The pattern of the fractal-attractors page's K buttons (PR #52): one button plays one
+// inversion on the whole figure; every point slides along its ray through the acting circle's
+// centre on the spherical-angle path (flowPoint in core.js); the untransformed figure stays
+// underneath as a faint ghost so the eye sees the set land back on itself; the acting circle —
+// the only thing the inversion holds fixed — is highlighted and holds still.
+const GHOST = '#d4d2ca';
+function flowPolyline(c, v, k, K, t) {
+  const m = Math.max(12, Math.min(48, Math.round((k.r * v.s) / 2)));
+  const pt = (a) => flowPoint(K, k.x + k.r * Math.cos(a), k.y + k.r * Math.sin(a), t);
+  let pen = false, pX = 0, pY = 0;
+  const emit = (x, y) => {
+    // a circle enclosing K's centre flows through infinity: lift the pen on far points and
+    // on segments that would span the canvas, or stray chords cross the figure
+    if (Math.abs(x - K.x) > 1e3 || Math.abs(y - K.y) > 1e3) { pen = false; return; }
+    const X = v.ox + x * v.s, Y = v.oy - y * v.s;
+    if (pen && Math.abs(X - pX) + Math.abs(Y - pY) > 900) pen = false;
+    if (!pen) { c.moveTo(X, Y); pen = true; } else c.lineTo(X, Y);
+    pX = X; pY = Y;
+  };
+  // where the flow stretches an arc, bisect long segments a few times before drawing them
+  const seg = (a1, p1, a2, p2, depth) => {
+    if (depth > 0 && (Math.abs(p2[0] - p1[0]) + Math.abs(p2[1] - p1[1])) * v.s > 40) {
+      const am = (a1 + a2) / 2, pm = pt(am);
+      seg(a1, p1, am, pm, depth - 1); seg(am, pm, a2, p2, depth - 1);
+      return;
+    }
+    emit(p2[0], p2[1]);
+  };
+  let aPrev = 0, pPrev = pt(0);
+  emit(pPrev[0], pPrev[1]);
+  for (let s = 1; s <= m; s++) {
+    const a = (2 * Math.PI * s) / m, p = pt(a);
+    seg(aPrev, pPrev, a, p, 5);
+    aPrev = a; pPrev = p;
+  }
+}
+// mid-flow the circles are no longer circles, so draw them as flowed polylines
+function strokeFlowed(c, v, circles, K, t, color, lw = 1.2, cap = 4000) {
+  c.strokeStyle = color; c.lineWidth = lw;
+  c.beginPath();
+  let drawn = 0;
+  for (const k of circles) {
+    if (k.r * v.s < 1.4 || ++drawn > cap) continue;
+    flowPolyline(c, v, k, K, t);
+  }
+  c.stroke();
+}
+function drawActing(c, v, K, color) {
+  c.strokeStyle = color; c.lineWidth = 2.4;
+  c.beginPath(); c.arc(v.ox + K.x * v.s, v.oy - K.y * v.s, K.r * v.s, 0, Math.PI * 2); c.stroke();
+}
+// drive st.anim.t from 0 to 1 with cosine ease, redrawing each frame
+function playInversion(st, zoom, K, done) {
+  if (st.anim) return false;
+  const t0 = performance.now(), dur = 1500;
+  st.anim = { K, t: 0 };
+  const step = (now) => {
+    const p = Math.min(1, (now - t0) / dur);
+    st.anim.t = 0.5 - 0.5 * Math.cos(Math.PI * p); // ease in and out
+    zoom.schedule();
+    if (p < 1) requestAnimationFrame(step);
+    else { st.anim = null; if (done) done(); zoom.schedule(); }
+  };
+  requestAnimationFrame(step);
+  return true;
+}
+
 // ---------- the two Apollonian circles and the packing (Soddy reflection) ----------
 function apollonianBoth(a, ka, b, kb, c, kc) {
   const s = 2 * Math.sqrt(Math.max(0, ka * kb + kb * kc + kc * ka));
@@ -947,7 +1064,7 @@ function fullPacking(rmin, bb) {
 // ---------- section A: inversion ----------
 (function sectionA() {
   const K = { x: 0, y: 0, r: 1 };
-  const st = { mode: 'elsewhere', cx: 1.45, cy: 0.62 };
+  const st = { mode: 'elsewhere', cx: 1.45, cy: 0.62, anim: null };
   const modes = ['through O', 'elsewhere', 'orthogonal', 'line'];
   const geomOf = () => {
     const d = Math.hypot(st.cx, st.cy);
@@ -959,35 +1076,54 @@ function fullPacking(rmin, bb) {
     const c = f.ctx;
     paper(f, PRINT.paper); toScreen(f);
     const g = geomOf();
-    // the reference circle C and its centre O
-    strokeCircles(c, v, f, [K], PRINT.ink, 2);
+    const anim = st.anim;
+    // while animating, the shape and its inverse stay as ghosts under the moving copy
+    const inkCol = anim ? GHOST : PRINT.ink, redCol = anim ? '#e2c6c0' : PRINT.red;
+    // the reference circle C and its centre O; C is the acting circle, so it holds still
+    strokeCircles(c, v, f, [K], anim ? PRINT.accent : PRINT.ink, anim ? 2.6 : 2);
     dot(c, v, 0, 0, 3.4, PRINT.ink);
     c.fillStyle = PRINT.muted; c.font = '13px "IBM Plex Mono"'; c.fillText('O', v.ox + 7, v.oy - 7);
     c.fillText('C', v.ox + (K.r * 0.72) * v.s, v.oy - (K.r * 0.72) * v.s);
     if (g.line) {
       // a line at distance d from O along (nx, ny), and its inverse: a circle through O
-      c.strokeStyle = PRINT.ink; c.lineWidth = 2; c.beginPath();
+      c.strokeStyle = inkCol; c.lineWidth = 2; c.beginPath();
       const px0 = v.ox + g.nx * g.d * v.s, py0 = v.oy - g.ny * g.d * v.s, tx = -g.ny, ty = g.nx, L = 4 * v.s;
       c.moveTo(px0 - tx * L, py0 + ty * L); c.lineTo(px0 + tx * L, py0 - ty * L); c.stroke();
       const r = K.r * K.r / (2 * g.d);
-      strokeCircles(c, v, f, [{ x: g.nx * r, y: g.ny * r, r }], PRINT.red, 2);
+      strokeCircles(c, v, f, [{ x: g.nx * r, y: g.ny * r, r }], redCol, 2);
     } else {
-      strokeCircles(c, v, f, [g], PRINT.ink, 2);
+      strokeCircles(c, v, f, [g], inkCol, 2);
       const d2 = g.x * g.x + g.y * g.y - g.r * g.r;
       if (Math.abs(d2) < 1e-4) {        // through O: the inverse is a straight line, drawn through two inverted points
         const nn = Math.hypot(g.x, g.y), nx = g.x / nn, ny = g.y / nn;
         const p1 = invPoint(K, g.x + g.r * ny, g.y - g.r * nx), p2 = invPoint(K, g.x - g.r * ny, g.y + g.r * nx);
-        c.strokeStyle = PRINT.red; c.lineWidth = 2; c.beginPath();
+        c.strokeStyle = redCol; c.lineWidth = 2; c.beginPath();
         const ex = p2[0] - p1[0], ey = p2[1] - p1[1];
         c.moveTo(v.ox + (p1[0] - 5 * ex) * v.s, v.oy - (p1[1] - 5 * ey) * v.s);
         c.lineTo(v.ox + (p2[0] + 5 * ex) * v.s, v.oy - (p2[1] + 5 * ey) * v.s); c.stroke();
       } else {
         const im = invCircle(K, g);
-        strokeCircles(c, v, f, [im], PRINT.red, 2);
+        strokeCircles(c, v, f, [im], redCol, 2);
       }
     }
+    if (anim) {
+      // the moving copy: every point of the shape slides along its ray through O
+      c.strokeStyle = PRINT.ink; c.lineWidth = 2; c.beginPath();
+      if (g.line) {
+        // sample the line densely near its foot and far past the frame; the flow closes it
+        // into the image circle through O
+        const fx = g.nx * g.d, fy = g.ny * g.d, tx = -g.ny, ty = g.nx, m = 160;
+        for (let i = 0; i <= m; i++) {
+          const u = 2 * Math.tan((i / m - 0.5) * (Math.PI * 0.97));
+          const [x, y] = flowPoint(K, fx + u * tx, fy + u * ty, anim.t);
+          const X = v.ox + x * v.s, Y = v.oy - y * v.s;
+          if (i === 0) c.moveTo(X, Y); else c.lineTo(X, Y);
+        }
+      } else flowPolyline(c, v, g, K, anim.t);
+      c.stroke();
+    }
     dot(c, v, st.cx, st.cy, 5, PRINT.accent);
-  }, { maxZoom: 8, onTap: (x, y) => { st.cx = x; st.cy = y === 0 ? 1e-4 : y; clamp(); zoom.schedule(); update(); } });
+  }, { maxZoom: 8, onTap: (x, y) => { if (st.anim) return; st.cx = x; st.cy = y === 0 ? 1e-4 : y; clamp(); zoom.schedule(); update(); } });
   function clamp() {
     const d = Math.hypot(st.cx, st.cy);
     const lo = st.mode === 'orthogonal' ? 1.12 : 0.3;
@@ -1005,6 +1141,12 @@ function fullPacking(rmin, bb) {
       st.mode === 'line' ? 'A line is a circle through infinity; its inverse is a circle through O.' :
       'Tap anywhere on the figure to move the black circle.';
   }
+  $('playA').addEventListener('click', () => {
+    if (playInversion(st, zoom, K, update)) {
+      $('infoA').textContent = st.mode === 'orthogonal' ? 'Playing the inversion — the orthogonal circle breathes through C and lands exactly on itself: it is self-inverse.' :
+        'Playing the inversion — every point slides along its ray through O; at halftime the whole shape crosses C at once.';
+    }
+  });
   markA(st.mode); update();
 })();
 
@@ -1098,19 +1240,27 @@ function fullPacking(rmin, bb) {
     const oc = orthoCircle(tri[0], tri[1], tri[2]);
     if (oc) CGEN.push(oc);
   }
-  const st = { mode: 'clans' };
+  const st = { mode: 'clans', anim: null };
   let lastCount = 0;
   const zoom = zoomable('wC', 'cC', (f) => fitBox(f, { x0: -1.05, x1: 1.05, y0: -1.05, y1: 1.05 }), (f, v) => {
     const c = f.ctx;
     paper(f, PRINT.paper); toScreen(f);
-    const bb = viewBox(f, v), rmin = Math.max(px(v, 1.6), 1e-5);
-    if (st.mode === 'generator') {
+    const anim = st.anim;
+    const bb = viewBox(f, v), rmin = Math.max(px(v, anim ? 3.2 : 1.6), 1e-5);
+    if (st.mode === 'generator' && !anim) {
       strokeCircles(c, v, f, GAMMA, PRINT.ink, 2.6);
       strokeCircles(c, v, f, CGEN, PRINT.accent, 1.3);
       lastCount = 8;
     } else {
       const all = clanCircles(CGEN, GAMMA, rmin, bb);
-      if (st.mode === 'clans') {
+      if (anim) {
+        // the net itself stays as a ghost; its moving copy streams through the acting circle
+        strokeCircles(c, v, f, all, GHOST, 1.1);
+        if (st.mode === 'clans') {
+          for (let cl = 0; cl < 4; cl++) strokeFlowed(c, v, all.filter((k) => k.clan === cl), anim.K, anim.t, CAT[[0, 2, 3, 4][cl]], 1.2);
+        } else strokeFlowed(c, v, all, anim.K, anim.t, PRINT.ink, 1.1);
+        drawActing(c, v, anim.K, PRINT.accent);
+      } else if (st.mode === 'clans') {
         for (let cl = 0; cl < 4; cl++) strokeCircles(c, v, f, all.filter((k) => k.clan === cl), CAT[[0, 2, 3, 4][cl]], 1.2);
       } else strokeCircles(c, v, f, all, PRINT.ink, 1.1);
       lastCount = all.length;
@@ -1123,6 +1273,12 @@ function fullPacking(rmin, bb) {
   const vals = ['generator', 'clans', 'plain'];
   const mark = stepButtons($('mC'), vals, (m) => names[vals.indexOf(m)], (m) => m, (m) => { st.mode = m; mark(m); zoom.schedule(); });
   mark('clans');
+  for (let i = 0; i < 4; i++) $('invC' + (i + 1)).addEventListener('click', () => {
+    if (st.mode === 'generator') { st.mode = 'clans'; mark('clans'); }
+    if (playInversion(st, zoom, CGEN[i], () => { $('infoC').textContent = `Done: the net landed exactly on itself — it is self-inverse. Each circle traded places with its image, so the clans reshuffled.`; })) {
+      $('infoC').textContent = `Inverting the whole net in C${'₁₂₃₄'[i]} (highlighted) — every circle streams through it; only that circle holds still.`;
+    }
+  });
   $('legC').innerHTML = ['Γ₂₃₄ clan', 'Γ₁₃₄ clan', 'Γ₁₂₄ clan', 'Γ₁₂₃ clan'].map((t, i) => `<span><i style="background:${CAT[[0, 2, 3, 4][i]]}"></i>${t}</span>`).join('');
   console.assert(CGEN.length === 4, 'four generator circles exist');
 })();
@@ -1156,13 +1312,14 @@ function fullPacking(rmin, bb) {
 (function sectionE() {
   const PAIRS4 = [[0, 1], [1, 2], [2, 3], [3, 0]];
   const { seedsIn, seedsOut } = osculatingSeeds(CHAIN, PAIRS4);
-  const st = { mode: 'limit', circles: false };
+  const st = { mode: 'limit', circles: false, anim: null };
   let lastCount = 0;
   const FIT = { x0: -1.35, x1: 1.35, y0: -1.42, y1: 1.28 };
   const zoom = zoomable('wE', 'cE', (f) => fitBox(f, FIT), (f, v) => {
     const c = f.ctx;
     paper(f, PRINT.paper); toScreen(f);
-    const bb = viewBox(f, v), rmin = Math.max(px(v, 2.6), 2e-5);
+    const anim = st.anim;
+    const bb = viewBox(f, v), rmin = Math.max(px(v, anim ? 5 : 2.6), 2e-5);
     lastCount = 0;
     for (const [seeds, color] of [[seedsOut, '#a5a39c'], [seedsIn, PRINT.ink]]) {
       for (const s of seeds) {
@@ -1172,10 +1329,17 @@ function fullPacking(rmin, bb) {
           regions = [s];
           for (let m = 0; m < 4; m++) if (!s.omit.includes(m)) regions.push(invRegion(CHAIN[m], s));
         } else regions = osculatingClan(CHAIN, s, rmin, bb);
-        fillRegions(c, v, f, regions, color);
+        if (anim) {
+          // the cover stays as a faint ghost; its boundaries flow through the acting circle
+          c.globalAlpha = 0.18;
+          fillRegions(c, v, f, regions, color);
+          c.globalAlpha = 1;
+          strokeFlowed(c, v, regions, anim.K, anim.t, color, 1.3);
+        } else fillRegions(c, v, f, regions, color);
         lastCount += regions.length;
       }
     }
+    if (anim) drawActing(c, v, anim.K, PRINT.accent);
     if (st.circles) {
       strokeCircles(c, v, f, CHAIN, PRINT.accent, 1.4);
       strokeCircles(c, v, f, [...seedsIn, ...seedsOut], PRINT.red, 1.1);
@@ -1190,6 +1354,13 @@ function fullPacking(rmin, bb) {
   });
   $('circE').addEventListener('change', (e) => { st.circles = e.target.checked; zoom.schedule(); });
   $('preE').addEventListener('click', () => { st.mode = 'limit'; mark('limit'); $('sEv').textContent = names.limit; zoom.refit(); });
+  for (let i = 0; i < 4; i++) $('invE' + (i + 1)).addEventListener('click', () => {
+    // only the full clans are self-inverse, so the animation plays on the limit
+    if (st.mode !== 'limit') { st.mode = 'limit'; mark('limit'); $('sEv').textContent = names.limit; }
+    if (playInversion(st, zoom, CHAIN[i], () => { $('infoE').textContent = 'Done: black landed on black and gray on gray — the cover, and so L itself, is self-inverse.'; })) {
+      $('infoE').textContent = `Inverting the whole cover in the chain circle C${'₁₂₃₄'[i]} (highlighted) — every disc streams through it while the circle holds still.`;
+    }
+  });
   mark('limit');
   console.assert(seedsIn.length === 2 && seedsOut.length === 2, 'M=4: two inside and two outside seeds', seedsIn.length, seedsOut.length);
 })();
@@ -1229,18 +1400,25 @@ function fullPacking(rmin, bb) {
   const five = osculatingSeeds(FRICKE, PAIRS5);
   const chain4 = FRICKE.slice(0, 4);
   const four = osculatingSeeds(chain4, PAIRS4);
-  const st = { mode: 'net' };
+  const st = { mode: 'net', anim: null };
   let lastCount = 0;
   const zoom = zoomable('wG', 'cG', (f) => fitBox(f, { x0: -1.95, x1: 1.75, y0: -1.1, y1: 1.85 }), (f, v) => {
     const c = f.ctx;
     paper(f, PRINT.paper); toScreen(f);
+    const anim = st.anim;
     const bb = viewBox(f, v);
     const rmin = Math.max(px(v, 1.3), 2e-5);
     lastCount = 0;
     if (st.mode === 'net') {
       strokeCircles(c, v, f, FRICKE, PRINT.ink, 2.2);
-      const dots = twistedLimit(FRICKE, 0, Math.max(px(v, 0.6), 2e-5), px(v, 3.2), bb, 400000);
-      fillCircles(c, v, f, dots, PRINT.ink, 1.25);
+      const dots = twistedLimit(FRICKE, 0, Math.max(px(v, anim ? 2.2 : 0.6), 2e-5), px(v, 3.2), bb, 400000);
+      if (anim) {
+        // the covering of L stays as a ghost; its moving copy streams through the acting circle
+        c.globalAlpha = 0.18; fillCircles(c, v, f, dots, PRINT.ink, 1.25); c.globalAlpha = 1;
+        const flowed = dots.map((k) => { const [x, y] = flowPoint(anim.K, k.x, k.y, anim.t); return { x, y, r: k.r }; });
+        fillCircles(c, v, f, flowed, PRINT.ink, 1.25);
+        drawActing(c, v, anim.K, PRINT.accent);
+      } else fillCircles(c, v, f, dots, PRINT.ink, 1.25);
       // the two circles Fricke's draftsman drew, as members of L
       const g1 = orthoCircle(FRICKE[1], FRICKE[2], FRICKE[4]);
       if (g1) strokeCircles(c, v, f, [g1], PRINT.red, 1.4);
@@ -1269,6 +1447,13 @@ function fullPacking(rmin, bb) {
   const mark = stepButtons($('mG'), ['net', 'corrected', 'chain'], (m) => names[m], (m) => names[m], (m) => { st.mode = m; mark(m); zoom.schedule(); });
   $('preGtop').addEventListener('click', () => { st.mode = 'corrected'; mark('corrected'); zoom.refit(); });
   $('preGbot').addEventListener('click', () => { st.mode = 'chain'; mark('chain'); zoom.refit(); });
+  for (let i = 0; i < 5; i++) $('invG' + (i + 1)).addEventListener('click', () => {
+    // the full covering of L is what the inversions carry onto itself, so play on the net view
+    if (st.mode !== 'net') { st.mode = 'net'; mark('net'); }
+    if (playInversion(st, zoom, FRICKE[i], () => { $('infoG').textContent = 'Done: the covering of L landed exactly on itself — Fricke’s five circles do generate a self-inverse set, just not the shape his draftsman drew.'; })) {
+      $('infoG').textContent = `Inverting the whole figure in C${'₁₂₃₄₅'[i]} (highlighted) — the covering of L streams through it and lands back on itself.`;
+    }
+  });
   mark('net');
   console.assert(five.seedsIn.length === 4 && five.seedsOut.length === 2, 'five-circle seeds: 4 in, 2 out', five.seedsIn.length, five.seedsOut.length);
 })();
