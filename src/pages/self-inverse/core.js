@@ -35,6 +35,21 @@ function invPoint(K, x, y) {
   const dx = x - K.x, dy = y - K.y, s = (K.r * K.r) / (dx * dx + dy * dy);
   return [K.x + s * dx, K.y + s * dy];
 }
+// Radial flow carrying a point to its inversion in K as t runs 0 → 1: the point stays on its
+// ray from K's centre while the angle a = atan(d/r) runs linearly to its mirror π/2 − a. This
+// is a rotation of the Riemann sphere seen in the plane: t = 0 the identity, t = 1 the exact
+// inversion. The path is symmetric under the inversion, so at t = ½ every point sits on K at
+// once — the halftime pinch is genuine and chosen (see DECISIONS.md, "Animating a circle
+// inversion"; the fractal-attractors page's Plate 199 buttons use the same path).
+function flowPoint(K, x, y, t) {
+  const dx = x - K.x, dy = y - K.y;
+  const d = Math.hypot(dx, dy) || 1e-12;
+  const a = Math.atan(d / K.r);
+  let s = (K.r * Math.tan(a + t * (Math.PI / 2 - 2 * a))) / d;
+  // a point near the centre flies toward infinity as t → 1; keep its coordinates finite
+  if (!isFinite(s) || s * d > 1e4) s = 1e4 / d;
+  return [K.x + s * dx, K.y + s * dy];
+}
 // Inversion of a circle that does not pass through K's centre. d2 > 0 keeps the circle's
 // orientation (centre outside K's disc... sign only matters for regions, handled by caller).
 function invCircle(K, c) {

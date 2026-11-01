@@ -49,12 +49,15 @@
           <div class="label-row"><span class="label">The four cases of page 167</span></div>
           <div class="steps words" id="mA" role="group" aria-label="Case"></div>
         </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="playA">Play the inversion</button>
+        </div>
         <p class="readline" id="infoA" aria-live="polite"></p>
         <dl class="read">
           <div><dt>Circle's distance to O</dt><dd id="rAd">—</dd></div>
           <div><dt>Its inverse</dt><dd id="rAk">a circle</dd></div>
         </dl>
-        <p class="note">A set that inversions carry onto itself is called <i>self-inverse</i>. The rest of the chapter looks for the smallest closed self-inverse set of a family of generating circles — its <i>limit set</i> L, the region "where infinitesimal children concentrate".</p>
+        <p class="note">A set that inversions carry onto itself is called <i>self-inverse</i>. The rest of the chapter looks for the smallest closed self-inverse set of a family of generating circles — its <i>limit set</i> L, the region "where infinitesimal children concentrate". The Play button slides every point of the shape along its ray through O — a rotation of the Riemann sphere seen in the plane. The halftime pinch, when the whole shape crosses C at once, is genuine: that circle is the only thing the inversion holds fixed.</p>
       </div>
     </div>
   </section>
@@ -120,11 +123,21 @@
           <div class="label-row"><span class="label">Show</span></div>
           <div class="steps words" id="mC" role="group" aria-label="What to show"></div>
         </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Watch one inversion act</span></div>
+          <div class="btn-row">
+            <button type="button" class="btn" id="invC1">C₁</button>
+            <button type="button" class="btn" id="invC2">C₂</button>
+            <button type="button" class="btn" id="invC3">C₃</button>
+            <button type="button" class="btn" id="invC4">C₄</button>
+          </div>
+        </div>
+        <p class="readline" id="infoC" aria-live="polite"></p>
         <dl class="read">
           <div><dt>Circles drawn</dt><dd id="rCa">—</dd></div>
           <div><dt>Built by</dt><dd id="rCb">inversions of the Γ circles</dd></div>
         </dl>
-        <p class="note">Here the net is not computed by Descartes' theorem at all: every circle is an inverted image of a Γ circle under a reduced word in the four C inversions, and the colours name which Γ each descends from — the book's four clans, made visible. That the result coincides with the packing of the previous section is the self-inverse property. Like the Sierpiński gasket of Plate 141, the net can also be knitted with a single thread: a line can pass twice over certain points but never twice over any interval.</p>
+        <p class="note">Here the net is not computed by Descartes' theorem at all: every circle is an inverted image of a Γ circle under a reduced word in the four C inversions, and the colours name which Γ each descends from — the book's four clans, made visible. That the result coincides with the packing of the previous section is the self-inverse property — and the C buttons play it: one inversion streams every circle of the net through the chosen C circle, and the net lands exactly on itself, though each circle has moved (the clans trade members, which the colours show when the motion ends). Like the Sierpiński gasket of Plate 141, the net can also be knitted with a single thread: a line can pass twice over certain points but never twice over any interval.</p>
       </div>
     </div>
   </section>
@@ -188,12 +201,22 @@
         <div class="btn-row">
           <button type="button" class="btn primary" id="preE">Show Plate 177 as printed</button>
         </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Watch one inversion act</span></div>
+          <div class="btn-row">
+            <button type="button" class="btn" id="invE1">C₁, left</button>
+            <button type="button" class="btn" id="invE2">C₂, bottom</button>
+            <button type="button" class="btn" id="invE3">C₃, right</button>
+            <button type="button" class="btn" id="invE4">C₄, top</button>
+          </div>
+        </div>
+        <p class="readline" id="infoE" aria-live="polite"></p>
         <dl class="read">
           <div><dt>Osculating discs drawn</dt><dd id="rEa">—</dd></div>
           <div><dt>Outside (gray) seeds</dt><dd>Δ₁₂₃ ∪ Δ₃₄₁, both unbounded</dd></div>
           <div><dt>Inside (black) seeds</dt><dd>Δ₂₃₄ ∪ Δ₄₁₂, which intersect</dd></div>
         </dl>
-        <p class="note">The plate's three figures are its stages: first the four Δ discs alone, then one round of inverses (Δ₁₂₃ and Δ₃₄₁ in C₄ and C₂; Δ₂₃₄ and Δ₄₁₂ in C₁ and C₃), then the full clans. The caption's analogy: the gray and black unions approximate the outside and inside of L the way the hexagon and star of Plate 43 approximate the Koch snowflake. Our render reproduces all three figures from the fitted chain; zooming refines the cover, and the uncovered thread is L.</p>
+        <p class="note">The plate's three figures are its stages: first the four Δ discs alone, then one round of inverses (Δ₁₂₃ and Δ₃₄₁ in C₄ and C₂; Δ₂₃₄ and Δ₄₁₂ in C₁ and C₃), then the full clans. The caption's analogy: the gray and black unions approximate the outside and inside of L the way the hexagon and star of Plate 43 approximate the Koch snowflake. Our render reproduces all three figures from the fitted chain; zooming refines the cover, and the uncovered thread is L. The C buttons play one inversion on the whole cover — the untouched cover stays as a ghost underneath, so the eye can check that the figure lands exactly back on itself.</p>
       </div>
     </div>
   </section>
@@ -257,11 +280,22 @@
           <button type="button" class="btn primary" id="preGtop">Plate 179, top right</button>
           <button type="button" class="btn" id="preGbot">Bottom right</button>
         </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Watch one inversion act</span></div>
+          <div class="btn-row">
+            <button type="button" class="btn" id="invG1">C₁, upper left</button>
+            <button type="button" class="btn" id="invG2">C₂, upper right</button>
+            <button type="button" class="btn" id="invG3">C₃, centre</button>
+            <button type="button" class="btn" id="invG4">C₄, lower left</button>
+            <button type="button" class="btn" id="invG5">C₅, lower right</button>
+          </div>
+        </div>
+        <p class="readline" id="infoG" aria-live="polite"></p>
         <dl class="read">
           <div><dt>Generator</dt><dd>5 circles, fitted rms 0.6 px</dd></div>
           <div><dt>Discs drawn</dt><dd id="rGa">—</dd></div>
         </dl>
-        <p class="note" id="noteG">The five circles were recovered from the scan by fitting the arcs that bound the engraving's blackened centre, then nudged to exact tangency (under a thousandth of the outer radius). Checked against the plate: our inside of L* matches the bottom-right shape with 98% overlap after a similarity fit, and the full five-circle shape matches the top-right black form feature for feature (the print sits rotated about 44°; overlap 74% at the rim's halftone precision). A pleasing confirmation: the two large circles Fricke's draftsman drew across the engraving check out as true circles of L — one passes through the three tangency points of C₂, C₃, C₅, orthogonal to all three, exactly like the Γ circles of the Apollonian net.</p>
+        <p class="note" id="noteG">The five circles were recovered from the scan by fitting the arcs that bound the engraving's blackened centre, then nudged to exact tangency (under a thousandth of the outer radius). Checked against the plate: our inside of L* matches the bottom-right shape with 98% overlap after a similarity fit, and the full five-circle shape matches the top-right black form feature for feature (the print sits rotated about 44°; overlap 74% at the rim's halftone precision). A pleasing confirmation: the two large circles Fricke's draftsman drew across the engraving check out as true circles of L — one passes through the three tangency points of C₂, C₃, C₅, orthogonal to all three, exactly like the Γ circles of the Apollonian net. The C buttons play one inversion on the covering of L (shown on the net view): the whole figure streams through the chosen circle and lands back on itself, the property Fricke's engraving was meant to illustrate.</p>
       </div>
     </div>
   </section>

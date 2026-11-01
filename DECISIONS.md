@@ -372,6 +372,15 @@ recursing to a sub-pixel cutoff; the emitted discs keep the thread contiguous an
 ones add detail. Rotating an inversion doesn't change image radii, only positions, so the same
 covering works for the twisted maps.
 
+**Inversion animations.** The page reuses the Plate 199 pattern (see "Animating a circle
+inversion" under Rendering lessons): one button plays one inversion on the whole figure along
+the spherical-angle path, over a faint ghost, with the acting circle highlighted. It plays only
+on views that are genuinely invariant under a single generator — the inversion demo, the net
+(whole-clan unions), Plate 177's limit cover, and Plate 179's net covering. The Poincaré-chain
+stages and the twisted maps are left without buttons: a finite stage s is carried to a mix of
+stages s−1 and s+1, and a twisted generator is not a pure inversion, so either animation would
+end on a visible snap.
+
 ## Part VI, chapter 19 (Plates 185–192)
 
 All on the page `self-squared-dragons`. Every figure is a per-pixel escape-time render of z → λz(1−z) or x → x²−μ (μ = λ²/4 − λ/2), with a distance estimate for boundaries and filaments. The scans were matched by eye at 300 dpi; the maps and Plates 185 and 192 follow from their definitions, while the dragons' λ are reconstructions, as noted below.

@@ -45,6 +45,74 @@ const viewBox = (f, v, pad = 0.05) => ({
 const px = (v, n = 1) => n / v.s;   // n screen pixels in world units
 const GRAYPANEL = '#b3b1aa';
 
+// ---------- inversion animation ----------
+// The pattern of the fractal-attractors page's K buttons (PR #52): one button plays one
+// inversion on the whole figure; every point slides along its ray through the acting circle's
+// centre on the spherical-angle path (flowPoint in core.js); the untransformed figure stays
+// underneath as a faint ghost so the eye sees the set land back on itself; the acting circle —
+// the only thing the inversion holds fixed — is highlighted and holds still.
+const GHOST = '#d4d2ca';
+function flowPolyline(c, v, k, K, t) {
+  const m = Math.max(12, Math.min(48, Math.round((k.r * v.s) / 2)));
+  const pt = (a) => flowPoint(K, k.x + k.r * Math.cos(a), k.y + k.r * Math.sin(a), t);
+  let pen = false, pX = 0, pY = 0;
+  const emit = (x, y) => {
+    // a circle enclosing K's centre flows through infinity: lift the pen on far points and
+    // on segments that would span the canvas, or stray chords cross the figure
+    if (Math.abs(x - K.x) > 1e3 || Math.abs(y - K.y) > 1e3) { pen = false; return; }
+    const X = v.ox + x * v.s, Y = v.oy - y * v.s;
+    if (pen && Math.abs(X - pX) + Math.abs(Y - pY) > 900) pen = false;
+    if (!pen) { c.moveTo(X, Y); pen = true; } else c.lineTo(X, Y);
+    pX = X; pY = Y;
+  };
+  // where the flow stretches an arc, bisect long segments a few times before drawing them
+  const seg = (a1, p1, a2, p2, depth) => {
+    if (depth > 0 && (Math.abs(p2[0] - p1[0]) + Math.abs(p2[1] - p1[1])) * v.s > 40) {
+      const am = (a1 + a2) / 2, pm = pt(am);
+      seg(a1, p1, am, pm, depth - 1); seg(am, pm, a2, p2, depth - 1);
+      return;
+    }
+    emit(p2[0], p2[1]);
+  };
+  let aPrev = 0, pPrev = pt(0);
+  emit(pPrev[0], pPrev[1]);
+  for (let s = 1; s <= m; s++) {
+    const a = (2 * Math.PI * s) / m, p = pt(a);
+    seg(aPrev, pPrev, a, p, 5);
+    aPrev = a; pPrev = p;
+  }
+}
+// mid-flow the circles are no longer circles, so draw them as flowed polylines
+function strokeFlowed(c, v, circles, K, t, color, lw = 1.2, cap = 4000) {
+  c.strokeStyle = color; c.lineWidth = lw;
+  c.beginPath();
+  let drawn = 0;
+  for (const k of circles) {
+    if (k.r * v.s < 1.4 || ++drawn > cap) continue;
+    flowPolyline(c, v, k, K, t);
+  }
+  c.stroke();
+}
+function drawActing(c, v, K, color) {
+  c.strokeStyle = color; c.lineWidth = 2.4;
+  c.beginPath(); c.arc(v.ox + K.x * v.s, v.oy - K.y * v.s, K.r * v.s, 0, Math.PI * 2); c.stroke();
+}
+// drive st.anim.t from 0 to 1 with cosine ease, redrawing each frame
+function playInversion(st, zoom, K, done) {
+  if (st.anim) return false;
+  const t0 = performance.now(), dur = 1500;
+  st.anim = { K, t: 0 };
+  const step = (now) => {
+    const p = Math.min(1, (now - t0) / dur);
+    st.anim.t = 0.5 - 0.5 * Math.cos(Math.PI * p); // ease in and out
+    zoom.schedule();
+    if (p < 1) requestAnimationFrame(step);
+    else { st.anim = null; if (done) done(); zoom.schedule(); }
+  };
+  requestAnimationFrame(step);
+  return true;
+}
+
 // ---------- the two Apollonian circles and the packing (Soddy reflection) ----------
 function apollonianBoth(a, ka, b, kb, c, kc) {
   const s = 2 * Math.sqrt(Math.max(0, ka * kb + kb * kc + kc * ka));
@@ -106,7 +174,7 @@ function fullPacking(rmin, bb) {
 // ---------- section A: inversion ----------
 (function sectionA() {
   const K = { x: 0, y: 0, r: 1 };
-  const st = { mode: 'elsewhere', cx: 1.45, cy: 0.62 };
+  const st = { mode: 'elsewhere', cx: 1.45, cy: 0.62, anim: null };
   const modes = ['through O', 'elsewhere', 'orthogonal', 'line'];
   const geomOf = () => {
     const d = Math.hypot(st.cx, st.cy);
@@ -118,35 +186,54 @@ function fullPacking(rmin, bb) {
     const c = f.ctx;
     paper(f, PRINT.paper); toScreen(f);
     const g = geomOf();
-    // the reference circle C and its centre O
-    strokeCircles(c, v, f, [K], PRINT.ink, 2);
+    const anim = st.anim;
+    // while animating, the shape and its inverse stay as ghosts under the moving copy
+    const inkCol = anim ? GHOST : PRINT.ink, redCol = anim ? '#e2c6c0' : PRINT.red;
+    // the reference circle C and its centre O; C is the acting circle, so it holds still
+    strokeCircles(c, v, f, [K], anim ? PRINT.accent : PRINT.ink, anim ? 2.6 : 2);
     dot(c, v, 0, 0, 3.4, PRINT.ink);
     c.fillStyle = PRINT.muted; c.font = '13px "IBM Plex Mono"'; c.fillText('O', v.ox + 7, v.oy - 7);
     c.fillText('C', v.ox + (K.r * 0.72) * v.s, v.oy - (K.r * 0.72) * v.s);
     if (g.line) {
       // a line at distance d from O along (nx, ny), and its inverse: a circle through O
-      c.strokeStyle = PRINT.ink; c.lineWidth = 2; c.beginPath();
+      c.strokeStyle = inkCol; c.lineWidth = 2; c.beginPath();
       const px0 = v.ox + g.nx * g.d * v.s, py0 = v.oy - g.ny * g.d * v.s, tx = -g.ny, ty = g.nx, L = 4 * v.s;
       c.moveTo(px0 - tx * L, py0 + ty * L); c.lineTo(px0 + tx * L, py0 - ty * L); c.stroke();
       const r = K.r * K.r / (2 * g.d);
-      strokeCircles(c, v, f, [{ x: g.nx * r, y: g.ny * r, r }], PRINT.red, 2);
+      strokeCircles(c, v, f, [{ x: g.nx * r, y: g.ny * r, r }], redCol, 2);
     } else {
-      strokeCircles(c, v, f, [g], PRINT.ink, 2);
+      strokeCircles(c, v, f, [g], inkCol, 2);
       const d2 = g.x * g.x + g.y * g.y - g.r * g.r;
       if (Math.abs(d2) < 1e-4) {        // through O: the inverse is a straight line, drawn through two inverted points
         const nn = Math.hypot(g.x, g.y), nx = g.x / nn, ny = g.y / nn;
         const p1 = invPoint(K, g.x + g.r * ny, g.y - g.r * nx), p2 = invPoint(K, g.x - g.r * ny, g.y + g.r * nx);
-        c.strokeStyle = PRINT.red; c.lineWidth = 2; c.beginPath();
+        c.strokeStyle = redCol; c.lineWidth = 2; c.beginPath();
         const ex = p2[0] - p1[0], ey = p2[1] - p1[1];
         c.moveTo(v.ox + (p1[0] - 5 * ex) * v.s, v.oy - (p1[1] - 5 * ey) * v.s);
         c.lineTo(v.ox + (p2[0] + 5 * ex) * v.s, v.oy - (p2[1] + 5 * ey) * v.s); c.stroke();
       } else {
         const im = invCircle(K, g);
-        strokeCircles(c, v, f, [im], PRINT.red, 2);
+        strokeCircles(c, v, f, [im], redCol, 2);
       }
     }
+    if (anim) {
+      // the moving copy: every point of the shape slides along its ray through O
+      c.strokeStyle = PRINT.ink; c.lineWidth = 2; c.beginPath();
+      if (g.line) {
+        // sample the line densely near its foot and far past the frame; the flow closes it
+        // into the image circle through O
+        const fx = g.nx * g.d, fy = g.ny * g.d, tx = -g.ny, ty = g.nx, m = 160;
+        for (let i = 0; i <= m; i++) {
+          const u = 2 * Math.tan((i / m - 0.5) * (Math.PI * 0.97));
+          const [x, y] = flowPoint(K, fx + u * tx, fy + u * ty, anim.t);
+          const X = v.ox + x * v.s, Y = v.oy - y * v.s;
+          if (i === 0) c.moveTo(X, Y); else c.lineTo(X, Y);
+        }
+      } else flowPolyline(c, v, g, K, anim.t);
+      c.stroke();
+    }
     dot(c, v, st.cx, st.cy, 5, PRINT.accent);
-  }, { maxZoom: 8, onTap: (x, y) => { st.cx = x; st.cy = y === 0 ? 1e-4 : y; clamp(); zoom.schedule(); update(); } });
+  }, { maxZoom: 8, onTap: (x, y) => { if (st.anim) return; st.cx = x; st.cy = y === 0 ? 1e-4 : y; clamp(); zoom.schedule(); update(); } });
   function clamp() {
     const d = Math.hypot(st.cx, st.cy);
     const lo = st.mode === 'orthogonal' ? 1.12 : 0.3;
@@ -164,6 +251,12 @@ function fullPacking(rmin, bb) {
       st.mode === 'line' ? 'A line is a circle through infinity; its inverse is a circle through O.' :
       'Tap anywhere on the figure to move the black circle.';
   }
+  $('playA').addEventListener('click', () => {
+    if (playInversion(st, zoom, K, update)) {
+      $('infoA').textContent = st.mode === 'orthogonal' ? 'Playing the inversion — the orthogonal circle breathes through C and lands exactly on itself: it is self-inverse.' :
+        'Playing the inversion — every point slides along its ray through O; at halftime the whole shape crosses C at once.';
+    }
+  });
   markA(st.mode); update();
 })();
 
@@ -257,19 +350,27 @@ function fullPacking(rmin, bb) {
     const oc = orthoCircle(tri[0], tri[1], tri[2]);
     if (oc) CGEN.push(oc);
   }
-  const st = { mode: 'clans' };
+  const st = { mode: 'clans', anim: null };
   let lastCount = 0;
   const zoom = zoomable('wC', 'cC', (f) => fitBox(f, { x0: -1.05, x1: 1.05, y0: -1.05, y1: 1.05 }), (f, v) => {
     const c = f.ctx;
     paper(f, PRINT.paper); toScreen(f);
-    const bb = viewBox(f, v), rmin = Math.max(px(v, 1.6), 1e-5);
-    if (st.mode === 'generator') {
+    const anim = st.anim;
+    const bb = viewBox(f, v), rmin = Math.max(px(v, anim ? 3.2 : 1.6), 1e-5);
+    if (st.mode === 'generator' && !anim) {
       strokeCircles(c, v, f, GAMMA, PRINT.ink, 2.6);
       strokeCircles(c, v, f, CGEN, PRINT.accent, 1.3);
       lastCount = 8;
     } else {
       const all = clanCircles(CGEN, GAMMA, rmin, bb);
-      if (st.mode === 'clans') {
+      if (anim) {
+        // the net itself stays as a ghost; its moving copy streams through the acting circle
+        strokeCircles(c, v, f, all, GHOST, 1.1);
+        if (st.mode === 'clans') {
+          for (let cl = 0; cl < 4; cl++) strokeFlowed(c, v, all.filter((k) => k.clan === cl), anim.K, anim.t, CAT[[0, 2, 3, 4][cl]], 1.2);
+        } else strokeFlowed(c, v, all, anim.K, anim.t, PRINT.ink, 1.1);
+        drawActing(c, v, anim.K, PRINT.accent);
+      } else if (st.mode === 'clans') {
         for (let cl = 0; cl < 4; cl++) strokeCircles(c, v, f, all.filter((k) => k.clan === cl), CAT[[0, 2, 3, 4][cl]], 1.2);
       } else strokeCircles(c, v, f, all, PRINT.ink, 1.1);
       lastCount = all.length;
@@ -282,6 +383,12 @@ function fullPacking(rmin, bb) {
   const vals = ['generator', 'clans', 'plain'];
   const mark = stepButtons($('mC'), vals, (m) => names[vals.indexOf(m)], (m) => m, (m) => { st.mode = m; mark(m); zoom.schedule(); });
   mark('clans');
+  for (let i = 0; i < 4; i++) $('invC' + (i + 1)).addEventListener('click', () => {
+    if (st.mode === 'generator') { st.mode = 'clans'; mark('clans'); }
+    if (playInversion(st, zoom, CGEN[i], () => { $('infoC').textContent = `Done: the net landed exactly on itself — it is self-inverse. Each circle traded places with its image, so the clans reshuffled.`; })) {
+      $('infoC').textContent = `Inverting the whole net in C${'₁₂₃₄'[i]} (highlighted) — every circle streams through it; only that circle holds still.`;
+    }
+  });
   $('legC').innerHTML = ['Γ₂₃₄ clan', 'Γ₁₃₄ clan', 'Γ₁₂₄ clan', 'Γ₁₂₃ clan'].map((t, i) => `<span><i style="background:${CAT[[0, 2, 3, 4][i]]}"></i>${t}</span>`).join('');
   console.assert(CGEN.length === 4, 'four generator circles exist');
 })();
@@ -315,13 +422,14 @@ function fullPacking(rmin, bb) {
 (function sectionE() {
   const PAIRS4 = [[0, 1], [1, 2], [2, 3], [3, 0]];
   const { seedsIn, seedsOut } = osculatingSeeds(CHAIN, PAIRS4);
-  const st = { mode: 'limit', circles: false };
+  const st = { mode: 'limit', circles: false, anim: null };
   let lastCount = 0;
   const FIT = { x0: -1.35, x1: 1.35, y0: -1.42, y1: 1.28 };
   const zoom = zoomable('wE', 'cE', (f) => fitBox(f, FIT), (f, v) => {
     const c = f.ctx;
     paper(f, PRINT.paper); toScreen(f);
-    const bb = viewBox(f, v), rmin = Math.max(px(v, 2.6), 2e-5);
+    const anim = st.anim;
+    const bb = viewBox(f, v), rmin = Math.max(px(v, anim ? 5 : 2.6), 2e-5);
     lastCount = 0;
     for (const [seeds, color] of [[seedsOut, '#a5a39c'], [seedsIn, PRINT.ink]]) {
       for (const s of seeds) {
@@ -331,10 +439,17 @@ function fullPacking(rmin, bb) {
           regions = [s];
           for (let m = 0; m < 4; m++) if (!s.omit.includes(m)) regions.push(invRegion(CHAIN[m], s));
         } else regions = osculatingClan(CHAIN, s, rmin, bb);
-        fillRegions(c, v, f, regions, color);
+        if (anim) {
+          // the cover stays as a faint ghost; its boundaries flow through the acting circle
+          c.globalAlpha = 0.18;
+          fillRegions(c, v, f, regions, color);
+          c.globalAlpha = 1;
+          strokeFlowed(c, v, regions, anim.K, anim.t, color, 1.3);
+        } else fillRegions(c, v, f, regions, color);
         lastCount += regions.length;
       }
     }
+    if (anim) drawActing(c, v, anim.K, PRINT.accent);
     if (st.circles) {
       strokeCircles(c, v, f, CHAIN, PRINT.accent, 1.4);
       strokeCircles(c, v, f, [...seedsIn, ...seedsOut], PRINT.red, 1.1);
@@ -349,6 +464,13 @@ function fullPacking(rmin, bb) {
   });
   $('circE').addEventListener('change', (e) => { st.circles = e.target.checked; zoom.schedule(); });
   $('preE').addEventListener('click', () => { st.mode = 'limit'; mark('limit'); $('sEv').textContent = names.limit; zoom.refit(); });
+  for (let i = 0; i < 4; i++) $('invE' + (i + 1)).addEventListener('click', () => {
+    // only the full clans are self-inverse, so the animation plays on the limit
+    if (st.mode !== 'limit') { st.mode = 'limit'; mark('limit'); $('sEv').textContent = names.limit; }
+    if (playInversion(st, zoom, CHAIN[i], () => { $('infoE').textContent = 'Done: black landed on black and gray on gray — the cover, and so L itself, is self-inverse.'; })) {
+      $('infoE').textContent = `Inverting the whole cover in the chain circle C${'₁₂₃₄'[i]} (highlighted) — every disc streams through it while the circle holds still.`;
+    }
+  });
   mark('limit');
   console.assert(seedsIn.length === 2 && seedsOut.length === 2, 'M=4: two inside and two outside seeds', seedsIn.length, seedsOut.length);
 })();
@@ -388,18 +510,25 @@ function fullPacking(rmin, bb) {
   const five = osculatingSeeds(FRICKE, PAIRS5);
   const chain4 = FRICKE.slice(0, 4);
   const four = osculatingSeeds(chain4, PAIRS4);
-  const st = { mode: 'net' };
+  const st = { mode: 'net', anim: null };
   let lastCount = 0;
   const zoom = zoomable('wG', 'cG', (f) => fitBox(f, { x0: -1.95, x1: 1.75, y0: -1.1, y1: 1.85 }), (f, v) => {
     const c = f.ctx;
     paper(f, PRINT.paper); toScreen(f);
+    const anim = st.anim;
     const bb = viewBox(f, v);
     const rmin = Math.max(px(v, 1.3), 2e-5);
     lastCount = 0;
     if (st.mode === 'net') {
       strokeCircles(c, v, f, FRICKE, PRINT.ink, 2.2);
-      const dots = twistedLimit(FRICKE, 0, Math.max(px(v, 0.6), 2e-5), px(v, 3.2), bb, 400000);
-      fillCircles(c, v, f, dots, PRINT.ink, 1.25);
+      const dots = twistedLimit(FRICKE, 0, Math.max(px(v, anim ? 2.2 : 0.6), 2e-5), px(v, 3.2), bb, 400000);
+      if (anim) {
+        // the covering of L stays as a ghost; its moving copy streams through the acting circle
+        c.globalAlpha = 0.18; fillCircles(c, v, f, dots, PRINT.ink, 1.25); c.globalAlpha = 1;
+        const flowed = dots.map((k) => { const [x, y] = flowPoint(anim.K, k.x, k.y, anim.t); return { x, y, r: k.r }; });
+        fillCircles(c, v, f, flowed, PRINT.ink, 1.25);
+        drawActing(c, v, anim.K, PRINT.accent);
+      } else fillCircles(c, v, f, dots, PRINT.ink, 1.25);
       // the two circles Fricke's draftsman drew, as members of L
       const g1 = orthoCircle(FRICKE[1], FRICKE[2], FRICKE[4]);
       if (g1) strokeCircles(c, v, f, [g1], PRINT.red, 1.4);
@@ -428,6 +557,13 @@ function fullPacking(rmin, bb) {
   const mark = stepButtons($('mG'), ['net', 'corrected', 'chain'], (m) => names[m], (m) => names[m], (m) => { st.mode = m; mark(m); zoom.schedule(); });
   $('preGtop').addEventListener('click', () => { st.mode = 'corrected'; mark('corrected'); zoom.refit(); });
   $('preGbot').addEventListener('click', () => { st.mode = 'chain'; mark('chain'); zoom.refit(); });
+  for (let i = 0; i < 5; i++) $('invG' + (i + 1)).addEventListener('click', () => {
+    // the full covering of L is what the inversions carry onto itself, so play on the net view
+    if (st.mode !== 'net') { st.mode = 'net'; mark('net'); }
+    if (playInversion(st, zoom, FRICKE[i], () => { $('infoG').textContent = 'Done: the covering of L landed exactly on itself — Fricke’s five circles do generate a self-inverse set, just not the shape his draftsman drew.'; })) {
+      $('infoG').textContent = `Inverting the whole figure in C${'₁₂₃₄₅'[i]} (highlighted) — the covering of L streams through it and lands back on itself.`;
+    }
+  });
   mark('net');
   console.assert(five.seedsIn.length === 4 && five.seedsOut.length === 2, 'five-circle seeds: 4 in, 2 out', five.seedsIn.length, five.seedsOut.length);
 })();
