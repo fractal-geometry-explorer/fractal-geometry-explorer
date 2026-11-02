@@ -48,6 +48,14 @@
           <div class="label-row"><span class="label">λ</span></div>
           <div class="steps words" id="mJ" role="group" aria-label="Lambda presets"></div>
         </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Ink</span></div>
+          <div class="steps words" id="inkJ" role="group" aria-label="Ink style"></div>
+        </div>
+        <div class="slider" id="depthWrap">
+          <div class="label-row"><span class="label">Depth budget</span><span class="value" id="dJv">40</span></div>
+          <input type="range" id="dJ" min="16" max="160" step="2" value="40" aria-label="Iteration depth before the shade ramps to ink">
+        </div>
         <div class="btn-row">
           <button type="button" class="btn primary" id="plate8">Show the Plate VIII reconstruction</button>
         </div>
@@ -55,10 +63,10 @@
         <dl class="read">
           <div><dt>λ</dt><dd id="rJa">—</dd></div>
           <div><dt>Limit points</dt><dd id="rJb">—</dd></div>
-          <div><dt>One cycle point</dt><dd id="rJc">—</dd></div>
+          <div><dt>Cycle pull |m|</dt><dd id="rJc">—</dd></div>
           <div><dt>|λ|</dt><dd id="rJd">—</dd></div>
         </dl>
-        <p class="note">A reconstruction in kind, not stroke for stroke: the book names no λ for this plate and no window, and no fit recovered them. The print shows three gray shades, which is the signature of a 3-point cycle; the default λ = 0.2213 + 0.4834i is the centre of a period-3 region of the map below, and reproduces the plate's round three-shade domains and star-chain boundaries. Tap a λ on Plate X below to send it here.</p>
+        <p class="note">A reconstruction in kind, not stroke for stroke: the book names no λ for this plate and no window, and no fit recovered them. The print shows three gray shades — the signature of a 3-point cycle — and under a magnifier its dark "stars" are feathered dendrites that thin into dots, with the detail cut off below a certain size. Two choices reproduce that look, both made by eye against the scan: a λ where the cycle pulls only moderately (|m| ≈ 0.5, not the superstable centre), so the basin edges sprout petals, and the <em>printed depth</em> ink rule — a point whose orbit needs more than the depth budget of steps to reach the cycle is inked toward black, so each deeper generation of basins drowns and the boundary keeps its feathered fringe. "Flat shades" shows the same basins resolved all the way down. Tap a λ on Plate X below to send it here.</p>
       </div>
     </div>
   </section>
