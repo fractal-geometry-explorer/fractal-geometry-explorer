@@ -6,7 +6,8 @@ const { readFileSync } = require('node:fs');
 const path = require('node:path');
 
 const root = path.resolve(__dirname, '..');
-const pages = JSON.parse(readFileSync(path.join(root, 'src/pages.json'), 'utf8')).pages;
+// every page in the manifest, plus the built index with its plate finder
+const pages = [...JSON.parse(readFileSync(path.join(root, 'src/pages.json'), 'utf8')).pages, { slug: 'index' }];
 (async () => {
 const browser = await chromium.launch();
 let failed = 0;
