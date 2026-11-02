@@ -27,7 +27,7 @@ Update this file in the same pull request as the work it records.
 | Move the ten existing pages onto the shared library; check each against its published version (`tools/check_build.py`) | done |
 | Automated checks in CI: build, smoke test (`tests/smoke.cjs`), phone width | done |
 | Hosting: GitHub Pages, published by `.github/workflows/pages.yml` on every merge to `main` | done |
-| Move the three oldest pages (monkeys-tree, minkowski-sausage, wiener-sausage) off their own stylesheet and canvas machinery onto `base.css` and the shared library — their markup and theme-following figures predate the conventions, so it is a rework, not a deduplication (see DECISIONS.md, Foundation) | todo |
+| Move the three oldest pages (monkeys-tree, minkowski-sausage, wiener-sausage) off their own stylesheet and canvas machinery onto `base.css` and the shared library — their markup and theme-following figures predate the conventions, so it is a rework, not a deduplication (see DECISIONS.md, Foundation) | done |
 
 ## I Introduction (chapters 1–4)
 

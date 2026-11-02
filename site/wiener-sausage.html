@@ -9,180 +9,159 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
 <style>
-/* Layout: the simulated trail on the left like a plate; controls, readouts and the measuring chart down the right. One column under 900px. */
+/* Layout: the trail in its band and the measuring chart with Wiener's law, each a figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */
 :root {
   --page: #e4e5e1;
-  --plate: #efefeb;
-  --ink: #141414;
   --text: #1b1d1f;
   --muted: #595e64;
   --rule: #c4c7c1;
   --surface: #f6f6f3;
   --accent: #285895;
-  --accent-soft: rgba(40, 88, 149, 0.16);
-  --change: #c4532a;
   --f-display: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
   --f-body: "Newsreader", Georgia, "Times New Roman", serif;
   --f-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* the figures are reproductions of printed plates, so their paper and inks stay the same in both themes */
+  --print-paper: #ecebe6;
+  --print-ink: #151515;
+  --print-rule: #c9c8c2;
+  --gain: rgba(47, 95, 158, 0.42);
+  --loss: rgba(186, 88, 44, 0.42);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --page: #111214; --plate: #18191c; --ink: #e9e8e3; --text: #e5e5e1; --muted: #9a9fa6;
-    --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6; --accent-soft: rgba(138, 177, 230, 0.22);
-    --change: #f0905f;
+    --page: #111214; --text: #e5e5e1; --muted: #9a9fa6; --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --page: #111214; --plate: #18191c; --ink: #e9e8e3; --text: #e5e5e1; --muted: #9a9fa6;
-  --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6; --accent-soft: rgba(138, 177, 230, 0.22);
-  --change: #f0905f;
+  --page: #111214; --text: #e5e5e1; --muted: #9a9fa6; --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6;
   color-scheme: dark;
 }
-
 * { box-sizing: border-box; }
-body {
-  background: var(--page); color: var(--text);
-  font-family: var(--f-display); font-size: 14px; line-height: 1.45;
-  -webkit-font-smoothing: antialiased;
-}
+body { background: var(--page); color: var(--text); font-family: var(--f-display); font-size: 14px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
 .wrap {
   max-width: 1180px; margin: 0 auto;
   padding-left: max(16px, env(safe-area-inset-left, 0px));
   padding-right: max(16px, env(safe-area-inset-right, 0px));
   padding-block: 36px 64px;
-  display: grid; gap: 32px;
+  display: grid; gap: 40px;
 }
-header { display: grid; gap: 10px; max-width: 780px; }
+header.top { display: grid; gap: 10px; max-width: 820px; }
 .eyebrow { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
 h1 {
   margin: 0; display: flex; align-items: center; flex-wrap: wrap; gap: 0.18em 0.42em;
-  font-weight: 800; font-size: clamp(30px, 5.4vw, 54px); line-height: 1.02;
-  letter-spacing: 0.01em; text-transform: uppercase; text-wrap: balance;
+  font-weight: 800; font-size: clamp(30px, 5.4vw, 54px); line-height: 1.02; letter-spacing: 0.01em; text-transform: uppercase; text-wrap: balance;
 }
 h1 .plate-no { font-weight: 600; text-transform: none; letter-spacing: 0; }
 .lozenge { display: inline-block; width: 0.42em; height: 0.42em; border: 0.075em solid currentColor; position: relative; top: -0.02em; }
 .lozenge::after { content: ""; position: absolute; inset: 0.1em; border: 0.05em solid currentColor; }
-.dek { margin: 0; font-family: var(--f-body); font-size: 19px; line-height: 1.45; max-width: 62ch; }
-.nc { text-transform: none; letter-spacing: 0; }
+.dek { margin: 0; font-family: var(--f-body); font-size: 19px; line-height: 1.45; max-width: 64ch; }
 
-.stage { display: grid; grid-template-columns: minmax(0, 1fr) minmax(290px, 360px); gap: 40px; align-items: start; }
-@media (max-width: 899px) { .stage { grid-template-columns: minmax(0, 1fr); gap: 28px; } }
-figure.plate { margin: 0; display: grid; gap: 10px; min-width: 0; width: 100%; }
-.canvas-wrap {
-  position: relative; width: 100%; aspect-ratio: 6 / 5; max-width: 100%;
-  background: var(--plate); outline: 1px solid var(--rule); overflow: hidden;
-  cursor: grab; touch-action: pan-y;
+nav.index {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+  padding: 10px max(16px, env(safe-area-inset-right, 0px)) 10px max(16px, env(safe-area-inset-left, 0px));
+  background: var(--page); border-bottom: 1px solid var(--rule);
+  display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none;
 }
-.canvas-wrap.dragging { cursor: grabbing; }
+nav.index a {
+  flex: none; display: inline-flex; gap: 8px; align-items: baseline; padding: 6px 10px;
+  border: 1px solid var(--rule); background: var(--surface); color: var(--text); text-decoration: none; font-size: 13px; font-weight: 600;
+}
+nav.index a b { font-family: var(--f-mono); font-weight: 500; color: var(--accent); }
+nav.index a:hover { border-color: var(--text); }
+
+section.plate { display: grid; gap: 18px; scroll-margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--rule); }
+.plate-head { display: grid; gap: 4px; }
+.plate-head .no { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.plate-head h2 { margin: 0; font-size: clamp(22px, 3vw, 30px); font-weight: 800; line-height: 1.1; text-transform: uppercase; letter-spacing: 0.01em; text-wrap: balance; }
+.plate-head .dim { margin: 0; font-family: var(--f-mono); font-size: 13px; color: var(--muted); }
+.plate-body { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(280px, 1fr); gap: 32px; align-items: start; }
+@media (max-width: 899px) { .plate-body { grid-template-columns: minmax(0, 1fr); gap: 20px; } }
+figure.fig { margin: 0; display: grid; gap: 8px; min-width: 0; }
+.canvas-wrap { position: relative; width: 100%; max-width: 100%; background: var(--print-paper); outline: 1px solid var(--rule); overflow: hidden; }
 .canvas-wrap canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.r-sq { aspect-ratio: 1 / 1; }
+.r-lox { aspect-ratio: 5 / 4; }
+.zoomable { cursor: grab; touch-action: pan-y; }
+.zoomable.dragging { cursor: grabbing; }
 .view-tools { position: absolute; top: 10px; right: 10px; display: flex; gap: 6px; z-index: 2; }
-.view-tools button {
-  min-width: 34px; height: 34px; padding: 0 10px; font: 600 15px/1 var(--f-display); color: var(--text);
-  background: var(--surface); border: 1px solid var(--rule); cursor: pointer;
-}
-.view-tools button:hover { border-color: var(--text); }
-figcaption { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 16px; font-size: 13px; color: var(--muted); }
+.view-tools button { min-width: 34px; height: 34px; padding: 0 10px; font: 600 15px/1 var(--f-display); color: var(--print-ink); background: #f7f7f3; border: 1px solid var(--print-rule); cursor: pointer; }
+figcaption { font-size: 13px; color: var(--muted); }
 figcaption strong { color: var(--text); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
-.num { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
 
-.panel { display: grid; gap: 24px; min-width: 0; }
-.group { display: grid; gap: 10px; min-width: 0; }
+.side { display: grid; gap: 18px; min-width: 0; align-content: start; }
+.side p.cap { margin: 0; font-family: var(--f-body); font-size: 17px; line-height: 1.55; max-width: 62ch; }
+.group { display: grid; gap: 8px; min-width: 0; }
 .label-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
 .label { font-size: 11.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
-.value { font-family: var(--f-mono); font-size: 12.5px; color: var(--text); font-variant-numeric: tabular-nums; }
+.value { font-family: var(--f-mono); font-size: 12.5px; font-variant-numeric: tabular-nums; text-align: right; }
+.steps { display: flex; flex-wrap: wrap; gap: 6px; }
+.steps button {
+  min-width: 38px; height: 34px; padding: 0 10px; font: 600 13px/1 var(--f-mono); color: var(--text);
+  background: var(--surface); border: 1px solid var(--rule); cursor: pointer;
+}
+.steps.words button { font: 600 13px/1 var(--f-display); }
+.steps button[aria-pressed="true"] { background: var(--text); color: var(--page); border-color: var(--text); }
+.steps button:hover { border-color: var(--text); }
+.steps button:disabled { opacity: 0.35; cursor: default; border-color: var(--rule); }
+.btn-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.btn { padding: 8px 12px; font: 600 13px/1.2 var(--f-display); color: var(--text); background: var(--surface); border: 1px solid var(--rule); cursor: pointer; }
+.btn:hover { border-color: var(--text); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--page); }
+.check { display: flex; align-items: flex-start; gap: 8px; font-size: 13.5px; cursor: pointer; }
+.check input { accent-color: var(--accent); width: 16px; height: 16px; margin: 1px 0 0; flex: none; }
+.check:has(input:disabled) { opacity: 0.45; cursor: default; }
+.slider { display: grid; gap: 4px; }
+.slider input { width: 100%; accent-color: var(--accent); margin: 0; }
+.slider input:disabled { opacity: 0.4; }
+dl.read { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; padding-top: 14px; border-top: 1px solid var(--rule); }
+dl.read div { display: grid; gap: 2px; min-width: 0; }
+dl.read dt { font-size: 10.5px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); }
+dl.read dd { margin: 0; font-family: var(--f-mono); font-size: 16px; overflow-wrap: anywhere; }
+dl.read dd small { font-size: 11.5px; color: var(--muted); }
+.note { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.mini { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; padding: 10px 12px; background: var(--print-paper); border: 1px solid var(--print-rule); color: var(--print-ink); }
+.mini svg { height: 64px; width: auto; max-width: 100%; }
+.mini .fx { font-family: var(--f-mono); font-size: 12px; line-height: 1.6; color: var(--print-ink); }
+.key { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--muted); }
+.key span { display: inline-flex; align-items: center; gap: 6px; }
+.key i { width: 14px; height: 10px; display: inline-block; border: 1px solid var(--print-rule); }
+.readline { min-height: 2.9em; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.readline b { color: var(--text); font-weight: 700; }
 
+.sub { display: grid; gap: 14px; padding-top: 22px; border-top: 1px dashed var(--rule); scroll-margin-top: 64px; }
+.sub h3 { margin: 0; font-size: 15px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
+.source { font-family: var(--f-body); font-size: 15px; color: var(--muted); margin: 0; max-width: 84ch; }
+.source i { color: var(--text); }
+.source a { color: var(--accent); }
+button:focus-visible, input:focus-visible, a:focus-visible, canvas:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.r-65 { aspect-ratio: 6 / 5; }
+.nc { text-transform: none; letter-spacing: 0; }
 .stages { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; }
 .stages button {
   display: grid; gap: 3px; padding: 4px 4px 5px; min-width: 0; background: var(--surface);
   border: 1px solid var(--rule); color: var(--text); cursor: pointer; font: inherit; text-align: center;
 }
-.stages button canvas { width: 100%; aspect-ratio: 4 / 3; display: block; background: var(--plate); }
+.stages button canvas { width: 100%; aspect-ratio: 4 / 3; display: block; background: var(--print-paper); }
 .stages button b { font-size: 12px; font-weight: 700; }
 .stages button span { font-family: var(--f-mono); font-size: 10.5px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .stages button:hover { border-color: var(--text); }
 .stages button[aria-pressed="true"] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
 .stages button[aria-pressed="true"] b { color: var(--accent); }
-
-.slider { display: grid; gap: 4px; }
-.slider input { width: 100%; accent-color: var(--accent); margin: 0; }
-.check { display: flex; align-items: flex-start; gap: 8px; font-size: 13.5px; cursor: pointer; }
-.check input { accent-color: var(--accent); width: 16px; height: 16px; margin: 1px 0 0; flex: none; }
-.swatch { display: inline-block; width: 10px; height: 10px; background: var(--change); margin-right: 4px; vertical-align: -1px; }
-
-dl.read { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; }
-dl.read div { display: grid; gap: 2px; min-width: 0; }
-dl.read dt { font-size: 10.5px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); }
-dl.read dd { margin: 0; font-family: var(--f-mono); font-size: 17px; }
-dl.read dd small { font-size: 11.5px; color: var(--muted); }
+.swatch { display: inline-block; width: 10px; height: 10px; background: #c2452d; margin-right: 4px; vertical-align: -1px; }
+.swatch.line { height: 0; border-top: 2px solid #2f5f9e; background: none; width: 12px; vertical-align: 3px; }
+/* every verdict message shares one grid cell; hidden copies of the longest fix the box's height */
 .verdict { margin: 0; font-size: 13px; line-height: 1.45; padding: 8px 10px; background: var(--surface); border: 1px solid var(--rule); display: grid; }
-/* every message shares one grid cell; hidden copies of the longest messages fix the box's height at any width */
 .verdict > span { grid-area: 1 / 1; }
 .v-size { visibility: hidden; }
-/* the caption reserves room for its longest wording too, so it wraps the same way at every stage and ε */
-.cap-stack { display: grid; min-width: 0; }
-.cap-stack > span { grid-area: 1 / 1; }
 #verdict { transition: opacity 0.15s; }
 #verdict.stale { opacity: 0.5; }
 @media (prefers-reduced-motion: reduce) { #verdict { transition: none; } }
-.exact { margin: 0; font-size: 12.5px; color: var(--muted); }
-.exact b { color: var(--text); font-family: var(--f-mono); font-weight: 500; }
-
-.legend { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 11.5px; color: var(--muted); }
-.legend span { display: inline-flex; align-items: center; gap: 5px; }
-.legend span.cur { color: var(--text); font-weight: 600; }
-.legend i { display: inline-block; width: 16px; height: 0; border-top: 2px solid var(--muted); }
-.legend i.ref { border-top: 1.5px dashed var(--text); opacity: 0.6; }
-.chart-box { position: relative; }
-#sChart { display: block; width: 100%; height: auto; background: var(--plate); outline: 1px solid var(--rule); touch-action: pan-y; cursor: crosshair; }
-#sChart .grid line { stroke: var(--rule); stroke-width: 1; }
-#sChart text { font-family: var(--f-mono); font-size: 10px; fill: var(--muted); }
-#sChart .ser { fill: none; stroke: var(--muted); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
-#sChart .ser.cur { stroke: var(--accent); }
-#sChart .ref { fill: none; stroke: var(--text); stroke-width: 1.25; stroke-dasharray: 4 3; opacity: 0.6; }
-#sChart .mark { stroke: var(--accent); stroke-width: 1; }
-#sChart .dot { fill: var(--accent); stroke: var(--plate); stroke-width: 2; }
-#sChart .hair { stroke: var(--muted); stroke-width: 1; }
-.tip {
-  position: absolute; top: 8px; pointer-events: none; z-index: 2;
-  background: var(--surface); border: 1px solid var(--rule); padding: 6px 8px;
-  display: grid; gap: 2px; min-width: 112px; font-size: 11.5px; color: var(--muted);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-.tip .hd { font-family: var(--f-mono); color: var(--text); margin-bottom: 2px; }
-.tip .row { display: flex; align-items: center; gap: 6px; }
-.tip .row i { display: inline-block; width: 12px; border-top: 2px solid var(--muted); }
-.tip .row b { font-family: var(--f-mono); font-weight: 500; color: var(--text); min-width: 3.2em; text-align: right; }
-.chart-note { margin: 0; font-size: 12.5px; color: var(--muted); line-height: 1.45; }
-details.nums summary { cursor: pointer; font-size: 12.5px; font-weight: 600; }
-.tbl-wrap { overflow-x: auto; margin-top: 6px; }
-.tbl-wrap table { border-collapse: collapse; width: 100%; font-family: var(--f-mono); font-size: 11.5px; font-variant-numeric: tabular-nums; }
-.tbl-wrap th, .tbl-wrap td { padding: 3px 6px; text-align: right; border-bottom: 1px solid var(--rule); white-space: nowrap; }
-.tbl-wrap th { color: var(--muted); font-weight: 500; }
-
-.notes {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 28px 40px;
-  padding-top: 28px; border-top: 1px solid var(--rule);
-}
-.notes article { display: grid; gap: 8px; align-content: start; min-width: 0; }
-.notes h2 { margin: 0; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
-.notes p { margin: 0; font-family: var(--f-body); font-size: 17px; line-height: 1.55; max-width: 62ch; }
-.gen-fig { display: flex; align-items: center; gap: 14px; padding: 10px 12px; background: var(--plate); border: 1px solid var(--rule); }
-.gen-fig svg { width: 150px; height: auto; flex: none; color: var(--ink); }
-.gen-fig div { font-family: var(--f-mono); font-size: 12.5px; line-height: 1.6; }
-.source { font-family: var(--f-body); font-size: 15px; color: var(--muted); margin: 0; max-width: 84ch; }
-.source i { color: var(--text); }
-.source a { color: var(--accent); }
-
-button:focus-visible, input:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-
-.btn-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
-.btn { padding: 8px 12px; font: 600 13px/1.2 var(--f-display); color: var(--text); background: var(--surface); border: 1px solid var(--rule); cursor: pointer; }
-.btn:hover { border-color: var(--text); }
-.hint-inline { font-size: 12.5px; color: var(--muted); flex: 1 1 180px; min-width: 0; }
-.swatch.line { height: 0; border-top: 2px solid var(--accent); background: none; width: 12px; vertical-align: 3px; }
-.legend i.law { border-top: 2px dotted var(--text); opacity: 0.75; }
-#sChart .law { fill: none; stroke: var(--text); stroke-width: 1.6; stroke-dasharray: 1.5 3.5; stroke-linecap: round; opacity: 0.75; }
+/* the caption reserves room for its longest wording, so it wraps the same way at every stage and ε */
+.cap-stack { display: grid; min-width: 0; }
+.cap-stack > span { grid-area: 1 / 1; }
 </style>
 <style>
 body { margin: 0; }
@@ -205,51 +184,55 @@ nav.shell a:hover .pn, nav.shell a:hover .pn b { color: var(--accent); }
 <nav class="shell" aria-label="Site"><a class="home" href="index.html">Fractal Geometry Explorer</a><span class="gap"></span><a rel="prev" href="brown-trails.html"><span class="pn">&#8592; <b>Plates 241–243</b></span></a><a rel="next" href="midpoint-displacement.html"><span class="pn"><b>Plate 246</b> &#8594;</span></a></nav>
 
 <div class="wrap">
-  <header>
+  <header class="top">
     <p class="eyebrow">The Fractal Geometry of Nature · Chapter 25, "Brownian motion and Brown fractals" · pages 234–235</p>
     <h1><span class="plate-no">Brown trail</span><span class="lozenge" aria-hidden="true"></span><span>Wiener Sausage</span></h1>
     <p class="dek">A planar Brownian path built the way Mandelbrot builds it, by pushing midpoints at random, wrapped in a band of radius ε. The band tells you its dimension is 2, and also why it covers no area.</p>
   </header>
 
-  <section class="stage">
-    <figure class="plate">
-      <div class="canvas-wrap" id="wrap">
-        <canvas id="cv" role="img" aria-label="Brownian trail with its Wiener sausage"></canvas>
-        <div class="view-tools">
-          <button type="button" id="zin" aria-label="Zoom in">+</button>
-          <button type="button" id="zout" aria-label="Zoom out">−</button>
-          <button type="button" id="zfit">Fit</button>
+  <nav class="index" aria-label="Sections">
+    <a href="#trail"><b>§</b> The trail in its band</a>
+    <a href="#chart"><b>§</b> Reading D from the band</a>
+  </nav>
+
+  <!-- ===================== THE TRAIL ===================== -->
+  <section class="plate" id="trail">
+    <div class="plate-head">
+      <p class="no">Pages 234–235 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>A Brown trail in its Wiener sausage</h2>
+      <p class="dim">D = log 2 / log √2 = 2 · expected band area ≈ π / ln(1/2ε²), Spitzer 1964</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-65 zoomable" id="wrap">
+          <canvas id="cv" role="img" aria-label="Brownian trail with its Wiener sausage"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
         </div>
-      </div>
-      <figcaption>
-        <span class="cap-stack">
-          <span class="v-size" aria-hidden="true"><strong>Brown trail</strong> · path <span class="num">999,999</span> · stage <span class="num">9</span> · <span class="num">262,144</span> steps · ε = <span class="num">0.0040</span></span>
-          <span><strong>Brown trail</strong> · path <span class="num" id="capSeed">1</span> · stage <span class="num" id="capStage">7</span> · <span class="num" id="capSteps">16,384</span> steps · ε = <span class="num" id="capEps">0.010</span></span>
-        </span>
-        <span>Drag to pan · pinch or Ctrl/⌘ + scroll to zoom</span>
-      </figcaption>
-    </figure>
-
-    <aside class="panel">
-      <div class="group">
-        <div class="label-row"><span class="label">Stage of construction</span><span class="value" id="stageVal">stage 7</span></div>
-        <div class="stages" id="stages"></div>
-        <div class="btn-row">
-          <button type="button" class="btn" id="newPath">Draw a new path</button>
-          <span class="hint-inline">Each path is a fresh random sample; the stages refine the same one.</span>
+        <figcaption>
+          <span class="cap-stack">
+            <span class="v-size" aria-hidden="true"><strong>Brown trail</strong> · path 999,999 · stage 9 · 262,144 steps · ε = 0.0040 · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</span>
+            <span><strong>Brown trail</strong> · path <span id="capSeed">7</span> · stage <span id="capStage">7</span> · <span id="capSteps">16,384</span> steps · ε = <span id="capEps">0.010</span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</span>
+          </span>
+        </figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Chapter 25 builds the planar Brown trail as a random Peano curve. Start with a random segment whose mean-square length is 1. At each pass, push the midpoint of every side in a random direction by a Gaussian distance whose mean square halves from pass to pass. Two halves, each 1/√2 the size of the whole in mean square, give the dimension log 2 / log √2 = 2. A stage here is two passes: stage n has 4<sup>n</sup> steps, each about 2<sup>−n</sup> long, in units where the whole path's mean-square span is 1.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Stage of construction</span><span class="value" id="stageVal">stage 7</span></div>
+          <div class="stages" id="stages"></div>
+          <div class="btn-row">
+            <button type="button" class="btn" id="newPath">Draw a new path</button>
+          </div>
+          <p class="note">Each path is a fresh random sample; the stages refine the same one.</p>
         </div>
-      </div>
-
-      <div class="group">
-        <label class="slider" for="eps">
-          <span class="label-row"><span class="label">Band radius <span class="nc">ε</span></span><span class="value" id="epsVal">0.010</span></span>
-          <input type="range" id="eps" min="0" max="1000" value="400">
-        </label>
-        <label class="check" for="prev"><input type="checkbox" id="prev"> <span><i class="swatch line" aria-hidden="true"></i>Show the stage before as a thin line</span></label>
-        <label class="check" for="chg"><input type="checkbox" id="chg"> <span><i class="swatch" aria-hidden="true"></i>Highlight where the last stage changed the band</span></label>
-      </div>
-
-      <div class="group">
+        <div class="group">
+          <label class="slider" for="eps">
+            <span class="label-row"><span class="label">Band radius <span class="nc">ε</span></span><span class="value" id="epsVal">0.010</span></span>
+            <input type="range" id="eps" min="0" max="1000" value="400">
+          </label>
+          <label class="check" for="prev"><input type="checkbox" id="prev"> <span><i class="swatch line" aria-hidden="true"></i>Show the stage before as a thin line</span></label>
+          <label class="check" for="chg"><input type="checkbox" id="chg"> <span><i class="swatch" aria-hidden="true"></i>Highlight where the last stage changed the band</span></label>
+        </div>
         <dl class="read">
           <div><dt>Band area</dt><dd id="rA">…</dd></div>
           <div><dt>Area ÷ 2<span class="nc">ε</span></dt><dd id="rL">…</dd></div>
@@ -262,47 +245,622 @@ nav.shell a:hover .pn, nav.shell a:hover .pn b { color: var(--accent); }
           <span class="v-size" aria-hidden="true">This stage's steps (about 0.0078 long) are at least as long as ε, so the band still follows them: 100.0% of it moved from the stage before.</span>
           <span id="verdict" aria-live="polite">Measuring…</span>
         </div>
+        <p class="note">Plate 32's point holds here too: the band keeps changing while a stage adds steps longer than ε, and stops once the new steps are shorter. Turn on the highlight and step through the stages — the moved area shrinks to slivers once 2<sup>−n</sup> falls below ε. The paths are simulated from the chapter's construction; nothing is traced from the book.</p>
       </div>
-
-      <div class="group">
-        <div class="label-row"><span class="label">Reading D from the band</span><span class="value" id="chartStatus">log–log</span></div>
-        <div class="legend" id="sLegend" aria-hidden="true"></div>
-        <div class="chart-box" id="sBox">
-          <svg id="sChart" role="img" aria-label="Log-log chart of band area divided by 2ε against ε, one line per stage, with Wiener's law"></svg>
-          <div class="tip" id="sTip" hidden></div>
-        </div>
-        <p class="exact">Exact D: <b>2</b>. Over the fitted range, Wiener's law predicts a fitted value of <b id="lawD">1.75</b>.</p>
-        <p class="chart-note">Each line is one stage: band area ÷ 2ε, the path's length as seen at resolution ε. The lines share one path at large ε and level off once ε drops below that stage's steps. The dashed line has the slope a dimension of 2 would give; the dotted curve is Wiener's law for the expected area. The measured lines follow the bend of the dotted curve, which is why the fitted D (current stage, ε up to 0.03) stays below 2. Click the chart to set ε.</p>
-        <details class="nums"><summary>Show the numbers</summary><div class="tbl-wrap"><table id="sTable"></table></div></details>
-      </div>
-    </aside>
+    </div>
   </section>
 
-  <section class="notes">
-    <article>
-      <h2>The trail</h2>
-      <p>Chapter 25 builds the planar Brown trail as a random Peano curve. Start with a random segment whose mean-square length is 1. At each pass, push the midpoint of every side in a random direction by a Gaussian distance whose mean square halves from pass to pass. Two halves, each 1/√2 the size of the whole in mean square, give the dimension log 2 / log √2 = 2.</p>
-      <p>A stage here is two passes: stage n has 4<sup>n</sup> steps, each about 2<sup>−n</sup> long. Lengths are in units where the whole path's mean-square span is 1.</p>
-    </article>
-    <article>
-      <h2>Wiener's sausage</h2>
-      <p>Plate 32's caption passes on a rumor that the word "sausage" comes from drawing this band around Norbert Wiener's Brownian curves. Probability theory kept the name. In the plane the band's expected area does not fall like a power of ε. It falls only like 1 / log(1/ε): in these units, about π / ln(1/2ε²), a result of Spitzer (1964).</p>
-    </article>
-    <article>
-      <h2>Why the fitted D falls short of 2</h2>
-      <p>A dimension of 2 would make area ÷ 2ε grow like 1/ε, a straight line of slope −1. The logarithm bends it: the local slope is about −1 + 2 / ln(1/2ε²), so a fit over practical values of ε gives roughly 1.7 to 1.8. D = 2 is reached only in the limit, and only logarithmically. It is the same reason page 235 gives for a strange fact: the trail has dimension 2, yet its area is zero.</p>
-    </article>
-    <article>
-      <h2>The critical stage</h2>
-      <p>Plate 32's point holds here too. The band keeps changing while a stage adds steps longer than ε, and stops once the new steps are shorter. Turn on the highlight and step through the stages: the moved area shrinks to slivers once 2<sup>−n</sup> falls below ε.</p>
-    </article>
+  <!-- ===================== THE MEASURING CHART ===================== -->
+  <section class="plate" id="chart">
+    <div class="plate-head">
+      <p class="no">Chapter 25 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Reading D from the band</h2>
+      <p class="dim" id="chartStatus">log–log</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="schart-legend" id="sLegend" aria-hidden="true"></div>
+        <div class="schart-box" id="sBox">
+          <svg id="sChart" role="img" aria-label="Log-log chart of band area divided by 2ε against ε, one line per stage, with Wiener's law"></svg>
+          <div class="schart-tip" id="sTip" hidden></div>
+        </div>
+        <figcaption><strong>The band as a measuring tool</strong> · hover for the numbers · click to set ε</figcaption>
+        <details class="schart-nums"><summary>Show the numbers</summary><div class="tbl-wrap"><table id="sTable"></table></div></details>
+      </figure>
+      <div class="side">
+        <p class="cap">Plate 32's caption passes on a rumor that the word "sausage" comes from drawing this band around Norbert Wiener's Brownian curves; probability theory kept the name. In the plane the band's expected area does not fall like a power of ε. It falls only like 1 / log(1/ε) — in these units, about π / ln(1/2ε²), a result of Spitzer (1964). Each line is one stage: band area ÷ 2ε, the path's length as seen at resolution ε. The lines share one path at large ε and level off once ε drops below that stage's steps. The dashed line has the slope a dimension of 2 would give; the dotted curve is Wiener's law for the expected area. The measured lines follow the bend of the dotted curve, which is why the fitted D (current stage, ε up to 0.03) stays below 2.</p>
+        <dl class="read">
+          <div><dt>Exact D</dt><dd>2</dd></div>
+          <div><dt>Fitted value Wiener's law predicts</dt><dd id="lawD">1.75</dd></div>
+        </dl>
+        <p class="note">A dimension of 2 would make area ÷ 2ε grow like 1/ε, a straight line of slope −1. The logarithm bends it: the local slope is about −1 + 2 / ln(1/2ε²), so a fit over practical values of ε gives roughly 1.7 to 1.8. D = 2 is reached only in the limit, and only logarithmically. It is the same reason page 235 gives for a strange fact: the trail has dimension 2, yet its area is zero.</p>
+      </div>
+    </div>
   </section>
 
   <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 25, pages 234–235 (the construction and D = 2) and page 32 (Plate 32's caption). The paths are simulated from that construction; nothing is traced from the book. Companion pages: <a href="minkowski-sausage.html">Minkowski Sausage</a> (Plate 32) and <a href="monkeys-tree.html">Mandelbrot's Monkeys Tree</a> (Plate 31).</p>
 </div>
 
 <script>
-// CORE START
+// Shared drawing library: style constants, the zoomable canvas (snapshot while panning), chunked
+// paths, controls and small SVG figures. Loaded before each page's own scripts; pages may extend
+// PRINT with their own inks (PRINT.red = ..., PRINT.light = ...).
+const $ = (id) => document.getElementById(id);
+const fmt = (n) => n.toLocaleString('en-US');
+const PRINT = { paper: '#ecebe6', ink: '#151515', rule: '#c9c8c2', muted: '#66665f', accent: '#2f5f9e', red: '#c2452d', faint: '#bdbbb3', gray: '#8f8e88' };
+const RAMP = [[233, 185, 73], [217, 113, 59], [184, 66, 79], [125, 58, 120], [63, 79, 151], [43, 122, 138]];
+const ramp = (t, a = 1) => {
+  const x = Math.max(0, Math.min(1, t)) * (RAMP.length - 1), i = Math.min(RAMP.length - 2, Math.floor(x)), f = x - i;
+  const c = RAMP[i].map((v, k) => Math.round(v + (RAMP[i + 1][k] - v) * f));
+  return `rgba(${c[0]},${c[1]},${c[2]},${a})`;
+};
+const CAT = ['#151515', '#9a988f', '#2f5f9e', '#c2452d', '#3f8f6c', '#b58a2a', '#6b4e9b', '#5f8fae'];
+
+// ---------- shared plumbing ----------
+function figure(canvas, draw) {
+  const wrap = canvas.parentElement;
+  const f = { canvas, ctx: canvas.getContext('2d'), w: 1, h: 1, dpr: 1, draw };
+  const resize = () => {
+    f.dpr = Math.min(2, window.devicePixelRatio || 1);
+    f.w = wrap.clientWidth || 1; f.h = wrap.clientHeight || 1;
+    canvas.width = Math.round(f.w * f.dpr); canvas.height = Math.round(f.h * f.dpr);
+    f.draw();
+  };
+  new ResizeObserver(resize).observe(wrap);
+  return f;
+}
+function fitBox(f, bb, pad = 0.04) {
+  const w = Math.max(1e-9, bb.x1 - bb.x0), h = Math.max(1e-9, bb.y1 - bb.y0), s = Math.min(f.w / (w * (1 + 2 * pad)), f.h / (h * (1 + 2 * pad)));
+  return { s, ox: f.w / 2 - ((bb.x0 + bb.x1) / 2) * s, oy: f.h / 2 + ((bb.y0 + bb.y1) / 2) * s };
+}
+const toWorld = (f, v) => f.ctx.setTransform(f.dpr * v.s, 0, 0, -f.dpr * v.s, f.dpr * v.ox, f.dpr * v.oy);
+const toScreen = (f) => f.ctx.setTransform(f.dpr, 0, 0, f.dpr, 0, 0);
+function paper(f, color) { f.ctx.setTransform(1, 0, 0, 1, 0, 0); f.ctx.fillStyle = color; f.ctx.fillRect(0, 0, f.canvas.width, f.canvas.height); }
+function polyPath(P, closed = true, upto) {
+  const p = new Path2D(), m = upto === undefined ? P.length / 2 : upto;
+  p.moveTo(P[0], P[1]);
+  for (let i = 1; i < m; i++) p.lineTo(P[2 * i], P[2 * i + 1]);
+  if (closed) p.closePath();
+  return p;
+}
+function bbox(P, bb = { x0: Infinity, x1: -Infinity, y0: Infinity, y1: -Infinity }) {
+  for (let i = 0; i < P.length; i += 2) { bb.x0 = Math.min(bb.x0, P[i]); bb.x1 = Math.max(bb.x1, P[i]); bb.y0 = Math.min(bb.y0, P[i + 1]); bb.y1 = Math.max(bb.y1, P[i + 1]); }
+  return bb;
+}
+function stepButtons(el, values, text, aria, onPick) {
+  const bs = values.map((v) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.textContent = text(v); b.setAttribute('aria-label', aria(v));
+    b.addEventListener('click', () => onPick(v));
+    el.append(b);
+    return b;
+  });
+  const mark = (cur) => bs.forEach((b, i) => b.setAttribute('aria-pressed', String(values[i] === cur)));
+  mark.buttons = bs;
+  return mark;
+}
+// pan and zoom: a quick rescaled snapshot while moving, a full redraw once it settles
+function zoomable(wrapId, canvasId, fitOf, render, opts = {}) {
+  const maxZoom = opts.maxZoom || 400;
+  const wrap = $(wrapId), z = { view: null, user: false, snapView: null, raf: 0, full: 0 };
+  const snap = document.createElement('canvas');
+  const f = figure($(canvasId), () => draw());
+  function touch() { wrap.style.touchAction = z.view && z.view.s > z.view.fit * 1.02 ? 'none' : 'pan-y'; }
+  function draw() {
+    if (!z.view || !z.user) { z.view = fitOf(f); z.view.fit = z.view.s; z.user = false; touch(); }
+    render(f, z.view);
+    snap.width = f.canvas.width; snap.height = f.canvas.height; snap.getContext('2d').drawImage(f.canvas, 0, 0);
+    z.snapView = { s: z.view.s, ox: z.view.ox, oy: z.view.oy };
+  }
+  function quick() {
+    const v = z.view, k = v.s / z.snapView.s, c = f.ctx;
+    c.setTransform(1, 0, 0, 1, 0, 0); c.fillStyle = z.ground || PRINT.paper; c.fillRect(0, 0, f.canvas.width, f.canvas.height);
+    c.drawImage(snap, (v.ox - z.snapView.ox * k) * f.dpr, (v.oy - z.snapView.oy * k) * f.dpr, snap.width * k, snap.height * k);
+  }
+  function schedule() { if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; draw(); }); }
+  function moved() {
+    if (!z.snapView) { schedule(); return; }
+    if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; quick(); });
+    clearTimeout(z.full); z.full = setTimeout(schedule, 160);
+  }
+  function zoomAt(px, py, k) {
+    const v = z.view, ns = Math.min(v.fit * maxZoom, Math.max(v.fit * 0.8, v.s * k)), wx = (px - v.ox) / v.s, wy = (v.oy - py) / v.s;
+    v.s = ns; v.ox = px - wx * ns; v.oy = py + wy * ns; z.user = true; touch(); moved();
+  }
+  function pan(dx, dy) { z.view.ox += dx; z.view.oy += dy; z.user = true; moved(); }
+  wrap.querySelector('[data-z="in"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1.6));
+  wrap.querySelector('[data-z="out"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1 / 1.6));
+  wrap.querySelector('[data-z="fit"]').addEventListener('click', () => { z.user = false; schedule(); });
+  const pts = new Map();
+  let pinch = null, down = null;
+  const local = (e) => { const r = wrap.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+  wrap.addEventListener('pointerdown', (e) => {
+    if (e.target.closest('.view-tools')) return;
+    pts.set(e.pointerId, local(e));
+    down = pts.size === 1 ? { p: local(e), t: performance.now(), moved: 0 } : null;
+    try { wrap.setPointerCapture(e.pointerId); } catch (_) {}
+    if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), m: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2] }; }
+    wrap.classList.add('dragging');
+  });
+  wrap.addEventListener('pointermove', (e) => {
+    if (!pts.has(e.pointerId)) return;
+    const prev = pts.get(e.pointerId), cur = local(e);
+    pts.set(e.pointerId, cur);
+    if (down) down.moved = Math.max(down.moved, Math.hypot(cur[0] - down.p[0], cur[1] - down.p[1]));
+    if (pts.size === 2 && pinch) {
+      const [a, b] = [...pts.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]), m = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+      pan(m[0] - pinch.m[0], m[1] - pinch.m[1]);
+      if (pinch.d > 0) zoomAt(m[0], m[1], d / pinch.d);
+      pinch = { d, m };
+    } else if (pts.size === 1 && (e.pointerType !== 'touch' || z.view.s > z.view.fit * 1.02)) pan(cur[0] - prev[0], cur[1] - prev[1]);
+  });
+  const end = (e) => {
+    if (down && pts.size === 1 && down.moved < 5 && opts.onTap) { const [x, y] = local(e), v = z.view; opts.onTap((x - v.ox) / v.s, (v.oy - y) / v.s); }
+    down = null;
+    pts.delete(e.pointerId); if (pts.size < 2) pinch = null; if (!pts.size) wrap.classList.remove('dragging');
+  };
+  wrap.addEventListener('pointerup', end); wrap.addEventListener('pointercancel', (e) => { down = null; end(e); });
+  wrap.addEventListener('wheel', (e) => { if (!(e.ctrlKey || e.metaKey)) return; e.preventDefault(); const [x, y] = local(e); zoomAt(x, y, Math.exp(-e.deltaY * 0.0045)); }, { passive: false });
+  wrap.addEventListener('dblclick', (e) => { if (e.target.closest('.view-tools')) return; const [x, y] = local(e); zoomAt(x, y, e.shiftKey ? 0.5 : 2); });
+  return { f, z, schedule, refit: () => { z.user = false; schedule(); } };
+}
+// chunked paths: many small paths fill far faster than one path with a hundred thousand pieces
+function chunked(count, add, size = 512) {
+  const out = [];
+  let p = null;
+  for (let i = 0; i < count; i++) { if (i % size === 0) { p = new Path2D(); out.push(p); } add(p, i); }
+  return out;
+}
+// fill and outline in the same colour, so that tiles which only meet along an edge show no hairline seams
+function solid(c, paths, color, lw) {
+  c.fillStyle = color; c.strokeStyle = color; c.lineWidth = lw; c.lineJoin = 'miter';
+  for (const p of paths) { c.fill(p); c.stroke(p); }
+}
+const dot = (c, v, x, y, r = 4, color = PRINT.red) => { c.beginPath(); c.arc(v.ox + x * v.s, v.oy - y * v.s, r, 0, Math.PI * 2); c.fillStyle = color; c.fill(); c.strokeStyle = PRINT.paper; c.lineWidth = 1.5; c.stroke(); };
+
+// a polyline (Float64Array or [[x,y],...]) as SVG points with y flipped
+const svgPts = (P) => (P instanceof Float64Array ? Array.from({ length: P.length / 2 }, (_, i) => [P[2 * i], P[2 * i + 1]]) : P).map(([x, y]) => `${x.toFixed(4)},${(-y).toFixed(4)}`).join(' ');
+function miniCurve(id, P, dots = true) {
+  const pts = P instanceof Float64Array ? Array.from({ length: P.length / 2 }, (_, i) => [P[2 * i], P[2 * i + 1]]) : P;
+  $(id).innerHTML = `<line x1="0" y1="0" x2="1" y2="0" stroke="#8a8a84" stroke-width="0.008" stroke-dasharray="0.025 0.02"/>` +
+    `<polyline points="${svgPts(pts)}" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linejoin="round"/>` +
+    (dots ? `<g fill="currentColor">${pts.map(([x, y], i) => `<circle cx="${x.toFixed(4)}" cy="${(-y).toFixed(4)}" r="${i === 0 || i === pts.length - 1 ? 0.03 : 0.018}"/>`).join('')}</g>` : '');
+}
+function miniTree(id, links, dx = 0) {
+  const ends = new Set(), mid = new Set(), k = (x, y) => `${x.toFixed(4)},${y.toFixed(4)}`;
+  let s = '';
+  for (const [px, py, qx, qy] of links) {
+    s += `<line x1="${(px + dx).toFixed(4)}" y1="${(-py).toFixed(4)}" x2="${(qx + dx).toFixed(4)}" y2="${(-qy).toFixed(4)}" stroke="currentColor" stroke-width="0.02" stroke-linecap="round"/>`;
+    mid.add(k(px + dx, py)); mid.add(k(qx + dx, qy));
+  }
+  s += `<g fill="currentColor">${[...mid].map((p) => { const [x, y] = p.split(',').map(Number); const big = (Math.abs(x - dx) < 1e-6 || Math.abs(x - dx - 1) < 1e-6) && Math.abs(y) < 1e-6; return `<circle cx="${x}" cy="${-y}" r="${big ? 0.03 : 0.018}"/>`; }).join('')}</g>`;
+  return s;
+}
+// canvas transform for a similarity map f = [ar, ai, br, bi, m] composed with the view
+function setMap(f, c, v, fig) {
+  const [ar, ai, br, bi, m] = f, k = fig.dpr * v.s;
+  if (m) c.setTransform(k * ar, -k * ai, k * ai, k * ar, fig.dpr * (v.ox + v.s * br), fig.dpr * (v.oy - v.s * bi));
+  else c.setTransform(k * ar, -k * ai, -k * ai, -k * ar, fig.dpr * (v.ox + v.s * br), fig.dpr * (v.oy - v.s * bi));
+}
+const segPath = (segs, pick) => { const p = new Path2D(); for (const s of segs) if (!pick || pick(s)) { p.moveTo(s[0], s[1]); p.lineTo(s[2], s[3]); } return p; };
+// Plate 64's chevrons, measured from the plate: each interval a→b becomes a thin quadrilateral
+// pointing toward F, the corner the next stage would add (see DECISIONS.md)
+const CHEV_OUT = 0.43, CHEV_IN = 0.235;
+function chevronPaths(P, F, m) {
+  return chunked(m, (p, i) => {
+    const ax = P[2 * i], ay = P[2 * i + 1], bx = P[2 * i + 2], by = P[2 * i + 3], mx = (ax + bx) / 2, my = (ay + by) / 2;
+    const vx = F[2 * i] - mx, vy = F[2 * i + 1] - my;
+    p.moveTo(ax, ay); p.lineTo(mx + CHEV_OUT * vx, my + CHEV_OUT * vy); p.lineTo(bx, by); p.lineTo(mx + CHEV_IN * vx, my + CHEV_IN * vy); p.closePath();
+  });
+}
+
+// The sausage kit, shared by the three pages that measure a curve through its ε-band: Plate 31
+// (monkeys-tree), Plate 32 (minkowski-sausage, this folder) and the Wiener sausage. Loaded after
+// shared/draw.js. It provides the ε scale and its slider mapping, band-area measurement in a pool
+// of workers, the distance-field band painter for the on-screen figure, the slope fit, and the
+// log–log measuring chart with its legend, tooltip and numbers table.
+
+// ---------- ε on a log scale ----------
+function epsScale(lo, hi) {
+  return {
+    lo, hi,
+    fromSlider: (v) => lo * Math.pow(hi / lo, v / 1000),
+    toSlider: (e) => Math.round((1000 * Math.log(e / lo)) / Math.log(hi / lo)),
+    grid: (n) => Array.from({ length: n }, (_, i) => lo * Math.pow(hi / lo, i / (n - 1))),
+  };
+}
+
+// fitted D = 1 − slope of log(area ÷ 2ε) against log ε, over the grid points with ε ≤ fitMax
+function fitSlopeD(grid, vals, fitMax, minPts = 5) {
+  const X = [], Y = [];
+  grid.forEach((e, i) => { if (e <= fitMax && isFinite(vals[i])) { X.push(Math.log(e)); Y.push(Math.log(vals[i])); } });
+  if (X.length < minPts) return NaN;
+  const mx = X.reduce((a, b) => a + b) / X.length, my = Y.reduce((a, b) => a + b) / Y.length;
+  let sxy = 0, sxx = 0;
+  for (let i = 0; i < X.length; i++) { sxy += (X[i] - mx) * (Y[i] - my); sxx += (X[i] - mx) ** 2; }
+  return 1 - sxy / sxx;
+}
+
+// ---------- band areas ----------
+// A round-capped, round-joined stroke of width 2ε is exactly the union of discs of radius ε along
+// the curve. Areas are measured by rasterizing that stroke at about six pixels per ε and summing
+// pixel coverage; diff() is the symmetric difference of two stages' bands, from per-pixel coverage.
+// geom: { path(n) -> Path2D, bbox(n) -> {x0,x1,y0,y1} } for the page's curve at stage/level n.
+function bandKit(createCanvas, geom) {
+  const cnv = createCanvas(), g = cnv.getContext('2d', { willReadFrequently: true });
+  function setup(bb, eps) {
+    const bw = bb.x1 - bb.x0 + 2 * eps, bh = bb.y1 - bb.y0 + 2 * eps;
+    let h = eps / 6;
+    if (Math.max(bw, bh) / h > 2000) h = Math.max(bw, bh) / 2000;
+    const W = Math.ceil(bw / h) + 2, H = Math.ceil(bh / h) + 2;
+    cnv.width = W; cnv.height = H;
+    return { h, W, H, bb };
+  }
+  function render(n, eps, s) {
+    g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, s.W, s.H);
+    g.setTransform(1 / s.h, 0, 0, -1 / s.h, (eps - s.bb.x0) / s.h + 1, (s.bb.y1 + eps) / s.h + 1);
+    g.lineWidth = 2 * eps; g.lineJoin = 'round'; g.lineCap = 'round'; g.strokeStyle = '#000';
+    g.stroke(geom.path(n));
+    return g.getImageData(0, 0, s.W, s.H).data;
+  }
+  const union = (a, b) => ({ x0: Math.min(a.x0, b.x0), x1: Math.max(a.x1, b.x1), y0: Math.min(a.y0, b.y0), y1: Math.max(a.y1, b.y1) });
+  return {
+    area(n, eps) {
+      const s = setup(geom.bbox(n), eps), d = render(n, eps, s);
+      let sum = 0;
+      for (let i = 3; i < d.length; i += 4) sum += d[i];
+      return (sum / 255) * s.h * s.h;
+    },
+    diff(n, m, eps) {
+      const s = setup(union(geom.bbox(n), geom.bbox(m)), eps), a = render(n, eps, s), b = render(m, eps, s);
+      let sum = 0;
+      for (let i = 3; i < a.length; i += 4) sum += Math.abs(a[i] - b[i]);
+      return (sum / 255) * s.h * s.h;
+    },
+  };
+}
+
+// A pool of workers running bandKit over the page's geometry, falling back to the page thread
+// where workers or OffscreenCanvas are missing. The page supplies its geometry twice: `preamble`
+// (a code string defining its construction functions, usually serialized from its own CORE block)
+// with `geomExpr` (an expression string over `cfg` evaluating to the geom object) for the workers,
+// and `localGeom(cfg)` (the same factory as a real function) for the fallback.
+// configure(cfg) ships new geometry data (it must survive structured clone) and drops stale jobs.
+// Jobs: { tag, kind: 'area'|'diff', n, m, eps, done(value) }.
+function measurePool({ preamble, geomExpr, localGeom, size = 2 }) {
+  let seq = 0, gen = 0, cfgNow = null, localKit = null;
+  const jobs = [], pool = [];
+  const runner = { busy: false, job: null };
+  const local = () => localKit || (localKit = bandKit(() => document.createElement('canvas'), localGeom(cfgNow)));
+  try {
+    if (typeof OffscreenCanvas !== 'undefined' && typeof Worker !== 'undefined') {
+      const src = `${bandKit}\n${preamble}\nconst GEOM=(cfg)=>(${geomExpr});\nlet kit=null;\n` +
+        `onmessage=(e)=>{const j=e.data;if(j.type==='cfg'){kit=bandKit(()=>new OffscreenCanvas(1,1),GEOM(j.cfg));return;}` +
+        `postMessage({id:j.id,v:j.kind==='area'?kit.area(j.n,j.eps):kit.diff(j.n,j.m,j.eps)});};`;
+      const url = URL.createObjectURL(new Blob([src], { type: 'text/javascript' }));
+      const n = Math.max(1, Math.min(size, (navigator.hardwareConcurrency || 2) - 1));
+      for (let k = 0; k < n; k++) {
+        const slot = { w: new Worker(url), job: null };
+        slot.w.onmessage = (e) => {
+          const j = slot.job; slot.job = null;
+          if (j && j.id === e.data.id && j.gen === gen) j.done(e.data.v);
+          next();
+        };
+        slot.w.onerror = (e) => {              // a broken worker leaves the pool; its job goes back in line
+          if (e && e.preventDefault) e.preventDefault();
+          pool.splice(pool.indexOf(slot), 1);
+          if (slot.job) jobs.unshift(slot.job);
+          slot.job = null; next();
+        };
+        pool.push(slot);
+      }
+    }
+  } catch (_) { pool.length = 0; }
+  function next() {
+    if (pool.length) {
+      for (const slot of pool) {
+        if (slot.job || !jobs.length) continue;
+        const j = jobs.shift(); j.id = ++seq; slot.job = j;
+        slot.w.postMessage({ id: j.id, kind: j.kind, n: j.n, m: j.m, eps: j.eps });
+      }
+      return;
+    }
+    if (runner.busy || !jobs.length) return;    // no workers: one job at a time on the page
+    const j = jobs.shift();
+    runner.busy = true; runner.job = j;
+    setTimeout(() => {
+      const kit = local(), v = j.kind === 'area' ? kit.area(j.n, j.eps) : kit.diff(j.n, j.m, j.eps);
+      runner.busy = false; runner.job = null;
+      if (j.gen === gen) j.done(v);
+      next();
+    }, 0);
+  }
+  return {
+    configure(cfg) {
+      gen++; cfgNow = cfg; localKit = null; jobs.length = 0;
+      for (const slot of pool) slot.w.postMessage({ type: 'cfg', cfg });
+    },
+    enqueue(job, front) { job.gen = gen; front ? jobs.unshift(job) : jobs.push(job); next(); },
+    cancelTag(tag) { for (let k = jobs.length - 1; k >= 0; k--) if (jobs[k].tag === tag) jobs.splice(k, 1); },
+    pending(test) { return jobs.some(test) || pool.some((s) => s.job && s.job.gen === gen && test(s.job)) || !!(runner.job && runner.job.gen === gen && test(runner.job)); },
+  };
+}
+
+// fill a results store (one Float64Array of grid.length per series key) through the pool
+function queueChart(pool, results, grid, order, onCell) {
+  pool.cancelTag('chart');
+  for (const d of order) {
+    if (!results[d]) results[d] = new Float64Array(grid.length).fill(NaN);
+    for (let i = 0; i < grid.length; i++) {
+      if (!isNaN(results[d][i]) || pool.pending((j) => j.tag === 'chart' && j.d === d && j.i === i)) continue;
+      pool.enqueue({ tag: 'chart', kind: 'area', n: d, eps: grid[i], d, i, done: (v) => { results[d][i] = v / (2 * grid[i]); onCell(); } });
+    }
+  }
+}
+
+// ---------- the on-screen band, from a distance field ----------
+// Stroke the curve one pixel thin, take an exact Euclidean distance transform (Felzenszwalb &
+// Huttenlocher), and fill the pixels within ε (see DECISIONS.md: the cost is per pixel, not per
+// step or per ε). The band is a plate reproduction, so its inks are fixed print colours.
+function bandPainter() {
+  const seedC = document.createElement('canvas'), seedG = seedC.getContext('2d', { willReadFrequently: true });
+  const bandC = document.createElement('canvas'), bandG = bandC.getContext('2d');
+  const fields = new Map();
+  function edtSq(seed, w, h) {
+    const N = w * h, g = new Float32Array(N), INF = 1e20;
+    for (let i = 0; i < N; i++) g[i] = seed[i] ? 0 : INF;
+    const L = Math.max(w, h), f = new Float64Array(L), d = new Float64Array(L), v = new Int32Array(L), z = new Float64Array(L + 1);
+    const pass = (n) => {
+      let k = 0; v[0] = 0; z[0] = -INF; z[1] = INF;
+      for (let q = 1; q < n; q++) {
+        let s = ((f[q] + q * q) - (f[v[k]] + v[k] * v[k])) / (2 * q - 2 * v[k]);
+        while (s <= z[k]) { k--; s = ((f[q] + q * q) - (f[v[k]] + v[k] * v[k])) / (2 * q - 2 * v[k]); }
+        k++; v[k] = q; z[k] = s; z[k + 1] = INF;
+      }
+      k = 0;
+      for (let q = 0; q < n; q++) { while (z[k + 1] < q) k++; const t = q - v[k]; d[q] = t * t + f[v[k]]; }
+    };
+    for (let x = 0; x < w; x++) { for (let y = 0; y < h; y++) f[y] = g[y * w + x]; pass(h); for (let y = 0; y < h; y++) g[y * w + x] = d[y]; }
+    for (let y = 0; y < h; y++) { const o = y * w; for (let x = 0; x < w; x++) f[x] = g[o + x]; pass(w); for (let x = 0; x < w; x++) g[o + x] = d[x]; }
+    return g;
+  }
+  // distance map for a set of paths over the visible canvas plus a margin wide enough for radius R (device px)
+  function field(name, paths, R, fig, v) {
+    const W = fig.canvas.width, H = fig.canvas.height;
+    const key = `${W}|${H}|${fig.dpr}|${v.s}|${v.ox}|${v.oy}`;
+    const c = fields.get(name);
+    if (c && c.key === key && c.M >= Math.ceil(R) + 2) return c;
+    const M = Math.ceil(R * 1.5) + 3;                 // headroom, so dragging ε wider rarely rebuilds
+    let k = 1;
+    while (((W + 2 * M) / k) * ((H + 2 * M) / k) > 3.0e6) k *= 2;
+    const w = Math.ceil((W + 2 * M) / k), h = Math.ceil((H + 2 * M) / k), a = (fig.dpr * v.s) / k;
+    seedC.width = w; seedC.height = h;
+    seedG.setTransform(a, 0, 0, -a, (fig.dpr * v.ox + M) / k, (fig.dpr * v.oy + M) / k);
+    seedG.lineWidth = 1 / a; seedG.lineJoin = 'round'; seedG.lineCap = 'round'; seedG.strokeStyle = '#000';
+    for (const p of paths) seedG.stroke(p);
+    const img = seedG.getImageData(0, 0, w, h).data, seed = new Uint8Array(w * h);
+    for (let i = 0, j = 3; i < seed.length; i++, j += 4) seed[i] = img[j] > 30 ? 1 : 0;
+    const out = { key, M, k, w, h, d2: edtSq(seed, w, h) };
+    fields.delete(name); fields.set(name, out);
+    while (fields.size > 4) fields.delete(fields.keys().next().value);
+    return out;
+  }
+  const ACC = [47, 95, 158], CHG = [194, 69, 45], SOFT = 0.16;   // PRINT.accent, PRINT.red
+  // spec: { key, paths } for the band, and optionally chg: { aKey, aPaths, bKey, bPaths } to
+  // colour the symmetric difference between two stages' bands in the change ink
+  function draw(fig, v, eps, spec) {
+    const W = fig.canvas.width, H = fig.canvas.height, R = eps * v.s * fig.dpr;
+    const F = field(spec.key, spec.paths, R, fig, v);
+    const A = spec.chg ? field(spec.chg.aKey, spec.chg.aPaths, R, fig, v) : null;
+    const B = spec.chg ? field(spec.chg.bKey, spec.chg.bPaths, R, fig, v) : null;
+    bandC.width = W; bandC.height = H;
+    const img = bandG.createImageData(W, H), px = img.data;
+    const P = Math.max(3, Math.round(3.5 * fig.dpr)), dot = fig.dpr > 1.5 ? 2 : 1;  // screen-tone stipple, as in the book
+    const reach2 = (R + 0.5) * (R + 0.5), t = 0.6;
+    const dist = (f, X, Y) => Math.sqrt(f.d2[(((Y + f.M) / f.k) | 0) * f.w + (((X + f.M) / f.k) | 0)]) * f.k;
+    for (let Y = 0; Y < H; Y++) {
+      const fy = (((Y + F.M) / F.k) | 0) * F.w;
+      for (let X = 0; X < W; X++) {
+        const d2 = F.d2[fy + (((X + F.M) / F.k) | 0)] * F.k * F.k;
+        if (spec.chg) {
+          const da = dist(A, X, Y), db = dist(B, X, Y);
+          if ((da <= R - t && db > R + t) || (db <= R - t && da > R + t)) {
+            const o = (Y * W + X) * 4;
+            px[o] = CHG[0]; px[o + 1] = CHG[1]; px[o + 2] = CHG[2]; px[o + 3] = 225;
+            continue;
+          }
+        }
+        if (d2 > reach2) continue;
+        const cov = Math.min(1, R + 0.5 - Math.sqrt(d2)), o = (Y * W + X) * 4;
+        const isDot = X % P < dot && Y % P < dot;
+        px[o] = ACC[0]; px[o + 1] = ACC[1]; px[o + 2] = ACC[2];
+        px[o + 3] = Math.round(255 * cov * (isDot ? 0.6 : SOFT));
+      }
+    }
+    bandG.putImageData(img, 0, 0);
+    fig.ctx.setTransform(1, 0, 0, 1, 0, 0);
+    fig.ctx.drawImage(bandC, 0, 0);
+  }
+  return { draw, reset: () => fields.clear() };
+}
+
+// ---------- the measuring chart ----------
+// A log–log SVG chart of area ÷ 2ε against ε, one line per stage, with a hover tooltip, a numbers
+// table and click-to-set-ε. Like the figures, it is drawn on printed paper with fixed inks, so it
+// reads the same in both themes. The kit injects its own stylesheet once.
+const SAUSAGE_CSS = `
+.schart-legend { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 11.5px; color: var(--muted); }
+.schart-legend span { display: inline-flex; align-items: center; gap: 5px; }
+.schart-legend span.cur { color: var(--text); font-weight: 600; }
+.schart-legend i { display: inline-block; width: 16px; height: 0; border-top: 2px solid #8f8e88; }
+.schart-legend i.cur { border-top-color: #2f5f9e; }
+.schart-legend i.ref { border-top: 1.5px dashed #151515; opacity: 0.6; }
+.schart-legend i.law { border-top: 2px dotted #151515; opacity: 0.75; }
+.schart-box { position: relative; }
+.schart-box svg { display: block; width: 100%; height: auto; background: #ecebe6; outline: 1px solid var(--rule); touch-action: pan-y; cursor: crosshair; }
+.schart-box svg .grid line { stroke: #dddcd5; stroke-width: 1; }
+.schart-box svg text { font-family: var(--f-mono); font-size: 10px; fill: #66665f; }
+.schart-box svg .ser { fill: none; stroke: #8f8e88; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.schart-box svg .ser.cur { stroke: #2f5f9e; }
+.schart-box svg .ref { fill: none; stroke: #151515; stroke-width: 1.25; stroke-dasharray: 4 3; opacity: 0.6; }
+.schart-box svg .law { fill: none; stroke: #151515; stroke-width: 1.6; stroke-dasharray: 1.5 3.5; stroke-linecap: round; opacity: 0.75; }
+.schart-box svg .mark { stroke: #2f5f9e; stroke-width: 1; }
+.schart-box svg .dot { fill: #2f5f9e; stroke: #ecebe6; stroke-width: 2; }
+.schart-box svg .hair { stroke: #66665f; stroke-width: 1; }
+.schart-tip { position: absolute; top: 8px; pointer-events: none; z-index: 2; background: var(--surface);
+  border: 1px solid var(--rule); padding: 6px 8px; display: grid; gap: 2px; min-width: 112px;
+  font-size: 11.5px; color: var(--muted); box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); }
+.schart-tip .hd { font-family: var(--f-mono); color: var(--text); margin-bottom: 2px; }
+.schart-tip .row { display: flex; align-items: center; gap: 6px; }
+.schart-tip .row i { display: inline-block; width: 12px; border-top: 2px solid #8f8e88; }
+.schart-tip .row b { font-family: var(--f-mono); font-weight: 500; color: var(--text); min-width: 3.2em; text-align: right; }
+.schart-nums summary { cursor: pointer; font-size: 12.5px; font-weight: 600; }
+.schart-nums .tbl-wrap { overflow-x: auto; margin-top: 6px; }
+.schart-nums table { border-collapse: collapse; width: 100%; font-family: var(--f-mono); font-size: 11.5px; font-variant-numeric: tabular-nums; }
+.schart-nums th, .schart-nums td { padding: 3px 6px; text-align: right; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+.schart-nums th { color: var(--muted); font-weight: 500; }`;
+let sausageCssDone = false;
+
+// cfg: { ids: { box, svg, tip, legend, table, status? }, grid, series: [{ key, label }],
+//        results, getCurrent(), getEps(), onPick(e), xTicks, yFloor: [ymin, ymax],
+//        refs?: (X, Y, f, results) => svg string, extraLegend?: [{ cls, label }],
+//        extraCols?: [{ label, value(i) }], extraTipRows?: (i, row) => void, serOpacity(d) }
+function sausageChart(cfg) {
+  if (!sausageCssDone) {
+    const st = document.createElement('style');
+    st.textContent = SAUSAGE_CSS;
+    document.head.append(st);
+    sausageCssDone = true;
+  }
+  const box = $(cfg.ids.box), svg = $(cfg.ids.svg), tip = $(cfg.ids.tip), table = cfg.ids.table && $(cfg.ids.table);
+  const grid = cfg.grid;
+  let geo = null, hoverIdx = -1;
+  (function buildLegend() {
+    const lg = $(cfg.ids.legend);
+    for (const s of cfg.series) {
+      const sp = document.createElement('span'), i = document.createElement('i');
+      sp.dataset.d = s.key; sp.append(i, document.createTextNode(s.label)); lg.append(sp);
+    }
+    for (const { cls, label } of cfg.extraLegend || []) {
+      const sp = document.createElement('span'), i = document.createElement('i');
+      i.className = cls; sp.append(i, document.createTextNode(label)); lg.append(sp);
+    }
+  })();
+  function paintLegend() {
+    $(cfg.ids.legend).querySelectorAll('span[data-d]').forEach((sp) => {
+      const d = +sp.dataset.d, cur = d === cfg.getCurrent(), i = sp.querySelector('i');
+      sp.classList.toggle('cur', cur);
+      i.classList.toggle('cur', cur);
+      i.style.opacity = cur ? 1 : cfg.serOpacity(d);
+    });
+  }
+  function interpL(r, e) {
+    for (let i = 0; i < grid.length - 1; i++) {
+      if (e >= grid[i] && e <= grid[i + 1] && isFinite(r[i]) && isFinite(r[i + 1])) {
+        const f = Math.log(e / grid[i]) / Math.log(grid[i + 1] / grid[i]);
+        return Math.exp(Math.log(r[i]) + f * (Math.log(r[i + 1]) - Math.log(r[i])));
+      }
+    }
+    return NaN;
+  }
+  function draw() {
+    const W = Math.max(240, Math.round(box.clientWidth || 320)), H = 226;
+    const ml = 34, mr = 10, mt = 10, mb = 34;
+    let [ymin, ymax] = cfg.yFloor;
+    const seen = (v) => { if (isFinite(v)) { ymax = Math.max(ymax, v * 1.12); ymin = Math.min(ymin, v / 1.12); } };
+    for (const d in cfg.results) for (const v of cfg.results[d]) seen(v);
+    if (cfg.alsoScale) cfg.alsoScale.forEach(seen);
+    const lo = grid[0], hi = grid[grid.length - 1];
+    const lx0 = Math.log(lo), lx1 = Math.log(hi), ly0 = Math.log(ymin), ly1 = Math.log(ymax);
+    const X = (e) => ml + ((Math.log(e) - lx0) / (lx1 - lx0)) * (W - ml - mr);
+    const Y = (v) => mt + (1 - (Math.log(v) - ly0) / (ly1 - ly0)) * (H - mt - mb);
+    geo = { X, W };
+    const f = (v) => v.toFixed(1);
+    const xt = cfg.xTicks, yt = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000].filter((v) => v >= ymin && v <= ymax);
+    let s = '<g class="grid">';
+    for (const t of xt) s += `<line x1="${f(X(t))}" x2="${f(X(t))}" y1="${mt}" y2="${H - mb}"/>`;
+    for (const t of yt) s += `<line x1="${ml}" x2="${W - mr}" y1="${f(Y(t))}" y2="${f(Y(t))}"/>`;
+    s += '</g>';
+    for (const t of xt) s += `<text x="${f(X(t))}" y="${H - mb + 13}" text-anchor="middle">${t}</text>`;
+    for (const t of yt) s += `<text x="${ml - 5}" y="${f(Y(t) + 3.5)}" text-anchor="end">${t}</text>`;
+    s += `<text x="${W - mr - 2}" y="${mt + 10}" text-anchor="end">area ÷ 2ε</text>`;
+    s += `<text x="${f((ml + W - mr) / 2)}" y="${H - 4}" text-anchor="middle">band radius ε (log scale)</text>`;
+    if (cfg.refs) s += cfg.refs(X, Y, f, cfg.results);
+    const cur = cfg.getCurrent();
+    const order = cfg.series.map((x) => x.key).filter((d) => d !== cur).concat([cur]);
+    for (const d of order) {
+      const r = cfg.results[d]; if (!r) continue;
+      let p = '';
+      r.forEach((v, i) => { if (isFinite(v)) p += (p ? 'L' : 'M') + f(X(grid[i])) + ' ' + f(Y(v)); });
+      if (p) s += `<path class="ser${d === cur ? ' cur' : ''}" style="stroke-opacity:${d === cur ? 1 : cfg.serOpacity(d)}" d="${p}"/>`;
+    }
+    if (hoverIdx >= 0) s += `<line class="hair" x1="${f(X(grid[hoverIdx]))}" x2="${f(X(grid[hoverIdx]))}" y1="${mt}" y2="${H - mb}"/>`;
+    const ex = X(Math.min(hi, Math.max(lo, cfg.getEps())));
+    s += `<line class="mark" x1="${f(ex)}" x2="${f(ex)}" y1="${mt}" y2="${H - mb}"/>`;
+    const cr = cfg.results[cur];
+    if (cr) { const v = interpL(cr, cfg.getEps()); if (isFinite(v)) s += `<circle class="dot" cx="${f(ex)}" cy="${f(Y(v))}" r="4"/>`; }
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    svg.innerHTML = s;
+    paintLegend();
+    if (table) drawTable();
+    if (cfg.ids.status) progress();
+  }
+  function progress() {
+    let done = 0, total = 0;
+    for (const { key } of cfg.series) { const r = cfg.results[key]; if (!r) continue; for (const v of r) { total++; if (isFinite(v)) done++; } }
+    $(cfg.ids.status).textContent = done < total ? `measuring ${done}/${total}` : 'log–log';
+  }
+  function drawTable() {
+    table.textContent = '';
+    const tr0 = document.createElement('tr');
+    ['ε', ...cfg.series.map((x) => x.label), ...(cfg.extraCols || []).map((c) => c.label)]
+      .forEach((c) => { const th = document.createElement('th'); th.textContent = c; tr0.append(th); });
+    table.append(tr0);
+    grid.forEach((e, i) => {
+      const tr = document.createElement('tr');
+      [e.toFixed(4),
+        ...cfg.series.map(({ key }) => { const r = cfg.results[key]; return r && isFinite(r[i]) ? r[i].toFixed(2) : '…'; }),
+        ...(cfg.extraCols || []).map((c) => c.value(i))]
+        .forEach((c) => { const td = document.createElement('td'); td.textContent = c; tr.append(td); });
+      table.append(tr);
+    });
+  }
+  function nearestIdx(e) {
+    const r = svg.getBoundingClientRect(), x = (e.clientX - r.left) * (geo.W / r.width);
+    let best = 0, bd = Infinity;
+    grid.forEach((g, i) => { const dx = Math.abs(geo.X(g) - x); if (dx < bd) { bd = dx; best = i; } });
+    return best;
+  }
+  function showTip(i) {
+    tip.textContent = '';
+    const hd = document.createElement('div'); hd.className = 'hd'; hd.textContent = `ε = ${grid[i].toFixed(4)}`; tip.append(hd);
+    const row = (keyStyle, value, label) => {
+      const r = document.createElement('div'); r.className = 'row';
+      const key = document.createElement('i'); Object.assign(key.style, keyStyle);
+      const b = document.createElement('b'); b.textContent = value;
+      r.append(key, b, document.createTextNode(label)); tip.append(r);
+    };
+    for (const { key, label } of [...cfg.series].reverse()) {
+      const r = cfg.results[key], v = r ? r[i] : NaN;
+      row({ borderTopColor: key === cfg.getCurrent() ? '#2f5f9e' : '#8f8e88', opacity: key === cfg.getCurrent() ? 1 : cfg.serOpacity(key) },
+        isFinite(v) ? v.toFixed(2) : '…', label.toLowerCase());
+    }
+    if (cfg.extraTipRows) cfg.extraTipRows(i, row);
+    tip.hidden = false;
+    const bw = box.clientWidth, tw = tip.offsetWidth, px = (geo.X(grid[i]) / geo.W) * bw;
+    tip.style.left = (px + 12 + tw > bw ? Math.max(0, px - 12 - tw) : px + 12) + 'px';
+  }
+  svg.addEventListener('pointermove', (e) => { if (!geo) return; hoverIdx = nearestIdx(e); draw(); showTip(hoverIdx); });
+  svg.addEventListener('pointerleave', () => { hoverIdx = -1; tip.hidden = true; draw(); });
+  svg.addEventListener('click', (e) => { if (geo) cfg.onPick(grid[nearestIdx(e)]); });
+  new ResizeObserver(() => draw()).observe(box);
+  return { draw };
+}
+
+// The Wiener sausage: a simulated planar Brown trail (chapter 25's midpoint construction) in its
+// ε-band. Geometry and page behaviour; the band measurement, band painter and measuring chart come
+// from the sausage kit (pages/minkowski-sausage/sausage.js), the canvas plumbing from shared/draw.js.
+// CORE START (also shipped to the measuring workers)
 const KMAX = 18;                                  // finest construction: 2^18 = 262,144 steps (stage 9)
 function mulberry32(a) {
   return function () {
@@ -338,54 +896,30 @@ function brownPath(seed) {
   return { xs, ys };
 }
 const strideOf = (n) => 1 << (KMAX - 2 * n);      // stage n uses every (4^(9−n))th point: 4^n steps
-// Band areas, measured by rasterizing a round-capped, round-joined stroke of width 2ε (exactly the union of discs)
-// and summing its pixel coverage. Runs in a worker when it can; the same code runs on the page otherwise.
-function makeMeasurer(createCanvas) {
-  let P = null, paths = {}, bb = null;
-  const cnv = createCanvas(), g = cnv.getContext('2d', { willReadFrequently: true });
-  function setPath(xs, ys) {
-    P = { xs, ys }; paths = {};
-    let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
-    for (let i = 0; i < xs.length; i++) { const x = xs[i], y = ys[i]; if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
-    bb = { x0, x1, y0, y1 };
-  }
-  function path(n) {
-    if (!paths[n]) {
-      const st = strideOf(n), p = new Path2D();
-      p.moveTo(P.xs[0], P.ys[0]);
-      for (let i = st; i < P.xs.length; i += st) p.lineTo(P.xs[i], P.ys[i]);
-      paths[n] = p;
-    }
-    return paths[n];
-  }
-  function setup(eps) {
-    const bw = bb.x1 - bb.x0 + 2 * eps, bh = bb.y1 - bb.y0 + 2 * eps;
-    let h = eps / 6;
-    if (Math.max(bw, bh) / h > 2000) h = Math.max(bw, bh) / 2000;
-    const W = Math.ceil(bw / h) + 2, H = Math.ceil(bh / h) + 2;
-    cnv.width = W; cnv.height = H;
-    return { h, W, H };
-  }
-  function render(n, eps, s) {
-    g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, s.W, s.H);
-    g.setTransform(1 / s.h, 0, 0, -1 / s.h, (eps - bb.x0) / s.h + 1, (bb.y1 + eps) / s.h + 1);
-    g.lineWidth = 2 * eps; g.lineJoin = 'round'; g.lineCap = 'round'; g.strokeStyle = '#000';
-    g.stroke(path(n));
-    return g.getImageData(0, 0, s.W, s.H).data;
-  }
+// the sampled path with its box, as the band measurer wants it
+function wienerGeom(cfg) {
+  const paths = {};
+  let bb = null;
   return {
-    setPath,
-    area(n, eps) {
-      const s = setup(eps), d = render(n, eps, s);
-      let sum = 0;
-      for (let i = 3; i < d.length; i += 4) sum += d[i];
-      return (sum / 255) * s.h * s.h;
+    path(n) {
+      if (!paths[n]) {
+        const st = strideOf(n), p = new Path2D();
+        p.moveTo(cfg.xs[0], cfg.ys[0]);
+        for (let i = st; i < cfg.xs.length; i += st) p.lineTo(cfg.xs[i], cfg.ys[i]);
+        paths[n] = p;
+      }
+      return paths[n];
     },
-    diff(n, m, eps) {
-      const s = setup(eps), a = render(n, eps, s), b = render(m, eps, s);
-      let sum = 0;
-      for (let i = 3; i < a.length; i += 4) sum += Math.abs(a[i] - b[i]);
-      return (sum / 255) * s.h * s.h;
+    bbox() {
+      if (!bb) {
+        let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+        for (let i = 0; i < cfg.xs.length; i++) {
+          const x = cfg.xs[i], y = cfg.ys[i];
+          if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y;
+        }
+        bb = { x0, x1, y0, y1 };
+      }
+      return bb;
     },
   };
 }
@@ -394,26 +928,14 @@ const lawArea = (e) => Math.PI / Math.log(1 / (2 * e * e));
 // CORE END
 
 (() => {
-  const $ = (id) => document.getElementById(id);
-  const wrap = $('wrap'), cv = $('cv'), ctx = cv.getContext('2d');
-  const fmt = (n) => n.toLocaleString('en-US');
   const NMIN = 4, NMAX = 9, STAGES = [4, 5, 6, 7, 8, 9];
-  const EPS_MIN = 0.004, EPS_MAX = 0.15, EPS_N = 13, FIT_MAX = 0.031;
-  const EPS_GRID = Array.from({ length: EPS_N }, (_, i) => EPS_MIN * Math.pow(EPS_MAX / EPS_MIN, i / (EPS_N - 1)));
-  const sliderToEps = (v) => EPS_MIN * Math.pow(EPS_MAX / EPS_MIN, v / 1000);
-  const epsToSlider = (e) => Math.round(1000 * Math.log(e / EPS_MIN) / Math.log(EPS_MAX / EPS_MIN));
+  const ES = epsScale(0.004, 0.15), EPS_N = 13, FIT_MAX = 0.031;
+  const EPS_GRID = ES.grid(EPS_N);
   const fmtEps = (e) => e.toFixed(e < 0.01 ? 4 : 3);
 
-  const state = { seed: 7, n: 7, eps: 0.01, prev: false, chg: false, view: null, userView: false };
-  let colors = {}, dpr = 1, path = null, bbox = null;
+  const state = { seed: 7, n: 7, eps: 0.01, prev: false, chg: false };
+  let path = null, bbox = null, stagePaths = {};
 
-  function readColors() {
-    const cs = getComputedStyle(document.documentElement), g = (k) => cs.getPropertyValue(k).trim();
-    colors = { ink: g('--ink'), plate: g('--plate'), accent: g('--accent'), soft: g('--accent-soft'), muted: g('--muted'), change: g('--change') };
-  }
-
-  // ---------- geometry ----------
-  let stagePaths = {};
   function stagePath(n) {
     if (!stagePaths[n]) {
       const st = strideOf(n), p = new Path2D();
@@ -434,152 +956,37 @@ const lawArea = (e) => Math.PI / Math.log(1 / (2 * e * e));
     return { x0: bbox.x0 - p, x1: bbox.x1 + p, y0: bbox.y0 - p, y1: bbox.y1 + p };
   }
 
-  // ---------- view ----------
-  const cssSize = () => ({ w: wrap.clientWidth, h: wrap.clientHeight });
-  function fitView() {
-    const { w, h } = cssSize(), b = bounds();
-    const s = Math.min(w / (b.x1 - b.x0), h / (b.y1 - b.y0));
-    state.view = { s, ox: w / 2 - ((b.x0 + b.x1) / 2) * s, oy: h / 2 + ((b.y0 + b.y1) / 2) * s, fit: s };
-    state.userView = false; updateTouch();
+  // ---------- the figure ----------
+  const painter = bandPainter();
+  function marker(f, v, wx, wy, filled, text) {
+    const c = f.ctx, x = v.ox + wx * v.s, y = v.oy - wy * v.s;
+    toScreen(f);
+    c.beginPath(); c.arc(x, y, 4.5, 0, Math.PI * 2);
+    c.fillStyle = filled ? PRINT.ink : PRINT.paper; c.fill();
+    c.lineWidth = 1.75; c.strokeStyle = PRINT.ink; c.stroke();
+    c.font = '600 12px "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif';
+    c.textAlign = 'left'; c.textBaseline = 'middle';
+    c.lineJoin = 'round'; c.lineWidth = 4; c.strokeStyle = PRINT.paper;   // halo, so the label reads over a dense trail
+    c.strokeText(text, x + 9, y - 10);
+    c.fillStyle = PRINT.ink; c.fillText(text, x + 9, y - 10);
   }
-  function zoomAt(px, py, f) {
-    const v = state.view, ns = Math.min(v.fit * 800, Math.max(v.fit * 0.6, v.s * f));
-    const wx = (px - v.ox) / v.s, wy = (v.oy - py) / v.s;
-    v.s = ns; v.ox = px - wx * ns; v.oy = py + wy * ns;
-    state.userView = true; updateTouch(); scheduleView();
-  }
-  function panBy(dx, dy) { state.view.ox += dx; state.view.oy += dy; state.userView = true; scheduleView(); }
-  function updateTouch() { wrap.style.touchAction = state.view && state.view.s > state.view.fit * 1.02 ? 'none' : 'pan-y'; }
-  function resize() {
-    dpr = Math.min(2, window.devicePixelRatio || 1);
-    const { w, h } = cssSize();
-    cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
-    if (!state.view || !state.userView) fitView();
-    drawMain();
-  }
-
-  // ---------- drawing ----------
-  const setWorld = (c) => { const v = state.view; c.setTransform(dpr * v.s, 0, 0, -dpr * v.s, dpr * v.ox, dpr * v.oy); };
-  // The band on screen comes from a distance map: draw the path thin, find each pixel's distance to it, and fill
-  // the pixels within ε. The cost does not grow with the number of steps or the width of the band.
-  function parseColor(c) {
-    let m = /^#?([0-9a-f]{6})$/i.exec(c);
-    if (m) { const v = parseInt(m[1], 16); return [(v >> 16) & 255, (v >> 8) & 255, v & 255, 1]; }
-    m = /rgba?\(([^)]+)\)/i.exec(c);
-    if (m) { const p = m[1].split(',').map((s) => parseFloat(s)); return [p[0], p[1], p[2], p.length > 3 ? p[3] : 1]; }
-    return [40, 88, 149, 1];
-  }
-  function edtSq(seed, w, h) {
-    const N = w * h, g = new Float32Array(N), INF = 1e20;
-    for (let i = 0; i < N; i++) g[i] = seed[i] ? 0 : INF;
-    const L = Math.max(w, h), f = new Float64Array(L), d = new Float64Array(L), v = new Int32Array(L), z = new Float64Array(L + 1);
-    const pass = (n) => {
-      let k = 0; v[0] = 0; z[0] = -INF; z[1] = INF;
-      for (let q = 1; q < n; q++) {
-        let s = ((f[q] + q * q) - (f[v[k]] + v[k] * v[k])) / (2 * q - 2 * v[k]);
-        while (s <= z[k]) { k--; s = ((f[q] + q * q) - (f[v[k]] + v[k] * v[k])) / (2 * q - 2 * v[k]); }
-        k++; v[k] = q; z[k] = s; z[k + 1] = INF;
-      }
-      k = 0;
-      for (let q = 0; q < n; q++) { while (z[k + 1] < q) k++; const t = q - v[k]; d[q] = t * t + f[v[k]]; }
-    };
-    for (let x = 0; x < w; x++) { for (let y = 0; y < h; y++) f[y] = g[y * w + x]; pass(h); for (let y = 0; y < h; y++) g[y * w + x] = d[y]; }
-    for (let y = 0; y < h; y++) { const o = y * w; for (let x = 0; x < w; x++) f[x] = g[o + x]; pass(w); for (let x = 0; x < w; x++) g[o + x] = d[x]; }
-    return g;
-  }
-  const seedC = document.createElement('canvas'), seedG = seedC.getContext('2d', { willReadFrequently: true });
-  const fields = new Map();
-  function field(name, paths, R) {
-    const v = state.view, W = cv.width, H = cv.height;
-    const key = `${state.seed}|${W}|${H}|${dpr}|${v.s}|${v.ox}|${v.oy}`;
-    const c = fields.get(name);
-    if (c && c.key === key && c.M >= Math.ceil(R) + 2) return c;
-    const M = Math.ceil(R * 1.5) + 3;
-    let k = 1;
-    while (((W + 2 * M) / k) * ((H + 2 * M) / k) > 3.0e6) k *= 2;
-    const w = Math.ceil((W + 2 * M) / k), h = Math.ceil((H + 2 * M) / k), a = (dpr * v.s) / k;
-    seedC.width = w; seedC.height = h;
-    seedG.setTransform(a, 0, 0, -a, (dpr * v.ox + M) / k, (dpr * v.oy + M) / k);
-    seedG.lineWidth = 1 / a; seedG.lineJoin = 'round'; seedG.lineCap = 'round'; seedG.strokeStyle = '#000';
-    for (const p of paths) seedG.stroke(p);
-    const img = seedG.getImageData(0, 0, w, h).data, seed = new Uint8Array(w * h);
-    for (let i = 0, j = 3; i < seed.length; i++, j += 4) seed[i] = img[j] > 30 ? 1 : 0;
-    const out = { key, M, k, w, h, d2: edtSq(seed, w, h) };
-    fields.delete(name); fields.set(name, out);
-    while (fields.size > 4) fields.delete(fields.keys().next().value);
-    return out;
-  }
-  const bandC = document.createElement('canvas'), bandG = bandC.getContext('2d');
-  function drawBand() {
-    const n = state.n, W = cv.width, H = cv.height, R = state.eps * state.view.s * dpr;
-    const F = field(`band|${n}`, [stagePath(n)], R);
-    const chg = state.chg && n > NMIN - 1;
-    const B = chg ? field(`band|${n - 1}`, [stagePath(n - 1)], R) : null;
-    bandC.width = W; bandC.height = H;
-    const img = bandG.createImageData(W, H), px = img.data;
-    const [ar, ag, ab] = parseColor(colors.accent), softA = parseColor(colors.soft)[3], [cr, cg, cb] = parseColor(colors.change);
-    const P = Math.max(3, Math.round(3.5 * dpr)), dot = dpr > 1.5 ? 2 : 1;
-    const reach2 = (R + 0.5) * (R + 0.5), t = 0.6;
-    for (let Y = 0; Y < H; Y++) {
-      const fy = ((Y + F.M) / F.k | 0) * F.w;
-      for (let X = 0; X < W; X++) {
-        const d2 = F.d2[fy + ((X + F.M) / F.k | 0)] * F.k * F.k;
-        if (chg) {
-          const db = Math.sqrt(B.d2[((Y + B.M) / B.k | 0) * B.w + ((X + B.M) / B.k | 0)]) * B.k, da = Math.sqrt(d2);
-          if ((da <= R - t && db > R + t) || (db <= R - t && da > R + t)) { const o = (Y * W + X) * 4; px[o] = cr; px[o + 1] = cg; px[o + 2] = cb; px[o + 3] = 225; continue; }
-        }
-        if (d2 > reach2) continue;
-        const cov = Math.min(1, R + 0.5 - Math.sqrt(d2)), o = (Y * W + X) * 4, isDot = (X % P) < dot && (Y % P) < dot;
-        px[o] = ar; px[o + 1] = ag; px[o + 2] = ab;
-        px[o + 3] = Math.round(255 * cov * (isDot ? 0.6 : softA));
-      }
-    }
-    bandG.putImageData(img, 0, 0);
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.drawImage(bandC, 0, 0);
-  }
-  function marker(wx, wy, filled, text) {
-    const v = state.view, x = v.ox + wx * v.s, y = v.oy - wy * v.s;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.beginPath(); ctx.arc(x, y, 4.5, 0, Math.PI * 2);
-    ctx.fillStyle = filled ? colors.ink : colors.plate; ctx.fill();
-    ctx.lineWidth = 1.75; ctx.strokeStyle = colors.ink; ctx.stroke();
-    ctx.font = '600 12px "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif';
-    ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
-    ctx.lineJoin = 'round'; ctx.lineWidth = 4; ctx.strokeStyle = colors.plate;   // halo, so the label reads over a dense trail
-    ctx.strokeText(text, x + 9, y - 10);
-    ctx.fillStyle = colors.ink; ctx.fillText(text, x + 9, y - 10);
-  }
-  function drawMain() {
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.fillStyle = colors.plate; ctx.fillRect(0, 0, cv.width, cv.height);
-    const n = state.n, s = state.view.s;
-    drawBand();
-    setWorld(ctx);
-    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
-    ctx.strokeStyle = colors.ink; ctx.lineWidth = 1 / s;
-    ctx.stroke(stagePath(n));
-    if (state.prev && n > NMIN - 1) { ctx.strokeStyle = colors.accent; ctx.lineWidth = 1.6 / s; ctx.stroke(stagePath(n - 1)); }
+  function render(f, v) {
+    paper(f, PRINT.paper);
+    const n = state.n;
+    const spec = { key: `band|${n}`, paths: [stagePath(n)] };
+    if (state.chg && n > NMIN - 1) spec.chg = { aKey: `band|${n}`, aPaths: [stagePath(n)], bKey: `band|${n - 1}`, bPaths: [stagePath(n - 1)] };
+    painter.draw(f, v, state.eps, spec);
+    toWorld(f, v);
+    const c = f.ctx;
+    c.lineJoin = 'round'; c.lineCap = 'round';
+    c.strokeStyle = PRINT.ink; c.lineWidth = 1 / v.s;
+    c.stroke(stagePath(n));
+    if (state.prev && n > NMIN - 1) { c.strokeStyle = PRINT.accent; c.lineWidth = 1.6 / v.s; c.stroke(stagePath(n - 1)); }
     const N = path.xs.length - 1;
-    marker(path.xs[0], path.ys[0], true, 't = 0');
-    marker(path.xs[N], path.ys[N], false, 't = 1');
-    snapC.width = cv.width; snapC.height = cv.height; snapC.getContext('2d').drawImage(cv, 0, 0);
-    snapView = { s: state.view.s, ox: state.view.ox, oy: state.view.oy };
+    marker(f, v, path.xs[0], path.ys[0], true, 't = 0');
+    marker(f, v, path.xs[N], path.ys[N], false, 't = 1');
   }
-  const snapC = document.createElement('canvas');
-  let snapView = null, fullTimer = 0, raf = 0;
-  function drawFast() {
-    const v = state.view, f = v.s / snapView.s;
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.fillStyle = colors.plate; ctx.fillRect(0, 0, cv.width, cv.height);
-    ctx.drawImage(snapC, (v.ox - snapView.ox * f) * dpr, (v.oy - snapView.oy * f) * dpr, snapC.width * f, snapC.height * f);
-  }
-  function schedule() { if (!raf) raf = requestAnimationFrame(() => { raf = 0; drawMain(); }); }
-  function scheduleView() {
-    if (!snapView) { schedule(); return; }
-    if (!raf) raf = requestAnimationFrame(() => { raf = 0; drawFast(); });
-    clearTimeout(fullTimer); fullTimer = setTimeout(schedule, 160);
-  }
+  const zoom = zoomable('wrap', 'cv', (f) => fitBox(f, bounds(), 0), render, { maxZoom: 800 });
 
   // ---------- stage thumbnails ----------
   const thumbs = [];
@@ -599,103 +1006,29 @@ const lawArea = (e) => Math.PI / Math.log(1 / (2 * e * e));
       c.width = Math.round(w * r); c.height = Math.round(h * r);
       const g = c.getContext('2d');
       g.setTransform(1, 0, 0, 1, 0, 0);
-      g.fillStyle = colors.plate; g.fillRect(0, 0, c.width, c.height);
+      g.fillStyle = PRINT.paper; g.fillRect(0, 0, c.width, c.height);
       const s = Math.min(c.width / (bw * 1.12), c.height / (bh * 1.12));
       g.setTransform(s, 0, 0, -s, c.width / 2 - ((bbox.x0 + bbox.x1) / 2) * s, c.height / 2 + ((bbox.y0 + bbox.y1) / 2) * s);
-      g.strokeStyle = colors.ink; g.lineWidth = 0.8 * r / s; g.lineJoin = 'round';
+      g.strokeStyle = PRINT.ink; g.lineWidth = 0.8 * r / s; g.lineJoin = 'round';
       g.stroke(stagePath(n));
       g.setTransform(1, 0, 0, 1, 0, 0);
     }
   }
 
-  // ---------- measurement: a small pool of workers, falling back to the page itself ----------
-  // Bands around 262,144 steps are slow to rasterize, so jobs are spread over several workers at once.
-  let seq = 0, pathGen = 0;
-  const jobs = [], pool = [], localM = makeMeasurer(() => document.createElement('canvas'));
-  const runner = { busy: false, job: null };
-  try {
-    if (typeof OffscreenCanvas !== 'undefined' && typeof Worker !== 'undefined') {
-      const src = `const KMAX=${KMAX};\nconst strideOf=${strideOf};\n${makeMeasurer}\n` +
-        `let M=null;onmessage=(e)=>{const j=e.data;if(!M)M=makeMeasurer(()=>new OffscreenCanvas(1,1));` +
-        `if(j.type==='path'){M.setPath(j.xs,j.ys);return;}` +
-        `const v=j.kind==='area'?M.area(j.n,j.eps):M.diff(j.n,j.m,j.eps);postMessage({id:j.id,v});};`;
-      const url = URL.createObjectURL(new Blob([src], { type: 'text/javascript' }));
-      const size = Math.max(1, Math.min(4, (navigator.hardwareConcurrency || 2) - 1));
-      for (let k = 0; k < size; k++) {
-        const slot = { w: new Worker(url), job: null };
-        slot.w.onmessage = (e) => {
-          const j = slot.job; slot.job = null;
-          if (j && j.id === e.data.id && j.gen === pathGen) j.done(e.data.v);
-          next();
-        };
-        slot.w.onerror = (e) => {
-          if (e && e.preventDefault) e.preventDefault();
-          pool.splice(pool.indexOf(slot), 1);
-          if (slot.job) jobs.unshift(slot.job);
-          slot.job = null; next();
-        };
-        pool.push(slot);
-      }
-    }
-  } catch (_) { pool.length = 0; }
-  function sendPath() {
-    pathGen++;
-    for (const slot of pool) slot.w.postMessage({ type: 'path', xs: path.xs, ys: path.ys });
-    localM.setPath(path.xs, path.ys);
-  }
-  const inflight = () => pool.map((s) => s.job).concat(runner.job ? [runner.job] : []).filter(Boolean);
-  function next() {
-    if (pool.length) {
-      for (const slot of pool) {
-        if (slot.job || !jobs.length) continue;
-        const j = jobs.shift(); j.id = ++seq; slot.job = j;
-        slot.w.postMessage({ id: j.id, kind: j.kind, n: j.n, m: j.m, eps: j.eps });
-      }
-      return;
-    }
-    if (runner.busy || !jobs.length) return;      // no workers: one job at a time on the page
-    const j = jobs.shift();
-    runner.busy = true; runner.job = j;
-    setTimeout(() => {
-      const v = j.kind === 'area' ? localM.area(j.n, j.eps) : localM.diff(j.n, j.m, j.eps);
-      runner.busy = false; runner.job = null;
-      if (j.gen === pathGen) j.done(v);
-      next();
-    }, 0);
-  }
-  function enqueue(job) { job.gen = pathGen; jobs.push(job); next(); }
-
-  const sz = { results: {} };
+  // ---------- measurement ----------
+  // Bands around 262,144 steps are slow to rasterize, so jobs are spread over several workers.
+  const pool = measurePool({
+    preamble: `const KMAX=${KMAX};\nconst strideOf=${strideOf};\n${wienerGeom}`,
+    geomExpr: 'wienerGeom(cfg)',
+    localGeom: (cfg) => wienerGeom(cfg),
+    size: 4,
+  });
+  const results = {};
   let chartRaf = 0;
-  const chartSoon = () => { if (!chartRaf) chartRaf = requestAnimationFrame(() => { chartRaf = 0; drawChart(); updateVerdict(); }); };
-  function sQueue() {
-    for (let k = jobs.length - 1; k >= 0; k--) if (jobs[k].tag === 'chart') jobs.splice(k, 1);
-    const order = [state.n, 9, 8, 7, 6, 5, 4].filter((d, i, a) => a.indexOf(d) === i);
-    for (const d of order) {
-      if (!sz.results[d]) sz.results[d] = new Float64Array(EPS_N).fill(NaN);
-      for (let i = 0; i < EPS_N; i++) {
-        if (!isNaN(sz.results[d][i]) || inflight().some((j) => j.tag === 'chart' && j.d === d && j.i === i && j.gen === pathGen)) continue;
-        enqueue({ tag: 'chart', kind: 'area', n: d, eps: EPS_GRID[i], d, i, done: (v) => { sz.results[d][i] = v / (2 * EPS_GRID[i]); chartSoon(); } });
-      }
-    }
-  }
-  function chartProgress() {
-    let done = 0, total = 0;
-    for (const d of STAGES) { const r = sz.results[d]; if (!r) continue; for (const v of r) { total++; if (isFinite(v)) done++; } }
-    $('chartStatus').textContent = done < total ? `measuring ${done}/${total}` : 'log–log';
-  }
-  function fitSlopeD(vals) {
-    const X = [], Y = [];
-    EPS_GRID.forEach((e, i) => { if (e <= FIT_MAX && isFinite(vals[i])) { X.push(Math.log(e)); Y.push(Math.log(vals[i])); } });
-    if (X.length < 5) return NaN;
-    const mx = X.reduce((a, b) => a + b) / X.length, my = Y.reduce((a, b) => a + b) / Y.length;
-    let sxy = 0, sxx = 0;
-    for (let i = 0; i < X.length; i++) { sxy += (X[i] - mx) * (Y[i] - my); sxx += (X[i] - mx) ** 2; }
-    return 1 - sxy / sxx;
-  }
-  const fitD = (d) => (sz.results[d] ? fitSlopeD(sz.results[d]) : NaN);
+  const chartSoon = () => { if (!chartRaf) chartRaf = requestAnimationFrame(() => { chartRaf = 0; chart.draw(); updateVerdict(); }); };
+  const sQueue = () => queueChart(pool, results, EPS_GRID, [state.n, 9, 8, 7, 6, 5, 4].filter((d, i, a) => a.indexOf(d) === i), chartSoon);
+  const fitD = (d) => (results[d] ? fitSlopeD(EPS_GRID, results[d], FIT_MAX) : NaN);
   const LAW = EPS_GRID.map((e) => lawArea(e) / (2 * e));
-  $('lawD').textContent = fitSlopeD(LAW).toFixed(2);
 
   let last = { A: NaN, chg: NaN };
   let measureT = 0, readGen = 0;
@@ -704,7 +1037,7 @@ const lawArea = (e) => Math.PI / Math.log(1 / (2 * e * e));
     $('rA').textContent = '…'; $('rL').textContent = '…'; $('rC').textContent = '…';
     last = { A: NaN, chg: NaN }; updateVerdict();
     measureT = setTimeout(() => {
-      for (let k = jobs.length - 1; k >= 0; k--) if (jobs[k].tag === 'read') jobs.splice(k, 1);
+      pool.cancelTag('read');
       const gen = ++readGen, n = state.n, eps = state.eps, got = { A: NaN, X: NaN };
       const finish = () => {
         if (gen !== readGen || !isFinite(got.A) || !isFinite(got.X)) return;
@@ -712,16 +1045,15 @@ const lawArea = (e) => Math.PI / Math.log(1 / (2 * e * e));
         $('rC').textContent = (100 * last.chg).toFixed(1) + '%';
         updateVerdict();
       };
-      const areaJob = { tag: 'read', kind: 'area', n, eps, gen: pathGen, done: (v) => {
+      // both go to the front of the line, so the readouts never wait behind the chart
+      pool.enqueue({ tag: 'read', kind: 'diff', n, m: n - 1, eps, done: (v) => { if (gen === readGen) { got.X = v; finish(); } } }, true);
+      pool.enqueue({ tag: 'read', kind: 'area', n, eps, done: (v) => {
         if (gen !== readGen) return;
         got.A = v;
         $('rA').textContent = v.toFixed(4);
         $('rL').textContent = (v / (2 * eps)).toFixed(2);
         finish();
-      } };
-      const diffJob = { tag: 'read', kind: 'diff', n, m: n - 1, eps, gen: pathGen, done: (v) => { if (gen === readGen) { got.X = v; finish(); } } };
-      jobs.unshift(areaJob, diffJob);    // the readouts never wait behind the chart
-      next();
+      } }, true);
     }, 110);
   }
   function updateVerdict() {
@@ -739,123 +1071,35 @@ const lawArea = (e) => Math.PI / Math.log(1 / (2 * e * e));
     v.textContent = t;
   }
 
-  // ---------- chart ----------
-  const sBox = $('sBox'), sChart = $('sChart'), sTip = $('sTip');
-  const serOpacity = (d) => (d === state.n ? 1 : 0.2 + 0.11 * (d - 3));
-  let geo = null, hoverIdx = -1;
-  (function buildLegend() {
-    const lg = $('sLegend');
-    for (const d of STAGES) {
-      const s = document.createElement('span'), i = document.createElement('i');
-      s.dataset.d = d; s.append(i, document.createTextNode(`Stage ${d}`)); lg.append(s);
-    }
-    for (const [cls, text] of [['ref', 'slope 1 − D (D = 2)'], ['law', "Wiener's law"]]) {
-      const s = document.createElement('span'), i = document.createElement('i');
-      i.className = cls; s.append(i, document.createTextNode(text)); lg.append(s);
-    }
-  })();
-  function paintLegend() {
-    $('sLegend').querySelectorAll('span[data-d]').forEach((s) => {
-      const d = +s.dataset.d, cur = d === state.n, i = s.querySelector('i');
-      s.classList.toggle('cur', cur);
-      i.style.borderTopColor = cur ? 'var(--accent)' : 'var(--muted)'; i.style.opacity = serOpacity(d);
-    });
-  }
-  function interpL(r, e) {
-    for (let i = 0; i < EPS_N - 1; i++) {
-      if (e >= EPS_GRID[i] && e <= EPS_GRID[i + 1] && isFinite(r[i]) && isFinite(r[i + 1])) {
-        const f = Math.log(e / EPS_GRID[i]) / Math.log(EPS_GRID[i + 1] / EPS_GRID[i]);
-        return Math.exp(Math.log(r[i]) + f * (Math.log(r[i + 1]) - Math.log(r[i])));
+  // ---------- the chart ----------
+  const chart = sausageChart({
+    ids: { box: 'sBox', svg: 'sChart', tip: 'sTip', legend: 'sLegend', table: 'sTable', status: 'chartStatus' },
+    grid: EPS_GRID,
+    series: STAGES.map((d) => ({ key: d, label: `Stage ${d}` })),
+    results,
+    getCurrent: () => state.n,
+    getEps: () => state.eps,
+    onPick: (e) => setEps(e, true),
+    xTicks: [0.005, 0.01, 0.02, 0.05, 0.1],
+    yFloor: [1, 30],
+    alsoScale: LAW,
+    serOpacity: (d) => 0.2 + 0.11 * (d - 3),
+    extraLegend: [{ cls: 'ref', label: 'slope 1 − D (D = 2)' }, { cls: 'law', label: "Wiener's law" }],
+    refs: (X, Y, f, rs) => {
+      let s = '', lp = '';
+      EPS_GRID.forEach((e, i) => { lp += (i ? 'L' : 'M') + f(X(e)) + ' ' + f(Y(LAW[i])); });
+      s += `<path class="law" d="${lp}"/>`;
+      const deep = rs[NMAX], ia = EPS_GRID.findIndex((e) => e >= 0.03);
+      if (deep && isFinite(deep[ia])) {
+        const L = (e) => deep[ia] * Math.pow(e / EPS_GRID[ia], -1);
+        s += `<path class="ref" d="M${f(X(ES.lo))} ${f(Y(L(ES.lo)))} L${f(X(0.1))} ${f(Y(L(0.1)))}"/>`;
       }
-    }
-    return NaN;
-  }
-  function drawChart() {
-    const W = Math.max(240, Math.round(sBox.clientWidth || 320)), H = 226;
-    const ml = 34, mr = 10, mt = 10, mb = 34;
-    let ymin = 1, ymax = 30;
-    const seen = (v) => { if (isFinite(v)) { ymax = Math.max(ymax, v * 1.12); ymin = Math.min(ymin, v / 1.12); } };
-    for (const d in sz.results) for (const v of sz.results[d]) seen(v);
-    LAW.forEach(seen);
-    const lx0 = Math.log(EPS_MIN), lx1 = Math.log(EPS_MAX), ly0 = Math.log(ymin), ly1 = Math.log(ymax);
-    const X = (e) => ml + ((Math.log(e) - lx0) / (lx1 - lx0)) * (W - ml - mr);
-    const Y = (v) => mt + (1 - (Math.log(v) - ly0) / (ly1 - ly0)) * (H - mt - mb);
-    geo = { X, W };
-    const f = (v) => v.toFixed(1);
-    const xt = [0.005, 0.01, 0.02, 0.05, 0.1], yt = [1, 2, 5, 10, 20, 50, 100].filter((v) => v >= ymin && v <= ymax);
-    let s = '<g class="grid">';
-    for (const t of xt) s += `<line x1="${f(X(t))}" x2="${f(X(t))}" y1="${mt}" y2="${H - mb}"/>`;
-    for (const t of yt) s += `<line x1="${ml}" x2="${W - mr}" y1="${f(Y(t))}" y2="${f(Y(t))}"/>`;
-    s += '</g>';
-    for (const t of xt) s += `<text x="${f(X(t))}" y="${H - mb + 13}" text-anchor="middle">${t}</text>`;
-    for (const t of yt) s += `<text x="${ml - 5}" y="${f(Y(t) + 3.5)}" text-anchor="end">${t}</text>`;
-    s += `<text x="${W - mr - 2}" y="${mt + 10}" text-anchor="end">area ÷ 2ε</text>`;
-    s += `<text x="${f((ml + W - mr) / 2)}" y="${H - 4}" text-anchor="middle">band radius ε (log scale)</text>`;
-    let lp = '';
-    EPS_GRID.forEach((e, i) => { lp += (i ? 'L' : 'M') + f(X(e)) + ' ' + f(Y(LAW[i])); });
-    s += `<path class="law" d="${lp}"/>`;
-    const deep = sz.results[NMAX], ia = EPS_GRID.findIndex((e) => e >= 0.03);
-    if (deep && isFinite(deep[ia])) {
-      const L = (e) => deep[ia] * Math.pow(e / EPS_GRID[ia], -1);
-      s += `<path class="ref" d="M${f(X(EPS_MIN))} ${f(Y(L(EPS_MIN)))} L${f(X(0.1))} ${f(Y(L(0.1)))}"/>`;
-    }
-    const order = STAGES.filter((d) => d !== state.n).concat([state.n]);
-    for (const d of order) {
-      const r = sz.results[d]; if (!r) continue;
-      let p = '';
-      r.forEach((v, i) => { if (isFinite(v)) p += (p ? 'L' : 'M') + f(X(EPS_GRID[i])) + ' ' + f(Y(v)); });
-      if (p) s += `<path class="ser${d === state.n ? ' cur' : ''}" style="stroke-opacity:${serOpacity(d)}" d="${p}"/>`;
-    }
-    if (hoverIdx >= 0) s += `<line class="hair" x1="${f(X(EPS_GRID[hoverIdx]))}" x2="${f(X(EPS_GRID[hoverIdx]))}" y1="${mt}" y2="${H - mb}"/>`;
-    const ex = X(Math.min(EPS_MAX, Math.max(EPS_MIN, state.eps)));
-    s += `<line class="mark" x1="${f(ex)}" x2="${f(ex)}" y1="${mt}" y2="${H - mb}"/>`;
-    const cr = sz.results[state.n];
-    if (cr) { const v = interpL(cr, state.eps); if (isFinite(v)) s += `<circle class="dot" cx="${f(ex)}" cy="${f(Y(v))}" r="4"/>`; }
-    sChart.setAttribute('viewBox', `0 0 ${W} ${H}`);
-    sChart.innerHTML = s;
-    paintLegend(); drawTable(); chartProgress();
-  }
-  function drawTable() {
-    const t = $('sTable');
-    t.textContent = '';
-    const tr0 = document.createElement('tr');
-    ['ε', ...STAGES.map((d) => `Stage ${d}`), "Wiener's law"].forEach((c) => { const th = document.createElement('th'); th.textContent = c; tr0.append(th); });
-    t.append(tr0);
-    EPS_GRID.forEach((e, i) => {
-      const tr = document.createElement('tr');
-      [e.toFixed(4), ...STAGES.map((d) => { const r = sz.results[d]; return r && isFinite(r[i]) ? r[i].toFixed(2) : '…'; }), LAW[i].toFixed(2)]
-        .forEach((c) => { const td = document.createElement('td'); td.textContent = c; tr.append(td); });
-      t.append(tr);
-    });
-  }
-  function nearestIdx(e) {
-    const r = sChart.getBoundingClientRect(), x = (e.clientX - r.left) * (geo.W / r.width);
-    let best = 0, bd = Infinity;
-    EPS_GRID.forEach((g, i) => { const dx = Math.abs(geo.X(g) - x); if (dx < bd) { bd = dx; best = i; } });
-    return best;
-  }
-  function showTip(i) {
-    sTip.textContent = '';
-    const hd = document.createElement('div'); hd.className = 'hd'; hd.textContent = `ε = ${EPS_GRID[i].toFixed(4)}`; sTip.append(hd);
-    const row = (keyStyle, value, label) => {
-      const r = document.createElement('div'); r.className = 'row';
-      const key = document.createElement('i'); Object.assign(key.style, keyStyle);
-      const b = document.createElement('b'); b.textContent = value;
-      r.append(key, b, document.createTextNode(label)); sTip.append(r);
-    };
-    for (const d of [...STAGES].reverse()) {
-      const r = sz.results[d], v = r ? r[i] : NaN;
-      row({ borderTopColor: d === state.n ? 'var(--accent)' : 'var(--muted)', opacity: serOpacity(d) }, isFinite(v) ? v.toFixed(2) : '…', `stage ${d}`);
-    }
-    row({ borderTopStyle: 'dotted', borderTopColor: 'var(--text)' }, LAW[i].toFixed(2), "Wiener's law");
-    sTip.hidden = false;
-    const bw = sBox.clientWidth, tw = sTip.offsetWidth, px = (geo.X(EPS_GRID[i]) / geo.W) * bw;
-    sTip.style.left = (px + 12 + tw > bw ? Math.max(0, px - 12 - tw) : px + 12) + 'px';
-  }
-  sChart.addEventListener('pointermove', (e) => { if (!geo) return; hoverIdx = nearestIdx(e); drawChart(); showTip(hoverIdx); });
-  sChart.addEventListener('pointerleave', () => { hoverIdx = -1; sTip.hidden = true; drawChart(); });
-  sChart.addEventListener('click', (e) => { if (geo) setEps(EPS_GRID[nearestIdx(e)], true); });
-  new ResizeObserver(() => drawChart()).observe(sBox);
+      return s;
+    },
+    extraCols: [{ label: "Wiener's law", value: (i) => LAW[i].toFixed(2) }],
+    extraTipRows: (i, row) => row({ borderTopStyle: 'dotted', borderTopColor: '#151515' }, LAW[i].toFixed(2), "Wiener's law"),
+  });
+  $('lawD').textContent = fitSlopeD(EPS_GRID, LAW, FIT_MAX).toFixed(2);
 
   // ---------- state changes ----------
   function updateText() {
@@ -864,82 +1108,41 @@ const lawArea = (e) => Math.PI / Math.log(1 / (2 * e * e));
     $('capSeed').textContent = fmt(state.seed); $('capStage').textContent = n; $('capSteps').textContent = fmt(Math.pow(4, n));
     const e = fmtEps(state.eps);
     $('capEps').textContent = e; $('epsVal').textContent = e;
-    cv.setAttribute('aria-label', `Stage ${n} of a simulated Brownian trail (${fmt(Math.pow(4, n))} steps) wrapped in a band of radius ${e}`);
+    $('cv').setAttribute('aria-label', `Stage ${n} of a simulated Brownian trail (${fmt(Math.pow(4, n))} steps) wrapped in a band of radius ${e}`);
     thumbs.forEach(({ n: k, b }) => b.setAttribute('aria-pressed', String(k === n)));
   }
   function setStage(n) {
     if (n === state.n) return;
     state.n = n;
-    updateText(); sQueue(); measureNow(); drawChart(); updateVerdict(); schedule();
+    updateText(); sQueue(); measureNow(); chart.draw(); updateVerdict(); zoom.schedule();
   }
   function setEps(e, fromChart) {
     state.eps = e;
-    if (fromChart) $('eps').value = epsToSlider(e);
-    updateText(); measureNow(); drawChart(); schedule();
+    if (fromChart) $('eps').value = ES.toSlider(e);
+    updateText(); measureNow(); chart.draw(); zoom.schedule();
   }
   function newPath(seed) {
     state.seed = seed;
-    makePath(seed); sendPath(); fields.clear();
-    for (let k = jobs.length - 1; k >= 0; k--) jobs.splice(k, 1);
-    sz.results = {};
-    fitView(); updateText(); drawThumbs(); sQueue(); measureNow(); drawChart(); updateVerdict(); schedule();
+    makePath(seed);
+    pool.configure({ xs: path.xs, ys: path.ys });
+    painter.reset();
+    for (const k in results) delete results[k];
+    zoom.refit(); updateText(); drawThumbs(); sQueue(); measureNow(); chart.draw(); updateVerdict();
   }
-  $('eps').addEventListener('input', (e) => setEps(sliderToEps(+e.target.value), false));
-  $('prev').addEventListener('change', (e) => { state.prev = e.target.checked; schedule(); });
-  $('chg').addEventListener('change', (e) => { state.chg = e.target.checked; schedule(); });
+  $('eps').addEventListener('input', (e) => setEps(ES.fromSlider(+e.target.value), false));
+  $('prev').addEventListener('change', (e) => { state.prev = e.target.checked; zoom.schedule(); });
+  $('chg').addEventListener('change', (e) => { state.chg = e.target.checked; zoom.schedule(); });
   $('newPath').addEventListener('click', () => newPath(1 + Math.floor(Math.random() * 999999)));
-  const center = () => { const { w, h } = cssSize(); return [w / 2, h / 2]; };
-  $('zin').addEventListener('click', () => zoomAt(...center(), 1.6));
-  $('zout').addEventListener('click', () => zoomAt(...center(), 1 / 1.6));
-  $('zfit').addEventListener('click', () => { fitView(); schedule(); });
-
-  // pointer pan / pinch
-  const pts = new Map();
-  let pinch = null;
-  const local = (e) => { const r = wrap.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
-  wrap.addEventListener('pointerdown', (e) => {
-    if (e.target.closest('.view-tools')) return;
-    pts.set(e.pointerId, local(e));
-    try { wrap.setPointerCapture(e.pointerId); } catch (_) {}
-    if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), m: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2] }; }
-    wrap.classList.add('dragging');
-  });
-  wrap.addEventListener('pointermove', (e) => {
-    if (!pts.has(e.pointerId)) return;
-    const prev = pts.get(e.pointerId), cur = local(e);
-    pts.set(e.pointerId, cur);
-    if (pts.size === 2 && pinch) {
-      const [a, b] = [...pts.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]), m = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
-      panBy(m[0] - pinch.m[0], m[1] - pinch.m[1]);
-      if (pinch.d > 0) zoomAt(m[0], m[1], d / pinch.d);
-      pinch = { d, m };
-    } else if (pts.size === 1) {
-      if (e.pointerType !== 'touch' || state.view.s > state.view.fit * 1.02) panBy(cur[0] - prev[0], cur[1] - prev[1]);
-    }
-  });
-  const end = (e) => { pts.delete(e.pointerId); if (pts.size < 2) pinch = null; if (!pts.size) wrap.classList.remove('dragging'); };
-  wrap.addEventListener('pointerup', end); wrap.addEventListener('pointercancel', end);
-  wrap.addEventListener('wheel', (e) => {
-    if (!(e.ctrlKey || e.metaKey)) return;
-    e.preventDefault(); const [x, y] = local(e); zoomAt(x, y, Math.exp(-e.deltaY * 0.0045));
-  }, { passive: false });
-  wrap.addEventListener('dblclick', (e) => { if (e.target.closest('.view-tools')) return; const [x, y] = local(e); zoomAt(x, y, e.shiftKey ? 0.5 : 2); });
-
-  const retheme = () => { readColors(); drawThumbs(); drawMain(); };
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', retheme);
-  new MutationObserver(retheme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 
   // boot
-  readColors();
-  makePath(state.seed); sendPath();
-  $('eps').value = epsToSlider(state.eps);
+  makePath(state.seed);
+  pool.configure({ xs: path.xs, ys: path.ys });
+  $('eps').value = ES.toSlider(state.eps);
   updateText();
-  new ResizeObserver(() => resize()).observe(wrap);
-  resize();
   drawThumbs();
   window.addEventListener('resize', drawThumbs);
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { drawThumbs(); drawMain(); });
-  sQueue(); measureNow(); drawChart();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => drawThumbs());
+  sQueue(); measureNow(); chart.draw();
 })();
 </script>
 
