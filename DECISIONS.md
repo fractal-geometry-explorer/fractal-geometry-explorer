@@ -360,17 +360,40 @@ region boundaries, then a least-squares refit), then idealized to exact tangency
   four osculate from inside, two from outside (each inside disc internally tangent to an
   outside one), and four intersect L and are discarded.
 
-**Plate 178 is a reconstruction of the idea, not of the plate.** Mumford's group of
-homographies is not stated in the book, so the plate cannot be reproduced stroke for stroke.
-The page's section composes each chain inversion with a rotation about its circle's centre
-(every two-letter word is then a Möbius map) and lets the twist grow from 0°, which leaves the
-self-inverse thread and spreads toward plane-filling forms. TRACKER reclassifies 178 as `art`.
+**Plate 178: the group is identified.** Mumford's group is not stated in the book, but the
+plate determines it. It is a once-punctured-torus group in Maskit's normalization — generators
+a = [[−iμ, −i], [−i, 0]], b = z + 2 — at μ ≈ −0.048 + 1.894i (±~0.005 in each part), an
+interior (discrete, non-cusp) point near the boundary of the Maskit slice, which is the
+caption's "near the Peano limit". Evidence, all from the scan: (1) the frame-free inversive
+distance between the plate's conjugate pairs of large tangent discs (measured 6.174/6.146/6.134,
+a function of Im μ alone; the group gives 6.1745 at Im μ = 1.894); (2) the attracting fixed
+points of short reduced words land on the plate's 24 spiral cores (median error 0.047, best at
+μ = −0.048 + 1.894i over a grid of discrete μ); (3) a two-way chamfer distance between a 14M-point
+orbit cloud and the plate ink; (4) full-resolution zooms show connected cusped teardrop
+components, so μ is not a cusp; 264 cusp roots were swept and all mismatch the disc invariants
+by 6–8%. The published Mumford–Wright value tr a = 1.91 + 0.05i fits 3–4× worse on (2) and (3)
+and is excluded. The orbit discs of a Maskit group are exactly round (their stabilizers are
+rigid triply-punctured-sphere groups), which is why the plate's big empty discs are perfect
+circles. TRACKER reclassifies 178 as `exact` (a fitted reproduction; the exact parameter is
+unpublished, said on the page).
+
+**Plate 178's pruning is a fixed word-length cutoff.** The plate does not recurse until pieces
+are subpixel: rendering every reduced word up to a fixed length ~11–13 (depth 12 on the page)
+reproduces its look — bead chains along disc rims stop after a few steps while the large
+spirals carry on, because a fixed length truncates the slowly-contracting parabolic b-chains
+early and leaves large loxodromic features intact. A size-adaptive cutoff at any eps looks
+wrong (asymmetric dense clusters). Related pitfall: with a parabolic generator the spread-< eps
+test never triggers along b-chains, so maxdepth is what actually bounds the recursion; at
+maxdepth 200 even eps = 0.03 explodes to millions of points. The page's "as printed" mode is
+eps = 0, depth 12 (a pure word-length cutoff, cached as it is view-independent); "finer" is
+eps following the zoom at depth 46.
 
 **Limit sets as disc coverings.** A reduced-word image of a generator disc always nests inside
 the previous disc, so L is drawn by emitting every image disc smaller than a few pixels while
 recursing to a sub-pixel cutoff; the emitted discs keep the thread contiguous and the terminal
-ones add detail. Rotating an inversion doesn't change image radii, only positions, so the same
-covering works for the twisted maps.
+ones add detail. (An earlier version of the page used this with inversions composed with
+rotations as a stand-in for Plate 178; that toy is gone now the group is identified, and the
+covering remains in use for Plate 179.)
 
 **Inversion animations.** The page reuses the Plate 199 pattern (see "Animating a circle
 inversion" under Rendering lessons): one button plays one inversion on the whole figure along

@@ -475,32 +475,78 @@ function fullPacking(rmin, bb) {
   console.assert(seedsIn.length === 2 && seedsOut.length === 2, 'M=4: two inside and two outside seeds', seedsIn.length, seedsOut.length);
 })();
 
-// ---------- section F: twisted inversions (Plate 178's theme) ----------
+// ---------- section F: Plate 178, the identified group ----------
 (function sectionF() {
-  const st = { th: 0, gens: CHAIN, coarse: false };
-  let timer = 0, lastCount = 0;
-  const fitOf = (f) => (st.gens === CHAIN ? fitBox(f, { x0: -1.3, x1: 1.3, y0: -1.35, y1: 1.2 }) : fitBox(f, { x0: -1.95, x1: 1.75, y0: -1.1, y1: 1.85 }));
-  const zoom = zoomable('wF', 'cF', fitOf, (f, v) => {
+  const st = { printed: true, anim: null, pts: null };
+  const fitOf = (f) => fitBox(f, { x0: -1.03, x1: 1.03, y0: -1.03, y1: 1.03 });
+  const drawDots = (c, v, pts, size, color, stride = 2) => {
+    c.fillStyle = color;
+    const h = size / 2;
+    for (let i = 0; i < pts.length; i += stride * 2) {
+      c.fillRect(v.ox + pts[i] * v.s - h, v.oy - pts[i + 1] * v.s - h, size, size);
+    }
+  };
+  const zoom = zoomable('wF', 'cF', (f) => fitOf(f), (f, v) => {
     const c = f.ctx;
     paper(f, PRINT.paper); toScreen(f);
     const bb = viewBox(f, v);
-    const rmin = Math.max(px(v, st.coarse ? 4 : 0.6), 1e-5);
-    const dots = twistedLimit(st.gens, (st.th * Math.PI) / 180, rmin, px(v, 3.2), bb, 400000);
-    fillCircles(c, v, f, dots, PRINT.ink, 1.25);
-    lastCount = dots.length;
-    $('rFa').textContent = fmt(lastCount);
-    $('cFn').textContent = `${fmt(lastCount)} discs`;
-    $('cFt').textContent = `${st.th}°`;
-  }, { maxZoom: 2000 });
-  $('twF').addEventListener('input', (e) => {
-    st.th = +e.target.value; $('twFv').textContent = `${st.th}°`;
-    st.coarse = true; zoom.schedule();
-    clearTimeout(timer); timer = setTimeout(() => { st.coarse = false; zoom.schedule(); }, 160);
-  });
-  const mark = stepButtons($('mF'), ['chain', 'fricke'], (m) => (m === 'chain' ? 'the chain of p. 173' : 'the five circles of Plate 179'), (m) => m, (m) => {
-    st.gens = m === 'chain' ? CHAIN : FRICKE; mark(m); zoom.refit();
-  });
-  mark('chain');
+    if (st.anim) {
+      // the symmetry flow: the untransformed set stays as a faint ghost; every point slides
+      // along the one-parameter Möbius path, and at t = 1 the set lands exactly on itself
+      const pts = st.anim.pts, M = st.anim.flow(st.anim.t), o = [0, 0];
+      const stride = Math.max(1, Math.round(pts.length / 2 / 60000));
+      drawDots(c, v, pts, 1.8, GHOST, stride);
+      c.fillStyle = PRINT.ink;
+      for (let i = 0; i < pts.length; i += stride * 2) {
+        mobiusC(M, pts[i], pts[i + 1], o);
+        c.fillRect(v.ox + o[0] * v.s - 0.9, v.oy - o[1] * v.s - 0.9, 1.8, 1.8);
+      }
+      return;
+    }
+    // "as printed" reproduces the plate's own pruning: every reduced word up to a fixed
+    // length, whatever size its piece has reached; "finer" lets eps follow the zoom instead,
+    // so zooming refines without end. The fixed-length set is view-independent, so cache it.
+    let pts;
+    if (st.printed) {
+      if (!st.printedPts) st.printedPts = maskitPoints(0, 12, { x0: -2, x1: 2, y0: -2, y1: 2 }, 1500000);
+      pts = st.printedPts;
+    } else {
+      pts = maskitPoints(Math.max(px(v, 1.05), 2e-5), 46, bb);
+    }
+    st.pts = pts;
+    drawDots(c, v, pts, st.printed ? 2.1 : 1.35, PRINT.ink);
+    $('rFa').textContent = fmt(pts.length / 2);
+    $('cFn').textContent = `${fmt(pts.length / 2)} points`;
+  }, { maxZoom: 4000 });
+  const mark = stepButtons($('mF'), ['printed', 'finer'],
+    (m) => (m === 'printed' ? 'as printed in 1982' : 'finer than the plate'),
+    (m) => (m === 'printed' ? 'Plate 178 as printed' : 'finer rendering'), (m) => {
+      st.printed = m === 'printed'; mark(m); zoom.schedule();
+    });
+  mark('printed');
+  const SYM = [
+    ['symFa', M178.a, 'a — it spirals the whole set about its two fixed points and lands it exactly on itself.'],
+    ['symFai', M178.ai, 'a⁻¹ — the same spiral run backwards.'],
+    ['symFb', M178.b, 'b — it slides the set along the rim, through the point where the outer circle and the left disc touch; that tangency point is the only point it holds fixed.'],
+    ['symFbi', M178.bi, 'b⁻¹ — the same slide run backwards.'],
+    ['symFe', M178.e, 'the involution — a half-turn of the sphere that swaps a with a⁻¹ and b with b⁻¹; it is why the plate looks the same upside down.'],
+  ];
+  for (const [id, M, text] of SYM) {
+    $(id).addEventListener('click', () => {
+      if (st.anim || !st.pts) return;
+      const t0 = performance.now(), dur = 2000;
+      st.anim = { flow: mobiusFlow(M), t: 0, pts: st.pts };
+      $('infoF').textContent = `Applying ${text}`;
+      const step = (now) => {
+        const p = Math.min(1, (now - t0) / dur);
+        st.anim.t = 0.5 - 0.5 * Math.cos(Math.PI * p);
+        zoom.schedule();
+        if (p < 1) requestAnimationFrame(step);
+        else { st.anim = null; $('infoF').textContent = 'Done: the limit set landed back on itself — the set is self-homographic.'; zoom.schedule(); }
+      };
+      requestAnimationFrame(step);
+    });
+  }
 })();
 
 // ---------- section G: Plate 179, Fricke corrected ----------
