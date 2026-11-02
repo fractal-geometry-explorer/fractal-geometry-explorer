@@ -218,11 +218,9 @@ function osculatingClan(gens, seed, rmin, bb, cap = 60000) {
   return out;
 }
 
-// ---------- twisted inversions (Plate 178's theme, a reconstruction) ----------
-// σθ,m = (rotation by θ about Cm's centre) ∘ (inversion in Cm). Composing two of these is a
-// homography (a Möbius map), so the group they generate is a group of homographies when θ ≠ 0.
-// The image of a circle is the inverted circle rotated about the centre; the covering-by-discs
-// drawing works exactly as for plain inversions because rotation keeps each disc in place.
+// ---------- covering a chain's limit set by discs (used for Plate 179) ----------
+// σθ,m = (rotation by θ about Cm's centre) ∘ (inversion in Cm); at θ = 0 this is plain
+// inversion, and the covering-by-discs drawing is the same as for the sections above.
 function twistCircle(K, th, c) {
   const im = invCircle(K, c);
   const co = Math.cos(th), si = Math.sin(th), dx = im.x - K.x, dy = im.y - K.y;
@@ -246,6 +244,104 @@ function twistedLimit(gens, th, rmin, rmax, bb, cap = 150000) {
     }
   }
   return out;
+}
+
+// ---------- Plate 178: the identified self-homographic group ----------
+// Plate 178 is the limit set of a once-punctured-torus Kleinian group in Maskit's
+// normalization — generators a = [[−iμ, −i], [−i, 0]] and b = z + 2 — identified from the
+// scan at μ = −0.048 + 1.894i, about ±0.005 in each part (DECISIONS.md, "Plate 178").
+// M178 holds the group conjugated into the plate's own frame, where the outer circle is the
+// unit circle: the generators, their inverses, the elliptic involution e (a half-turn that
+// swaps a with a⁻¹ and b with b⁻¹), and the fixed points of the three cyclic rotations of
+// the commutator, which lie on the limit set and are the reference points of the recursion.
+// A 2×2 complex matrix is stored flat as [ar, ai, br, bi, cr, ci, dr, di], det = 1.
+const M178 = {
+  a: [2.9214284042, 1.9479801089, 1.9346142348, -0.0583438186, -0.0375345626, -3.9047866630, -1.0274284042, -1.8999801089],
+  b: [1, -1.0134093461, -0.0008112307, -1.0134090214, -0.0008112307, 1.0134090214, 1, 1.0134093461],
+  ai: [-1.0274284042, -1.8999801089, -1.9346142348, 0.0583438186, 0.0375345626, 3.9047866630, 2.9214284042, 1.9479801089],
+  bi: [1, 1.0134093461, 0.0008112307, 1.0134090214, 0.0008112307, -1.0134090214, 1, -1.0134093461],
+  e: [0.9939269766, 0.9596986507, 0.9938943971, -0.0410969715, -0.9923579261, -1.9604936580, -0.9939269766, -0.9596986507],
+  refs: [-0.3828237149, 0.2052316989, -0.6661076400, 0.3429536596, -0.0172817852, 0.9998506588],
+};
+function matMulC(m, n) {
+  const o = new Float64Array(8);
+  for (let i = 0; i < 2; i++) for (let j = 0; j < 2; j++) {
+    let re = 0, im = 0;
+    for (let k = 0; k < 2; k++) {
+      const a = m[4 * i + 2 * k], b = m[4 * i + 2 * k + 1], c = n[4 * k + 2 * j], d = n[4 * k + 2 * j + 1];
+      re += a * c - b * d; im += a * d + b * c;
+    }
+    o[4 * i + 2 * j] = re; o[4 * i + 2 * j + 1] = im;
+  }
+  return o;
+}
+function mobiusC(m, x, y, out) {
+  const nr = m[0] * x - m[1] * y + m[2], ni = m[0] * y + m[1] * x + m[3];
+  const dr = m[4] * x - m[5] * y + m[6], di = m[4] * y + m[5] * x + m[7];
+  const q = 1 / (dr * dr + di * di);
+  out[0] = (nr * dr + ni * di) * q; out[1] = (ni * dr - nr * di) * q;
+}
+// Depth-first over reduced words in a, b, a⁻¹, b⁻¹. A word is a leaf when it has squeezed
+// the three reference points within eps of each other — its piece of the limit set is
+// smaller than eps — or at maxdepth, which is what ends the runs of b: a parabolic never
+// contracts the neighbourhood of its own fixed point. With eps = 0 the recursion is a pure
+// fixed word-length cutoff, which is the pruning of the printed plate (see the page note).
+// Emits [x0,y0,x1,y1,…].
+function maskitPoints(eps, maxdepth, bb, cap = 400000) {
+  const G = [M178.a, M178.b, M178.ai, M178.bi], INV = [2, 3, 0, 1], R = M178.refs;
+  const out = [];
+  const mats = [Float64Array.from([1, 0, 0, 0, 0, 0, 1, 0])], lasts = [-1], deps = [0];
+  const p = [0, 0], q = [0, 0], r = [0, 0];
+  while (mats.length && out.length < cap * 2) {
+    const T = mats.pop(), last = lasts.pop(), d = deps.pop();
+    mobiusC(T, R[0], R[1], p); mobiusC(T, R[2], R[3], q); mobiusC(T, R[4], R[5], r);
+    const spread = Math.hypot(p[0] - q[0], p[1] - q[1]) + Math.hypot(q[0] - r[0], q[1] - r[1]);
+    if (!isFinite(spread)) continue;
+    if (spread < eps || d >= maxdepth) { out.push(p[0], p[1], q[0], q[1]); continue; }
+    if (bb) {
+      const pad = spread * 3;
+      if (Math.max(p[0], q[0], r[0]) + pad < bb.x0 || Math.min(p[0], q[0], r[0]) - pad > bb.x1 ||
+          Math.max(p[1], q[1], r[1]) + pad < bb.y0 || Math.min(p[1], q[1], r[1]) - pad > bb.y1) continue;
+    }
+    for (let gi = 0; gi < 4; gi++) {
+      if (gi === INV[last]) continue;
+      mats.push(matMulC(T, G[gi])); lasts.push(gi); deps.push(d + 1);
+    }
+  }
+  return out;
+}
+// One-parameter flow M^t of a det-1 Möbius matrix: identity at t = 0, the map itself at
+// t = 1, moving along its one-parameter subgroup — a spiral for loxodromic a, a slide for
+// parabolic b, a turn for the elliptic involution. Returns a function t → flat matrix.
+function mobiusFlow(mIn) {
+  const trR = mIn[0] + mIn[6], trI = mIn[1] + mIn[7];
+  const m = trR < 0 ? mIn.map((v) => -v) : mIn.slice();      // −M is the same Möbius map
+  const tr = [Math.abs(trR), trR < 0 ? -trI : trI];
+  if (Math.hypot(tr[0] - 2, tr[1]) < 1e-7) {
+    return (t) => [1 + t * (m[0] - 1), t * m[1], t * m[2], t * m[3], t * m[4], t * m[5], 1 + t * (m[6] - 1), t * m[7]];
+  }
+  const cmul = (u, v) => [u[0] * v[0] - u[1] * v[1], u[0] * v[1] + u[1] * v[0]];
+  const cdiv = (u, v) => { const q2 = v[0] * v[0] + v[1] * v[1]; return [(u[0] * v[0] + u[1] * v[1]) / q2, (u[1] * v[0] - u[0] * v[1]) / q2]; };
+  const csqrt = (u) => { const s = Math.sqrt(Math.hypot(u[0], u[1])), a2 = Math.atan2(u[1], u[0]) / 2; return [s * Math.cos(a2), s * Math.sin(a2)]; };
+  const disc = csqrt([tr[0] * tr[0] - tr[1] * tr[1] - 4, 2 * tr[0] * tr[1]]);
+  const lam = [(tr[0] + disc[0]) / 2, (tr[1] + disc[1]) / 2];
+  const ilam = cdiv([1, 0], lam);
+  const A = [m[0], m[1]], B = [m[2], m[3]], C2 = [m[4], m[5]], D = [m[6], m[7]];
+  const byB = Math.hypot(B[0], B[1]) > Math.hypot(C2[0], C2[1]);
+  const v1 = byB ? [B, [lam[0] - A[0], lam[1] - A[1]]] : [[lam[0] - D[0], lam[1] - D[1]], C2];
+  const v2 = byB ? [B, [ilam[0] - A[0], ilam[1] - A[1]]] : [[ilam[0] - D[0], ilam[1] - D[1]], C2];
+  const P = [v1[0][0], v1[0][1], v2[0][0], v2[0][1], v1[1][0], v1[1][1], v2[1][0], v2[1][1]];
+  const det = [P[0] * P[6] - P[1] * P[7] - (P[2] * P[4] - P[3] * P[5]), P[0] * P[7] + P[1] * P[6] - (P[2] * P[5] + P[3] * P[4])];
+  const inv2 = cdiv([1, 0], det);
+  const Pi0 = cmul([P[6], P[7]], inv2), Pi1 = cmul([-P[2], -P[3]], inv2), Pi2 = cmul([-P[4], -P[5]], inv2), Pi3 = cmul([P[0], P[1]], inv2);
+  const Pi = [Pi0[0], Pi0[1], Pi1[0], Pi1[1], Pi2[0], Pi2[1], Pi3[0], Pi3[1]];
+  const logr = Math.log(Math.hypot(lam[0], lam[1])), arg = Math.atan2(lam[1], lam[0]);
+  return (t) => {
+    const er = Math.exp(t * logr), e = [er * Math.cos(t * arg), er * Math.sin(t * arg)];
+    const ei = cdiv([1, 0], e);
+    const Dg = [e[0], e[1], 0, 0, 0, 0, ei[0], ei[1]];
+    return matMulC(matMulC(P, Dg), Pi);
+  };
 }
 
 // ---------- self-checks (console only) ----------

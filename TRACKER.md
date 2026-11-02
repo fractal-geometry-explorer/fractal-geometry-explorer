@@ -106,7 +106,7 @@ Update this file in the same pull request as the work it records.
 | Figure, p. 170 | 169–170 | Apollonian packing, nets and gaskets | exact | done | self-inverse |
 | Figure, p. 173 | 172–173 | Poincaré chain and the stages of Poincaré's construction | exact | done | self-inverse |
 | 177 | 177 | A self-inverse fractal (Mandelbrot construction) | exact | done | self-inverse |
-| 178 | 178 | Self-homographic fractal, near the Peano limit (group unpublished; reconstruction of the idea) | art | done | self-inverse |
+| 178 | 178 | Self-homographic fractal, near the Peano limit (group identified from the scan: Maskit punctured-torus group, μ ≈ −0.048 + 1.894i; fixed word-length pruning) | exact | done | self-inverse |
 | 179 | 179 | A celebrated self-inverse fractal, corrected (Fricke's five circles, fitted) | exact | done | self-inverse |
 | 185 | 185–186 | Self-squared fractal curves for real λ | exact | done | self-squared-dragons |
 | 187 | 186–187 | Composite of self-squared curves for real λ (the drape; caption on p. 186, confirmed) | render | done | self-squared-dragons |
