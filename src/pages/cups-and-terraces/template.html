@@ -1,0 +1,160 @@
+<title>Islands, Lakes and Cups</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.r-ch { aspect-ratio: 10 / 7; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 29, "The Areas of Islands, Lakes, and Cups" · pages 272–276</p>
+    <h1><span class="plate-no">Chapter 29</span><span class="lozenge" aria-hidden="true"></span><span>Islands, Lakes and Cups</span></h1>
+    <p class="dek">The Brown relief of chapter 28, put to the test of areas. Islands pass: Korčak's hyperbolic law Pr(A &gt; a) = Fa⁻ᴮ falls out of the model with B = D/2. Lakes fail — they are not the mirror image of islands — and chasing why leads to two lake surrogates, deadvalleys and cups, to terraces fit for the Devil, and to an eroded Brown model. The chapter prints no figures, so everything below is this page's illustration of its arguments.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#korcak"><b>a⁻ᴮ</b> Korčak's law</a>
+    <a href="#deadvalleys"><b>z &lt; 0</b> Islands against deadvalleys</a>
+    <a href="#cups"><b>B*</b> Cups and the Devil's terraces</a>
+  </nav>
+
+  <!-- ===================== KORCAK'S LAW ===================== -->
+  <section class="plate" id="korcak">
+    <div class="plate-head">
+      <p class="no">Chapter 29, page 272 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Korčak's law of island areas</h2>
+      <p class="dim" id="dimA">Pr(A &gt; a) = Fa⁻ᴮ · B = D/2 = (2 − H)/2 · H = 0.8 fits "all of Earth"</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-ch zoomable" id="wA">
+          <canvas id="cA" role="img" aria-label="A Brown archipelago and the ranked areas of its islands on log paper"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cAt">The archipelago</strong> · <span id="cAn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The scatter of island sizes is often the most striking thing on a map. Korčak 1938 found it hyperbolic: the number of islands larger than a falls like a⁻ᴮ. Chapter 13 derived exactly this for nonrandom Koch islands with B = D/2; here the relation survives when the coastline is a level set of a random relief — it is enough that the <i>relief</i> be self-similar. For the fractional Brown relief the coastline dimension is D = 2 − H, so B = 1 − H/2, and the persistence H = 0.8 (B = 0.6) comes very close to the empirical distribution for the whole Earth.</p>
+        <div class="mini" aria-label="The law">
+          <div class="fx">Pr(A &gt; a) = F·a⁻ᴮ · 2B = D = 2 − H<br>rank r island has area ∝ r^(−1/B)</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mA" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Persistence H</span><span class="value" id="HvA">H = 0.80</span></div>
+          <input type="range" id="HsA" min="0.3" max="0.9" step="0.05" value="0.8" aria-label="Persistence H">
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Sea share</span><span class="value" id="svA">70%</span></div>
+          <input type="range" id="ssA" min="0.4" max="0.9" step="0.01" value="0.7" aria-label="Share of the map under water">
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="earthA">All of Earth: H = 0.8</button>
+          <button type="button" class="btn" id="newA">New seed</button>
+        </div>
+        <p class="readline" id="infoA" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Coastline D = 2 − H</dt><dd id="rAa">1.20</dd></div>
+          <div><dt>Predicted B = D/2</dt><dd id="rAb">0.60</dd></div>
+          <div><dt>Fitted B on this map</dt><dd id="rAc">—</dd></div>
+          <div><dt>Whole islands in the window</dt><dd id="rAd">—</dd></div>
+        </dl>
+        <p class="note">The field is the spectral synthesis of the <a href="brown-relief.html">chapter 28 page</a> (256-period, central crop, bilinear upsampling before thresholding), a statistical reconstruction with its seed on display. The fit reads the rank–area line over whole islands only — one window truncates whatever touches its border, and keeping those cut islands was checked (in node, across seeds) to drag the fitted B to about half the prediction. Even so, one map holds few islands, so the fit scatters by a tenth or two around B from seed to seed. The chapter adds one open point: the dimension of a single fractional Brown island's own coast "is not known yet".</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ISLANDS AGAINST DEADVALLEYS ===================== -->
+  <section class="plate" id="deadvalleys">
+    <div class="plate-head">
+      <p class="no">Chapter 29, pages 272–273 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Islands against deadvalleys</h2>
+      <p class="dim">same exponent B, different prefactor F · a deadvalley: land enclosing ground below sea level</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-ch zoomable" id="wB">
+          <canvas id="cB" role="img" aria-label="One Brown relief shown as ocean, land, and the deadvalleys enclosed in the land"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>The map</strong> · <span id="cBn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Lakes look like anti-islands, but the definitions refuse the symmetry. The honest mirror image of an ocean island is a <i>deadvalley</i>: an area enclosed by the continent whose ground lies below ocean level — the basins of the Dead Sea, the Caspian, Death Valley, the Qattara Depression, some holding water and some dry. Deadvalleys obey the same exponent B as islands, so the 10th and 20th largest of each stand in the same ratio; what differs is Korčak's prefactor F, which sets the absolute sizes. On a map that is mostly ocean, islands get the greater F; make the map mostly land and the advantage flips to the deadvalleys.</p>
+        <div class="key" aria-label="Colours">
+          <span><i style="background:#ecebe6"></i> ocean</span>
+          <span><i style="background:#151515"></i> land</span>
+          <span><i style="background:#2f5f9e"></i> deadvalleys</span>
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Sea share</span><span class="value" id="svB">70%</span></div>
+          <input type="range" id="ssB" min="0.15" max="0.85" step="0.01" value="0.7" aria-label="Share of the map under water">
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="panB">Pangaea: mostly ocean</button>
+          <button type="button" class="btn" id="thalB">Panthalassia inverted: mostly land</button>
+          <button type="button" class="btn" id="newB">New seed</button>
+        </div>
+        <p class="readline" id="infoB" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Islands</dt><dd id="rBa">—</dd></div>
+          <div><dt>Deadvalleys</dt><dd id="rBb">—</dd></div>
+          <div><dt>10th island area</dt><dd id="rBc">—</dd></div>
+          <div><dt>10th deadvalley area</dt><dd id="rBd">—</dd></div>
+        </dl>
+        <p class="note">This page's own reading of the chapter's map-inspection argument, on one H = 0.8 field: an island is a connected patch above sea level that is not the main landmass (the component touching most border, or the largest); a deadvalley is a below-level patch enclosed by land, i.e. not connected to the ocean. Lakes are a third thing entirely — their bottoms need not lie below z = 0 and their surfaces need not lie at z = 0 — and the chapter concedes that their hyperbolic law may be mere robustness of the distribution under "diverse forms of torture": a hyperbolic primeval relief times a thousand arbitrary geological multipliers stays hyperbolic.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CUPS AND THE DEVIL'S TERRACES ===================== -->
+  <section class="plate" id="cups">
+    <div class="plate-head">
+      <p class="no">Chapter 29, pages 273–276 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Cups and the Devil's terraces</h2>
+      <p class="dim" id="dimC">fill every dip to the brim · B*(x): a Lévy staircase up, then down · cup lengths hyperbolic, exponent H</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-ch zoomable" id="wC">
+          <canvas id="cC" role="img" aria-label="A Brown profile with every dip filled to the brim, and the filled relief seen as a map of flat terraces"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cCt">A vertical cut</strong> · <span id="cCn"></span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Make the landscape impermeable and fill every dip exactly to its brim: the filled dips are the <i>cups</i>. A droplet landing above the filled surface B* escapes to the ocean along a never-ascending path; a droplet with B &lt; z &lt; B* is trapped forever. On a line, B* is explicit — the running maximum up to the summit, then the running maximum from the far end — a Lévy devil's staircase climbing and then descending, continuous, varying on a set of length zero. Mandelbrot conjectures a random droplet is almost certain to land in a cup: the cups' surfaces are then "a wild extrapolate of the terraced fields in southeast Asia" — the Devil's terraces — and their cumulative coastline a ramified net, a random kin of the Sierpiński gasket.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mC" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Persistence H</span><span class="value" id="HvC">H = 0.50</span></div>
+          <input type="range" id="HsC" min="0.3" max="0.9" step="0.05" value="0.5" aria-label="Persistence H">
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="brownC">Brown: H = 1/2</button>
+          <button type="button" class="btn" id="newC">New seed</button>
+        </div>
+        <p class="readline" id="infoC" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Cups resolved</dt><dd id="rCa">—</dd></div>
+          <div><dt>Share lying in cups</dt><dd id="rCb">—</dd></div>
+          <div><dt>Longest cup</dt><dd id="rCc">—</dd></div>
+          <div><dt>Dirt to fill all cups</dt><dd id="rCd">—</dd></div>
+        </dl>
+        <p class="note">The cut draws B (ink), the trapped water (accent) and B* (red); zoom into B* alone and new treads keep appearing — the same construction as <a href="linear-levy-dusts.html">Plates 286–287</a>, which the chapter cites. The map fills the two-dimensional field by priority flood, the exact two-dimensional B*: every cell rises to the lowest brim on any path to the border. A cut across <i>that</i> map (the third mode) lies below the cut's own one-dimensional filling — more escape routes, less water — and is the "devilishly terraced" profile of the text, peaked maxima over flat floors. The dirt readout is the chapter's thrift argument: with D barely above 2 the fill volume Σ(relative area)^(1+H/2) is small, so erosion can level the cups without reshaping the hills — the eroded model B*, scaling again if the ocean is set right, with dimension between 2 and 3 − H. What altitude destroys is drawn too: watershed points are maxima and passes, river points never are, and a Brown relief has local minima — so it has no river trees, "a fresh strike" against the model, patched by the filling.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 29, pages 272–276. The chapter prints no figures, so nothing on this page reproduces printed art: every figure is a seeded simulation of the chapter's constructions, matched statistically. Companion pages: <a href="brown-relief.html">Brown Relief and Coastlines</a> for the model under test, <a href="linear-levy-dusts.html">Linear Lévy Dusts</a> for the staircases B* turns into, <a href="length-area.html">Length–Area Relations</a> for Korčak's law among the other area laws.</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>

@@ -95,7 +95,7 @@ Update this file in the same pull request as the work it records.
 
 | Plate | Page | Title | Kind | Status | Site page |
 | :- | :- | :- | :- | :- | :- |
-| (concept) | 147–150 | Surfaces of positive volume; the arteries-and-veins model of flesh (chapter 15, no plates; confirm against the scan) | — | todo | |
+| (concept) | 147–150 | Surfaces of positive volume; the arteries-and-veins model of flesh (chapter 15, no plates — confirmed against the scan) | — | done | positive-volume |
 | 155 | 154–155 | Fractal umbrella trees and fractal canopies | exact | done | umbrella-trees |
 | 163 | 163 | Flattened fractal models of plant flowers | exact | done | diameter-exponent |
 | 164–165 | 164–165 | Plane-filling recursive bronchi | exact | done | diameter-exponent |
@@ -120,8 +120,8 @@ Update this file in the same pull request as the work it records.
 
 | Plate | Page | Title | Kind | Status | Site page |
 | :- | :- | :- | :- | :- | :- |
-| (concept) | 200–204 | Chance as a tool in model making (chapter 21; confirm plates and pages against the scan) | — | todo | |
-| (concept) | 205–209 | Conditional stationarity and cosmographic principles (chapter 22; confirm plates and pages against the scan) | — | todo | |
+| (concept) | 200–204 | Chance as a tool in model making (chapter 21, no plates — confirmed against the scan) | — | done | tool-of-chance |
+| (concept) | 205–209 | Conditional stationarity and cosmographic principles (chapter 22, no plates — confirmed against the scan) | — | done | conditional-cosmography |
 
 ## VIII Stratified random fractals (chapters 23–26)
 
@@ -150,7 +150,7 @@ Update this file in the same pull request as the work it records.
 | 269, C9 (top) | 269 | Brownian Pangaea (coastline D = 3/2) | render | done | brown-relief |
 | 270 | 270 | The first known examples of Brown coastlines | random | done | brown-relief |
 | 271 | 271 | The first known examples of fractional Brown islands (D = 2.3000) | render | done | brown-relief |
-| (concept) | 272–276 | Island, lake and cup areas: Korčak's law, deadvalleys, the Devil's terraces (chapter 29, no figures) | — | todo | |
+| (concept) | 272–276 | Island, lake and cup areas: Korčak's law, deadvalleys, the Devil's terraces (chapter 29, no figures) | — | done | cups-and-terraces |
 | (concept) | 277–279 | Isothermal surfaces of homogeneous turbulence (chapter 30) | random | done | isothermal-surfaces |
 
 ## A book within the book, in colour (C1–C16, before chapter 30)
@@ -202,7 +202,7 @@ Update this file in the same pull request as the work it records.
 | (sketches) | 391–404 | Chapter 40, six biographical sketches: Bachelier, Fournier d'Albe, Hurst, Lévy, Richardson, Zipf | data | done | biographical-sketches |
 | Drawing, p. 404 | 404 | Jean Effel's lecture drawing, "fournir vos questions à mes réponses" | art | done | biographical-sketches |
 | (concept) | 405–421 | Historical sketches: chimeras, dimension, Poincaré, old scaling evidence, Weierstrass | — | done | historical-sketches |
-| (concept) | 422– | Epilog: the path to fractals (chapter 42; confirm pages against the scan) | — | todo | |
+| (concept) | 422–424 | Epilog: the path to fractals (chapter 42, no figures — pages confirmed against the scan) | — | done | path-to-fractals |
 
 ## Front matter and the update for the second printing (pages 458–468)
 
@@ -226,13 +226,15 @@ Each chapter session should add the chapter's main ideas here, alongside its pla
 - length–area–volume relations (chapter 12): done, on the length-area page (divider-walk demo, Hack's rivers, area–volume cases);
 - percolation (chapter 13) — done, on islands-clusters (seeded bond-percolation lattice);
 - the order of ramification and fractal lattices (chapter 14) — done, discussed on the ramified-lattices page;
-- surfaces with positive volume: Cantor dusts of positive measure, Osgood's curve of positive area, and the arteries-and-veins model of flesh (chapter 15, which prints no plates);
+- surfaces with positive volume: Cantor dusts of positive measure, Osgood's curve of positive area, and the arteries-and-veins model of flesh (chapter 15, which prints no plates) — done, on the positive-volume page;
+- chance as a tool: the controller-and-seed scheme, the grand portfolio, nonconstrained against self-constrained chance (chapter 21) — done, on the tool-of-chance page;
+- the conditional cosmographic principle and the avoidance of stratification (chapter 22) — done, on the conditional-cosmography page;
 - the diameter exponent of trees (chapter 17) — done, on the diameter-exponent page;
 - fractal attractors, "chaotic" evolution, decomposable dynamical systems and the Feigenbaum dust attractor (chapter 20) — done, on the fractal-attractors page;
 - canonical curdling, the Bienaymé birth-and-death criticality and D* = log ⟨N⟩/log b (chapter 23; on the random-curds page);
 - 1/f noise and scaling nets (chapter 27): the Joseph effect, Hurst's R/S and the spectrum are on the fractional-trails page;
-- island, lake and cup areas: Korčak's law Pr(A > a) = F·a⁻ᴮ with B = D/2, deadvalleys, cups and the Devil's terraces, the eroded Brown model (chapter 29, pages 272–276 — the chapter prints no figure);
-- global dependence in Brown relief, and the horizon (chapter 28);
+- island, lake and cup areas: Korčak's law Pr(A > a) = F·a⁻ᴮ with B = D/2, deadvalleys, cups and the Devil's terraces, the eroded Brown model (chapter 29, pages 272–276 — the chapter prints no figure) — done, on the cups-and-terraces page;
+- the horizon of a fractal Earth (chapter 28) — done, a section of the brown-relief page; the chapter's global-dependence remarks stay prose (they argue what constructions must avoid, not a figure);
 - geometric inversion, self-inverse sets, limit sets, fractal osculation and the Apollonian model of smectics (chapter 18) — done, on the self-inverse page;
 - Lévy flights and dusts (chapters 31–32): the interval tremas, unforced clustering and the birth-and-death argument are on the linear-levy-dusts page; the flights, subordination and spatial dusts on the levy-dusts page;
 - disc and ball tremas: saturation, critical dimensions, lunar craters and galactic voids (chapter 33; the Moon-saturation section of the disc-tremas page);

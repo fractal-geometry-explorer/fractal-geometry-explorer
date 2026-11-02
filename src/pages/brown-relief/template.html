@@ -28,6 +28,7 @@
     <a href="#pangaea"><b>269</b> Pangaea</a>
     <a href="#first"><b>270</b> First coastlines</a>
     <a href="#island"><b>271</b> Island from the sea</a>
+    <a href="#horizon"><b>Rᴴ⁻¹</b> The horizon</a>
   </nav>
 
   <!-- ===================== PLATES 264-265: LAKE LANDSCAPES ===================== -->
@@ -291,6 +292,55 @@
           <div><dt>Seed</dt><dd id="rFd">—</dd></div>
         </dl>
         <p class="note">The six sea levels are not stated in the book; here they fall so the land grows from a few specks to near half the sheet, matching the print by eye. The relief is gently tapered toward the sheet's centre so that the island emerges in view rather than at the edge — a presentation choice, flagged here, not part of the model. No side lighting is simulated, as the caption notes: the raster alone shapes the relief.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== THE HORIZON (CHAPTER CONCEPT, NO PLATE) ===================== -->
+  <section class="plate" id="horizon">
+    <div class="plate-head">
+      <p class="no">Chapter 28, pages 261–262 — a concept the chapter argues in words <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>The horizon of a fractal Earth</h2>
+      <p class="dim" id="dimG">apparent height of a mountain at distance R: tan ≈ Rᴴ⁻¹ → 0 · so the horizon exists even on a flat Earth</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-coast zoomable" id="wG">
+          <canvas id="cG" role="img" aria-label="An observer over a fractional Brown relief, the skyline of farthest visible points, and the horizon"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cGt">The view along one bearing</strong> · <span id="cGn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">On a Brownian flat Earth the horizon's very existence needs an argument: might not every mountain be backed by a higher one, for ever? No — a mountain at distance R stands of order Rᴴ tall, so the tangent of its apparent height falls off like Rᴴ⁻¹ and tends to 0: along every bearing there is a farthest nonhidden point, and the horizon is defined. But its behaviour betrays the flat model: a flat Earth's horizon hangs <i>above</i> the plane through the observer at any altitude, while a round Earth's horizon drops below that plane once the observer is tall enough. The observed properties of the horizon confirm that Earth is round — "the opposite conclusion would have been devastating".</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mG" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Earth</span></div>
+          <div class="steps words" id="eG" role="group" aria-label="Flat or round"></div>
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Observer's height</span><span class="value" id="hGv"></span></div>
+          <input type="range" id="hGs" min="0.2" max="6" step="0.1" value="1" aria-label="Observer height in relief units">
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Persistence H</span><span class="value" id="HGv"></span></div>
+          <input type="range" id="HGs" min="0.3" max="0.9" step="0.05" value="0.5" aria-label="Persistence H">
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="roundG">Climb a round Earth</button>
+          <button type="button" class="btn" id="seedG">New seed</button>
+        </div>
+        <p class="readline" id="infoG" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Horizon distance</dt><dd id="rGa">—</dd></div>
+          <div><dt>Horizon against eye level</dt><dd id="rGb">—</dd></div>
+          <div><dt>Envelope exponent H − 1</dt><dd id="rGc">—</dd></div>
+          <div><dt>Visible skyline points</dt><dd id="rGd">—</dd></div>
+        </dl>
+        <p class="note">The chapter prints no figure for this argument, so both views are this page's illustrations: the profile along one bearing is a seeded fractional Brown line (vertical scale exaggerated as in the plates), the skyline marks the nonhidden points — those not blocked by nearer ground — and the red dot is the horizon, the farthest of them. On the round Earth the relief rides a sphere whose curvature is exaggerated about 500-fold, or no drop would be visible across one window; the note under the apparent-height chart draws the Rᴴ⁻¹ envelope that makes the horizon exist. One honest caveat: on a truly infinite flat Earth some farther mountain always tops any observer, but a finite window holds only finitely many peaks, so at exaggerated heights even the flat view here eventually looks down on everything.</p>
       </div>
     </div>
   </section>

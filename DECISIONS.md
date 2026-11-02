@@ -277,6 +277,12 @@ Chapter 13 prints no numbered plates; its six figures sit in the running text. A
 
 ## Part V, chapters 15–17
 
+**Chapter 15, "Surfaces with positive volume, and flesh" (pages 147–150, page positive-volume).**
+- The chapter prints no figures at all — all four scanned pages checked — so every figure on the page is its own illustration of the constructions the text describes, and each is flagged as such.
+- **The trema schedule λₖ = λ₁qᵏ⁻¹ is the page's choice** of a summable sequence; the chapter only requires Σλₖ < ∞ for positive measure. The three figures (the bar in Plate 80's style, the cross-cut plane dust, the flesh section) all share the one product Π(1 − λₖ), computed exactly. The chapter's three classes of linear dust (D < 1; D = 1, length 0; D = 1, length > 0) are stated in the note; the middle class (λₖ → 0 with divergent sum) is not given a preset.
+- **The curve of positive area is a reconstruction in kind.** The chapter follows Osgood's bays-and-promontories in words only; the page draws Knopp's wedge-removal scheme instead, chosen because each triangle sheds exactly the share λₖ (triangle e–v–x sheds wedge p–v–q with p, q around the midpoint of e–x at spacing λₖ·|ex|, children e–p-as-apex–v and v–q-as-apex–x), so the marsh area is exactly Π(1 − λₖ) at every stage — the property the chapter's construction exists to have. Said on the page.
+- **The flesh section is schematic and planar:** crosses of relative area λₖ cut from every tile, odd stages artery, even stages vein; tissue keeps share Π(1 − λₖ), and every tissue point has a stage-1 artery within the stage-1 tile side and a stage-2 vein within the stage-2 tile side (the "within" readouts are those bounds). The page says what the section cannot show: connected vessel trees, tissue a connected surface with D_T = 2, and Brouwer's three-network common boundary.
+
 **Plate 155, fractal umbrella trees (chapter 16).**
 - All five trees are one construction: a bare V from an apex (no trunk is drawn), with two children per branch at the same inter-branch angle θ, lengths scaled by one ratio r. Codes are irrelevant: the tree is symmetric.
 - **The parameters are round angles at the self-contact threshold.** Free fits of (θ, r) to the 600 dpi scan land on θ = 20°, 36°, 60° (top row, upright), 150° and 200° (bottom row, printed with the axis horizontal), each within ~0.1°, with r at the critical value for that θ. The caption's rule "for each D, θ takes the smallest value compatible with self-avoidance" picks the same curve.
@@ -445,6 +451,18 @@ Both plates on the page `fractal-attractors`, drawn by the chapter's own algorit
 
 **Pages 194–195, the dust attractor (no plate).** The bifurcation tree is ours — the book prints no figure for these pages. Quoted, not recomputed: D ≈ 0.538 (Grassberger, cited by the book from a preprint) and Feigenbaum's 1/α ≈ 0.3995. Computed: the window magnifier re-centres on (λ∞, ½) and shrinks by (δ, α) per step, mirror-flipping odd steps because α acts with a sign; cycle periods and Lyapunov exponents for tapped λ come from the orbit of ½.
 
+## Part VII, chapters 21–22
+
+**Chapter 21, "Chance as a tool in model making" (pages 200–204, page tool-of-chance).**
+- No plates — all five scanned pages checked. Both figures are the page's own.
+- **The controller demo uses Plate 46's generator** (three steps of 1/√7, the same constants as the gosper-island page), because its caption is the passage the chapter cites for the S/F choice; F is the mirror in the chord. The chapter's control sequences are per *stage* ("alternate S and F", "the k-th digit of π", a seeded coin); the portfolio view adds a per-piece coin — one toss per interval, chapter 24's actual scheme — and draws six consecutive seeds.
+- **The polygon sampler pairs each of n random steps with its opposite and shuffles**, which closes the walk by construction but is *not* the uniform law on closed 2n-step polygons; the page says so (uniformity is part of what makes the counting hard). Self-avoidance is brute rejection with a 20,000-draw cap; the acceptance chart (batches of 1,500–3,000 per n, n ≤ 12) shows the roughly geometric collapse. Hyperbolic variables and the typical-D warning are prose cross-links (power-laws, brown-trails), not new figures.
+
+**Chapter 22, "Conditional stationarity and cosmographic principles" (pages 205–209, page conditional-cosmography).**
+- No plates — all five scanned pages checked. Both figures are the page's own.
+- **Matter is played by the base-3 random curdling dust** (each cell keeps N of its 9 ninths, seeded per cell, chapter 23's construction) because it satisfies the conditional principle by design. The plane stands in for space: the global-density exponent 3 reads as 2, "δ = 0" as a vanishing share of the window. M(R) is averaged over 50 material origins (dust points) against 50 arbitrary origins (uniform in the window); the fitted conditional slope lands on D = log N/log 3 within a few hundredths at N = 4.
+- **Stratification is drawn as mass curves**: the Fournier quincunx at ratio 1/5 (planar D = 1) gives the staircase — chapter 9's climb-and-sag band — against the N = 3 curds (D = 1) whose conditional mass curve is straight. The chapter's program (zero density, conditional principle only, every-ratio scaling, apparent hierarchy from D < 2, data fit improving to chapter 35) closes the page as prose.
+
 ## Part VIII, chapter 23
 
 **Plates 218–219, Hoyle curdling (page 218–219).**
@@ -563,12 +581,22 @@ All six plate groups are random (`random`/`render`), so they are matched statist
 - Plates 264-265: can the two middle landscapes' D be pinned from the print (e.g., by variogram of the skyline)? The page interpolates.
 - Plate 270: the growing land share down the page suggests the originals did not renormalise variance per D, or chose sea levels per panel; worth a look if the original programs ever surface.
 
+**The horizon (pages 261–262, section added to the brown-relief page).**
+- The chapter argues the horizon in words and prints nothing, so both views are the page's own: a seeded fractional Brown line (`fbmLine`, the 1D spectral synthesis added to the page's core) as the profile along one bearing, the skyline as the running maximum of the apparent slope (z(R)·V − eye)/R, and the horizon as the farthest nonhidden point. The apparent-height chart draws the Rᴴ⁻¹ envelope (constant fitted to the sample's own maxima), which is the chapter's existence argument.
+- **The round Earth's curvature is exaggerated** (radius 2 window-widths, ≈ 500× too curved for a 500 km window) or no drop would show; said on the page. The flat-Earth claim "the horizon stays above eye level at any height" holds only while the finite window holds higher peaks, and the page's note says so.
+
 ## Part IX, chapter 29
 
 **Chapter 29, "The areas of islands, lakes, and cups" (pages 272–276): no plates.**
 - Checked against the scan page by page: all five pages are running text, with no figure, plate or caption box. The tracker's plate inventory for part IX (which ends at page 271) is correct.
 - The chapter's concepts went on the "Concepts without a plate" list: Korčak's law for island areas (Pr(A > a) = F·a⁻ᴮ, with 2B = D extended from Koch coastlines to Brown zerosets), the asymmetry between islands, deadvalleys and lakes, cups and the Devil's terraces (the filled relief B\*ₕ, whose vertical cut is a Lévy devil's staircase — the book points to Plates 286–287 in chapter 31), rivers and watersheds losing their symmetry once altitude exists, and the eroded Brown model B\*ₕ with dimension between 2 and 3 − H.
 - If a page is ever built for these ideas, the natural home is with chapter 31's Lévy staircases (Plates 286–287): the one-dimensional cup construction — fill every dip of a Brown line-to-line function to its brim — is exactly the staircase those plates draw.
+
+**The page (cups-and-terraces), built on chapter 28's machinery.** A page of its own after all (the Korčak and deadvalley material needs 2D fields, which the Lévy pages don't carry); it loads `pages/brown-relief/core.js` and cross-links the staircase pages.
+- **Korčak fit: exclude islands that touch the window border.** Checked in node across seeds (H = 0.5 and 0.8, 512² fields): with border-truncated islands included the fitted B runs at about half the predicted D/2; with whole islands only it scatters around the prediction by a tenth or two. The page fits ranks 2+ of whole islands with area ≥ 4 cells, and its note sets those expectations.
+- **Deadvalleys are read as below-level components not connected to the border** (the ocean), islands as above-level components other than the main landmass. The prefactor asymmetry flips with the sea share, as the chapter's map-inspection argument says; exponents stay put.
+- **The 1D cups are exact** (running max to the argmax, running max from the far end); the 2D filling B*(x, y) is exact priority-flood on a 128² crop. A cut of the 2D filling lies below the same row's own 1D filling (more escape routes), which is the "devilishly terraced" cut of the text; the page draws both.
+- The conjectures are reported as conjectures (droplet almost surely lands in a cup; cup-length exponent H; eroded-model dimension between 2 and 3 − H).
 
 ## The colour signature (plates C1–C16) and chapter 30
 
@@ -753,6 +781,12 @@ with w = b^(−H) = b^(D−2), and W₁(t) − W₁(0) = (1−w²)^(−1/2) Σ_{
 - **Weierstrass figure.** W(t) = Σ b⁻ⁿᴴ cos(2π bⁿt), normalised by Σ b⁻ⁿᴴ; box dimension of the graph 2 − H; nowhere differentiable for H ≤ 1 by Hardy 1916 (ab ≥ 1 with a = b⁻ᴴ). The H slider stops at 0.2 (D ≤ 1.8) because terms past frequency 10⁹ would lose cos() to floating-point error, and at smaller H the dropped tail would be visible. Riemann view draws the partial sum of Σ n⁻² sin(n²t) to n = min(9000, 2.5·px-per-unit); Gerver 1970: derivative −1/2 at t = πp/q with p, q odd (the marked point is t = π, R(π) = 0).
 - **Topic split with chapter 39.** Agreed with the chapter-39 thread: this page keeps the Weierstrass *story* and a small historical figure; the mathematics (spectra, modified forms, kin) goes on mathematical-backup#weierstrass. No forward hyperlink from this page (it would be dead until that page merges); the chapter-39 PR may add the links both ways once both pages exist.
 - Chapters 40 (biographical sketches) and 42 (epilog) are other threads' work; this page's tracker row covers only chapter 41.
+
+## Part XII, chapter 42 (Epilog, pages 422–424, page path-to-fractals)
+
+- A text chapter: three scanned pages, no figures. The page's one figure is a route map of the epilog's own narrative — thirteen stations on five field lanes from 1951 (Zipf's law via the wastebasket book review) to 1982 (this book), each with the chapter's account and a link to the site page that treats it where one exists.
+- **Dates are the epilog's**; where it gives only a relative time (the 1962–64 visiting professorship, "soon after"), the station sits mid-interval and its year readout is marked ≈. The lane assignment (words / economics / noises & turbulence / earth & sky / synthesis) is the page's device.
+- The chapter's two arguments — description before explanation (the central-limit-theorem point, the Yule-revival episode, the prices payoff), and fractal geometry as a low-competitiveness historical anomaly — are prose sections, not figures; nothing in the chapter suggests a drawing for them.
 
 ## Update for the second printing (pages 458–468 and front matter, page second-printing)
 

@@ -1,0 +1,860 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Surfaces of Positive Volume</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>
+/* Layout: three concept sections (Cantor dusts of positive measure with the drifting-dimension charts, the wedge-removal curve of positive area, the arteries-and-veins section of flesh), each a computed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */
+:root {
+  --page: #e4e5e1;
+  --text: #1b1d1f;
+  --muted: #595e64;
+  --rule: #c4c7c1;
+  --surface: #f6f6f3;
+  --accent: #285895;
+  --f-display: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Newsreader", Georgia, "Times New Roman", serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* the figures are reproductions of printed plates, so their paper and inks stay the same in both themes */
+  --print-paper: #ecebe6;
+  --print-ink: #151515;
+  --print-rule: #c9c8c2;
+  --gain: rgba(47, 95, 158, 0.42);
+  --loss: rgba(186, 88, 44, 0.42);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --page: #111214; --text: #e5e5e1; --muted: #9a9fa6; --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --page: #111214; --text: #e5e5e1; --muted: #9a9fa6; --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--page); color: var(--text); font-family: var(--f-display); font-size: 14px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
+.wrap {
+  max-width: 1180px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 36px 64px;
+  display: grid; gap: 40px;
+}
+header.top { display: grid; gap: 10px; max-width: 820px; }
+.eyebrow { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+h1 {
+  margin: 0; display: flex; align-items: center; flex-wrap: wrap; gap: 0.18em 0.42em;
+  font-weight: 800; font-size: clamp(30px, 5.4vw, 54px); line-height: 1.02; letter-spacing: 0.01em; text-transform: uppercase; text-wrap: balance;
+}
+h1 .plate-no { font-weight: 600; text-transform: none; letter-spacing: 0; }
+.lozenge { display: inline-block; width: 0.42em; height: 0.42em; border: 0.075em solid currentColor; position: relative; top: -0.02em; }
+.lozenge::after { content: ""; position: absolute; inset: 0.1em; border: 0.05em solid currentColor; }
+.dek { margin: 0; font-family: var(--f-body); font-size: 19px; line-height: 1.45; max-width: 64ch; }
+
+nav.index {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+  padding: 10px max(16px, env(safe-area-inset-right, 0px)) 10px max(16px, env(safe-area-inset-left, 0px));
+  background: var(--page); border-bottom: 1px solid var(--rule);
+  display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none;
+}
+nav.index a {
+  flex: none; display: inline-flex; gap: 8px; align-items: baseline; padding: 6px 10px;
+  border: 1px solid var(--rule); background: var(--surface); color: var(--text); text-decoration: none; font-size: 13px; font-weight: 600;
+}
+nav.index a b { font-family: var(--f-mono); font-weight: 500; color: var(--accent); }
+nav.index a:hover { border-color: var(--text); }
+
+section.plate { display: grid; gap: 18px; scroll-margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--rule); }
+.plate-head { display: grid; gap: 4px; }
+.plate-head .no { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.plate-head h2 { margin: 0; font-size: clamp(22px, 3vw, 30px); font-weight: 800; line-height: 1.1; text-transform: uppercase; letter-spacing: 0.01em; text-wrap: balance; }
+.plate-head .dim { margin: 0; font-family: var(--f-mono); font-size: 13px; color: var(--muted); }
+.plate-body { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(280px, 1fr); gap: 32px; align-items: start; }
+@media (max-width: 899px) { .plate-body { grid-template-columns: minmax(0, 1fr); gap: 20px; } }
+figure.fig { margin: 0; display: grid; gap: 8px; min-width: 0; }
+.canvas-wrap { position: relative; width: 100%; max-width: 100%; background: var(--print-paper); outline: 1px solid var(--rule); overflow: hidden; }
+.canvas-wrap canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.r-sq { aspect-ratio: 1 / 1; }
+.r-lox { aspect-ratio: 5 / 4; }
+.zoomable { cursor: grab; touch-action: pan-y; }
+.zoomable.dragging { cursor: grabbing; }
+.view-tools { position: absolute; top: 10px; right: 10px; display: flex; gap: 6px; z-index: 2; }
+.view-tools button { min-width: 34px; height: 34px; padding: 0 10px; font: 600 15px/1 var(--f-display); color: var(--print-ink); background: #f7f7f3; border: 1px solid var(--print-rule); cursor: pointer; }
+figcaption { font-size: 13px; color: var(--muted); }
+figcaption strong { color: var(--text); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+
+.side { display: grid; gap: 18px; min-width: 0; align-content: start; }
+.side p.cap { margin: 0; font-family: var(--f-body); font-size: 17px; line-height: 1.55; max-width: 62ch; }
+.group { display: grid; gap: 8px; min-width: 0; }
+.label-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.label { font-size: 11.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.value { font-family: var(--f-mono); font-size: 12.5px; font-variant-numeric: tabular-nums; text-align: right; }
+.steps { display: flex; flex-wrap: wrap; gap: 6px; }
+.steps button {
+  min-width: 38px; height: 34px; padding: 0 10px; font: 600 13px/1 var(--f-mono); color: var(--text);
+  background: var(--surface); border: 1px solid var(--rule); cursor: pointer;
+}
+.steps.words button { font: 600 13px/1 var(--f-display); }
+.steps button[aria-pressed="true"] { background: var(--text); color: var(--page); border-color: var(--text); }
+.steps button:hover { border-color: var(--text); }
+.steps button:disabled { opacity: 0.35; cursor: default; border-color: var(--rule); }
+.btn-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.btn { padding: 8px 12px; font: 600 13px/1.2 var(--f-display); color: var(--text); background: var(--surface); border: 1px solid var(--rule); cursor: pointer; }
+.btn:hover { border-color: var(--text); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--page); }
+.check { display: flex; align-items: flex-start; gap: 8px; font-size: 13.5px; cursor: pointer; }
+.check input { accent-color: var(--accent); width: 16px; height: 16px; margin: 1px 0 0; flex: none; }
+.check:has(input:disabled) { opacity: 0.45; cursor: default; }
+.slider { display: grid; gap: 4px; }
+.slider input { width: 100%; accent-color: var(--accent); margin: 0; }
+.slider input:disabled { opacity: 0.4; }
+dl.read { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; padding-top: 14px; border-top: 1px solid var(--rule); }
+dl.read div { display: grid; gap: 2px; min-width: 0; }
+dl.read dt { font-size: 10.5px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); }
+dl.read dd { margin: 0; font-family: var(--f-mono); font-size: 16px; overflow-wrap: anywhere; }
+dl.read dd small { font-size: 11.5px; color: var(--muted); }
+.note { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.mini { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; padding: 10px 12px; background: var(--print-paper); border: 1px solid var(--print-rule); color: var(--print-ink); }
+.mini svg { height: 64px; width: auto; max-width: 100%; }
+.mini .fx { font-family: var(--f-mono); font-size: 12px; line-height: 1.6; color: var(--print-ink); }
+.key { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--muted); }
+.key span { display: inline-flex; align-items: center; gap: 6px; }
+.key i { width: 14px; height: 10px; display: inline-block; border: 1px solid var(--print-rule); }
+.readline { min-height: 2.9em; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.readline b { color: var(--text); font-weight: 700; }
+
+.sub { display: grid; gap: 14px; padding-top: 22px; border-top: 1px dashed var(--rule); scroll-margin-top: 64px; }
+.sub h3 { margin: 0; font-size: 15px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
+.source { font-family: var(--f-body); font-size: 15px; color: var(--muted); margin: 0; max-width: 84ch; }
+.source i { color: var(--text); }
+.source a { color: var(--accent); }
+button:focus-visible, input:focus-visible, a:focus-visible, canvas:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.r-ch { aspect-ratio: 10 / 7; }
+.r-tri { aspect-ratio: 10 / 7; }
+</style>
+<style>
+body { margin: 0; }
+/* The hidden attribute must beat the pages' own display rules (.slider, .check, ...). The artifact
+   wrapper's stylesheet used to provide this; self-hosted pages carry it themselves. */
+[hidden] { display: none !important; }
+nav.shell { font-family: var(--f-display); font-size: 12.5px; font-weight: 600; background: var(--page);
+  border-bottom: 1px solid var(--rule); display: flex; align-items: center; gap: 6px 18px;
+  padding: 9px max(16px, env(safe-area-inset-right, 0px)) 9px max(16px, env(safe-area-inset-left, 0px)); }
+nav.shell a { color: var(--text); text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+nav.shell a:hover { color: var(--accent); }
+nav.shell .home { letter-spacing: 0.07em; text-transform: uppercase; flex: none; }
+nav.shell .gap { flex: 1; }
+nav.shell .pn { color: var(--muted); font-weight: 500; }
+nav.shell .pn b { color: var(--text); font-weight: 600; }
+nav.shell a:hover .pn, nav.shell a:hover .pn b { color: var(--accent); }
+</style>
+</head>
+<body>
+<nav class="shell" aria-label="Site"><a class="home" href="index.html">Fractal Geometry Explorer</a><span class="gap"></span><a rel="prev" href="ramified-lattices.html"><span class="pn">&#8592; <b>Plates 141–146</b></span></a><a rel="next" href="umbrella-trees.html"><span class="pn"><b>Plate 155</b> &#8594;</span></a></nav>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 15, "Surfaces with Positive Volume, and Flesh" · pages 147–150</p>
+    <h1><span class="plate-no">Chapter 15</span><span class="lozenge" aria-hidden="true"></span><span>Surfaces of Positive Volume</span></h1>
+    <p class="dek">Part V's opening chapter builds the mildest-sounding monsters in the book: dusts with positive length, curves with positive area, surfaces with positive volume. The trick is a trema ratio that shrinks from stage to stage. The payoff is anatomy — tissue in which an artery and a vein run arbitrarily close to every point is exactly such a set. The chapter prints no plates, so every figure below is this page's illustration of its constructions.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#fat-dust"><b>Π(1−λₖ)</b> Dusts of positive measure</a>
+    <a href="#osgood"><b>D_T = 1</b> A curve of positive area</a>
+    <a href="#flesh"><b>D = 3</b> Arteries, veins and flesh</a>
+  </nav>
+
+  <!-- ===================== CANTOR DUSTS OF POSITIVE MEASURE ===================== -->
+  <section class="plate" id="fat-dust">
+    <div class="plate-head">
+      <p class="no">Chapter 15, pages 147–148 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Cantor dusts of positive measure</h2>
+      <p class="dim" id="dimA">λₖ = λ₁qᵏ⁻¹ · remaining measure Π(1 − λₖ) &gt; 0 when Σλₖ &lt; ∞ · D_T = 0, D = 1</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-ch zoomable" id="wA">
+          <canvas id="cA" role="img" aria-label="A Cantor dust whose tremas shrink fast enough to leave positive length"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cAt">The bar</strong> · <span id="cAn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Cantor's triadic dust has zero length because its tremas keep a fixed ratio: cut the middle λ out of every interval forever and the remaining length Π(1 − λ)ᴷ dies. But the dust's other properties — totally disconnected, D_T = 0 — come only from the <i>bisection</i>, not the ratio. Let the ratio λₖ shrink with the stage k, fast enough that Σλₖ converges, and the remainder keeps a positive length 1 − P while staying a dust. It is no longer self-similar, so it has no similarity dimension, but Hausdorff's definition answers D = 1: a fractal still, since D &gt; D_T, whose D and D_T describe it "very superficially". The same cross-cutting in the plane leaves a dust of positive area with D = 2, and in space a dust of positive volume with D = 3.</p>
+        <div class="mini" aria-label="The rule">
+          <div class="fx">stage k: cut the middle λₖ of every piece<br>length left: Π(1 − λₖ) → 1 − P</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mA" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">First trema λ₁</span><span class="value" id="l1vA">λ₁ = 0.333</span></div>
+          <input type="range" id="l1sA" min="0.05" max="0.8" step="0.005" value="0.333" aria-label="First trema ratio">
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Shrink factor q</span><span class="value" id="qvA">q = 0.50</span></div>
+          <input type="range" id="qsA" min="0.3" max="1" step="0.01" value="0.5" aria-label="Shrink factor q">
+        </div>
+        <div class="group" id="kAg">
+          <div class="label-row"><span class="label">Stages</span></div>
+          <div class="steps" id="kA" role="group" aria-label="Stages"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="fatA">A fat dust: λ₁ = 1/3, q = 1/2</button>
+          <button type="button" class="btn" id="cantorA">Cantor's dust: q = 1</button>
+        </div>
+        <p class="readline" id="infoA" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Length at this stage</dt><dd id="rAa">—</dd></div>
+          <div><dt>Length in the limit</dt><dd id="rAb">—</dd></div>
+          <div><dt>Formal Dₖ at this stage</dt><dd id="rAc">—</dd></div>
+          <div><dt>D and D_T</dt><dd id="rAd">1 and 0</dd></div>
+        </dl>
+        <p class="note">The chapter prints no figure, so the bar (drawn in Plate 80's style), the plane dust and the charts are this page's illustrations. The λₖ = λ₁qᵏ⁻¹ schedule is this page's choice of a summable sequence; the chapter only asks Σλₖ &lt; ∞. The drifting formal dimension Dₖ = log 2/log(1/rₖ) with rₖ = (1 − λₖ)/2 is the chapter's own device: it climbs toward 1 as the tremas fade, embodying the <i>effective dimension</i> of Chapter 3's <a href="what-is-a-fractal.html">ball of thread</a>. The three classes of linear dust the chapter sorts out — D &lt; 1, D = 1 with zero length, D = 1 with positive length — appear as q &lt; 1 against q = 1 here (D = 1 with zero length needs λₖ → 0 with Σλₖ = ∞, as in λₖ = 1/k, which the presets skip).</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== A CURVE OF POSITIVE AREA ===================== -->
+  <section class="plate" id="osgood">
+    <div class="plate-head">
+      <p class="no">Chapter 15, pages 148–149 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>A curve of positive area</h2>
+      <p class="dim" id="dimB">marshland area Π(1 − λₖ) · the limit: a curve, D_T = 1, with D = 2 and positive area</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-tri zoomable" id="wB">
+          <canvas id="cB" role="img" aria-label="The wedge-removal construction of a curve with positive area"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cBt">The marshland</strong> · <span id="cBn"></span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Dusts of positive volume don't offend intuition much — but after Lebesgue 1903 and Osgood 1903, <i>curves</i> of positive area had to be swallowed too. The chapter generalizes the midpoint construction of <a href="koch-plates.html">Plate 43</a>: keep cutting bays and promontories out of a strip of marshland, but let their relative widths λₖ tend to 0 with Π(1 − λₖ) &gt; 0. The marshland then never loses its area — yet in the limit it is a genuine curve: no interior points, and D_T = 1, because any point can be cut off from the rest by removing just two points.</p>
+        <div class="mini" aria-label="The rule">
+          <div class="fx">stage k: each triangle sheds a wedge,<br>a λₖ share of itself, and splits in two</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mB" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">First wedge λ₁</span><span class="value" id="l1vB">λ₁ = 0.40</span></div>
+          <input type="range" id="l1sB" min="0.1" max="0.7" step="0.005" value="0.4" aria-label="First wedge ratio">
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Shrink factor q</span><span class="value" id="qvB">q = 0.60</span></div>
+          <input type="range" id="qsB" min="0.3" max="1" step="0.01" value="0.6" aria-label="Shrink factor q">
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Stages</span></div>
+          <div class="steps" id="kB" role="group" aria-label="Stages"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="posB">Positive area: q = 0.6</button>
+          <button type="button" class="btn" id="zeroB">Constant ratio: q = 1, area → 0</button>
+        </div>
+        <p class="readline" id="infoB" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Marsh area at this stage</dt><dd id="rBa">—</dd></div>
+          <div><dt>Area in the limit</dt><dd id="rBb">—</dd></div>
+          <div><dt>Pieces</dt><dd id="rBc">—</dd></div>
+          <div><dt>D and D_T</dt><dd id="rBd">2 and 1</dd></div>
+        </dl>
+        <p class="note">A reconstruction in kind: the chapter describes Osgood's bays and promontories in words and prints nothing, so this page draws the simplest scheme with the same bookkeeping — Knopp's wedge removal, in which each triangle sheds a wedge of relative area exactly λₖ and splits in two, and the curve is the limit of the triangle chains. The area is then exactly Π(1 − λₖ) at every stage, the property the chapter's construction is built to have. At q = 1 the same picture collapses to an ordinary zero-area Koch-like curve. The chapter adds a remark run the other way: a Koch curve whose generator grows at every stage can drive D to 2 while the area stays 0 — a plane-filling curve's D without its double points, met again in the rivers that "crisscross finer scale domains less thoroughly" below their inner cutoff.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ARTERIES, VEINS AND FLESH ===================== -->
+  <section class="plate" id="flesh">
+    <div class="plate-head">
+      <p class="no">Chapter 15, pages 149–150 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Arteries, veins and flesh</h2>
+      <p class="dim" id="dimC">tissue: D_T = 2, D = 3, most of the volume · vessels: standard domains, a small share</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wC">
+          <canvas id="cC" role="img" aria-label="A cross-section of the vascular model: artery and vein cuts at alternating stages, tissue in ink"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>A section of flesh</strong> · <span id="cCn"></span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Harvey's circulation puts an artery and a vein within a small distance of nearly every point of the body; blood being expensive, the vessels must still occupy only a small share of the volume. Euclid finds the demands contradictory: tissue must be the common boundary of two three-dimensional networks, yet have far more volume than both. The spatial Osgood construction delivers precisely this. Vessels are standard domains — blood cells fit inside them — while tissue contains no piece, however small, free of both networks: a fractal surface with D_T = 2 and D = 3. "Lebesgue-Osgood monsters are the very substance of our flesh!"</p>
+        <div class="key" aria-label="Colours">
+          <span><i style="background:#c2452d"></i> arteries (odd stages)</span>
+          <span><i style="background:#2f5f9e"></i> veins (even stages)</span>
+          <span><i style="background:#151515"></i> tissue</span>
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">First cut λ₁ (area share)</span><span class="value" id="l1vC">λ₁ = 0.30</span></div>
+          <input type="range" id="l1sC" min="0.05" max="0.6" step="0.005" value="0.3" aria-label="First cut, share of the area">
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Shrink factor q</span><span class="value" id="qvC">q = 0.55</span></div>
+          <input type="range" id="qsC" min="0.3" max="1" step="0.01" value="0.55" aria-label="Shrink factor q">
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Stages</span></div>
+          <div class="steps" id="kC" role="group" aria-label="Stages"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="fleshC">Thrifty blood: λ₁ = 0.3, q = 0.55</button>
+          <button type="button" class="btn" id="zeroC">Constant ratio: tissue vanishes</button>
+        </div>
+        <p class="readline" id="infoC" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Tissue share in the limit</dt><dd id="rCa">—</dd></div>
+          <div><dt>Blood share in the limit</dt><dd id="rCb">—</dd></div>
+          <div><dt>Artery within</dt><dd id="rCc">—</dd></div>
+          <div><dt>Vein within</dt><dd id="rCd">—</dd></div>
+        </dl>
+        <p class="note">A schematic planar section, this page's own: each stage cuts a cross — artery at odd stages, vein at even — of relative area λₖ from every tile, so the tissue keeps the share Π(1 − λₖ) while every tissue point has a stage-k artery and a stage-(k+1) vein within the size of its stage-k tile (the "within" readouts). What the section cannot show: in the genuine spatial model each network connects into one branching tree, the tissue is a connected <i>surface</i> (D_T = 2), and Brouwer's construction even gives arteries, veins and the lung's bronchioles one common boundary — the chapter's answer to Hahn's claim that such sets put geometry beyond intuition. The flat tiles here stand for sections of tissue, not for dust.</p>
+      </div>
+    </div>
+    <div class="sub" id="intuition">
+      <h3>Of intuition, old and new</h3>
+      <p class="cap">The chapter closes on Hans Hahn's essay against geometric intuition, which offers the three-domain boundary as proof that intuition "is a wholly unreliable guide" and must yield to logic. Mandelbrot's verdict is the opposite: once the monsters are seen doing honest work — here, literally as flesh — intuition does not break, it trains. The Essay's recurring moral: "mathematics is too important to be abandoned to fanatic logicians."</p>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 15, pages 147–150. The chapter prints no plates, so nothing on this page reproduces printed art: every figure computes the chapter's constructions, with this page's own choices (the λₖ schedule, Knopp's wedge scheme, the planar vascular section) flagged under each one. Companion pages: <a href="cantor-dust.html">Cantor Dust</a> for the zero-measure original, <a href="koch-plates.html">Triadic Koch Island</a> for Plate 43's midpoint construction, <a href="diameter-exponent.html">Trees and the Diameter Exponent</a> for chapter 17's bronchi.</p>
+</div>
+
+<script>
+// Shared drawing library: style constants, the zoomable canvas (snapshot while panning), chunked
+// paths, controls and small SVG figures. Loaded before each page's own scripts; pages may extend
+// PRINT with their own inks (PRINT.red = ..., PRINT.light = ...).
+const $ = (id) => document.getElementById(id);
+const fmt = (n) => n.toLocaleString('en-US');
+const PRINT = { paper: '#ecebe6', ink: '#151515', rule: '#c9c8c2', muted: '#66665f', accent: '#2f5f9e', red: '#c2452d', faint: '#bdbbb3', gray: '#8f8e88' };
+const RAMP = [[233, 185, 73], [217, 113, 59], [184, 66, 79], [125, 58, 120], [63, 79, 151], [43, 122, 138]];
+const ramp = (t, a = 1) => {
+  const x = Math.max(0, Math.min(1, t)) * (RAMP.length - 1), i = Math.min(RAMP.length - 2, Math.floor(x)), f = x - i;
+  const c = RAMP[i].map((v, k) => Math.round(v + (RAMP[i + 1][k] - v) * f));
+  return `rgba(${c[0]},${c[1]},${c[2]},${a})`;
+};
+const CAT = ['#151515', '#9a988f', '#2f5f9e', '#c2452d', '#3f8f6c', '#b58a2a', '#6b4e9b', '#5f8fae'];
+
+// ---------- shared plumbing ----------
+function figure(canvas, draw) {
+  const wrap = canvas.parentElement;
+  const f = { canvas, ctx: canvas.getContext('2d'), w: 1, h: 1, dpr: 1, draw };
+  const resize = () => {
+    f.dpr = Math.min(2, window.devicePixelRatio || 1);
+    f.w = wrap.clientWidth || 1; f.h = wrap.clientHeight || 1;
+    canvas.width = Math.round(f.w * f.dpr); canvas.height = Math.round(f.h * f.dpr);
+    f.draw();
+  };
+  new ResizeObserver(resize).observe(wrap);
+  return f;
+}
+function fitBox(f, bb, pad = 0.04) {
+  const w = Math.max(1e-9, bb.x1 - bb.x0), h = Math.max(1e-9, bb.y1 - bb.y0), s = Math.min(f.w / (w * (1 + 2 * pad)), f.h / (h * (1 + 2 * pad)));
+  return { s, ox: f.w / 2 - ((bb.x0 + bb.x1) / 2) * s, oy: f.h / 2 + ((bb.y0 + bb.y1) / 2) * s };
+}
+const toWorld = (f, v) => f.ctx.setTransform(f.dpr * v.s, 0, 0, -f.dpr * v.s, f.dpr * v.ox, f.dpr * v.oy);
+const toScreen = (f) => f.ctx.setTransform(f.dpr, 0, 0, f.dpr, 0, 0);
+function paper(f, color) { f.ctx.setTransform(1, 0, 0, 1, 0, 0); f.ctx.fillStyle = color; f.ctx.fillRect(0, 0, f.canvas.width, f.canvas.height); }
+function polyPath(P, closed = true, upto) {
+  const p = new Path2D(), m = upto === undefined ? P.length / 2 : upto;
+  p.moveTo(P[0], P[1]);
+  for (let i = 1; i < m; i++) p.lineTo(P[2 * i], P[2 * i + 1]);
+  if (closed) p.closePath();
+  return p;
+}
+function bbox(P, bb = { x0: Infinity, x1: -Infinity, y0: Infinity, y1: -Infinity }) {
+  for (let i = 0; i < P.length; i += 2) { bb.x0 = Math.min(bb.x0, P[i]); bb.x1 = Math.max(bb.x1, P[i]); bb.y0 = Math.min(bb.y0, P[i + 1]); bb.y1 = Math.max(bb.y1, P[i + 1]); }
+  return bb;
+}
+function stepButtons(el, values, text, aria, onPick) {
+  const bs = values.map((v) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.textContent = text(v); b.setAttribute('aria-label', aria(v));
+    b.addEventListener('click', () => onPick(v));
+    el.append(b);
+    return b;
+  });
+  const mark = (cur) => bs.forEach((b, i) => b.setAttribute('aria-pressed', String(values[i] === cur)));
+  mark.buttons = bs;
+  return mark;
+}
+// pan and zoom: a quick rescaled snapshot while moving, a full redraw once it settles
+function zoomable(wrapId, canvasId, fitOf, render, opts = {}) {
+  const maxZoom = opts.maxZoom || 400;
+  const wrap = $(wrapId), z = { view: null, user: false, snapView: null, raf: 0, full: 0 };
+  const snap = document.createElement('canvas');
+  const f = figure($(canvasId), () => draw());
+  function touch() { wrap.style.touchAction = z.view && z.view.s > z.view.fit * 1.02 ? 'none' : 'pan-y'; }
+  function draw() {
+    if (!z.view || !z.user) { z.view = fitOf(f); z.view.fit = z.view.s; z.user = false; touch(); }
+    render(f, z.view);
+    snap.width = f.canvas.width; snap.height = f.canvas.height; snap.getContext('2d').drawImage(f.canvas, 0, 0);
+    z.snapView = { s: z.view.s, ox: z.view.ox, oy: z.view.oy };
+  }
+  function quick() {
+    const v = z.view, k = v.s / z.snapView.s, c = f.ctx;
+    c.setTransform(1, 0, 0, 1, 0, 0); c.fillStyle = z.ground || PRINT.paper; c.fillRect(0, 0, f.canvas.width, f.canvas.height);
+    c.drawImage(snap, (v.ox - z.snapView.ox * k) * f.dpr, (v.oy - z.snapView.oy * k) * f.dpr, snap.width * k, snap.height * k);
+  }
+  function schedule() { if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; draw(); }); }
+  function moved() {
+    if (!z.snapView) { schedule(); return; }
+    if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; quick(); });
+    clearTimeout(z.full); z.full = setTimeout(schedule, 160);
+  }
+  function zoomAt(px, py, k) {
+    const v = z.view, ns = Math.min(v.fit * maxZoom, Math.max(v.fit * 0.8, v.s * k)), wx = (px - v.ox) / v.s, wy = (v.oy - py) / v.s;
+    v.s = ns; v.ox = px - wx * ns; v.oy = py + wy * ns; z.user = true; touch(); moved();
+  }
+  function pan(dx, dy) { z.view.ox += dx; z.view.oy += dy; z.user = true; moved(); }
+  wrap.querySelector('[data-z="in"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1.6));
+  wrap.querySelector('[data-z="out"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1 / 1.6));
+  wrap.querySelector('[data-z="fit"]').addEventListener('click', () => { z.user = false; schedule(); });
+  const pts = new Map();
+  let pinch = null, down = null;
+  const local = (e) => { const r = wrap.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+  wrap.addEventListener('pointerdown', (e) => {
+    if (e.target.closest('.view-tools')) return;
+    pts.set(e.pointerId, local(e));
+    down = pts.size === 1 ? { p: local(e), t: performance.now(), moved: 0 } : null;
+    try { wrap.setPointerCapture(e.pointerId); } catch (_) {}
+    if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), m: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2] }; }
+    wrap.classList.add('dragging');
+  });
+  wrap.addEventListener('pointermove', (e) => {
+    if (!pts.has(e.pointerId)) return;
+    const prev = pts.get(e.pointerId), cur = local(e);
+    pts.set(e.pointerId, cur);
+    if (down) down.moved = Math.max(down.moved, Math.hypot(cur[0] - down.p[0], cur[1] - down.p[1]));
+    if (pts.size === 2 && pinch) {
+      const [a, b] = [...pts.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]), m = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+      pan(m[0] - pinch.m[0], m[1] - pinch.m[1]);
+      if (pinch.d > 0) zoomAt(m[0], m[1], d / pinch.d);
+      pinch = { d, m };
+    } else if (pts.size === 1 && (e.pointerType !== 'touch' || z.view.s > z.view.fit * 1.02)) pan(cur[0] - prev[0], cur[1] - prev[1]);
+  });
+  const end = (e) => {
+    if (down && pts.size === 1 && down.moved < 5 && opts.onTap) { const [x, y] = local(e), v = z.view; opts.onTap((x - v.ox) / v.s, (v.oy - y) / v.s); }
+    down = null;
+    pts.delete(e.pointerId); if (pts.size < 2) pinch = null; if (!pts.size) wrap.classList.remove('dragging');
+  };
+  wrap.addEventListener('pointerup', end); wrap.addEventListener('pointercancel', (e) => { down = null; end(e); });
+  wrap.addEventListener('wheel', (e) => { if (!(e.ctrlKey || e.metaKey)) return; e.preventDefault(); const [x, y] = local(e); zoomAt(x, y, Math.exp(-e.deltaY * 0.0045)); }, { passive: false });
+  wrap.addEventListener('dblclick', (e) => { if (e.target.closest('.view-tools')) return; const [x, y] = local(e); zoomAt(x, y, e.shiftKey ? 0.5 : 2); });
+  return { f, z, schedule, refit: () => { z.user = false; schedule(); } };
+}
+// chunked paths: many small paths fill far faster than one path with a hundred thousand pieces
+function chunked(count, add, size = 512) {
+  const out = [];
+  let p = null;
+  for (let i = 0; i < count; i++) { if (i % size === 0) { p = new Path2D(); out.push(p); } add(p, i); }
+  return out;
+}
+// fill and outline in the same colour, so that tiles which only meet along an edge show no hairline seams
+function solid(c, paths, color, lw) {
+  c.fillStyle = color; c.strokeStyle = color; c.lineWidth = lw; c.lineJoin = 'miter';
+  for (const p of paths) { c.fill(p); c.stroke(p); }
+}
+const dot = (c, v, x, y, r = 4, color = PRINT.red) => { c.beginPath(); c.arc(v.ox + x * v.s, v.oy - y * v.s, r, 0, Math.PI * 2); c.fillStyle = color; c.fill(); c.strokeStyle = PRINT.paper; c.lineWidth = 1.5; c.stroke(); };
+
+// a polyline (Float64Array or [[x,y],...]) as SVG points with y flipped
+const svgPts = (P) => (P instanceof Float64Array ? Array.from({ length: P.length / 2 }, (_, i) => [P[2 * i], P[2 * i + 1]]) : P).map(([x, y]) => `${x.toFixed(4)},${(-y).toFixed(4)}`).join(' ');
+function miniCurve(id, P, dots = true) {
+  const pts = P instanceof Float64Array ? Array.from({ length: P.length / 2 }, (_, i) => [P[2 * i], P[2 * i + 1]]) : P;
+  $(id).innerHTML = `<line x1="0" y1="0" x2="1" y2="0" stroke="#8a8a84" stroke-width="0.008" stroke-dasharray="0.025 0.02"/>` +
+    `<polyline points="${svgPts(pts)}" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linejoin="round"/>` +
+    (dots ? `<g fill="currentColor">${pts.map(([x, y], i) => `<circle cx="${x.toFixed(4)}" cy="${(-y).toFixed(4)}" r="${i === 0 || i === pts.length - 1 ? 0.03 : 0.018}"/>`).join('')}</g>` : '');
+}
+function miniTree(id, links, dx = 0) {
+  const ends = new Set(), mid = new Set(), k = (x, y) => `${x.toFixed(4)},${y.toFixed(4)}`;
+  let s = '';
+  for (const [px, py, qx, qy] of links) {
+    s += `<line x1="${(px + dx).toFixed(4)}" y1="${(-py).toFixed(4)}" x2="${(qx + dx).toFixed(4)}" y2="${(-qy).toFixed(4)}" stroke="currentColor" stroke-width="0.02" stroke-linecap="round"/>`;
+    mid.add(k(px + dx, py)); mid.add(k(qx + dx, qy));
+  }
+  s += `<g fill="currentColor">${[...mid].map((p) => { const [x, y] = p.split(',').map(Number); const big = (Math.abs(x - dx) < 1e-6 || Math.abs(x - dx - 1) < 1e-6) && Math.abs(y) < 1e-6; return `<circle cx="${x}" cy="${-y}" r="${big ? 0.03 : 0.018}"/>`; }).join('')}</g>`;
+  return s;
+}
+// canvas transform for a similarity map f = [ar, ai, br, bi, m] composed with the view
+function setMap(f, c, v, fig) {
+  const [ar, ai, br, bi, m] = f, k = fig.dpr * v.s;
+  if (m) c.setTransform(k * ar, -k * ai, k * ai, k * ar, fig.dpr * (v.ox + v.s * br), fig.dpr * (v.oy - v.s * bi));
+  else c.setTransform(k * ar, -k * ai, -k * ai, -k * ar, fig.dpr * (v.ox + v.s * br), fig.dpr * (v.oy - v.s * bi));
+}
+const segPath = (segs, pick) => { const p = new Path2D(); for (const s of segs) if (!pick || pick(s)) { p.moveTo(s[0], s[1]); p.lineTo(s[2], s[3]); } return p; };
+// Plate 64's chevrons, measured from the plate: each interval a→b becomes a thin quadrilateral
+// pointing toward F, the corner the next stage would add (see DECISIONS.md)
+const CHEV_OUT = 0.43, CHEV_IN = 0.235;
+function chevronPaths(P, F, m) {
+  return chunked(m, (p, i) => {
+    const ax = P[2 * i], ay = P[2 * i + 1], bx = P[2 * i + 2], by = P[2 * i + 3], mx = (ax + bx) / 2, my = (ay + by) / 2;
+    const vx = F[2 * i] - mx, vy = F[2 * i + 1] - my;
+    p.moveTo(ax, ay); p.lineTo(mx + CHEV_OUT * vx, my + CHEV_OUT * vy); p.lineTo(bx, by); p.lineTo(mx + CHEV_IN * vx, my + CHEV_IN * vy); p.closePath();
+  });
+}
+
+// Chapter 15 ("Surfaces with Positive Volume, and Flesh") prints no plates, so everything on this
+// page computes the chapter's constructions: Cantor dusts whose trema ratios shrink fast enough to
+// leave positive measure, the drifting formal dimension D_k, a curve of positive area by wedge
+// removal, and the arteries-and-veins section of flesh.
+
+// trema ratios: lambda_k = l1 * q^(k-1). Sum finite exactly when q < 1, and then the remaining
+// measure prod(1 - lambda_k) stays positive. q = 1 is Cantor's constant-ratio case, measure 0.
+const lam = (l1, q, k) => Math.min(0.95, l1 * Math.pow(q, k - 1));
+// remaining fraction after K stages (per-stage factor 1 - lambda_k, in any dimension: the plane
+// construction removes a cross of relative area lambda_k, so the same product applies)
+function remaining(l1, q, K) {
+  let p = 1;
+  for (let k = 1; k <= K; k++) p *= 1 - lam(l1, q, k);
+  return p;
+}
+// the limit (converged numerically; past lambda_k < 1e-12 the factors are 1 to double precision)
+function remainingLimit(l1, q) {
+  let p = 1;
+  for (let k = 1; k <= 4000; k++) {
+    const l = lam(l1, q, k);
+    if (l < 1e-13) break;
+    p *= 1 - l;
+  }
+  return q >= 1 ? 0 : p;
+}
+// the linear dust's intervals after K stages: each stage bisects every interval by a centred
+// trema of ratio lambda_k, leaving two pieces of ratio r_k = (1 - lambda_k)/2 each
+function fatDustIntervals(l1, q, K) {
+  let cur = [[0, 1]];
+  for (let k = 1; k <= K; k++) {
+    const l = lam(l1, q, k), next = [];
+    for (const [a, b] of cur) {
+      const w = (b - a) * (1 - l) / 2;
+      next.push([a, a + w], [b - w, b]);
+    }
+    cur = next;
+  }
+  return cur;
+}
+const formalDim = (l1, q, k) => Math.log(2) / Math.log(2 / (1 - lam(l1, q, k)));
+
+// ---- a curve of positive area, by wedge removal (Knopp's scheme) ----
+// A stage-k triangle carries the curve from e to x past the apex v. Remove the wedge (p, v, q),
+// where p and q sit on e-x around its midpoint with |pq| = lambda_k |ex|; the children
+// (e, p-as-apex, exit v) and (v, q-as-apex, exit x) partition the rest, so the area multiplies
+// by exactly 1 - lambda_k per stage. lambda_k -> 0 fast enough leaves a curve of positive area.
+function knoppTriangles(l1, q, K) {
+  // triangle = [ex, ey, vx, vy, xx, xy]: entry, apex, exit
+  let cur = [[0, 0, 0.5, 0.75, 1, 0]];
+  for (let k = 1; k <= K; k++) {
+    const l = lam(l1, q, k), next = [];
+    for (const [ex, ey, vx, vy, xx, xy] of cur) {
+      const mx = (ex + xx) / 2, my = (ey + xy) / 2, dx = (xx - ex) / 2, dy = (xy - ey) / 2;
+      const px = mx - l * dx, py = my - l * dy, qx = mx + l * dx, qy = my + l * dy;
+      next.push([ex, ey, px, py, vx, vy], [vx, vy, qx, qy, xx, xy]);
+    }
+    cur = next;
+  }
+  return cur;
+}
+
+// ---- the plane dust and the flesh section: cut a cross from every square ----
+// A square of side s loses a centred cross of width u_k * s (relative area lambda_k = 1 - (1-u_k)^2),
+// leaving four corner squares of side s(1 - u_k)/2. Stages alternate artery and vein.
+const crossWidth = (l1, q, k) => 1 - Math.sqrt(1 - lam(l1, q, k));
+// returns { squares: [x, y, s] at depth K, crosses: [x, y, s, u, k] one per cut square }
+function crossDust(l1, q, K) {
+  let cur = [[0, 0, 1]];
+  const crosses = [];
+  for (let k = 1; k <= K; k++) {
+    const u = crossWidth(l1, q, k), next = [];
+    for (const [x, y, s] of cur) {
+      crosses.push([x, y, s, u, k]);
+      const w = s * (1 - u) / 2, g = s - w;
+      next.push([x, y, w], [x + g, y, w], [x, y + g, w], [x + g, y + g, w]);
+    }
+    cur = next;
+  }
+  return { squares: cur, crosses };
+}
+
+// ---- a small chart in screen space (same conventions as the site's other chart pages) ----
+const SUPS = '⁰¹²³⁴⁵⁶⁷⁸⁹';
+const supNum = (n) => String(n).replace(/\d/g, (d) => SUPS[+d]);
+const decadeLabel = (e) => `10${e < 0 ? '⁻' : ''}${supNum(Math.abs(e))}`;
+function chart(f, o) {
+  const c = f.ctx, ml = o.ml ?? 58, mr = o.mr ?? 16, mt = o.mt ?? 14, mb = o.mb ?? 36;
+  const iw = Math.max(1, f.w - ml - mr), ih = Math.max(1, f.h - mt - mb);
+  const tx = (u) => (o.x.log ? Math.log10(u) : u), ty = (v) => (o.y.log ? Math.log10(v) : v);
+  const x0 = tx(o.x.min), x1 = tx(o.x.max), y0 = ty(o.y.min), y1 = ty(o.y.max);
+  const X = (u) => ml + ((tx(u) - x0) / (x1 - x0)) * iw;
+  const Y = (v) => mt + ih - ((ty(v) - y0) / (y1 - y0)) * ih;
+  c.font = '500 10.5px "IBM Plex Mono", monospace';
+  const grid = (t0, t1, log, vert) => {
+    const ticks = [];
+    if (log) {
+      const step = t1 - t0 > 9 ? 2 : 1;
+      for (let e = Math.ceil(t0 - 1e-9); e <= Math.floor(t1 + 1e-9); e++) if (e % step === 0) ticks.push([e, decadeLabel(e)]);
+    } else {
+      const span = t1 - t0, step = [0.1, 0.2, 0.25, 0.5, 1, 2, 5, 10, 20, 50, 100].find((s) => span / s <= 8) || 1000;
+      for (let v = Math.ceil(t0 / step) * step; v <= t1 + 1e-9; v += step) ticks.push([v, String(Math.round(v * 100) / 100)]);
+    }
+    for (const [v, label] of ticks) {
+      const p = (v - t0) / (t1 - t0);
+      c.strokeStyle = '#dddbd2'; c.lineWidth = 1; c.beginPath();
+      if (vert) {
+        const x = ml + p * iw;
+        c.moveTo(x, mt); c.lineTo(x, mt + ih); c.stroke();
+        c.fillStyle = PRINT.muted; c.textAlign = 'center'; c.textBaseline = 'top'; c.fillText(label, x, mt + ih + 6);
+      } else {
+        const y = mt + ih - p * ih;
+        c.moveTo(ml, y); c.lineTo(ml + iw, y); c.stroke();
+        c.fillStyle = PRINT.muted; c.textAlign = 'right'; c.textBaseline = 'middle'; c.fillText(label, ml - 6, y);
+      }
+    }
+  };
+  grid(x0, x1, o.x.log, true);
+  grid(y0, y1, o.y.log, false);
+  c.strokeStyle = PRINT.rule; c.lineWidth = 1; c.strokeRect(ml, mt, iw, ih);
+  c.fillStyle = PRINT.muted; c.textAlign = 'center'; c.textBaseline = 'top'; c.fillText(o.x.label, ml + iw / 2, f.h - 16);
+  c.save(); c.translate(15, mt + ih / 2); c.rotate(-Math.PI / 2); c.textBaseline = 'middle'; c.fillText(o.y.label, 0, 0); c.restore();
+  return { X, Y, ml, mr, mt, mb, iw, ih,
+    clip: () => { c.save(); c.beginPath(); c.rect(ml, mt, iw, ih); c.clip(); },
+    unclip: () => c.restore() };
+}
+
+(() => {
+  const fx3 = (x) => x.toFixed(3);
+  const pct = (x) => `${(100 * x).toFixed(1)}%`;
+
+  // ====================== Cantor dusts of positive measure (pages 147-148) ======================
+  const stA = { mode: 'bar', l1: 1 / 3, q: 0.5, K: 7 };
+  const KS_A = [1, 2, 3, 4, 5, 6, 7, 8];
+  const zA = zoomable('wA', 'cA', (f) => {
+    if (stA.mode === 'bar') return fitBox(f, { x0: -0.02, x1: 1.02, y0: -(stA.K + 1) * 0.12, y1: 0.05 }, 0.02);
+    if (stA.mode === 'plane') return fitBox(f, { x0: -0.02, x1: 1.02, y0: -0.02, y1: 1.02 }, 0.02);
+    return fitBox(f, { x0: 0, x1: 1, y0: 0, y1: 1 }, 0);
+  }, (f, v) => {
+    const c = f.ctx, { l1, q, K } = stA;
+    paper(f, PRINT.paper);
+    if (stA.mode === 'bar') {
+      // stages 0..K as rows of constant thickness, Plate 80's style
+      toWorld(f, v);
+      const TH = 0.07, PITCH = 0.12;
+      for (let k = 0; k <= K; k++) {
+        const rows = fatDustIntervals(l1, q, k), y = -k * PITCH;
+        c.fillStyle = PRINT.ink;
+        for (const [a, b] of rows) c.fillRect(a, y - TH, b - a, TH);
+      }
+      toScreen(f);
+      c.font = '500 10.5px "IBM Plex Mono", monospace'; c.textAlign = 'right'; c.textBaseline = 'middle'; c.fillStyle = PRINT.muted;
+      for (let k = 0; k <= K; k++) {
+        const y = v.oy + (k * 0.12 + 0.035) * v.s;
+        if (y > 4 && y < f.h - 4 && v.s * 0.12 > 13) c.fillText(`k = ${k} · ${remaining(l1, q, k).toFixed(3)}`, v.ox - 8, y);
+      }
+    } else if (stA.mode === 'plane') {
+      toWorld(f, v);
+      const { squares } = crossDust(l1, q, Math.min(K, 7));
+      c.fillStyle = PRINT.ink;
+      for (const [x, y, s] of squares) c.fillRect(x, y, s, s);
+      toScreen(f);
+    } else {
+      toScreen(f);
+      c.lineJoin = 'round'; c.lineCap = 'round';
+      if (stA.mode === 'length') {
+        const ch = chart(f, { x: { min: 0, max: 24, log: false, label: 'stage k' }, y: { min: 0, max: 1, log: false, label: 'remaining length' } });
+        ch.clip();
+        const qs = [[stA.q, PRINT.red, 2.2], [1, PRINT.ink, 1.6]];
+        for (const [qq, col, lw] of qs) {
+          c.strokeStyle = col; c.lineWidth = lw; c.beginPath();
+          for (let k = 0; k <= 24; k++) { const y = ch.Y(remaining(stA.l1, qq, k)); if (k) c.lineTo(ch.X(k), y); else c.moveTo(ch.X(k), y); }
+          c.stroke();
+        }
+        const lim = remainingLimit(stA.l1, stA.q);
+        c.strokeStyle = PRINT.red; c.lineWidth = 1; c.setLineDash([4, 3]);
+        c.beginPath(); c.moveTo(ch.X(0), ch.Y(lim)); c.lineTo(ch.X(24), ch.Y(lim)); c.stroke(); c.setLineDash([]);
+        ch.unclip();
+        c.font = '600 11px "IBM Plex Mono", monospace'; c.textAlign = 'left'; c.textBaseline = 'top';
+        c.fillStyle = PRINT.red; c.fillText(`shrinking tremas, q = ${stA.q.toFixed(2)}: length -> ${lim.toFixed(3)}`, ch.ml + 10, ch.mt + 8);
+        c.fillStyle = PRINT.ink; c.fillText('constant tremas, q = 1: length -> 0', ch.ml + 10, ch.mt + 24);
+      } else {
+        const ch = chart(f, { x: { min: 0, max: 24, log: false, label: 'stage k' }, y: { min: 0, max: 1.05, log: false, label: 'formal dimension Dk' } });
+        ch.clip();
+        c.strokeStyle = '#b9b7af'; c.lineWidth = 1; c.setLineDash([4, 3]);
+        c.beginPath(); c.moveTo(ch.X(0), ch.Y(1)); c.lineTo(ch.X(24), ch.Y(1)); c.stroke(); c.setLineDash([]);
+        c.strokeStyle = PRINT.red; c.lineWidth = 2.2; c.beginPath();
+        for (let k = 1; k <= 24; k++) { const y = ch.Y(formalDim(stA.l1, stA.q, k)); if (k > 1) c.lineTo(ch.X(k), y); else c.moveTo(ch.X(k), y); }
+        c.stroke();
+        c.strokeStyle = PRINT.ink; c.lineWidth = 1.6; c.beginPath();
+        for (let k = 1; k <= 24; k++) { const y = ch.Y(formalDim(stA.l1, 1, k)); if (k > 1) c.lineTo(ch.X(k), y); else c.moveTo(ch.X(k), y); }
+        c.stroke();
+        ch.unclip();
+        c.font = '600 11px "IBM Plex Mono", monospace'; c.textAlign = 'left'; c.textBaseline = 'top';
+        c.fillStyle = PRINT.red; c.fillText(`q = ${stA.q.toFixed(2)}: Dk drifts up to D = 1`, ch.ml + 10, ch.mt + 8);
+        c.fillStyle = PRINT.ink; c.fillText(`q = 1: Dk stays at log 2/log(2/(1-λ₁)) = ${formalDim(stA.l1, 1, 1).toFixed(4)}`, ch.ml + 10, ch.mt + 24);
+      }
+    }
+  });
+  const MODES_A = { bar: 'The bar', plane: 'The plane dust', length: 'Remaining length', dim: 'Drifting Dₖ' };
+  const INFO_A = {
+    bar: 'Stage k bisects every interval by a trema centred on its midpoint, ratio λₖ — the bisection makes the dust, the ratios decide the measure. Each row is labelled with its remaining length Πₖ(1 − λₖ). With q < 1 the rows stop thinning; at q = 1 they die at Cantor\'s geometric rate.',
+    plane: 'The same in the plane: cut a cross of relative area λₖ from the unit square, leaving four tiles, and repeat with λ₂, λ₃, … The remaining area is the same product Π(1 − λₖ), so the limit is a dust (D_T = 0) of positive area: D = 2. In E dimensions, positive volume and D = E.',
+    length: 'The product Π(1 − λₖ) against the stage. It converges to a positive limit exactly when Σλₖ < ∞ — the red curve flattens where its tremas have become negligible — while constant ratios (black) decay geometrically to 0.',
+    dim: 'The dust with positive length has no similarity dimension, but setting rₖ = (1 − λₖ)/2 defines the formal Dₖ = log 2/log(1/rₖ) of the stage. When it drifts slowly it embodies Chapter 3\'s effective dimension: this dust looks like a D < 1 Cantor dust at coarse resolutions and like D = 1 in the fine.',
+  };
+  function setA(refit) {
+    markMA(stA.mode); markKA(stA.K);
+    $('kAg').hidden = stA.mode === 'length' || stA.mode === 'dim';
+    $('l1vA').textContent = `λ₁ = ${stA.l1.toFixed(3)}`;
+    $('qvA').textContent = `q = ${stA.q.toFixed(2)}`;
+    const lim = remainingLimit(stA.l1, stA.q);
+    $('cAt').textContent = MODES_A[stA.mode];
+    $('cAn').textContent = `λ₁ = ${stA.l1.toFixed(3)}, q = ${stA.q.toFixed(2)}` + (stA.mode === 'bar' || stA.mode === 'plane' ? ` · ${stA.K} stages` : '');
+    $('infoA').innerHTML = INFO_A[stA.mode];
+    $('dimA').textContent = `λₖ = λ₁qᵏ⁻¹ · remaining measure Π(1 − λₖ) ≈ ${lim.toFixed(3)} · D_T = 0, D = ${stA.q < 1 ? (stA.mode === 'plane' ? '2' : '1') : formalDim(stA.l1, 1, 1).toFixed(4)}`;
+    const atK = remaining(stA.l1, stA.q, stA.K);
+    $('rAa').textContent = stA.mode === 'plane' ? `${fx3(atK)} (area)` : fx3(atK);
+    $('rAb').textContent = stA.q >= 1 ? '0' : fx3(lim);
+    $('rAc').textContent = formalDim(stA.l1, stA.q, stA.K).toFixed(4);
+    $('rAd').textContent = stA.q < 1 ? (stA.mode === 'plane' ? '2 and 0' : '1 and 0') : `${formalDim(stA.l1, 1, 1).toFixed(3)} and 0`;
+    if (refit) zA.refit(); else zA.schedule();
+  }
+  const markMA = stepButtons($('mA'), Object.keys(MODES_A), (k) => MODES_A[k], (k) => `Show: ${MODES_A[k]}`, (k) => { stA.mode = k; setA(true); });
+  const markKA = stepButtons($('kA'), KS_A, String, (k) => `${k} stages`, (k) => { stA.K = k; setA(stA.mode === 'bar'); });
+  $('l1sA').addEventListener('input', (e) => { stA.l1 = +e.target.value; setA(false); });
+  $('qsA').addEventListener('input', (e) => { stA.q = +e.target.value; setA(false); });
+  $('fatA').addEventListener('click', () => { Object.assign(stA, { l1: 1 / 3, q: 0.5 }); $('l1sA').value = 1 / 3; $('qsA').value = 0.5; setA(false); });
+  $('cantorA').addEventListener('click', () => { Object.assign(stA, { l1: 1 / 3, q: 1 }); $('l1sA').value = 1 / 3; $('qsA').value = 1; setA(false); });
+
+  // ====================== A curve of positive area (pages 148-149) ======================
+  const stB = { mode: 'marsh', l1: 0.4, q: 0.6, K: 8 };
+  const zB = zoomable('wB', 'cB', (f) => {
+    if (stB.mode === 'chart') return fitBox(f, { x0: 0, x1: 1, y0: 0, y1: 1 }, 0);
+    return fitBox(f, { x0: -0.02, x1: 1.02, y0: -0.02, y1: 0.78 }, 0.02);
+  }, (f, v) => {
+    const c = f.ctx, { l1, q } = stB;
+    paper(f, PRINT.paper);
+    if (stB.mode !== 'chart') {
+      toWorld(f, v);
+      const tris = knoppTriangles(l1, q, stB.K);
+      const paths = chunked(tris.length, (p, i) => {
+        const t = tris[i];
+        p.moveTo(t[0], t[1]); p.lineTo(t[2], t[3]); p.lineTo(t[4], t[5]);
+      }, 1024);
+      solid(c, paths, stB.mode === 'marsh' ? PRINT.ink : '#b7b5ac', 0.5 / v.s);
+      if (stB.mode === 'curve') {
+        // the chain of entry points approximates the limit curve
+        c.strokeStyle = PRINT.red; c.lineWidth = 1.8 / v.s; c.beginPath();
+        c.moveTo(tris[0][0], tris[0][1]);
+        for (const t of tris) c.lineTo(t[2], t[3]);
+        c.lineTo(tris[tris.length - 1][4], tris[tris.length - 1][5]);
+        c.stroke();
+      }
+      toScreen(f);
+    } else {
+      toScreen(f);
+      c.lineJoin = 'round'; c.lineCap = 'round';
+      const ch = chart(f, { x: { min: 0, max: 16, log: false, label: 'stage k' }, y: { min: 0, max: 1, log: false, label: 'marsh area / starting area' } });
+      ch.clip();
+      for (const [qq, col, lw] of [[stB.q, PRINT.red, 2.2], [1, PRINT.ink, 1.6]]) {
+        c.strokeStyle = col; c.lineWidth = lw; c.beginPath();
+        for (let k = 0; k <= 16; k++) { const y = ch.Y(remaining(stB.l1, qq, k)); if (k) c.lineTo(ch.X(k), y); else c.moveTo(ch.X(k), y); }
+        c.stroke();
+      }
+      ch.unclip();
+      c.font = '600 11px "IBM Plex Mono", monospace'; c.textAlign = 'left'; c.textBaseline = 'top';
+      c.fillStyle = PRINT.red; c.fillText(`q = ${stB.q.toFixed(2)}: the curve keeps area ${remainingLimit(stB.l1, stB.q).toFixed(3)}`, ch.ml + 10, ch.mt + 8);
+      c.fillStyle = PRINT.ink; c.fillText('q = 1: an ordinary Koch-like curve, area 0', ch.ml + 10, ch.mt + 24);
+    }
+  });
+  const MODES_B = { marsh: 'The marshland', curve: 'The chain of triangles', chart: 'The area' };
+  const INFO_B = {
+    marsh: 'What area remains after the wedges of ratios λ₁ … λₖ are gone. Each triangle sheds exactly the share λₖ, so the ink covers Π(1 − λₖ) of the starting triangle at every stage — zoom in: the marsh is all edge, and no disc of any size will ever fit inside it.',
+    curve: 'The order in which the limit curve threads the triangles (red), entry to exit. Every triangle chain shrinks to a point, so the limit is a continuous curve from corner to corner; removing its point in any wedge tip splits it, hence D_T = 1.',
+    chart: 'The marsh area against the stage: the same product as the linear dust, now read as area. Positive exactly when Σλₖ < ∞.',
+  };
+  const KS_B = [2, 4, 6, 8, 10, 12];
+  function setB(refit) {
+    markMB(stB.mode); markKB(stB.K);
+    $('l1vB').textContent = `λ₁ = ${stB.l1.toFixed(2)}`;
+    $('qvB').textContent = `q = ${stB.q.toFixed(2)}`;
+    const lim = remainingLimit(stB.l1, stB.q);
+    $('cBt').textContent = MODES_B[stB.mode];
+    $('cBn').textContent = `λ₁ = ${stB.l1.toFixed(2)}, q = ${stB.q.toFixed(2)} · stage ${stB.K}`;
+    $('infoB').innerHTML = INFO_B[stB.mode];
+    $('dimB').textContent = `marshland area Π(1 − λₖ) ≈ ${lim.toFixed(3)} · the limit: a curve, D_T = 1, with ${stB.q < 1 ? 'D = 2 and positive area' : 'zero area'}`;
+    $('rBa').textContent = fx3(remaining(stB.l1, stB.q, stB.K));
+    $('rBb').textContent = stB.q >= 1 ? '0' : fx3(lim);
+    $('rBc').textContent = fmt(2 ** stB.K);
+    $('rBd').textContent = stB.q < 1 ? '2 and 1' : '< 2, and 1';
+    if (refit) zB.refit(); else zB.schedule();
+  }
+  const markMB = stepButtons($('mB'), Object.keys(MODES_B), (k) => MODES_B[k], (k) => `Show: ${MODES_B[k]}`, (k) => { stB.mode = k; setB(true); });
+  const markKB = stepButtons($('kB'), KS_B, String, (k) => `${k} stages`, (k) => { stB.K = k; setB(false); });
+  $('l1sB').addEventListener('input', (e) => { stB.l1 = +e.target.value; setB(false); });
+  $('qsB').addEventListener('input', (e) => { stB.q = +e.target.value; setB(false); });
+  $('posB').addEventListener('click', () => { Object.assign(stB, { l1: 0.4, q: 0.6 }); $('l1sB').value = 0.4; $('qsB').value = 0.6; setB(false); });
+  $('zeroB').addEventListener('click', () => { Object.assign(stB, { q: 1 }); $('qsB').value = 1; setB(false); });
+
+  // ====================== Arteries, veins and flesh (pages 149-150) ======================
+  const stC = { l1: 0.3, q: 0.55, K: 5 };
+  const zC = zoomable('wC', 'cC', (f) => fitBox(f, { x0: -0.02, x1: 1.02, y0: -0.02, y1: 1.02 }, 0.02), (f, v) => {
+    const c = f.ctx, { l1, q, K } = stC;
+    paper(f, PRINT.paper);
+    toWorld(f, v);
+    const { squares, crosses } = crossDust(l1, q, K);
+    // tissue first, then the vessels over it, stage by stage so late cuts stay visible
+    c.fillStyle = PRINT.ink;
+    for (const [x, y, s] of squares) c.fillRect(x, y, s, s);
+    for (const [x, y, s, u, k] of crosses) {
+      const w = s * u, a = (s - w) / 2;
+      c.fillStyle = k % 2 ? '#c2452d' : '#2f5f9e';
+      c.fillRect(x + a, y, w, s);
+      c.fillRect(x, y + a, s, w);
+    }
+    toScreen(f);
+  });
+  const KS_C = [1, 2, 3, 4, 5, 6];
+  function setC(refit) {
+    markKC(stC.K);
+    $('l1vC').textContent = `λ₁ = ${stC.l1.toFixed(2)}`;
+    $('qvC').textContent = `q = ${stC.q.toFixed(2)}`;
+    const lim = remainingLimit(stC.l1, stC.q);
+    $('cCn').textContent = `λ₁ = ${stC.l1.toFixed(2)}, q = ${stC.q.toFixed(2)} · ${stC.K} stages`;
+    // every tissue point sits in a stage-k tile, whose own cross is cut at stage k+1:
+    // tile side after k stages is prod (1 - u_j)/2
+    const side1 = (1 - crossWidth(stC.l1, stC.q, 1)) / 2;
+    const side2 = side1 * (1 - crossWidth(stC.l1, stC.q, 2)) / 2;
+    $('infoC').innerHTML = stC.q < 1
+      ? `With q = ${stC.q.toFixed(2)} the blood takes <b>${pct(1 - lim)}</b> of the section and the tissue keeps <b>${pct(lim)}</b> — yet no tissue disc of any size is free of vessels: zoom into any black tile and the next stages cut it again.`
+      : 'At q = 1 the tissue share dies geometrically: all flesh and no blood is impossible, but so is all blood and no flesh — the shrinking schedule is what feeds both demands at once.';
+    $('rCa').textContent = stC.q >= 1 ? '0' : pct(lim);
+    $('rCb').textContent = stC.q >= 1 ? '100%' : pct(1 - lim);
+    // distance bounds: a point in a stage-k tile has the tile's own next odd/even cut within the tile
+    $('rCc').textContent = `${side1.toFixed(3)} of any point`;
+    $('rCd').textContent = `${side2.toFixed(4)} of any point`;
+    if (refit) zC.refit(); else zC.schedule();
+  }
+  const markKC = stepButtons($('kC'), KS_C, String, (k) => `${k} stages`, (k) => { stC.K = k; setC(false); });
+  $('l1sC').addEventListener('input', (e) => { stC.l1 = +e.target.value; setC(false); });
+  $('qsC').addEventListener('input', (e) => { stC.q = +e.target.value; setC(false); });
+  $('fleshC').addEventListener('click', () => { Object.assign(stC, { l1: 0.3, q: 0.55 }); $('l1sC').value = 0.3; $('qsC').value = 0.55; setC(false); });
+  $('zeroC').addEventListener('click', () => { Object.assign(stC, { q: 1 }); $('qsC').value = 1; setC(false); });
+
+  setA(true); setB(true); setC(true);
+})();
+
+</script>
+
+</body>
+</html>

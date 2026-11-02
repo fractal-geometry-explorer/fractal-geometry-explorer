@@ -562,6 +562,67 @@
       "layout_comment": "/* Layout: the gasket and arrowhead (141), a percolation cluster (p. 132), the skewed web (143), the carpet and the Menger sponge (145), the branching curve of p. 139 and the split snowflake halls (146), each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
     },
     {
+      "slug": "positive-volume",
+      "title": "Surfaces of Positive Volume",
+      "plates": "Chapter 15",
+      "chapter": 15,
+      "scripts": [
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: three concept sections (Cantor dusts of positive measure with the drifting-dimension charts, the wedge-removal curve of positive area, the arteries-and-veins section of flesh), each a computed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "tool-of-chance",
+      "title": "Chance as a Tool",
+      "plates": "Chapter 21",
+      "chapter": 21,
+      "scripts": [
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: two concept sections (the controller-and-seed portfolio on Plate 46's generator, nonconstrained against self-constrained lattice polygons) plus a prose sub on hyperbolic laws and the typical D; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "conditional-cosmography",
+      "title": "Conditional Cosmography",
+      "plates": "Chapter 22",
+      "chapter": 22,
+      "scripts": [
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: two concept sections (M(R) from arbitrary against material origins on a random dust, the Fournier staircase against unstratified random scaling) plus a prose sub on the chapter's program; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "cups-and-terraces",
+      "title": "Islands, Lakes and Cups",
+      "plates": "Chapter 29",
+      "chapter": 29,
+      "scripts": [
+        "shared/draw.js",
+        "pages/brown-relief/core.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: three concept sections (Korcak's law on a Brown archipelago, islands against deadvalleys on one map, the cups and the Devil's terraces in one and two dimensions), each a seeded figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
+    },
+    {
+      "slug": "path-to-fractals",
+      "title": "The Path to Fractals",
+      "plates": "Chapter 42",
+      "chapter": 42,
+      "scripts": [
+        "shared/draw.js",
+        "core.js",
+        "ui.js"
+      ],
+      "layout_comment": "/* Layout: the epilog's route map (stations by year and field, tappable) beside its caption and readouts, then two prose sections (description before explanation, the historical anomaly). One column under 900px. */"
+    },
+    {
       "slug": "second-printing",
       "title": "Update for the Second Printing",
       "plates": "Plates II, VIII, X, 467",

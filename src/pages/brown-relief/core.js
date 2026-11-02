@@ -84,6 +84,27 @@ function fbmSurface(n, H, seed) {
   for (let i = 0; i < re.length; i++) re[i] /= s;
   return re;
 }
+// ---- fractional Brown line-to-line function, period n: the same spectral shortcut in one
+// dimension (white complex noise filtered to density k^-(2H+1)); mean 0, unit variance ----
+function fbmLine(n, H, seed) {
+  const rng = mulberry32((seed * 2654435761 + 13) >>> 0), g = gaussMaker(rng);
+  const re = new Float64Array(n), im = new Float64Array(n);
+  const e = -(H + 0.5);
+  for (let i = 1; i < n; i++) {
+    const k = i <= n / 2 ? i : i - n;
+    const a = Math.pow(Math.abs(k), e);
+    re[i] = g() * a; im[i] = g() * a;
+  }
+  fft1(re, im, 0, 1, n, true);
+  let m = 0;
+  for (let i = 0; i < n; i++) m += re[i];
+  m /= n;
+  let s = 0;
+  for (let i = 0; i < n; i++) { re[i] -= m; s += re[i] * re[i]; }
+  s = Math.sqrt(s / n) || 1;
+  for (let i = 0; i < n; i++) re[i] /= s;
+  return re;
+}
 // central w x h crop of an n-period field (keeps clear of the periodic seam)
 function cropField(src, n, w, h) {
   const out = new Float64Array(w * h), i0 = (n - w) >> 1, j0 = (n - h) >> 1;

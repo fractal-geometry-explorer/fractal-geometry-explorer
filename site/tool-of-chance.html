@@ -1,0 +1,764 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Chance as a Tool</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>
+/* Layout: two concept sections (the controller-and-seed portfolio on Plate 46's generator, nonconstrained against self-constrained lattice polygons) plus a prose sub on hyperbolic laws and the typical D; a sticky index on top. One column under 900px. */
+:root {
+  --page: #e4e5e1;
+  --text: #1b1d1f;
+  --muted: #595e64;
+  --rule: #c4c7c1;
+  --surface: #f6f6f3;
+  --accent: #285895;
+  --f-display: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Newsreader", Georgia, "Times New Roman", serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* the figures are reproductions of printed plates, so their paper and inks stay the same in both themes */
+  --print-paper: #ecebe6;
+  --print-ink: #151515;
+  --print-rule: #c9c8c2;
+  --gain: rgba(47, 95, 158, 0.42);
+  --loss: rgba(186, 88, 44, 0.42);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --page: #111214; --text: #e5e5e1; --muted: #9a9fa6; --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --page: #111214; --text: #e5e5e1; --muted: #9a9fa6; --rule: #2e3034; --surface: #1d1f22; --accent: #8ab1e6;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--page); color: var(--text); font-family: var(--f-display); font-size: 14px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
+.wrap {
+  max-width: 1180px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 36px 64px;
+  display: grid; gap: 40px;
+}
+header.top { display: grid; gap: 10px; max-width: 820px; }
+.eyebrow { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+h1 {
+  margin: 0; display: flex; align-items: center; flex-wrap: wrap; gap: 0.18em 0.42em;
+  font-weight: 800; font-size: clamp(30px, 5.4vw, 54px); line-height: 1.02; letter-spacing: 0.01em; text-transform: uppercase; text-wrap: balance;
+}
+h1 .plate-no { font-weight: 600; text-transform: none; letter-spacing: 0; }
+.lozenge { display: inline-block; width: 0.42em; height: 0.42em; border: 0.075em solid currentColor; position: relative; top: -0.02em; }
+.lozenge::after { content: ""; position: absolute; inset: 0.1em; border: 0.05em solid currentColor; }
+.dek { margin: 0; font-family: var(--f-body); font-size: 19px; line-height: 1.45; max-width: 64ch; }
+
+nav.index {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+  padding: 10px max(16px, env(safe-area-inset-right, 0px)) 10px max(16px, env(safe-area-inset-left, 0px));
+  background: var(--page); border-bottom: 1px solid var(--rule);
+  display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none;
+}
+nav.index a {
+  flex: none; display: inline-flex; gap: 8px; align-items: baseline; padding: 6px 10px;
+  border: 1px solid var(--rule); background: var(--surface); color: var(--text); text-decoration: none; font-size: 13px; font-weight: 600;
+}
+nav.index a b { font-family: var(--f-mono); font-weight: 500; color: var(--accent); }
+nav.index a:hover { border-color: var(--text); }
+
+section.plate { display: grid; gap: 18px; scroll-margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--rule); }
+.plate-head { display: grid; gap: 4px; }
+.plate-head .no { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.plate-head h2 { margin: 0; font-size: clamp(22px, 3vw, 30px); font-weight: 800; line-height: 1.1; text-transform: uppercase; letter-spacing: 0.01em; text-wrap: balance; }
+.plate-head .dim { margin: 0; font-family: var(--f-mono); font-size: 13px; color: var(--muted); }
+.plate-body { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(280px, 1fr); gap: 32px; align-items: start; }
+@media (max-width: 899px) { .plate-body { grid-template-columns: minmax(0, 1fr); gap: 20px; } }
+figure.fig { margin: 0; display: grid; gap: 8px; min-width: 0; }
+.canvas-wrap { position: relative; width: 100%; max-width: 100%; background: var(--print-paper); outline: 1px solid var(--rule); overflow: hidden; }
+.canvas-wrap canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.r-sq { aspect-ratio: 1 / 1; }
+.r-lox { aspect-ratio: 5 / 4; }
+.zoomable { cursor: grab; touch-action: pan-y; }
+.zoomable.dragging { cursor: grabbing; }
+.view-tools { position: absolute; top: 10px; right: 10px; display: flex; gap: 6px; z-index: 2; }
+.view-tools button { min-width: 34px; height: 34px; padding: 0 10px; font: 600 15px/1 var(--f-display); color: var(--print-ink); background: #f7f7f3; border: 1px solid var(--print-rule); cursor: pointer; }
+figcaption { font-size: 13px; color: var(--muted); }
+figcaption strong { color: var(--text); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+
+.side { display: grid; gap: 18px; min-width: 0; align-content: start; }
+.side p.cap { margin: 0; font-family: var(--f-body); font-size: 17px; line-height: 1.55; max-width: 62ch; }
+.group { display: grid; gap: 8px; min-width: 0; }
+.label-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.label { font-size: 11.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.value { font-family: var(--f-mono); font-size: 12.5px; font-variant-numeric: tabular-nums; text-align: right; }
+.steps { display: flex; flex-wrap: wrap; gap: 6px; }
+.steps button {
+  min-width: 38px; height: 34px; padding: 0 10px; font: 600 13px/1 var(--f-mono); color: var(--text);
+  background: var(--surface); border: 1px solid var(--rule); cursor: pointer;
+}
+.steps.words button { font: 600 13px/1 var(--f-display); }
+.steps button[aria-pressed="true"] { background: var(--text); color: var(--page); border-color: var(--text); }
+.steps button:hover { border-color: var(--text); }
+.steps button:disabled { opacity: 0.35; cursor: default; border-color: var(--rule); }
+.btn-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.btn { padding: 8px 12px; font: 600 13px/1.2 var(--f-display); color: var(--text); background: var(--surface); border: 1px solid var(--rule); cursor: pointer; }
+.btn:hover { border-color: var(--text); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--page); }
+.check { display: flex; align-items: flex-start; gap: 8px; font-size: 13.5px; cursor: pointer; }
+.check input { accent-color: var(--accent); width: 16px; height: 16px; margin: 1px 0 0; flex: none; }
+.check:has(input:disabled) { opacity: 0.45; cursor: default; }
+.slider { display: grid; gap: 4px; }
+.slider input { width: 100%; accent-color: var(--accent); margin: 0; }
+.slider input:disabled { opacity: 0.4; }
+dl.read { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; padding-top: 14px; border-top: 1px solid var(--rule); }
+dl.read div { display: grid; gap: 2px; min-width: 0; }
+dl.read dt { font-size: 10.5px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); }
+dl.read dd { margin: 0; font-family: var(--f-mono); font-size: 16px; overflow-wrap: anywhere; }
+dl.read dd small { font-size: 11.5px; color: var(--muted); }
+.note { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.mini { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; padding: 10px 12px; background: var(--print-paper); border: 1px solid var(--print-rule); color: var(--print-ink); }
+.mini svg { height: 64px; width: auto; max-width: 100%; }
+.mini .fx { font-family: var(--f-mono); font-size: 12px; line-height: 1.6; color: var(--print-ink); }
+.key { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--muted); }
+.key span { display: inline-flex; align-items: center; gap: 6px; }
+.key i { width: 14px; height: 10px; display: inline-block; border: 1px solid var(--print-rule); }
+.readline { min-height: 2.9em; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.readline b { color: var(--text); font-weight: 700; }
+
+.sub { display: grid; gap: 14px; padding-top: 22px; border-top: 1px dashed var(--rule); scroll-margin-top: 64px; }
+.sub h3 { margin: 0; font-size: 15px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
+.source { font-family: var(--f-body); font-size: 15px; color: var(--muted); margin: 0; max-width: 84ch; }
+.source i { color: var(--text); }
+.source a { color: var(--accent); }
+button:focus-visible, input:focus-visible, a:focus-visible, canvas:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.r-ch { aspect-ratio: 10 / 7; }
+</style>
+<style>
+body { margin: 0; }
+/* The hidden attribute must beat the pages' own display rules (.slider, .check, ...). The artifact
+   wrapper's stylesheet used to provide this; self-hosted pages carry it themselves. */
+[hidden] { display: none !important; }
+nav.shell { font-family: var(--f-display); font-size: 12.5px; font-weight: 600; background: var(--page);
+  border-bottom: 1px solid var(--rule); display: flex; align-items: center; gap: 6px 18px;
+  padding: 9px max(16px, env(safe-area-inset-right, 0px)) 9px max(16px, env(safe-area-inset-left, 0px)); }
+nav.shell a { color: var(--text); text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+nav.shell a:hover { color: var(--accent); }
+nav.shell .home { letter-spacing: 0.07em; text-transform: uppercase; flex: none; }
+nav.shell .gap { flex: 1; }
+nav.shell .pn { color: var(--muted); font-weight: 500; }
+nav.shell .pn b { color: var(--text); font-weight: 600; }
+nav.shell a:hover .pn, nav.shell a:hover .pn b { color: var(--accent); }
+</style>
+</head>
+<body>
+<nav class="shell" aria-label="Site"><a class="home" href="index.html">Fractal Geometry Explorer</a><span class="gap"></span><a rel="prev" href="fractal-attractors.html"><span class="pn">&#8592; <b>Plates 198–199</b></span></a><a rel="next" href="conditional-cosmography.html"><span class="pn"><b>Chapter 22</b> &#8594;</span></a></nav>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 21, "Chance as a Tool in Model Making" · pages 200–204</p>
+    <h1><span class="plate-no">Chapter 21</span><span class="lozenge" aria-hidden="true"></span><span>Chance as a Tool</span></h1>
+    <p class="dek">Part VII opens the Essay's second half: why the fractal models now turn random. A coastline's shaping forces are unrecorded and unrecoverable, so statistics is the only honest description — and chance slots neatly into the book's recursions as a <i>controller</i> feeding choices to a <i>processor</i>, with the seed as a page number in a grand portfolio of shapes. The chapter prints no plates, so every figure below is this page's illustration of its arguments.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#controller"><b>seed</b> The controller and the portfolio</a>
+    <a href="#constrained"><b>2n</b> Self-constrained chance</a>
+    <a href="#typical"><b>Pr</b> Hyperbolic laws and the typical D</a>
+  </nav>
+
+  <!-- ===================== FROM RECURSIVITY TO RANDOMNESS ===================== -->
+  <section class="plate" id="controller">
+    <div class="plate-head">
+      <p class="no">Chapter 21, pages 201–203 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>The controller, the seed and the grand portfolio</h2>
+      <p class="dim" id="dimA">one processor (Plate 46's generator, D = log 3/log √7 ≈ 1.1292) · many control sequences</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-ch zoomable" id="wA">
+          <canvas id="cA" role="img" aria-label="One Koch processor driven by different control sequences, and the portfolio of seeded curves"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cAt">The controller</strong> · <span id="cAn"></span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The Koch loop is a <i>processor program</i>: each run adds fresh detail to what the last run drew. The caption of <a href="gosper-island.html">Plate 46</a> observes that its generator can be used straight (S) or flipped (F) — so before each loop a <i>controller</i> must say which. Every control sequence is a different curve, all of the same dimension: the loop defines not one fractal but a denumerable family. Replace the tape by a pseudo-random generator and the only parameter of chance left is its input, the seed — a page number in a virtual "grand portfolio", every page one shape, most pages alike in essentials and different in detail.</p>
+        <div class="mini" aria-label="The scheme">
+          <div class="fx">controller → S F F S F S S …<br>processor → one stage per letter</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mA" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group" id="ctlAg">
+          <div class="label-row"><span class="label">Control sequence</span></div>
+          <div class="steps words" id="ctlA" role="group" aria-label="Control sequence"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Stages</span></div>
+          <div class="steps" id="kA" role="group" aria-label="Stages"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="coinA">Toss a coin per stage</button>
+          <button type="button" class="btn" id="newA">New seed</button>
+        </div>
+        <p class="readline" id="infoA" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Sequence</dt><dd id="rAa">—</dd></div>
+          <div><dt>Seed</dt><dd id="rAb">—</dd></div>
+          <div><dt>Curves in the family</dt><dd id="rAc">—</dd></div>
+          <div><dt>D (every one of them)</dt><dd id="rAd">1.1292</dd></div>
+        </dl>
+        <p class="note">The chapter prints no figure; the processor here is Plate 46's three-step generator, and S against F is the choice its caption names. "Alternate S and F" and "the k-th digit of π" are the chapter's own examples of compact instructions a controller may interpret; the coin is its simplest controller. The portfolio view goes one step further than the per-stage tape — every piece tosses its own coin, which is how chapter 24's <a href="chains-and-squigs.html">random chains</a> actually randomize — and shows six pages of the portfolio side by side: same species, different seeds.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== NONCONSTRAINED AND SELF-CONSTRAINED CHANCE ===================== -->
+  <section class="plate" id="constrained">
+    <div class="plate-head">
+      <p class="no">Chapter 21, pages 203–204 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Nonconstrained and self-constrained chance</h2>
+      <p class="dim" id="dimB">closed 2n-step lattice polygons: easy · self-avoiding ones: "continues to elude the best minds"</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-ch zoomable" id="wB">
+          <canvas id="cB" role="img" aria-label="Random lattice polygons, their self-contacts, and the cost of demanding self-avoidance"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cBt">A random polygon</strong> · <span id="cBn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Merely to invoke chance is an empty gesture: vary a coastline's parts at random in shape, size and order, and the pieces will not fit together. The practical divide is whether the controller can run its loops without inspecting their outcome. Lattice polygons of 2n sides, self-intersections allowed, are <i>nonconstrained</i> — easy combinatorics, generated in one pass. Coastlines must not cross themselves, and that single geometric demand makes the chance <i>self-constrained</i>: even counting the self-avoiding polygons is an unsolved problem, and the Essay dodges such chance everywhere but <a href="lattice-physics.html">chapter 36</a>.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mB" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Half the sides, n</span><span class="value" id="nvB">n = 12</span></div>
+          <input type="range" id="nsB" min="4" max="40" step="1" value="12" aria-label="Half the number of sides">
+        </div>
+        <div class="group" id="selfBg">
+          <div class="label-row"><span class="label">Demand</span></div>
+          <div class="steps words" id="selfB" role="group" aria-label="Demand"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="newB">New sample</button>
+        </div>
+        <p class="readline" id="infoB" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Sides 2n</dt><dd id="rBa">24</dd></div>
+          <div><dt>Self-contacts</dt><dd id="rBb">—</dd></div>
+          <div><dt>Draws needed</dt><dd id="rBc">—</dd></div>
+          <div><dt>Acceptance rate</dt><dd id="rBd">—</dd></div>
+        </dl>
+        <p class="note">This page's own illustration of the chapter's example. The sampler pairs each of n random steps with its opposite and shuffles, which closes the loop by construction (a simple closed-walk sampler, not the uniform law on all closed polygons — uniformity is part of what makes the counting hard). The self-avoiding demand is met by brute rejection, and the acceptance chart shows the price: it falls roughly geometrically with n, and past a few dozen sides honest sampling needs the specialist algorithms of lattice physics.</p>
+      </div>
+    </div>
+    <div class="sub" id="typical">
+      <h3>Hyperbolic laws, and a random set's typical D</h3>
+      <p class="cap">Two more of the chapter's threads live on other pages. The counting law Nr(U &gt; u) ∝ u⁻ᴰ of chapters 6, 13 and 14 here turns into the probabilist's <i>hyperbolic distribution</i> Pr(U &gt; u) ∝ u⁻ᴰ, star of most remaining chapters — its paradoxes and robustness are drawn on <a href="power-laws.html">Scaling Without Geometry</a>. And dimension itself needs care once sets are random: in the portfolio each page has its own D, but outside a batch of defective seeds of zero total probability, all pages share one <i>almost sure</i> D. Averaging the sets instead of their dimensions is the trap: the average of all symmetric random walks sits still at its starting point, D = 0, while almost every walk has D = 2 (<a href="brown-trails.html">chapter 25</a>). Likewise a mass exponent M(R) ∝ R<sup>Q</sup> need not be a dimension — <a href="islands-clusters.html">chapter 13</a>'s warning, repeated here.</p>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 21, pages 200–204. The chapter prints no plates, so nothing on this page reproduces printed art: every figure is computed, with this page's own choices (the polygon sampler, the six-seed portfolio grid) flagged under each one. Companion pages: <a href="conditional-cosmography.html">Conditional Cosmography</a> for chapter 22's stronger claim that fractal models <i>need</i> chance, and <a href="chains-and-squigs.html">Random Chains and Squigs</a> for the first constructions built this way.</p>
+</div>
+
+<script>
+// Shared drawing library: style constants, the zoomable canvas (snapshot while panning), chunked
+// paths, controls and small SVG figures. Loaded before each page's own scripts; pages may extend
+// PRINT with their own inks (PRINT.red = ..., PRINT.light = ...).
+const $ = (id) => document.getElementById(id);
+const fmt = (n) => n.toLocaleString('en-US');
+const PRINT = { paper: '#ecebe6', ink: '#151515', rule: '#c9c8c2', muted: '#66665f', accent: '#2f5f9e', red: '#c2452d', faint: '#bdbbb3', gray: '#8f8e88' };
+const RAMP = [[233, 185, 73], [217, 113, 59], [184, 66, 79], [125, 58, 120], [63, 79, 151], [43, 122, 138]];
+const ramp = (t, a = 1) => {
+  const x = Math.max(0, Math.min(1, t)) * (RAMP.length - 1), i = Math.min(RAMP.length - 2, Math.floor(x)), f = x - i;
+  const c = RAMP[i].map((v, k) => Math.round(v + (RAMP[i + 1][k] - v) * f));
+  return `rgba(${c[0]},${c[1]},${c[2]},${a})`;
+};
+const CAT = ['#151515', '#9a988f', '#2f5f9e', '#c2452d', '#3f8f6c', '#b58a2a', '#6b4e9b', '#5f8fae'];
+
+// ---------- shared plumbing ----------
+function figure(canvas, draw) {
+  const wrap = canvas.parentElement;
+  const f = { canvas, ctx: canvas.getContext('2d'), w: 1, h: 1, dpr: 1, draw };
+  const resize = () => {
+    f.dpr = Math.min(2, window.devicePixelRatio || 1);
+    f.w = wrap.clientWidth || 1; f.h = wrap.clientHeight || 1;
+    canvas.width = Math.round(f.w * f.dpr); canvas.height = Math.round(f.h * f.dpr);
+    f.draw();
+  };
+  new ResizeObserver(resize).observe(wrap);
+  return f;
+}
+function fitBox(f, bb, pad = 0.04) {
+  const w = Math.max(1e-9, bb.x1 - bb.x0), h = Math.max(1e-9, bb.y1 - bb.y0), s = Math.min(f.w / (w * (1 + 2 * pad)), f.h / (h * (1 + 2 * pad)));
+  return { s, ox: f.w / 2 - ((bb.x0 + bb.x1) / 2) * s, oy: f.h / 2 + ((bb.y0 + bb.y1) / 2) * s };
+}
+const toWorld = (f, v) => f.ctx.setTransform(f.dpr * v.s, 0, 0, -f.dpr * v.s, f.dpr * v.ox, f.dpr * v.oy);
+const toScreen = (f) => f.ctx.setTransform(f.dpr, 0, 0, f.dpr, 0, 0);
+function paper(f, color) { f.ctx.setTransform(1, 0, 0, 1, 0, 0); f.ctx.fillStyle = color; f.ctx.fillRect(0, 0, f.canvas.width, f.canvas.height); }
+function polyPath(P, closed = true, upto) {
+  const p = new Path2D(), m = upto === undefined ? P.length / 2 : upto;
+  p.moveTo(P[0], P[1]);
+  for (let i = 1; i < m; i++) p.lineTo(P[2 * i], P[2 * i + 1]);
+  if (closed) p.closePath();
+  return p;
+}
+function bbox(P, bb = { x0: Infinity, x1: -Infinity, y0: Infinity, y1: -Infinity }) {
+  for (let i = 0; i < P.length; i += 2) { bb.x0 = Math.min(bb.x0, P[i]); bb.x1 = Math.max(bb.x1, P[i]); bb.y0 = Math.min(bb.y0, P[i + 1]); bb.y1 = Math.max(bb.y1, P[i + 1]); }
+  return bb;
+}
+function stepButtons(el, values, text, aria, onPick) {
+  const bs = values.map((v) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.textContent = text(v); b.setAttribute('aria-label', aria(v));
+    b.addEventListener('click', () => onPick(v));
+    el.append(b);
+    return b;
+  });
+  const mark = (cur) => bs.forEach((b, i) => b.setAttribute('aria-pressed', String(values[i] === cur)));
+  mark.buttons = bs;
+  return mark;
+}
+// pan and zoom: a quick rescaled snapshot while moving, a full redraw once it settles
+function zoomable(wrapId, canvasId, fitOf, render, opts = {}) {
+  const maxZoom = opts.maxZoom || 400;
+  const wrap = $(wrapId), z = { view: null, user: false, snapView: null, raf: 0, full: 0 };
+  const snap = document.createElement('canvas');
+  const f = figure($(canvasId), () => draw());
+  function touch() { wrap.style.touchAction = z.view && z.view.s > z.view.fit * 1.02 ? 'none' : 'pan-y'; }
+  function draw() {
+    if (!z.view || !z.user) { z.view = fitOf(f); z.view.fit = z.view.s; z.user = false; touch(); }
+    render(f, z.view);
+    snap.width = f.canvas.width; snap.height = f.canvas.height; snap.getContext('2d').drawImage(f.canvas, 0, 0);
+    z.snapView = { s: z.view.s, ox: z.view.ox, oy: z.view.oy };
+  }
+  function quick() {
+    const v = z.view, k = v.s / z.snapView.s, c = f.ctx;
+    c.setTransform(1, 0, 0, 1, 0, 0); c.fillStyle = z.ground || PRINT.paper; c.fillRect(0, 0, f.canvas.width, f.canvas.height);
+    c.drawImage(snap, (v.ox - z.snapView.ox * k) * f.dpr, (v.oy - z.snapView.oy * k) * f.dpr, snap.width * k, snap.height * k);
+  }
+  function schedule() { if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; draw(); }); }
+  function moved() {
+    if (!z.snapView) { schedule(); return; }
+    if (!z.raf) z.raf = requestAnimationFrame(() => { z.raf = 0; quick(); });
+    clearTimeout(z.full); z.full = setTimeout(schedule, 160);
+  }
+  function zoomAt(px, py, k) {
+    const v = z.view, ns = Math.min(v.fit * maxZoom, Math.max(v.fit * 0.8, v.s * k)), wx = (px - v.ox) / v.s, wy = (v.oy - py) / v.s;
+    v.s = ns; v.ox = px - wx * ns; v.oy = py + wy * ns; z.user = true; touch(); moved();
+  }
+  function pan(dx, dy) { z.view.ox += dx; z.view.oy += dy; z.user = true; moved(); }
+  wrap.querySelector('[data-z="in"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1.6));
+  wrap.querySelector('[data-z="out"]').addEventListener('click', () => zoomAt(f.w / 2, f.h / 2, 1 / 1.6));
+  wrap.querySelector('[data-z="fit"]').addEventListener('click', () => { z.user = false; schedule(); });
+  const pts = new Map();
+  let pinch = null, down = null;
+  const local = (e) => { const r = wrap.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+  wrap.addEventListener('pointerdown', (e) => {
+    if (e.target.closest('.view-tools')) return;
+    pts.set(e.pointerId, local(e));
+    down = pts.size === 1 ? { p: local(e), t: performance.now(), moved: 0 } : null;
+    try { wrap.setPointerCapture(e.pointerId); } catch (_) {}
+    if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), m: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2] }; }
+    wrap.classList.add('dragging');
+  });
+  wrap.addEventListener('pointermove', (e) => {
+    if (!pts.has(e.pointerId)) return;
+    const prev = pts.get(e.pointerId), cur = local(e);
+    pts.set(e.pointerId, cur);
+    if (down) down.moved = Math.max(down.moved, Math.hypot(cur[0] - down.p[0], cur[1] - down.p[1]));
+    if (pts.size === 2 && pinch) {
+      const [a, b] = [...pts.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]), m = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+      pan(m[0] - pinch.m[0], m[1] - pinch.m[1]);
+      if (pinch.d > 0) zoomAt(m[0], m[1], d / pinch.d);
+      pinch = { d, m };
+    } else if (pts.size === 1 && (e.pointerType !== 'touch' || z.view.s > z.view.fit * 1.02)) pan(cur[0] - prev[0], cur[1] - prev[1]);
+  });
+  const end = (e) => {
+    if (down && pts.size === 1 && down.moved < 5 && opts.onTap) { const [x, y] = local(e), v = z.view; opts.onTap((x - v.ox) / v.s, (v.oy - y) / v.s); }
+    down = null;
+    pts.delete(e.pointerId); if (pts.size < 2) pinch = null; if (!pts.size) wrap.classList.remove('dragging');
+  };
+  wrap.addEventListener('pointerup', end); wrap.addEventListener('pointercancel', (e) => { down = null; end(e); });
+  wrap.addEventListener('wheel', (e) => { if (!(e.ctrlKey || e.metaKey)) return; e.preventDefault(); const [x, y] = local(e); zoomAt(x, y, Math.exp(-e.deltaY * 0.0045)); }, { passive: false });
+  wrap.addEventListener('dblclick', (e) => { if (e.target.closest('.view-tools')) return; const [x, y] = local(e); zoomAt(x, y, e.shiftKey ? 0.5 : 2); });
+  return { f, z, schedule, refit: () => { z.user = false; schedule(); } };
+}
+// chunked paths: many small paths fill far faster than one path with a hundred thousand pieces
+function chunked(count, add, size = 512) {
+  const out = [];
+  let p = null;
+  for (let i = 0; i < count; i++) { if (i % size === 0) { p = new Path2D(); out.push(p); } add(p, i); }
+  return out;
+}
+// fill and outline in the same colour, so that tiles which only meet along an edge show no hairline seams
+function solid(c, paths, color, lw) {
+  c.fillStyle = color; c.strokeStyle = color; c.lineWidth = lw; c.lineJoin = 'miter';
+  for (const p of paths) { c.fill(p); c.stroke(p); }
+}
+const dot = (c, v, x, y, r = 4, color = PRINT.red) => { c.beginPath(); c.arc(v.ox + x * v.s, v.oy - y * v.s, r, 0, Math.PI * 2); c.fillStyle = color; c.fill(); c.strokeStyle = PRINT.paper; c.lineWidth = 1.5; c.stroke(); };
+
+// a polyline (Float64Array or [[x,y],...]) as SVG points with y flipped
+const svgPts = (P) => (P instanceof Float64Array ? Array.from({ length: P.length / 2 }, (_, i) => [P[2 * i], P[2 * i + 1]]) : P).map(([x, y]) => `${x.toFixed(4)},${(-y).toFixed(4)}`).join(' ');
+function miniCurve(id, P, dots = true) {
+  const pts = P instanceof Float64Array ? Array.from({ length: P.length / 2 }, (_, i) => [P[2 * i], P[2 * i + 1]]) : P;
+  $(id).innerHTML = `<line x1="0" y1="0" x2="1" y2="0" stroke="#8a8a84" stroke-width="0.008" stroke-dasharray="0.025 0.02"/>` +
+    `<polyline points="${svgPts(pts)}" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linejoin="round"/>` +
+    (dots ? `<g fill="currentColor">${pts.map(([x, y], i) => `<circle cx="${x.toFixed(4)}" cy="${(-y).toFixed(4)}" r="${i === 0 || i === pts.length - 1 ? 0.03 : 0.018}"/>`).join('')}</g>` : '');
+}
+function miniTree(id, links, dx = 0) {
+  const ends = new Set(), mid = new Set(), k = (x, y) => `${x.toFixed(4)},${y.toFixed(4)}`;
+  let s = '';
+  for (const [px, py, qx, qy] of links) {
+    s += `<line x1="${(px + dx).toFixed(4)}" y1="${(-py).toFixed(4)}" x2="${(qx + dx).toFixed(4)}" y2="${(-qy).toFixed(4)}" stroke="currentColor" stroke-width="0.02" stroke-linecap="round"/>`;
+    mid.add(k(px + dx, py)); mid.add(k(qx + dx, qy));
+  }
+  s += `<g fill="currentColor">${[...mid].map((p) => { const [x, y] = p.split(',').map(Number); const big = (Math.abs(x - dx) < 1e-6 || Math.abs(x - dx - 1) < 1e-6) && Math.abs(y) < 1e-6; return `<circle cx="${x}" cy="${-y}" r="${big ? 0.03 : 0.018}"/>`; }).join('')}</g>`;
+  return s;
+}
+// canvas transform for a similarity map f = [ar, ai, br, bi, m] composed with the view
+function setMap(f, c, v, fig) {
+  const [ar, ai, br, bi, m] = f, k = fig.dpr * v.s;
+  if (m) c.setTransform(k * ar, -k * ai, k * ai, k * ar, fig.dpr * (v.ox + v.s * br), fig.dpr * (v.oy - v.s * bi));
+  else c.setTransform(k * ar, -k * ai, -k * ai, -k * ar, fig.dpr * (v.ox + v.s * br), fig.dpr * (v.oy - v.s * bi));
+}
+const segPath = (segs, pick) => { const p = new Path2D(); for (const s of segs) if (!pick || pick(s)) { p.moveTo(s[0], s[1]); p.lineTo(s[2], s[3]); } return p; };
+// Plate 64's chevrons, measured from the plate: each interval a→b becomes a thin quadrilateral
+// pointing toward F, the corner the next stage would add (see DECISIONS.md)
+const CHEV_OUT = 0.43, CHEV_IN = 0.235;
+function chevronPaths(P, F, m) {
+  return chunked(m, (p, i) => {
+    const ax = P[2 * i], ay = P[2 * i + 1], bx = P[2 * i + 2], by = P[2 * i + 3], mx = (ax + bx) / 2, my = (ay + by) / 2;
+    const vx = F[2 * i] - mx, vy = F[2 * i + 1] - my;
+    p.moveTo(ax, ay); p.lineTo(mx + CHEV_OUT * vx, my + CHEV_OUT * vy); p.lineTo(bx, by); p.lineTo(mx + CHEV_IN * vx, my + CHEV_IN * vy); p.closePath();
+  });
+}
+
+// Chapter 21 ("Chance as a Tool in Model Making") prints no plates, so everything on this page
+// computes the chapter's own examples: a controller feeding S or F to the processor of a Koch
+// loop (the caption of Plate 46 is the chapter's cited case), the seed as a page number in the
+// grand portfolio, and the contrast between nonconstrained and self-constrained chance (random
+// lattice polygons against self-avoiding ones).
+
+// deterministic RNG, so the "random" figures draw the same until reseeded
+function mulberry32(seed) {
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+// ---- the processor: Plate 46's coastline generator (three steps of 1/sqrt 7), run in its
+// straight (S) or flipped (F) variant on every interval of the stage ----
+const PHI21 = Math.atan2(Math.sqrt(3), 5);
+const GW21 = [Math.cos(PHI21) / Math.sqrt(7), -Math.sin(PHI21) / Math.sqrt(7)];
+const GV21 = [GW21[0] * 0.5 - GW21[1] * Math.sqrt(3) / 2, GW21[0] * Math.sqrt(3) / 2 + GW21[1] * 0.5];
+const GEN21 = [[0, 0], GW21, [GW21[0] + GV21[0], GW21[1] + GV21[1]], [1, 0]];       // S
+const GEN21F = GEN21.map(([x, y]) => [x, -y]);                                       // F: mirrored in the chord
+// control sequences: what the controller hands the processor before each loop
+const PI_DIGITS = '14159265358979323846';
+function controlSequence(kind, K, seed) {
+  if (kind === 'allS') return Array(K).fill(0);
+  if (kind === 'alt') return Array.from({ length: K }, (_, k) => k % 2);
+  if (kind === 'pi') return Array.from({ length: K }, (_, k) => +PI_DIGITS[k % PI_DIGITS.length] % 2);
+  const rnd = mulberry32(seed * 2654435761 + 11);
+  return Array.from({ length: K }, () => (rnd() < 0.5 ? 0 : 1));
+}
+// the curve on [0,1] after K stages; variantOf(stage, pieceIndex) returns 0 for S, 1 for F
+function controlledCurve(K, variantOf) {
+  let P = new Float64Array([0, 0, 1, 0]);
+  for (let k = 0; k < K; k++) {
+    const m = P.length / 2 - 1, Q = new Float64Array(m * 6 + 2);
+    for (let i = 0; i < m; i++) {
+      const ax = P[2 * i], ay = P[2 * i + 1], dx = P[2 * i + 2] - ax, dy = P[2 * i + 3] - ay;
+      const G = variantOf(k, i) ? GEN21F : GEN21;
+      for (let g = 0; g < 3; g++) { Q[6 * i + 2 * g] = ax + dx * G[g][0] - dy * G[g][1]; Q[6 * i + 2 * g + 1] = ay + dx * G[g][1] + dy * G[g][0]; }
+    }
+    Q[Q.length - 2] = 1; Q[Q.length - 1] = 0;
+    P = Q;
+  }
+  return P;
+}
+
+// ---- nonconstrained against self-constrained chance: random 2n-sided lattice polygons ----
+// A closed 2n-step walk: n steps paired with their opposites, shuffled. (A simple closed-walk
+// sampler, not the uniform distribution on all closed polygons; the page says so.)
+const DIRS21 = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+function randomClosedPolygon(n, rnd) {
+  const steps = [];
+  for (let i = 0; i < n; i++) { const d = Math.floor(rnd() * 4); steps.push(d, d ^ 1); }
+  for (let i = steps.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); const t = steps[i]; steps[i] = steps[j]; steps[j] = t; }
+  const P = [[0, 0]];
+  let x = 0, y = 0;
+  for (const d of steps) { x += DIRS21[d][0]; y += DIRS21[d][1]; P.push([x, y]); }
+  return P;
+}
+// repeated vertices (beyond the closing return to the origin) — the walk's self-contacts
+function selfContacts(P) {
+  const seen = new Map();
+  let hits = 0;
+  for (let i = 0; i < P.length - 1; i++) {
+    const k = P[i][0] * 100003 + P[i][1];
+    if (seen.has(k)) hits++;
+    seen.set(k, 1);
+  }
+  return hits;
+}
+// rejection-sample a self-avoiding polygon; returns { P, tries } or null after maxTries
+function selfAvoidingPolygon(n, rnd, maxTries = 20000) {
+  for (let t = 1; t <= maxTries; t++) {
+    const P = randomClosedPolygon(n, rnd);
+    if (selfContacts(P) === 0) return { P, tries: t };
+  }
+  return null;
+}
+// acceptance rate measured over a batch
+function acceptanceRate(n, seed, batch = 3000) {
+  const rnd = mulberry32(seed * 7919 + n);
+  let ok = 0;
+  for (let t = 0; t < batch; t++) if (selfContacts(randomClosedPolygon(n, rnd)) === 0) ok++;
+  return ok / batch;
+}
+
+// ---- a small chart in screen space ----
+const SUPS = '⁰¹²³⁴⁵⁶⁷⁸⁹';
+const supNum = (n) => String(n).replace(/\d/g, (d) => SUPS[+d]);
+const decadeLabel = (e) => `10${e < 0 ? '⁻' : ''}${supNum(Math.abs(e))}`;
+function chart(f, o) {
+  const c = f.ctx, ml = o.ml ?? 58, mr = o.mr ?? 16, mt = o.mt ?? 14, mb = o.mb ?? 36;
+  const iw = Math.max(1, f.w - ml - mr), ih = Math.max(1, f.h - mt - mb);
+  const tx = (u) => (o.x.log ? Math.log10(u) : u), ty = (v) => (o.y.log ? Math.log10(v) : v);
+  const x0 = tx(o.x.min), x1 = tx(o.x.max), y0 = ty(o.y.min), y1 = ty(o.y.max);
+  const X = (u) => ml + ((tx(u) - x0) / (x1 - x0)) * iw;
+  const Y = (v) => mt + ih - ((ty(v) - y0) / (y1 - y0)) * ih;
+  c.font = '500 10.5px "IBM Plex Mono", monospace';
+  const grid = (t0, t1, log, vert) => {
+    const ticks = [];
+    if (log) {
+      const step = t1 - t0 > 9 ? 2 : 1;
+      for (let e = Math.ceil(t0 - 1e-9); e <= Math.floor(t1 + 1e-9); e++) if (e % step === 0) ticks.push([e, decadeLabel(e)]);
+    } else {
+      const span = t1 - t0, step = [0.1, 0.2, 0.25, 0.5, 1, 2, 5, 10, 20, 50, 100].find((s) => span / s <= 8) || 1000;
+      for (let v = Math.ceil(t0 / step) * step; v <= t1 + 1e-9; v += step) ticks.push([v, String(Math.round(v * 100) / 100)]);
+    }
+    for (const [v, label] of ticks) {
+      const p = (v - t0) / (t1 - t0);
+      c.strokeStyle = '#dddbd2'; c.lineWidth = 1; c.beginPath();
+      if (vert) {
+        const x = ml + p * iw;
+        c.moveTo(x, mt); c.lineTo(x, mt + ih); c.stroke();
+        c.fillStyle = PRINT.muted; c.textAlign = 'center'; c.textBaseline = 'top'; c.fillText(label, x, mt + ih + 6);
+      } else {
+        const y = mt + ih - p * ih;
+        c.moveTo(ml, y); c.lineTo(ml + iw, y); c.stroke();
+        c.fillStyle = PRINT.muted; c.textAlign = 'right'; c.textBaseline = 'middle'; c.fillText(label, ml - 6, y);
+      }
+    }
+  };
+  grid(x0, x1, o.x.log, true);
+  grid(y0, y1, o.y.log, false);
+  c.strokeStyle = PRINT.rule; c.lineWidth = 1; c.strokeRect(ml, mt, iw, ih);
+  c.fillStyle = PRINT.muted; c.textAlign = 'center'; c.textBaseline = 'top'; c.fillText(o.x.label, ml + iw / 2, f.h - 16);
+  c.save(); c.translate(15, mt + ih / 2); c.rotate(-Math.PI / 2); c.textBaseline = 'middle'; c.fillText(o.y.label, 0, 0); c.restore();
+  return { X, Y, ml, mr, mt, mb, iw, ih,
+    clip: () => { c.save(); c.beginPath(); c.rect(ml, mt, iw, ih); c.clip(); },
+    unclip: () => c.restore() };
+}
+
+(() => {
+  const D21 = Math.log(3) / Math.log(Math.sqrt(7));
+
+  // ====================== The controller and the portfolio (pages 201-203) ======================
+  const stA = { mode: 'stage', ctl: 'alt', K: 6, seed: 1 };
+  const KS_A = [2, 3, 4, 5, 6, 7];
+  function stageCurve() {
+    const seq = controlSequence(stA.ctl, stA.K, stA.seed);
+    return { seq, P: controlledCurve(stA.K, (k) => seq[k]) };
+  }
+  function pieceCurve(seed) {
+    const rnd = mulberry32(seed * 48271 + 3);
+    // per-piece coin: hash stage and index through the seeded stream is order-dependent, so
+    // draw a fixed table of tosses per stage (enough for 3^k pieces) once per seed
+    const tables = [];
+    for (let k = 0; k < stA.K; k++) {
+      const t = new Uint8Array(Math.pow(3, k) + 1);
+      for (let i = 0; i < t.length; i++) t[i] = rnd() < 0.5 ? 0 : 1;
+      tables.push(t);
+    }
+    return controlledCurve(stA.K, (k, i) => tables[k][i]);
+  }
+  const zA = zoomable('wA', 'cA', (f) => {
+    if (stA.mode === 'portfolio') return fitBox(f, { x0: -0.05, x1: 3.35, y0: -1.25, y1: 0.45 }, 0.03);
+    return fitBox(f, { x0: -0.05, x1: 1.05, y0: -0.42, y1: 0.42 }, 0.03);
+  }, (f, v) => {
+    const c = f.ctx;
+    paper(f, PRINT.paper);
+    toWorld(f, v);
+    c.lineJoin = 'round'; c.lineCap = 'round';
+    if (stA.mode === 'portfolio') {
+      for (let p = 0; p < 6; p++) {
+        const col = p % 3, row = (p - col) / 3;
+        const P = pieceCurve(stA.seed + p);
+        c.save();
+        c.translate(col * 1.15, -row * 0.85);
+        c.strokeStyle = PRINT.ink; c.lineWidth = 1.1 / v.s;
+        c.stroke(polyPath(P, false));
+        c.restore();
+      }
+      toScreen(f);
+      c.font = '500 10.5px "IBM Plex Mono", monospace'; c.textAlign = 'left'; c.textBaseline = 'top'; c.fillStyle = PRINT.muted;
+      for (let p = 0; p < 6; p++) {
+        const col = p % 3, row = (p - col) / 3;
+        c.fillText(`seed ${stA.seed + p}`, v.ox + (col * 1.15) * v.s, v.oy - (-row * 0.85 + 0.38) * v.s);
+      }
+      return;
+    }
+    const { P } = stageCurve();
+    c.strokeStyle = PRINT.ink; c.lineWidth = 1.4 / v.s;
+    c.stroke(polyPath(P, false));
+    toScreen(f);
+  });
+  const MODES_A = { stage: 'One tape, one curve', portfolio: 'Six pages of the portfolio' };
+  const CTLS_A = { allS: 'All S', alt: 'Alternate S, F', pi: 'Digits of π', coin: 'A seeded coin' };
+  function setA(refit) {
+    markMA(stA.mode); markCA(stA.ctl); markKA(stA.K);
+    $('ctlAg').hidden = stA.mode === 'portfolio';
+    $('newA').hidden = stA.mode !== 'portfolio' && stA.ctl !== 'coin';
+    const seq = controlSequence(stA.ctl, stA.K, stA.seed);
+    const word = seq.map((s) => (s ? 'F' : 'S')).join(' ');
+    $('cAt').textContent = MODES_A[stA.mode];
+    $('cAn').textContent = stA.mode === 'portfolio'
+      ? `every piece its own toss · stage ${stA.K} · seeds ${stA.seed}–${stA.seed + 5}`
+      : `${CTLS_A[stA.ctl]} → ${word}`;
+    $('infoA').innerHTML = stA.mode === 'portfolio'
+      ? 'Six seeds, one species: the pages differ in detail but are the same in essentials — the chapter\'s botanical standard for a good random model. A "defective seed" producing an atypical plant is allowed, but must be rare.'
+      : 'The controller may read a tape, interpret a compact instruction ("alternate S and F", "use the k-th digit of π"), or toss a seeded coin — the processor below never knows the difference. Each sequence is a different curve of the same D.';
+    $('rAa').textContent = stA.mode === 'portfolio' ? 'one toss per piece' : word;
+    $('rAb').textContent = stA.mode === 'portfolio' || stA.ctl === 'coin' ? String(stA.seed) : '— (no chance used)';
+    $('rAc').textContent = stA.mode === 'portfolio' ? `2^(Σ3ᵏ) at stage ${stA.K}` : `2ᴷ per K stages`;
+    $('rAd').textContent = D21.toFixed(4);
+    if (refit) zA.refit(); else zA.schedule();
+  }
+  const markMA = stepButtons($('mA'), Object.keys(MODES_A), (k) => MODES_A[k], (k) => `Show: ${MODES_A[k]}`, (k) => { stA.mode = k; setA(true); });
+  const markCA = stepButtons($('ctlA'), Object.keys(CTLS_A), (k) => CTLS_A[k], (k) => `Control sequence: ${CTLS_A[k]}`, (k) => { stA.ctl = k; setA(false); });
+  const markKA = stepButtons($('kA'), KS_A, String, (k) => `${k} stages`, (k) => { stA.K = k; setA(false); });
+  $('coinA').addEventListener('click', () => { stA.mode = 'stage'; stA.ctl = 'coin'; setA(false); });
+  $('newA').addEventListener('click', () => { stA.seed += stA.mode === 'portfolio' ? 6 : 1; setA(false); });
+
+  // ====================== Self-constrained chance (pages 203-204) ======================
+  const stB = { mode: 'poly', n: 12, self: 'free', seed: 1 };
+  let lastB = { P: null, contacts: 0, tries: 1, failed: false };
+  const rateCacheB = {};
+  function sampleB() {
+    const rnd = mulberry32(stB.seed * 104729 + stB.n * 7 + (stB.self === 'avoid' ? 1 : 0));
+    if (stB.self === 'avoid') {
+      const r = selfAvoidingPolygon(stB.n, rnd);
+      lastB = r ? { P: r.P, contacts: 0, tries: r.tries, failed: false } : { P: randomClosedPolygon(stB.n, rnd), contacts: -1, tries: 20000, failed: true };
+      if (lastB.failed) lastB.contacts = selfContacts(lastB.P);
+    } else {
+      const P = randomClosedPolygon(stB.n, rnd);
+      lastB = { P, contacts: selfContacts(P), tries: 1, failed: false };
+    }
+  }
+  function rateB(n) {
+    const key = `${n}`;
+    if (!(key in rateCacheB)) rateCacheB[key] = acceptanceRate(n, 5, n > 24 ? 1500 : 3000);
+    return rateCacheB[key];
+  }
+  const zB = zoomable('wB', 'cB', (f) => {
+    if (stB.mode === 'rate') return fitBox(f, { x0: 0, x1: 1, y0: 0, y1: 1 }, 0);
+    const bb = bbox(Float64Array.from(lastB.P.flat()));
+    return fitBox(f, { x0: bb.x0 - 1, x1: bb.x1 + 1, y0: bb.y0 - 1, y1: bb.y1 + 1 }, 0.04);
+  }, (f, v) => {
+    const c = f.ctx;
+    paper(f, PRINT.paper);
+    if (stB.mode === 'poly') {
+      toWorld(f, v);
+      c.lineJoin = 'round'; c.lineCap = 'round';
+      const P = lastB.P;
+      c.strokeStyle = PRINT.ink; c.lineWidth = 2.2 / v.s;
+      c.beginPath(); c.moveTo(P[0][0], P[0][1]);
+      for (let i = 1; i < P.length; i++) c.lineTo(P[i][0], P[i][1]);
+      c.stroke();
+      // mark the self-contacts
+      const seen = new Map();
+      for (let i = 0; i < P.length - 1; i++) {
+        const k = `${P[i][0]},${P[i][1]}`;
+        if (seen.has(k)) {
+          c.beginPath(); c.arc(P[i][0], P[i][1], 4.5 / v.s, 0, 2 * Math.PI);
+          c.fillStyle = PRINT.red; c.fill();
+        }
+        seen.set(k, 1);
+      }
+      c.beginPath(); c.arc(P[0][0], P[0][1], 4.5 / v.s, 0, 2 * Math.PI);
+      c.fillStyle = PRINT.accent; c.fill();
+      toScreen(f);
+    } else {
+      toScreen(f);
+      c.lineJoin = 'round'; c.lineCap = 'round';
+      const ns = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+      const ch = chart(f, { x: { min: 2, max: 13, log: false, label: 'half the sides, n' }, y: { min: 1e-4, max: 1, log: true, label: 'share of draws that are self-avoiding' } });
+      ch.clip();
+      c.strokeStyle = PRINT.red; c.lineWidth = 1.8; c.beginPath();
+      let started = false;
+      const pts = [];
+      for (const n of ns) {
+        const r = rateB(n);
+        if (r <= 0) continue;
+        pts.push([n, r]);
+        if (started) c.lineTo(ch.X(n), ch.Y(r)); else { c.moveTo(ch.X(n), ch.Y(r)); started = true; }
+      }
+      c.stroke();
+      for (const [n, r] of pts) { c.beginPath(); c.arc(ch.X(n), ch.Y(r), 3.5, 0, 2 * Math.PI); c.fillStyle = PRINT.ink; c.fill(); c.strokeStyle = PRINT.paper; c.lineWidth = 1.5; c.stroke(); }
+      ch.unclip();
+      c.font = '600 11px "IBM Plex Mono", monospace'; c.textAlign = 'left'; c.textBaseline = 'top';
+      c.fillStyle = PRINT.ink; c.fillText('measured on batches of random closed polygons', ch.ml + 10, ch.mt + 8);
+      c.fillStyle = PRINT.red; c.fillText('a roughly geometric collapse;', ch.ml + 10, ch.mt + 24);
+      c.fillText('past n = 12 the batches find none at all', ch.ml + 10, ch.mt + 40);
+    }
+  });
+  const MODES_B = { poly: 'A random polygon', rate: 'The price of the constraint' };
+  function setB(refit) {
+    if (stB.mode === 'poly') sampleB();
+    markMB(stB.mode); markSB(stB.self);
+    $('selfBg').hidden = stB.mode !== 'poly';
+    $('nvB').textContent = `n = ${stB.n}`;
+    $('cBt').textContent = MODES_B[stB.mode];
+    $('cBn').textContent = stB.mode === 'poly' ? `2n = ${2 * stB.n} sides · seed ${stB.seed}` : 'batches of 1,500–3,000 draws per n';
+    $('infoB').innerHTML = stB.mode === 'rate'
+      ? 'Rejection is honest but hopeless: to sample one self-avoiding polygon of 2n sides costs on the order of 1/rate draws, and the rate collapses with n. Counting the survivors exactly is the unsolved problem the chapter names.'
+      : stB.self === 'avoid'
+        ? (lastB.failed ? `<b>Gave up</b> after ${fmt(lastB.tries)} draws without one self-avoiding polygon — the constraint has priced this n out of rejection sampling.` : `This sample needed <b>${fmt(lastB.tries)}</b> draw${lastB.tries === 1 ? '' : 's'}: the controller had to inspect its outcome and start over, the signature of self-constrained chance.`)
+        : `Nonconstrained: one pass, no inspection, done. The red dots are the walk's self-contacts${lastB.contacts ? ` — ${lastB.contacts} here` : ' (none this time, by luck)'}, which a coastline forbids.`;
+    $('rBa').textContent = String(2 * stB.n);
+    $('rBb').textContent = stB.mode === 'rate' ? '—' : String(lastB.contacts);
+    $('rBc').textContent = stB.mode === 'rate' ? '≈ 1/rate' : (stB.self === 'avoid' ? (lastB.failed ? `> ${fmt(lastB.tries)}` : fmt(lastB.tries)) : '1');
+    const rate = rateB(stB.n);
+    $('rBd').textContent = rate > 0 ? `${(100 * rate).toPrecision(2)}% at this n` : 'none in a 1,500-draw batch';
+    if (refit) zB.refit(); else zB.schedule();
+  }
+  const markMB = stepButtons($('mB'), Object.keys(MODES_B), (k) => MODES_B[k], (k) => `Show: ${MODES_B[k]}`, (k) => { stB.mode = k; setB(true); });
+  const markSB = stepButtons($('selfB'), ['free', 'avoid'], (k) => (k === 'free' ? 'Any closed polygon' : 'Self-avoiding'), (k) => `Demand: ${k}`, (k) => { stB.self = k; setB(true); });
+  $('nsB').addEventListener('input', (e) => { stB.n = +e.target.value; setB(true); });
+  $('newB').addEventListener('click', () => { stB.seed++; setB(true); });
+
+  setA(true); setB(true);
+})();
+
+</script>
+
+</body>
+</html>
