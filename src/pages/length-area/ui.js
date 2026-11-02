@@ -35,10 +35,12 @@
       const n = stageFor(stA.shape, isle.s, G);
       const P = islandTeragon(stA.shape, n);
       const walk = dividerWalk(P, G, isle.s, isle.ox, isle.oy);
-      out.push({ isle, n, walk, area: shoelace(P) * isle.s * isle.s, glen: walk.steps * G });
+      // an island the yardstick cannot even span measures 0: it drops out of the chart and the
+      // fit (log 0 would otherwise send the chart's bounds to -Infinity and hang the tick loop)
+      out.push({ isle, n, walk, area: shoelace(P) * isle.s * isle.s, glen: walk.steps * G, ok: walk.steps > 0 });
     }
-    const rows = out.map((o) => [Math.log10(o.area), Math.log10(o.glen)]);
-    return (measA = { G, out, rows, fit: leastSquares(rows) });
+    const rows = out.filter((o) => o.ok).map((o) => [Math.log10(o.area), Math.log10(o.glen)]);
+    return (measA = { G, out, rows, dropped: out.length - rows.length, fit: leastSquares(rows) });
   }
 
   const zA = zoomable('wA', 'cA', (f) => fitBox(f, layoutA(stA.shape).box, 0.02), (f, v) => {
@@ -67,30 +69,38 @@
   });
   const fA2 = figure($('cA2'), () => {
     const M = measA || measureA(), S = SHAPES[stA.shape];
+    if (!M.rows.length) { paper(fA2, PRINT.paper); return; }
     const xs = M.rows.map((r) => r[0]), ys = M.rows.map((r) => r[1]);
     const x0 = Math.min(...xs) - 0.4, x1 = Math.max(...xs) + 0.4;
     const y0 = Math.min(...ys) - 0.4, y1 = Math.max(...ys) + 0.4;
     const ch = chartFrame(fA2, { x0, x1, y0, y1, xlabel: 'G-area', ylabel: 'G-length', left: 52 });
-    ch.line(S.D / 2, M.fit.b + (M.fit.slope - S.D / 2) * ((x0 + x1) / 2), PRINT.accent, [5, 4]);
-    ch.line(M.fit.slope, M.fit.b, PRINT.ink);
+    if (M.fit) {
+      ch.line(S.D / 2, M.fit.b + (M.fit.slope - S.D / 2) * ((x0 + x1) / 2), PRINT.accent, [5, 4]);
+      ch.line(M.fit.slope, M.fit.b, PRINT.ink);
+    }
     for (const [x, y] of M.rows) ch.rain(x, y, 4.5);
   });
   function setA(refitView) {
     const M = measureA(), S = SHAPES[stA.shape], G = M.G;
     markShA(stA.shape);
     $('gAv').textContent = `G = ${G.toFixed(G < 0.1 ? 3 : 2)}`;
-    const Dfit = 2 * M.fit.slope;
-    $('rAslope').textContent = M.fit.slope.toFixed(3);
-    $('rAd').textContent = Dfit.toFixed(3);
+    $('rAslope').textContent = M.fit ? M.fit.slope.toFixed(3) : '—';
+    $('rAd').textContent = M.fit ? (2 * M.fit.slope).toFixed(3) : '—';
     $('rAtrue').textContent = S.D.toFixed(4) + (stA.shape === 'koch' ? ' (log 4/log 3)' : stA.shape === 'quad' ? ' (3/2)' : ' (standard)');
-    const ratios = M.out.map((o) => Math.pow(o.glen, 1 / S.D) / Math.sqrt(o.area));
-    const mean = ratios.reduce((a, b) => a + b, 0) / ratios.length;
-    const spread = (Math.max(...ratios) - Math.min(...ratios)) / mean;
-    $('rAratio').textContent = `±${(100 * spread / 2).toFixed(1)}%`;
-    const n1 = M.out[0], n5 = M.out[M.out.length - 1];
-    $('infoA').innerHTML = stA.shape === 'circle'
-      ? `A standard family: the walk takes <b>${n1.walk.steps.toFixed(1)}</b> steps around the smallest circle and <b>${n5.walk.steps.toFixed(1)}</b> around the largest, and the slope is the classical 1/2. The ratio length/√area is 2√π ≈ 3.545 for every circle, whatever G is.`
-      : `With this G the smallest island's coast measures <b>${n1.glen.toFixed(2)}</b> and the largest <b>${n5.glen.toFixed(1)}</b>. Shrink G: every G-length grows without bound (the coasts are fractal), yet the slope — and the ratio (G-length)<sup>1/D</sup>/√(G-area), constant across islands to the spread shown — keeps reporting the same D.`;
+    const kept = M.out.filter((o) => o.ok);
+    const ratios = kept.map((o) => Math.pow(o.glen, 1 / S.D) / Math.sqrt(o.area));
+    const mean = ratios.reduce((a, b) => a + b, 0) / Math.max(1, ratios.length);
+    const spread = ratios.length ? (Math.max(...ratios) - Math.min(...ratios)) / mean : 0;
+    $('rAratio').textContent = ratios.length ? `±${(100 * spread / 2).toFixed(1)}%` : '—';
+    const n1 = kept[0], n5 = kept[kept.length - 1];
+    const droppedNote = M.dropped
+      ? ` The yardstick is longer than the ${M.dropped === 1 ? 'smallest island' : `${M.dropped} smallest islands`}, so ${M.dropped === 1 ? 'it drops' : 'they drop'} out of the walk and the fit.`
+      : '';
+    $('infoA').innerHTML = !n1
+      ? 'The yardstick is longer than every island in the family: no divider walk can take a single step. Shrink G.'
+      : (stA.shape === 'circle'
+        ? `A standard family: the walk takes <b>${n1.walk.steps.toFixed(1)}</b> steps around the smallest circle and <b>${n5.walk.steps.toFixed(1)}</b> around the largest, and the slope is the classical 1/2. The ratio length/√area is 2√π ≈ 3.545 for every circle, whatever G is.`
+        : `With this G the smallest island's coast measures <b>${n1.glen.toFixed(2)}</b> and the largest <b>${n5.glen.toFixed(1)}</b>. Shrink G: every G-length grows without bound (the coasts are fractal), yet the slope — and the ratio (G-length)<sup>1/D</sup>/√(G-area), constant across islands to the spread shown — keeps reporting the same D.`) + droppedNote;
     $('dimA').innerHTML = `(G-length) ∝ (G-area)<sup>D/2</sup> at a fixed yardstick G · ${S.name} D = ${stA.shape === 'koch' ? 'log 4/log 3 ≈ 1.2619' : stA.shape === 'quad' ? 'log 8/log 4 = 3/2' : '1'}`;
     if (refitView) zA.refit(); else zA.schedule();
     fA2.draw();

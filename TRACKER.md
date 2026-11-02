@@ -95,6 +95,7 @@ Update this file in the same pull request as the work it records.
 
 | Plate | Page | Title | Kind | Status | Site page |
 | :- | :- | :- | :- | :- | :- |
+| (concept) | 147–150 | Surfaces of positive volume; the arteries-and-veins model of flesh (chapter 15, no plates; confirm against the scan) | — | todo | |
 | 155 | 154–155 | Fractal umbrella trees and fractal canopies | exact | done | umbrella-trees |
 | 163 | 163 | Flattened fractal models of plant flowers | exact | done | diameter-exponent |
 | 164–165 | 164–165 | Plane-filling recursive bronchi | exact | done | diameter-exponent |
@@ -114,6 +115,13 @@ Update this file in the same pull request as the work it records.
 | 190–191 | 190–192 | Self-squared dragons; approach to the "Peano" limit | exact | done | self-squared-dragons |
 | 192 | 192 | Real self-squared Fatou dusts | exact | done | self-squared-dragons |
 | 198–199 | 198–199 | Attraction to fractals (San Marco dragon; Pharaoh's breastplate) | exact | done | fractal-attractors |
+
+## VII Randomness (chapters 21–22)
+
+| Plate | Page | Title | Kind | Status | Site page |
+| :- | :- | :- | :- | :- | :- |
+| (concept) | 200–204 | Chance as a tool in model making (chapter 21; confirm plates and pages against the scan) | — | todo | |
+| (concept) | 205–209 | Conditional stationarity and cosmographic principles (chapter 22; confirm plates and pages against the scan) | — | todo | |
 
 ## VIII Stratified random fractals (chapters 23–26)
 
@@ -142,6 +150,7 @@ Update this file in the same pull request as the work it records.
 | 269, C9 (top) | 269 | Brownian Pangaea (coastline D = 3/2) | render | done | brown-relief |
 | 270 | 270 | The first known examples of Brown coastlines | random | done | brown-relief |
 | 271 | 271 | The first known examples of fractional Brown islands (D = 2.3000) | render | done | brown-relief |
+| (concept) | 272–276 | Island, lake and cup areas: Korčak's law, deadvalleys, the Devil's terraces (chapter 29, no figures) | — | todo | |
 | (concept) | 277–279 | Isothermal surfaces of homogeneous turbulence (chapter 30) | random | done | isothermal-surfaces |
 
 ## A book within the book, in colour (C1–C16, before chapter 30)
@@ -193,6 +202,7 @@ Update this file in the same pull request as the work it records.
 | (sketches) | 391–404 | Chapter 40, six biographical sketches: Bachelier, Fournier d'Albe, Hurst, Lévy, Richardson, Zipf | data | done | biographical-sketches |
 | Drawing, p. 404 | 404 | Jean Effel's lecture drawing, "fournir vos questions à mes réponses" | art | done | biographical-sketches |
 | (concept) | 405–421 | Historical sketches: chimeras, dimension, Poincaré, old scaling evidence, Weierstrass | — | done | historical-sketches |
+| (concept) | 422– | Epilog: the path to fractals (chapter 42; confirm pages against the scan) | — | todo | |
 
 ## Front matter and the update for the second printing (pages 458–468)
 

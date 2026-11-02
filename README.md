@@ -4,7 +4,7 @@ Interactive reconstructions of the plates in Benoit B. Mandelbrot's *The Fractal
 
 ## Status
 
-Ten pages are built so far, covering plates 31–73 (chapters 5–7) and a page on Brownian motion. See `TRACKER.md` for the full plate list and what comes next.
+Every plate chapter of the book now has a page — 47 pages covering the plates of chapters 2–41, the colour signature C1–C16 and the second-printing update. See `TRACKER.md` for the full plate list and what remains (a few plateless chapters await the review pass).
 
 The site is published at https://fractal-geometry-explorer.github.io/fractal-geometry-explorer/ every time `main` changes.
 
