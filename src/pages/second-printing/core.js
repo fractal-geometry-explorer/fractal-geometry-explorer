@@ -31,13 +31,33 @@ function lzCycle(lr, li, warm = 8000) {
   return null;
 }
 
+// |multiplier| of the cycle: the product of f'(z) = lam(1 + 1/z^2) over the cycle points.
+// 1 - |m| is how fast orbits close in; near 1 the basin edges grow the print's feathered stars.
+function lzMult(lr, li, cyc) {
+  if (!cyc) return 0;
+  let mr = 1, mi = 0;
+  for (const [ar, ai] of cyc.pts) {
+    const q = ar * ar + ai * ai;
+    const ir = (ar * ar - ai * ai) / (q * q), ii = -(2 * ar * ai) / (q * q); // 1/z^2
+    const gr = 1 + ir, gi = ii;
+    const fr = lr * gr - li * gi, fi = lr * gi + li * gr;
+    const nr = mr * fr - mi * fi, ni = mr * fi + mi * fr;
+    mr = nr; mi = ni;
+  }
+  return Math.hypot(mr, mi);
+}
+
 const PAPER_RGB = [236, 235, 230], INK_RGB = [21, 21, 21];
 function putGray(d, o, g) { d[o] = g[0]; d[o + 1] = g[1]; d[o + 2] = g[2]; d[o + 3] = 255; }
 const mix = (t) => [0, 1, 2].map((k) => Math.round(PAPER_RGB[k] + (INK_RGB[k] - PAPER_RGB[k]) * t));
 
 // Julia basins (Plate VIII). cyc from lzCycle; shade = phase of capture, ink where no basin claims
 // the pixel (the Julia filigree of "stars"), paper where the orbit escapes to infinity.
-function rasterBasins(img, v, lam, cyc, itmax = 600, step = 1) {
+// depth = {k0, k1} reproduces the print's depth-limited ink: a pixel captured within k0 steps keeps
+// its flat phase shade, and beyond that the shade ramps to solid ink at k1 — so the small basins,
+// which take more steps per generation, drown in ink and the boundary grows the plate's feathered
+// stars. depth = null is the flat mathematical picture.
+function rasterBasins(img, v, lam, cyc, itmax = 600, step = 1, depth = null) {
   const W = img.width, H = img.height, d = img.data, lr = lam[0], li = lam[1];
   const p = cyc ? cyc.p : 0;
   // one gray per phase, spread over the plate's range (three phases land on the print's grays)
@@ -64,6 +84,10 @@ function rasterBasins(img, v, lam, cyc, itmax = 600, step = 1) {
               // all points of one basin component reach the same cycle point in step, so the
               // phase (index - step) mod p is constant on the component: a stable shade
               col = shades[(((A[m][2] - k) % p) + p) % p];
+              if (depth && k > depth.k0) {
+                const t = Math.min(1, (k - depth.k0) / (depth.k1 - depth.k0));
+                col = [0, 1, 2].map((ch) => Math.round(col[ch] + (ink[ch] - col[ch]) * t));
+              }
               k = itmax; break;
             }
           }

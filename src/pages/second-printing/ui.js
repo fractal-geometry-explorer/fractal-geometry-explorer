@@ -4,12 +4,12 @@
 const cplx = (re, im, digits = 4) => `${re.toFixed(digits)} ${im < 0 ? '−' : '+'} ${Math.abs(im).toFixed(digits)}i`;
 
 // ---------- Plate VIII: Julia basins of lam(z - 1/z) ----------
-const J = { lam: [0.22127359, 0.48341992], cyc: null, c: null, t: 0 };
+const J = { lam: [0.2213, 0.5134], cyc: null, c: null, t: 0, printInk: true, k0: 40 };
 const J_PRESETS = [
-  ['Plate VIII', 0.22127359, 0.48341992],
+  ['Plate VIII', 0.2213, 0.5134],
+  ['Superstable 3', 0.22127359, 0.48341992],
   ['Period 4', -0.05, -0.95],
   ['Period 2', -0.5, 0],
-  ['Period 1', 0.65, 0],
 ];
 function setLamJ(lr, li) {
   J.lam = [lr, li];
@@ -17,12 +17,13 @@ function setLamJ(lr, li) {
   J.c = null;
   markJ(J_PRESETS.findIndex((p) => Math.abs(p[1] - lr) + Math.abs(p[2] - li) < 1e-9));
   const c = J.cyc;
+  const m = lzMult(lr, li, c);
   $('rJa').textContent = cplx(lr, li);
   $('rJb').textContent = c ? String(c.p) : 'none found';
-  $('rJc').textContent = c ? cplx(c.pts[0][0], c.pts[0][1], 3) : '—';
+  $('rJc').textContent = c ? m.toFixed(3) : '—';
   $('rJd').textContent = Math.hypot(lr, li).toFixed(4);
   $('infoJ').innerHTML = c
-    ? `The critical orbit settles on a <b>${c.p}-point</b> limit cycle; each basin phase gets its own gray, and the Julia set between the basins prints as ink.`
+    ? `The critical orbit settles on a <b>${c.p}-point</b> limit cycle pulling at strength |m| = ${m.toFixed(2)} — ${m < 0.2 ? 'a hard pull: edges stay clean pebbles' : m < 0.7 ? 'a middling pull: the edges grow the print’s feathered stars' : 'a weak pull: convergence is slow and the stars overrun the basins'}.`
     : 'No small limit cycle: the critical orbit escapes or wanders, and the picture is boundary alone.';
   zj.refit();
 }
@@ -46,15 +47,26 @@ function cachedRaster(store, key, W, H, compute, onFine) {
 }
 const zj = zoomable('wJ', 'cJ', (f) => fitBox(f, { x0: -2.2, x1: 2.2, y0: -2.2, y1: 2.2 }), (f, v) => {
   const W = Math.round(f.w), H = Math.round(f.h);
-  const key = [J.lam[0], J.lam[1], W, H, v.s, v.ox, v.oy].join('|');
+  const key = [J.lam[0], J.lam[1], J.printInk ? J.k0 : 'flat', W, H, v.s, v.ox, v.oy].join('|');
+  const depth = J.printInk ? { k0: J.k0, k1: J.k0 * 2.8 } : null;
   const cache = cachedRaster(J, key, W, H,
-    (img, step) => rasterBasins(img, { s: v.s, ox: v.ox, oy: v.oy }, J.lam, J.cyc, 600, step),
+    (img, step) => rasterBasins(img, { s: v.s, ox: v.ox, oy: v.oy }, J.lam, J.cyc, 600, step, depth),
     () => zj.schedule());
   paper(f, PRINT.paper); toScreen(f);
   f.ctx.imageSmoothingEnabled = false;
   f.ctx.drawImage(cache.off, 0, 0, W, H);
 }, { maxZoom: 2000 });
 const markJ = stepButtons($('mJ'), [0, 1, 2, 3], (i) => J_PRESETS[i][0], (i) => `Set lambda to the ${J_PRESETS[i][0]} value`, (i) => setLamJ(J_PRESETS[i][1], J_PRESETS[i][2]));
+const markInkJ = stepButtons($('inkJ'), [0, 1], (i) => ['Printed depth', 'Flat shades'][i], (i) => ['Depth-limited ink, as the plate was printed', 'Every basin in its flat phase shade'][i], (i) => {
+  J.printInk = i === 0; J.c = null; markInkJ(i);
+  $('depthWrap').hidden = !J.printInk;
+  zj.schedule();
+});
+markInkJ(0);
+$('dJ').addEventListener('input', () => {
+  J.k0 = +$('dJ').value; $('dJv').textContent = String(J.k0);
+  J.c = null; zj.schedule();
+});
 $('plate8').addEventListener('click', () => { setLamJ(J_PRESETS[0][1], J_PRESETS[0][2]); });
 
 // ---------- Plate X: the lambda-map ----------

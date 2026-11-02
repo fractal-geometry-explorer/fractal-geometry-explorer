@@ -200,6 +200,14 @@ nav.shell a:hover .pn, nav.shell a:hover .pn b { color: var(--accent); }
           <div class="label-row"><span class="label">λ</span></div>
           <div class="steps words" id="mJ" role="group" aria-label="Lambda presets"></div>
         </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Ink</span></div>
+          <div class="steps words" id="inkJ" role="group" aria-label="Ink style"></div>
+        </div>
+        <div class="slider" id="depthWrap">
+          <div class="label-row"><span class="label">Depth budget</span><span class="value" id="dJv">40</span></div>
+          <input type="range" id="dJ" min="16" max="160" step="2" value="40" aria-label="Iteration depth before the shade ramps to ink">
+        </div>
         <div class="btn-row">
           <button type="button" class="btn primary" id="plate8">Show the Plate VIII reconstruction</button>
         </div>
@@ -207,10 +215,10 @@ nav.shell a:hover .pn, nav.shell a:hover .pn b { color: var(--accent); }
         <dl class="read">
           <div><dt>λ</dt><dd id="rJa">—</dd></div>
           <div><dt>Limit points</dt><dd id="rJb">—</dd></div>
-          <div><dt>One cycle point</dt><dd id="rJc">—</dd></div>
+          <div><dt>Cycle pull |m|</dt><dd id="rJc">—</dd></div>
           <div><dt>|λ|</dt><dd id="rJd">—</dd></div>
         </dl>
-        <p class="note">A reconstruction in kind, not stroke for stroke: the book names no λ for this plate and no window, and no fit recovered them. The print shows three gray shades, which is the signature of a 3-point cycle; the default λ = 0.2213 + 0.4834i is the centre of a period-3 region of the map below, and reproduces the plate's round three-shade domains and star-chain boundaries. Tap a λ on Plate X below to send it here.</p>
+        <p class="note">A reconstruction in kind, not stroke for stroke: the book names no λ for this plate and no window, and no fit recovered them. The print shows three gray shades — the signature of a 3-point cycle — and under a magnifier its dark "stars" are feathered dendrites that thin into dots, with the detail cut off below a certain size. Two choices reproduce that look, both made by eye against the scan: a λ where the cycle pulls only moderately (|m| ≈ 0.5, not the superstable centre), so the basin edges sprout petals, and the <em>printed depth</em> ink rule — a point whose orbit needs more than the depth budget of steps to reach the cycle is inked toward black, so each deeper generation of basins drowns and the boundary keeps its feathered fringe. "Flat shades" shows the same basins resolved all the way down. Tap a λ on Plate X below to send it here.</p>
       </div>
     </div>
   </section>
@@ -565,13 +573,33 @@ function lzCycle(lr, li, warm = 8000) {
   return null;
 }
 
+// |multiplier| of the cycle: the product of f'(z) = lam(1 + 1/z^2) over the cycle points.
+// 1 - |m| is how fast orbits close in; near 1 the basin edges grow the print's feathered stars.
+function lzMult(lr, li, cyc) {
+  if (!cyc) return 0;
+  let mr = 1, mi = 0;
+  for (const [ar, ai] of cyc.pts) {
+    const q = ar * ar + ai * ai;
+    const ir = (ar * ar - ai * ai) / (q * q), ii = -(2 * ar * ai) / (q * q); // 1/z^2
+    const gr = 1 + ir, gi = ii;
+    const fr = lr * gr - li * gi, fi = lr * gi + li * gr;
+    const nr = mr * fr - mi * fi, ni = mr * fi + mi * fr;
+    mr = nr; mi = ni;
+  }
+  return Math.hypot(mr, mi);
+}
+
 const PAPER_RGB = [236, 235, 230], INK_RGB = [21, 21, 21];
 function putGray(d, o, g) { d[o] = g[0]; d[o + 1] = g[1]; d[o + 2] = g[2]; d[o + 3] = 255; }
 const mix = (t) => [0, 1, 2].map((k) => Math.round(PAPER_RGB[k] + (INK_RGB[k] - PAPER_RGB[k]) * t));
 
 // Julia basins (Plate VIII). cyc from lzCycle; shade = phase of capture, ink where no basin claims
 // the pixel (the Julia filigree of "stars"), paper where the orbit escapes to infinity.
-function rasterBasins(img, v, lam, cyc, itmax = 600, step = 1) {
+// depth = {k0, k1} reproduces the print's depth-limited ink: a pixel captured within k0 steps keeps
+// its flat phase shade, and beyond that the shade ramps to solid ink at k1 — so the small basins,
+// which take more steps per generation, drown in ink and the boundary grows the plate's feathered
+// stars. depth = null is the flat mathematical picture.
+function rasterBasins(img, v, lam, cyc, itmax = 600, step = 1, depth = null) {
   const W = img.width, H = img.height, d = img.data, lr = lam[0], li = lam[1];
   const p = cyc ? cyc.p : 0;
   // one gray per phase, spread over the plate's range (three phases land on the print's grays)
@@ -598,6 +626,10 @@ function rasterBasins(img, v, lam, cyc, itmax = 600, step = 1) {
               // all points of one basin component reach the same cycle point in step, so the
               // phase (index - step) mod p is constant on the component: a stable shade
               col = shades[(((A[m][2] - k) % p) + p) % p];
+              if (depth && k > depth.k0) {
+                const t = Math.min(1, (k - depth.k0) / (depth.k1 - depth.k0));
+                col = [0, 1, 2].map((ch) => Math.round(col[ch] + (ink[ch] - col[ch]) * t));
+              }
               k = itmax; break;
             }
           }
@@ -741,12 +773,12 @@ const CHARPY_LINE = { x0: 1.104, y0: 174, x1: 1.306, y1: 11 };
 const cplx = (re, im, digits = 4) => `${re.toFixed(digits)} ${im < 0 ? '−' : '+'} ${Math.abs(im).toFixed(digits)}i`;
 
 // ---------- Plate VIII: Julia basins of lam(z - 1/z) ----------
-const J = { lam: [0.22127359, 0.48341992], cyc: null, c: null, t: 0 };
+const J = { lam: [0.2213, 0.5134], cyc: null, c: null, t: 0, printInk: true, k0: 40 };
 const J_PRESETS = [
-  ['Plate VIII', 0.22127359, 0.48341992],
+  ['Plate VIII', 0.2213, 0.5134],
+  ['Superstable 3', 0.22127359, 0.48341992],
   ['Period 4', -0.05, -0.95],
   ['Period 2', -0.5, 0],
-  ['Period 1', 0.65, 0],
 ];
 function setLamJ(lr, li) {
   J.lam = [lr, li];
@@ -754,12 +786,13 @@ function setLamJ(lr, li) {
   J.c = null;
   markJ(J_PRESETS.findIndex((p) => Math.abs(p[1] - lr) + Math.abs(p[2] - li) < 1e-9));
   const c = J.cyc;
+  const m = lzMult(lr, li, c);
   $('rJa').textContent = cplx(lr, li);
   $('rJb').textContent = c ? String(c.p) : 'none found';
-  $('rJc').textContent = c ? cplx(c.pts[0][0], c.pts[0][1], 3) : '—';
+  $('rJc').textContent = c ? m.toFixed(3) : '—';
   $('rJd').textContent = Math.hypot(lr, li).toFixed(4);
   $('infoJ').innerHTML = c
-    ? `The critical orbit settles on a <b>${c.p}-point</b> limit cycle; each basin phase gets its own gray, and the Julia set between the basins prints as ink.`
+    ? `The critical orbit settles on a <b>${c.p}-point</b> limit cycle pulling at strength |m| = ${m.toFixed(2)} — ${m < 0.2 ? 'a hard pull: edges stay clean pebbles' : m < 0.7 ? 'a middling pull: the edges grow the print’s feathered stars' : 'a weak pull: convergence is slow and the stars overrun the basins'}.`
     : 'No small limit cycle: the critical orbit escapes or wanders, and the picture is boundary alone.';
   zj.refit();
 }
@@ -783,15 +816,26 @@ function cachedRaster(store, key, W, H, compute, onFine) {
 }
 const zj = zoomable('wJ', 'cJ', (f) => fitBox(f, { x0: -2.2, x1: 2.2, y0: -2.2, y1: 2.2 }), (f, v) => {
   const W = Math.round(f.w), H = Math.round(f.h);
-  const key = [J.lam[0], J.lam[1], W, H, v.s, v.ox, v.oy].join('|');
+  const key = [J.lam[0], J.lam[1], J.printInk ? J.k0 : 'flat', W, H, v.s, v.ox, v.oy].join('|');
+  const depth = J.printInk ? { k0: J.k0, k1: J.k0 * 2.8 } : null;
   const cache = cachedRaster(J, key, W, H,
-    (img, step) => rasterBasins(img, { s: v.s, ox: v.ox, oy: v.oy }, J.lam, J.cyc, 600, step),
+    (img, step) => rasterBasins(img, { s: v.s, ox: v.ox, oy: v.oy }, J.lam, J.cyc, 600, step, depth),
     () => zj.schedule());
   paper(f, PRINT.paper); toScreen(f);
   f.ctx.imageSmoothingEnabled = false;
   f.ctx.drawImage(cache.off, 0, 0, W, H);
 }, { maxZoom: 2000 });
 const markJ = stepButtons($('mJ'), [0, 1, 2, 3], (i) => J_PRESETS[i][0], (i) => `Set lambda to the ${J_PRESETS[i][0]} value`, (i) => setLamJ(J_PRESETS[i][1], J_PRESETS[i][2]));
+const markInkJ = stepButtons($('inkJ'), [0, 1], (i) => ['Printed depth', 'Flat shades'][i], (i) => ['Depth-limited ink, as the plate was printed', 'Every basin in its flat phase shade'][i], (i) => {
+  J.printInk = i === 0; J.c = null; markInkJ(i);
+  $('depthWrap').hidden = !J.printInk;
+  zj.schedule();
+});
+markInkJ(0);
+$('dJ').addEventListener('input', () => {
+  J.k0 = +$('dJ').value; $('dJv').textContent = String(J.k0);
+  J.c = null; zj.schedule();
+});
 $('plate8').addEventListener('click', () => { setLamJ(J_PRESETS[0][1], J_PRESETS[0][2]); });
 
 // ---------- Plate X: the lambda-map ----------
