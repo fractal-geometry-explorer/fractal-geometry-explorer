@@ -611,13 +611,13 @@ function chevronPaths(P, F, m) {
   });
 }
 
-// Chapter 39 numerics. The chapter prints no figures, so everything here computes the entry's own
-// formulas: fractional Gaussian noise by circulant embedding (Davies–Harte, exact covariance),
-// Lévy stable densities by FFT inversion of the characteristic function (the book's equation (L)
-// with (A:D)), ball coverings of the triadic sets, R/S statistics, and the Weierstrass sums.
+// Shared randomness and spectral synthesis: the site's one seedable PRNG, a Gaussian sampler, and
+// the in-place radix-2 FFT. Every random figure names its seed, and the pages' copies of these
+// functions were numerically identical, so a page moved onto this file draws the same pixels for
+// the same seed.
 
-// ---------- seeded randomness ----------
-function mulberry(seed) {
+// ---- mulberry32: a tiny seedable PRNG; returns a function giving uniforms in [0, 1) ----
+function mulberry32(seed) {
   let a = seed >>> 0;
   return () => {
     a = (a + 0x6d2b79f5) | 0;
@@ -626,41 +626,64 @@ function mulberry(seed) {
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
 }
-function gaussMaker(rand) {
+
+// ---- standard Gaussians by Marsaglia's polar method, with the spare value cached ----
+function gaussMaker(rnd) {
   let spare = null;
   return () => {
     if (spare !== null) { const v = spare; spare = null; return v; }
     let u, v, s;
-    do { u = 2 * rand() - 1; v = 2 * rand() - 1; s = u * u + v * v; } while (s >= 1 || s === 0);
-    const m = Math.sqrt((-2 * Math.log(s)) / s);
-    spare = v * m;
-    return u * m;
+    do { u = 2 * rnd() - 1; v = 2 * rnd() - 1; s = u * u + v * v; } while (s >= 1 || s === 0);
+    const k = Math.sqrt((-2 * Math.log(s)) / s);
+    spare = v * k;
+    return u * k;
   };
 }
 
-// ---------- FFT: iterative radix-2, in place, length a power of two ----------
-function fft(re, im) {
-  const n = re.length;
+// ---- FFT: iterative radix-2, in place, length a power of two ----
+// The core works on a strided slice (i0, stride, n), so one function serves 1D rows, 2D columns
+// and plain arrays. No scaling: an inverse pass returns n times the inverse transform.
+function fftStride(re, im, i0, stride, n, inv) {
   for (let i = 1, j = 0; i < n; i++) {
     let bit = n >> 1;
     for (; j & bit; bit >>= 1) j ^= bit;
     j ^= bit;
-    if (i < j) { let t = re[i]; re[i] = re[j]; re[j] = t; t = im[i]; im[i] = im[j]; im[j] = t; }
+    if (i < j) {
+      const a = i0 + i * stride, b = i0 + j * stride;
+      let t = re[a]; re[a] = re[b]; re[b] = t;
+      t = im[a]; im[a] = im[b]; im[b] = t;
+    }
   }
   for (let len = 2; len <= n; len <<= 1) {
-    const ang = (-2 * Math.PI) / len, wr = Math.cos(ang), wi = Math.sin(ang);
+    const ang = ((inv ? 2 : -2) * Math.PI) / len, wr = Math.cos(ang), wi = Math.sin(ang), half = len >> 1;
     for (let i = 0; i < n; i += len) {
       let cr = 1, ci = 0;
-      for (let k = 0; k < len / 2; k++) {
-        const a = i + k, b = a + len / 2;
-        const xr = re[b] * cr - im[b] * ci, xi = re[b] * ci + im[b] * cr;
-        re[b] = re[a] - xr; im[b] = im[a] - xi;
-        re[a] += xr; im[a] += xi;
-        const nr = cr * wr - ci * wi; ci = cr * wi + ci * wr; cr = nr;
+      for (let k = 0; k < half; k++) {
+        const a = i0 + (i + k) * stride, b = i0 + (i + k + half) * stride;
+        const vr = re[b] * cr - im[b] * ci, vi = re[b] * ci + im[b] * cr;
+        re[b] = re[a] - vr; im[b] = im[a] - vi;
+        re[a] += vr; im[a] += vi;
+        const t = cr * wr - ci * wi; ci = cr * wi + ci * wr; cr = t;
       }
     }
   }
 }
+// Whole-array transform; the inverse divides by n, so fft(re, im, true) undoes fft(re, im).
+function fft(re, im, inv) {
+  const n = re.length;
+  fftStride(re, im, 0, 1, n, inv);
+  if (inv) for (let i = 0; i < n; i++) { re[i] /= n; im[i] /= n; }
+}
+// 2D transform of an n×n grid stored row-major, rows then columns, unscaled either way.
+function fft2(re, im, n, inv) {
+  for (let r = 0; r < n; r++) fftStride(re, im, r * n, 1, n, inv);
+  for (let c = 0; c < n; c++) fftStride(re, im, c, n, n, inv);
+}
+
+// Chapter 39 numerics. The chapter prints no figures, so everything here computes the entry's own
+// formulas: fractional Gaussian noise by circulant embedding (Davies–Harte, exact covariance),
+// Lévy stable densities by FFT inversion of the characteristic function (the book's equation (L)
+// with (A:D)), ball coverings of the triadic sets, R/S statistics, and the Weierstrass sums.
 
 // ---------- fractional Gaussian noise, exact, by circulant embedding (Davies–Harte) ----------
 // Returns n unit-variance increments of B_H at unit steps; cov(k) = (|k+1|^2H − 2|k|^2H + |k−1|^2H)/2.
@@ -672,7 +695,7 @@ function fgn(H, n, seed) {
   for (let k = 1; k < n; k++) re[m - k] = re[k];
   fft(re, im);                                   // eigenvalues of the circulant (theoretically ≥ 0)
   const lam = re.map((v) => Math.max(0, v));
-  const rnd = gaussMaker(mulberry(seed));
+  const rnd = gaussMaker(mulberry32(seed));
   const vr = new Float64Array(m), vi = new Float64Array(m);
   vr[0] = Math.sqrt(lam[0]) * rnd();
   vr[n] = Math.sqrt(lam[n]) * rnd();
@@ -845,7 +868,7 @@ function weierW1(t, b, w, fMax) {
 }
 // Gauss randomized: each term × a complex Gaussian factor (zero mean, unit variance), drawn per n
 function weierGaussFactors(seed, nMin, nMax) {
-  const rnd = gaussMaker(mulberry(seed)), out = new Map();
+  const rnd = gaussMaker(mulberry32(seed)), out = new Map();
   for (let n = nMin; n <= nMax; n++) out.set(n, [rnd() * Math.SQRT1_2, rnd() * Math.SQRT1_2]);
   return out;
 }
@@ -1196,7 +1219,7 @@ function weierGauss(t, b, w, fMax, fac, nMin) {
       if (stD.proc === 'fgn') X = fgn(stD.H, n, 40 + stD.seed * 13);
       else {
         X = new Float64Array(n);
-        const rand = mulberry(40 + stD.seed * 13), g = gaussMaker(rand);
+        const rand = mulberry32(40 + stD.seed * 13), g = gaussMaker(rand);
         if (stD.proc === 'levy') for (let i = 0; i < n; i++) X[i] = stableSample(1.5, rand);
         else {
           let acc = 0;

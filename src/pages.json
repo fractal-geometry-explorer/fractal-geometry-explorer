@@ -7,6 +7,7 @@
       "chapter": 2,
       "scripts": [
         "shared/draw.js",
+        "shared/random.js",
         "pages/fractal-landscapes/fbm.js",
         "data.js",
         "core.js",
@@ -156,6 +157,7 @@
       "chapter": 25,
       "scripts": [
         "shared/draw.js",
+        "shared/random.js",
         "core.js",
         "ui.js"
       ],
@@ -168,6 +170,7 @@
       "chapter": 27,
       "scripts": [
         "shared/draw.js",
+        "shared/random.js",
         "core.js",
         "ui.js"
       ],
@@ -192,6 +195,7 @@
       "chapter": 10,
       "scripts": [
         "shared/draw.js",
+        "shared/random.js",
         "core.js",
         "ui.js"
       ],
@@ -227,6 +231,7 @@
       "chapter": 9,
       "scripts": [
         "shared/draw.js",
+        "shared/random.js",
         "core.js",
         "ui.js"
       ],
@@ -251,6 +256,7 @@
       "chapter": 28,
       "scripts": [
         "shared/draw.js",
+        "shared/random.js",
         "core.js",
         "ui.js"
       ],
@@ -298,6 +304,7 @@
       "chapter": 31,
       "scripts": [
         "shared/draw.js",
+        "shared/random.js",
         "core.js",
         "ui.js"
       ],
@@ -311,6 +318,7 @@
       "scripts": [
         "shared/geometry.js",
         "shared/draw.js",
+        "shared/random.js",
         "core.js",
         "ui.js"
       ],
@@ -336,6 +344,7 @@
       "scripts": [
         "shared/geometry.js",
         "shared/draw.js",
+        "shared/random.js",
         "core.js",
         "ui.js"
       ],
@@ -348,6 +357,7 @@
       "chapter": 13,
       "scripts": [
         "shared/draw.js",
+        "shared/random.js",
         "core.js",
         "ui.js"
       ],
@@ -360,6 +370,7 @@
       "chapter": 37,
       "scripts": [
         "shared/draw.js",
+        "shared/random.js",
         "script.js"
       ],
       "layout_comment": "/* Layout: Plate 340's doubly logarithmic chart with a draggable stable curve, then the scaling-principle simulations, each a figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
@@ -371,6 +382,7 @@
       "chapter": 38,
       "scripts": [
         "shared/draw.js",
+        "shared/random.js",
         "core.js",
         "ui.js"
       ],
@@ -396,6 +408,7 @@
       "chapter": 39,
       "scripts": [
         "shared/draw.js",
+        "shared/random.js",
         "core.js",
         "ui.js"
       ],
@@ -408,6 +421,7 @@
       "chapter": 24,
       "scripts": [
         "shared/draw.js",
+        "shared/random.js",
         "script.js"
       ],
       "layout_comment": "/* Layout: the random Koch coastline (228), the random Peano curve (229), the squig and its valleys (230) and the hexa-squig loop (231), each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
@@ -431,6 +445,7 @@
       "chapter": 30,
       "scripts": [
         "shared/draw.js",
+        "shared/random.js",
         "fbm.js",
         "render3d.js",
         "ui.js"
@@ -444,6 +459,7 @@
       "chapter": 30,
       "scripts": [
         "shared/draw.js",
+        "shared/random.js",
         "pages/fractal-landscapes/fbm.js",
         "script.js"
       ],
@@ -517,6 +533,7 @@
       "chapter": 35,
       "scripts": [
         "shared/draw.js",
+        "shared/random.js",
         "core.js",
         "ui.js"
       ],
@@ -531,6 +548,7 @@
       "scripts": [
         "shared/geometry.js",
         "shared/draw.js",
+        "shared/random.js",
         "core.js",
         "ui.js"
       ]
@@ -556,6 +574,7 @@
       "scripts": [
         "shared/geometry.js",
         "shared/draw.js",
+        "shared/random.js",
         "core.js",
         "ui.js"
       ],

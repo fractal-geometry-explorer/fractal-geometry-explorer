@@ -2,10 +2,9 @@
 // (Lévy flights, subordinated Brownian trails) are seeded so every figure can be reproduced.
 // Drawing machinery is in src/shared/draw.js, generator machinery in src/shared/geometry.js.
 
-// ---- seeded randomness ----
+// ---- seeded randomness: the shared PRNG plus a polar-method gauss on the same stream ----
 function rng(seed) {
-  let a = seed >>> 0;
-  const u = () => { a |= 0; a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  const u = mulberry32(seed);
   u.gauss = () => { let r = 0, s = 0; do { r = 2 * u() - 1; s = 2 * u() - 1; } while (r * r + s * s >= 1 || (r === 0 && s === 0)); return r * Math.sqrt((-2 * Math.log(r * r + s * s)) / (r * r + s * s)); };
   return u;
 }
