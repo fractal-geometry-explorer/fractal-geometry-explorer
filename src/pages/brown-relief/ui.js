@@ -432,6 +432,170 @@
   $('seedF').addEventListener('click', () => { stF.seed = nextSeed(stF.seed); setF(); });
   $('plateF').addEventListener('click', () => { Object.assign(stF, { mode: 'printed', aboveQ: 0.2, seed: DEFAULT_SEED }); $('qFs').value = 0.2; setF(); zF.refit(); });
 
+  // a small chart in screen space, as on the site's other chart pages
+  const SUPS_G = '⁰¹²³⁴⁵⁶⁷⁸⁹';
+  const decadeLabelG = (e) => `10${e < 0 ? '⁻' : ''}${String(Math.abs(e)).replace(/\d/g, (d) => SUPS_G[+d])}`;
+  function chart(f, o) {
+    const c = f.ctx, ml = o.ml ?? 58, mr = o.mr ?? 16, mt = o.mt ?? 14, mb = o.mb ?? 36;
+    const iw = Math.max(1, f.w - ml - mr), ih = Math.max(1, f.h - mt - mb);
+    const tx = (u) => (o.x.log ? Math.log10(u) : u), ty = (v) => (o.y.log ? Math.log10(v) : v);
+    const x0 = tx(o.x.min), x1 = tx(o.x.max), y0 = ty(o.y.min), y1 = ty(o.y.max);
+    const X = (u) => ml + ((tx(u) - x0) / (x1 - x0)) * iw;
+    const Y = (v) => mt + ih - ((ty(v) - y0) / (y1 - y0)) * ih;
+    c.font = '500 10.5px "IBM Plex Mono", monospace';
+    const grid = (t0, t1, log, vert) => {
+      const ticks = [];
+      if (log) {
+        for (let e = Math.ceil(t0 - 1e-9); e <= Math.floor(t1 + 1e-9); e++) ticks.push([e, decadeLabelG(e)]);
+      } else {
+        const span = t1 - t0, step = [0.1, 0.2, 0.25, 0.5, 1, 2, 5, 10].find((s) => span / s <= 8) || 100;
+        for (let v = Math.ceil(t0 / step) * step; v <= t1 + 1e-9; v += step) ticks.push([v, String(Math.round(v * 100) / 100)]);
+      }
+      for (const [v, label] of ticks) {
+        const p = (v - t0) / (t1 - t0);
+        c.strokeStyle = '#dddbd2'; c.lineWidth = 1; c.beginPath();
+        if (vert) {
+          const x = ml + p * iw;
+          c.moveTo(x, mt); c.lineTo(x, mt + ih); c.stroke();
+          c.fillStyle = PRINT.muted; c.textAlign = 'center'; c.textBaseline = 'top'; c.fillText(label, x, mt + ih + 6);
+        } else {
+          const y = mt + ih - p * ih;
+          c.moveTo(ml, y); c.lineTo(ml + iw, y); c.stroke();
+          c.fillStyle = PRINT.muted; c.textAlign = 'right'; c.textBaseline = 'middle'; c.fillText(label, ml - 6, y);
+        }
+      }
+    };
+    grid(x0, x1, o.x.log, true);
+    grid(y0, y1, o.y.log, false);
+    c.strokeStyle = PRINT.rule; c.lineWidth = 1; c.strokeRect(ml, mt, iw, ih);
+    c.fillStyle = PRINT.muted; c.textAlign = 'center'; c.textBaseline = 'top'; c.fillText(o.x.label, ml + iw / 2, f.h - 16);
+    c.save(); c.translate(15, mt + ih / 2); c.rotate(-Math.PI / 2); c.textBaseline = 'middle'; c.fillText(o.y.label, 0, 0); c.restore();
+    return { X, Y, ml, mr, mt, mb, iw, ih,
+      clip: () => { c.save(); c.beginPath(); c.rect(ml, mt, iw, ih); c.clip(); },
+      unclip: () => c.restore() };
+  }
+
+  // ====================== the horizon (chapter concept, pages 261-262) ======================
+  const stG = { mode: 'view', earth: 'flat', h: 1, H: 0.5, seed: DEFAULT_SEED };
+  const N_G = 2048, V_G = 0.07, RE_G = 2;         // vertical scale and the (exaggerated) Earth radius
+  const profCache = {};
+  function profileG() {
+    const key = `${stG.H}|${stG.seed}`;
+    if (!profCache[key]) profCache[key] = fbmLine(N_G, stG.H, stG.seed);
+    return profCache[key];
+  }
+  // terrain height (with the round Earth's drop), eye level, apparent-slope arrays and the skyline
+  function sceneG() {
+    const z = profileG(), drop = (x) => (stG.earth === 'round' ? (x * x) / (2 * RE_G) : 0);
+    const eye = V_G * z[0] + V_G * stG.h;
+    const terr = new Float64Array(N_G), e = new Float64Array(N_G), vis = new Uint8Array(N_G);
+    let run = -Infinity, hor = 0;
+    for (let i = 1; i < N_G; i++) {
+      const x = i / (N_G - 1);
+      terr[i] = V_G * z[i] - drop(x);
+      e[i] = (terr[i] - eye) / x;
+      if (e[i] >= run) { run = e[i]; vis[i] = 1; hor = i; }
+    }
+    terr[0] = V_G * z[0];
+    return { z, terr, e, vis, hor, eye };
+  }
+  const zG = zoomable('wG', 'cG', (f) => {
+    if (stG.mode === 'angles') return fitBox(f, { x0: 0, x1: 1, y0: 0, y1: 1 }, 0);
+    return fitBox(f, { x0: -0.02, x1: 1.02, y0: -0.38, y1: 0.55 }, 0.02);
+  }, (f, v) => {
+    const c = f.ctx;
+    paper(f, PAPER);
+    const S = sceneG();
+    if (stG.mode === 'view') {
+      toWorld(f, v);
+      c.lineJoin = 'round'; c.lineCap = 'round';
+      // the ground, filled down to the frame
+      c.fillStyle = INK;
+      c.beginPath(); c.moveTo(0, -0.6);
+      for (let i = 0; i < N_G; i++) c.lineTo(i / (N_G - 1), S.terr[i]);
+      c.lineTo(1, -0.6); c.closePath(); c.fill();
+      // the skyline: nonhidden points, marked over the crest
+      c.fillStyle = PRINT.accent;
+      for (let i = 1; i < N_G; i++) if (S.vis[i]) c.fillRect(i / (N_G - 1) - 0.0012, S.terr[i], 0.0024, 0.012);
+      // eye, sight line to the horizon, and eye level
+      const hx = S.hor / (N_G - 1);
+      c.strokeStyle = '#8f8e88'; c.lineWidth = 1 / v.s; c.setLineDash([0.012, 0.009]);
+      c.beginPath(); c.moveTo(0, S.eye); c.lineTo(1, S.eye); c.stroke(); c.setLineDash([]);
+      c.strokeStyle = PRINT.red; c.lineWidth = 1.6 / v.s;
+      c.beginPath(); c.moveTo(0, S.eye); c.lineTo(hx, S.terr[S.hor]); c.stroke();
+      toScreen(f);
+      dot(c, v, 0, S.eye, 4.5, PRINT.ink);
+      dot(c, v, hx, S.terr[S.hor], 5, PRINT.red);
+      c.font = '600 11px "IBM Plex Mono", monospace'; c.textAlign = 'left'; c.textBaseline = 'bottom';
+      c.fillStyle = PRINT.ink; c.fillText('eye', v.ox + 6, v.oy - S.eye * v.s - 6);
+      c.fillStyle = PRINT.red; c.textAlign = 'center'; c.fillText('horizon', v.ox + hx * v.s, v.oy - S.terr[S.hor] * v.s - 10);
+    } else {
+      toScreen(f);
+      c.lineJoin = 'round'; c.lineCap = 'round';
+      const ch = chart(f, { ml: 64, x: { min: 0.01, max: 1, log: true, label: 'distance R (window widths)' }, y: { min: -0.4, max: 0.6, log: false, label: 'tangent of apparent height' } });
+      ch.clip();
+      c.strokeStyle = '#b9b7af'; c.lineWidth = 1; c.setLineDash([4, 3]);
+      c.beginPath(); c.moveTo(ch.X(0.01), ch.Y(0)); c.lineTo(ch.X(1), ch.Y(0)); c.stroke(); c.setLineDash([]);
+      // the R^(H-1) envelope of the mountains' own apparent height
+      let cEnv = 0;
+      for (let i = 32; i < N_G; i++) { const x = i / (N_G - 1); cEnv = Math.max(cEnv, (V_G * Math.abs(S.z[i])) / Math.pow(x, stG.H)); }
+      c.strokeStyle = PRINT.accent; c.lineWidth = 1.4; c.setLineDash([6, 4]); c.beginPath();
+      for (let i = 0; i <= 140; i++) {
+        const x = Math.pow(10, -2 + (2 * i) / 140), y = ch.Y(cEnv * Math.pow(x, stG.H - 1));
+        if (i) c.lineTo(ch.X(x), y); else c.moveTo(ch.X(x), y);
+      }
+      c.stroke(); c.setLineDash([]);
+      // apparent height along the bearing, and its running maximum
+      c.strokeStyle = INK; c.lineWidth = 1.2; c.beginPath();
+      let started = false;
+      for (let i = 8; i < N_G; i++) {
+        const x = ch.X(i / (N_G - 1)), y = ch.Y(Math.max(-0.4, Math.min(0.6, S.e[i])));
+        if (started) c.lineTo(x, y); else { c.moveTo(x, y); started = true; }
+      }
+      c.stroke();
+      c.strokeStyle = PRINT.red; c.lineWidth = 2; c.beginPath();
+      let run = -Infinity;
+      started = false;
+      for (let i = 8; i < N_G; i++) {
+        run = Math.max(run, S.e[i]);
+        const x = ch.X(i / (N_G - 1)), y = ch.Y(Math.max(-0.4, Math.min(0.6, run)));
+        if (started) c.lineTo(x, y); else { c.moveTo(x, y); started = true; }
+      }
+      c.stroke();
+      ch.unclip();
+      c.font = '600 11px "IBM Plex Mono", monospace'; c.textAlign = 'left'; c.textBaseline = 'top';
+      c.fillStyle = INK; c.fillText('apparent height of the ground at R', ch.ml + 10, ch.mt + 8);
+      c.fillStyle = PRINT.red; c.fillText('its running maximum: flat past the horizon', ch.ml + 10, ch.mt + 24);
+      c.fillStyle = PRINT.accent; c.fillText(`envelope ∝ R^(H−1) = R^${(stG.H - 1).toFixed(2)}`, ch.ml + 10, ch.mt + 40);
+    }
+  });
+  const MODES_G = { view: 'The view', angles: 'Apparent heights' };
+  function setG(refit) {
+    markMG(stG.mode); markEG(stG.earth);
+    $('hGv').textContent = `${stG.h.toFixed(1)} × the relief's sd`;
+    $('HGv').textContent = `H = ${stG.H.toFixed(2)}`;
+    const S = sceneG();
+    const hx = S.hor / (N_G - 1), eHor = S.e[S.hor];
+    const mrad = Math.abs(Math.atan(eHor)) * 1000;
+    $('cGt').textContent = MODES_G[stG.mode];
+    $('cGn').textContent = `${stG.earth} Earth · H = ${stG.H.toFixed(2)} · seed ${stG.seed}`;
+    $('dimG').textContent = `apparent height of a mountain at distance R: tan ≈ Rᴴ⁻¹ = R^${(stG.H - 1).toFixed(2)} → 0 · so the horizon exists even on a flat Earth`;
+    $('infoG').innerHTML = stG.earth === 'flat'
+      ? 'Flat Earth: the sight line to the horizon climbs — the horizon stays above eye level, however high the observer stands (within this finite window; see the note). Nearer crests hide all the ground between the blue skyline points.'
+      : 'Round Earth: the sphere\'s drop overwhelms the mountains\' Rᴴ growth. Climb, and the horizon slips below eye level and runs toward the window edge — the two behaviours the chapter says confirm a round Earth.';
+    $('rGa').textContent = `${hx.toFixed(2)} of the window`;
+    $('rGb').textContent = `${eHor >= 0 ? 'above' : 'below'} by ${mrad.toFixed(0)} mrad`;
+    $('rGc').textContent = (stG.H - 1).toFixed(2);
+    $('rGd').textContent = fmt(S.vis.reduce((a, b) => a + b, 0));
+    if (refit) zG.refit(); else zG.schedule();
+  }
+  const markMG = stepButtons($('mG'), Object.keys(MODES_G), (k) => MODES_G[k], (k) => `Show: ${MODES_G[k]}`, (k) => { stG.mode = k; setG(true); });
+  const markEG = stepButtons($('eG'), ['flat', 'round'], (k) => (k === 'flat' ? 'Flat' : 'Round (×500 curvature)'), (k) => `${k} Earth`, (k) => { stG.earth = k; setG(false); });
+  $('hGs').addEventListener('input', () => { stG.h = Number($('hGs').value); setG(false); });
+  $('HGs').addEventListener('input', () => { stG.H = Number($('HGs').value); setG(false); });
+  $('roundG').addEventListener('click', () => { Object.assign(stG, { earth: 'round', h: 5 }); $('hGs').value = 5; setG(false); });
+  $('seedG').addEventListener('click', () => { stG.seed = nextSeed(stG.seed); setG(false); });
+
   // first paint
-  setA(); setB(); setC(); setD(); setE(); setF();
+  setA(); setB(); setC(); setD(); setE(); setF(); setG();
 })();

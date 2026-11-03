@@ -1,0 +1,187 @@
+<title>Surfaces of Positive Volume</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.r-ch { aspect-ratio: 10 / 7; }
+.r-tri { aspect-ratio: 10 / 7; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 15, "Surfaces with Positive Volume, and Flesh" · pages 147–150</p>
+    <h1><span class="plate-no">Chapter 15</span><span class="lozenge" aria-hidden="true"></span><span>Surfaces of Positive Volume</span></h1>
+    <p class="dek">Part V's opening chapter builds the mildest-sounding monsters in the book: dusts with positive length, curves with positive area, surfaces with positive volume. The trick is a trema ratio that shrinks from stage to stage. The payoff is anatomy — tissue in which an artery and a vein run arbitrarily close to every point is exactly such a set. The chapter prints no plates, so every figure below is this page's illustration of its constructions.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#fat-dust"><b>Π(1−λₖ)</b> Dusts of positive measure</a>
+    <a href="#osgood"><b>D_T = 1</b> A curve of positive area</a>
+    <a href="#flesh"><b>D = 3</b> Arteries, veins and flesh</a>
+  </nav>
+
+  <!-- ===================== CANTOR DUSTS OF POSITIVE MEASURE ===================== -->
+  <section class="plate" id="fat-dust">
+    <div class="plate-head">
+      <p class="no">Chapter 15, pages 147–148 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Cantor dusts of positive measure</h2>
+      <p class="dim" id="dimA">λₖ = λ₁qᵏ⁻¹ · remaining measure Π(1 − λₖ) &gt; 0 when Σλₖ &lt; ∞ · D_T = 0, D = 1</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-ch zoomable" id="wA">
+          <canvas id="cA" role="img" aria-label="A Cantor dust whose tremas shrink fast enough to leave positive length"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cAt">The bar</strong> · <span id="cAn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Cantor's triadic dust has zero length because its tremas keep a fixed ratio: cut the middle λ out of every interval forever and the remaining length Π(1 − λ)ᴷ dies. But the dust's other properties — totally disconnected, D_T = 0 — come only from the <i>bisection</i>, not the ratio. Let the ratio λₖ shrink with the stage k, fast enough that Σλₖ converges, and the remainder keeps a positive length 1 − P while staying a dust. It is no longer self-similar, so it has no similarity dimension, but Hausdorff's definition answers D = 1: a fractal still, since D &gt; D_T, whose D and D_T describe it "very superficially". The same cross-cutting in the plane leaves a dust of positive area with D = 2, and in space a dust of positive volume with D = 3.</p>
+        <div class="mini" aria-label="The rule">
+          <div class="fx">stage k: cut the middle λₖ of every piece<br>length left: Π(1 − λₖ) → 1 − P</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mA" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">First trema λ₁</span><span class="value" id="l1vA">λ₁ = 0.333</span></div>
+          <input type="range" id="l1sA" min="0.05" max="0.8" step="0.005" value="0.333" aria-label="First trema ratio">
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Shrink factor q</span><span class="value" id="qvA">q = 0.50</span></div>
+          <input type="range" id="qsA" min="0.3" max="1" step="0.01" value="0.5" aria-label="Shrink factor q">
+        </div>
+        <div class="group" id="kAg">
+          <div class="label-row"><span class="label">Stages</span></div>
+          <div class="steps" id="kA" role="group" aria-label="Stages"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="fatA">A fat dust: λ₁ = 1/3, q = 1/2</button>
+          <button type="button" class="btn" id="cantorA">Cantor's dust: q = 1</button>
+        </div>
+        <p class="readline" id="infoA" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Length at this stage</dt><dd id="rAa">—</dd></div>
+          <div><dt>Length in the limit</dt><dd id="rAb">—</dd></div>
+          <div><dt>Formal Dₖ at this stage</dt><dd id="rAc">—</dd></div>
+          <div><dt>D and D_T</dt><dd id="rAd">1 and 0</dd></div>
+        </dl>
+        <p class="note">The chapter prints no figure, so the bar (drawn in Plate 80's style), the plane dust and the charts are this page's illustrations. The λₖ = λ₁qᵏ⁻¹ schedule is this page's choice of a summable sequence; the chapter only asks Σλₖ &lt; ∞. The drifting formal dimension Dₖ = log 2/log(1/rₖ) with rₖ = (1 − λₖ)/2 is the chapter's own device: it climbs toward 1 as the tremas fade, embodying the <i>effective dimension</i> of Chapter 3's <a href="what-is-a-fractal.html">ball of thread</a>. The three classes of linear dust the chapter sorts out — D &lt; 1, D = 1 with zero length, D = 1 with positive length — appear as q &lt; 1 against q = 1 here (D = 1 with zero length needs λₖ → 0 with Σλₖ = ∞, as in λₖ = 1/k, which the presets skip).</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== A CURVE OF POSITIVE AREA ===================== -->
+  <section class="plate" id="osgood">
+    <div class="plate-head">
+      <p class="no">Chapter 15, pages 148–149 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>A curve of positive area</h2>
+      <p class="dim" id="dimB">marshland area Π(1 − λₖ) · the limit: a curve, D_T = 1, with D = 2 and positive area</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-tri zoomable" id="wB">
+          <canvas id="cB" role="img" aria-label="The wedge-removal construction of a curve with positive area"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cBt">The marshland</strong> · <span id="cBn"></span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Dusts of positive volume don't offend intuition much — but after Lebesgue 1903 and Osgood 1903, <i>curves</i> of positive area had to be swallowed too. The chapter generalizes the midpoint construction of <a href="koch-plates.html">Plate 43</a>: keep cutting bays and promontories out of a strip of marshland, but let their relative widths λₖ tend to 0 with Π(1 − λₖ) &gt; 0. The marshland then never loses its area — yet in the limit it is a genuine curve: no interior points, and D_T = 1, because any point can be cut off from the rest by removing just two points.</p>
+        <div class="mini" aria-label="The rule">
+          <div class="fx">stage k: each triangle sheds a wedge,<br>a λₖ share of itself, and splits in two</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mB" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">First wedge λ₁</span><span class="value" id="l1vB">λ₁ = 0.40</span></div>
+          <input type="range" id="l1sB" min="0.1" max="0.7" step="0.005" value="0.4" aria-label="First wedge ratio">
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Shrink factor q</span><span class="value" id="qvB">q = 0.60</span></div>
+          <input type="range" id="qsB" min="0.3" max="1" step="0.01" value="0.6" aria-label="Shrink factor q">
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Stages</span></div>
+          <div class="steps" id="kB" role="group" aria-label="Stages"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="posB">Positive area: q = 0.6</button>
+          <button type="button" class="btn" id="zeroB">Constant ratio: q = 1, area → 0</button>
+        </div>
+        <p class="readline" id="infoB" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Marsh area at this stage</dt><dd id="rBa">—</dd></div>
+          <div><dt>Area in the limit</dt><dd id="rBb">—</dd></div>
+          <div><dt>Pieces</dt><dd id="rBc">—</dd></div>
+          <div><dt>D and D_T</dt><dd id="rBd">2 and 1</dd></div>
+        </dl>
+        <p class="note">A reconstruction in kind: the chapter describes Osgood's bays and promontories in words and prints nothing, so this page draws the simplest scheme with the same bookkeeping — Knopp's wedge removal, in which each triangle sheds a wedge of relative area exactly λₖ and splits in two, and the curve is the limit of the triangle chains. The area is then exactly Π(1 − λₖ) at every stage, the property the chapter's construction is built to have. At q = 1 the same picture collapses to an ordinary zero-area Koch-like curve. The chapter adds a remark run the other way: a Koch curve whose generator grows at every stage can drive D to 2 while the area stays 0 — a plane-filling curve's D without its double points, met again in the rivers that "crisscross finer scale domains less thoroughly" below their inner cutoff.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ARTERIES, VEINS AND FLESH ===================== -->
+  <section class="plate" id="flesh">
+    <div class="plate-head">
+      <p class="no">Chapter 15, pages 149–150 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Arteries, veins and flesh</h2>
+      <p class="dim" id="dimC">tissue: D_T = 2, D = 3, most of the volume · vessels: standard domains, a small share</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-sq zoomable" id="wC">
+          <canvas id="cC" role="img" aria-label="A cross-section of the vascular model: artery and vein cuts at alternating stages, tissue in ink"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong>A section of flesh</strong> · <span id="cCn"></span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Harvey's circulation puts an artery and a vein within a small distance of nearly every point of the body; blood being expensive, the vessels must still occupy only a small share of the volume. Euclid finds the demands contradictory: tissue must be the common boundary of two three-dimensional networks, yet have far more volume than both. The spatial Osgood construction delivers precisely this. Vessels are standard domains — blood cells fit inside them — while tissue contains no piece, however small, free of both networks: a fractal surface with D_T = 2 and D = 3. "Lebesgue-Osgood monsters are the very substance of our flesh!"</p>
+        <div class="key" aria-label="Colours">
+          <span><i style="background:#c2452d"></i> arteries (odd stages)</span>
+          <span><i style="background:#2f5f9e"></i> veins (even stages)</span>
+          <span><i style="background:#151515"></i> tissue</span>
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">First cut λ₁ (area share)</span><span class="value" id="l1vC">λ₁ = 0.30</span></div>
+          <input type="range" id="l1sC" min="0.05" max="0.6" step="0.005" value="0.3" aria-label="First cut, share of the area">
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Shrink factor q</span><span class="value" id="qvC">q = 0.55</span></div>
+          <input type="range" id="qsC" min="0.3" max="1" step="0.01" value="0.55" aria-label="Shrink factor q">
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Stages</span></div>
+          <div class="steps" id="kC" role="group" aria-label="Stages"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="fleshC">Thrifty blood: λ₁ = 0.3, q = 0.55</button>
+          <button type="button" class="btn" id="zeroC">Constant ratio: tissue vanishes</button>
+        </div>
+        <p class="readline" id="infoC" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Tissue share in the limit</dt><dd id="rCa">—</dd></div>
+          <div><dt>Blood share in the limit</dt><dd id="rCb">—</dd></div>
+          <div><dt>Artery within</dt><dd id="rCc">—</dd></div>
+          <div><dt>Vein within</dt><dd id="rCd">—</dd></div>
+        </dl>
+        <p class="note">A schematic planar section, this page's own: each stage cuts a cross — artery at odd stages, vein at even — of relative area λₖ from every tile, so the tissue keeps the share Π(1 − λₖ) while every tissue point has a stage-k artery and a stage-(k+1) vein within the size of its stage-k tile (the "within" readouts). What the section cannot show: in the genuine spatial model each network connects into one branching tree, the tissue is a connected <i>surface</i> (D_T = 2), and Brouwer's construction even gives arteries, veins and the lung's bronchioles one common boundary — the chapter's answer to Hahn's claim that such sets put geometry beyond intuition. The flat tiles here stand for sections of tissue, not for dust.</p>
+      </div>
+    </div>
+    <div class="sub" id="intuition">
+      <h3>Of intuition, old and new</h3>
+      <p class="cap">The chapter closes on Hans Hahn's essay against geometric intuition, which offers the three-domain boundary as proof that intuition "is a wholly unreliable guide" and must yield to logic. Mandelbrot's verdict is the opposite: once the monsters are seen doing honest work — here, literally as flesh — intuition does not break, it trains. The Essay's recurring moral: "mathematics is too important to be abandoned to fanatic logicians."</p>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 15, pages 147–150. The chapter prints no plates, so nothing on this page reproduces printed art: every figure computes the chapter's constructions, with this page's own choices (the λₖ schedule, Knopp's wedge scheme, the planar vascular section) flagged under each one. Companion pages: <a href="cantor-dust.html">Cantor Dust</a> for the zero-measure original, <a href="koch-plates.html">Triadic Koch Island</a> for Plate 43's midpoint construction, <a href="diameter-exponent.html">Trees and the Diameter Exponent</a> for chapter 17's bronchi.</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>

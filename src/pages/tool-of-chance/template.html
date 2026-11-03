@@ -1,0 +1,124 @@
+<title>Chance as a Tool</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.r-ch { aspect-ratio: 10 / 7; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 21, "Chance as a Tool in Model Making" · pages 200–204</p>
+    <h1><span class="plate-no">Chapter 21</span><span class="lozenge" aria-hidden="true"></span><span>Chance as a Tool</span></h1>
+    <p class="dek">Part VII opens the Essay's second half: why the fractal models now turn random. A coastline's shaping forces are unrecorded and unrecoverable, so statistics is the only honest description — and chance slots neatly into the book's recursions as a <i>controller</i> feeding choices to a <i>processor</i>, with the seed as a page number in a grand portfolio of shapes. The chapter prints no plates, so every figure below is this page's illustration of its arguments.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#controller"><b>seed</b> The controller and the portfolio</a>
+    <a href="#constrained"><b>2n</b> Self-constrained chance</a>
+    <a href="#typical"><b>Pr</b> Hyperbolic laws and the typical D</a>
+  </nav>
+
+  <!-- ===================== FROM RECURSIVITY TO RANDOMNESS ===================== -->
+  <section class="plate" id="controller">
+    <div class="plate-head">
+      <p class="no">Chapter 21, pages 201–203 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>The controller, the seed and the grand portfolio</h2>
+      <p class="dim" id="dimA">one processor (Plate 46's generator, D = log 3/log √7 ≈ 1.1292) · many control sequences</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-ch zoomable" id="wA">
+          <canvas id="cA" role="img" aria-label="One Koch processor driven by different control sequences, and the portfolio of seeded curves"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cAt">The controller</strong> · <span id="cAn"></span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The Koch loop is a <i>processor program</i>: each run adds fresh detail to what the last run drew. The caption of <a href="gosper-island.html">Plate 46</a> observes that its generator can be used straight (S) or flipped (F) — so before each loop a <i>controller</i> must say which. Every control sequence is a different curve, all of the same dimension: the loop defines not one fractal but a denumerable family. Replace the tape by a pseudo-random generator and the only parameter of chance left is its input, the seed — a page number in a virtual "grand portfolio", every page one shape, most pages alike in essentials and different in detail.</p>
+        <div class="mini" aria-label="The scheme">
+          <div class="fx">controller → S F F S F S S …<br>processor → one stage per letter</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mA" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group" id="ctlAg">
+          <div class="label-row"><span class="label">Control sequence</span></div>
+          <div class="steps words" id="ctlA" role="group" aria-label="Control sequence"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Stages</span></div>
+          <div class="steps" id="kA" role="group" aria-label="Stages"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="coinA">Toss a coin per stage</button>
+          <button type="button" class="btn" id="newA">New seed</button>
+        </div>
+        <p class="readline" id="infoA" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Sequence</dt><dd id="rAa">—</dd></div>
+          <div><dt>Seed</dt><dd id="rAb">—</dd></div>
+          <div><dt>Curves in the family</dt><dd id="rAc">—</dd></div>
+          <div><dt>D (every one of them)</dt><dd id="rAd">1.1292</dd></div>
+        </dl>
+        <p class="note">The chapter prints no figure; the processor here is Plate 46's three-step generator, and S against F is the choice its caption names. "Alternate S and F" and "the k-th digit of π" are the chapter's own examples of compact instructions a controller may interpret; the coin is its simplest controller. The portfolio view goes one step further than the per-stage tape — every piece tosses its own coin, which is how chapter 24's <a href="chains-and-squigs.html">random chains</a> actually randomize — and shows six pages of the portfolio side by side: same species, different seeds.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== NONCONSTRAINED AND SELF-CONSTRAINED CHANCE ===================== -->
+  <section class="plate" id="constrained">
+    <div class="plate-head">
+      <p class="no">Chapter 21, pages 203–204 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Nonconstrained and self-constrained chance</h2>
+      <p class="dim" id="dimB">closed 2n-step lattice polygons: easy · self-avoiding ones: "continues to elude the best minds"</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-ch zoomable" id="wB">
+          <canvas id="cB" role="img" aria-label="Random lattice polygons, their self-contacts, and the cost of demanding self-avoidance"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cBt">A random polygon</strong> · <span id="cBn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">Merely to invoke chance is an empty gesture: vary a coastline's parts at random in shape, size and order, and the pieces will not fit together. The practical divide is whether the controller can run its loops without inspecting their outcome. Lattice polygons of 2n sides, self-intersections allowed, are <i>nonconstrained</i> — easy combinatorics, generated in one pass. Coastlines must not cross themselves, and that single geometric demand makes the chance <i>self-constrained</i>: even counting the self-avoiding polygons is an unsolved problem, and the Essay dodges such chance everywhere but <a href="lattice-physics.html">chapter 36</a>.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mB" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="slider">
+          <div class="label-row"><span class="label">Half the sides, n</span><span class="value" id="nvB">n = 12</span></div>
+          <input type="range" id="nsB" min="4" max="40" step="1" value="12" aria-label="Half the number of sides">
+        </div>
+        <div class="group" id="selfBg">
+          <div class="label-row"><span class="label">Demand</span></div>
+          <div class="steps words" id="selfB" role="group" aria-label="Demand"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="newB">New sample</button>
+        </div>
+        <p class="readline" id="infoB" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Sides 2n</dt><dd id="rBa">24</dd></div>
+          <div><dt>Self-contacts</dt><dd id="rBb">—</dd></div>
+          <div><dt>Draws needed</dt><dd id="rBc">—</dd></div>
+          <div><dt>Acceptance rate</dt><dd id="rBd">—</dd></div>
+        </dl>
+        <p class="note">This page's own illustration of the chapter's example. The sampler pairs each of n random steps with its opposite and shuffles, which closes the loop by construction (a simple closed-walk sampler, not the uniform law on all closed polygons — uniformity is part of what makes the counting hard). The self-avoiding demand is met by brute rejection, and the acceptance chart shows the price: it falls roughly geometrically with n, and past a few dozen sides honest sampling needs the specialist algorithms of lattice physics.</p>
+      </div>
+    </div>
+    <div class="sub" id="typical">
+      <h3>Hyperbolic laws, and a random set's typical D</h3>
+      <p class="cap">Two more of the chapter's threads live on other pages. The counting law Nr(U &gt; u) ∝ u⁻ᴰ of chapters 6, 13 and 14 here turns into the probabilist's <i>hyperbolic distribution</i> Pr(U &gt; u) ∝ u⁻ᴰ, star of most remaining chapters — its paradoxes and robustness are drawn on <a href="power-laws.html">Scaling Without Geometry</a>. And dimension itself needs care once sets are random: in the portfolio each page has its own D, but outside a batch of defective seeds of zero total probability, all pages share one <i>almost sure</i> D. Averaging the sets instead of their dimensions is the trap: the average of all symmetric random walks sits still at its starting point, D = 0, while almost every walk has D = 2 (<a href="brown-trails.html">chapter 25</a>). Likewise a mass exponent M(R) ∝ R<sup>Q</sup> need not be a dimension — <a href="islands-clusters.html">chapter 13</a>'s warning, repeated here.</p>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 21, pages 200–204. The chapter prints no plates, so nothing on this page reproduces printed art: every figure is computed, with this page's own choices (the polygon sampler, the six-seed portfolio grid) flagged under each one. Companion pages: <a href="conditional-cosmography.html">Conditional Cosmography</a> for chapter 22's stronger claim that fractal models <i>need</i> chance, and <a href="chains-and-squigs.html">Random Chains and Squigs</a> for the first constructions built this way.</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>

@@ -1,0 +1,116 @@
+<title>Conditional Cosmography</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<style>/*BASECSS*/
+.r-ch { aspect-ratio: 10 / 7; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">The Fractal Geometry of Nature · Chapter 22, "Conditional Stationarity and Cosmographic Principles" · pages 205–209</p>
+    <h1><span class="plate-no">Chapter 22</span><span class="lozenge" aria-hidden="true"></span><span>Conditional Cosmography</span></h1>
+    <p class="dek">Chapter 21 gave the usual reasons for randomness; this chapter gives the fractal one — a nonrandom fractal cannot be stationary and cannot scale at every ratio, so no nonrandom model can satisfy any cosmographic principle. The repair is to weaken the principle itself: ask invariance not for all observers, but only for observers standing on matter. The chapter prints no plates, so every figure below is this page's illustration of its argument.</p>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <a href="#conditioning"><b>M(R)</b> Peeking from a material point</a>
+    <a href="#strata"><b>rᵏ</b> Stratified against scaling</a>
+    <a href="#program"><b>δ = 0</b> The program</a>
+  </nav>
+
+  <!-- ===================== THE CONDITIONAL COSMOGRAPHIC PRINCIPLE ===================== -->
+  <section class="plate" id="conditioning">
+    <div class="plate-head">
+      <p class="no">Chapter 22, pages 206–208 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Peeking from a material point</h2>
+      <p class="dim" id="dimA">conditional: M(R) ∝ Rᴰ from every material origin · absolute: a random ball is almost surely empty</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-ch zoomable" id="wA">
+          <canvas id="cA" role="img" aria-label="A random fractal dust with an arbitrary origin and a material origin, and the mass M(R) seen from each"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cAt">The dust</strong> · <span id="cAn"></span></figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">The cosmologic principle — no place is special — read descriptively and brutally demands strict translation invariance; soften it by chance and it becomes statistical stationarity, the <i>uniform</i> cosmographic principle. But a fractal distribution of matter with D &lt; 3 has global density zero, and a frame of reference dropped at random then almost surely sees nothing at all: the absolute distribution says only "empty", and distinguishes no D from another. Condition the frame's origin to lie <i>on a material point</i> — where every astronomer in fact stands — and the description comes alive: the conditional law is the same for all such observers, and M(R) ∝ Rᴰ.</p>
+        <div class="mini" aria-label="The two principles">
+          <div class="fx">uniform: all origins alike → only δ = 0<br>conditional: material origins alike → D</div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mA" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Kept ninths N (D = log N/log 3)</span></div>
+          <div class="steps" id="nA" role="group" aria-label="Kept ninths"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="galaxyA">Galaxy-like: N = 4, D ≈ 1.26</button>
+          <button type="button" class="btn" id="newA">New seed</button>
+        </div>
+        <p class="readline" id="infoA" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Dimension D</dt><dd id="rAa">—</dd></div>
+          <div><dt>Points drawn</dt><dd id="rAb">—</dd></div>
+          <div><dt>Arbitrary origins seeing nothing (R = 0.1)</dt><dd id="rAc">—</dd></div>
+          <div><dt>Fitted M(R) slope, material origins</dt><dd id="rAd">—</dd></div>
+        </dl>
+        <p class="note">This page's own illustration: the matter is a random curdling dust (base 3, every cell keeps N of its 9 ninths — chapter 23's construction, chosen here because it satisfies the conditional principle by design). The plane stands in for space, so the global-density exponent 3 becomes 2 and "δ = 0" reads "a vanishing share of the window's area". The M(R) chart averages fifty origins of each kind; Bayes connects the two laws — the absolute is the conditional averaged over uniformly scattered origins, which is exactly why it washes out to "empty" when δ = 0. The chapter's deadlock is drawn too: hierarchical models with a finite upper cutoff (Fournier universes scattered uniformly) rescue a positive δ at the price of making clusters local — the choice Mandelbrot's conditional principle avoids.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== AVOIDANCE OF STRATIFICATION ===================== -->
+  <section class="plate" id="strata">
+    <div class="plate-head">
+      <p class="no">Chapter 22, pages 208–209 <span class="lozenge" aria-hidden="true"></span></p>
+      <h2>Stratified against scaling</h2>
+      <p class="dim" id="dimB">nonrandom cascades scale only at ratios rᵏ · random dusts scale with respect to every r</p>
+    </div>
+    <div class="plate-body">
+      <figure class="fig">
+        <div class="canvas-wrap r-ch zoomable" id="wB">
+          <canvas id="cB" role="img" aria-label="A Fournier hierarchy against a random dust, and the mass curve of each: a staircase against a straight line"></canvas>
+          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+        </div>
+        <figcaption><strong id="cBt">Two dusts</strong> · <span id="cBn"></span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</figcaption>
+      </figure>
+      <div class="side">
+        <p class="cap">A nonrandom fractal whose parts shrink by one ratio r admits only the scaling ratios rᵏ: it is <i>strongly stratified</i>, a built-in hierarchy of levels. Astronomers found such models computable but suspect — there is no direct evidence that the clusters are real — and called for quasi-continuous alternatives (de Vaucouleurs 1970). No nonrandom fractal can oblige. A random dust can: it scales with respect to every ratio, carries no designed-in strata, and still <i>looks</i> hierarchical, because apparent clustering is a corollary of any D &lt; 2 — the hierarchy is in the eye, not the rule.</p>
+        <div class="group">
+          <div class="label-row"><span class="label">Show</span></div>
+          <div class="steps words" id="mB" role="group" aria-label="What to show"></div>
+        </div>
+        <div class="group">
+          <div class="label-row"><span class="label">Matter</span></div>
+          <div class="steps words" id="setB" role="group" aria-label="Which set"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn" id="newB">New seed</button>
+        </div>
+        <p class="readline" id="infoB" aria-live="polite"></p>
+        <dl class="read">
+          <div><dt>Dimension D</dt><dd id="rBa">—</dd></div>
+          <div><dt>Admissible ratios</dt><dd id="rBb">—</dd></div>
+          <div><dt>M(R) between levels</dt><dd id="rBc">—</dd></div>
+          <div><dt>Looks clustered?</dt><dd id="rBd">—</dd></div>
+        </dl>
+        <p class="note">This page's own figures. The stratified example is chapter 9's <a href="fournier-universe.html">Fournier quincunx</a> at ratio 1/5 (D = log 5/log 5 = 1 in the plane); its mass curve from the centre is a staircase — plateaus a factor 5 wide in R, risers a factor 5 in M, chapter 9's climb-and-sag band. The random partner is the curdling dust with N = 3, whose D = log 3/log 3 = 1 matches, and whose mass curve from a material point is straight. The point is the shape, not the slope: rescale the staircase by anything but a power of 5 and it misses itself, while the random curve slides along itself at any ratio, statistically.</p>
+      </div>
+    </div>
+    <div class="sub" id="program">
+      <h3>The program the random chapters must fill</h3>
+      <p class="cap">The chapter ends on a promissory note, redeemed in chapters 32 to 35: explicit random constructions that induce a zero global density; satisfy the conditional cosmographic principle and no stronger form; scale with respect to every ratio; are not stratified by design but look hierarchical as a corollary of D &lt; 2; and fit the quantitative data better as the models grow more careful — the <a href="levy-dusts.html">Lévy dusts</a>, the <a href="disc-tremas.html">trema dusts</a> and their <a href="general-tremas.html">generalizations</a>.</p>
+    </div>
+  </section>
+
+  <p class="source">Source: Benoit B. Mandelbrot, <i>The Fractal Geometry of Nature</i> (1982), chapter 22, pages 205–209. The chapter prints no plates, so nothing on this page reproduces printed art: every figure is computed, with this page's own choices (the curdling stand-in for spatial matter, the planar reading of δ = 0) flagged under each one. Companion pages: <a href="tool-of-chance.html">Chance as a Tool</a> for chapter 21, <a href="fournier-universe.html">Fournier Universes</a> for the stratified model this chapter wants randomized, <a href="random-curds.html">Random Curds</a> for the construction that first delivers it.</p>
+</div>
+
+<script>
+/*SCRIPT*/
+</script>
