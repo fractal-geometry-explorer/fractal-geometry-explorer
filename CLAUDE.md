@@ -21,6 +21,7 @@ An integrated website of interactive reconstructions of every plate and main con
 src/shared/base.css        shared style: colour tokens, dark mode, layout, controls
 src/shared/draw.js         shared drawing: style constants, zoomable canvas, chunked paths, controls, mini SVGs, chevrons
 src/shared/geometry.js     shared geometry: similarity maps, decorated generators, cascades, tree cascades, rounding, dimension
+src/shared/random.js       shared randomness: mulberry32 seeded PRNG, Gaussian sampler, radix-2 FFT
 src/pages.json             manifest: slug, title, plates, chapter, scripts
 src/pages/<slug>/          template.html + the page's scripts
 tools/build.py             builds site/ from src/  (python3 tools/build.py)

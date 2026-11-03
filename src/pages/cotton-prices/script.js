@@ -243,14 +243,6 @@ sayPrinted();
 
 /* ===================== the scaling principle, simulated ===================== */
 const B = { a: 1.7, seed: 1, mode: 'record', rescale: true, n: 1250, big: 16384 };
-function mulberry32(s) {
-  return () => {
-    s = (s + 0x6D2B79F5) | 0;
-    let t = Math.imul(s ^ (s >>> 15), 1 | s);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
 // Chambers–Mallows–Stuck; the Brownian record reuses the same (U, W) so the two runs are twins
 function simulate() {
   const rnd = mulberry32(B.seed * 2654435761), n = B.big, a = B.a, s0 = 0.009;

@@ -3,15 +3,6 @@
 // the spectrum. H is the Hurst exponent, fGn the yearly increments, fBm their running sum.
 
 // ---- seeded Gaussians ----
-function mulberry32(seed) {
-  let a = seed >>> 0;
-  return () => {
-    a = (a + 0x6d2b79f5) | 0;
-    let t = Math.imul(a ^ (a >>> 15), 1 | a);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
 function normals(seed, count) {
   const rnd = mulberry32(seed), out = new Float64Array(count);
   for (let i = 0; i < count; i += 2) {
@@ -20,27 +11,6 @@ function normals(seed, count) {
     if (i + 1 < count) out[i + 1] = r * Math.sin(a);
   }
   return out;
-}
-
-// ---- in-place radix-2 FFT (n a power of two) ----
-function fft(re, im) {
-  const n = re.length;
-  for (let i = 1, j = 0; i < n; i++) {
-    let bit = n >> 1;
-    for (; j & bit; bit >>= 1) j ^= bit;
-    j ^= bit;
-    if (i < j) { let t = re[i]; re[i] = re[j]; re[j] = t; t = im[i]; im[i] = im[j]; im[j] = t; }
-  }
-  for (let len = 2; len <= n; len <<= 1) {
-    const half = len >> 1, ang = -2 * Math.PI / len;
-    for (let k = 0; k < half; k++) {
-      const wr = Math.cos(ang * k), wi = Math.sin(ang * k);
-      for (let i = k; i < n; i += len) {
-        const j = i + half, tr = re[j] * wr - im[j] * wi, ti = re[j] * wi + im[j] * wr;
-        re[j] = re[i] - tr; im[j] = im[i] - ti; re[i] += tr; im[i] += ti;
-      }
-    }
-  }
 }
 
 // ---- exact fGn: eigenvalues of the circulant embedding of the covariance ----

@@ -156,7 +156,7 @@
   const SWEEPS_QUICK = 2, SWEEPS_FULL = 12;
   let walkC = null, pendingC = 0, chartC = null, chartJob = 0;
   function growWalkC() {
-    const { n, seed } = stC, rnd = rng32(seed * 101 + n);
+    const { n, seed } = stC, rnd = mulberry32(seed * 101 + n);
     walkC = sarwStart(n);
     sarwPivot(walkC, SWEEPS_QUICK * n, rnd);
     const job = ++pendingC;
@@ -180,7 +180,7 @@
         setC(false);
         return;
       }
-      const n = CHART_NS[i], rnd = rng32(stC.seed * 977 + n), w = sarwStart(n);
+      const n = CHART_NS[i], rnd = mulberry32(stC.seed * 977 + n), w = sarwStart(n);
       sarwPivot(w, 15 * n, rnd);
       let s2 = 0;
       for (let m = 0; m < CHART_M; m++) { sarwPivot(w, 2 * n, rnd); const r = sarwR(w); s2 += r * r; }
