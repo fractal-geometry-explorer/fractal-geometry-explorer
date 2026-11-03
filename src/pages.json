@@ -22,9 +22,11 @@
       "chapter": 5,
       "artifact": "https://claude.ai/artifact/7gvGnFScNh6SAy2x99eudc",
       "scripts": [
+        "shared/draw.js",
+        "pages/minkowski-sausage/sausage.js",
         "script.js"
       ],
-      "layout_comment": "/* Layout: the plate sits on the left like a page of the book; the instrument panel runs down the right. One column under 900px. */"
+      "layout_comment": "/* Layout: the plate (31), the generator editor and the Minkowski-sausage measurement, each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
     },
     {
       "slug": "minkowski-sausage",
@@ -33,9 +35,11 @@
       "chapter": 5,
       "artifact": "https://claude.ai/artifact/LXgM42xuGAp9wWuX2x18D6",
       "scripts": [
+        "shared/draw.js",
+        "sausage.js",
         "script.js"
       ],
-      "layout_comment": "/* Layout: the plate on the left as on the book's page 32; controls, readouts and the measuring chart down the right. One column under 900px. */"
+      "layout_comment": "/* Layout: the curve in its band (Plate 32) and the measuring chart, each a printed figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
     },
     {
       "slug": "coast-of-britain",
@@ -57,9 +61,12 @@
       "chapter": 25,
       "artifact": "https://claude.ai/artifact/RvpGQi3Td4y7gZnjM1pukG",
       "scripts": [
+        "shared/draw.js",
+        "shared/random.js",
+        "pages/minkowski-sausage/sausage.js",
         "script.js"
       ],
-      "layout_comment": "/* Layout: the simulated trail on the left like a plate; controls, readouts and the measuring chart down the right. One column under 900px. */"
+      "layout_comment": "/* Layout: the trail in its band and the measuring chart with Wiener's law, each a figure beside its caption, controls and numbers; a sticky index on top. One column under 900px. */"
     },
     {
       "slug": "koch-plates",

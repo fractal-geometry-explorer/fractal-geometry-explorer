@@ -1,4 +1,7 @@
-// CORE START
+// Plate 31: the monkeys tree, computed from its 11-segment generator. Geometry and page
+// behaviour; the band measurement and the measuring chart come from the sausage kit
+// (pages/minkowski-sausage/sausage.js), and the canvas plumbing from shared/draw.js.
+// CORE START (also shipped to the measuring workers)
 const S3 = Math.sqrt(3);
 const LONG = 1 / 3, SHORT = 1 / (3 * S3);
 const STEPS = [[LONG, 60], [LONG, 60], [LONG, 0], [LONG, -60], [SHORT, 150], [SHORT, 150], [SHORT, 210], [SHORT, 270], [SHORT, 270], [LONG, 0], [LONG, 0]];
@@ -51,6 +54,23 @@ function buildLevel(n, opts) {
     xs = nx; ys = ny;
   }
   return { xs, ys };
+}
+// the raw polygon with its box, as the band measurer wants it (the band is measured on the true
+// curve, never on the rounded display curve)
+function monkeysGeom(opts) {
+  const paths = {}, bbs = {};
+  const ensure = (n) => {
+    if (paths[n]) return;
+    const c = buildLevel(n, opts), p = new Path2D();
+    let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+    for (let i = 0; i < c.xs.length; i++) {
+      const x = c.xs[i], y = c.ys[i];
+      i ? p.lineTo(x, y) : p.moveTo(x, y);
+      if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y;
+    }
+    paths[n] = p; bbs[n] = { x0, x1, y0, y1 };
+  };
+  return { path: (n) => { ensure(n); return paths[n]; }, bbox: (n) => { ensure(n); return bbs[n]; } };
 }
 // ---- circular-arc rounding ----
 // Each segment becomes a biarc: two circular arcs through its endpoints whose tangents match where they meet.
@@ -176,28 +196,16 @@ function solveD() {
 // CORE END
 
 (() => {
-  const $ = (id) => document.getElementById(id);
-  const wrap = $('wrap'), cv = $('cv'), ov = $('ov');
-  const ctx = cv.getContext('2d'), octx = ov.getContext('2d');
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const fmt = (n) => n.toLocaleString('en-US');
   const ARC_SAMPLES = [1, 12, 8, 4, 2, 1]; // points per arc for tracing and highlighting; drawing uses true arcs
   const MAXN = 5;
+  const SOFT = 'rgba(47, 95, 158, 0.16)';  // PRINT.accent at the band's wash strength
 
-  const state = {
-    n: 3, opts: MANDEL.slice(), mode: 'fill', round: 1, gap: 0.15, constr: false, eps: 0.02,
-    hover: -1, trace: null, view: null, userView: false,
-  };
-  let colors = {};
-  let cache = {};      // raw curves by level for current opts
+  const state = { n: 3, opts: MANDEL.slice(), mode: 'fill', round: 1, gap: 0.15, constr: false, eps: 0.02, hover: -1, trace: null };
+  let cache = {};      // raw curves by level for the current arrangement
+  let rawPaths = {};   // the exact polygon, used for the sausage
   let disp = null;     // smoothed display curve + paths
-  let dpr = 1;
 
-  function readColors() {
-    const cs = getComputedStyle(document.documentElement);
-    const g = (k) => cs.getPropertyValue(k).trim();
-    colors = { ink: g('--ink'), plate: g('--plate'), accent: g('--accent'), soft: g('--accent-soft'), muted: g('--muted') };
-  }
   function curve(n) {
     if (!cache[n]) cache[n] = buildLevel(n, state.opts);
     return cache[n];
@@ -235,155 +243,104 @@ function solveD() {
     }
     return p;
   }
+  function rawPath(n) {
+    if (!rawPaths[n]) { const c = curve(n); rawPaths[n] = pathFrom(c.xs, c.ys, false); }
+    return rawPaths[n];
+  }
   function rebuildDisplay() {
     const c = curve(state.n);
     const A = arcSpline(c.xs, c.ys, state.round);
     const k = ARC_SAMPLES[state.n];
     const s = sampleArcs(A, k);
     disp = { xs: s.xs, ys: s.ys, m: 2 * k, line: arcPath(A, false), fill: arcPath(A, true), raw: rawPath(state.n), bounds: boundsOf(c) };
-  }
-  // the exact polygon, used for the sausage (no rounding: the band is measured on the true curve)
-  let rawPaths = {};
-  function rawPath(n) {
-    if (!rawPaths[n]) { const c = curve(n); rawPaths[n] = pathFrom(c.xs, c.ys, false); }
-    return rawPaths[n];
+    scene.key = '';
   }
 
-  // ---------- view ----------
-  function cssSize() { return { w: wrap.clientWidth, h: wrap.clientHeight }; }
-  function fitView() {
-    const { w, h } = cssSize(), b = disp.bounds;
-    const s = Math.min(w / (b.x1 - b.x0), h / (b.y1 - b.y0));
-    const cx = (b.x0 + b.x1) / 2, cy = (b.y0 + b.y1) / 2;
-    state.view = { s, ox: w / 2 - cx * s, oy: h / 2 + cy * s, fit: s };
-    state.userView = false;
-    updateTouch();
+  // ---------- the figure: a cached scene, with construction lines, hover and trace on top ----------
+  const scene = { key: '', canvas: document.createElement('canvas') };
+  let patCache = null;
+  function stipple(f, v) {        // screen-space dot stipple, echoing the screen tone of the book's sausage
+    if (!window.DOMMatrix) return null;
+    const key = String(f.dpr);
+    if (!patCache || patCache.key !== key) {
+      const c = document.createElement('canvas'), n = Math.max(3, Math.round(3.5 * f.dpr));
+      c.width = c.height = n;
+      const g = c.getContext('2d');
+      g.fillStyle = PRINT.accent; g.globalAlpha = 0.6;
+      g.beginPath(); g.arc(n / 2, n / 2, 0.7 * f.dpr, 0, Math.PI * 2); g.fill();
+      patCache = { key, canvas: c };
+    }
+    const p = scene.canvas.getContext('2d').createPattern(patCache.canvas, 'repeat');
+    if (!p || !p.setTransform) return null;
+    const a = f.dpr * v.s, e = f.dpr * v.ox, fy = f.dpr * v.oy;
+    p.setTransform(new DOMMatrix([1 / a, 0, 0, -1 / a, -e / a, fy / a]));
+    return p;
   }
-  function zoomAt(px, py, f) {
-    const v = state.view;
-    const ns = Math.min(v.fit * 600, Math.max(v.fit * 0.6, v.s * f));
-    const wx = (px - v.ox) / v.s, wy = (v.oy - py) / v.s;
-    v.s = ns; v.ox = px - wx * ns; v.oy = py + wy * ns;
-    state.userView = true; updateTouch(); scheduleView();
-  }
-  function panBy(dx, dy) {
-    state.view.ox += dx; state.view.oy += dy; state.userView = true; scheduleView();
-  }
-  function updateTouch() {
-    const zoomed = state.view && state.view.s > state.view.fit * 1.02;
-    wrap.style.touchAction = zoomed ? 'none' : 'pan-y';
-  }
-  function resize() {
-    dpr = Math.min(2, window.devicePixelRatio || 1);
-    const { w, h } = cssSize();
-    for (const c of [cv, ov]) { c.width = Math.round(w * dpr); c.height = Math.round(h * dpr); }
-    if (!state.view || !state.userView) fitView();
-    drawAll();
-  }
-
-  // ---------- drawing ----------
-  function setWorld(c) {
-    const v = state.view;
-    c.setTransform(dpr * v.s, 0, 0, -dpr * v.s, dpr * v.ox, dpr * v.oy);
-  }
-  function drawMain() {
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.fillStyle = colors.plate; ctx.fillRect(0, 0, cv.width, cv.height);
-    setWorld(ctx);
-    const s = state.view.s;
-    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+  function drawScene(f, v) {
+    scene.canvas.width = f.canvas.width; scene.canvas.height = f.canvas.height;
+    const c = scene.canvas.getContext('2d');
+    c.setTransform(1, 0, 0, 1, 0, 0);
+    c.fillStyle = PRINT.paper; c.fillRect(0, 0, scene.canvas.width, scene.canvas.height);
+    c.setTransform(f.dpr * v.s, 0, 0, -f.dpr * v.s, f.dpr * v.ox, f.dpr * v.oy);
+    c.lineJoin = 'round'; c.lineCap = 'round';
     if (state.mode === 'fill') {
-      ctx.fillStyle = colors.ink; ctx.fill(disp.fill, 'nonzero');
+      c.fillStyle = PRINT.ink; c.fill(disp.fill, 'nonzero');
       if (state.gap > 0) {
-        ctx.strokeStyle = colors.plate;
-        ctx.lineWidth = state.gap * 0.4 * Math.pow(3, -Math.max(state.n, 3));
-        ctx.stroke(disp.line);
+        c.strokeStyle = PRINT.paper;
+        c.lineWidth = state.gap * 0.4 * Math.pow(3, -Math.max(state.n, 3));
+        c.stroke(disp.line);
       }
     } else if (state.mode === 'sausage') {
       // a round-capped, round-joined stroke of width 2ε is exactly the union of discs of radius ε along the curve
-      ctx.lineWidth = 2 * state.eps;
-      ctx.strokeStyle = colors.soft; ctx.stroke(disp.raw);
-      const pat = stipple();
-      if (pat) { ctx.strokeStyle = pat; ctx.stroke(disp.raw); }
-      ctx.strokeStyle = colors.ink; ctx.lineWidth = 1.2 / s; ctx.stroke(disp.raw);
+      c.lineWidth = 2 * state.eps;
+      c.strokeStyle = SOFT; c.stroke(disp.raw);
+      const pat = stipple(f, v);
+      if (pat) { c.strokeStyle = pat; c.stroke(disp.raw); }
+      c.strokeStyle = PRINT.ink; c.lineWidth = 1.2 / v.s; c.stroke(disp.raw);
     } else {
-      ctx.strokeStyle = colors.ink; ctx.lineWidth = 1.4 / s; ctx.stroke(disp.line);
+      c.strokeStyle = PRINT.ink; c.lineWidth = 1.4 / v.s; c.stroke(disp.line);
     }
-    snapC.width = cv.width; snapC.height = cv.height;
-    snapC.getContext('2d').drawImage(cv, 0, 0);
-    snapView = { s: state.view.s, ox: state.view.ox, oy: state.view.oy };
-  }
-  // screen-space dot stipple, echoing the screen tone of the book's sausage
-  let patCache = null;
-  function stipple() {
-    if (!window.DOMMatrix) return null;
-    const key = colors.accent + '|' + dpr;
-    if (!patCache || patCache.key !== key) {
-      const c = document.createElement('canvas'), n = Math.max(3, Math.round(3.5 * dpr));
-      c.width = c.height = n;
-      const g = c.getContext('2d');
-      g.fillStyle = colors.accent; g.globalAlpha = 0.6;
-      g.beginPath(); g.arc(n / 2, n / 2, 0.7 * dpr, 0, Math.PI * 2); g.fill();
-      patCache = { key, canvas: c };
-    }
-    const p = ctx.createPattern(patCache.canvas, 'repeat');
-    if (!p || !p.setTransform) return null;
-    const v = state.view, a = dpr * v.s, e = dpr * v.ox, f = dpr * v.oy;
-    p.setTransform(new DOMMatrix([1 / a, 0, 0, -1 / a, -e / a, f / a]));
-    return p;
-  }
-  // while panning or zooming deep levels, move a cached image, then redraw the true arcs once the gesture rests
-  const snapC = document.createElement('canvas');
-  let snapView = null, fullTimer = 0;
-  function drawFast() {
-    const v = state.view, f = v.s / snapView.s;
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.fillStyle = colors.plate; ctx.fillRect(0, 0, cv.width, cv.height);
-    ctx.drawImage(snapC, (v.ox - snapView.ox * f) * dpr, (v.oy - snapView.oy * f) * dpr, snapC.width * f, snapC.height * f);
-  }
-  function scheduleView() {
-    if (state.n < 4 || !snapView) { schedule(); return; }
-    if (!raf) raf = requestAnimationFrame(() => { raf = 0; drawFast(); drawOverlay(); });
-    clearTimeout(fullTimer);
-    fullTimer = setTimeout(schedule, 160);
   }
   function strokeRange(c, xs, ys, a, b) {
     c.beginPath(); c.moveTo(xs[a], ys[a]);
     for (let i = a + 1; i <= b; i++) c.lineTo(xs[i], ys[i]);
     c.stroke();
   }
-  function drawOverlay() {
-    octx.setTransform(1, 0, 0, 1, 0, 0);
-    octx.clearRect(0, 0, ov.width, ov.height);
-    setWorld(octx);
-    const s = state.view.s;
-    octx.lineJoin = 'round'; octx.lineCap = 'round';
+  function drawOverlay(f, v) {
+    const c = f.ctx, s = v.s;
+    toWorld(f, v);
+    c.lineJoin = 'round'; c.lineCap = 'round';
     if (state.constr && state.n > 0) {
       const p = curve(state.n - 1);
-      octx.strokeStyle = colors.accent; octx.lineWidth = 1.5 / s; octx.setLineDash([6 / s, 4 / s]);
-      strokeRange(octx, p.xs, p.ys, 0, p.xs.length - 1);
-      octx.setLineDash([]);
+      c.strokeStyle = PRINT.accent; c.lineWidth = 1.5 / s; c.setLineDash([6 / s, 4 / s]);
+      strokeRange(c, p.xs, p.ys, 0, p.xs.length - 1);
+      c.setLineDash([]);
       if (p.xs.length <= 122) {
-        octx.fillStyle = colors.accent;
-        for (let i = 0; i < p.xs.length; i++) { octx.beginPath(); octx.arc(p.xs[i], p.ys[i], 3 / s, 0, Math.PI * 2); octx.fill(); }
+        c.fillStyle = PRINT.accent;
+        for (let i = 0; i < p.xs.length; i++) { c.beginPath(); c.arc(p.xs[i], p.ys[i], 3 / s, 0, Math.PI * 2); c.fill(); }
       }
     }
     if (state.hover >= 0 && state.n > 0) {
       const per = Math.pow(11, state.n - 1) * disp.m;
       const a = state.hover * per, b = a + per;
-      octx.strokeStyle = colors.soft; octx.lineWidth = 9 / s; strokeRange(octx, disp.xs, disp.ys, a, b);
-      octx.strokeStyle = colors.accent; octx.lineWidth = 2.5 / s; strokeRange(octx, disp.xs, disp.ys, a, b);
+      c.strokeStyle = SOFT; c.lineWidth = 9 / s; strokeRange(c, disp.xs, disp.ys, a, b);
+      c.strokeStyle = PRINT.accent; c.lineWidth = 2.5 / s; strokeRange(c, disp.xs, disp.ys, a, b);
     }
     if (state.trace) {
       const last = disp.xs.length - 1;
       const k = Math.max(1, Math.floor(state.trace.p * last));
-      octx.strokeStyle = colors.accent; octx.lineWidth = 2.25 / s; strokeRange(octx, disp.xs, disp.ys, 0, k);
-      octx.fillStyle = colors.accent; octx.beginPath(); octx.arc(disp.xs[k], disp.ys[k], 4.5 / s, 0, Math.PI * 2); octx.fill();
+      c.strokeStyle = PRINT.accent; c.lineWidth = 2.25 / s; strokeRange(c, disp.xs, disp.ys, 0, k);
+      c.fillStyle = PRINT.accent; c.beginPath(); c.arc(disp.xs[k], disp.ys[k], 4.5 / s, 0, Math.PI * 2); c.fill();
     }
   }
-  let raf = 0;
-  function schedule() { if (!raf) raf = requestAnimationFrame(() => { raf = 0; drawMain(); drawOverlay(); }); }
-  function drawAll() { drawMain(); drawOverlay(); }
+  function render(f, v) {
+    const key = [f.canvas.width, f.canvas.height, v.s, v.ox, v.oy, state.n, state.mode, state.round, state.gap, state.mode === 'sausage' ? state.eps : 0].join('|');
+    if (scene.key !== key) { drawScene(f, v); scene.key = key; }
+    f.ctx.setTransform(1, 0, 0, 1, 0, 0);
+    f.ctx.drawImage(scene.canvas, 0, 0);
+    drawOverlay(f, v);
+  }
+  const zoom = zoomable('wrap', 'cv', (f) => fitBox(f, disp.bounds, 0), render, { maxZoom: 600 });
 
   // ---------- depth thumbnails ----------
   const depthsEl = $('depths');
@@ -408,12 +365,12 @@ function solveD() {
       const r = Math.min(2, window.devicePixelRatio || 1);
       c.width = Math.round(w * r); c.height = Math.round(h * r);
       const g = c.getContext('2d');
-      g.fillStyle = colors.plate; g.fillRect(0, 0, c.width, c.height);
+      g.fillStyle = PRINT.paper; g.fillRect(0, 0, c.width, c.height);
       const cu = curve(n), bd = boundsOf(cu);
       const s = Math.min(c.width / (bd.x1 - bd.x0), c.height / (bd.y1 - bd.y0));
       const ox = c.width / 2 - (bd.x0 + bd.x1) / 2 * s, oy = c.height / 2 + (bd.y0 + bd.y1) / 2 * s;
       g.setTransform(s, 0, 0, -s, ox, oy);
-      g.fillStyle = colors.ink; g.fill(pathFrom(cu.xs, cu.ys, true), 'nonzero');
+      g.fillStyle = PRINT.ink; g.fill(pathFrom(cu.xs, cu.ys, true), 'nonzero');
       g.setTransform(1, 0, 0, 1, 0, 0);
     }
   }
@@ -496,7 +453,7 @@ function solveD() {
     state.hover = i;
     segEls.forEach((s, k) => s.g.classList.toggle('on', k === i));
     describe(i);
-    schedule();
+    zoom.schedule();
   }
   function checkStatus() {
     const el = $('status');
@@ -511,202 +468,67 @@ function solveD() {
         : `Self-avoiding through level 3. You found another arrangement that works.`;
   }
 
-  // ---------- Minkowski sausage: measurement ----------
-  const EPS_MIN = 0.004, EPS_MAX = 0.12, EPS_N = 12, FIT_MAX = 0.031, DTRUE = solveD();
-  const EPS_GRID = Array.from({ length: EPS_N }, (_, i) => EPS_MIN * Math.pow(EPS_MAX / EPS_MIN, i / (EPS_N - 1)));
-  const sliderToEps = (v) => EPS_MIN * Math.pow(EPS_MAX / EPS_MIN, v / 1000);
-  const epsToSlider = (e) => Math.round(1000 * Math.log(e / EPS_MIN) / Math.log(EPS_MAX / EPS_MIN));
-  const mCanvas = document.createElement('canvas');
-  const mctx = mCanvas.getContext('2d', { willReadFrequently: true });
-  // area of the band of radius eps around the level-n polygon: rasterize the round stroke, sum its coverage
-  function sausageArea(n, eps) {
-    const c = curve(n);
-    let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
-    for (let i = 0; i < c.xs.length; i++) {
-      const x = c.xs[i], y = c.ys[i];
-      if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y;
-    }
-    const bw = x1 - x0 + 2 * eps, bh = y1 - y0 + 2 * eps;
-    let h = eps / 6;                                   // about 6 pixels per ε
-    if (Math.max(bw, bh) / h > 2000) h = Math.max(bw, bh) / 2000;
-    const W = Math.ceil(bw / h) + 2, H = Math.ceil(bh / h) + 2;
-    mCanvas.width = W; mCanvas.height = H;
-    mctx.setTransform(1 / h, 0, 0, -1 / h, (eps - x0) / h + 1, (y1 + eps) / h + 1);
-    mctx.lineWidth = 2 * eps; mctx.lineJoin = 'round'; mctx.lineCap = 'round'; mctx.strokeStyle = '#000';
-    mctx.stroke(rawPath(n));
-    const d = mctx.getImageData(0, 0, W, H).data;
-    let sum = 0;
-    for (let i = 3; i < d.length; i += 4) sum += d[i];
-    return (sum / 255) * h * h;
-  }
-  const sz = { results: {}, queue: [], running: false, active: false };
-  function sQueue() {
-    sz.queue = [];
-    const order = [state.n, 5, 4, 3, 2, 1].filter((d, i, a) => d > 0 && a.indexOf(d) === i);
-    for (const d of order) {
-      if (!sz.results[d]) sz.results[d] = new Float64Array(EPS_N).fill(NaN);
-      for (let i = 0; i < EPS_N; i++) if (isNaN(sz.results[d][i])) sz.queue.push([d, i]);
-    }
-  }
-  function pump() {
-    if (sz.running || !sz.active || !sz.queue.length) return;
-    sz.running = true;
-    const step = () => {
-      const t0 = performance.now();
-      while (sz.queue.length && performance.now() - t0 < 24) {
-        const [d, i] = sz.queue.shift();
-        if (sz.results[d] && isNaN(sz.results[d][i])) sz.results[d][i] = sausageArea(d, EPS_GRID[i]) / (2 * EPS_GRID[i]);
-      }
-      drawChart();
-      if (sz.queue.length) setTimeout(step, 12); else sz.running = false;
-    };
-    setTimeout(step, 0);
-  }
-  function sReset() { sz.results = {}; sQueue(); pump(); }
-  let measureT = 0;
+  // ---------- Minkowski sausage: measurement and chart ----------
+  const ES = epsScale(0.004, 0.12), EPS_N = 12, FIT_MAX = 0.031, DTRUE = solveD();
+  const EPS_GRID = ES.grid(EPS_N);
+  const pool = measurePool({
+    preamble: `const GX=${JSON.stringify(GX)},GY=${JSON.stringify(GY)};\n${segMap}\n${buildLevel}\n${monkeysGeom}`,
+    geomExpr: 'monkeysGeom(cfg.opts)',
+    localGeom: (cfg) => monkeysGeom(cfg.opts),
+    size: 2,
+  });
+  const results = {};
+  let chartRaf = 0;
+  const chartSoon = () => { if (!chartRaf) chartRaf = requestAnimationFrame(() => { chartRaf = 0; chart.draw(); updateFit(); }); };
+  const sQueue = () => queueChart(pool, results, EPS_GRID, [state.n, 5, 4, 3, 2, 1].filter((d, i, a) => d > 0 && a.indexOf(d) === i), chartSoon);
+  let measureT = 0, readGen = 0;
   function measureNow() {
     clearTimeout(measureT);
     measureT = setTimeout(() => {
-      const A = sausageArea(state.n, state.eps);
-      $('sA').textContent = A.toFixed(4);
-      $('sL').textContent = (A / (2 * state.eps)).toFixed(2);
+      pool.cancelTag('read');
+      const gen = ++readGen, n = state.n, eps = state.eps;
+      pool.enqueue({ tag: 'read', kind: 'area', n, eps, done: (v) => {
+        if (gen !== readGen) return;
+        $('sA').textContent = v.toFixed(4);
+        $('sL').textContent = (v / (2 * eps)).toFixed(2);
+      } }, true);
     }, 110);
   }
-  function fitD(d) {
-    const r = sz.results[d];
-    if (!r) return NaN;
-    const X = [], Y = [];
-    EPS_GRID.forEach((e, i) => { if (e <= FIT_MAX && isFinite(r[i])) { X.push(Math.log(e)); Y.push(Math.log(r[i])); } });
-    if (X.length < 4) return NaN;
-    const mx = X.reduce((a, b) => a + b) / X.length, my = Y.reduce((a, b) => a + b) / Y.length;
-    let sxy = 0, sxx = 0;
-    for (let i = 0; i < X.length; i++) { sxy += (X[i] - mx) * (Y[i] - my); sxx += (X[i] - mx) ** 2; }
-    return 1 - sxy / sxx;
-  }
-
-  // ---------- Minkowski sausage: chart ----------
-  const sBox = $('sBox'), sChart = $('sChart'), sTip = $('sTip');
-  const serOpacity = (d) => (d === state.n ? 1 : 0.22 + 0.13 * d);
-  let geo = null, hoverIdx = -1;
-  (function buildLegend() {
-    const lg = $('sLegend');
-    for (let d = 1; d <= 5; d++) {
-      const s = document.createElement('span'), i = document.createElement('i');
-      s.dataset.d = d; s.append(i, document.createTextNode(`Level ${d}`)); lg.append(s);
-    }
-    const s = document.createElement('span'), i = document.createElement('i');
-    i.className = 'ref'; s.append(i, document.createTextNode('slope 1 − D')); lg.append(s);
-  })();
-  function paintLegend() {
-    $('sLegend').querySelectorAll('span[data-d]').forEach((s) => {
-      const d = +s.dataset.d, cur = d === state.n;
-      s.classList.toggle('cur', cur);
-      const i = s.querySelector('i');
-      i.style.borderTopColor = cur ? 'var(--accent)' : 'var(--muted)';
-      i.style.opacity = serOpacity(d);
-    });
-  }
-  function interpL(r, e) {
-    for (let i = 0; i < EPS_N - 1; i++) {
-      if (e >= EPS_GRID[i] && e <= EPS_GRID[i + 1] && isFinite(r[i]) && isFinite(r[i + 1])) {
-        const f = Math.log(e / EPS_GRID[i]) / Math.log(EPS_GRID[i + 1] / EPS_GRID[i]);
-        return Math.exp(Math.log(r[i]) + f * (Math.log(r[i + 1]) - Math.log(r[i])));
-      }
-    }
-    return NaN;
-  }
-  function drawChart() {
-    const W = Math.max(240, Math.round(sBox.clientWidth || 320)), H = 226;
-    const ml = 34, mr = 10, mt = 10, mb = 34;
-    let ymin = 1.5, ymax = 100;
-    for (const d in sz.results) for (const v of sz.results[d]) if (isFinite(v)) { ymax = Math.max(ymax, v * 1.1); ymin = Math.min(ymin, v / 1.1); }
-    const lx0 = Math.log(EPS_MIN), lx1 = Math.log(EPS_MAX), ly0 = Math.log(ymin), ly1 = Math.log(ymax);
-    const X = (e) => ml + ((Math.log(e) - lx0) / (lx1 - lx0)) * (W - ml - mr);
-    const Y = (v) => mt + (1 - (Math.log(v) - ly0) / (ly1 - ly0)) * (H - mt - mb);
-    geo = { X, W };
-    const f = (v) => v.toFixed(1);
-    let s = '<g class="grid">';
-    const xt = [0.005, 0.01, 0.02, 0.05, 0.1], yt = [2, 5, 10, 20, 50, 100, 200, 500, 1000].filter((v) => v >= ymin && v <= ymax);
-    for (const t of xt) s += `<line x1="${f(X(t))}" x2="${f(X(t))}" y1="${mt}" y2="${H - mb}"/>`;
-    for (const t of yt) s += `<line x1="${ml}" x2="${W - mr}" y1="${f(Y(t))}" y2="${f(Y(t))}"/>`;
-    s += '</g>';
-    for (const t of xt) s += `<text x="${f(X(t))}" y="${H - mb + 13}" text-anchor="middle">${t}</text>`;
-    for (const t of yt) s += `<text x="${ml - 5}" y="${f(Y(t) + 3.5)}" text-anchor="end">${t}</text>`;
-    s += `<text x="${W - mr - 2}" y="${mt + 10}" text-anchor="end">area ÷ 2ε</text>`;
-    s += `<text x="${f((ml + W - mr) / 2)}" y="${H - 4}" text-anchor="middle">band radius ε (log scale)</text>`;
-    // reference slope 1 − D, anchored where the depths agree
-    const deep = sz.results[5], ia = EPS_GRID.findIndex((e) => e >= 0.025);
-    if (deep && isFinite(deep[ia])) {
-      const L = (e) => deep[ia] * Math.pow(e / EPS_GRID[ia], 1 - DTRUE);
-      s += `<path class="ref" d="M${f(X(EPS_MIN))} ${f(Y(L(EPS_MIN)))} L${f(X(0.07))} ${f(Y(L(0.07)))}"/>`;
-    }
-    const order = [1, 2, 3, 4, 5].filter((d) => d !== state.n).concat(state.n > 0 ? [state.n] : []);
-    for (const d of order) {
-      const r = sz.results[d]; if (!r) continue;
-      let p = '';
-      r.forEach((v, i) => { if (isFinite(v)) p += (p ? 'L' : 'M') + f(X(EPS_GRID[i])) + ' ' + f(Y(v)); });
-      if (p) s += `<path class="ser${d === state.n ? ' cur' : ''}" style="stroke-opacity:${serOpacity(d)}" d="${p}"/>`;
-    }
-    if (hoverIdx >= 0) s += `<line class="hair" x1="${f(X(EPS_GRID[hoverIdx]))}" x2="${f(X(EPS_GRID[hoverIdx]))}" y1="${mt}" y2="${H - mb}"/>`;
-    const ex = X(Math.min(EPS_MAX, Math.max(EPS_MIN, state.eps)));
-    s += `<line class="mark" x1="${f(ex)}" x2="${f(ex)}" y1="${mt}" y2="${H - mb}"/>`;
-    const cr = sz.results[state.n];
-    if (cr) { const v = interpL(cr, state.eps); if (isFinite(v)) s += `<circle class="dot" cx="${f(ex)}" cy="${f(Y(v))}" r="4"/>`; }
-    sChart.setAttribute('viewBox', `0 0 ${W} ${H}`);
-    sChart.innerHTML = s;
-    paintLegend();
-    const D = fitD(state.n);
+  function updateFit() {
+    const D = state.n > 0 && results[state.n] ? fitSlopeD(EPS_GRID, results[state.n], FIT_MAX, 4) : NaN;
     $('sD').textContent = state.n === 0 ? '—' : isFinite(D) ? D.toFixed(2) : 'measuring…';
-    drawTable();
   }
-  function drawTable() {
-    const t = $('sTable');
-    const rows = [['ε', 'Level 1', 'Level 2', 'Level 3', 'Level 4', 'Level 5']];
-    EPS_GRID.forEach((e, i) => rows.push([e.toFixed(4), ...[1, 2, 3, 4, 5].map((d) => (sz.results[d] && isFinite(sz.results[d][i]) ? sz.results[d][i].toFixed(1) : '…'))]));
-    t.textContent = '';
-    rows.forEach((r, k) => {
-      const tr = document.createElement('tr');
-      r.forEach((c) => { const cell = document.createElement(k === 0 ? 'th' : 'td'); cell.textContent = c; tr.append(cell); });
-      t.append(tr);
-    });
-  }
-  function nearestIdx(e) {
-    const r = sChart.getBoundingClientRect(), x = (e.clientX - r.left) * (geo.W / r.width);
-    let best = 0, bd = Infinity;
-    EPS_GRID.forEach((g, i) => { const dx = Math.abs(geo.X(g) - x); if (dx < bd) { bd = dx; best = i; } });
-    return best;
-  }
-  function showTip(i) {
-    sTip.textContent = '';
-    const hd = document.createElement('div'); hd.className = 'hd'; hd.textContent = `ε = ${EPS_GRID[i].toFixed(4)}`; sTip.append(hd);
-    for (let d = 5; d >= 1; d--) {
-      const r = sz.results[d], v = r ? r[i] : NaN;
-      const row = document.createElement('div'); row.className = 'row';
-      const key = document.createElement('i');
-      key.style.borderTopColor = d === state.n ? 'var(--accent)' : 'var(--muted)'; key.style.opacity = serOpacity(d);
-      const b = document.createElement('b'); b.textContent = isFinite(v) ? v.toFixed(1) : '…';
-      row.append(key, b, document.createTextNode(`level ${d}`));
-      sTip.append(row);
-    }
-    sTip.hidden = false;
-    const bw = sBox.clientWidth, tw = sTip.offsetWidth;
-    const px = (geo.X(EPS_GRID[i]) / geo.W) * bw;
-    sTip.style.left = (px + 12 + tw > bw ? Math.max(0, px - 12 - tw) : px + 12) + 'px';
-  }
-  sChart.addEventListener('pointermove', (e) => { if (!geo) return; hoverIdx = nearestIdx(e); drawChart(); showTip(hoverIdx); });
-  sChart.addEventListener('pointerleave', () => { hoverIdx = -1; sTip.hidden = true; drawChart(); });
-  sChart.addEventListener('click', (e) => { if (!geo) return; setEps(EPS_GRID[nearestIdx(e)], true); });
-  new ResizeObserver(() => drawChart()).observe(sBox);
-  new IntersectionObserver((ents) => { if (ents.some((x) => x.isIntersecting)) { sz.active = true; pump(); } }, { rootMargin: '200px' }).observe($('sGroup'));
+  const chart = sausageChart({
+    ids: { box: 'sBox', svg: 'sChart', tip: 'sTip', legend: 'sLegend', table: 'sTable', status: 'chartStatus' },
+    grid: EPS_GRID,
+    series: Array.from({ length: MAXN }, (_, i) => ({ key: i + 1, label: `Level ${i + 1}` })),
+    results,
+    getCurrent: () => state.n,
+    getEps: () => state.eps,
+    onPick: (e) => setEps(e, true),
+    xTicks: [0.005, 0.01, 0.02, 0.05, 0.1],
+    yFloor: [1.5, 100],
+    serOpacity: (d) => 0.22 + 0.13 * d,
+    extraLegend: [{ cls: 'ref', label: 'slope 1 − D' }],
+    refs: (X, Y, f, rs) => {
+      const deep = rs[MAXN], ia = EPS_GRID.findIndex((e) => e >= 0.025);
+      if (!deep || !isFinite(deep[ia])) return '';
+      const L = (e) => deep[ia] * Math.pow(e / EPS_GRID[ia], 1 - DTRUE);
+      return `<path class="ref" d="M${f(X(ES.lo))} ${f(Y(L(ES.lo)))} L${f(X(0.07))} ${f(Y(L(0.07)))}"/>`;
+    },
+  });
   function setEps(e, fromChart) {
     state.eps = e;
-    if (fromChart) $('eps').value = epsToSlider(e);
-    if (state.mode !== 'sausage') { state.mode = 'sausage'; }
-    sz.active = true; pump();
-    updateText(); measureNow(); drawChart(); schedule();
+    if (fromChart) $('eps').value = ES.toSlider(e);
+    if (state.mode !== 'sausage') { state.mode = 'sausage'; markInk('sausage'); }
+    updateText(); measureNow(); chart.draw(); zoom.schedule();
   }
 
   // ---------- state changes ----------
+  const markInk = stepButtons($('mInk'), ['fill', 'line', 'sausage'],
+    (m) => ({ fill: 'Filled', line: 'Outline', sausage: 'Sausage' }[m]),
+    (m) => ({ fill: 'Fill the plate', line: 'Draw the outline only', sausage: 'Wrap the curve in its ε-band' }[m]),
+    (m) => { state.mode = m; markInk(m); updateText(); zoom.schedule(); });
   function updateText() {
     const n = state.n;
     $('depthVal').textContent = `level ${n}`;
@@ -717,16 +539,13 @@ function solveD() {
     $('stL').innerHTML = `${L < 100 ? L.toFixed(L < 10 ? 2 : 1) : fmt(Math.round(L))} <small>× base</small>`;
     $('stS').innerHTML = n === 0 ? `1 <small>(the base)</small>` : `1/${fmt(Math.round(Math.pow(3 * S3, n)))} <small>of base</small>`;
     const how = state.mode === 'fill' ? 'filled' : state.mode === 'line' ? 'drawn as an outline' : `wrapped in a band of radius ${state.eps.toFixed(3)}`;
-    cv.setAttribute('aria-label', `Monkeys Tree fractal at level ${n}, ${fmt(Math.pow(11, n))} segments, ${how}`);
+    $('cv').setAttribute('aria-label', `Monkeys Tree fractal at level ${n}, ${fmt(Math.pow(11, n))} segments, ${how}`);
     $('epsVal').textContent = `${state.eps.toFixed(state.eps < 0.01 ? 4 : 3)} of base`;
     $('round').disabled = state.mode === 'sausage';
-    $('mSaus').setAttribute('aria-pressed', String(state.mode === 'sausage'));
     thumbs.forEach((t, k) => t.b.setAttribute('aria-pressed', String(k === n)));
     $('roundVal').textContent = Math.round(state.round * 100) + '%';
     $('gapVal').textContent = Math.round(state.gap * 100) + '%';
     $('gap').disabled = state.mode !== 'fill';
-    $('mFill').setAttribute('aria-pressed', String(state.mode === 'fill'));
-    $('mLine').setAttribute('aria-pressed', String(state.mode === 'line'));
   }
   function stopTrace() { if (state.trace) { cancelAnimationFrame(state.trace.raf); state.trace = null; } $('trace').textContent = 'Trace the curve'; }
   function setDepth(n) {
@@ -734,121 +553,57 @@ function solveD() {
     stopTrace();
     state.n = n;
     rebuildDisplay();
-    if (!state.userView) fitView();
-    updateText(); schedule();
-    sQueue(); pump(); measureNow(); drawChart();
+    updateText(); zoom.schedule();
+    sQueue(); measureNow(); chart.draw(); updateFit();
   }
   function optsChanged() {
     stopTrace();
     cache = {}; rawPaths = {};
     rebuildDisplay();
-    if (!state.userView) fitView();
-    refreshGen(); checkStatus(); drawThumbs(); updateText(); schedule();
-    sReset(); measureNow(); drawChart();
+    refreshGen(); checkStatus(); drawThumbs(); updateText(); zoom.schedule();
+    pool.configure({ opts: state.opts.slice() });
+    for (const k in results) delete results[k];
+    sQueue(); measureNow(); chart.draw(); updateFit();
   }
 
-  $('mFill').addEventListener('click', () => { state.mode = 'fill'; updateText(); schedule(); });
-  $('mLine').addEventListener('click', () => { state.mode = 'line'; updateText(); schedule(); });
-  $('mSaus').addEventListener('click', () => { state.mode = 'sausage'; sz.active = true; pump(); updateText(); schedule(); });
-  $('eps').addEventListener('input', (e) => setEps(sliderToEps(+e.target.value), false));
-  $('round').addEventListener('input', (e) => { state.round = e.target.value / 100; rebuildDisplay(); stopTrace(); updateText(); schedule(); });
-  $('gap').addEventListener('input', (e) => { state.gap = e.target.value / 100; updateText(); schedule(); });
-  $('constr').addEventListener('change', (e) => { state.constr = e.target.checked; schedule(); });
+  $('eps').addEventListener('input', (e) => setEps(ES.fromSlider(+e.target.value), false));
+  $('round').addEventListener('input', (e) => { state.round = e.target.value / 100; rebuildDisplay(); stopTrace(); updateText(); zoom.schedule(); });
+  $('gap').addEventListener('input', (e) => { state.gap = e.target.value / 100; scene.key = ''; updateText(); zoom.schedule(); });
+  $('constr').addEventListener('change', (e) => { state.constr = e.target.checked; zoom.schedule(); });
   $('mandel').addEventListener('click', () => { state.opts = MANDEL.slice(); optsChanged(); });
   $('shuffle').addEventListener('click', () => { state.opts = state.opts.map(() => Math.floor(Math.random() * 4)); optsChanged(); });
   $('restore').addEventListener('click', () => {
     state.mode = 'fill'; state.round = 1; state.gap = 0.15; state.constr = false; state.n = 3;
     $('round').value = 100; $('gap').value = 15; $('constr').checked = false;
-    state.opts = MANDEL.slice(); optsChanged(); fitView(); schedule();
+    markInk('fill');
+    state.opts = MANDEL.slice(); optsChanged(); zoom.refit();
   });
   $('trace').addEventListener('click', () => {
-    if (state.trace && state.trace.p < 1) { stopTrace(); schedule(); return; }
+    if (state.trace && state.trace.p < 1) { stopTrace(); zoom.schedule(); return; }
     stopTrace();
-    if (reduceMotion) { state.trace = { p: 1, raf: 0 }; $('trace').textContent = 'Trace again'; schedule(); return; }
+    if (reduceMotion) { state.trace = { p: 1, raf: 0 }; $('trace').textContent = 'Trace again'; zoom.schedule(); return; }
     const dur = 4200 + 900 * state.n, t0 = performance.now();
     state.trace = { p: 0, raf: 0 };
     $('trace').textContent = 'Stop tracing';
     const step = (t) => {
       if (!state.trace) return;
       state.trace.p = Math.min(1, (t - t0) / dur);
-      drawOverlay();
+      zoom.schedule();
       if (state.trace.p < 1) state.trace.raf = requestAnimationFrame(step);
       else $('trace').textContent = 'Trace again';
     };
     state.trace.raf = requestAnimationFrame(step);
   });
 
-  // zoom buttons
-  const center = () => { const { w, h } = cssSize(); return [w / 2, h / 2]; };
-  $('zin').addEventListener('click', () => zoomAt(...center(), 1.6));
-  $('zout').addEventListener('click', () => zoomAt(...center(), 1 / 1.6));
-  $('zfit').addEventListener('click', () => { fitView(); schedule(); });
-
-  // pointer pan / pinch
-  const pts = new Map();
-  let pinch = null;
-  const local = (e) => { const r = wrap.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
-  wrap.addEventListener('pointerdown', (e) => {
-    if (e.target.closest('.view-tools')) return;
-    if (e.pointerType === 'touch' && pts.size === 0 && !(state.view.s > state.view.fit * 1.02)) {
-      // let one-finger drags scroll the page at the fitted view; still track for pinch
-    }
-    pts.set(e.pointerId, local(e));
-    try { wrap.setPointerCapture(e.pointerId); } catch (_) {}
-    if (pts.size === 2) {
-      const [a, b] = [...pts.values()];
-      pinch = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), m: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2] };
-    }
-    wrap.classList.add('dragging');
-  });
-  wrap.addEventListener('pointermove', (e) => {
-    if (!pts.has(e.pointerId)) return;
-    const prev = pts.get(e.pointerId), cur = local(e);
-    pts.set(e.pointerId, cur);
-    if (pts.size === 2 && pinch) {
-      const [a, b] = [...pts.values()];
-      const d = Math.hypot(a[0] - b[0], a[1] - b[1]), m = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
-      panBy(m[0] - pinch.m[0], m[1] - pinch.m[1]);
-      if (pinch.d > 0) zoomAt(m[0], m[1], d / pinch.d);
-      pinch = { d, m };
-    } else if (pts.size === 1) {
-      const zoomed = state.view.s > state.view.fit * 1.02;
-      if (e.pointerType !== 'touch' || zoomed) panBy(cur[0] - prev[0], cur[1] - prev[1]);
-    }
-  });
-  const end = (e) => {
-    pts.delete(e.pointerId);
-    if (pts.size < 2) pinch = null;
-    if (pts.size === 0) wrap.classList.remove('dragging');
-  };
-  wrap.addEventListener('pointerup', end);
-  wrap.addEventListener('pointercancel', end);
-  wrap.addEventListener('wheel', (e) => {
-    if (!(e.ctrlKey || e.metaKey)) return;
-    e.preventDefault();
-    const [x, y] = local(e);
-    zoomAt(x, y, Math.exp(-e.deltaY * 0.0045));
-  }, { passive: false });
-  wrap.addEventListener('dblclick', (e) => {
-    if (e.target.closest('.view-tools')) return;
-    const [x, y] = local(e); zoomAt(x, y, e.shiftKey ? 1 / 2 : 2);
-  });
-
-  // theme changes
-  const retheme = () => { readColors(); drawThumbs(); drawAll(); };
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', retheme);
-  new MutationObserver(retheme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-
   // boot
   $('stD').textContent = solveD().toFixed(4);
   $('eqD').textContent = solveD().toFixed(5);
-  readColors();
+  pool.configure({ opts: state.opts.slice() });
   rebuildDisplay();
+  markInk('fill');
   refreshGen(); checkStatus(); updateText();
-  sQueue(); measureNow(); drawChart();
-  new ResizeObserver(() => resize()).observe(wrap);
-  resize();
   drawThumbs();
   window.addEventListener('resize', () => drawThumbs());
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { drawThumbs(); });
+  sQueue(); measureNow(); chart.draw(); updateFit();
 })();
