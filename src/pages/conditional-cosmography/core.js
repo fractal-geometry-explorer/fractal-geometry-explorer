@@ -3,16 +3,6 @@
 // against the same dust seen from one of its own points (the conditional cosmographic principle),
 // and the stratification of nonrandom cascades against the every-ratio scaling of random ones.
 
-// deterministic RNG, so the "random" figures draw the same until reseeded
-function mulberry32(seed) {
-  let a = seed >>> 0;
-  return () => {
-    a = (a + 0x6d2b79f5) | 0;
-    let t = Math.imul(a ^ (a >>> 15), 1 | a);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
 // a seeded hash per cell, so the cascade is stable while parameters move
 function cellHash(seed, depth, ix, iy) {
   let h = (seed ^ (depth * 0x9e3779b9) ^ Math.imul(ix, 0x85ebca6b) ^ Math.imul(iy, 0xc2b2ae35)) >>> 0;

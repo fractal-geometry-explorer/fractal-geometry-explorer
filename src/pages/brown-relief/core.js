@@ -41,7 +41,7 @@ function fbmLine(n, H, seed) {
     const a = Math.pow(Math.abs(k), e);
     re[i] = g() * a; im[i] = g() * a;
   }
-  fft1(re, im, 0, 1, n, true);
+  fftStride(re, im, 0, 1, n, true);
   let m = 0;
   for (let i = 0; i < n; i++) m += re[i];
   m /= n;

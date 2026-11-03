@@ -599,6 +599,7 @@
       "chapter": 21,
       "scripts": [
         "shared/draw.js",
+        "shared/random.js",
         "core.js",
         "ui.js"
       ],
@@ -611,6 +612,7 @@
       "chapter": 22,
       "scripts": [
         "shared/draw.js",
+        "shared/random.js",
         "core.js",
         "ui.js"
       ],
@@ -623,6 +625,7 @@
       "chapter": 29,
       "scripts": [
         "shared/draw.js",
+        "shared/random.js",
         "pages/brown-relief/core.js",
         "core.js",
         "ui.js"
