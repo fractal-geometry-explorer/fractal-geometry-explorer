@@ -99,7 +99,7 @@ function refinedPaths(pts, segs, m, seedBase) {
   const out = [];
   for (let s = 0; s < segs.length; s++) {
     const [i, j] = segs[s];
-    const r = rng(seedBase + s * 7919);
+    const r = mulberry32(seedBase + s * 7919);
     out.push(refineSegment(pts[i][0], pts[i][1], pts[j][0], pts[j][1], m, SIGMA2, r));
   }
   return out;

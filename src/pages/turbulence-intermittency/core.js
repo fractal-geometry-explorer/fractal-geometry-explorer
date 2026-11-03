@@ -4,16 +4,6 @@
 // homogeneous turbulence), the branching-process section argument for D > 2, and the spectrum
 // (in)equality B = (3 − D)/3.
 
-// seeded PRNG (mulberry32)
-function rng(seed) {
-  let a = seed >>> 0;
-  return () => {
-    a |= 0; a = (a + 0x6D2B79F5) | 0;
-    let t = Math.imul(a ^ (a >>> 15), 1 | a);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
 // k distinct cells out of n (partial Fisher–Yates), seeded, ascending. The first k picks of a
 // given seed are a prefix of the first k + 1, so growing N adds curds without moving the rest.
 function pickCells(rand, n, k) {
@@ -29,7 +19,7 @@ function pickCells(rand, n, k) {
 // cell draws its own positions from the same seed. Returns the starts of every stage 0..m
 // (stage k holds the N^k ancestors, of length 9^−k, of the stage-m cells).
 function curdleLine(N, m, seed, fixed) {
-  const rand = rng(seed), gen = pickCells(rand, 9, N), stages = [new Float64Array(1)];
+  const rand = mulberry32(seed), gen = pickCells(rand, 9, N), stages = [new Float64Array(1)];
   let len = 1;
   for (let s = 0; s < m; s++) {
     const prev = stages[s], out = new Float64Array(prev.length * N);
@@ -43,7 +33,7 @@ function curdleLine(N, m, seed, fixed) {
 // curdle the unit cube in base 3: one generator (N of the 27 subcells, seeded), reused in every
 // cell — the chapter's curdling, "a crude de-randomized form" of the Novikov–Stewart model of
 // chapter 23. D = log N / log 3; dissipation density multiplies by 27/N at every stage.
-const cubeGen = (N, seed) => pickCells(rng(seed), 27, N).map((c) => [c % 3, ((c / 3) | 0) % 3, (c / 9) | 0]);
+const cubeGen = (N, seed) => pickCells(mulberry32(seed), 27, N).map((c) => [c % 3, ((c / 3) | 0) % 3, (c / 9) | 0]);
 function curdleCube(gen, m) {
   let cells = [[0, 0, 0]], side = 1;
   for (let s = 0; s < m; s++) {

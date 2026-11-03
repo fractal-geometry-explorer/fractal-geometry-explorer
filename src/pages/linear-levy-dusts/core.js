@@ -3,14 +3,8 @@
 // law: the trema of rank p (the p-th largest) has covering size κ/p, κ = (E − D)·(measure of
 // the sampled region) — length of an interval on the line (E = 1), width of a strip in the
 // plane (E = 2; a strip covers a point when the line's offset falls within its width). Every
-// random figure is seeded so it can be reproduced; same rng and pareto as the chapter 32 page.
+// random figure is seeded so it can be reproduced; same pareto as the chapter 32 page; the PRNG is shared/random.js.
 
-// ---- seeded randomness ----
-function rng(seed) {
-  let a = seed >>> 0;
-  const u = () => { a |= 0; a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
-  return u;
-}
 // a hyperbolic (Pareto) jump: Pr(U > u) = u^(−D) for u ≥ 1, the caption's law for Plates 286–287
 const pareto = (u, D) => Math.pow(1 - u(), -1 / D);
 // one uniform [0,1) per (stream, rank), as on the disc-tremas page: trema p's position never
@@ -144,7 +138,7 @@ const whiteShare = (D, P) => Math.exp(-(2 - D) * (Math.log(P) + EULER));
 // Pr(U > u) = u^(−D), u ≥ 1; then rescale so the staircase ends at (1, 1). Returns the jump
 // abscissas X[0…steps] with X[steps] = 1, plus the largest tread and its position.
 function levyStair(D, steps, seed) {
-  const u = rng(seed), X = new Float64Array(steps + 1);
+  const u = mulberry32(seed), X = new Float64Array(steps + 1);
   for (let i = 1; i <= steps; i++) X[i] = X[i - 1] + pareto(u, D);
   const T = X[steps];
   let big = 0, bigAt = 0;

@@ -34,9 +34,8 @@ function gasketTris(n) {
 // ---- Page 132: bond percolation at criticality ----
 // Bonds of an L×L square lattice are open with probability p (p_c = 1/2). The cluster of
 // interest spans left to right; its dangling ends are then trimmed away, as in the diagram.
-function mulberry(seed) { let t = seed >>> 0; return () => { t = (t + 0x6d2b79f5) >>> 0; let r = Math.imul(t ^ (t >>> 15), 1 | t); r = (r + Math.imul(r ^ (r >>> 7), 61 | r)) ^ r; return ((r ^ (r >>> 14)) >>> 0) / 4294967296; }; }
 function percolation(L, p, seed) {
-  const rnd = mulberry(seed), N = L * L;
+  const rnd = mulberry32(seed), N = L * L;
   const right = new Uint8Array(N), up = new Uint8Array(N);          // bond to x+1, bond to y+1
   for (let i = 0; i < N; i++) { right[i] = (i % L < L - 1) && rnd() < p ? 1 : 0; up[i] = (i < N - L) && rnd() < p ? 1 : 0; }
   // clusters by union-find

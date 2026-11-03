@@ -30,7 +30,7 @@
       const y0 = Math.max(0, Math.floor((T[5 * i + 1] - ey) * G)), y1 = Math.min(G - 1, Math.floor((T[5 * i + 1] + ey) * G));
       for (let gy = y0; gy <= y1; gy++) for (let gx = x0; gx <= x1; gx++) cells[gy * G + gx].push(i);
     }
-    const rnd = mulberry(987654321);
+    const rnd = mulberry32(987654321);
     let w = 0;
     for (let k = 0; k < n; k++) {
       const x = rnd(), y = rnd(), lst = cells[Math.min(G - 1, (y * G) | 0) * G + Math.min(G - 1, (x * G) | 0)];
