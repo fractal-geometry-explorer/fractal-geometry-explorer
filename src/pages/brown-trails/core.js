@@ -1,14 +1,6 @@
 // Chapter 25 core: seeded randomness, the coin-toss walk and its zeroset (Plate 241),
 // midpoint-displacement curves from the Pólya sweep to the Brown trail (pages 233–234),
 // and lattice Brown trails with their hulls, gaps and boundaries (Plates 242–243).
-function mulberry32(a) {
-  return function () {
-    a |= 0; a = (a + 0x6D2B79F5) | 0;
-    let t = Math.imul(a ^ (a >>> 15), 1 | a);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
 const lsFit = (xs, ys) => {
   const n = xs.length;
   let sx = 0, sy = 0;

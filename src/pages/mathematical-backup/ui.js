@@ -333,7 +333,7 @@
       if (stD.proc === 'fgn') X = fgn(stD.H, n, 40 + stD.seed * 13);
       else {
         X = new Float64Array(n);
-        const rand = mulberry(40 + stD.seed * 13), g = gaussMaker(rand);
+        const rand = mulberry32(40 + stD.seed * 13), g = gaussMaker(rand);
         if (stD.proc === 'levy') for (let i = 0; i < n; i++) X[i] = stableSample(1.5, rand);
         else {
           let acc = 0;

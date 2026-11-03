@@ -3,52 +3,6 @@
 // Lévy stable densities by FFT inversion of the characteristic function (the book's equation (L)
 // with (A:D)), ball coverings of the triadic sets, R/S statistics, and the Weierstrass sums.
 
-// ---------- seeded randomness ----------
-function mulberry(seed) {
-  let a = seed >>> 0;
-  return () => {
-    a = (a + 0x6d2b79f5) | 0;
-    let t = Math.imul(a ^ (a >>> 15), 1 | a);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-function gaussMaker(rand) {
-  let spare = null;
-  return () => {
-    if (spare !== null) { const v = spare; spare = null; return v; }
-    let u, v, s;
-    do { u = 2 * rand() - 1; v = 2 * rand() - 1; s = u * u + v * v; } while (s >= 1 || s === 0);
-    const m = Math.sqrt((-2 * Math.log(s)) / s);
-    spare = v * m;
-    return u * m;
-  };
-}
-
-// ---------- FFT: iterative radix-2, in place, length a power of two ----------
-function fft(re, im) {
-  const n = re.length;
-  for (let i = 1, j = 0; i < n; i++) {
-    let bit = n >> 1;
-    for (; j & bit; bit >>= 1) j ^= bit;
-    j ^= bit;
-    if (i < j) { let t = re[i]; re[i] = re[j]; re[j] = t; t = im[i]; im[i] = im[j]; im[j] = t; }
-  }
-  for (let len = 2; len <= n; len <<= 1) {
-    const ang = (-2 * Math.PI) / len, wr = Math.cos(ang), wi = Math.sin(ang);
-    for (let i = 0; i < n; i += len) {
-      let cr = 1, ci = 0;
-      for (let k = 0; k < len / 2; k++) {
-        const a = i + k, b = a + len / 2;
-        const xr = re[b] * cr - im[b] * ci, xi = re[b] * ci + im[b] * cr;
-        re[b] = re[a] - xr; im[b] = im[a] - xi;
-        re[a] += xr; im[a] += xi;
-        const nr = cr * wr - ci * wi; ci = cr * wi + ci * wr; cr = nr;
-      }
-    }
-  }
-}
-
 // ---------- fractional Gaussian noise, exact, by circulant embedding (Davies–Harte) ----------
 // Returns n unit-variance increments of B_H at unit steps; cov(k) = (|k+1|^2H − 2|k|^2H + |k−1|^2H)/2.
 function fgn(H, n, seed) {
@@ -59,7 +13,7 @@ function fgn(H, n, seed) {
   for (let k = 1; k < n; k++) re[m - k] = re[k];
   fft(re, im);                                   // eigenvalues of the circulant (theoretically ≥ 0)
   const lam = re.map((v) => Math.max(0, v));
-  const rnd = gaussMaker(mulberry(seed));
+  const rnd = gaussMaker(mulberry32(seed));
   const vr = new Float64Array(m), vi = new Float64Array(m);
   vr[0] = Math.sqrt(lam[0]) * rnd();
   vr[n] = Math.sqrt(lam[n]) * rnd();
@@ -232,7 +186,7 @@ function weierW1(t, b, w, fMax) {
 }
 // Gauss randomized: each term × a complex Gaussian factor (zero mean, unit variance), drawn per n
 function weierGaussFactors(seed, nMin, nMax) {
-  const rnd = gaussMaker(mulberry(seed)), out = new Map();
+  const rnd = gaussMaker(mulberry32(seed)), out = new Map();
   for (let n = nMin; n <= nMax; n++) out.set(n, [rnd() * Math.SQRT1_2, rnd() * Math.SQRT1_2]);
   return out;
 }

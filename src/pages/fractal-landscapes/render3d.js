@@ -131,7 +131,7 @@ function zenithView(h, n, sea, span) {
 // Brown relief on the sphere from random great-circle faults (the model of Chapter 28): each
 // fault lifts one hemisphere by a small step. Returns a lat-long height grid.
 function sphereFaults(nu, nv, faults, seed) {
-  const h = new Float64Array(nu * nv), r = rng(seed);
+  const h = new Float64Array(nu * nv), r = mulberry32(seed);
   const ux = new Float64Array(faults), uy = new Float64Array(faults), uz = new Float64Array(faults), sg = new Float64Array(faults);
   for (let k = 0; k < faults; k++) {
     const z = 2 * r() - 1, ph = 2 * Math.PI * r(), s = Math.sqrt(1 - z * z);

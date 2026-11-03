@@ -166,15 +166,6 @@ function knottedContacts(P) {
 }
 
 // ---- seeded Bernoulli bond percolation on an n x n site lattice ----
-function mulberry32(seed) {
-  let a = seed >>> 0;
-  return () => {
-    a |= 0; a = (a + 0x6D2B79F5) | 0;
-    let t = Math.imul(a ^ (a >>> 15), 1 | a);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
 function percolation(n, p, seed) {
   const rnd = mulberry32(seed);
   // bonds: H[i][j] joins (i,j)-(i,j+1), V[i][j] joins (i,j)-(i+1,j); copper with probability p

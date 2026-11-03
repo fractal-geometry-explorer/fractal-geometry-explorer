@@ -1,22 +1,15 @@
 // The Wiener sausage: a simulated planar Brown trail (chapter 25's midpoint construction) in its
 // ε-band. Geometry and page behaviour; the band measurement, band painter and measuring chart come
 // from the sausage kit (pages/minkowski-sausage/sausage.js), the canvas plumbing from shared/draw.js.
-// CORE START (also shipped to the measuring workers)
+// CORE START (also shipped to the measuring workers; mulberry32 comes from shared/random.js and
+// is not needed in the workers, which receive the path's points ready-made)
 const KMAX = 18;                                  // finest construction: 2^18 = 262,144 steps (stage 9)
-function mulberry32(a) {
-  return function () {
-    a |= 0; a = (a + 0x6D2B79F5) | 0;
-    let t = Math.imul(a ^ (a >>> 15), 1 | a);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
 // Mandelbrot pp. 234–235: random initiator of mean-square length 1, then isotropic Gaussian midpoint
 // displacements whose mean square halves at each pass. Coarser stages are subsets of the same points.
 function brownPath(seed) {
   const rnd = mulberry32(seed * 2654435761);
   let spare = null;
-  const gauss = () => {
+  const gauss = () => {        // Box–Muller, kept local: the shared gaussMaker consumes uniforms differently
     if (spare !== null) { const s = spare; spare = null; return s; }
     let u = 0; while (u === 0) u = rnd();
     const v = rnd(), r = Math.sqrt(-2 * Math.log(u));

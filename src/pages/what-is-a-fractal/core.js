@@ -3,17 +3,6 @@
 // straight segment, the Cantor dust, the Koch curve, the trail of Brownian motion), and the
 // ball of thread whose effective dimension crosses over as the resolution refines.
 
-// seeded PRNG (mulberry32)
-function rng(seed) {
-  let a = seed >>> 0;
-  return () => {
-    a |= 0; a = (a + 0x6D2B79F5) | 0;
-    let t = Math.imul(a ^ (a >>> 15), 1 | a);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-
 // ---------- the four example sets ----------
 const LOG = Math.log;
 // triadic Koch generator (chapter 6): four pieces of 1/3, none mirrored or reversed
@@ -31,7 +20,7 @@ function cantorStarts(m) {
 }
 // a Brownian trail: n Gaussian steps, scaled into a box 1 wide (y range kept in proportion)
 function brownTrail(n, seed) {
-  const rand = rng(seed), P = new Float64Array(2 * n + 2);
+  const rand = mulberry32(seed), P = new Float64Array(2 * n + 2);
   let x = 0, y = 0;
   for (let i = 1; i <= n; i++) {
     const r = Math.sqrt(-2 * LOG(1 - rand())), a = 2 * Math.PI * rand();
@@ -91,7 +80,7 @@ function coastDim(x) {
 // z bands per tone, each a Path2D, so one render is a few hundred strokes, not tens of thousands.
 const BALL_R = 5, THREAD_W = 0.1, SEG_N = 160, TONE_N = 5, BAND_N = 14;
 function windBall(seed) {
-  const rand = rng(seed), layers = [{ r: BALL_R - 0.05, n: 150 }, { r: BALL_R - 0.16, n: 110 }];
+  const rand = mulberry32(seed), layers = [{ r: BALL_R - 0.05, n: 150 }, { r: BALL_R - 0.16, n: 110 }];
   const segs = [];                               // [x1, y1, x2, y2, z, tone]
   for (const { r, n } of layers) {
     // axis drifts on the sphere: a slow seeded walk, so neighbouring wraps lie side by side

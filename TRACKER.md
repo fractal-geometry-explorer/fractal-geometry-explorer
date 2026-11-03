@@ -28,6 +28,7 @@ Update this file in the same pull request as the work it records.
 | Automated checks in CI: build, smoke test (`tests/smoke.cjs`), phone width | done |
 | Hosting: GitHub Pages, published by `.github/workflows/pages.yml` on every merge to `main` | done |
 | Move the three oldest pages (monkeys-tree, minkowski-sausage, wiener-sausage) off their own stylesheet and canvas machinery onto `base.css` and the shared library — their markup and theme-following figures predate the conventions, so it is a rework, not a deduplication (see DECISIONS.md, Foundation) | done |
+| Unify the duplicated seeded RNG (mulberry32 under five names), the radix-2 FFT and the duplicated Gaussian sampler into `src/shared/random.js`; 19 pages moved over and verified canvas-identical (see DECISIONS.md, Foundation); wiener-sausage followed in the oldest-pages rework | partial — midpoint-displacement waits on PR #37 |
 
 ## I Introduction (chapters 1–4)
 

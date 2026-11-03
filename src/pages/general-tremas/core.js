@@ -4,10 +4,6 @@
 // trema process: positions and sizes random, the trema length (area, volume) law fixed by D,
 // the generator's shape free. No DOM in this file.
 
-function mulberry(seed) {
-  let a = seed >>> 0;
-  return () => { a |= 0; a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
-}
 // a deterministic stream per grid cell, so a trema is the same every time its cell is visited
 function cellHash(a, b, c, d) {
   let h = Math.imul(a ^ 0x2e1b2137, 0x9e3779b1) ^ Math.imul(b ^ 0x5f356495, 0x85ebca77) ^ Math.imul(c ^ 0x1b873593, 0xc2b2ae3d) ^ Math.imul(d, 0x27d4eb2f);
@@ -31,7 +27,7 @@ function tremas323(D, w, seed) {
   const K = (2 - D) / 2;
   const pMax = Math.sqrt((2 * P323.aMax) / w);            // long diagonal of the largest diamond
   const m = pMax / 2 + 0.01, side = 1 + 2 * m;            // centers beyond the square still reach it
-  const rnd = mulberry(seed);
+  const rnd = mulberry32(seed);
   const count = Math.round(side * side * K * (1 / P323.aMin - 1 / P323.aMax));
   const T = new Float64Array(count * 5);                  // cx, cy, half long diag, half short diag, angle
   for (let i = 0; i < count; i++) {
@@ -89,7 +85,7 @@ function dust325Start(opts) {
   const [sAx, sEq] = shapeAxes(shape, f);
   const bMax = Math.max(sAx, sEq);                        // bounding radius per unit scale
   const axInv = 1 / (sAx * sAx), eqInv = 1 / (sEq * sEq);
-  const rnd = mulberry(seed);
+  const rnd = mulberry32(seed);
   const O = [0, 0, 0];                                    // the origin, a lattice point of the torus
 
   // Tremas live in one flat stack: 10 floats each — cx, cy, cz, axis x/y/z, 1/ax², 1/eq²,
@@ -102,7 +98,7 @@ function dust325Start(opts) {
   const grow = (need) => { if (top + need > S.length) { const n = new Float64Array(Math.max(S.length * 2, top + need)); n.set(S); S = n; } };
   function emitCell(k, jx, jy, jz, x0, y0, z0, x1, y1, z1) {
     const n = 1 << k, rk = L / n;
-    const r = mulberry(cellHash(((jx % n) + n) % n, ((jy % n) + n) % n, ((jz % n) + n) % n, (seed ^ (k * 0x9e37)) >>> 0));
+    const r = mulberry32(cellHash(((jx % n) + n) % n, ((jy % n) + n) % n, ((jz % n) + n) % n, (seed ^ (k * 0x9e37)) >>> 0));
     const m = poisson(mu, r), b3 = 1 / (rk * rk * rk), a3 = 8 * b3;
     grow(m * ST);
     for (let t = 0; t < m; t++) {
@@ -191,7 +187,7 @@ function dust325Start(opts) {
         let dead = false;
         for (let i = p0; i < p1 && !dead; i += ST) dead = inside(i, x, y, z);
         if (dead) continue;
-        const jr = mulberry(cellHash(x | 0, y | 0, z | 0, seed ^ 0x5bd1));
+        const jr = mulberry32(cellHash(x | 0, y | 0, z | 0, seed ^ 0x5bd1));
         dots.push(jitter ? [x + jr(), y + jr(), z + jr()] : [x, y, z]);
       }
       return;

@@ -634,6 +634,75 @@ function chevronPaths(P, F, m) {
   });
 }
 
+// Shared randomness and spectral synthesis: the site's one seedable PRNG, a Gaussian sampler, and
+// the in-place radix-2 FFT. Every random figure names its seed, and the pages' copies of these
+// functions were numerically identical, so a page moved onto this file draws the same pixels for
+// the same seed.
+
+// ---- mulberry32: a tiny seedable PRNG; returns a function giving uniforms in [0, 1) ----
+function mulberry32(seed) {
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+// ---- standard Gaussians by Marsaglia's polar method, with the spare value cached ----
+function gaussMaker(rnd) {
+  let spare = null;
+  return () => {
+    if (spare !== null) { const v = spare; spare = null; return v; }
+    let u, v, s;
+    do { u = 2 * rnd() - 1; v = 2 * rnd() - 1; s = u * u + v * v; } while (s >= 1 || s === 0);
+    const k = Math.sqrt((-2 * Math.log(s)) / s);
+    spare = v * k;
+    return u * k;
+  };
+}
+
+// ---- FFT: iterative radix-2, in place, length a power of two ----
+// The core works on a strided slice (i0, stride, n), so one function serves 1D rows, 2D columns
+// and plain arrays. No scaling: an inverse pass returns n times the inverse transform.
+function fftStride(re, im, i0, stride, n, inv) {
+  for (let i = 1, j = 0; i < n; i++) {
+    let bit = n >> 1;
+    for (; j & bit; bit >>= 1) j ^= bit;
+    j ^= bit;
+    if (i < j) {
+      const a = i0 + i * stride, b = i0 + j * stride;
+      let t = re[a]; re[a] = re[b]; re[b] = t;
+      t = im[a]; im[a] = im[b]; im[b] = t;
+    }
+  }
+  for (let len = 2; len <= n; len <<= 1) {
+    const ang = ((inv ? 2 : -2) * Math.PI) / len, wr = Math.cos(ang), wi = Math.sin(ang), half = len >> 1;
+    for (let i = 0; i < n; i += len) {
+      let cr = 1, ci = 0;
+      for (let k = 0; k < half; k++) {
+        const a = i0 + (i + k) * stride, b = i0 + (i + k + half) * stride;
+        const vr = re[b] * cr - im[b] * ci, vi = re[b] * ci + im[b] * cr;
+        re[b] = re[a] - vr; im[b] = im[a] - vi;
+        re[a] += vr; im[a] += vi;
+        const t = cr * wr - ci * wi; ci = cr * wi + ci * wr; cr = t;
+      }
+    }
+  }
+}
+// Whole-array transform; the inverse divides by n, so fft(re, im, true) undoes fft(re, im).
+function fft(re, im, inv) {
+  const n = re.length;
+  fftStride(re, im, 0, 1, n, inv);
+  if (inv) for (let i = 0; i < n; i++) { re[i] /= n; im[i] /= n; }
+}
+// 2D transform of an n×n grid stored row-major, rows then columns, unscaled either way.
+function fft2(re, im, n, inv) {
+  for (let r = 0; r < n; r++) fftStride(re, im, r * n, 1, n, inv);
+  for (let c = 0; c < n; c++) fftStride(re, im, c, n, n, inv);
+}
+
 // Chapter 36 geometry: the spin automaton of the figure on page 329 (Pascal's triangle mod 2),
 // the Sierpinski gasket it converges to, downsized random walks, the self-avoiding walk by the
 // pivot algorithm, and a Leopold & Langbein style river network grown from loop-erased walks.
@@ -670,20 +739,11 @@ function gasketTris(depth) {
   return out;
 }
 
-// ---- seeded randomness (mulberry32), so every random figure can be reproduced ----
-function rng32(a) {
-  return function () {
-    a |= 0; a = (a + 0x6D2B79F5) | 0;
-    let t = Math.imul(a ^ (a >>> 15), 1 | a);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
 
 // a random walk on the square lattice, downsized to approximate Brownian motion on [0, 1]:
 // 4^k steps of length 2^−k. Returns the trail as a polyline.
 function downsizedWalk(k, seed) {
-  const N = Math.pow(4, k), h = Math.pow(2, -k), rnd = rng32(seed), P = new Float64Array(2 * N + 2);
+  const N = Math.pow(4, k), h = Math.pow(2, -k), rnd = mulberry32(seed), P = new Float64Array(2 * N + 2);
   let x = 0, y = 0;
   for (let i = 1; i <= N; i++) {
     const d = Math.floor(rnd() * 4);
@@ -756,7 +816,7 @@ const sarwR = (w) => Math.hypot(w.X[w.n] - w.X[0], w.Y[w.n] - w.Y[0]);
 // it closes (a loop-erased walk), the one rule that never snags. parent[i] is the cell the water
 // of cell i flows into (−1: off the grid).
 function riverNetwork(G, seed) {
-  const rnd = rng32(seed), parent = new Int32Array(G * G).fill(-2), exit = new Int8Array(G * G).fill(-1);
+  const rnd = mulberry32(seed), parent = new Int32Array(G * G).fill(-2), exit = new Int8Array(G * G).fill(-1);
   const order = Array.from({ length: G * G }, (_, i) => i);
   for (let i = order.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [order[i], order[j]] = [order[j], order[i]]; }
   for (const s of order) {
@@ -986,7 +1046,7 @@ function longestRiver(net) {
   const SWEEPS_QUICK = 2, SWEEPS_FULL = 12;
   let walkC = null, pendingC = 0, chartC = null, chartJob = 0;
   function growWalkC() {
-    const { n, seed } = stC, rnd = rng32(seed * 101 + n);
+    const { n, seed } = stC, rnd = mulberry32(seed * 101 + n);
     walkC = sarwStart(n);
     sarwPivot(walkC, SWEEPS_QUICK * n, rnd);
     const job = ++pendingC;
@@ -1010,7 +1070,7 @@ function longestRiver(net) {
         setC(false);
         return;
       }
-      const n = CHART_NS[i], rnd = rng32(stC.seed * 977 + n), w = sarwStart(n);
+      const n = CHART_NS[i], rnd = mulberry32(stC.seed * 977 + n), w = sarwStart(n);
       sarwPivot(w, 15 * n, rnd);
       let s2 = 0;
       for (let m = 0; m < CHART_M; m++) { sarwPivot(w, 2 * n, rnd); const r = sarwR(w); s2 += r * r; }

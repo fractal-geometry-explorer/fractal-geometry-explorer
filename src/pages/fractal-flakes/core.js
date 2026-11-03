@@ -15,7 +15,7 @@
 // as the caption of Plates 266-267 explains for the coastlines).
 function fbm3d(n, H, seed) {
   const N = n * n * n;
-  const re = new Float64Array(N), im = new Float64Array(N), r = rng(seed);
+  const re = new Float64Array(N), im = new Float64Array(N), r = mulberry32(seed);
   for (let z = 0; z < n; z++) {
     const kz = z <= n / 2 ? z : z - n;
     for (let y = 0; y < n; y++) {
