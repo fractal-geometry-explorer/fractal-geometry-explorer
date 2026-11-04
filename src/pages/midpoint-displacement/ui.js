@@ -208,10 +208,11 @@
   $('seedC').addEventListener('click', () => { stC.seed = (stC.seed * 48271 + 3) % 100000; dirtyC(); setC(false); });
 
   // ====================== Plate 246: the computer bug ======================
-  // The reconstruction's fitted values (DECISIONS.md, chapter 26): about 150 cells across the
-  // picture, round tremas by the rank law with C = 0.1, a plain at 0.08 of the eye's height with
-  // spikes up to 0.24, heights skewed by u^9, and a view half-angle of atan(0.31) = 17 degrees.
-  const BUG = { cells: 150, C: 0.1, plain: 0.08, top: 0.24, k: 9, G: 0.31, seed: 9 };
+  // The reconstruction's fitted values (DECISIONS.md, chapter 26): about 170 cells across the
+  // picture, round tremas by the rank law with C = 0.1, one post per cell 0.9 cells wide and up to
+  // half a cell off centre, heights top * (1 - u^2) up to 0.24 of the eye's height, a plain at 0.08
+  // sloping into the pits over 1.5 cells, and a view half-angle of atan(0.31) = 17 degrees.
+  const BUG = { cells: 170, C: 0.1, plain: 0.08, top: 0.24, k: 2, w: 0.9, jit: 0.5, ramp: 1.5, G: 0.31, seed: 9 };
   const stD = { mode: 'bug', top: BUG.top, seed: BUG.seed, draft: false };
   let relD = { key: '' }, tabD = { key: '' }, imgD = { key: '' };
   function reliefOf() {
@@ -221,7 +222,7 @@
   }
   function tableOf() {                            // a coarse table while a slider moves, the full one after
     const R = reliefOf(), key = `${relD.key}|${stD.draft}`;
-    if (tabD.key !== key) tabD = { key, T: stD.draft ? bugTable(R, Math.SQRT2, 1024, 420, 560) : bugTable(R, Math.SQRT2, 3072, 1200, 1600) };
+    if (tabD.key !== key) tabD = { key, T: stD.draft ? bugTable(R, BUG.G, Math.SQRT2, 1024, 420, 560) : bugTable(R, BUG.G, Math.SQRT2, 4096, 1200, 2000) };
     return tabD.T;
   }
   const zD = zoomable('wD', 'cD', (f) => fitBox(f, { x0: -1, x1: 1, y0: -1, y1: 1 }, 0.01), (f, v) => {
@@ -244,22 +245,21 @@
       const key = `${tabD.key}|${W}|${H}|${v.s}|${v.ox}|${v.oy}`;
       if (imgD.key !== key) {
         const img = c.createImageData(W, H), d = img.data, PP = [236, 235, 230], IN = [21, 21, 21];
-        const G2 = BUG.G * BUG.G, near = 1 - stD.top, far = Math.sqrt(1 + 2 * G2), near01 = new Float32Array(W * H);
+        const near01 = new Float32Array(W * H);
         for (let j = 0; j < H; j++) {
           const wy = Math.max(-1, Math.min(1, (v.oy - (j + 0.5) / f.dpr) / v.s));
           for (let i = 0; i < W; i++) {
-            // nearness: the distance from the eye to the surface seen at (wx, wy), from the
-            // farthest floor (0) to the tallest spike under the eye (1); outside the frame the
-            // edge value is carried on so the softening below leaves no rim
+            // nearness of what is seen at (wx, wy), from the farthest floor (0) to the tallest
+            // post under the eye (1); outside the frame the edge value is carried on so the
+            // softening below leaves no rim
             const wx = Math.max(-1, Math.min(1, ((i + 0.5) / f.dpr - v.ox) / v.s));
-            const z = bugSeen(T, wx, wy), dist = (1 - z) * Math.sqrt(1 + G2 * (wx * wx + wy * wy));
-            near01[j * W + i] = (far - dist) / (far - near);
+            near01[j * W + i] = bugSeen(T, wx, wy);
           }
         }
-        // soften like the print: about 0.006 half-widths (3 px of the scanned plate), never more
-        // than at the plate's own size, so zooming in shows the relief's detail; the tone curve
+        // soften like the print: about 0.004 half-widths (2 px of the scanned plate), never more
+        // than at the plate's own size, so zooming in shows the posts' detail; the tone curve
         // was fitted on the softened nearness, so it comes after
-        soften(near01, W, H, 0.006 * Math.min(v.s, v.fit || v.s) * f.dpr);
+        soften(near01, W, H, 0.004 * Math.min(v.s, v.fit || v.s) * f.dpr);
         for (let j = 0; j < H; j++) {
           const wy = (v.oy - (j + 0.5) / f.dpr) / v.s, inY = wy >= -1 && wy <= 1;
           for (let i = 0; i < W; i++) {
@@ -316,9 +316,9 @@
   const MODES_D = { order: 'The strict order', bug: 'The bug, reconstructed' };
   const INFO_D = {
     order: 'What the program was meant to draw: random round tremas, flat and in two tones — the design whose corrected output became Plates 306 to 309. Disc p has area proportional to 1/p, so holes come at every size; here they are black, as in Plates 308–309.',
-    bug: 'The same tremas as pits in a plain studded with random spikes, seen from close above. Perspective lays each spike over, away from the point under the eye, and nearer surfaces print lighter. The pits keep their place and shape: outline them to compare with the strict order.',
+    bug: 'The same tremas as pits in a plain crowded with thin posts of random height, seen from close above. Perspective lays each post over into a streak, away from the point under the eye; a post prints in one grey, lighter the nearer its top is to the eye, and nearer posts paint over farther ones. The pits keep their place and shape: outline them to compare with the strict order.',
   };
-  const topLabel = () => (stD.top <= BUG.plain + 1e-9 ? 'none: a flat plain' : `${stD.top.toFixed(2)} of the eye's height`);
+  const topLabel = () => (stD.top <= BUG.plain + 1e-9 ? 'none: only the plain and its pits' : `${stD.top.toFixed(2)} of the eye's height`);
   function setD(refit) {
     markMD(stD.mode);
     const R = reliefOf();
