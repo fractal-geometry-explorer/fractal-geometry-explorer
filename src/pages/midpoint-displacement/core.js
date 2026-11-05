@@ -1,14 +1,6 @@
 // Chapter 26 core: seeded randomness, midpoint-displacement curves in the plane and on the line,
 // Poisson strata, a segment-crossing counter, and Plate 246 reconstructed as a forest of posts on a
 // trema plain, seen from straight above.
-function mulberry32(a) {
-  return () => {
-    a |= 0; a = (a + 0x6d2b79f5) | 0;
-    let t = Math.imul(a ^ (a >>> 15), 1 | a);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
 const gaussOf = (rnd) => () => Math.sqrt(-2 * Math.log(1 - rnd())) * Math.cos(2 * Math.PI * rnd());
 
 // ---- the plane curve B*_H(t): midpoint displacement on a time grid ----

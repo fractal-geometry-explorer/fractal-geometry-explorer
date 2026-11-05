@@ -338,6 +338,7 @@
       "chapter": 26,
       "scripts": [
         "shared/draw.js",
+        "shared/random.js",
         "core.js",
         "ui.js"
       ],
