@@ -149,8 +149,10 @@ def index_page(pages):
         todo = sum(1 for e in plates if e['part'] == part and e['status'] != 'done')
         def card(p):
             shelf = 'Colour plates' if is_colour(p) else ('Second printing' if p['chapter'] > 42 else 'Chapter {}'.format(p['chapter']))
-            return (f'<a href="{p["slug"]}.html"><b>{html.escape(p["plates"])}</b><span>{html.escape(p["title"])}</span>'
-                    f'<small>{shelf}</small></a>')
+            thumb = (f'<img src="thumbs/{p["slug"]}.webp" alt="" loading="lazy" width="620" height="388">'
+                     if (SRC / 'thumbs' / f'{p["slug"]}.webp').exists() else '')
+            return (f'<a href="{p["slug"]}.html">{thumb}<span class="t"><b>{html.escape(p["plates"])}</b>'
+                    f'<span>{html.escape(p["title"])}</span><small>{shelf}</small></span></a>')
         cards = ''.join(card(p) for p in bypart[part])
         left = f'<p class="left">{todo} plate group{"s" if todo != 1 else ""} still to build.</p>' if todo else ''
         if not cards and not left:
@@ -207,9 +209,11 @@ section { display: grid; gap: 14px; border-top: 1px solid var(--rule); padding-t
 section h2 { margin: 0; font-size: 15px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
 .chapters { margin: -10px 0 0; font-size: 12px; color: var(--muted); letter-spacing: 0.05em; text-transform: uppercase; }
 .chapters:empty { display: none; }
-.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
-.cards a { display: grid; gap: 3px; padding: 12px 14px; background: var(--surface); border: 1px solid var(--rule); color: var(--text); text-decoration: none; }
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 12px; }
+.cards a { display: grid; grid-template-rows: auto 1fr; background: var(--surface); border: 1px solid var(--rule); color: var(--text); text-decoration: none; }
 .cards a:hover { border-color: var(--text); }
+.cards img { display: block; width: 100%; height: auto; aspect-ratio: 620 / 388; object-fit: cover; border-bottom: 1px solid var(--rule); background: #ecebe6; }
+.cards .t { display: grid; gap: 3px; padding: 10px 12px 12px; align-content: start; }
 .cards b { font-family: var(--f-mono); font-weight: 500; font-size: 12.5px; color: var(--accent); }
 .cards span { font-weight: 700; font-size: 15px; line-height: 1.25; }
 .cards small { font-size: 11.5px; color: var(--muted); letter-spacing: 0.05em; text-transform: uppercase; }
@@ -273,6 +277,10 @@ def main():
     for p in pages:
         (SITE / f"{p['slug']}.html").write_text(build_page(p, rewrite=not as_published, pages=pages))
     (SITE / 'index.html').write_text(index_page(pages))
+    thumbs = sorted((SRC / 'thumbs').glob('*.webp')) if (SRC / 'thumbs').exists() else []
+    (SITE / 'thumbs').mkdir(exist_ok=True)
+    for t in thumbs:
+        (SITE / 'thumbs' / t.name).write_bytes(t.read_bytes())
     print(f'built {len(pages)} pages and index.html into {SITE}')
 
 
