@@ -24,6 +24,7 @@ Update this file in the same pull request as the work it records.
 | :- | :- |
 | Pull a shared library out of the ten existing pages: geometry (similarity maps, decorated generators, cascades, tree cascades, chevrons, rounding), drawing (zoomable canvas, chunked paths, controls) and style | done |
 | Site shell: chapter index, plate finder, navigation between pages, cross-links | done |
+| Collapsible sidebar on every page: the full page list grouped by book part, current page marked; a push panel on wide screens, an overlay drawer on phones (injected by `tools/build.py` at wrap time) | done |
 | Move the ten existing pages onto the shared library; check each against its published version (`tools/check_build.py`) | done |
 | Automated checks in CI: build, smoke test (`tests/smoke.cjs`), phone width | done |
 | Hosting: GitHub Pages, published by `.github/workflows/pages.yml` on every merge to `main` | done |

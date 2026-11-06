@@ -38,7 +38,66 @@ nav.shell .gap { flex: 1; }
 nav.shell .pn { color: var(--muted); font-weight: 500; }
 nav.shell .pn b { color: var(--text); font-weight: 600; }
 nav.shell a:hover .pn, nav.shell a:hover .pn b { color: var(--accent); }
+nav.shell button.contents { font: inherit; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text);
+  background: none; border: 0; padding: 0; margin: 0; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; flex: none; }
+nav.shell button.contents:hover { color: var(--accent); }
+nav.shell button.contents svg { display: block; }
+@media (max-width: 519px) { nav.shell button.contents .lbl { display: none; } }
+nav.sidenav { position: fixed; z-index: 60; top: 0; bottom: 0; left: 0; width: 300px;
+  background: var(--surface); border-right: 1px solid var(--rule); overflow-y: auto; overscroll-behavior: contain;
+  padding: 0 0 28px; font-family: var(--f-display); visibility: hidden; transform: translateX(-102%); }
+body.sn-anim nav.sidenav { transition: transform 0.18s ease, visibility 0.18s; }
+body.sn-open nav.sidenav { visibility: visible; transform: none; }
+@media (min-width: 1100px) {
+  body.sn-anim { transition: padding-left 0.18s ease; }
+  body.sn-open { padding-left: 300px; }
+}
+.sn-head { position: sticky; top: 0; z-index: 1; display: flex; align-items: center; justify-content: space-between;
+  background: var(--surface); border-bottom: 1px solid var(--rule); padding: 9px 10px 9px 16px; }
+.sn-head a { font-size: 12.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase;
+  color: var(--text); text-decoration: none; }
+.sn-head a:hover { color: var(--accent); }
+.sn-head button { font: inherit; color: var(--muted); background: none; border: 0; padding: 4px 8px; cursor: pointer; line-height: 1; font-size: 16px; }
+.sn-head button:hover { color: var(--accent); }
+nav.sidenav h2 { margin: 18px 16px 6px; font-size: 11px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); }
+nav.sidenav ul { margin: 0; padding: 0; list-style: none; }
+nav.sidenav li a { display: grid; gap: 1px; padding: 6px 16px 7px; color: var(--text); text-decoration: none; border-left: 3px solid transparent; }
+nav.sidenav li a:hover { color: var(--accent); background: color-mix(in srgb, var(--accent) 7%, transparent); }
+nav.sidenav li a b { font-family: var(--f-mono); font-weight: 500; font-size: 11px; color: var(--muted); }
+nav.sidenav li a span { font-size: 13px; font-weight: 600; line-height: 1.3; }
+nav.sidenav li a[aria-current] { border-left-color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, transparent); }
+nav.sidenav li a[aria-current] span { color: var(--accent); }
+.sn-scrim { position: fixed; inset: 0; z-index: 59; background: rgba(0, 0, 0, 0.35); }
+@media (min-width: 1100px) { .sn-scrim { display: none !important; } }
+nav.sidenav a:focus-visible, nav.shell button.contents:focus-visible, .sn-head button:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
 </style>'''
+
+SIDENAV_JS = '''<script>
+(function () {
+  const nav = document.getElementById('sidenav'), scrim = document.getElementById('snscrim');
+  const toggle = document.getElementById('sntoggle'), closeBtn = document.getElementById('snclose');
+  const mq = window.matchMedia('(min-width: 1100px)');
+  const isOpen = () => document.body.classList.contains('sn-open');
+  let t;
+  function set(open, save) {
+    document.body.classList.toggle('sn-open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+    scrim.hidden = !open || mq.matches;
+    if (save && mq.matches) try { localStorage.setItem('fge-sidenav', open ? '1' : '0'); } catch (e) {}
+    clearTimeout(t); t = setTimeout(() => window.dispatchEvent(new Event('resize')), 200);
+  }
+  function stored() { try { return localStorage.getItem('fge-sidenav') !== '0'; } catch (e) { return true; } }
+  set(mq.matches && stored(), false);
+  const cur = nav.querySelector('[aria-current]');
+  if (cur) nav.scrollTop = Math.max(0, cur.offsetTop - nav.clientHeight / 2);
+  requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.add('sn-anim')));
+  toggle.addEventListener('click', () => set(!isOpen(), true));
+  closeBtn.addEventListener('click', () => set(false, true));
+  scrim.addEventListener('click', () => set(false, true));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && isOpen() && !mq.matches) set(false, false); });
+  mq.addEventListener('change', (e) => set(e.matches && stored(), false));
+})();
+</script>'''
 
 
 def load_manifest():
@@ -78,6 +137,56 @@ def parse_tracker():
     return out
 
 
+def short_part(part):
+    return re.sub(r'\s*\(.*\)$', '', part)
+
+
+def is_colour(p):
+    return bool(re.search(r'\bC\d', p['plates']))
+
+
+def grouped_pages(pages, plates=None):
+    """The tracker's book parts in order, each with the built pages it shelves."""
+    plates = parse_tracker() if plates is None else plates
+    parts = []
+    for e in plates:
+        if e['part'] not in parts:
+            parts.append(e['part'])
+    order = book_order(pages)
+    bypart = {}
+    for part in parts:
+        m = re.search(r'chapters (\d+)–(\d+)', part) or re.search(r'chapters (\d+)-(\d+)', part)
+        if m:
+            lo, hi = int(m.group(1)), int(m.group(2))
+            bypart[part] = [p for p in order if lo <= p['chapter'] <= hi and not is_colour(p)]
+        elif 'C1' in part:                 # the colour signature, shelved by its plate letters
+            bypart[part] = [p for p in order if is_colour(p)]
+        elif 'second printing' in part.lower():  # the update, shelved after chapter 42
+            bypart[part] = [p for p in order if p['chapter'] > 42 and not is_colour(p)]
+        else:
+            bypart[part] = []
+    return parts, bypart
+
+
+def sidenav(p, pages):
+    """The collapsible left panel: every built page grouped by book part, the current one marked."""
+    parts, bypart = grouped_pages(pages)
+    out = ['<nav id="sidenav" class="sidenav" aria-label="All pages">',
+           '<div class="sn-head"><a href="index.html">Fractal Geometry Explorer</a>',
+           '<button id="snclose" type="button" aria-label="Collapse the page list">&#10005;</button></div>']
+    for part in parts:
+        if not bypart[part]:
+            continue
+        out.append(f'<h2>{html.escape(short_part(part))}</h2><ul>')
+        for q in bypart[part]:
+            cur = ' aria-current="page"' if q is p else ''
+            out.append(f'<li><a href="{q["slug"]}.html"{cur}><b>{html.escape(q["plates"])}</b>'
+                       f'<span>{html.escape(q["title"])}</span></a></li>')
+        out.append('</ul>')
+    out.append('</nav><div id="snscrim" class="sn-scrim" hidden></div>')
+    return ''.join(out)
+
+
 def build_page(p, rewrite=True, pages=None):
     d = SRC / 'pages' / p['slug']
     css = (SRC / 'shared' / 'base.css').read_text()
@@ -97,7 +206,10 @@ def build_page(p, rewrite=True, pages=None):
 def shell_nav(p, pages):
     order = book_order(pages)
     i = order.index(p)
+    burger = ('<svg width="15" height="12" viewBox="0 0 15 12" aria-hidden="true">'
+              '<path d="M0 1h15M0 6h15M0 11h15" stroke="currentColor" stroke-width="1.6"/></svg>')
     parts = ['<nav class="shell" aria-label="Site">',
+             f'<button id="sntoggle" class="contents" type="button" aria-controls="sidenav" aria-expanded="false">{burger}<span class="lbl">Contents</span></button>',
              '<a class="home" href="index.html">Fractal Geometry Explorer</a>', '<span class="gap"></span>']
     if i > 0:
         q = order[i - 1]
@@ -116,34 +228,16 @@ def wrap_page(fragment, p, pages):
     return ('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
             '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
             + head + '\n' + SHELL_CSS + '\n</head>\n<body>\n'
-            + shell_nav(p, pages) + body + '\n</body>\n</html>\n')
+            + sidenav(p, pages) + '\n' + shell_nav(p, pages) + body + '\n' + SIDENAV_JS + '\n</body>\n</html>\n')
 
 
 def index_page(pages):
     plates = parse_tracker()
     # finder data: label, numbers, title, status, slug, part (short)
-    short = lambda part: re.sub(r'\s*\(.*\)$', '', part)
-    data = [[e['label'], e['nums'], e['title'], e['status'], e['slug'], short(e['part']), 1 if e['c'] else 0]
+    data = [[e['label'], e['nums'], e['title'], e['status'], e['slug'], short_part(e['part']), 1 if e['c'] else 0]
             for e in plates]
     # sections: book parts in order, with built pages as cards and what remains as a count
-    parts = []
-    for e in plates:
-        if e['part'] not in parts:
-            parts.append(e['part'])
-    order = book_order(pages)
-    is_colour = lambda p: bool(re.search(r'\bC\d', p['plates']))
-    bypart = {}
-    for part in parts:
-        m = re.search(r'chapters (\d+)–(\d+)', part) or re.search(r'chapters (\d+)-(\d+)', part)
-        if m:
-            lo, hi = int(m.group(1)), int(m.group(2))
-            bypart[part] = [p for p in order if lo <= p['chapter'] <= hi and not is_colour(p)]
-        elif 'C1' in part:                 # the colour signature, shelved by its plate letters
-            bypart[part] = [p for p in order if is_colour(p)]
-        elif 'second printing' in part.lower():  # the update, shelved after chapter 42
-            bypart[part] = [p for p in order if p['chapter'] > 42 and not is_colour(p)]
-        else:
-            bypart[part] = []
+    parts, bypart = grouped_pages(pages, plates)
     sections = []
     for part in parts:
         todo = sum(1 for e in plates if e['part'] == part and e['status'] != 'done')
@@ -158,7 +252,7 @@ def index_page(pages):
         if not cards and not left:
             continue
         m = re.search(r'\((chapters[^)]*|pages[^)]*|C1[^)]*)\)', part)
-        sections.append(f'<section><h2>{html.escape(short(part))}</h2>'
+        sections.append(f'<section><h2>{html.escape(short_part(part))}</h2>'
                         f'<p class="chapters">{html.escape(m.group(1) if m else "")}</p>'
                         f'<div class="cards">{cards}</div>{left}</section>')
     return INDEX_TPL.replace('/*DATA*/', json.dumps(data, ensure_ascii=False)).replace('<!--SECTIONS-->', ''.join(sections))
