@@ -155,10 +155,43 @@ nav.shell .gap { flex: 1; }
 nav.shell .pn { color: var(--muted); font-weight: 500; }
 nav.shell .pn b { color: var(--text); font-weight: 600; }
 nav.shell a:hover .pn, nav.shell a:hover .pn b { color: var(--accent); }
+nav.shell button.contents { font: inherit; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text);
+  background: none; border: 0; padding: 0; margin: 0; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; flex: none; }
+nav.shell button.contents:hover { color: var(--accent); }
+nav.shell button.contents svg { display: block; }
+@media (max-width: 519px) { nav.shell button.contents .lbl { display: none; } }
+nav.sidenav { position: fixed; z-index: 60; top: 0; bottom: 0; left: 0; width: 300px;
+  background: var(--surface); border-right: 1px solid var(--rule); overflow-y: auto; overscroll-behavior: contain;
+  padding: 0 0 28px; font-family: var(--f-display); visibility: hidden; transform: translateX(-102%); }
+body.sn-anim nav.sidenav { transition: transform 0.18s ease, visibility 0.18s; }
+body.sn-open nav.sidenav { visibility: visible; transform: none; }
+@media (min-width: 1100px) {
+  body.sn-anim { transition: padding-left 0.18s ease; }
+  body.sn-open { padding-left: 300px; }
+}
+.sn-head { position: sticky; top: 0; z-index: 1; display: flex; align-items: center; justify-content: space-between;
+  background: var(--surface); border-bottom: 1px solid var(--rule); padding: 9px 10px 9px 16px; }
+.sn-head a { font-size: 12.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase;
+  color: var(--text); text-decoration: none; }
+.sn-head a:hover { color: var(--accent); }
+.sn-head button { font: inherit; color: var(--muted); background: none; border: 0; padding: 4px 8px; cursor: pointer; line-height: 1; font-size: 16px; }
+.sn-head button:hover { color: var(--accent); }
+nav.sidenav h2 { margin: 18px 16px 6px; font-size: 11px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); }
+nav.sidenav ul { margin: 0; padding: 0; list-style: none; }
+nav.sidenav li a { display: grid; gap: 1px; padding: 6px 16px 7px; color: var(--text); text-decoration: none; border-left: 3px solid transparent; }
+nav.sidenav li a:hover { color: var(--accent); background: color-mix(in srgb, var(--accent) 7%, transparent); }
+nav.sidenav li a b { font-family: var(--f-mono); font-weight: 500; font-size: 11px; color: var(--muted); }
+nav.sidenav li a span { font-size: 13px; font-weight: 600; line-height: 1.3; }
+nav.sidenav li a[aria-current] { border-left-color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, transparent); }
+nav.sidenav li a[aria-current] span { color: var(--accent); }
+.sn-scrim { position: fixed; inset: 0; z-index: 59; background: rgba(0, 0, 0, 0.35); }
+@media (min-width: 1100px) { .sn-scrim { display: none !important; } }
+nav.sidenav a:focus-visible, nav.shell button.contents:focus-visible, .sn-head button:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
 </style>
 </head>
 <body>
-<nav class="shell" aria-label="Site"><a class="home" href="index.html">Fractal Geometry Explorer</a><span class="gap"></span><a rel="prev" href="what-is-a-fractal.html"><span class="pn">&#8592; <b>Dimension</b></span></a><a rel="next" href="monkeys-tree.html"><span class="pn"><b>Plate 31</b> &#8594;</span></a></nav>
+<nav id="sidenav" class="sidenav" aria-label="All pages"><div class="sn-head"><a href="index.html">Fractal Geometry Explorer</a><button id="snclose" type="button" aria-label="Collapse the page list">&#10005;</button></div><h2>I Introduction</h2><ul><li><a href="fractal-flakes.html"><b>Plates 10–13</b><span>Fractal Flakes and Perrin&#x27;s Tracings</span></a></li><li><a href="what-is-a-fractal.html"><b>Dimension</b><span>What Is a Fractal?</span></a></li><li><a href="two-cutoffs.html" aria-current="page"><b>Cutoffs</b><span>Between Two Cutoffs</span></a></li></ul><h2>II Three classic fractals, tamed</h2><ul><li><a href="monkeys-tree.html"><b>Plate 31</b><span>Mandelbrot&#x27;s Monkeys Tree</span></a></li><li><a href="minkowski-sausage.html"><b>Plate 32</b><span>Minkowski Sausage</span></a></li><li><a href="coast-of-britain.html"><b>Plate 33</b><span>How Long Is the Coast of Britain?</span></a></li><li><a href="koch-plates.html"><b>Plates 42–45</b><span>Triadic Koch Island</span></a></li><li><a href="gosper-island.html"><b>Plates 46–47</b><span>Gosper Island</span></a></li><li><a href="quadric-islands.html"><b>Plates 49–55</b><span>Quadric Koch Islands</span></a></li><li><a href="unequal-parts.html"><b>Plates 56–57</b><span>Unequal Parts</span></a></li><li><a href="peano-sweeps.html"><b>Plates 63–65</b><span>Peano Sweeps</span></a></li><li><a href="dragon-sweeps.html"><b>Plates 66–67</b><span>Square and Dragon Sweeps</span></a></li><li><a href="snow-sweeps.html"><b>Plates 68–73</b><span>Sweeps, Rivers and Trees</span></a></li><li><a href="cantor-dust.html"><b>Plates 80–83</b><span>Cantor Dust</span></a></li></ul><h2>III Galaxies and eddies</h2><ul><li><a href="fournier-universe.html"><b>Plates 95–96</b><span>Fournier Universes</span></a></li><li><a href="turbulence-intermittency.html"><b>Intermittency</b><span>Turbulence and Intermittency</span></a></li><li><a href="fractal-singularities.html"><b>Chapter 11</b><span>Fractal Singularities</span></a></li></ul><h2>IV Scaling fractals</h2><ul><li><a href="length-area.html"><b>Plate 115</b><span>Length–Area Relations</span></a></li><li><a href="islands-clusters.html"><b>Chapter 13 figures</b><span>Islands, Clusters and Percolation</span></a></li><li><a href="ramified-lattices.html"><b>Plates 141–146</b><span>Gaskets, Webs and Sponges</span></a></li></ul><h2>V Nonscaling fractals</h2><ul><li><a href="positive-volume.html"><b>Chapter 15</b><span>Surfaces of Positive Volume</span></a></li><li><a href="umbrella-trees.html"><b>Plate 155</b><span>Fractal Umbrella Trees</span></a></li><li><a href="diameter-exponent.html"><b>Plates 163–165</b><span>Trees and the Diameter Exponent</span></a></li></ul><h2>VI Self-mapping fractals</h2><ul><li><a href="self-inverse.html"><b>Pages 166–179</b><span>Self-Inverse Fractals and Apollonian Nets</span></a></li><li><a href="self-squared-dragons.html"><b>Plates 185–192</b><span>Self-Squared Dragons</span></a></li><li><a href="fractal-attractors.html"><b>Plates 198–199</b><span>Attraction to Fractals</span></a></li></ul><h2>VII Randomness</h2><ul><li><a href="tool-of-chance.html"><b>Chapter 21</b><span>Chance as a Tool</span></a></li><li><a href="conditional-cosmography.html"><b>Chapter 22</b><span>Conditional Cosmography</span></a></li></ul><h2>VIII Stratified random fractals</h2><ul><li><a href="random-curds.html"><b>Plates 218–223</b><span>Random Curds</span></a></li><li><a href="chains-and-squigs.html"><b>Plates 228–231</b><span>Random Chains and Squigs</span></a></li><li><a href="brown-trails.html"><b>Plates 241–243</b><span>Brown Trails and Hulls</span></a></li><li><a href="wiener-sausage.html"><b>Brownian motion</b><span>Wiener Sausage</span></a></li><li><a href="midpoint-displacement.html"><b>Plate 246</b><span>Random Midpoint Displacement</span></a></li></ul><h2>IX Fractional Brown fractals</h2><ul><li><a href="fractional-trails.html"><b>Plate 255</b><span>Fractional Brown Trails</span></a></li><li><a href="brown-relief.html"><b>Plates 264–271</b><span>Brown Relief and Coastlines</span></a></li><li><a href="cups-and-terraces.html"><b>Chapter 29</b><span>Islands, Lakes and Cups</span></a></li><li><a href="isothermal-surfaces.html"><b>Chapter 30</b><span>Isothermal Surfaces of Turbulence</span></a></li></ul><h2>A book within the book, in colour</h2><ul><li><a href="color-plates.html"><b>Plates C1–C7, C16</b><span>A Book Within the Book</span></a></li><li><a href="fractal-landscapes.html"><b>Plates C9–C15</b><span>Landscapes That Never Were</span></a></li></ul><h2>X Random tremas; texture</h2><ul><li><a href="linear-levy-dusts.html"><b>Plates 285–287</b><span>Linear Lévy Dusts</span></a></li><li><a href="levy-dusts.html"><b>Plates 293–300</b><span>Spatial Lévy Dusts</span></a></li><li><a href="disc-tremas.html"><b>Plates 306–309</b><span>Disc and Sphere Tremas</span></a></li><li><a href="carpets-lacunarity.html"><b>Plate 318</b><span>Carpets&#x27; Lacunarity</span></a></li><li><a href="general-tremas.html"><b>Plates 323–325</b><span>General Tremas</span></a></li></ul><h2>XI Miscellany</h2><ul><li><a href="lattice-physics.html"><b>Figure, p. 329</b><span>Fractals in Lattice Physics</span></a></li><li><a href="cotton-prices.html"><b>Plate 340</b><span>Scaling in Cotton Prices</span></a></li><li><a href="power-laws.html"><b>Chapter 38</b><span>Scaling Without Geometry</span></a></li><li><a href="mathematical-backup.html"><b>Chapter 39</b><span>Mathematical Backup</span></a></li></ul><h2>XII Of men and ideas</h2><ul><li><a href="biographical-sketches.html"><b>Pages 391–404</b><span>Biographical Sketches</span></a></li><li><a href="historical-sketches.html"><b>Pages 405–421</b><span>Historical Sketches</span></a></li><li><a href="path-to-fractals.html"><b>Chapter 42</b><span>The Path to Fractals</span></a></li></ul><h2>Front matter and the update for the second printing</h2><ul><li><a href="second-printing.html"><b>Plates II, VIII, X, 467</b><span>Update for the Second Printing</span></a></li></ul></nav><div id="snscrim" class="sn-scrim" hidden></div>
+<nav class="shell" aria-label="Site"><button id="sntoggle" class="contents" type="button" aria-controls="sidenav" aria-expanded="false"><svg width="15" height="12" viewBox="0 0 15 12" aria-hidden="true"><path d="M0 1h15M0 6h15M0 11h15" stroke="currentColor" stroke-width="1.6"/></svg><span class="lbl">Contents</span></button><a class="home" href="index.html">Fractal Geometry Explorer</a><span class="gap"></span><a rel="prev" href="what-is-a-fractal.html"><span class="pn">&#8592; <b>Dimension</b></span></a><a rel="next" href="monkeys-tree.html"><span class="pn"><b>Plate 31</b> &#8594;</span></a></nav>
 
 <div class="wrap">
   <header class="top">
@@ -746,5 +779,31 @@ function strokeChunks(P, size = 4096) {
 
 </script>
 
+<script>
+(function () {
+  const nav = document.getElementById('sidenav'), scrim = document.getElementById('snscrim');
+  const toggle = document.getElementById('sntoggle'), closeBtn = document.getElementById('snclose');
+  const mq = window.matchMedia('(min-width: 1100px)');
+  const isOpen = () => document.body.classList.contains('sn-open');
+  let t;
+  function set(open, save) {
+    document.body.classList.toggle('sn-open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+    scrim.hidden = !open || mq.matches;
+    if (save && mq.matches) try { localStorage.setItem('fge-sidenav', open ? '1' : '0'); } catch (e) {}
+    clearTimeout(t); t = setTimeout(() => window.dispatchEvent(new Event('resize')), 200);
+  }
+  function stored() { try { return localStorage.getItem('fge-sidenav') !== '0'; } catch (e) { return true; } }
+  set(mq.matches && stored(), false);
+  const cur = nav.querySelector('[aria-current]');
+  if (cur) nav.scrollTop = Math.max(0, cur.offsetTop - nav.clientHeight / 2);
+  requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.add('sn-anim')));
+  toggle.addEventListener('click', () => set(!isOpen(), true));
+  closeBtn.addEventListener('click', () => set(false, true));
+  scrim.addEventListener('click', () => set(false, true));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && isOpen() && !mq.matches) set(false, false); });
+  mq.addEventListener('change', (e) => set(e.matches && stored(), false));
+})();
+</script>
 </body>
 </html>
