@@ -1,4 +1,7 @@
-// Capture a thumbnail for every page from its own first drawn figure, for the index.
+// Capture a thumbnail for every page from one of its own drawn figures, for the index.
+// src/thumbs.json names the chosen figure per page (0-based index into the page's
+// <figure> elements, picked by the user); a page missing from it falls back to its
+// first drawn figure.
 // Run after `python3 tools/build.py`:  node tools/thumbs.cjs [slug ...]
 // Writes src/thumbs/<slug>.webp (committed; the build copies them to site/thumbs/).
 // Needs Playwright and Pillow (both preinstalled in Claude's cloud sessions).
@@ -11,6 +14,8 @@ const root = path.resolve(__dirname, '..');
 const outDir = path.join(root, 'src', 'thumbs');
 mkdirSync(outDir, { recursive: true });
 const all = JSON.parse(readFileSync(path.join(root, 'src/pages.json'), 'utf8')).pages;
+let chosen = {};
+try { chosen = JSON.parse(readFileSync(path.join(root, 'src/thumbs.json'), 'utf8')); } catch {}
 const only = process.argv.slice(2);
 const pages = only.length ? all.filter((p) => only.includes(p.slug)) : all;
 
@@ -25,8 +30,8 @@ const pages = only.length ? all.filter((p) => only.includes(p.slug)) : all;
     await page.waitForTimeout(2200);
     // zoom buttons, sliders and readout strips sit on top of the canvases; keep them out of the shot
     await page.addStyleTag({ content: 'figure .view-tools, figure button, figure input, figure .hud, figure figcaption { visibility: hidden !important; }' });
-    // the first figure whose canvas (or svg/img) has actually drawn something
-    const box = await page.evaluate(() => {
+    // the chosen figure (src/thumbs.json), else the first whose canvas (or svg/img) has drawn
+    const box = await page.evaluate((want) => {
       const drawn = (c) => {
         try {
           if (!c.width || !c.height) return false;
@@ -39,20 +44,28 @@ const pages = only.length ? all.filter((p) => only.includes(p.slug)) : all;
         } catch { return true; }
       };
       const figs = [...document.querySelectorAll('figure')];
-      for (const f of figs) {
+      const shoot = (f) => {
         const r = f.getBoundingClientRect();
-        if (r.width < 120 || r.height < 90) continue;
+        if (r.width < 120 || r.height < 90) return null;
         const cs = [...f.querySelectorAll('canvas')];
         const ok = cs.length ? cs.some(drawn) : !!f.querySelector('svg, img');
-        if (!ok) continue;
+        if (!ok) return null;
         // crop to the drawn canvas itself, not the figure, to leave out toolbars and readout strips
         const target = cs.find(drawn) || f;
         target.scrollIntoView({ block: 'center' });
         const b = target.getBoundingClientRect();
         return { x: b.x, y: b.y, width: b.width, height: b.height };
+      };
+      if (want != null && figs[want]) {
+        const b = shoot(figs[want]);
+        if (b) return b;
+      }
+      for (const f of figs) {
+        const b = shoot(f);
+        if (b) return b;
       }
       return null;
-    });
+    }, chosen[p.slug]);
     if (!box) {
       console.log(`FAIL ${p.slug}  no drawn figure${errors.length ? '  errors: ' + errors.join(' | ') : ''}`);
       failed++; await page.close(); continue;
