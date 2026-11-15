@@ -77,9 +77,23 @@ section.plate { display: grid; gap: 18px; scroll-margin-top: 64px; padding-top: 
 .plate-head h2 { margin: 0; font-size: clamp(22px, 3vw, 30px); font-weight: 800; line-height: 1.1; text-transform: uppercase; letter-spacing: 0.01em; text-wrap: balance; }
 .plate-head .dim { margin: 0; font-family: var(--f-mono); font-size: 13px; color: var(--muted); }
 .plate-body { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(280px, 1fr); gap: 32px; align-items: start; }
-@media (max-width: 899px) { .plate-body { grid-template-columns: minmax(0, 1fr); gap: 20px; } }
+/* The figure follows its controls: it rides along (sticky) while the side column scrolls, and the
+   canvas is capped so figure plus controls share the screen. 64px clears the sticky section index. */
+.plate-body > figure.fig, section.plate > figure.fig, .sub > figure.fig { position: sticky; top: 64px; z-index: 3; background: var(--page); }
+/* A figure placed straight in the section or a sub (the full-width ribbons) needs its container
+   to be a block, not a grid: a grid row would pin the sticky figure in place. */
+section.plate:has(> figure.fig) { display: block; }
+section.plate:has(> figure.fig) > * + * { margin-top: 18px; }
+.sub:has(> figure.fig) { display: block; }
+.sub:has(> figure.fig) > * + * { margin-top: 14px; }
+@media (max-width: 899px) {
+  .plate-body { display: block; }
+  .plate-body > * + * { margin-top: 20px; }
+  .plate-body > figure.fig, section.plate > figure.fig, .sub > figure.fig { top: 48px; padding-bottom: 10px; border-bottom: 1px solid var(--rule); }
+  :root { --canvas-max: 46vh; }
+}
 figure.fig { margin: 0; display: grid; gap: 8px; min-width: 0; }
-.canvas-wrap { position: relative; width: 100%; max-width: 100%; background: var(--print-paper); outline: 1px solid var(--rule); overflow: hidden; }
+.canvas-wrap { position: relative; width: 100%; max-width: 100%; background: var(--print-paper); outline: 1px solid var(--rule); overflow: hidden; max-height: var(--canvas-max, calc(100vh - 170px)); }
 .canvas-wrap canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .r-sq { aspect-ratio: 1 / 1; }
 .r-lox { aspect-ratio: 5 / 4; }
