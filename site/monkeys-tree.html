@@ -89,7 +89,8 @@ section.plate:has(> figure.fig) > * + * { margin-top: 18px; }
 @media (max-width: 899px) {
   .plate-body { display: block; }
   .plate-body > * + * { margin-top: 20px; }
-  .plate-body > figure.fig, section.plate > figure.fig, .sub > figure.fig { top: 48px; padding-bottom: 10px; border-bottom: 1px solid var(--rule); }
+  /* a soft shadow under the pinned figure, so the controls visibly slide beneath it */
+  .plate-body > figure.fig, section.plate > figure.fig, .sub > figure.fig { top: 48px; padding-bottom: 10px; border-bottom: 1px solid var(--rule); box-shadow: 0 12px 14px -12px rgba(0, 0, 0, 0.32); }
   :root { --canvas-max: 46vh; }
 }
 figure.fig { margin: 0; display: grid; gap: 8px; min-width: 0; }
@@ -842,7 +843,7 @@ function sausageChart(cfg) {
     return NaN;
   }
   function draw() {
-    const W = Math.max(240, Math.round(box.clientWidth || 320)), H = 226;
+    const W = Math.max(240, Math.round(box.clientWidth || 320)), H = Math.round(parseFloat(getComputedStyle(box).getPropertyValue('--chart-h')) || 226);
     const ml = 34, mr = 10, mt = 10, mb = 34;
     let [ymin, ymax] = cfg.yFloor;
     const seen = (v) => { if (isFinite(v)) { ymax = Math.max(ymax, v * 1.12); ymin = Math.min(ymin, v / 1.12); } };
