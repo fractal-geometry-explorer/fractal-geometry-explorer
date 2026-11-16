@@ -88,6 +88,26 @@
       <div class="side">
         <p class="cap">To extend similarity dimension to unequal parts, Mandelbrot looks at ordinary shapes paved by pieces shrunk in ratios r<sub>m</sub>. An interval cut into unequal pieces needs Σ r<sub>m</sub> = 1, and a square paved by unequal squares needs Σ r<sub>m</sub><sup>2</sup> = 1. With N equal parts the old rule N r<sup>D</sup> = 1 reads Σ r<sub>m</sub><sup>D</sup> = 1 too. So he forms G(D) = Σ r<sub>m</sub><sup>D</sup> and takes D to be its unique real root of G(D) = 1. G is strictly decreasing, so there is exactly one.</p>
         <div class="legend" id="gLeg"></div>
+        <div class="group twins">
+          <div class="label-row"><span class="label">Reshape the generators while watching G(D)</span></div>
+          <label class="slider" for="a56T">
+            <span class="label-row"><span class="label">Plate 56 · flat sides</span><span class="value" data-twin-value="a56v">a = 0.250</span></span>
+            <input type="range" id="a56T" data-twin="a56" min="250" max="450" value="250">
+          </label>
+          <label class="slider" for="ang57T">
+            <span class="label-row"><span class="label">Plate 57, top · leg angle</span><span class="value" data-twin-value="ang57v">92.4°</span></span>
+            <input type="range" id="ang57T" data-twin="ang57" min="9005" max="12000" value="9240">
+          </label>
+          <label class="slider" for="p57T">
+            <span class="label-row"><span class="label">Plate 57, top · trunk position</span><span class="value" data-twin-value="p57v">0.328 along the base</span></span>
+            <input type="range" id="p57T" data-twin="p57" min="200" max="500" value="328">
+          </label>
+          <label class="slider" for="bBT">
+            <span class="label-row"><span class="label">Plate 57, bottom · bump size</span><span class="value" data-twin-value="bBv">b = 0.050</span></span>
+            <input type="range" id="bBT" data-twin="bB" min="0" max="120" value="50">
+          </label>
+          <p class="note">These are the same sliders as in each plate's own section: moving one here moves it there too.</p>
+        </div>
         <p class="note">Whether this D always equals the Hausdorff–Besicovitch dimension, he writes, "remains to be investigated. In every case I know of, it does." P. A. P. Moran had in fact proved it in 1946 for pieces that don't overlap; Hutchinson's 1981 theory of self-similar sets made that condition standard.</p>
       </div>
     </div>
