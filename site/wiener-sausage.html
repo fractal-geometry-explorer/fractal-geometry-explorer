@@ -89,7 +89,8 @@ section.plate:has(> figure.fig) > * + * { margin-top: 18px; }
 @media (max-width: 899px) {
   .plate-body { display: block; }
   .plate-body > * + * { margin-top: 20px; }
-  .plate-body > figure.fig, section.plate > figure.fig, .sub > figure.fig { top: 48px; padding-bottom: 10px; border-bottom: 1px solid var(--rule); }
+  /* a soft shadow under the pinned figure, so the controls visibly slide beneath it */
+  .plate-body > figure.fig, section.plate > figure.fig, .sub > figure.fig { top: 48px; padding-bottom: 10px; border-bottom: 1px solid var(--rule); box-shadow: 0 12px 14px -12px rgba(0, 0, 0, 0.32); }
   :root { --canvas-max: 46vh; }
 }
 figure.fig { margin: 0; display: grid; gap: 8px; min-width: 0; }
@@ -151,6 +152,18 @@ dl.read dd small { font-size: 11.5px; color: var(--muted); }
 .source a { color: var(--accent); }
 button:focus-visible, input:focus-visible, a:focus-visible, canvas:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
+/* The curve and its measuring chart are one pinned pair: the band slider redraws both. */
+.fig.pair { display: grid; gap: 14px; }
+.fig.pair > figure { margin: 0; display: grid; gap: 8px; min-width: 0; }
+.fig.pair { --canvas-max: calc(100vh - 480px); }
+@media (max-width: 899px) {
+  .fig.pair { --canvas-max: 25vh; gap: 8px; }
+  .fig.pair .schart-box { --chart-h: 150; }
+  .fig.pair figcaption { font-size: 12px; line-height: 1.35; }
+  .fig.pair .schart-legend { font-size: 10.5px; gap: 2px 10px; }
+  .fig.pair .pair-hint { display: none; }
+}
+.sub > .dim { margin: 0; font-family: var(--f-mono); font-size: 13px; color: var(--muted); }
 .r-65 { aspect-ratio: 6 / 5; }
 .nc { text-transform: none; letter-spacing: 0; }
 .stages { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; }
@@ -250,17 +263,27 @@ nav.sidenav a:focus-visible, nav.shell button.contents:focus-visible, .sn-head b
       <p class="dim">D = log 2 / log √2 = 2 · expected band area ≈ π / ln(1/2ε²), Spitzer 1964</p>
     </div>
     <div class="plate-body">
-      <figure class="fig">
-        <div class="canvas-wrap r-65 zoomable" id="wrap">
-          <canvas id="cv" role="img" aria-label="Brownian trail with its Wiener sausage"></canvas>
-          <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
-        </div>
-        <figcaption>
-          <span class="cap-stack">
-            <span class="v-size" aria-hidden="true"><strong>Brown trail</strong> · path 999,999 · stage 9 · 262,144 steps · ε = 0.0040 · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</span>
-            <span><strong>Brown trail</strong> · path <span id="capSeed">7</span> · stage <span id="capStage">7</span> · <span id="capSteps">16,384</span> steps · ε = <span id="capEps">0.010</span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</span>
-          </span>
-        </figcaption>
+      <figure class="fig pair">
+        <figure>
+          <div class="canvas-wrap r-65 zoomable" id="wrap">
+            <canvas id="cv" role="img" aria-label="Brownian trail with its Wiener sausage"></canvas>
+            <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+          </div>
+          <figcaption>
+            <span class="cap-stack">
+              <span class="v-size" aria-hidden="true"><strong>Brown trail</strong> · path 999,999 · stage 9 · 262,144 steps · ε = 0.0040 · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</span>
+              <span><strong>Brown trail</strong> · path <span id="capSeed">7</span> · stage <span id="capStage">7</span> · <span id="capSteps">16,384</span> steps · ε = <span id="capEps">0.010</span> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</span>
+            </span>
+          </figcaption>
+        </figure>
+        <figure>
+          <div class="schart-legend" id="sLegend" aria-hidden="true"></div>
+          <div class="schart-box" id="sBox">
+            <svg id="sChart" role="img" aria-label="Log-log chart of band area divided by 2ε against ε, one line per stage, with Wiener's law"></svg>
+            <div class="schart-tip" id="sTip" hidden></div>
+          </div>
+          <figcaption><strong>The band as a measuring tool</strong><span class="pair-hint"> · hover for the numbers · click to set ε</span></figcaption>
+        </figure>
       </figure>
       <div class="side">
         <p class="cap">Chapter 25 builds the planar Brown trail as a random Peano curve. Start with a random segment whose mean-square length is 1. At each pass, push the midpoint of every side in a random direction by a Gaussian distance whose mean square halves from pass to pass. Two halves, each 1/√2 the size of the whole in mean square, give the dimension log 2 / log √2 = 2. A stage here is two passes: stage n has 4<sup>n</sup> steps, each about 2<sup>−n</sup> long, in units where the whole path's mean-square span is 1.</p>
@@ -293,34 +316,17 @@ nav.sidenav a:focus-visible, nav.shell button.contents:focus-visible, .sn-head b
           <span id="verdict" aria-live="polite">Measuring…</span>
         </div>
         <p class="note">Plate 32's point holds here too: the band keeps changing while a stage adds steps longer than ε, and stops once the new steps are shorter. Turn on the highlight and step through the stages — the moved area shrinks to slivers once 2<sup>−n</sup> falls below ε. The paths are simulated from the chapter's construction; nothing is traced from the book.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===================== THE MEASURING CHART ===================== -->
-  <section class="plate" id="chart">
-    <div class="plate-head">
-      <p class="no">Chapter 25 <span class="lozenge" aria-hidden="true"></span></p>
-      <h2>Reading D from the band</h2>
-      <p class="dim" id="chartStatus">log–log</p>
-    </div>
-    <div class="plate-body">
-      <figure class="fig">
-        <div class="schart-legend" id="sLegend" aria-hidden="true"></div>
-        <div class="schart-box" id="sBox">
-          <svg id="sChart" role="img" aria-label="Log-log chart of band area divided by 2ε against ε, one line per stage, with Wiener's law"></svg>
-          <div class="schart-tip" id="sTip" hidden></div>
+        <div class="sub" id="chart">
+          <h3>Reading D from the band</h3>
+          <p class="dim" id="chartStatus">log–log</p>
+          <p class="cap">Plate 32's caption passes on a rumor that the word "sausage" comes from drawing this band around Norbert Wiener's Brownian curves; probability theory kept the name. In the plane the band's expected area does not fall like a power of ε. It falls only like 1 / log(1/ε) — in these units, about π / ln(1/2ε²), a result of Spitzer (1964). Each line is one stage: band area ÷ 2ε, the path's length as seen at resolution ε. The lines share one path at large ε and level off once ε drops below that stage's steps. The dashed line has the slope a dimension of 2 would give; the dotted curve is Wiener's law for the expected area. The measured lines follow the bend of the dotted curve, which is why the fitted D (current stage, ε up to 0.03) stays below 2.</p>
+          <dl class="read">
+            <div><dt>Exact D</dt><dd>2</dd></div>
+            <div><dt>Fitted value Wiener's law predicts</dt><dd id="lawD">1.75</dd></div>
+          </dl>
+          <p class="note">A dimension of 2 would make area ÷ 2ε grow like 1/ε, a straight line of slope −1. The logarithm bends it: the local slope is about −1 + 2 / ln(1/2ε²), so a fit over practical values of ε gives roughly 1.7 to 1.8. D = 2 is reached only in the limit, and only logarithmically. It is the same reason page 235 gives for a strange fact: the trail has dimension 2, yet its area is zero.</p>
+          <details class="schart-nums"><summary>Show the numbers</summary><div class="tbl-wrap"><table id="sTable"></table></div></details>
         </div>
-        <figcaption><strong>The band as a measuring tool</strong> · hover for the numbers · click to set ε</figcaption>
-        <details class="schart-nums"><summary>Show the numbers</summary><div class="tbl-wrap"><table id="sTable"></table></div></details>
-      </figure>
-      <div class="side">
-        <p class="cap">Plate 32's caption passes on a rumor that the word "sausage" comes from drawing this band around Norbert Wiener's Brownian curves; probability theory kept the name. In the plane the band's expected area does not fall like a power of ε. It falls only like 1 / log(1/ε) — in these units, about π / ln(1/2ε²), a result of Spitzer (1964). Each line is one stage: band area ÷ 2ε, the path's length as seen at resolution ε. The lines share one path at large ε and level off once ε drops below that stage's steps. The dashed line has the slope a dimension of 2 would give; the dotted curve is Wiener's law for the expected area. The measured lines follow the bend of the dotted curve, which is why the fitted D (current stage, ε up to 0.03) stays below 2.</p>
-        <dl class="read">
-          <div><dt>Exact D</dt><dd>2</dd></div>
-          <div><dt>Fitted value Wiener's law predicts</dt><dd id="lawD">1.75</dd></div>
-        </dl>
-        <p class="note">A dimension of 2 would make area ÷ 2ε grow like 1/ε, a straight line of slope −1. The logarithm bends it: the local slope is about −1 + 2 / ln(1/2ε²), so a fit over practical values of ε gives roughly 1.7 to 1.8. D = 2 is reached only in the limit, and only logarithmically. It is the same reason page 235 gives for a strange fact: the trail has dimension 2, yet its area is zero.</p>
       </div>
     </div>
   </section>
@@ -880,7 +886,7 @@ function sausageChart(cfg) {
     return NaN;
   }
   function draw() {
-    const W = Math.max(240, Math.round(box.clientWidth || 320)), H = 226;
+    const W = Math.max(240, Math.round(box.clientWidth || 320)), H = Math.round(parseFloat(getComputedStyle(box).getPropertyValue('--chart-h')) || 226);
     const ml = 34, mr = 10, mt = 10, mb = 34;
     let [ymin, ymax] = cfg.yFloor;
     const seen = (v) => { if (isFinite(v)) { ymax = Math.max(ymax, v * 1.12); ymin = Math.min(ymin, v / 1.12); } };

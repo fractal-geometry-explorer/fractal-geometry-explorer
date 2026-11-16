@@ -300,3 +300,14 @@ function countPieces(rs, eps, cap = 600000, parity = -1) {
   set57();
   setB();
 })();
+
+// Twin sliders beside the G(D) chart: each drives a plate's own slider (which redraws the plate and
+// G(D)) and follows it back, so the generators can be reshaped with the chart in view.
+document.querySelectorAll('input[data-twin]').forEach((t) => {
+  const src = $(t.dataset.twin), val = t.closest('label').querySelector('[data-twin-value]'), srcVal = $(val.dataset.twinValue);
+  const pull = () => { if (t.value !== src.value) t.value = src.value; val.textContent = srcVal.textContent; };
+  t.addEventListener('input', () => { src.value = t.value; src.dispatchEvent(new Event('input', { bubbles: true })); pull(); });
+  src.addEventListener('input', pull);
+  new MutationObserver(pull).observe(srcVal, { childList: true, characterData: true, subtree: true });
+  pull();
+});

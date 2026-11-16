@@ -259,7 +259,7 @@ function solveD() {
   // ---------- the figure: a cached scene, with construction lines, hover and trace on top ----------
   const scene = { key: '', canvas: document.createElement('canvas') };
   let patCache = null;
-  function stipple(f, v) {        // screen-space dot stipple, echoing the screen tone of the book's sausage
+  function stipple(f, v, target = scene.canvas) {        // screen-space dot stipple, echoing the screen tone of the book's sausage
     if (!window.DOMMatrix) return null;
     const key = String(f.dpr);
     if (!patCache || patCache.key !== key) {
@@ -270,31 +270,31 @@ function solveD() {
       g.beginPath(); g.arc(n / 2, n / 2, 0.7 * f.dpr, 0, Math.PI * 2); g.fill();
       patCache = { key, canvas: c };
     }
-    const p = scene.canvas.getContext('2d').createPattern(patCache.canvas, 'repeat');
+    const p = target.getContext('2d').createPattern(patCache.canvas, 'repeat');
     if (!p || !p.setTransform) return null;
     const a = f.dpr * v.s, e = f.dpr * v.ox, fy = f.dpr * v.oy;
     p.setTransform(new DOMMatrix([1 / a, 0, 0, -1 / a, -e / a, fy / a]));
     return p;
   }
-  function drawScene(f, v) {
-    scene.canvas.width = f.canvas.width; scene.canvas.height = f.canvas.height;
-    const c = scene.canvas.getContext('2d');
+  function drawScene(f, v, target = scene.canvas, mode = state.mode) {
+    target.width = f.canvas.width; target.height = f.canvas.height;
+    const c = target.getContext('2d');
     c.setTransform(1, 0, 0, 1, 0, 0);
-    c.fillStyle = PRINT.paper; c.fillRect(0, 0, scene.canvas.width, scene.canvas.height);
+    c.fillStyle = PRINT.paper; c.fillRect(0, 0, target.width, target.height);
     c.setTransform(f.dpr * v.s, 0, 0, -f.dpr * v.s, f.dpr * v.ox, f.dpr * v.oy);
     c.lineJoin = 'round'; c.lineCap = 'round';
-    if (state.mode === 'fill') {
+    if (mode === 'fill') {
       c.fillStyle = PRINT.ink; c.fill(disp.fill, 'nonzero');
       if (state.gap > 0) {
         c.strokeStyle = PRINT.paper;
         c.lineWidth = state.gap * 0.4 * Math.pow(3, -Math.max(state.n, 3));
         c.stroke(disp.line);
       }
-    } else if (state.mode === 'sausage') {
+    } else if (mode === 'sausage') {
       // a round-capped, round-joined stroke of width 2ε is exactly the union of discs of radius ε along the curve
       c.lineWidth = 2 * state.eps;
       c.strokeStyle = SOFT; c.stroke(disp.raw);
-      const pat = stipple(f, v);
+      const pat = stipple(f, v, target);
       if (pat) { c.strokeStyle = pat; c.stroke(disp.raw); }
       c.strokeStyle = PRINT.ink; c.lineWidth = 1.2 / v.s; c.stroke(disp.raw);
     } else {
@@ -341,6 +341,17 @@ function solveD() {
     drawOverlay(f, v);
   }
   const zoom = zoomable('wrap', 'cv', (f) => fitBox(f, disp.bounds, 0), render, { maxZoom: 600 });
+  // the measuring section's own view: always the band, so the band slider and both figures it moves sit together
+  const sceneB = { key: '', canvas: document.createElement('canvas') };
+  function renderB(f, v) {
+    const key = [f.canvas.width, f.canvas.height, v.s, v.ox, v.oy, state.n, state.eps].join('|');
+    if (sceneB.key !== key) { drawScene(f, v, sceneB.canvas, 'sausage'); sceneB.key = key; }
+    f.ctx.setTransform(1, 0, 0, 1, 0, 0);
+    f.ctx.drawImage(sceneB.canvas, 0, 0);
+  }
+  const zoomB = zoomable('wrapB', 'cvB', (f) => fitBox(f, disp.bounds, 0.02), renderB, { maxZoom: 600 });
+  const schedulePlate = zoom.schedule;
+  zoom.schedule = () => { schedulePlate(); zoomB.schedule(); };
 
   // ---------- depth thumbnails ----------
   const depthsEl = $('depths');
@@ -520,7 +531,6 @@ function solveD() {
   function setEps(e, fromChart) {
     state.eps = e;
     if (fromChart) $('eps').value = ES.toSlider(e);
-    if (state.mode !== 'sausage') { state.mode = 'sausage'; markInk('sausage'); }
     updateText(); measureNow(); chart.draw(); zoom.schedule();
   }
 
@@ -532,7 +542,7 @@ function solveD() {
   function updateText() {
     const n = state.n;
     $('depthVal').textContent = `level ${n}`;
-    $('capLevel').textContent = n;
+    $('capLevel').textContent = n; $('capLevelB').textContent = n;
     $('capSegs').textContent = fmt(Math.pow(11, n));
     $('stN').textContent = fmt(Math.pow(11, n));
     const L = Math.pow(GROWTH, n);
