@@ -308,7 +308,7 @@ function sausageChart(cfg) {
     return NaN;
   }
   function draw() {
-    const W = Math.max(240, Math.round(box.clientWidth || 320)), H = 226;
+    const W = Math.max(240, Math.round(box.clientWidth || 320)), H = Math.round(parseFloat(getComputedStyle(box).getPropertyValue('--chart-h')) || 226);
     const ml = 34, mr = 10, mt = 10, mb = 34;
     let [ymin, ymax] = cfg.yFloor;
     const seen = (v) => { if (isFinite(v)) { ymax = Math.max(ymax, v * 1.12); ymin = Math.min(ymin, v / 1.12); } };
