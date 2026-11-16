@@ -5,6 +5,17 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
 <style>/*BASECSS*/
 .r-45 { aspect-ratio: 4 / 5; }
+/* The band view and its measuring chart are one pinned pair: the band slider redraws both. */
+.fig.pair { display: grid; gap: 14px; }
+.fig.pair > figure { margin: 0; display: grid; gap: 8px; min-width: 0; }
+.fig.pair { --canvas-max: calc(100vh - 480px); }
+@media (max-width: 899px) {
+  .fig.pair { --canvas-max: 25vh; gap: 8px; }
+  .fig.pair .schart-box { --chart-h: 150; }
+  .fig.pair figcaption { font-size: 12px; line-height: 1.35; }
+  .fig.pair .schart-legend { font-size: 10.5px; gap: 2px 10px; }
+  .fig.pair .pair-hint { display: none; }
+}
 figure.fig.tall { justify-self: center; width: 100%; max-width: min(100%, calc(84vh * 0.8)); }
 .nc { text-transform: none; letter-spacing: 0; }
 .depths { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; }
@@ -131,17 +142,26 @@ figure.fig.tall { justify-self: center; width: 100%; max-width: min(100%, calc(8
       <p class="dim" id="chartStatus">log–log</p>
     </div>
     <div class="plate-body">
-      <figure class="fig">
-        <div class="schart-legend" id="sLegend" aria-hidden="true"></div>
-        <div class="schart-box" id="sBox">
-          <svg id="sChart" role="img" aria-label="Log-log chart of band area divided by 2ε against ε, one line per depth"></svg>
-          <div class="schart-tip" id="sTip" hidden></div>
-        </div>
-        <figcaption><strong>Band area ÷ 2ε against ε</strong> · hover for the numbers · click to set ε and show the band</figcaption>
-        <details class="schart-nums"><summary>Show the numbers</summary><div class="tbl-wrap"><table id="sTable"></table></div></details>
+      <figure class="fig pair">
+        <figure>
+          <div class="canvas-wrap r-sq zoomable" id="wrapB">
+            <canvas id="cvB" role="img" aria-label="The Monkeys Tree curve wrapped in its band of radius ε"></canvas>
+            <div class="view-tools"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+          </div>
+          <figcaption><strong>The band</strong> · radius ε around the level-<span id="capLevelB">3</span> curve<span class="pair-hint"> · drag to pan, pinch or Ctrl/⌘ + scroll to zoom</span></figcaption>
+        </figure>
+        <figure>
+          <div class="schart-legend" id="sLegend" aria-hidden="true"></div>
+          <div class="schart-box" id="sBox">
+            <svg id="sChart" role="img" aria-label="Log-log chart of band area divided by 2ε against ε, one line per depth"></svg>
+            <div class="schart-tip" id="sTip" hidden></div>
+          </div>
+          <figcaption><strong>Band area ÷ 2ε against ε</strong><span class="pair-hint"> · hover for the numbers · click to set ε</span></figcaption>
+        </figure>
       </figure>
       <div class="side">
-        <p class="cap">Plate 32, on the next page of the book, wraps a curve in a band of radius ε: every point within ε of it. The band's area divided by its width 2ε is the curve's length as seen at resolution ε. For a smooth curve that settles to the true length. For a fractal it keeps growing, roughly like ε<sup>1−D</sup>, which is the law Richardson found for coastlines. Choose the Sausage inking above, or click the chart, to see the band on the plate.</p>
+        <p class="cap">Plate 32, on the next page of the book, wraps a curve in a band of radius ε: every point within ε of it. The band's area divided by its width 2ε is the curve's length as seen at resolution ε. For a smooth curve that settles to the true length. For a fractal it keeps growing, roughly like ε<sup>1−D</sup>, which is the law Richardson found for coastlines. The curve above the chart wears the band at the radius you choose; click the chart to jump to a radius. The Sausage inking on the plate at the top of the page shows the same band.</p>
+        <details class="schart-nums"><summary>Show the numbers</summary><div class="tbl-wrap"><table id="sTable"></table></div></details>
         <label class="slider" for="eps">
           <span class="label-row"><span class="label">Band radius <span class="nc">ε</span></span><span class="value" id="epsVal">0.020 of base</span></span>
           <input type="range" id="eps" min="0" max="1000" value="473">
